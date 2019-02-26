@@ -583,6 +583,13 @@ class DrawCard extends BaseCard {
             attachments: this.attachments.map(attachment => {
                 return attachment.getSummary(activePlayer, hideWhenFaceup);
             }),
+            clan: this.getPrintedFaction(),
+            name: this.cardData.name,
+            text: this.cardData.text,
+            mil: (this.cardData.type === CardTypes.Attachment) ? this.getMilitarySkill(false) : this.getMilitarySkill(true),
+            pol: (this.cardData.type === CardTypes.Attachment) ? this.getPoliticalSkill(false) : this.getPoliticalSkill(true),
+            glory: this.getGlory(),
+            cost: this.getCost(),
             inConflict: this.inConflict,
             isConflict: this.isConflict,
             isDynasty: this.isDynasty,
@@ -590,8 +597,10 @@ class DrawCard extends BaseCard {
             isHonored: this.isHonored,
             bowed: this.bowed,
             fate: this.fate,
+            flavor: this.cardData.flavor,
             new: this.new,
-            covert: this.covert
+            covert: this.covert,
+            unique: this.cardData.unicity
         });
     }
 }

@@ -83,12 +83,18 @@
 
 .card-frame {
   border-radius:6px;
+  &.small {
+    border-radius:3px;
+  }
   position: relative;
 }
 
 .card {
   position: relative;
   border-radius: 6px;
+  &.small {
+    border-radius:3px;
+  }
   box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
   overflow: hidden;
   z-index: @layer-cards;
@@ -185,11 +191,304 @@
   }
 }
 
+.bolded {
+  font-weight:bold;
+}
+
+.fate-cost {
+  display:inline-block;
+  font-family: 'wc_mano_negra_btaregular';
+  color:whitesmoke;
+  text-shadow:
+   0px 0px 1px #332233,
+   0px 0px 2px #882244;
+  font-weight:bold;
+  border:1px;
+  font-size: 0.9em;
+  text-align:center;
+  vertical-align:middle;
+  z-index:@layer-cards+2;
+  &.event-overlay {
+    grid-column-start:3;
+    grid-column-end:5;
+    grid-row-start:2;
+    grid-row-end:4;
+  }
+  &.attachment-overlay {
+    grid-column-start:2;
+    grid-column-end:4;
+    grid-row-start:2;
+    grid-row-end:4;
+  }
+  &.character-overlay {
+    grid-column-start:2;
+    grid-column-end:4;
+    grid-row-start:2;
+    grid-row-end:4;
+  }
+}
+
+.glory {
+  display:inline-block;
+  font-family: 'wc_mano_negra_btaregular';
+  color:#453e2e;
+  text-shadow:
+  0px 0px 1px white,
+  0px 0px 3px #886644;
+  font-size: 0.8em;
+  text-align:center;
+  grid-column-start:6;
+  grid-column-end:8;
+  grid-row-start: 9;
+  z-index:@layer-cards+2;
+}
+
+.mil-skill {
+  display:inline-block;
+  &.character-overlay {
+    grid-column-start:3;
+    grid-row-start:5;
+    grid-row-end:6;
+  }
+  &.attachment-overlay {
+    grid-column-start:3;
+    grid-row-start:4;
+    grid-row-end:5;
+    text-align:left;
+  }
+  font-family: 'wc_mano_negra_btaregular';
+  font-weight:bold;
+  color:@military-number-color;
+  text-align:center;
+  font-size: 0.8em;
+  z-index:@layer-cards+2;
+}
+
+.pol-skill {
+  display:inline-block;
+  font-weight:bold;
+  &.character-overlay {
+    grid-column-start:3;
+    grid-row-start:7;
+    grid-row-end:8;
+  }
+  &.attachment-overlay {
+    grid-column-start:3;
+    grid-row-start:5;
+    grid-row-end:6;
+    text-align:left;
+  }
+  font-family: 'wc_mano_negra_btaregular';
+  color:@political-number-color;
+  text-align:center;
+  font-size: 0.8em;
+  z-index:@layer-cards+2;
+}
+
+.card-title {
+  display:inline-block;
+  font-family: 'brushtiptexe';
+  z-index: @layer-cards + 2;
+  color: black;
+  font-size: 0.65em;
+  font-kerning:none;
+  text-align:justify;
+  -moz-text-align-last: center;
+  text-align-last: center;
+  vertical-align:middle;
+  line-height:1.926em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &.character-overlay {
+    grid-row-start:2;
+    grid-row-end:4;
+    grid-column-start:5;
+    grid-column-end:6;
+  }
+
+  &.event-overlay {
+    grid-row-start:7;
+    grid-row-end:8;
+    grid-column-start:3;
+    grid-column-end:8;
+  }
+
+  &.attachment-overlay { 
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    transform-origin:left;
+    position:absolute;
+    width:9em;
+    height:2em;
+    bottom:1.5em;
+    left:1.3em;
+    vertical-align:middle;
+    grid-column-start:2;
+    grid-column-end:5;
+    text-align:center;
+    overflow:visibile;
+  }
+
+  &.holding-overlay {
+    transform-origin:center;
+    grid-row-start:7;
+    grid-row-end:11;
+    grid-column-start:5;
+    grid-column-end:10;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+  }
+}
+
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed|Open+Sans|Roboto');
+
+.card-text {
+  position:relative;
+  display:inline-block;
+  text-align: left;
+  font-kerning:none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height:1.425;
+  font-family: "Segoe UI", "Open Sans Condensed", sans-serif;
+  font-size: 0.34em;
+  font-weight: 400;
+  z-index: @layer-cards + 1;
+  color: black;
+  &.character-overlay {
+    grid-row-start:11;
+    grid-row-end:12;
+    grid-column-start:3;
+    grid-column-end:8;
+  }
+  &.attachment-overlay {
+    grid-row-start:8;
+    grid-row-end:9;
+    grid-column-start:5;
+    grid-column-end:7;
+  }
+  &.event-overlay {
+    grid-row-start:8;
+    grid-row-end:9;
+    grid-column-start:3;
+    grid-column-end:7;
+  }
+  &.holding-overlay {
+    grid-row-start:3;
+    grid-row-end:5;
+    grid-column-start:5;
+    grid-column-end:7;
+  }
+  &.stronghold-overlay {
+    grid-row-start:10;
+    grid-row-end:11;
+    grid-column-start:3;
+    grid-column-end:7;
+  }
+}
+
+.flavor-text {
+  font-size: 0.3em;
+  font-style:italic;
+}
+
+.bolded {
+  font-weight:bold;
+}
+
+.emphasized {
+  font-weight:bold;
+  font-style:italic;
+}
+
+.italicized {
+  font-style:italic;
+}
+
+.superscripted {
+  font-size:0.7em;
+  vertical-align:text-top;
+}
+
+.overlay-base {
+  position:absolute;
+  width:@card-width;
+  height:@card-height;
+  z-index: @layer-cards + 1;
+  font-size: 5pt;
+  &.small {
+    width: @card-sm-width;
+    height: @card-sm-height;
+    font-size: 4pt;
+  }
+  &.large {
+    width: @card-lg-width;
+    height: @card-lg-height;
+    font-size: 7pt;
+  }
+  &.x-large {
+    font-size:11pt;
+    width: @card-xl-width;
+    height: @card-xl-height;
+  }
+
+  &.bowed {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    left: 20px;
+    top: -21px;
+
+  }
+  &.character-overlay {
+    display: grid;
+    grid-template-columns: 2% 2% 10% 1% 70% 4% 3% 1.5% 10% 1% 3%; 
+    grid-template-rows:  2% 1% 9% 3.5% 7% 2% 7% 27% 6% 5% 20% 10%;
+  }
+  &.attachment-overlay {
+    display: grid;
+    grid-template-columns: 2% 3% 10% 1% 75% 5% 15% 1% 3%; 
+    grid-template-rows:  1% 1% 14% 10% 10% 22% 5% 30%;
+  }
+  &.event-overlay {
+    display: grid;
+    grid-template-columns: 2% 2.6% 2% 6% 68% 2% 10% 1% 3%; 
+    grid-template-rows:  1% 1% 10% 3% 30% 10% 13% 5% 30%;
+  }
+  &.holding-overlay {
+    display: grid;
+    grid-template-columns: 2% 1.6% 10% 1% 73% 2% 10% 1% 3%; 
+    grid-template-rows:  1% 1% 10% 3.5% 7% 2% 7% 32% 5% 30%;
+  }
+  &.stronghold-overlay {
+    display: grid;
+    grid-template-columns: 2% 1.6% 10% 1% 73% 2% 10% 1% 3%; 
+    grid-template-rows:  1% 1% 10% 3.5% 7% 2% 7% 32% 5% 30%;
+  }
+}
+
+.overlay-image {
+  position: absolute;
+  z-index: 1;
+  padding:0;
+}
+
 .card-image {
   left: 0;
   position: absolute;
   top: 0;
-
+  z-index:0;
+ 
   &.small {
     &.vertical {
       height: @card-sm-height;
@@ -246,17 +545,16 @@
     }
 
     &.bowed {
-      left: 20px;
-      top: -21px;
+      //  left: 20px;
+      //  top: -21px;
     }
   }
 
-  &.bowed {
-    left: 9px;
-    top: -10px;
-    transform: rotate(90deg);
-
-  }
+  // &.bowed {
+  //   left: 9px;
+  //   top: -10px;
+  //   transform: rotate(90deg);
+  // }
 
   &.broken {
       transform: rotate(180deg);
@@ -276,6 +574,7 @@
   margin: 0 0 0 -12px;
   position: absolute;
   text-align: center;
+  overflow-x:visible;
   top: -28px;
   width: 24px;
   z-index: @layer-card-menu;
@@ -400,7 +699,7 @@
   align-content: center;
   align-items: center;
   flex-wrap: wrap;
-  z-index: @layer-cards + 1;
+  z-index: @layer-cards + 2;
 }
 
 .card.vertical .counters {
@@ -477,71 +776,6 @@
   width: 25px;
   height: 25px;
 }
-
-
-/* Don't think we actually need this
-.counter {
-  padding: 0;
-  font-size: 12px;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  text-align: center;
-  margin: 2px;
-  text-shadow: 1px 1px 2px #000;
-  border-radius: 4px;
-  color: white;
-
-  &.political {
-    span {
-      display: none;
-    }
-
-    font-family: 'fiveringsdb';
-
-    &:before {
-      content: "\e901";
-      color: @political-icon-color;
-    }
-
-    background-color: rgba(0, 0, 0, 0.85);
-  }
-
-  &.military {
-    span {
-      display: none;
-    }
-
-    font-family: 'fiveringsdb';
-
-    &:before {
-      content: "\e900";
-      color: @military-icon-color;
-    }
-
-    background-color: rgba(0, 0, 0, 0.85);
-  }
-
-  &.fade-out {
-    opacity: 0.4;
-  }
-
-  &.cancel {
-    position: relative;
-
-    &:after {
-      border-bottom: 0.17em solid @brand-danger;
-      content: "";
-      left: 0;
-      margin-top: calc(0.17em / 2 * -1);
-      position: absolute;
-      right: 0;
-      top: 50%;
-    }
-  }
-}
-
-*/
 
 .strength {
   background-color: @strength-color;

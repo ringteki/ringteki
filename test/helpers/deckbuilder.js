@@ -54,9 +54,9 @@ class DeckBuilder {
         let stronghold = defaultStronghold;
         let provinceDeck = [];
         let conflictDeck = [];
-        let conflictDeckSize = conflictBuffer; 
+        let conflictDeckSize = conflictBuffer;
         let dynastyDeck = [];
-        let dynastyDeckSize = dynastyBuffer; 
+        let dynastyDeckSize = dynastyBuffer;
         let inPlayCards = []; // Considered separately, because may consist of both dynasty and conflict
 
         if(player.faction) {

@@ -1,10 +1,6 @@
 @font-face {
   font-family: 'fiveringsdb';
-  src:  url('fonts/fiveringsdb.eot?yn5wqh');
-  src:  url('fonts/fiveringsdb.eot?yn5wqh#iefix') format('embedded-opentype'),
-    url('fonts/fiveringsdb.ttf?yn5wqh') format('truetype'),
-    url('fonts/fiveringsdb.woff?yn5wqh') format('woff'),
-    url('fonts/fiveringsdb.svg?yn5wqh#fiveringsdb') format('svg');
+  src: url('../public/fonts/fiveringsdb.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -190,6 +186,32 @@
   height: 16px;
   width: 12px;
   margin-top: -2px;
+}
+
+.icon-unique {
+  font-family: 'fiveringsdb';
+  line-height:1;
+  font-size:0.6em;
+  &:before {
+    content: "\E90E";
+  }
+}
+.icon-conflict-military {
+  font-family: 'fiveringsdb';
+  text-align: center;
+
+  &:before {
+    content: "\e900";
+  }
+}
+
+.icon-conflict-political {
+  font-family: 'fiveringsdb';
+  text-align: center;
+
+  &:before {
+    content: "\e901";
+  }
 }
 
 .hide-text {

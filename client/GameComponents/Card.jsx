@@ -188,6 +188,63 @@ class Card extends React.Component {
         return wrapperClassName;
     }
 
+
+    getCardText() {
+        let text = this.props.card.text;
+        if(text) {
+            let lines = text.split(/\r?\n/);
+            let outputs = lines.map(line => {
+                return (
+                    <span>
+                        { this.spanifyText(line) }
+                        <br className='card-text'/>
+                    </span>);
+            });
+            return outputs;
+        }
+        return <span/>;
+    }
+
+    //process FRDB text, converting placeholders to icons and setting styles as needed
+    spanifyText(text) {
+        if(!text) {
+            return <span/>;
+        }
+        let regexTransforms = /([^<]*)<(i|b|em)>(.*)<\/\2>(.*)/i;
+        let regexIcons = /([^[]*)\[(element|clan|conflict)-([a-z]*)\](.*)/i;
+        let tfMatch = text.match(regexTransforms);
+        if(!tfMatch) {
+            let icMatch = text.match(regexIcons);
+            if(!icMatch) {
+                return text;
+            }
+            //return icon span and recurse with the rest of the text
+            return (
+                <span>
+                    { icMatch[1] && this.spanifyText(icMatch[1]) }
+                    <span className={ 'icon-' + icMatch[2] + '-' + icMatch[3] } />
+                    { icMatch[4] && this.spanifyText(icMatch[4]) }
+                </span>
+            );
+        }
+        let formatClass = '';
+        //format found block and process sub-blocks
+        if(tfMatch[2] === 'i') {
+            formatClass = 'italicized';
+        } else if(tfMatch[2] === 'b') {
+            formatClass = 'bolded';
+        } else if(tfMatch[2] === 'em') {
+            formatClass = 'emphasized';
+        }
+        return (
+            <span>
+                { this.spanifyText(tfMatch[1]) }
+                <span className={ formatClass }> { this.spanifyText(tfMatch[3]) } </span>
+                { this.spanifyText(tfMatch[4]) }
+            </span>
+        );
+    }
+
     getWrapperStyle() {
         let wrapperStyle = {};
         let attachmentOffset = 13;
@@ -383,7 +440,9 @@ class Card extends React.Component {
         } else {
             cardBack = 'cardback.jpg';
         }
-
+        let cardType = this.props.card.type;
+        let hasProvinceStrength = _.contains(['province', 'holding', 'stronghold'],cardType);
+        let hasSkills = _.contains(['character', 'attachment'],cardType);
         return (
             <div className='card-frame' ref='cardFrame'
                 onTouchMove={ ev => this.onTouchMove(ev) }
@@ -397,15 +456,51 @@ class Card extends React.Component {
                     onClick={ ev => this.onClick(ev, this.props.card) }
                     onDragStart={ ev => this.onCardDragStart(ev, this.props.card, this.props.source) }
                     draggable>
-                    <div>
-                        <span className='card-name'>{ this.props.card.name }</span>
+                    { !this.isFacedown() && <div className={ 'overlay-base ' + this.props.size + ' ' + cardType + '-overlay' + (this.isBowed() ? ' bowed' : '') } >
                         <img className={ imageClass } src={ '/img/cards/' + (!this.isFacedown() && !this.props.card.isToken ? (this.props.card.id + '.jpg') : cardBack) } />
-                    </div>
-                    { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
+                        { !this.isFacedown() && <img className={ ' overlay-image ' + imageClass + (this.isBowed() ? ' bowed' : '') } src={ '/img/overlays/Card - ' + this.props.card.clan + '- ' + this.props.card.type + '.png' } /> }
+                        <span className='card-name'>{ this.props.card.name }</span>
+                        <div className={ 'card-title ' + cardType + '-overlay' }>
+                            <span className={ this.props.card.unique ? 'bolded icon-unique' : '' }/>
+                            <span>{ (this.props.card.unique ? ' ' : '') + this.props.card.name }</span>
+                        </div>
+                        { !this.isFacedown() && <div className={ 'fate-cost ' + cardType + '-overlay' }> { this.props.card.cost }</div> }
+                        { hasSkills && <div className={ 'mil-skill ' + cardType + '-overlay' }>
+                            { (cardType === 'attachment') && (<span className='superscripted'>
+                                { (this.props.card.mil < 0) ? '-' : '+' }
+                            </span>) }
+                            { this.props.card.mil }
+                        </div> }
+                        { hasSkills && <div className={ 'pol-skill ' + cardType + '-overlay' }>
+                            { cardType === 'attachment' && (<span className='superscripted'>
+                                { (this.props.card.pol < 0) ? '-' : '+' }
+                            </span>) }
+                            { this.props.card.pol }
+                        </div> }
+                        { hasProvinceStrength && <div className={ 'province-strength ' + cardType + '-overlay' }> { this.props.card.strength }</div> }
+                        { (cardType === 'character') && <div className={ 'glory ' + cardType + '-overlay' }> { this.props.card.glory }</div> }
+                        { !this.isFacedown() && <div className={ 'card-text ' + cardType + '-overlay' }> { this.getCardText() } </div> }
+                        { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
+                    </div> }
+                    { this.isFacedown() && <div className='overlay-base'>
+                        <img className={ imageClass } src={ '/img/cards/' + cardBack }/>
+                    </div> }
                 </div>
                 { this.showMenu() ? <CardMenu menu={ this.props.card.menu } onMenuItemClick={ this.onMenuItemClick } /> : null }
                 { this.getPopup() }
             </div>);
+    }
+
+    isBowed() {
+        return (this.props.orientation === 'horizontal' || this.props.orientation === 'bowed' || this.props.card.bowed);
+    }
+
+    hasSkills() {
+        return (!this.isFacedown() && (this.props.card.type === 'character' || this.props.card.type === 'attachment'));
+    }
+
+    hasGlory() {
+        return (!this.isFacedown() && (this.props.card.type === 'character'));
     }
 
     onCloseClick(event) {
@@ -524,6 +619,7 @@ Card.propTypes = {
         controller: PropTypes.string,
         covert: PropTypes.bool,
         facedown: PropTypes.bool,
+        flavor: PropTypes.string,
         id: PropTypes.string,
         inConflict: PropTypes.bool,
         inDanger: PropTypes.bool,
@@ -550,10 +646,14 @@ Card.propTypes = {
         strength: PropTypes.number,
         tokens: PropTypes.object,
         type: PropTypes.string,
+        text: PropTypes.string,
+        unique: PropTypes.bool,
         unselectable: PropTypes.bool,
         uuid: PropTypes.string
     }).isRequired,
+    clan: PropTypes.string,
     className: PropTypes.string,
+    cost: PropTypes.number,
     declaring: PropTypes.bool,
     disableMouseOver: PropTypes.bool,
     isInPopup: PropTypes.bool,

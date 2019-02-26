@@ -67,6 +67,7 @@
     "react-dom": "^16.0.0",
     "react-draggable": "^3.0.3",
     "react-google-recaptcha": "^0.9.7",
+    "react-html-parser": "^2.0.2",
     "react-redux": "^4.4.8",
     "react-redux-toastr": "^7.1.5",
     "redux": "^3.7.2",
