@@ -455,7 +455,6 @@ class Card extends React.Component {
                 onTouchMove={ ev => this.onTouchMove(ev) }
                 onTouchEnd={ ev => this.onTouchEnd(ev) }
                 onTouchStart={ ev => this.onTouchStart(ev) }>
-               
                 <div className={ cardClass }
                     style={ this.props.wrapped ? {} : this.props.style }
                     onMouseOver={ this.props.disableMouseOver ? null : this.onMouseOver.bind(this, this.props.card) }
