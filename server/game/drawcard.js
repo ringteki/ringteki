@@ -586,8 +586,8 @@ class DrawCard extends BaseCard {
             clan: this.getPrintedFaction(),
             name: this.cardData.name,
             text: this.cardData.text,
-            mil: (this.cardData.type === CardTypes.Attachment) ? this.getMilitarySkill(false) : this.getMilitarySkill(true),
-            pol: (this.cardData.type === CardTypes.Attachment) ? this.getPoliticalSkill(false) : this.getPoliticalSkill(true),
+            mil: (this.cardData.type === CardTypes.Attachment) ? this.cardData.printedMilitarySkill : this.getMilitarySkill(true),
+            pol: (this.cardData.type === CardTypes.Attachment) ? this.cardData.printedPoliticalSkill : this.getPoliticalSkill(true),
             glory: this.getGlory(),
             cost: this.getCost(),
             inConflict: this.inConflict,
@@ -600,7 +600,8 @@ class DrawCard extends BaseCard {
             flavor: this.cardData.flavor,
             new: this.new,
             covert: this.covert,
-            unique: this.cardData.unicity
+            unique: this.cardData.unicity,
+            traits: this.getTraits()
         });
     }
 }

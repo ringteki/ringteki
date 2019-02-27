@@ -195,14 +195,21 @@ class Card extends React.Component {
             let lines = text.split(/\r?\n/);
             let outputs = lines.map(line => {
                 return (
-                    <span>
+                    <p className='card-text-pg'>
                         { this.spanifyText(line) }
-                        <br className='card-text'/>
-                    </span>);
+                    </p>);
             });
             return outputs;
         }
         return <span/>;
+    }
+
+    getTraitsText() {
+        let text = '';
+        _.forEach(this.props.card.traits, trait => {
+            text += (text.length > 0 ? ' ' : '') + trait.charAt(0).toUpperCase() + trait.slice(1).replace('-clan', ' Clan') + '.';
+        });
+        return text;
     }
 
     //process FRDB text, converting placeholders to icons and setting styles as needed
@@ -210,7 +217,7 @@ class Card extends React.Component {
         if(!text) {
             return <span/>;
         }
-        let regexTransforms = /([^<]*)<(i|b|em)>(.*)<\/\2>(.*)/i;
+        let regexTransforms = /([^<]*)<(i|b|em)>([^<]*)<\/\2>(.*)/i;
         let regexIcons = /([^[]*)\[(element|clan|conflict)-([a-z]*)\](.*)/i;
         let tfMatch = text.match(regexTransforms);
         if(!tfMatch) {
@@ -448,7 +455,7 @@ class Card extends React.Component {
                 onTouchMove={ ev => this.onTouchMove(ev) }
                 onTouchEnd={ ev => this.onTouchEnd(ev) }
                 onTouchStart={ ev => this.onTouchStart(ev) }>
-                { this.getCardOrder() }
+               
                 <div className={ cardClass }
                     style={ this.props.wrapped ? {} : this.props.style }
                     onMouseOver={ this.props.disableMouseOver ? null : this.onMouseOver.bind(this, this.props.card) }
@@ -479,6 +486,7 @@ class Card extends React.Component {
                         </div> }
                         { hasProvinceStrength && <div className={ 'province-strength ' + cardType + '-overlay' }> { this.props.card.strength }</div> }
                         { (cardType === 'character') && <div className={ 'glory ' + cardType + '-overlay' }> { this.props.card.glory }</div> }
+                        { !this.isFacedown() && <div className={ 'card-traits ' + cardType + '-overlay' }> { this.getTraitsText() } </div> }
                         { !this.isFacedown() && <div className={ 'card-text ' + cardType + '-overlay' }> { this.getCardText() } </div> }
                         { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
                     </div> }
@@ -658,6 +666,7 @@ Card.propTypes = {
     disableMouseOver: PropTypes.bool,
     isInPopup: PropTypes.bool,
     isMe: PropTypes.bool,
+    mil:PropTypes.string,
     onClick: PropTypes.func,
     onCloseClick: PropTypes.func,
     onDragDrop: PropTypes.func,
@@ -666,11 +675,13 @@ Card.propTypes = {
     onMouseOver: PropTypes.func,
     onTouchMove: PropTypes.func,
     orientation: PropTypes.oneOf(['horizontal', 'bowed', 'vertical']),
+    pol: PropTypes.string,
     popupLocation: PropTypes.string,
     size: PropTypes.string,
     source: PropTypes.oneOf(['hand', 'dynasty discard pile', 'conflict discard pile', 'play area', 'dynasty deck', 'conflict deck', 'province deck', 'province 1', 'province 2', 'province 3', 'province 4', 'attachment', 'stronghold province', 'additional', 'role card']).isRequired,
     style: PropTypes.object,
     title: PropTypes.string,
+    traits: PropTypes.array,
     wrapped: PropTypes.bool
 };
 Card.defaultProps = {
