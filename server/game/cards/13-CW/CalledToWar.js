@@ -18,7 +18,7 @@ class CalledToWar extends DrawCard {
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
                     optional: true,
-                    cardCondition: card => card.hasTrait('bushi'),
+                    cardCondition: (card, context) => card.hasTrait('bushi') && context.player.opponent.checkRestrictions('takeHonor'),
                     gameAction: AbilityDsl.actions.placeFate()
                 }
             },
