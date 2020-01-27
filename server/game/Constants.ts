@@ -269,6 +269,7 @@ export enum EventNames {
     OnPassActionPhasePriority = 'onPassActionPhasePriority',
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
+    OnConflictMoved = 'onConflictMoved',
     Unnamed = 'unnamedEvent'
 };
 
