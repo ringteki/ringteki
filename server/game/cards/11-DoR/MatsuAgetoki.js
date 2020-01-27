@@ -11,7 +11,7 @@ class MatsuAgetoki extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 gameAction: AbilityDsl.actions.moveConflict()
-            },
+            }
         });
     }
 }

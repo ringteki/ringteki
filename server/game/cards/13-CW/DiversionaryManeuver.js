@@ -14,7 +14,7 @@ class DiversionaryManeuver extends DrawCard {
                 AbilityDsl.actions.sendHome(context => ({
                     target: context.game.currentConflict.getParticipants()
                 }))
-            ]) 
+            ])
         });
     }
 }

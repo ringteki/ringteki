@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Players, CardTypes, EventNames } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class TalismanOfTheSun extends DrawCard {
@@ -12,7 +12,7 @@ class TalismanOfTheSun extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 gameAction: AbilityDsl.actions.moveConflict()
-            },
+            }
         });
     }
 }

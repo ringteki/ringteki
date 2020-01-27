@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes, EventNames, Players } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class ChasingTheSun extends DrawCard {
@@ -12,7 +12,7 @@ class ChasingTheSun extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 gameAction: AbilityDsl.actions.moveConflict()
-            },
+            }
         });
     }
 }
