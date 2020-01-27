@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const { Locations, Players, CardTypes, EventNames } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class TalismanOfTheSun extends DrawCard {
     setupCardAbilities(ability) {
@@ -7,24 +8,11 @@ class TalismanOfTheSun extends DrawCard {
             title: 'Move conflict to a different province',
             condition: context => context.player.isDefendingPlayer(),
             cost: ability.costs.bowSelf(),
-            effect: 'move the conflict to another province',
-            handler: context => this.game.promptForSelect(context.player, {
-                context: context,
+            target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                controller: Players.Self,
-                cardCondition: card => card !== this.game.currentConflict.conflictProvince && card.canBeAttacked(),
-                onSelect: (player, card) => {
-                    this.game.addMessage('{0} moves the conflict to {1}', context.player, card);
-                    card.inConflict = true;
-                    this.game.currentConflict.conflictProvince.inConflict = false;
-                    this.game.currentConflict.conflictProvince = card;
-                    if(card.facedown) {
-                        this.game.raiseEvent(EventNames.OnCardRevealed, { context: context, card: card }, () => card.facedown = false);
-                    }
-                    return true;
-                }
-            })
+                gameAction: AbilityDsl.actions.moveConflict()
+            },
         });
     }
 }
