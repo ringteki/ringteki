@@ -33,7 +33,7 @@ describe('Called to War', function() {
             expect(this.player2).toBeAbleToSelect(this.shibaTsukune);
             expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
             this.player2.clickCard(this.shibaTsukune);
-            expect(this.getChatLogs(10)).toContain('player1 plays Called to War to places a fate on Matsu Berserker.  player2 gives player1 1 honor to place a fate on Shiba Tsukune');
+            expect(this.getChatLogs(1)).toContain('player1 plays Called to War to places a fate on Matsu Berserker.  player2 gives player1 1 honor to place a fate on Shiba Tsukune');
 
             expect(this.matsuBerserker.fate).toBe(1);
             expect(this.shibaTsukune.fate).toBe(1);
@@ -53,7 +53,7 @@ describe('Called to War', function() {
             expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
             expect(this.player2).toHavePromptButton('Done');
             this.player2.clickPrompt('Done');
-            expect(this.getChatLogs(10)).toContain('player1 plays Called to War to places a fate on Matsu Berserker');
+            expect(this.getChatLogs(1)).toContain('player1 plays Called to War to places a fate on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
             expect(this.shibaTsukune.fate).toBe(0);
@@ -62,7 +62,7 @@ describe('Called to War', function() {
             expect(this.player2.honor).toBe(10);
         });
 
-        it('should allow each player to choose a bushi', function() {
+        it('should not allow choosing a bushi if you cannot give the honor', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.matsuBerserker],
@@ -80,13 +80,45 @@ describe('Called to War', function() {
             expect(this.player2).not.toBeAbleToSelect(this.shibaTsukune);
             expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
             this.player2.clickPrompt('Done');
-            expect(this.getChatLogs(10)).toContain('player1 plays Called to War to places a fate on Matsu Berserker');
+            expect(this.getChatLogs(3)).toContain('player1 plays Called to War to places a fate on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
             expect(this.shibaTsukune.fate).toBe(0);
 
             expect(this.player1.honor).toBe(10);
             expect(this.player2.honor).toBe(10);
+        });
+
+        it('should work if opponent has no bushi', function() {
+            this.player2.moveCard(this.shibaTsukune, 'dynasty discard pile');
+            this.player1.clickCard(this.calledToWar);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
+            expect(this.player1).not.toBeAbleToSelect(this.ikomaProdigy);
+            this.player1.clickCard(this.matsuBerserker);
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toHavePromptButton('Done');
+            this.player2.clickPrompt('Done');
+            expect(this.getChatLogs(1)).toContain('player1 plays Called to War to places a fate on Matsu Berserker');
+
+            expect(this.matsuBerserker.fate).toBe(1);
+            expect(this.player1.honor).toBe(10);
+            expect(this.player2.honor).toBe(10);
+        });
+
+        it('should not work if neither player has a bushi', function() {
+            this.player2.moveCard(this.shibaTsukune, 'dynasty discard pile');
+            this.player1.moveCard(this.matsuBerserker, 'dynasty discard pile');
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.calledToWar);
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should not work if only opponent has a bushi', function() {
+            this.player1.moveCard(this.matsuBerserker, 'dynasty discard pile');
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.calledToWar);
+            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

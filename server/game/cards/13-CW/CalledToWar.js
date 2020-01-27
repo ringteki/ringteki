@@ -18,15 +18,15 @@ class CalledToWar extends DrawCard {
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
                     optional: true,
-                    cardCondition: (card, context) => card.hasTrait('bushi') && context.player.opponent.checkRestrictions('takeHonor'),
-                    gameAction: AbilityDsl.actions.placeFate()
+                    cardCondition: card => card.hasTrait('bushi'),
+                    gameAction: AbilityDsl.actions.joint([
+                        AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
+                        AbilityDsl.actions.placeFate()
+                    ])
                 }
             },
             effect: 'places a fate on {1}{2}',
-            effectArgs: context => [context.targets.myCharacter, this.buildString(context)],
-            gameAction: AbilityDsl.actions.takeHonor(context => ({
-                amount: (context.targets.oppCharacter && !Array.isArray(context.targets.oppCharacter)) ? 1 : 0
-            }))
+            effectArgs: context => [context.targets.myCharacter, this.buildString(context)]
         });
     }
 
