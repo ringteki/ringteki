@@ -4,7 +4,7 @@
   "description": "The server code for Ringteki, a browser based implementation of the Legend of the Five Rings LCG",
   "main": "index.js",
   "scripts": {
-    "test": "npm run jasmine && npm run karma",
+    "test": "npm run jasmine",
     "jasmine": "tsc && cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine",
     "karma": "cross-env karma start karma.config.js --single-run",
     "coverage": "cross-env JASMINE_CONFIG_PATH=./jasmine.json nyc jasmine && nyc report --reporter=text-lcov | coveralls",
