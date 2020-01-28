@@ -6,6 +6,7 @@ class EndlessPlainsSkirmisher extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move this character to the confict',
+            condition: context => !context.source.isParticipating(),
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Which side should this character be on?',

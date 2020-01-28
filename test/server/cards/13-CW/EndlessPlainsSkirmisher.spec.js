@@ -177,5 +177,20 @@ describe('Endless Plains Skirmisher', function() {
             expect(this.player1.honor).toBe(honor - 1);
             expect(this.game.rings.air.claimedBy).toBe(this.player1.player.name);
         });
+
+        it('should not work if already in conflict', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.skirmisher],
+                defenders: [],
+                type: 'military',
+                ring: 'air'
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.skirmisher);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
     });
 });
