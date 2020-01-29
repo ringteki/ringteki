@@ -1,6 +1,8 @@
 const escapeRegex = require('../util.js').escapeRegex;
 const logger = require('../log.js');
 
+/* Look at throneteki for updates */
+
 class UserService {
     constructor(db) {
         this.users = db.get('users');

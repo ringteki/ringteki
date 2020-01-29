@@ -1,3 +1,5 @@
+/* Look at throneteki for updates */
+
 class NewsService {
     constructor(db) {
         this.news = db.get('news');

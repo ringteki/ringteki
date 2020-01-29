@@ -5,15 +5,18 @@ const _ = require('underscore');
 const monk = require('monk');
 const EventEmitter = require('events');
 const GameService = require('./services/GameService.js');
+const ServiceFactory = require('./services/ServiceFactory.js');
 
 class GameRouter extends EventEmitter {
     constructor(config) {
         super();
 
+        let configService = ServiceFactory.configService();
+        
         this.workers = {};
-        this.gameService = new GameService(monk(config.dbPath));
+        this.gameService = new GameService(monk(configService.getValue('dbPath')));
 
-        router.bind(config.mqUrl, err => {
+        router.bind(`tcp://0.0.0.0:${configService.getValue('mqPort')}`, err => {
             if(err) {
                 logger.info(err);
             }

@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 const moment = require('moment');
 
+const { validateDeck } = require('ringteki-deck-helper');
+
 const logger = require('./log.js');
 const version = moment(require('../version.js'));
 const PendingGame = require('./pendinggame.js');
@@ -11,8 +13,9 @@ const GameRouter = require('./gamerouter.js');
 const MessageService = require('./services/MessageService.js');
 const DeckService = require('./services/DeckService.js');
 const CardService = require('./services/CardService.js');
-const validateDeck = require('../client/deck-validator.js'); // XXX Move this to a common location
 const Settings = require('./settings.js');
+
+
 
 class Lobby {
     constructor(server, options = {}) {

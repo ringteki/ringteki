@@ -1,5 +1,7 @@
 const logger = require('../log.js');
 
+/* Look at throneteki for updates */
+
 class MessageService {
     constructor(db) {
         this.messages = db.get('messages');
