@@ -14,6 +14,7 @@ describe('Yogo Asami', function() {
                 this.brash = this.player1.findCardByName('brash-samurai');
                 this.yogoAsami = this.player1.findCardByName('yogo-asami');
                 this.doomed = this.player2.findCardByName('doomed-shugenja');
+                
                 this.noMoreActions();
             });
 
