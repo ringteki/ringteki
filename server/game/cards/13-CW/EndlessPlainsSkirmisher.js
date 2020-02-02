@@ -6,16 +6,14 @@ class EndlessPlainsSkirmisher extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move this character to the confict',
-            condition: context => !context.source.isParticipating(),
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Which side should this character be on?',
                 choices: {
-                    'Mine': () => true,
-                    'My Opponent\'s': context => context.player.opponent
+                    'Mine': AbilityDsl.actions.moveToConflict({ side: Players.Self }),
+                    'My Opponent\'s': AbilityDsl.actions.moveToConflict({ side: Players.Opponent })
                 }
             },
-            gameAction: AbilityDsl.actions.moveToConflict(context => ({ side: context.select === 'Mine' ? Players.Self : Players.Opponent })),
             effect: 'join the conflict for {1}!',
             effectArgs: context => this.getEffectArg(context, context.select)
         });
