@@ -167,5 +167,28 @@ describe('Vine Tattoo', function() {
             expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
             expect(this.player1).toBeAbleToSelect(this.sotorii);
         });
+
+        it('Covert Test - during attacker declaration (no legal coverter)', function() {
+            this.noMoreActions();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
+            this.player1.clickCard(this.tengu);
+            this.player1.clickCard(this.sotorii);
+            expect(this.sotorii.covert).toBe(false);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.masterAlchemist.covert).toBe(true);
+        });
+
+        it('Covert Test - during attacker declaration (legal coverter + illegal coverter)', function() {
+            this.noMoreActions();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
+            this.player1.clickCard(this.tengu);
+            this.player1.clickCard(this.ikehata);
+            this.player1.clickCard(this.sotorii);
+            expect(this.sotorii.covert).toBe(true);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.masterAlchemist.covert).toBe(true);
+        });
     });
 });

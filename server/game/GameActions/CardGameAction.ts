@@ -36,7 +36,7 @@ export class CardGameAction extends GameAction {
             if (context.player && context.ability && context.ability.targets && context.ability.targets.length > 0) {
                 let targetForCost = [card];
 
-                if (context.targets.challenger && context.targets.duelTarget) { //duels act weird, we need to handle targeting correctly for this to work
+                if (context.targets.challenger && context.targets.duelTarget) { //duels act weird, we need to handle targeting differently for them to work
                     let duelTargets = _.flatten(_.values(context.targets));
                     targetForCost = targetForCost.concat(duelTargets);
                 }
