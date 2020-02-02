@@ -199,7 +199,7 @@ class InitiateConflictPrompt extends UiPrompt {
                     }
                 }
             }
-            
+
             return this.covertRemaining && targetable;
 
         }
