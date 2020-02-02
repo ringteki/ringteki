@@ -36,6 +36,44 @@ describe('Isawa Pilgrim', function() {
                 expect(this.player2).toHavePrompt('Action Window');
                 expect(this.jade.location).toBe('conflict discard pile');
             });
+
+            it('should properly switch sides during a conflict', function() {
+                this.player2.claimRing('water');
+                this.player1.pass();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.pilgrim],
+                    defenders: []
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.pilgrim);
+                expect(this.pilgrim.controller).toBe(this.player2.player);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(2)).toContain('Political Air conflict - Attacker: 0 Defender: 2');
+            });
+
+            it('should be able to switch back', function() {
+                this.player2.claimRing('water');
+                this.player1.pass();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.pilgrim],
+                    defenders: []
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.pilgrim);
+                expect(this.pilgrim.controller).toBe(this.player2.player);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(2)).toContain('Political Air conflict - Attacker: 0 Defender: 2');
+                this.player1.claimRing('water');
+                this.game.checkGameState(true);
+                this.player2.clickCard(this.pilgrim);
+                expect(this.pilgrim.controller).toBe(this.player1.player);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(2)).toContain('Political Air conflict - Attacker: 2 Defender: 0');
+            });
         });
     });
 });
