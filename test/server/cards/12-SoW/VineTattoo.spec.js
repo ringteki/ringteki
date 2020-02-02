@@ -190,5 +190,39 @@ describe('Vine Tattoo', function() {
             this.player1.clickCard(this.masterAlchemist);
             expect(this.masterAlchemist.covert).toBe(true);
         });
+
+        it('Covert Test - reaction to covert should be on the right target', function() {
+            this.noMoreActions();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
+            this.player1.clickCard(this.tengu);
+            this.player1.clickCard(this.ikehata);
+            this.player1.clickCard(this.sotorii);
+            expect(this.sotorii.covert).toBe(true);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.masterAlchemist.covert).toBe(true);
+            this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.tengu);
+            this.player1.clickCard(this.tengu);
+            expect(this.getChatLogs(3)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
+        });
+
+        it('Covert Test - reaction to covert should be on the right target (switching selection order)', function() {
+            this.noMoreActions();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
+            this.player1.clickCard(this.tengu);
+            this.player1.clickCard(this.ikehata);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.masterAlchemist.covert).toBe(true);
+            this.player1.clickCard(this.sotorii);
+            expect(this.sotorii.covert).toBe(true);
+            this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.tengu);
+            this.player1.clickCard(this.tengu);
+            expect(this.getChatLogs(3)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
+        });
     });
 });

@@ -173,33 +173,35 @@ class InitiateConflictPrompt extends UiPrompt {
                     attacker: card
                 });
             }
-            else {
-                if (this.selectedDefenders.includes(card)) {
-                    return true;
-                }
-                if (card.isCovert() || !this.covertRemaining) {
-                    return false;
-                }
 
-                //Make sure the covert is legal
-                let attackersWithCovert = _.filter(this.conflict.attackers, card => card.isCovert());
-                let covertContexts = attackersWithCovert.map(card => new AbilityContext({
-                    game: this.game,
-                    player: this.conflict.attackingPlayer,
-                    source: card,
-                    ability: new CovertAbility()
-                }));
+            if(this.selectedDefenders.includes(card)) {
+                return true;
+            }
+            if(card.isCovert() || !this.covertRemaining) {
+                return false;
+            }
 
-                let targetable = false;
-                for(const context of covertContexts) {
-                    if(context.player.checkRestrictions('initiateKeywords', context)) {
-                        if (card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context)) {
-                            targetable = true;
-                        }
+            //Make sure the covert is legal
+            let attackersWithCovert = _.filter(this.conflict.attackers, card => card.isCovert());
+            let covertContexts = attackersWithCovert.map(card => new AbilityContext({
+                game: this.game,
+                player: this.conflict.attackingPlayer,
+                source: card,
+                ability: new CovertAbility()
+            }));
+
+            let targetable = false;
+
+            for(const context of covertContexts) {
+                if(context.player.checkRestrictions('initiateKeywords', context)) {
+                    if(card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context)) {
+                        targetable = true;
                     }
                 }
-                return this.covertRemaining && targetable;
             }
+            
+            return this.covertRemaining && targetable;
+
         }
         return false;
     }

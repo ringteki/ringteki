@@ -5,7 +5,7 @@ describe('InitateConflictPrompt: ', function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseEvent', 'promptWithHandlerMenu', 'getFrameworkContext', 'resetClocks']);
         this.fireRing = { element: 'fire' };
         this.gameSpy.rings = { fire: this.fireRing };
-        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration']);
+        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'checkRestrictions']);
         this.playerSpy.getLegalConflictTypes.and.returnValue(['military', 'political']);
         this.playerSpy.cardsInPlay = [];
         this.conflictSpy = jasmine.createSpyObj('conflict', ['calculateSkill', 'removeFromConflict', 'addAttacker', 'setDeclarationComplete']);
@@ -292,8 +292,16 @@ describe('InitateConflictPrompt: ', function() {
 
             describe('if the card is controlled by the other player,', function() {
                 beforeEach(function() {
+                    this.covertSpy = jasmine.createSpyObj('card', ['checkRestrictions', 'canDeclareAsAttacker', 'isCovert', 'canBeBypassedByCovert', 'getEffects', 'canBeAttacked']);
+                    this.covertSpy.isCovert.and.returnValue(true);
+                    this.conflictSpy.attackers.push(this.covertSpy);
+                    this.conflictSpy.attackingPlayer = this.playerSpy;
+                    this.playerSpy.checkRestrictions.and.returnValue(true);
+                    this.playerSpy.playableLocations = [];
+                    this.covertSpy.location = 'play area';
                     this.cardSpy.controller = this.opponent;
                     this.cardSpy.canBeBypassedByCovert.and.returnValue(true);
+                    this.cardSpy.checkRestrictions.and.returnValue(true);
                 });
 
                 describe('if the card is currently selected', function() {
