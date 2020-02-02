@@ -54,6 +54,9 @@ export class PutIntoPlayAction extends CardGameAction {
             if(!card.checkRestrictions('putIntoPlay', context)) {
                 return false;
             }
+            if(!card.checkRestrictions('putIntoConflict', context)) {
+                return false;
+            }
         }
         return true;
     }

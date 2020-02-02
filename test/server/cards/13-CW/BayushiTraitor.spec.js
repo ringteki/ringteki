@@ -34,7 +34,7 @@ describe('Bayushi Traitor', function() {
             it('should enter play under the control of your opponent', function() {
                 this.player1.clickCard(this.traitor);
                 this.player1.clickPrompt('1');
-                expect(this.getChatLogs(1)).toContain('player1 plays Bayushi Traitor at player2\'s home with 1 additional fate');
+                expect(this.getChatLogs(1)).toContain('player1 plays Bayushi Traitor at home with 1 additional fate');
                 expect(this.traitor.controller.name).toBe(this.player2.name);
                 this.player2.clickCard(this.jade);
                 expect(this.player2).toBeAbleToSelect(this.mystic);
@@ -48,7 +48,7 @@ describe('Bayushi Traitor', function() {
             it('should contribute glory for your opponent', function() {
                 this.player1.clickCard(this.traitor);
                 this.player1.clickPrompt('1');
-                expect(this.getChatLogs(1)).toContain('player1 plays Bayushi Traitor at player2\'s home with 1 additional fate');
+                expect(this.getChatLogs(1)).toContain('player1 plays Bayushi Traitor at home with 1 additional fate');
                 expect(this.traitor.controller.name).toBe(this.player2.name);
                 this.noMoreActions();
                 this.player1.passConflict();
@@ -195,7 +195,7 @@ describe('Bayushi Traitor', function() {
 
                 this.player1.clickCard(this.traitor);
                 this.player1.clickPrompt('1');
-                expect(this.getChatLogs(3)).toContain('player1 plays Bayushi Traitor at player2\'s home with 1 additional fate');
+                expect(this.getChatLogs(3)).toContain('player1 plays Bayushi Traitor at home with 1 additional fate');
                 expect(this.player2).toHavePrompt('Conflict Action Window');
 
                 expect(this.game.currentConflict.defenders).not.toContain(this.traitor);
