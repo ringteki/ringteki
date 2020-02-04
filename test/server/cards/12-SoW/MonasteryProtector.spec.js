@@ -706,5 +706,27 @@ describe('Monastery Protector', function() {
             expect(this.player2.fate).toBe(0);
             expect(this.getChatLogs(3)).toContain('player2 pays 2 fate in order to target Monastery Protector');
         });
+
+        it('should take the fate (duel - you choose target)', function() {
+            this.player1.fate = 10;
+            this.player2.fate = 1;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue],
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.debate);
+            this.player2.clickCard(this.hiroue);
+            expect(this.player2).toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).toBeAbleToSelect(this.ancientMaster);
+            this.player2.clickCard(this.protector);
+            this.player1.clickPrompt('2');
+            this.player2.clickPrompt('1');
+            expect(this.player2.fate).toBe(0);
+            expect(this.getChatLogs(15)).toContain('player2 pays 1 fate in order to target Monastery Protector');
+        });
     });
 });
