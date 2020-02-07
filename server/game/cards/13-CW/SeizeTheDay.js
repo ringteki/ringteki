@@ -6,9 +6,9 @@ class SeizeTheDay extends DrawCard {
         this.reaction({
             title: 'Become first player',
             when: {
-                onPhaseStarted: (event, context) => event.phase === Phases.Conflict && this.game.getFirstPlayer() !== context.player,
+                onPhaseStarted: (event, context) => event.phase === Phases.Conflict && this.game.getFirstPlayer() !== context.player
             },
-            handler: context => {
+            handler: () => {
                 let firstPlayer = this.game.getFirstPlayer();
                 let otherPlayer = this.game.getOtherPlayer(firstPlayer);
                 if(otherPlayer) {
