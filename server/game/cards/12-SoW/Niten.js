@@ -34,7 +34,7 @@ class Niten extends DrawCard {
                 cardType: CardTypes.Attachment,
                 controller: Players.Self,
                 location: Locations.Hand,
-                cardCondition: (card, context) => card.canAttach(context.source.parent, context) || card.canAttach(context.costs.nitenCaptureParentCost, context)
+                cardCondition: (card, context) => card.canAttach(context.source.parent) || card.canAttach(context.costs.nitenCaptureParentCost)
             },
             gameAction: AbilityDsl.actions.attach(context => ({
                 target: context.costs.nitenCaptureParentCost,

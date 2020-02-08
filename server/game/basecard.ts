@@ -516,9 +516,7 @@ class BaseCard extends EffectSource {
 
     checkForIllegalAttachments() {
         let context = this.game.getFrameworkContext(this.controller);
-        let illegalAttachments = this.attachments.filter(attachment => (
-            !this.allowAttachment(attachment) || !attachment.canAttach(this, { game: this.game, player: this.controller })
-        ));
+        let illegalAttachments = this.attachments.filter(attachment => !this.allowAttachment(attachment) || !attachment.canAttach(this));
         for(const effectCard of this.getEffects(EffectNames.CannotHaveOtherRestrictedAttachments)) {
             illegalAttachments = illegalAttachments.concat(this.attachments.filter(card => card.isRestricted() && card !== effectCard));
         }
@@ -609,11 +607,12 @@ class BaseCard extends EffectSource {
      * Checks whether the passed card meets the attachment restrictions (e.g.
      * Opponent cards only, specific factions, etc) for this card.
      */
-    canAttach(parent, context, ignoreType = false) {
-        if(!parent || parent.getType() !== CardTypes.Character || !ignoreType && this.getType() !== CardTypes.Attachment) {
+    canAttach(parent, properties = { ignoreType: false, controller: this.controller }) {
+        const attachmentController = properties.controller || this.controller;
+        if(!parent || parent.getType() !== CardTypes.Character || !properties.ignoreType && this.getType() !== CardTypes.Attachment) {
             return false;
         }
-        if(this.anyEffect(EffectNames.AttachmentMyControlOnly) && context.player !== parent.controller && this.controller !== parent.controller) {
+        if(this.anyEffect(EffectNames.AttachmentMyControlOnly) && attachmentController !== parent.controller) {
             return false;
         } else if(this.anyEffect(EffectNames.AttachmentUniqueRestriction) && !parent.isUnique()) {
             return false;
