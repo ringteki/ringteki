@@ -25,7 +25,7 @@ class TotalWarfare extends DrawCard {
         return source && source.getType() === 'province' && this.getType() === CardTypes.Attachment;
     }
 
-    canAttach(parent, context) { // eslint-disable-line no-unused-vars
+    canAttach(parent) {
         return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }
