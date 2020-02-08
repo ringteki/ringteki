@@ -10,6 +10,7 @@ describe('Diversionary Maneuver', function() {
                         hand: ['diversionary-maneuver']
                     },
                     player2: {
+                        role: ['keeper-of-water'],
                         provinces: ['public-forum', 'sanpuku-seido', 'rally-to-the-cause'],
                         inPlay: ['serene-warrior', 'doji-challenger', 'borderlands-defender']
                     }
@@ -194,6 +195,64 @@ describe('Diversionary Maneuver', function() {
 
                 this.player2.clickPrompt('Done');
                 expect(this.getChatLogs(3)).toContain('player2 moves no one to the conflict');
+            });
+
+            it('should allow reacting to the province being revealed', function() {
+                this.initiateConflict({
+                    ring: 'air',
+                    province: this.publicForum,
+                    attackers: [this.agetoki],
+                    defenders: [this.warrior]
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.maneuver);
+                expect(this.player1).toHavePrompt('Diversionary Maneuver');
+                expect(this.player1).toBeAbleToSelect(this.sanpukuSeido);
+                expect(this.player1).toBeAbleToSelect(this.rally);
+                expect(this.player1).not.toBeAbleToSelect(this.publicForum);
+                expect(this.player1).not.toBeAbleToSelect(this.upholding);
+                this.player1.clickCard(this.rally);
+                expect(this.publicForum.inConflict).toBe(false);
+                expect(this.rally.inConflict).toBe(true);
+                expect(this.game.currentConflict.conflictProvince).toBe(this.rally);
+
+                expect(this.agetoki.bowed).toBe(true);
+                expect(this.agetoki.inConflict).toBe(false);
+                expect(this.warrior.bowed).toBe(true);
+                expect(this.warrior.inConflict).toBe(false);
+                expect(this.getChatLogs(1)).toContain('player1 plays Diversionary Maneuver to move the conflict to Rally to the Cause and send all participating characters home bowed');
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.rally);
+                this.player2.clickCard(this.rally);
+                expect(this.getChatLogs(1)).toContain('player2 uses Rally to the Cause to switch the conflict type');
+
+                expect(this.player1).toHavePrompt('Choose cards');
+                expect(this.player1).toBeAbleToSelect(this.mystic);
+                expect(this.player1).not.toBeAbleToSelect(this.agetoki);
+                expect(this.player1).toBeAbleToSelect(this.maiden);
+                expect(this.player1).toHavePromptButton('Done');
+
+                this.player1.clickCard(this.mystic);
+                this.player1.clickCard(this.maiden);
+                this.player1.clickPrompt('Done');
+
+                expect(this.mystic.inConflict).toBe(true);
+                expect(this.maiden.inConflict).toBe(true);
+
+                expect(this.getChatLogs(1)).toContain('player1 moves Miya Mystic and Shrine Maiden to the conflict');
+
+                expect(this.player2).toHavePrompt('Choose cards');
+                expect(this.player2).toBeAbleToSelect(this.challenger);
+                expect(this.player2).not.toBeAbleToSelect(this.warrior);
+                expect(this.player2).toBeAbleToSelect(this.defender);
+                expect(this.player2).toHavePromptButton('Done');
+
+                this.player2.clickCard(this.challenger);
+                this.player2.clickCard(this.defender);
+                this.player2.clickPrompt('Done');
+                expect(this.getChatLogs(3)).toContain('player2 moves Doji Challenger and Borderlands Defender to the conflict');
             });
         });
     });
