@@ -4,6 +4,11 @@ const AbilityDsl = require('../../abilitydsl');
 
 class NaturalNegotiator extends DrawCard {
     setupCardAbilities() {
+        this.attachmentConditions({
+            trait: 'courtier',
+            myControl: true
+        });
+
         this.action({
             title: 'Switch attached characters base skills',
             effect: 'switch {1}\'s base {2} and {3} skill',
@@ -16,14 +21,6 @@ class NaturalNegotiator extends DrawCard {
                 effect: AbilityDsl.effects.switchBaseSkills()
             }))
         });
-    }
-
-    canAttach(card, context) {
-        if(card.hasTrait('courtier') && card.controller === context.player) {
-            return super.canAttach(card, context);
-        }
-
-        return false;
     }
 }
 
