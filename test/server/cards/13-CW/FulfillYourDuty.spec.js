@@ -34,6 +34,7 @@ describe('Fulfill Your Duty', function () {
         });
 
         it('should activate during a conflict and add the sacrificed characters skill to the province strength', function () {
+            this.noMoreActions();
             this.initiateConflict({
                 province: this.p2Pilgrimage,
                 attackers: [this.outrider],
