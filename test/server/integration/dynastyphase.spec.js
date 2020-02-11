@@ -65,7 +65,7 @@ describe('dynasty phase', function() {
 
                 expect(this.akodoToturi.location).toBe('play area');
                 expect(this.akodoToturi.fate).toBe(1);
-                expect(this.player1.player.fate).toBe(startingFate - (this.akodoToturi.cardData.cost + 1));
+                expect(this.player1.player.fate).toBe(startingFate - (this.akodoToturi.getCost() + 1));
                 expect(this.player2).toHavePrompt('Click pass when done');
             });
 
