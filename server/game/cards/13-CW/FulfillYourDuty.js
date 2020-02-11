@@ -8,12 +8,12 @@ class FulfillYourDuty extends DrawCard {
             title: 'Add Province Strength',
             condition: () => this.game.isDuringConflict(),
             cost: AbilityDsl.costs.sacrifice({ cardType: CardTypes.Character }),
-            effect: 'add {1} to the province strength',
-            effectArgs: context => context.costs.sacrifice.getMilitarySkill(),
+            effect: 'add {1} to the attacked province\'s strength',
+            effectArgs: context => context.costs.sacrificeStateWhenChosen ? context.costs.sacrificeStateWhenChosen.getMilitarySkill() : 0,
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 target: this.game.currentConflict.conflictProvince,
                 targetLocation: Locations.Provinces,
-                effect: AbilityDsl.effects.modifyProvinceStrength(context.costs.sacrifice.getMilitarySkill())
+                effect: AbilityDsl.effects.modifyProvinceStrength(context.costs.sacrificeStateWhenChosen ? context.costs.sacrificeStateWhenChosen.getMilitarySkill() : 0)
             }))
         });
     }
