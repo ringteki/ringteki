@@ -12,7 +12,7 @@ class RoadsideInn extends DrawCard {
             targets: {
                 myCharacter: {
                     cardType: CardTypes.Character,
-                    gameAction: AbilityDsl.actions.placeFate( context => ({ origin: context.player }) )
+                    gameAction: AbilityDsl.actions.placeFate(context => ({ origin: context.player }))
                 },
                 oppCharacter: {
                     player: Players.Opponent,
@@ -20,7 +20,7 @@ class RoadsideInn extends DrawCard {
                     optional: true,
                     gameAction: AbilityDsl.actions.joint([
                         AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                        AbilityDsl.actions.placeFate( context => ({ origin: context.player.opponent }) )
+                        AbilityDsl.actions.placeFate(context => ({ origin: context.player.opponent }))
                     ])
                 }
             },

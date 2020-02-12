@@ -68,6 +68,47 @@ describe('Roadside Inn', function() {
             expect(this.player2.fate).toBe(9);
         });
 
+        it('should work with standard fate phase fate business', function() {
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.inn);
+            this.player1.clickCard(this.inn);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
+            expect(this.player1).toBeAbleToSelect(this.ikomaProdigy);
+            expect(this.player1).toBeAbleToSelect(this.dojiWhisperer);
+            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
+            this.player1.clickCard(this.matsuBerserker);
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
+            expect(this.player2).toBeAbleToSelect(this.ikomaProdigy);
+            expect(this.player2).toBeAbleToSelect(this.dojiWhisperer);
+            expect(this.player2).toBeAbleToSelect(this.solemnScholar);
+            this.player2.clickCard(this.dojiWhisperer);
+            expect(this.getChatLogs(1)).toContain('player1 uses Roadside Inn to place a fate from their pool on Matsu Berserker.  player2 gives player1 1 honor to place a fate from their pool on Doji Whisperer');
+
+            expect(this.matsuBerserker.fate).toBe(1);
+            expect(this.dojiWhisperer.fate).toBe(1);
+
+            expect(this.player1.honor).toBe(11);
+            expect(this.player2.honor).toBe(9);
+
+            expect(this.player1.fate).toBe(9);
+            expect(this.player2.fate).toBe(9);
+
+            this.player1.clickPrompt('Done');
+            this.player2.clickPrompt('Done');
+
+            expect(this.matsuBerserker.fate).toBe(0);
+            expect(this.dojiWhisperer.fate).toBe(0);
+
+            expect(this.matsuBerserker.location).toBe('play area');
+            expect(this.ikomaProdigy.location).toBe('dynasty discard pile');
+            expect(this.solemnScholar.location).toBe('dynasty discard pile');
+            expect(this.dojiWhisperer.location).toBe('play area');
+        });
+
+
         it('should not allow selecting a character if you have no fate', function() {
             this.player2.fate = 0;
             this.noMoreActions();
@@ -126,7 +167,6 @@ describe('Roadside Inn', function() {
             this.noMoreActions();
 
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.inn);
         });
     });
 });
