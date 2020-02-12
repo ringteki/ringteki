@@ -68,7 +68,7 @@ describe('One of the Forgotten', function() {
                     player1: {
                         inPlay: ['daidoji-uji'],
                         hand: ['way-of-the-crane'],
-                        dynastyDiscard: ['one-of-the-forgotten'],
+                        dynastyDiscard: ['one-of-the-forgotten']
                     },
                     player2: {
                     }
@@ -95,7 +95,7 @@ describe('One of the Forgotten', function() {
                 this.player1.pass();
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
-                
+
                 this.player1.clickCard(this.forgotten);
                 expect(this.player1).toHavePromptButton('0');
                 expect(this.player1).toHavePromptButton('1');
