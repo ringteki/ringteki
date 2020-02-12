@@ -9,14 +9,12 @@ class CalledToWar extends DrawCard {
             targets: {
                 myCharacter: {
                     cardType: CardTypes.Character,
-                    controller: Players.Self,
                     cardCondition: card => card.hasTrait('bushi'),
                     gameAction: AbilityDsl.actions.placeFate()
                 },
                 oppCharacter: {
                     player: Players.Opponent,
                     cardType: CardTypes.Character,
-                    controller: Players.Opponent,
                     optional: true,
                     cardCondition: card => card.hasTrait('bushi'),
                     gameAction: AbilityDsl.actions.joint([
@@ -25,7 +23,7 @@ class CalledToWar extends DrawCard {
                     ])
                 }
             },
-            effect: 'places a fate on {1}{2}',
+            effect: 'place a fate on {1}{2}',
             effectArgs: context => [context.targets.myCharacter, this.buildString(context)]
         });
     }
