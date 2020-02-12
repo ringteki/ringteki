@@ -5,19 +5,22 @@ describe('Monastery Protector', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['monastery-protector', 'doji-challenger', 'ancient-master', 'court-musician', 'utaku-tetsuko'],
-                    hand: ['hawk-tattoo', 'way-of-the-scorpion']
+                    hand: ['hawk-tattoo', 'way-of-the-scorpion'],
+                    dynastyDiscard: ['monastery-protector']
                 },
                 player2: {
                     fate: 0,
-                    inPlay: ['yogo-hiroue', 'awakened-tsukumogami'],
-                    hand: ['way-of-the-scorpion', 'hurricane-punch', 'duelist-training', 'unfulfilled-duty', 'jade-tetsubo', 'court-games', 'civil-discourse', 'policy-debate'],
+                    inPlay: ['yogo-hiroue', 'awakened-tsukumogami', 'doji-whisperer', 'togashi-mitsu'],
+                    hand: ['way-of-the-scorpion', 'hurricane-punch', 'duelist-training', 'unfulfilled-duty', 'jade-tetsubo', 'court-games', 'civil-discourse', 'policy-debate', 'void-fist'],
                     dynastyDiscard: ['city-of-lies'],
-                    conflictDiscard: ['kirei-ko'],
+                    conflictDiscard: ['kirei-ko', 'defend-your-honor'],
                     provinces: ['manicured-garden', 'blood-of-onnotangu']
                 }
             });
 
-            this.protector = this.player1.findCardByName('monastery-protector');
+            this.protector = this.player1.findCardByName('monastery-protector', 'play area');
+            this.protector2 = this.player1.findCardByName('monastery-protector', 'dynasty discard pile');
+
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.ancientMaster = this.player1.findCardByName('ancient-master');
             this.tattoo = this.player1.findCardByName('hawk-tattoo');
@@ -38,6 +41,11 @@ describe('Monastery Protector', function() {
             this.civil = this.player2.findCardByName('civil-discourse');
             this.debate = this.player2.findCardByName('policy-debate');
             this.kireiKo = this.player2.findCardByName('kirei-ko');
+
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.dyh = this.player2.findCardByName('defend-your-honor');
+            this.mitsu = this.player2.findCardByName('togashi-mitsu');
+            this.voidFist = this.player2.findCardByName('void-fist');
         });
 
         it('should not impact own targeting', function() {
@@ -458,6 +466,30 @@ describe('Monastery Protector', function() {
             expect(this.player1).not.toBeAbleToSelect(this.ancientMaster);
         });
 
+        it('should allow targeting if you can pay a fate, and then take the fate (duel - opponent chooses target)', function() {
+            this.player1.fate = 10;
+            this.player2.fate = 2;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue],
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.civil);
+            this.player2.clickCard(this.hiroue);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.protector);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).toBeAbleToSelect(this.ancientMaster);
+
+            this.player1.clickCard(this.protector);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+            expect(this.player2.fate).toBe(0);
+            expect(this.getChatLogs(9)).toContain('player2 pays 1 fate in order to target Monastery Protector');
+        });
+
         it('should not impact events that don\'t target', function() {
             this.player2.fate = 0;
             this.player2.moveCard(this.kireiKo, 'hand');
@@ -558,6 +590,143 @@ describe('Monastery Protector', function() {
             expect(this.player2.fate).toBe(0);
             expect(this.game.rings.air.fate).toBe(0);
             expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should work with void fist (multiple actions, same card, same target)', function() {
+            this.player1.fate = 10;
+            this.player2.fate = 3;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue, this.whisperer, this.mitsu],
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.hurricanePunch);
+            this.player2.clickCard(this.mitsu);
+            this.player1.pass();
+            this.player2.clickCard(this.scorpion);
+            this.player2.clickCard(this.whisperer);
+            this.player1.pass();
+            this.player2.clickCard(this.voidFist);
+            expect(this.player2).toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).toBeAbleToSelect(this.ancientMaster);
+
+            this.player2.clickCard(this.protector);
+            expect(this.player2.fate).toBe(2);
+            expect(this.getChatLogs(3)).toContain('player2 pays 1 fate in order to target Monastery Protector');
+        });
+
+        it('should work with replaying events, no memory', function() {
+            this.player1.fate = 10;
+            this.player2.fate = 3;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue, this.whisperer, this.mitsu],
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.hurricanePunch);
+            this.player2.clickCard(this.mitsu);
+            this.player1.pass();
+            this.player2.clickCard(this.scorpion);
+            this.player2.clickCard(this.whisperer);
+            this.player1.pass();
+            this.player2.clickCard(this.voidFist);
+            expect(this.player2).toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).toBeAbleToSelect(this.ancientMaster);
+
+            this.player2.clickCard(this.protector);
+            expect(this.player2.fate).toBe(2);
+            expect(this.getChatLogs(3)).toContain('player2 pays 1 fate in order to target Monastery Protector');
+            this.player1.pass();
+            this.player2.clickCard(this.mitsu);
+            this.player2.clickCard(this.voidFist);
+            this.player2.clickCard(this.ancientMaster);
+            expect(this.player2.fate).toBe(1);
+            expect(this.getChatLogs(4)).toContain('player2 pays 1 fate in order to target Ancient Master');
+        });
+
+        it('should work with defend your honor', function() {
+            this.player2.moveCard(this.dyh, 'hand');
+            this.player1.fate = 10;
+            this.player2.fate = 1;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue, this.whisperer],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.scorpionP1);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.dyh);
+            this.player2.clickCard(this.dyh);
+            this.player2.clickCard(this.hiroue);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.protector);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).toBeAbleToSelect(this.ancientMaster);
+
+            this.player1.clickCard(this.protector);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+            expect(this.player2.fate).toBe(0);
+            expect(this.getChatLogs(9)).toContain('player2 pays 1 fate in order to target Monastery Protector');
+        });
+
+        it('should stack', function() {
+            this.player2.fate = 1;
+            this.player1.moveCard(this.protector2, 'play area');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue],
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.scorpion);
+            expect(this.player2).not.toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).not.toBeAbleToSelect(this.ancientMaster);
+
+            this.player2.fate = 2;
+            this.player2.clickPrompt('Cancel');
+            this.player2.clickCard(this.scorpion);
+            expect(this.player2).toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).toBeAbleToSelect(this.ancientMaster);
+
+            this.player2.clickCard(this.protector);
+            expect(this.player2.fate).toBe(0);
+            expect(this.getChatLogs(3)).toContain('player2 pays 2 fate in order to target Monastery Protector');
+        });
+
+        it('should take the fate (duel - you choose target)', function() {
+            this.player1.fate = 10;
+            this.player2.fate = 1;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.protector, this.challenger, this.ancientMaster],
+                defenders: [this.hiroue],
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.debate);
+            this.player2.clickCard(this.hiroue);
+            expect(this.player2).toBeAbleToSelect(this.protector);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).toBeAbleToSelect(this.ancientMaster);
+            this.player2.clickCard(this.protector);
+            this.player1.clickPrompt('2');
+            this.player2.clickPrompt('1');
+            expect(this.player2.fate).toBe(0);
+            expect(this.getChatLogs(15)).toContain('player2 pays 1 fate in order to target Monastery Protector');
         });
     });
 });
