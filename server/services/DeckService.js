@@ -13,8 +13,20 @@ class DeckService {
             });
     }
 
+    getByStandaloneId(id) {
+        return this.decks.findOne({ standaloneDeckId: id })
+            .catch(err => {
+                logger.error('Unable to fetch standalone deck', err);
+                throw new Error('Unable to fetch standalone deck ' + id);
+            });
+    }
+
     findByUserName(userName) {
         return this.decks.find({ username: userName }, { sort: { lastUpdated: -1 } });
+    }
+
+    getStandaloneDecks() {
+        return this.decks.find({ standaloneDeckId: { $exists: true } }, { sort: { lastUpdated: -1 } });
     }
 
     create(deck) {
@@ -29,6 +41,23 @@ class DeckService {
             faction: deck.faction,
             alliance: deck.alliance,
             lastUpdated: new Date()
+        };
+
+        return this.decks.insert(properties);
+    }
+
+    createStandalone(deck) {
+        let properties = {
+            name: deck.deckName,
+            provinceCards: deck.provinceCards,
+            stronghold: deck.stronghold,
+            role: deck.role,
+            conflictCards: deck.conflictCards,
+            dynastyCards: deck.dynastyCards,
+            faction: deck.faction,
+            alliance: deck.alliance,
+            lastUpdated: deck.lastUpdate,
+            standaloneDeckId: deck.standaloneDeckId
         };
 
         return this.decks.insert(properties);
@@ -56,4 +85,3 @@ class DeckService {
 }
 
 module.exports = DeckService;
-
