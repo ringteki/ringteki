@@ -44,7 +44,7 @@ interface TargetToken extends BaseTarget {
 
 interface BaseTargetCard extends BaseTarget {
     cardType?: CardTypes | CardTypes[];
-    controller?: Players;
+    controller?: ((context: AbilityContext) => Players) | Players;
     location?: Locations | Locations[];
     optional?: boolean;
 };

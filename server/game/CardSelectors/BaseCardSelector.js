@@ -28,10 +28,15 @@ class BaseCardSelector {
     }
 
     findPossibleCards(context) {
+        let controllerProp = this.controller;
+        if(typeof controllerProp === 'function') {
+            controllerProp = controllerProp(context);
+        }
+
         if(this.location.includes(Locations.Any)) {
-            if(this.controller === Players.Self) {
+            if(controllerProp === Players.Self) {
                 return context.game.allCards.filter(card => card.controller === context.player);
-            } else if(this.controller === Players.Opponent) {
+            } else if(controllerProp === Players.Opponent) {
                 return context.game.allCards.filter(card => card.controller === context.player.opponent);
             }
             return context.game.allCards.toArray();
@@ -54,7 +59,7 @@ class BaseCardSelector {
             attachments = attachments.concat(...context.player.opponent.cardsInPlay.map(card => card.attachments.toArray()));
         }
         let possibleCards = [];
-        if(this.controller !== Players.Opponent) {
+        if(controllerProp !== Players.Opponent) {
             possibleCards = this.location.reduce((array, location) => {
                 let cards = context.player.getSourceList(location).toArray();
                 if(location === Locations.PlayArea) {
@@ -63,7 +68,7 @@ class BaseCardSelector {
                 return array.concat(cards);
             }, possibleCards);
         }
-        if(this.controller !== Players.Self && context.player.opponent) {
+        if(controllerProp !== Players.Self && context.player.opponent) {
             possibleCards = this.location.reduce((array, location) => {
                 let cards = context.player.opponent.getSourceList(location).toArray();
                 if(location === Locations.PlayArea) {
@@ -76,6 +81,11 @@ class BaseCardSelector {
     }
 
     canTarget(card, context, choosingPlayer, selectedCards = []) {
+        let controllerProp = this.controller;
+        if(typeof controllerProp === 'function') {
+            controllerProp = controllerProp(context);
+        }
+
         if(!card) {
             return false;
         }
@@ -83,10 +93,10 @@ class BaseCardSelector {
         if(this.checkTarget && !card.canBeTargeted(context, selectedCards)) {
             return false;
         }
-        if(this.controller === Players.Self && card.controller !== context.player) {
+        if(controllerProp === Players.Self && card.controller !== context.player) {
             return false;
         }
-        if(this.controller === Players.Opponent && card.controller !== context.player.opponent) {
+        if(controllerProp === Players.Opponent && card.controller !== context.player.opponent) {
             return false;
         }
         if(!this.location.includes(Locations.Any) && !this.location.includes(card.location)) {
