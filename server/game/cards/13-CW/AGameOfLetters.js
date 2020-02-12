@@ -9,26 +9,21 @@ class AGameOfLetters extends DrawCard {
             condition: () => this.game.isDuringConflict('political'),
             targets: {
                 token: {
-                    // activePromptTitle: 'Choose a token',
-                    // mode: TargetModes.Token,
-                    // player: Players.Any
                     activePromptTitle: 'Choose a token',
-                    cardType: CardTypes.Character,
-                    controller: Players.Any,
-                    cardCondition: card => card.isHonored || card.isDishonored
+                    mode: TargetModes.Token
                 },
                 character: {
                     activePromptTitle: 'Choose a character',
                     dependsOn: 'token',
                     cardType: CardTypes.Character,
-                    cardCondition: (card, context) => card.controller !== context.targets.token.controller && card.isParticipating(),
+                    cardCondition: (card, context) => card.controller !== context.tokens.token.card.controller && card.isParticipating(),
                     player: Players.Any,
                     gameAction: AbilityDsl.actions.conditional({
-                        condition: (context, properties) => context.targets.token.isHonored,
+                        condition: context => context.tokens.token.honored,
                         trueGameAction: AbilityDsl.actions.honor(),
                         falseGameAction: AbilityDsl.actions.dishonor()
                     })
-                },
+                }
             }
         });
     }

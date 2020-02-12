@@ -46,7 +46,6 @@ describe('A Game of Letters', function() {
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
-
         it('should let you target a token independent of participating', function() {
             this.noMoreActions();
             this.initiateConflict({
