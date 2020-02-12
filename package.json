@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/ringteki/ringteki#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.2.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.2",
     "command-line-args": "^4.0.7",

@@ -1,11 +1,9 @@
-const monk = require('monk');
-const config = require('config');
 const CardService = require('../services/CardService.js');
+const Factions = require('../game/Factions');
 
-let db = monk(config.dbPath);
-let cardService = new CardService(db);
+module.exports.init = function(server, options) {
+    let cardService = new CardService(options.db);
 
-module.exports.init = function(server) {
     server.get('/api/cards', function(req, res, next) {
         cardService.getAllCards({ shortForm: true })
             .then(cards => {
@@ -27,15 +25,16 @@ module.exports.init = function(server) {
     });
 
     server.get('/api/factions', function(req, res) {
-        let factions = [
-            { name: 'Crab Clan', value: 'crab' },
-            { name: 'Crane Clan', value: 'crane' },
-            { name: 'Dragon Clan', value: 'dragon' },
-            { name: 'Lion Clan', value: 'lion' },
-            { name: 'Phoenix Clan', value: 'phoenix' },
-            { name: 'Scorpion Clan', value: 'scorpion' },
-            { name: 'Unicorn Clan', value: 'unicorn' }
-        ];
-        res.send({ success: true, factions: factions });
+        res.send({ success: true, factions: Factions });
+    });
+
+    server.get('/api/restricted-list', function(req, res, next) {
+        cardService.getRestrictedList()
+            .then(restrictedList => {
+                res.send({ success: true, restrictedList: restrictedList });
+            })
+            .catch(err => {
+                next(err);
+            });
     });
 };

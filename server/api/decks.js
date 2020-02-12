@@ -1,17 +1,12 @@
-const monk = require('monk');
-const config = require('config');
+const passport = require('passport');
+
 const DeckService = require('../services/DeckService.js');
-const {wrapAsync} = require('../util.js');
+const { wrapAsync } = require('../util.js');
 
-let db = monk(config.dbPath);
-let deckService = new DeckService(db);
+module.exports.init = function(server, options) {
+    let deckService = new DeckService(options.db);
 
-module.exports.init = function(server) {
-    server.get('/api/decks/:id', wrapAsync(async function(req, res) {
-        if(!req.user) {
-            return res.status(401).send({ message: 'Unauthorized' });
-        }
-
+    server.get('/api/decks/:id', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
         if(!req.params.id || req.params.id === '') {
             return res.status(404).send({ message: 'No such deck' });
         }
@@ -29,20 +24,12 @@ module.exports.init = function(server) {
         res.send({ success: true, deck: deck });
     }));
 
-    server.get('/api/decks', wrapAsync(async function(req, res) {
-        if(!req.user) {
-            return res.status(401).send({ message: 'Unauthorized' });
-        }
-
+    server.get('/api/decks', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
         let decks = await deckService.findByUserName(req.user.username);
         res.send({ success: true, decks: decks });
     }));
 
-    server.put('/api/decks/:id', wrapAsync(async function(req, res) {
-        if(!req.user) {
-            return res.status(401).send({ message: 'Unauthorized' });
-        }
-
+    server.put('/api/decks/:id', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
         let deck = await deckService.getById(req.params.id);
 
         if(!deck) {
@@ -53,28 +40,20 @@ module.exports.init = function(server) {
             return res.status(401).send({ message: 'Unauthorized' });
         }
 
-        let data = Object.assign({ id: req.params.id }, JSON.parse(req.body.data));
+        let data = Object.assign({ id: req.params.id }, req.body.deck);
 
         deckService.update(data);
 
         res.send({ success: true, message: 'Saved' });
     }));
 
-    server.post('/api/decks', wrapAsync(async function(req, res) {
-        if(!req.user) {
-            return res.status(401).send({ message: 'Unauthorized' });
-        }
-
-        let deck = Object.assign(JSON.parse(req.body.data), { username: req.user.username });
+    server.post('/api/decks', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
+        let deck = Object.assign(req.body.deck, { username: req.user.username });
         await deckService.create(deck);
         res.send({ success: true });
     }));
 
-    server.delete('/api/decks/:id', wrapAsync(async function(req, res) {
-        if(!req.user) {
-            return res.status(401).send({ message: 'Unauthorized' });
-        }
-
+    server.delete('/api/decks/:id', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
         let id = req.params.id;
 
         let deck = await deckService.getById(id);
@@ -90,4 +69,14 @@ module.exports.init = function(server) {
         await deckService.delete(id);
         res.send({ success: true, message: 'Deck deleted successfully', deckId: id });
     }));
+
+    server.get('/api/standalone-decks', function(req, res, next) {
+        deckService.getStandaloneDecks()
+            .then(decks => {
+                res.send({ success: true, decks: decks });
+            })
+            .catch(err => {
+                next(err);
+            });
+    });
 };

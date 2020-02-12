@@ -1,54 +1,58 @@
-const monk = require('monk');
-const UserService = require('../services/UserService.js');
+  
+const passport = require('passport');
+
+const { wrapAsync } = require('../util.js');
+const ServiceFactory = require('../services/ServiceFactory.js');
 const logger = require('../log.js');
-const config = require('config');
 
-let db = monk(config.dbPath);
-let userService = new UserService(db);
+module.exports.init = function(server, options) {
+    let userService = ServiceFactory.userService(options.db, ServiceFactory.configService());
 
-module.exports.init = function(server) {
-    server.get('/api/user/:username', function(req, res) {
-        if(!req.user) {
-            return res.status(401);
-        }
-
+    server.get('/api/user/:username', passport.authenticate('jwt', { session: false }), wrapAsync(async (req, res) => {
         if(!req.user.permissions || !req.user.permissions.canManageUsers) {
             return res.status(403);
         }
 
-        userService.getUserByUsername(req.params.username)
-            .then(user => {
-                if(!user) {
-                    res.status(404).send({ message: 'Not found'});
+        let user;
+        let linkedAccounts;
+        try {
+            user = await userService.getUserByUsername(req.params.username);
 
-                    return Promise.reject('User not found');
-                }
+            if(!user) {
+                return res.status(404).send({ message: 'Not found' });
+            }
 
-                res.send({ success: true, user: user });
-            })
-            .catch(err => {
-                logger.error(err);
-            });
-    });
+            linkedAccounts = await userService.getPossiblyLinkedAccounts(user);
+        } catch(error) {
+            logger.error(error);
 
-    server.put('/api/user/:username', function(req, res) {
-        if(!req.user) {
-            return res.status(401);
+            return res.send({ success: false, message: 'An error occurred searching the user.  Please try again later.' });
         }
 
+        res.send({ success: true, user: user.getFullDetails(), linkedAccounts: linkedAccounts && linkedAccounts.map(account => account.username).filter(name => name !== user.username) });
+    }));
+
+    server.put('/api/user/:username', passport.authenticate('jwt', { session: false }), function(req, res) {
         if(!req.user.permissions || !req.user.permissions.canManageUsers) {
             return res.status(403);
         }
 
-        let userToSet = JSON.parse(req.body.data);
+        let userToSet = req.body.userToChange;
 
         userService.getUserByUsername(req.params.username)
-            .then(user => {
+            .then(dbUser => {
+                let user = dbUser.getDetails();
+
                 if(!user) {
-                    return res.status(404).send({ message: 'Not found'});
+                    return res.status(404).send({ message: 'Not found' });
                 }
 
-                user.permissions = userToSet.permissions;
+                if(req.user.permissions.canManagePermissions) {
+                    user.permissions = userToSet.permissions;
+                }
+
+                user.verified = userToSet.verified;
+                user.disabled = userToSet.disabled;
 
                 return userService.update(user);
             })
