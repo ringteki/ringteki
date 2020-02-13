@@ -12,15 +12,15 @@ class DiversionaryManeuver extends DrawCard {
                 location: Locations.Provinces,
                 cardCondition: (card, context) => !card.isConflictProvince() && card.canBeAttacked() && card.controller === context.game.currentConflict.conflictProvince.controller
             },
-            gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.moveConflict( context => ({ 
-                    target: context.target }) ),
+            gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.bow(context => ({
                     target: context.game.currentConflict.getParticipants()
                 })),
                 AbilityDsl.actions.sendHome(context => ({
                     target: context.game.currentConflict.getParticipants()
                 })),
+                AbilityDsl.actions.moveConflict(context => ({
+                    target: context.target })),
                 AbilityDsl.actions.selectCard({
                     cardType: CardTypes.Character,
                     location: Locations.PlayArea,

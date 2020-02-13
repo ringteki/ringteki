@@ -47,6 +47,12 @@ describe('Diversionary Maneuver', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.publicForum);
                 expect(this.player1).not.toBeAbleToSelect(this.upholding);
                 this.player1.clickCard(this.sanpukuSeido);
+                expect(this.getChatLogs(1)).toContain('player1 plays Diversionary Maneuver to move the conflict to Sanpuku Seidō and send all participating characters home bowed');
+
+                expect(this.player1).toHavePromptButton('Done');
+                this.player1.clickPrompt('Done');
+                expect(this.player2).toHavePromptButton('Done');
+                this.player2.clickPrompt('Done');
 
                 expect(this.publicForum.inConflict).toBe(false);
                 expect(this.sanpukuSeido.inConflict).toBe(true);
@@ -60,14 +66,6 @@ describe('Diversionary Maneuver', function() {
                 expect(this.warrior.inConflict).toBe(false);
                 expect(this.challenger.bowed).toBe(true);
                 expect(this.challenger.inConflict).toBe(false);
-
-                expect(this.getChatLogs(1)).toContain('player1 plays Diversionary Maneuver to move the conflict to Sanpuku Seidō and send all participating characters home bowed');
-
-                expect(this.player1).toHavePromptButton('Done');
-                this.player1.clickPrompt('Done');
-                expect(this.player2).toHavePromptButton('Done');
-                this.player2.clickPrompt('Done');
-
             });
 
             it('should not move home or bow characters who cannot be affected', function() {
@@ -123,11 +121,6 @@ describe('Diversionary Maneuver', function() {
 
                 expect(this.getChatLogs(1)).toContain('player1 plays Diversionary Maneuver to move the conflict to Sanpuku Seidō and send all participating characters home bowed');
 
-                expect(this.agetoki.bowed).toBe(true);
-                expect(this.agetoki.inConflict).toBe(false);
-                expect(this.warrior.bowed).toBe(true);
-                expect(this.warrior.inConflict).toBe(false);
-
                 expect(this.player1).toHavePrompt('Choose cards');
                 expect(this.player1).toBeAbleToSelect(this.mystic);
                 expect(this.player1).not.toBeAbleToSelect(this.agetoki);
@@ -137,9 +130,6 @@ describe('Diversionary Maneuver', function() {
                 this.player1.clickCard(this.mystic);
                 this.player1.clickCard(this.maiden);
                 this.player1.clickPrompt('Done');
-
-                expect(this.mystic.inConflict).toBe(true);
-                expect(this.maiden.inConflict).toBe(true);
 
                 expect(this.getChatLogs(1)).toContain('player1 moves Miya Mystic and Shrine Maiden to the conflict');
 
@@ -157,6 +147,14 @@ describe('Diversionary Maneuver', function() {
                 expect(this.publicForum.inConflict).toBe(false);
                 expect(this.sanpukuSeido.inConflict).toBe(true);
                 expect(this.game.currentConflict.conflictProvince).toBe(this.sanpukuSeido);
+
+                expect(this.agetoki.bowed).toBe(true);
+                expect(this.agetoki.inConflict).toBe(false);
+                expect(this.warrior.bowed).toBe(true);
+                expect(this.warrior.inConflict).toBe(false);
+
+                expect(this.mystic.inConflict).toBe(true);
+                expect(this.maiden.inConflict).toBe(true);
 
                 expect(this.challenger.inConflict).toBe(true);
                 expect(this.defender.inConflict).toBe(true);
@@ -189,8 +187,6 @@ describe('Diversionary Maneuver', function() {
                 this.player1.clickCard(this.mystic);
                 this.player1.clickPrompt('Done');
 
-                expect(this.mystic.inConflict).toBe(true);
-
                 expect(this.getChatLogs(1)).toContain('player1 moves Miya Mystic to the conflict');
 
                 expect(this.player2).toHavePrompt('Choose cards');
@@ -205,6 +201,8 @@ describe('Diversionary Maneuver', function() {
                 expect(this.publicForum.inConflict).toBe(false);
                 expect(this.sanpukuSeido.inConflict).toBe(true);
                 expect(this.game.currentConflict.conflictProvince).toBe(this.sanpukuSeido);
+
+                expect(this.mystic.inConflict).toBe(true);
 
                 expect(this.agetoki.bowed).toBe(true);
                 expect(this.agetoki.inConflict).toBe(false);
@@ -228,14 +226,7 @@ describe('Diversionary Maneuver', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.publicForum);
                 expect(this.player1).not.toBeAbleToSelect(this.upholding);
                 this.player1.clickCard(this.rally);
-                expect(this.publicForum.inConflict).toBe(false);
-                expect(this.rally.inConflict).toBe(true);
-                expect(this.game.currentConflict.conflictProvince).toBe(this.rally);
 
-                expect(this.agetoki.bowed).toBe(true);
-                expect(this.agetoki.inConflict).toBe(false);
-                expect(this.warrior.bowed).toBe(true);
-                expect(this.warrior.inConflict).toBe(false);
                 expect(this.getChatLogs(1)).toContain('player1 plays Diversionary Maneuver to move the conflict to Rally to the Cause and send all participating characters home bowed');
 
                 expect(this.player1).toHavePrompt('Choose cards');
@@ -247,9 +238,6 @@ describe('Diversionary Maneuver', function() {
                 this.player1.clickCard(this.mystic);
                 this.player1.clickCard(this.maiden);
                 this.player1.clickPrompt('Done');
-
-                expect(this.mystic.inConflict).toBe(true);
-                expect(this.maiden.inConflict).toBe(true);
 
                 expect(this.getChatLogs(1)).toContain('player1 moves Miya Mystic and Shrine Maiden to the conflict');
 
@@ -263,6 +251,18 @@ describe('Diversionary Maneuver', function() {
                 this.player2.clickCard(this.defender);
                 this.player2.clickPrompt('Done');
                 expect(this.getChatLogs(3)).toContain('player2 moves Doji Challenger and Borderlands Defender to the conflict');
+
+                expect(this.publicForum.inConflict).toBe(false);
+                expect(this.rally.inConflict).toBe(true);
+                expect(this.game.currentConflict.conflictProvince).toBe(this.rally);
+
+                expect(this.agetoki.bowed).toBe(true);
+                expect(this.agetoki.inConflict).toBe(false);
+                expect(this.warrior.bowed).toBe(true);
+                expect(this.warrior.inConflict).toBe(false);
+
+                expect(this.mystic.inConflict).toBe(true);
+                expect(this.maiden.inConflict).toBe(true);
 
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 expect(this.player2).toBeAbleToSelect(this.rally);
