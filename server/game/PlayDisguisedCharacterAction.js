@@ -106,16 +106,14 @@ class PlayDisguisedCharacterAction extends BaseAction {
                     context.game.actions.attach({ target: context.source, attachment: attachment }).addEventsToArray(moveEvents, context);
                 }
                 context.game.actions.moveStatusToken({ target: replacedCharacter.personalHonor, recipient: context.source }).addEventsToArray(moveEvents, context);
+                moveEvents.push(context.game.getEvent(EventNames.Unnamed, {}, () => {
+                    context.game.checkGameState(true);
+                    context.game.openThenEventWindow(context.game.actions.discardFromPlay({ cannotBeCancelled: true }).getEvent(replacedCharacter, context));
+                }));
                 context.game.openThenEventWindow(moveEvents);
             }));
             context.game.openThenEventWindow(events);
         });
-        context.game.queueSimpleStep(() => {
-            const discardEvents = [];
-            discardEvents.push(context.game.getEvent(EventNames.Unnamed, {}, () =>
-                    context.game.openThenEventWindow(context.game.actions.discardFromPlay({ cannotBeCancelled: true }).getEvent(replacedCharacter, context))));
-            context.game.openThenEventWindow(discardEvents);
-        })
     }
 
     isCardPlayed() {
