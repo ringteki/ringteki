@@ -34,8 +34,8 @@ export class MoveConflictAction extends CardGameAction {
         context.game.currentConflict.conflictProvince.inConflict = false;
         context.game.currentConflict.conflictProvince = newProvince;
         if(newProvince.facedown) {
-            newProvince.facedown = false;
-            context.game.raiseEvent(EventNames.OnCardRevealed, { context: context, card: newProvince });
+            const revealEvent = event.context.game.actions.reveal().getEvent(newProvince, event.context.game.getFrameworkContext());
+            event.context.game.openThenEventWindow(revealEvent);
         }
     }
 }
