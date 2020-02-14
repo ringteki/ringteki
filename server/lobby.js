@@ -3,17 +3,17 @@ const Socket = require('./socket.js');
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 const moment = require('moment');
-
 const { validateDeck } = require('ringteki-deck-helper');
 
 const logger = require('./log.js');
 const version = moment(require('../version.js'));
 const PendingGame = require('./pendinggame.js');
 const GameRouter = require('./gamerouter.js');
-const MessageService = require('./services/MessageService.js');
+const ServiceFactory = require('./services/ServiceFactory');
 const DeckService = require('./services/DeckService.js');
 const CardService = require('./services/CardService.js');
-const Settings = require('./settings.js');
+const User = require('./models/User');
+const { sortBy } = require('./Array');
 
 
 
@@ -22,40 +22,37 @@ class Lobby {
         this.sockets = {};
         this.users = {};
         this.games = {};
-        this.config = options.config;
-        this.messageService = options.messageService || new MessageService(options.db);
+        this.configService = options.configService || ServiceFactory.configService();
+        this.messageService = options.messageService || ServiceFactory.messageService(options.db);
         this.deckService = options.deckService || new DeckService(options.db);
         this.cardService = options.cardService || new CardService(options.db);
-        this.router = options.router || new GameRouter(this.config);
-        this.titleCardData = null;
+        this.userService = options.userService || ServiceFactory.userService(options.db, this.configService);
+        this.router = options.router || new GameRouter();
 
         this.router.on('onGameClosed', this.onGameClosed.bind(this));
+        this.router.on('onGameRematch', this.onGameRematch.bind(this));
         this.router.on('onPlayerLeft', this.onPlayerLeft.bind(this));
         this.router.on('onWorkerTimedOut', this.onWorkerTimedOut.bind(this));
         this.router.on('onNodeReconnected', this.onNodeReconnected.bind(this));
         this.router.on('onWorkerStarted', this.onWorkerStarted.bind(this));
+
+        this.userService.on('onBlocklistChanged', this.onBlocklistChanged.bind(this));
 
         this.io = options.io || socketio(server, { perMessageDeflate: false });
         this.io.set('heartbeat timeout', 30000);
         this.io.use(this.handshake.bind(this));
         this.io.on('connection', this.onConnection.bind(this));
 
-        this.lastUserBroadcast = moment();
+        this.messageService.on('messageDeleted', messageId => {
+            this.io.emit('removemessage', messageId);
+        });
 
-        this.loadCardData();
-
-        setInterval(() => this.clearStaleGames(), 60 * 1000);
-    }
-
-    async loadCardData() {
-        this.shortCardData = await this.cardService.getAllCards({ shortForm: true });
+        setInterval(() => this.clearStalePendingGames(), 60 * 1000);
     }
 
     // External methods
     getStatus() {
-        var nodeStatus = this.router.getNodeStatus();
-
-        return nodeStatus;
+        return this.router.getNodeStatus();
     }
 
     disableNode(nodeName) {
@@ -67,8 +64,8 @@ class Lobby {
     }
 
     debugDump() {
-        var games = _.map(this.games, game => {
-            var players = _.map(game.players, player => {
+        let games = Object.values(this.games).map(game => {
+            let players = Object.values(game.players).map(player => {
                 return {
                     name: player.name,
                     left: player.left,
@@ -77,7 +74,7 @@ class Lobby {
                 };
             });
 
-            var spectators = _.map(game.spectators, spectator => {
+            let spectators = Object.values(game.spectators).map(spectator => {
                 return {
                     name: spectator.name,
                     id: spectator.id
@@ -95,13 +92,13 @@ class Lobby {
             };
         });
 
-        var nodes = this.router.getNodeStatus();
+        let nodes = this.router.getNodeStatus();
 
         return {
             games: games,
             nodes: nodes,
-            socketCount: _.size(this.sockets),
-            userCount: _.size(this.users)
+            socketCount: Object.values(this.sockets).length,
+            userCount: Object.values(this.users).length
         };
     }
 
