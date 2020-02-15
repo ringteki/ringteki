@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const _ = require('underscore');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const logger = require('./log.js');
 const GameChat = require('./game/gamechat.js');
@@ -29,6 +29,10 @@ class PendingGame {
 
     getPlayers() {
         return this.players;
+    }
+
+    getSpectators() {
+        return Object.values(this.spectators);
     }
 
     getPlayerOrSpectator(playerName) {
@@ -67,11 +71,15 @@ class PendingGame {
     }
 
     addPlayer(id, user) {
+        if(!user) {
+            logger.error('Tried to add a player to a game that did not have a user object');
+            return;
+        }
+
         this.players[user.username] = {
             id: id,
             name: user.username,
             user: user,
-            emailHash: user.emailHash,
             owner: this.owner.username === user.username
         };
     }
@@ -80,39 +88,23 @@ class PendingGame {
         this.spectators[user.username] = {
             id: id,
             name: user.username,
-            user: user,
-            emailHash: user.emailHash
+            user: user
         };
     }
 
-    newGame(id, user, password, callback) {
+    newGame(id, user, password) {
         if(password) {
-            bcrypt.hash(password, 10, (err, hash) => {
-                if(err) {
-                    logger.info(err);
-
-                    callback(err);
-
-                    return;
-                }
-
-                this.password = hash;
-                this.addPlayer(id, user);
-
-                callback();
-            });
-        } else {
-            this.addPlayer(id, user);
-
-            callback();
+            this.password = crypto.createHash('md5').update(password).digest('hex');
         }
+
+        this.addPlayer(id, user);
     }
 
     isUserBlocked(user) {
         return _.contains(this.owner.blockList, user.username.toLowerCase());
     }
 
-    join(id, user, password, callback) {
+    join(id, user, password) {
         if(_.size(this.players) === 2 || this.started) {
             return;
         }
@@ -122,24 +114,13 @@ class PendingGame {
         }
 
         if(this.password) {
-            bcrypt.compare(password, this.password, (err, valid) => {
-                if(err) {
-                    return callback(new Error('Bad password'), 'Incorrect game password');
-                }
-
-                if(!valid) {
-                    return callback(new Error('Bad password'), 'Incorrect game password');
-                }
-
-                this.addPlayer(id, user);
-
-                callback();
-            });
-        } else {
-            this.addPlayer(id, user);
-
-            callback();
+            if(crypto.createHash('md5').update(password).digest('hex') !== this.password) {
+                return 'Incorrect game password';
+            }
         }
+
+        this.addPlayer(id, user);
+        this.addMessage('{0} has joined the game', user.username);
     }
 
     watch(id, user, password, callback) {
@@ -154,27 +135,13 @@ class PendingGame {
         }
 
         if(this.password) {
-            bcrypt.compare(password, this.password, (err, valid) => {
-                if(err) {
-                    return callback(new Error('Bad password'), 'Incorrect game password');
-                }
-
-                if(!valid) {
-                    return callback(new Error('Bad password'), 'Incorrect game password');
-                }
-
-                this.addSpectator(id, user);
-
-                this.addMessage('{0} has joined the game as a spectator', user.username);
-                callback();
-            });
-        } else {
-            this.addSpectator(id, user);
-
-            this.addMessage('{0} has joined the game as a spectator', user.username);
-
-            callback();
+            if(crypto.createHash('md5').update(password).digest('hex') !== this.password) {
+                return 'Incorrect game password';
+            }
         }
+
+        this.addSpectator(id, user);
+        this.addMessage('{0} has joined the game as a spectator', user.username);
     }
 
     leave(playerName) {
@@ -191,6 +158,8 @@ class PendingGame {
             if(this.started) {
                 this.players[playerName].left = true;
             } else {
+                this.removeAndResetOwner(playerName);
+
                 delete this.players[playerName];
             }
         }
@@ -212,6 +181,8 @@ class PendingGame {
 
         if(this.players[playerName]) {
             if(!this.started) {
+                this.removeAndResetOwner(playerName);
+
                 delete this.players[playerName];
             }
         } else {
@@ -224,6 +195,8 @@ class PendingGame {
         if(!player) {
             return;
         }
+
+        player.argType = 'player';
 
         this.addMessage('{0} {1}', player, message);
     }
@@ -259,6 +232,25 @@ class PendingGame {
         return true;
     }
 
+    removeAndResetOwner(playerName) {
+        if(this.isOwner(playerName)) {
+            let otherPlayer = _.find(this.players, player => player.name !== playerName);
+            if(otherPlayer) {
+                this.owner = otherPlayer.user;
+                otherPlayer.owner = true;
+            }
+        }
+    }
+
+    isVisibleFor(user) {
+        if(!user) {
+            return true;
+        }
+
+        let players = Object.values(this.players);
+        return !this.owner.hasUserBlocked(user) && !user.hasUserBlocked(this.owner) && players.every(player => !player.user.hasUserBlocked(user));
+    }
+
     hasActivePlayer(playerName) {
         return this.players[playerName] && !this.players[playerName].left && !this.players[playerName].disconnected || this.spectators[playerName];
     }
@@ -280,9 +272,7 @@ class PendingGame {
             }
 
             playerSummaries[player.name] = {
-                agenda: this.started && player.agenda ? player.agenda.cardData.code : undefined,
                 deck: activePlayer ? deck : {},
-                emailHash: player.emailHash,
                 faction: this.started && player.faction ? player.faction.value : undefined,
                 id: player.id,
                 left: player.left,
@@ -314,6 +304,41 @@ class PendingGame {
                     settings: spectator.settings
                 };
             })
+        };
+    }
+
+    getStartGameDetails() {
+        const players = {};
+
+        for(let playerDetails of Object.values(this.players)) {
+            const {name, user, ...rest} = playerDetails;
+            players[name] = {
+                name,
+                user: user.getDetails(),
+                ...rest
+            };
+        }
+
+        const spectators = {};
+        for(let spectatorDetails of Object.values(this.spectators)) {
+            const {name, user, ...rest} = spectatorDetails;
+            spectators[name] = {
+                name,
+                user: user.getDetails(),
+                ...rest
+            };
+        }
+
+        return {
+            allowSpectators: this.allowSpectators,
+            clocks: this.clocks,
+            createdAt: this.createdAt,
+            gameType: this.gameType,
+            id: this.id,
+            name: this.name,
+            owner: this.owner.getDetails(),
+            players,
+            spectators
         };
     }
 }
