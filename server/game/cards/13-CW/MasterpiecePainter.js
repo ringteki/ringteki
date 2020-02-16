@@ -28,7 +28,7 @@ class MasterpiecePainter extends DrawCard {
 }
 
 const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(context => {
-    let chosenPlayer = player === 'me' ? context.player : context.player.opponent
+    let chosenPlayer = player === 'me' ? context.player : context.player.opponent;
     let topCard = chosenPlayer.conflictDeck.first();
     return {
         targetController: player === 'me' ? Players.Self : Players.Opponent,
@@ -43,7 +43,7 @@ const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(cont
             AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard])
         ]
     };
-})
+});
 
 MasterpiecePainter.id = 'masterpiece-painter';
 

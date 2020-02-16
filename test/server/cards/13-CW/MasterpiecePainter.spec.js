@@ -37,7 +37,7 @@ describe('Masterpiece Painter', function() {
 
                 this.player1.clickPrompt('player1');
 
-                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player1 reveal the top card of their deck. They may play their card until the end of the phase.')
+                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player1 reveal the top card of their deck. They may play their card until the end of the phase.');
             });
 
             it('should display the effect message - (p2 target)', function () {
@@ -49,7 +49,7 @@ describe('Masterpiece Painter', function() {
 
                 this.player1.clickPrompt('player2');
 
-                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player2 reveal the top card of their deck. They may play their card until the end of the phase.')
+                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player2 reveal the top card of their deck. They may play their card until the end of the phase.');
             });
 
             it('should display the effect message - (p1 and p2 target)', function () {
@@ -61,7 +61,7 @@ describe('Masterpiece Painter', function() {
 
                 this.player1.clickPrompt('player1 and player2');
 
-                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player1 and player2 reveal the top card of their deck. They may play their card until the end of the phase.')
+                expect(this.getChatLogs(3)).toContain('player1 uses Masterpiece Painter to make player1 and player2 reveal the top card of their deck. They may play their card until the end of the phase.');
             });
 
             it('should let the target play the top card of their deck. - (p1 target)', function () {
