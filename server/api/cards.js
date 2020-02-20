@@ -37,4 +37,14 @@ module.exports.init = function(server, options) {
                 next(err);
             });
     });
+
+    server.get('/api/banned-list', function(req, res, next) {
+        cardService.getBannedList()
+            .then(bannedList => {
+                res.send({ success: true, bannedList: bannedList });
+            })
+            .catch(err => {
+                next(err);
+            });
+    });
 };
