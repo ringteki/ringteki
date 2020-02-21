@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes } = require('../../Constants');
 
 class PeacemakersBlade extends DrawCard {
     setupCardAbilities() {
@@ -11,12 +12,11 @@ class PeacemakersBlade extends DrawCard {
         });
     }
 
-    canPlay(context, playType) {
-        if(this.game.currentConflict) {
+    canAttach(card) {
+        if(card.getType() === CardTypes.Character && card.isAttacking()) {
             return false;
         }
-
-        return super.canPlay(context, playType);
+        return super.canAttach(card);
     }
 }
 
