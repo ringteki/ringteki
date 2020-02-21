@@ -30,13 +30,17 @@ class ConflictPhase extends Phase {
         super(game, Phases.Conflict);
         this.initialise([
             new SimpleStep(this.game, () => this.beginPhase()),
-            new ActionWindow(this.game, 'Action Window', 'preConflict'),
-            new SimpleStep(this.game, () => this.startConflictChoice())
+            new SimpleStep(this.game, () => this.queueSteps())
         ]);
     }
 
     beginPhase() {
         this.currentPlayer = this.game.getFirstPlayer();
+    }
+
+    queueSteps() {
+        this.game.queueStep(new ActionWindow(this.game, 'Action Window', 'preConflict'));
+        this.game.queueStep(new SimpleStep(this.game, () => this.startConflictChoice()));
     }
 
     startConflictChoice() {

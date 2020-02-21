@@ -1,11 +1,12 @@
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
+import { Locations, CardTypes, EventNames, Players }  from '../Constants';
 
 export interface PutIntoPlayProperties extends CardActionProperties {
     fate?: number,
-    status?: string
+    status?: string,
+    controller?: Players
 }
 
 export class PutIntoPlayAction extends CardGameAction {
@@ -16,7 +17,8 @@ export class PutIntoPlayAction extends CardGameAction {
     intoConflict: boolean;
     defaultProperties: PutIntoPlayProperties = { 
         fate: 0,
-        status: 'ordinary'
+        status: 'ordinary',
+        controller: Players.Self
     };
     constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
         super(properties);
@@ -52,15 +54,19 @@ export class PutIntoPlayAction extends CardGameAction {
             if(!card.checkRestrictions('putIntoPlay', context)) {
                 return false;
             }
+            if(!card.checkRestrictions('putIntoConflict', context)) {
+                return false;
+            }
         }
         return true;
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { fate, status } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
+        let { fate, status, controller } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.fate = fate;
         event.status = status;
+        event.controller = controller;
         event.intoConflict = this.intoConflict;
         event.originalLocation = card.location;      
     }
@@ -80,8 +86,16 @@ export class PutIntoPlayAction extends CardGameAction {
 
         event.context.player.moveCard(event.card, Locations.PlayArea);
 
+        //moveCard sets all this stuff and only works if the owner is moving cards, so we're switching it around
+        if (event.controller === Players.Opponent) {
+            event.card.controller = event.context.player.opponent;
+            event.card.setDefaultController(event.card.controller);
+            event.card.owner.cardsInPlay.splice(event.card.owner.cardsInPlay.indexOf(event.card), 1);
+            event.card.controller.cardsInPlay.push(event.card);
+        }
+
         if(event.intoConflict) {
-            if(event.context.player.isAttackingPlayer()) {
+            if(event.card.controller.isAttackingPlayer()) {
                 event.context.game.currentConflict.addAttacker(event.card);
             } else {
                 event.context.game.currentConflict.addDefender(event.card);

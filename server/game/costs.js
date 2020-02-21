@@ -5,7 +5,7 @@ const GameActions = require('./GameActions/GameActions');
 const GameActionCost = require('./costs/GameActionCost');
 const MetaActionCost = require('./costs/MetaActionCost');
 const Event = require('./Events/Event');
-const { EventNames, Locations, Players, TargetModes } = require('./Constants');
+const { EventNames, Locations, Players, TargetModes, PlayTypes } = require('./Constants');
 
 function getSelectCost(action, properties, activePromptTitle) {
     return new MetaActionCost(GameActions.selectCard(Object.assign({ gameAction: action }, properties)), activePromptTitle);
@@ -247,7 +247,13 @@ const Costs = {
             },
             resolve: function (context, result) {
                 let extrafate = context.player.fate - context.player.getReducedCost(type, context.source);
-                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacter', context) || !context.player.checkRestrictions('spendFate', context)) {
+                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacter', context)) {
+                    extrafate = 0;
+                }
+                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacterFromProvince', context) && type === PlayTypes.PlayFromProvince) {
+                    extrafate = 0;
+                }
+                if(!context.player.checkRestrictions('spendFate', context)) {
                     extrafate = 0;
                 }
                 let choices = [];
