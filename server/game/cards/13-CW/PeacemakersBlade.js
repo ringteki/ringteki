@@ -5,10 +5,7 @@ const { CardTypes } = require('../../Constants');
 class PeacemakersBlade extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            effect: [
-                AbilityDsl.effects.cannotParticipateAsAttacker('military'),
-                AbilityDsl.effects.cannotParticipateAsAttacker('political')
-            ]
+            effect: AbilityDsl.effects.cardCannot('declareAttacker')
         });
     }
 
@@ -20,7 +17,7 @@ class PeacemakersBlade extends DrawCard {
     }
 }
 
-PeacemakersBlade.id = 'Peacemaker-s-Blade';
+PeacemakersBlade.id = 'peacemaker-s-blade';
 
 module.exports = PeacemakersBlade;
 
