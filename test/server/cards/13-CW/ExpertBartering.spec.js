@@ -177,5 +177,61 @@ describe('Expert Bartering', function() {
             this.player1.clickCard(this.expert);
             expect(this.player1).toHavePrompt('Choose an attachment');
         });
+
+        it('should allow using it immediately to switch back', function() {
+            this.player1.clickCard(this.expert);
+            this.player1.clickPrompt('Yes');
+
+            this.player1.clickCard(this.fan);
+            expect(this.kuwanan.attachments.toArray()).toContain(this.fan);
+            expect(this.doomed.attachments.toArray()).toContain(this.expert);
+
+            expect(this.fan.controller).toBe(this.player1.player);
+            expect(this.expert.controller).toBe(this.player2.player);
+
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+
+            this.player2.clickCard(this.expert);
+            this.player2.clickPrompt('Yes');
+
+            this.player2.clickCard(this.fan);
+            expect(this.kuwanan.attachments.toArray()).toContain(this.expert);
+            expect(this.doomed.attachments.toArray()).toContain(this.fan);
+
+            expect(this.fan.controller).toBe(this.player2.player);
+            expect(this.expert.controller).toBe(this.player1.player);
+
+            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+        });
+
+        it('should not allow the same player to use it twice in the same turn', function() {
+            this.player1.clickCard(this.expert);
+            this.player1.clickPrompt('Yes');
+
+            this.player1.clickCard(this.fan);
+            expect(this.kuwanan.attachments.toArray()).toContain(this.fan);
+            expect(this.doomed.attachments.toArray()).toContain(this.expert);
+
+            expect(this.fan.controller).toBe(this.player1.player);
+            expect(this.expert.controller).toBe(this.player2.player);
+
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+
+            this.player2.clickCard(this.expert);
+            this.player2.clickPrompt('Yes');
+
+            this.player2.clickCard(this.fan);
+            expect(this.kuwanan.attachments.toArray()).toContain(this.expert);
+            expect(this.doomed.attachments.toArray()).toContain(this.fan);
+
+            expect(this.fan.controller).toBe(this.player2.player);
+            expect(this.expert.controller).toBe(this.player1.player);
+
+            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.expert);
+            expect(this.player1).toHavePrompt('Action Window');
+        });
     });
 });
