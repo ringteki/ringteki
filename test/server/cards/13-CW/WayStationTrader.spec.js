@@ -44,6 +44,16 @@ describe('Way Station Trader', function () {
             expect(this.getChatLogs(2)).toContain('player1 uses Way Station Trader to take 1 fate from player2');
         });
 
+        it('should not activate when opponent has no fate', function () {
+            this.player2.fate = 0;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.trader]
+            });
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+        });
+
         it('should not activate when this character is not participating', function () {
             this.noMoreActions();
             this.initiateConflict({
