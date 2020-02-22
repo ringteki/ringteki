@@ -64,6 +64,7 @@ class AbilityContext {
     copy(newProps: object): AbilityContext {
         let copy = this.createCopy(newProps);
         copy.target = this.target;
+        copy.token = this.token;
         copy.select = this.select;
         copy.ring = this.ring;
         copy.provincesToRefill = this.provincesToRefill;
@@ -103,6 +104,7 @@ class AbilityContext {
             targets: Object.assign({}, this.targets),
             rings: Object.assign({}, this.rings),
             selects: Object.assign({}, this.selects),
+            tokens: Object.assign({}, this.tokens),
             events: this.events,
             stage: this.stage,
             targetAbility: this.targetAbility
