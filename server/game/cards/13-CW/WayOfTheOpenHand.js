@@ -13,7 +13,7 @@ class WayOfTheOpenHand extends DrawCard {
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.sendHome(),
                     AbilityDsl.actions.placeFate()
-                ]),
+                ])
             },
             effect: 'send home and place a fate on {0}'
         });

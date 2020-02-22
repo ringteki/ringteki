@@ -69,7 +69,7 @@ describe('Way of the Open Hand', function() {
 
             this.initiateConflict({
                 attackers: [this.mirumotoRaitsugu],
-                defenders: [this.matsuTsuko],
+                defenders: [this.matsuTsuko]
             });
 
             let fate = this.mirumotoRaitsugu.fate;
