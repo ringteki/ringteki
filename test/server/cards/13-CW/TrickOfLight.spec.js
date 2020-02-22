@@ -14,6 +14,7 @@ describe('Trick of the Light', function () {
                 });
                 this.moto = this.player1.findCardByName('moto-juro');
                 this.trickOfLight = this.player1.findCardByName('trick-of-the-light');
+
                 this.adept = this.player2.findCardByName('adept-of-the-waves');
             });
 
