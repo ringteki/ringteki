@@ -582,6 +582,16 @@ class Lobby {
         }
     }
 
+    onPendingGameChat(socket, message) {
+        let game = this.findGameForUser(socket.user.username);
+        if(!game) {
+            return;
+        }
+
+        game.chat(socket.user.username, message);
+        this.sendGameState(game);
+    }
+
     async onLobbyChat(socket, message) {
         if(Date.now() - socket.user.registered < this.configService.getValue('minLobbyChatTime') * 1000) {
             socket.send('nochat');

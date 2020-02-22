@@ -2,8 +2,16 @@
     env: 'development',
 
     secret: 'somethingverysecret',
+    hmacSecret: 'somethingevenmoresecret',
+
     dbPath: 'mongodb://127.0.0.1:27017/ringteki',
+    // This is the host/port of the Zero MQ server which does the node load balancing
+    requireActiviation: false,
+    appName: 'Jigoku Online',
+    
     mqUrl: 'tcp://127.0.0.1:6000',
+    mqHost: 'lobby',
+    mqPort: '6000',
 
     /*
      * Other global configurations used, but not specified, include:

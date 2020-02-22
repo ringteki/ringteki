@@ -56,7 +56,7 @@
     "pmx": "^1.6.7",
     "raven": "^1.2.1",
     "request": "^2.88.2",
-    "ringteki-deck-helper": "^1.0.0",
+    "ringteki-deck-helper": "^1.0.2",
     "socket.io": "^2.1.1",
     "socket.io-client": "^1.7.4",
     "underscore": "^1.8.3",
