@@ -392,6 +392,50 @@ const Costs = {
             },
             promptsPlayer: true
         };
+    },
+
+    optionalFateCost: function (amount) {
+        return {
+            canPay: function () {
+                return true;
+            },
+            resolve: function (context, result) {
+                let fateAvailable = true;
+                if(context.player.fate < amount) {
+                    fateAvailable = false;
+                }
+                if(!context.player.checkRestrictions('spendFate', context)) {
+                    fateAvailable = false;
+                }
+                let choices = [];
+                let handlers = [];
+                context.costs.optionalFateCost = 0;
+
+                if(fateAvailable) {
+                    choices = ['Yes', 'No'];
+                    handlers = [() => context.costs.optionalFateCost = amount, () => context.costs.optionalFateCost = 0];
+                }
+                if(fateAvailable && result.canCancel) {
+                    choices.push('Cancel');
+                    handlers.push(() => {
+                        result.cancelled = true;
+                    });
+                }
+
+                if(choices.length > 0) {
+                    context.game.promptWithHandlerMenu(context.player, {
+                        activePromptTitle: 'Spend ' + amount + ' fate?',
+                        source: context.source,
+                        choices:  choices,
+                        handlers: handlers
+                    });
+                }
+            },
+            pay: function (context) {
+                context.player.fate -= context.costs.optionalFateCost;
+            },
+            promptsPlayer: true
+        };
     }
 };
 
