@@ -5,7 +5,7 @@ const { CardTypes } = require('../../Constants');
 class PeacemakersBlade extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            effect: AbilityDsl.effects.cardCannot('declareAttacker')
+            effect: AbilityDsl.effects.cardCannot('declareAsAttacker')
         });
     }
 
