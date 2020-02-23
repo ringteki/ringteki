@@ -36,19 +36,61 @@ describe('Ikoma Message Runner', function() {
                 this.player2.clickCard(this.ikomaMessageRunner);
                 expect(this.player2).toHavePrompt('Choose a facedown card in your provinces');
                 this.player2.clickCard(this.tsuko);
+                expect(this.player2).toHavePromptButton('Done');
+                this.player2.clickPrompt('Done');
 
                 expect(this.toturi.facedown).toBe(true);
                 expect(this.tsuko.facedown).toBe(true);
 
                 expect(this.player2).toHavePrompt('Choose a facedown card in opponents provinces');
                 this.player2.clickCard(this.toturi);
+                expect(this.player2).toHavePromptButton('Done');
+                this.player2.clickPrompt('Done');
 
                 expect(this.toturi.facedown).toBe(false);
                 expect(this.tsuko.facedown).toBe(false);
                 expect(this.ikomaProdigy.facedown).toBe(true);
                 expect(this.berserker.facedown).toBe(true);
 
-                expect(this.getChatLog(5)).toContain('Player2 uses Ikoma Message Runner to reveal');
+                expect(this.getChatLogs(4)).toContain('player2 uses Ikoma Message Runner to reveal up to 1 facedown card in each player\'s provinces. Matsu Tsuko is revealed in player2\'s province 2. Akodo Toturi is revealed in player1\'s province 2.');
+            });
+
+            it('having no facedown cards should not prevent activating it.', function() {
+                const dynastyCardsPlayer1 = [];
+                const locations = ['province 1', 'province 2', 'province 3', 'province 4'];
+
+                locations.forEach(location => {
+                    dynastyCardsPlayer1.push(this.player2.player.getDynastyCardsInProvince(location)[0]);
+                });
+
+                dynastyCardsPlayer1.forEach(card => {
+                    card.facedown = false;
+                });
+
+                this.game.checkGameState(true);
+
+                this.player2.clickCard(this.ikomaMessageRunner);
+                expect(this.player2).toHavePrompt('Choose a facedown card in your provinces');
+
+                expect(this.player2).not.toBeAbleToSelect(this.berserker);
+                expect(this.player2).not.toBeAbleToSelect(this.tsuko);
+                expect(this.player2).not.toBeAbleToSelect(this.motso);
+                expect(this.player2).toHavePromptButton('Done');
+                this.player2.clickPrompt('Done');
+
+                expect(this.toturi.facedown).toBe(true);
+                expect(this.tsuko.facedown).toBe(false);
+
+                expect(this.player2).toHavePrompt('Choose a facedown card in opponents provinces');
+                this.player2.clickCard(this.toturi);
+                expect(this.player2).toHavePromptButton('Done');
+                this.player2.clickPrompt('Done');
+
+                expect(this.toturi.facedown).toBe(false);
+                expect(this.tsuko.facedown).toBe(false);
+                expect(this.ikomaProdigy.facedown).toBe(true);
+                expect(this.berserker.facedown).toBe(false);
+                expect(this.getChatLogs(4)).toContain('player2 uses Ikoma Message Runner to reveal up to 1 facedown card in each player\'s provinces. Akodo Toturi is revealed in player1\'s province 2.');
             });
         });
     });
