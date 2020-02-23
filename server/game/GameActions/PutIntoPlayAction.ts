@@ -6,7 +6,8 @@ import { Locations, CardTypes, EventNames, Players }  from '../Constants';
 export interface PutIntoPlayProperties extends CardActionProperties {
     fate?: number,
     status?: string,
-    controller?: Players
+    controller?: Players,
+    side?: Players
 }
 
 export class PutIntoPlayAction extends CardGameAction {
@@ -18,7 +19,8 @@ export class PutIntoPlayAction extends CardGameAction {
     defaultProperties: PutIntoPlayProperties = { 
         fate: 0,
         status: 'ordinary',
-        controller: Players.Self
+        controller: Players.Self,
+        side: Players.Self
     };
     constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
         super(properties);
@@ -31,6 +33,7 @@ export class PutIntoPlayAction extends CardGameAction {
     }
 
     canAffect(card: DrawCard, context: AbilityContext): boolean {
+        let properties = this.getProperties(context) as PutIntoPlayProperties;
         if(!context || !super.canAffect(card, context)) {
             return false;
         } else if(!context.player || card.anotherUniqueInPlay(context.player)) {
@@ -40,11 +43,6 @@ export class PutIntoPlayAction extends CardGameAction {
         } else if(this.intoConflict) {
             // There is no current conflict, or no context (cards must be put into play by a player, not a framework event)
             if(!context.game.currentConflict) {
-                return false;
-            }
-            // controller is attacking, and character can't attack, or controller is defending, and character can't defend
-            if((context.player.isAttackingPlayer() && !card.canParticipateAsAttacker()) ||
-                (context.player.isDefendingPlayer() && !card.canParticipateAsDefender())) {
                 return false;
             }
             // card cannot participate in this conflict type
@@ -57,18 +55,33 @@ export class PutIntoPlayAction extends CardGameAction {
             if(!card.checkRestrictions('putIntoConflict', context)) {
                 return false;
             }
+            
+            // its being put into play for its controller, & controller is attacking and character can't attack, or controller is defending and character can't defend
+            if (properties.side !== Players.Opponent) {
+                if((context.player.isAttackingPlayer() && !card.canParticipateAsAttacker()) ||
+                    (context.player.isDefendingPlayer() && !card.canParticipateAsDefender())) {
+                    return false;
+                }
+            }            
+            else {
+                if((context.player.isAttackingPlayer() && !card.canParticipateAsDefender()) ||
+                    (context.player.isDefendingPlayer() && !card.canParticipateAsAttacker())) {
+                    return false;
+                }
+            }            
         }
         return true;
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { fate, status, controller } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
+        let { fate, status, controller, side } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.fate = fate;
         event.status = status;
         event.controller = controller;
         event.intoConflict = this.intoConflict;
-        event.originalLocation = card.location;      
+        event.originalLocation = card.location;
+        event.side = side;      
     }
 
     eventHandler(event, additionalProperties = {}): void {
@@ -95,10 +108,19 @@ export class PutIntoPlayAction extends CardGameAction {
         }
 
         if(event.intoConflict) {
-            if(event.card.controller.isAttackingPlayer()) {
-                event.context.game.currentConflict.addAttacker(event.card);
-            } else {
-                event.context.game.currentConflict.addDefender(event.card);
+            if (event.side !== Players.Opponent) {
+                if(event.card.controller.isAttackingPlayer()) {
+                    event.context.game.currentConflict.addAttacker(event.card);
+                } else {
+                    event.context.game.currentConflict.addDefender(event.card);
+                }        
+            }
+            else {
+                if(event.card.controller.isAttackingPlayer()) {
+                    event.context.game.currentConflict.addDefender(event.card);
+                } else {
+                    event.context.game.currentConflict.addAttacker(event.card);
+                }        
             }
         }
     }
