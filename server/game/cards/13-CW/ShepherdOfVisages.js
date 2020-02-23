@@ -13,7 +13,7 @@ class ShepherdOfVisages extends DrawCard {
                     effect: AbilityDsl.effects.modifyGlory(-2)
                 }))
             },
-            effect: 'give {0} -3 glory until the end of the conflict'
+            effect: 'give {0} -2 glory until the end of the conflict'
         });
     }
 }
