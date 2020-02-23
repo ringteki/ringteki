@@ -10,7 +10,7 @@ describe('Ramparts of Stone', function() {
                     },
                     player2: {
                         inPlay: ['doji-challenger', 'doji-whisperer'],
-                        hand: ['steward-of-law', 'mirumoto-s-fury', 'ramparts-of-stone']
+                        hand: ['steward-of-law', 'mirumoto-s-fury', 'ramparts-of-stone', 'ornate-fan']
                     }
                 });
                 this.noMoreActions();
@@ -55,6 +55,31 @@ describe('Ramparts of Stone', function() {
                 expect(this.fingerOfJade.location).toBe('conflict discard pile');
                 expect(this.katana.location).toBe('conflict discard pile');
                 expect(this.courtGames.location).toBe('conflict discard pile');
+            });
+
+            it('finger of jade should not be able to cancel it', function() {
+                this.player2.pass();
+                this.player1.playAttachment(this.fingerOfJade, this.outrider);
+                this.player2.clickCard(this.ramparts);
+                this.player1.clickPrompt('Bow all participating characters');
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should always be the attacking player that the card effects', function() {
+                this.noMoreActions();
+                this.player1.clickPrompt('Yes');
+                this.player1.clickPrompt('Gain 2 honor');
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.challenger],
+                    defenders: [this.wayfinder],
+                    ring: 'fire'
+                });
+                this.player1.pass();
+                this.player2.clickCard(this.ramparts);
+                expect(this.player2).toHavePrompt('Ramparts of Stone');
+                expect(this.player2.currentButtons).toContain('Bow all participating characters');
+                expect(this.player2.currentButtons).toContain('Discard three cards from hand');
             });
         });
     });
