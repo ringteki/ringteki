@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Players, TargetModes, CardTypes } = require('../../Constants');
+const { Players, TargetModes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class RampartsOfStone extends DrawCard {
