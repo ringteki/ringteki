@@ -17,9 +17,12 @@ class RampartsOfStone extends DrawCard {
                         return Players.Opponent;
                     },
                     choices: {
-                        'Bow all participating characters': AbilityDsl.actions.bow((context) => ({
-                            target: context.targets.select.player.filterCardsInPlay(card => card.getType() === CardTypes.Character && card.isParticipating())
-                        })),
+                        'Bow all participating characters': AbilityDsl.actions.bow((context) => {
+                            let targetPlayer = context.player.isAttackingPlayer() ? context.player : context.player.opponent;
+                            return {
+                                target: targetPlayer.filterCardsInPlay(card => card.getType() === CardTypes.Character && card.isParticipating())
+                            };
+                        }),
                         'Discard three cards from hand': AbilityDsl.actions.chosenDiscard({amount: 3})
                     }
                 }

@@ -29,9 +29,8 @@ describe('Ramparts of Stone', function() {
             it('should prompt the attacker to discard or bow character', function() {
                 this.player2.clickCard(this.ramparts);
                 expect(this.player1).toHavePrompt('Ramparts of Stone');
-                expect(this.player1.currentButtons).toContain('Bow all participating character');
+                expect(this.player1.currentButtons).toContain('Bow all participating characters');
                 expect(this.player1.currentButtons).toContain('Discard three cards from hand');
-
             });
         });
     });
