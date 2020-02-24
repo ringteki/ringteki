@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes, EventNames, Players } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class ChasingTheSun extends DrawCard {
     setupCardAbilities() {
@@ -7,25 +8,11 @@ class ChasingTheSun extends DrawCard {
             title: 'Move the conflict to another eligible province',
             condition: context => context.player.isAttackingPlayer(),
             cannotBeMirrored: true,
-            effect: 'move the conflict to a different province',
-            handler: context => this.game.promptForSelect(context.player, {
-                context: context,
+            target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                controller: Players.Opponent,
-                cardCondition: card => !card.isConflictProvince() && card.canBeAttacked(),
-                onSelect: (player, card) => {
-                    this.game.addMessage('{0} moves the conflict to {1}', player, card);
-                    card.inConflict = true;
-                    this.game.currentConflict.conflictProvince.inConflict = false;
-                    this.game.currentConflict.conflictProvince = card;
-                    if(card.facedown) {
-                        card.facedown = false;
-                        this.game.raiseEvent(EventNames.OnCardRevealed, { context: context, card: card });
-                    }
-                    return true;
-                }
-            })
+                gameAction: AbilityDsl.actions.moveConflict()
+            }
         });
     }
 }

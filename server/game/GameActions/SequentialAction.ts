@@ -48,7 +48,7 @@ export class SequentialAction extends GameAction {
                             events.push(event);
                         }    
                         if(gameAction !== properties.gameActions[properties.gameActions.length - 1]) {
-                            context.game.openEventWindow(eventsForThisAction);
+                            context.game.openThenEventWindow(eventsForThisAction);
                         }
                     });
                 }

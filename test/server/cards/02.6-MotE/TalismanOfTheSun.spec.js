@@ -5,7 +5,8 @@ describe('Talisman of the Sun', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shrine-maiden']
+                        inPlay: ['shrine-maiden'],
+                        provinces: ['manicured-garden']
                     },
                     player2: {
                         provinces: ['public-forum', 'sanpuku-seido'],
@@ -14,6 +15,9 @@ describe('Talisman of the Sun', function() {
                     }
                 });
                 this.player1.pass();
+                this.garden = this.player1.findCardByName('manicured-garden');
+                this.seido = this.player2.findCardByName('sanpuku-seido');
+                this.forum = this.player2.findCardByName('public-forum');
                 this.talismanOfTheSun = this.player2.playAttachment('talisman-of-the-sun', 'serene-warrior');
                 this.noMoreActions();
                 this.initiateConflict({
@@ -27,9 +31,13 @@ describe('Talisman of the Sun', function() {
             it('should move the conflict to a new province', function() {
                 this.player2.clickCard(this.talismanOfTheSun);
                 expect(this.player2).toHavePrompt('Talisman of the Sun');
+                expect(this.player2).not.toBeAbleToSelect(this.garden);
+                expect(this.player2).not.toBeAbleToSelect(this.forum);
+                expect(this.player2).toBeAbleToSelect(this.seido);
                 this.sanpukuSeido = this.player2.clickCard('sanpuku-seido');
                 expect(this.sanpukuSeido.inConflict).toBe(true);
                 expect(this.game.currentConflict.conflictProvince).toBe(this.sanpukuSeido);
+                expect(this.getChatLogs(3)).toContain('player2 uses Talisman of the Sun, bowing Talisman of the Sun to move the conflict to Sanpuku Seidō');
             });
 
             it('should apply any constant abilities of the new province', function() {
