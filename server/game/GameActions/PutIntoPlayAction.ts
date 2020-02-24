@@ -34,11 +34,17 @@ export class PutIntoPlayAction extends CardGameAction {
 
     canAffect(card: DrawCard, context: AbilityContext): boolean {
         let properties = this.getProperties(context) as PutIntoPlayProperties;
+        let contextCopy = context.copy( { source: card });
+
         if(!context || !super.canAffect(card, context)) {
             return false;
         } else if(!context.player || card.anotherUniqueInPlay(context.player)) {
             return false;
         } else if(card.location === Locations.PlayArea || card.facedown) {
+            return false;
+        } else if(!card.checkRestrictions('putIntoPlay', context)) {
+            return false;
+        } else if (!context.player.checkRestrictions('enterPlay', contextCopy)) {
             return false;
         } else if(this.intoConflict) {
             // There is no current conflict, or no context (cards must be put into play by a player, not a framework event)
@@ -47,9 +53,6 @@ export class PutIntoPlayAction extends CardGameAction {
             }
             // card cannot participate in this conflict type
             if(card.hasDash(context.game.currentConflict.conflictType)) {
-                return false;
-            }
-            if(!card.checkRestrictions('putIntoPlay', context)) {
                 return false;
             }
             if(!card.checkRestrictions('putIntoConflict', context)) {
