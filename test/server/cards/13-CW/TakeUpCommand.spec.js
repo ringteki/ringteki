@@ -67,6 +67,7 @@ describe('Take up Command', function() {
             this.player2.clickCard(this.brash);
             expect(this.brash.bowed).toBe(false);
             expect(this.brash.inConflict).toBe(true);
+            expect(this.getChatLogs(3)).toContain('player2 uses Borderlands Defender\'s gained ability from Take Up Command to ready Brash Samurai and move it into the conflict');
         });
 
         it('should move in a ready not participating character', function() {
