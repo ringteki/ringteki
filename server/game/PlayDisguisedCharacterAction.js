@@ -66,6 +66,8 @@ class PlayDisguisedCharacterAction extends BaseAction {
             return 'cannotTrigger';
         } else if(context.source.anotherUniqueInPlay(context.player)) {
             return 'unique';
+        } else if(!context.player.checkRestrictions('enterPlay', context)) {
+            return 'restriction';
         }
         return super.meetsRequirements(context);
     }
