@@ -26,7 +26,7 @@ export class AttachToRingAction extends CardGameAction {
         let properties = this.getProperties(context, additionalProperties) as AttachToRingActionProperties;
         if(!context || !context.player || !ring) {
             return false;
-        } else if(!properties.attachment || properties.attachment.anotherUniqueInPlay(context.player) || !properties.attachment.canAttach(ring, context)) {
+        } else if(!properties.attachment || properties.attachment.anotherUniqueInPlay(context.player) || !properties.attachment.canAttach(ring)) {
             return false;
         }
         return super.canAffect(ring, context);
