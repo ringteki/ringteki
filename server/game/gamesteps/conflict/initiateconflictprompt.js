@@ -12,6 +12,72 @@ const capitalize = {
     void: 'Void'
 };
 
+//Work list
+//Step 1: Identify the forced attacker combinations for each ring/conflict type combo
+//Step 2: Identify the options that 
+
+class ForcedAttackers {
+    constructor(ring, conflictType, attackers) {
+        this.ring = ring;
+        this.conflictType = conflictType;
+        this.attackers = attackers;
+    }
+
+    getNumberOfAttackers() {
+        return this.attackers.length;
+    }
+}
+
+class ForcedAttackersMatrix {
+    constructor(player, characters, game) {
+        this.player = player;
+        this.characters = characters;
+        this.attackers = {};
+        this.maximumAttackers = 0;
+        this.defaultAttackers = [];
+        this.buildMatrix(game);
+    }
+
+    isCombinationValid(ring, conflictType) {
+        return this.attackers[ring][conflictType].getNumberOfAttackers() === this.maximumAttackers;
+    }
+
+    buildMatrix(game) {
+        const rings = [game.rings.air, game.rings.earth, game.rings.fire, game.rings.void, game.rings.water];
+        const conflictTypes = ['military', 'political'];
+
+        this.maximumAttackers = 0;
+        this.defaultRing = game.rings.air;
+        this.defaultType = 'military';
+        rings.forEach(ring => {
+            this.attackers[ring] = {}
+            conflictTypes.forEach(type => {
+                let attackers = this.getForcedAttackers(ring, type);
+                this.attackers[ring][type] = new ForcedAttackers(ring, type, attackers);
+                if (attackers.length > this.maximumAttackers) {
+                    this.maximumAttackers = attackers.length;
+                    this.defaultRing = ring;
+                    this.defaultType = type;
+                }
+            })
+        })
+    }
+
+    getForcedAttackers(ring, conflictType) {
+        if (!this.player.hasLegalConflictDeclaration({ type: conflictType, ring: ring })) {
+            return 0;
+        }
+
+        if (this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
+            return this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
+        }
+
+        return this.characters.filter(card =>
+            card.canDeclareAsAttacker(conflictType, ring) &&
+            card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === conflictType));
+    }
+}
+
 class InitiateConflictPrompt extends UiPrompt {
     constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing) {
         super(game);
@@ -21,6 +87,7 @@ class InitiateConflictPrompt extends UiPrompt {
         this.canPass = canPass;
         this.selectedDefenders = [];
         this.covertRemaining = false;
+        this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
         this.checkForMustSelect();
     }
 
@@ -32,16 +99,15 @@ class InitiateConflictPrompt extends UiPrompt {
         return super.continue();
     }
 
-    getMustBeDeclared() {
-        return this.choosingPlayer.cardsInPlay.filter(card =>
-            card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === this.conflict.conflictType));
-    }
-
     checkForMustSelect() {
-        for(const card of this.getMustBeDeclared()) {
-            if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
-                this.selectCard(card);
-            }
+        if (this.forcedAttackers.maximumAttackers > 0) {
+            this.conflict.ring = this.forcedAttackers.defaultRing;
+            this.conflict.conflictType = this.forcedAttackers.defaultType;
+            for(const card of this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
+                if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
+                    this.selectCard(card);
+                }
+            }    
         }
     }
 
@@ -111,7 +177,15 @@ class InitiateConflictPrompt extends UiPrompt {
             ring.flipConflictType();
         } else {
             const type = ring.conflictType;
+
+            let polValid = this.forcedAttackers.isCombinationValid(ring, 'political');
+            let milValid = this.forcedAttackers.isCombinationValid(ring, 'military');
+
             if(!player.hasLegalConflictDeclaration({ type, ring, province: this.conflict.conflictProvince })) {
+                ring.flipConflictType();
+            } else if (polValid && !milValid && type === 'military') {
+                ring.flipConflictType();
+            } else if (milValid && !polValid && type === 'political') {
                 ring.flipConflictType();
             } else if(this.conflict.attackers.some(card => !card.canDeclareAsAttacker(type, ring))) {
                 ring.flipConflictType();
@@ -129,6 +203,12 @@ class InitiateConflictPrompt extends UiPrompt {
             }
         });
 
+        _.each(this.forcedAttackers.getForcedAttackers(ring, ring.conflictType), card => {
+            if (!this.conflict.attackers.includes(card)) {
+                this.selectCard(card);
+            }
+        })
+
         this.conflict.calculateSkill(true);
         this.recalculateCovert();
 
@@ -143,13 +223,14 @@ class InitiateConflictPrompt extends UiPrompt {
             if(!player.hasLegalConflictDeclaration({ type: newType, ring, province })) {
                 return false;
             }
-            const mustBeDeclaredAttackers = this.getMustBeDeclared().filter(card => card.inConflict);
-            return mustBeDeclaredAttackers.every(card =>
-                card.canDeclareAsAttacker(newType, ring, province) &&
-                player.hasLegalConflictDeclaration({ type: newType, ring, province })
-            );
+
+            if (!this.forcedAttackers.isCombinationValid(ring, newType)) {
+                return false;
+            }
+
+            return true;
         }
-        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province });
+        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province }) && (this.forcedAttackers.isCombinationValid(ring, 'political') || this.forcedAttackers.isCombinationValid(ring, 'military'));
     }
 
     checkCardCondition(card) {
@@ -162,7 +243,7 @@ class InitiateConflictPrompt extends UiPrompt {
         } else if(card.type === CardTypes.Character && card.location === Locations.PlayArea) {
             if(card.controller === this.choosingPlayer) {
                 if(this.conflict.attackers.includes(card)) {
-                    return !card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === this.conflict.conflictType);
+                    return !this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
                 }
                 return this.choosingPlayer.hasLegalConflictDeclaration({
                     type: this.conflict.conflictType,
