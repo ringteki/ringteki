@@ -102,7 +102,9 @@ class InitiateConflictPrompt extends UiPrompt {
     checkForMustSelect() {
         if (this.forcedAttackers.maximumAttackers > 0) {
             this.conflict.ring = this.forcedAttackers.defaultRing;
-            this.conflict.conflictType = this.forcedAttackers.defaultType;
+            if (this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
+                this.conflict.ring.flipConflictType();
+            }
             for(const card of this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
                 if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
                     this.selectCard(card);

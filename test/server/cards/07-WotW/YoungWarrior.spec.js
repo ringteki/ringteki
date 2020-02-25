@@ -21,14 +21,14 @@ describe('Young Warrior', function() {
 
             it('should automatically add Young Warrior to attackers', function() {
                 this.noMoreActions();
-                expect(this.player1).toHavePrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
                 expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
             });
 
             it('should not allow removing Young Warrior from the conflict as an attacker', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.youngWarrior);
-                expect(this.player1).toHavePrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
                 expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
             });
 
@@ -65,7 +65,7 @@ describe('Young Warrior', function() {
                 });
 
                 it('should automatically add Young Warrior to attackers', function() {
-                    expect(this.player1).toHavePrompt('Initiate Conflict');
+                    expect(this.player1).toHavePrompt('Political Air Conflict');
                     expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
                 });
 
@@ -127,8 +127,8 @@ describe('Young Warrior', function() {
                 });
 
                 it('should automatically add Young Warrior to attackers', function() {
-                    expect(this.player1).toHavePrompt('Initiate Conflict');
-                    expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
+                    expect(this.player1).toHavePrompt('Military Air Conflict');
+                    expect(this.game.currentConflict.attackers).toContain(this.youngWarrior2);
                 });
 
                 it('should allow flipping the ring and automatically add to attackers', function() {
