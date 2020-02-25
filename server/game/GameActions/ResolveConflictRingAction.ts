@@ -49,7 +49,8 @@ export class ResolveConflictRingAction extends RingAction {
             activePromptTitle = chosenElements.reduce((string, element) => string + ' ' + element, activePromptTitle + '\nChosen elements:');
         }
         let buttons = [];
-
+        
+        elements.map(element => buttons.push({text:element.slice(0,1).toUpperCase() + element.slice(1) + " Ring", arg: element}));
         if(chosenElements.length > 0) {
             buttons.push({ text: 'Done', arg: 'done' });
         }
@@ -73,7 +74,12 @@ export class ResolveConflictRingAction extends RingAction {
             onMenuCommand: (player, arg) => {
                 if(arg === 'all') {
                     this.resolveRingEffects(player, elements.concat(chosenElements));
-                } else if(arg === 'done') {
+                } else if(elements.includes(arg)) {
+                    elementsToResolve--;
+                    chosenElements.push(arg);
+                    this.chooseElementsToResolve(player, elements.filter(e => e !== arg), elementsToResolve, chosenElements);
+                }
+                else if(arg === 'done') {
                     this.resolveRingEffects(player, chosenElements);
                 }
                 return true;
