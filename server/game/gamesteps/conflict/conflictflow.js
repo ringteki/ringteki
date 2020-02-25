@@ -382,7 +382,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             ring.contested = false;
             return;
         }
-        if(this.conflict.winner) {
+        if(this.conflict.winner && this.conflict.winner.checkRestrictions('claimRings', this.game.getFrameworkContext())) {
             this.game.raiseEvent(EventNames.OnClaimRing, { player: this.conflict.winner, conflict: this.conflict, ring:this.conflict.ring }, () => ring.claimRing(this.conflict.winner));
         }
         //Do this lazily for now
