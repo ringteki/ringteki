@@ -5,12 +5,13 @@ describe('InitateConflictPrompt: ', function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseEvent', 'promptWithHandlerMenu', 'getFrameworkContext', 'resetClocks']);
         this.fireRing = { element: 'fire' };
         this.gameSpy.rings = { fire: this.fireRing };
-        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration']);
+        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'getEffects']);
         this.playerSpy.getLegalConflictTypes.and.returnValue(['military', 'political']);
         this.playerSpy.cardsInPlay = [];
         this.conflictSpy = jasmine.createSpyObj('conflict', ['calculateSkill', 'removeFromConflict', 'addAttacker', 'setDeclarationComplete']);
         this.conflictSpy.attackers = [];
         this.conflictSpy.conflictProvince = null;
+        this.playerSpy.getEffects.and.returnValue([]);
         this.prompt = new InitateConflictPrompt(this.gameSpy, this.conflictSpy, this.playerSpy);
     });
 

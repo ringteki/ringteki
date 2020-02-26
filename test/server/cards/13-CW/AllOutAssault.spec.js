@@ -1,153 +1,211 @@
-describe('A Game of Letters', function() {
+describe('All Out Assault', function() {
     integration(function() {
-        beforeEach(function() {
-            this.setupTest({
-                phase: 'conflict',
-                player1: {
-                    inPlay: ['kakita-yoshi', 'doji-fumiki', 'maker-of-keepsakes'],
-                    hand: ['finger-of-jade']
-                },
-                player2: {
-                    inPlay: ['doji-whisperer', 'doji-challenger'],
-                    hand: ['a-game-of-letters']
-                }
+        describe('Base Case (no dash, no element dependant, no Tadakatsu)', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'draw',
+                    player1: {
+                        inPlay: ['kakita-yoshi', 'doji-fumiki', 'maker-of-keepsakes'],
+                        hand: ['all-out-assault'],
+                    },
+                    player2: {
+                        inPlay: ['doji-whisperer', 'doji-challenger']
+                    }
+                });
+
+                this.yoshi = this.player1.findCardByName('kakita-yoshi');
+                this.fumiki = this.player1.findCardByName('doji-fumiki');
+                this.keepsakes = this.player1.findCardByName('maker-of-keepsakes');
+                this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
+                this.challenger = this.player2.findCardByName('doji-challenger');
+                this.assault = this.player1.findCardByName('all-out-assault');
+
+                this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay2 = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                this.noMoreActions();
             });
 
-            this.yoshi = this.player1.findCardByName('kakita-yoshi');
-            this.fumiki = this.player1.findCardByName('doji-fumiki');
-            this.keepsakes = this.player1.findCardByName('maker-of-keepsakes');
-            this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
-            this.challenger = this.player2.findCardByName('doji-challenger');
-            this.game = this.player2.findCardByName('a-game-of-letters');
-            this.jade = this.player1.findCardByName('finger-of-jade');
-
-            this.yoshi.honor();
-            this.dojiWhisperer.dishonor();
-            this.challenger.honor();
-        });
-
-        it('should not work outside of conflicts', function() {
-            this.player1.pass();
-            expect(this.player2).toHavePrompt('Action Window');
-            this.player2.clickCard(this.game);
-            expect(this.player2).toHavePrompt('Action Window');
-        });
-
-        it('should not work in mil conflicts', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi],
-                defenders: [this.dojiWhisperer],
-                type: 'military'
+            it('should trigger at the start of the conflict phase', function() {
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.assault);
+                this.player1.clickCard(this.assault);
+                expect(this.getChatLogs(1)).toContain('player1 plays All Out Assault to force each player to attack with as many characters as they can each conflict!');
             });
 
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            this.player2.clickCard(this.game);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-        });
+            it('should not allow passing conflicts', function() {
+                this.player1.clickCard(this.assault);
 
-        it('should let you target a token independent of participating', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.keepsakes],
-                defenders: [this.dojiWhisperer],
-                type: 'political'
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Choose province to attack');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+                expect(this.player1).not.toHavePromptButton('Pass Conflict');
             });
 
-            this.player2.clickCard(this.game);
-            expect(this.player2).toHavePrompt('Choose a token');
-            expect(this.player2).toBeAbleToSelect(this.yoshi);
-            expect(this.player2).not.toBeAbleToSelect(this.fumiki);
-            expect(this.player2).not.toBeAbleToSelect(this.keepsakes);
-            expect(this.player2).toBeAbleToSelect(this.dojiWhisperer);
-            expect(this.player2).toBeAbleToSelect(this.challenger);
-        });
+            it('should force assigning all characters and not let you unassign', function() {
+                this.player1.clickCard(this.assault);
+                this.noMoreActions();
 
-        it('should let you choose a character controlled by the player who doesn\'t control the character with the token', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.keepsakes],
-                defenders: [this.dojiWhisperer],
-                type: 'political'
+                expect(this.game.currentConflict.attackers).toContain(this.yoshi);
+                expect(this.game.currentConflict.attackers).toContain(this.fumiki);
+                expect(this.game.currentConflict.attackers).toContain(this.keepsakes);
+
+                this.player1.clickCard(this.yoshi);
+                this.player1.clickCard(this.fumiki);
+                this.player1.clickCard(this.keepsakes);
+
+                expect(this.game.currentConflict.attackers).toContain(this.yoshi);
+                expect(this.game.currentConflict.attackers).toContain(this.fumiki);
+                expect(this.game.currentConflict.attackers).toContain(this.keepsakes);
             });
 
-            this.player2.clickCard(this.game);
-            this.player2.clickCard(this.yoshi);
-
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
-            expect(this.player2).not.toBeAbleToSelect(this.fumiki);
-            expect(this.player2).not.toBeAbleToSelect(this.keepsakes);
-            expect(this.player2).toBeAbleToSelect(this.dojiWhisperer);
-            expect(this.player2).not.toBeAbleToSelect(this.challenger);
-        });
-
-        it('should apply the same effect as the token', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.keepsakes],
-                defenders: [this.dojiWhisperer],
-                type: 'political'
+            it('should let you switch the ring and the conflict type', function() {
+                this.player1.clickCard(this.assault);
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+                this.player1.clickRing('air');
+                expect(this.player1).toHavePrompt('Political Air Conflict');
+                this.player1.clickRing('earth');
+                expect(this.player1).toHavePrompt('Political Earth Conflict');
+                this.player1.clickRing('earth');
+                expect(this.player1).toHavePrompt('Military Earth Conflict');
             });
 
-            this.player2.clickCard(this.game);
-            this.player2.clickCard(this.yoshi);
-            expect(this.dojiWhisperer.isDishonored).toBe(true);
-            expect(this.player2).toBeAbleToSelect(this.dojiWhisperer);
-            this.player2.clickCard(this.dojiWhisperer);
-            expect(this.dojiWhisperer.isDishonored).toBe(false);
-        });
+            it('should not assign bowed characters and should still let you attack', function() {
+                this.player1.clickCard(this.assault);
+                this.yoshi.bowed = true;
+                this.noMoreActions();
 
-        it('should apply the same effect as the token', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.fumiki, this.keepsakes],
-                defenders: [],
-                type: 'political'
+                expect(this.game.currentConflict.attackers).not.toContain(this.yoshi);
+                expect(this.game.currentConflict.attackers).toContain(this.fumiki);
+                expect(this.game.currentConflict.attackers).toContain(this.keepsakes);
             });
 
-            this.player2.clickCard(this.game);
-            this.player2.clickCard(this.dojiWhisperer);
-            expect(this.dojiWhisperer.isDishonored).toBe(true);
-            expect(this.player2).toBeAbleToSelect(this.yoshi);
-            expect(this.player2).not.toBeAbleToSelect(this.keepsakes);
-            expect(this.player2).toBeAbleToSelect(this.fumiki);
-            this.player2.clickCard(this.fumiki);
-            expect(this.fumiki.isDishonored).toBe(true);
+            it('should effect both players', function() {
+                this.player1.clickCard(this.assault);
+                this.noMoreActions();
+                this.player1.clickCard(this.shamefulDisplay2);
+                this.player1.clickPrompt('Initiate Conflict');
+                this.player2.clickPrompt('Done'); //no defenders
+                this.noMoreActions();
+                this.player1.clickPrompt('No');
+                this.player1.clickPrompt('Don\'t Resolve');
+
+                this.noMoreActions();
+                expect(this.player2).toHavePrompt('Choose province to attack');
+                expect(this.player2).toHavePrompt('Military Earth Conflict');
+                expect(this.player2).not.toHavePromptButton('Pass Conflict');
+            });
         });
 
-        it('should only let you target a valid token', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.keepsakes],
-                defenders: [],
-                type: 'political'
+        describe('Dashes and Element Dependent Characters', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'draw',
+                    player1: {
+                        inPlay: ['bayushi-liar', 'matsu-berserker', 'alibi-artist', 'fire-tensai-acolyte'],
+                        hand: ['all-out-assault'],
+                    },
+                    player2: {
+                    }
+                });
+
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.alibi = this.player1.findCardByName('alibi-artist');
+                this.acolyte = this.player1.findCardByName('fire-tensai-acolyte');
+                this.assault = this.player1.findCardByName('all-out-assault');
+
+                this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay2 = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                this.noMoreActions();
+                this.player1.clickCard(this.assault);
             });
 
-            this.player2.clickCard(this.game);
-            expect(this.player2).toHavePrompt('Choose a token');
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
-            expect(this.player2).not.toBeAbleToSelect(this.fumiki);
-            expect(this.player2).not.toBeAbleToSelect(this.keepsakes);
-            expect(this.player2).not.toBeAbleToSelect(this.dojiWhisperer);
-            expect(this.player2).toBeAbleToSelect(this.challenger);
+            it('should force you to assign the type you have more dashes on - political', function() {
+                this.noMoreActions();
+
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+            });
+
+            it('should force you to pick a legal element', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+                this.player1.clickRing('earth');
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+            });
+
+            it('should let you switch conflict type with an equal number of dashes', function() {
+                this.liar.bowed = true;
+                this.noMoreActions();
+
+                expect(this.player1).toHavePrompt('Military Fire Conflict');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+            });
+
+            it('should force you to assign the type you have more dashes on - military', function() {
+                this.liar.bowed = true;
+                this.alibi.bowed = true;
+                this.noMoreActions();
+
+                expect(this.player1).toHavePrompt('Military Fire Conflict');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Military Fire Conflict');
+            });
+
+            it('should let you pick any element if the forced element is already claimed', function() {
+                this.player2.claimRing('fire');
+                this.noMoreActions();
+                expect(this.game.currentConflict.attackers).not.toContain(this.acolyte);
+                expect(this.player1).toHavePrompt('Political Air Conflict');
+                this.player1.clickRing('earth');
+                expect(this.player1).toHavePrompt('Political Earth Conflict');
+            });
         });
+        
+        describe('Tadakatsu', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'draw',
+                    player1: {
+                        inPlay: ['bayushi-liar', 'matsu-berserker', 'alibi-artist', 'fire-tensai-acolyte', 'young-warrior'],
+                        hand: ['all-out-assault'],
+                    },
+                    player2: {
+                        inPlay: ['togashi-tadakatsu']
+                    }
+                });
 
-        it('finger of jade should not stop the token selection', function() {
-            this.player1.playAttachment(this.jade, this.yoshi);
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.keepsakes],
-                defenders: [this.dojiWhisperer],
-                type: 'political'
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.alibi = this.player1.findCardByName('alibi-artist');
+                this.acolyte = this.player1.findCardByName('fire-tensai-acolyte');
+                this.assault = this.player1.findCardByName('all-out-assault');
+
+                this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay2 = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                this.noMoreActions();
+                this.player1.clickCard(this.assault);
             });
 
-            this.player2.clickCard(this.game);
-            this.player2.clickCard(this.yoshi);
-            expect(this.dojiWhisperer.isDishonored).toBe(true);
-            expect(this.player2).toBeAbleToSelect(this.dojiWhisperer);
-            this.player2.clickCard(this.dojiWhisperer);
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.dojiWhisperer.isDishonored).toBe(false);
+            it('Should force you to pick the fire ring for your opponent due to Fire Tensai Acolyte', function() {
+                this.noMoreActions();
+
+                expect(this.player2).toHavePrompt('hi');
+
+                // expect(this.player1).toHavePrompt('Political Fire Conflict');
+                // this.player1.clickRing('fire');
+                // expect(this.player1).toHavePrompt('Political Fire Conflict');
+            });
         });
     });
 });

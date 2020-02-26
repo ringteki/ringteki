@@ -12,10 +12,6 @@ const capitalize = {
     void: 'Void'
 };
 
-//Work list
-//Step 1: Identify the forced attacker combinations for each ring/conflict type combo
-//Step 2: Identify the options that 
-
 class ForcedAttackers {
     constructor(ring, conflictType, attackers) {
         this.ring = ring;
@@ -39,7 +35,10 @@ class ForcedAttackersMatrix {
     }
 
     isCombinationValid(ring, conflictType) {
-        return this.attackers[ring][conflictType].getNumberOfAttackers() === this.maximumAttackers;
+        if (this.maximumAttackers === 0) {
+            return true;
+        }
+        return this.attackers[ring.name][conflictType].getNumberOfAttackers() === this.maximumAttackers;
     }
 
     buildMatrix(game) {
@@ -50,10 +49,10 @@ class ForcedAttackersMatrix {
         this.defaultRing = game.rings.air;
         this.defaultType = 'military';
         rings.forEach(ring => {
-            this.attackers[ring] = {}
+            this.attackers[ring.name] = {}
             conflictTypes.forEach(type => {
                 let attackers = this.getForcedAttackers(ring, type);
-                this.attackers[ring][type] = new ForcedAttackers(ring, type, attackers);
+                this.attackers[ring.name][type] = new ForcedAttackers(ring, type, attackers);
                 if (attackers.length > this.maximumAttackers) {
                     this.maximumAttackers = attackers.length;
                     this.defaultRing = ring;
@@ -88,6 +87,9 @@ class InitiateConflictPrompt extends UiPrompt {
         this.selectedDefenders = [];
         this.covertRemaining = false;
         this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
+        if (this.forcedAttackers.maximumAttackers > 0) {
+            this.canPass = false;
+        }
         this.checkForMustSelect();
     }
 
