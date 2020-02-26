@@ -8,6 +8,8 @@ export interface AttachActionProperties extends CardActionProperties {
     attachment?: DrawCard;
     ignoreType?: boolean;
     takeControl?: boolean;
+    giveControl?: boolean;
+    controlSwitchOptional?: boolean;
 }
 
 export class AttachAction extends CardGameAction {
@@ -16,7 +18,9 @@ export class AttachAction extends CardGameAction {
     targetType = [CardTypes.Character, CardTypes.Province];
     defaultProperties: AttachActionProperties = {
         ignoreType: false,
-        takeControl: false
+        takeControl: false,
+        giveControl: false,
+        controlSwitchOptional: false
     };
 
     constructor(properties: ((context: AbilityContext) => AttachActionProperties) | AttachActionProperties) {
@@ -28,6 +32,9 @@ export class AttachAction extends CardGameAction {
         if(properties.takeControl) {
             return ['take control of and attach {2}\'s {1} to {0}', [properties.target, properties.attachment, (properties.attachment as DrawCard).parent]];
         }
+        else if(properties.giveControl) {
+            return ['give control of and attach {2}\'s {1} to {0}', [properties.target, properties.attachment, (properties.attachment as DrawCard).parent]];
+        }
         return ['attach {1} to {0}', [properties.target, properties.attachment]];
     }
 
@@ -35,18 +42,30 @@ export class AttachAction extends CardGameAction {
         let properties = this.getProperties(context, additionalProperties) as AttachActionProperties;
         let canAttachProps = {
             ignoreType: properties.ignoreType,
-            controller: properties.takeControl ? context.player : properties.attachment.controller
+            controller: this.getFinalController(properties, context)
         };
         if(!context || !context.player || !card || card.location !== Locations.PlayArea && card.type !== CardTypes.Province) {
             return false;
         } else if(!properties.attachment || properties.attachment.anotherUniqueInPlay(context.player) || !properties.attachment.canAttach(card, canAttachProps)) {
             return false;
-        } else if(properties.takeControl && properties.attachment.controller === context.player) {
+        } else if(!properties.controlSwitchOptional && properties.takeControl && properties.attachment.controller === context.player) {
+            return false;
+        } else if(!properties.controlSwitchOptional && properties.giveControl && properties.attachment.controller !== context.player) {
             return false;
         }
         return card.allowAttachment(properties.attachment) && super.canAffect(card, context);
     }
 
+    getFinalController(properties, context) {
+        if (properties.takeControl) {
+            return context.player;
+        }
+        else if (properties.giveControl) {
+            return context.player.opponent;
+        }
+
+        return properties.attachment.controller;
+    }
 
     checkEventCondition(event, additionalProperties): boolean {
         return this.canAffect(event.parent, event.context, additionalProperties);
@@ -79,6 +98,10 @@ export class AttachAction extends CardGameAction {
         event.card.parent = event.parent;
         if(properties.takeControl) {
             event.card.controller = event.context.player;
+            event.card.updateEffectContexts();
+        }
+        else if(properties.giveControl) {
+            event.card.controller = event.context.player.opponent;
             event.card.updateEffectContexts();
         }
     }

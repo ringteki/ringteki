@@ -27,6 +27,7 @@ interface TargetSelect extends BaseTarget {
 
 interface TargetRing extends BaseTarget {
     mode: TargetModes.Ring;
+    optional?: boolean;
     ringCondition: (ring: Ring, context?: AbilityContext) => boolean;
 };
 

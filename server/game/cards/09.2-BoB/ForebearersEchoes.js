@@ -12,7 +12,7 @@ class ForebearersEchoes extends DrawCard {
                 location: Locations.DynastyDiscardPile,
                 controller: Players.Self,
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.multiple([
+                gameAction: AbilityDsl.actions.joint([
                     AbilityDsl.actions.putIntoConflict(context => ({
                         target: context.target
                     })),
@@ -30,7 +30,8 @@ class ForebearersEchoes extends DrawCard {
                         })
                     }))
                 ])
-            }
+            },
+            effect: 'put {0} into play in the conflict and apply a lasting effect to {0}'
         });
     }
 }
