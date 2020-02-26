@@ -115,6 +115,7 @@ describe('All Out Assault', function() {
                 this.liar = this.player1.findCardByName('bayushi-liar');
                 this.alibi = this.player1.findCardByName('alibi-artist');
                 this.acolyte = this.player1.findCardByName('fire-tensai-acolyte');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.assault = this.player1.findCardByName('all-out-assault');
 
                 this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
@@ -146,8 +147,12 @@ describe('All Out Assault', function() {
                 this.noMoreActions();
 
                 expect(this.player1).toHavePrompt('Military Fire Conflict');
+                expect(this.game.currentConflict.attackers).not.toContain(this.alibi);
+                expect(this.game.currentConflict.attackers).toContain(this.berserker);
                 this.player1.clickRing('fire');
                 expect(this.player1).toHavePrompt('Political Fire Conflict');
+                expect(this.game.currentConflict.attackers).not.toContain(this.berserker);
+                expect(this.game.currentConflict.attackers).toContain(this.alibi);
             });
 
             it('should force you to assign the type you have more dashes on - military', function() {
