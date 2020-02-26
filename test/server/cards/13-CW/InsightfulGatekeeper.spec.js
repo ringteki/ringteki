@@ -1,4 +1,4 @@
-describe('A Game of Letters', function() {
+describe('Insightful Gatekeeper', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

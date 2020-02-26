@@ -1,4 +1,4 @@
-describe('A Game of Letters', function() {
+describe('Cunning Confidant', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
