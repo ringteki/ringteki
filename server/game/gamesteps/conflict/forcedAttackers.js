@@ -58,7 +58,7 @@ class ForcedAttackersMatrix {
 
         if(this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
             let forced = this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
-            if (forced.length > 0) {
+            if(forced.length > 0) {
                 this.canPass = false;
             }
             return forced;
