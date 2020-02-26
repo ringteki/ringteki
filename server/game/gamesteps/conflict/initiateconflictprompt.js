@@ -1,6 +1,7 @@
 const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
-const { Locations, CardTypes, EffectNames } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
+const ForcedAttackersMatrix = require('./forcedAttackers.js');
 
 const capitalize = {
     military: 'Military',
@@ -12,73 +13,8 @@ const capitalize = {
     void: 'Void'
 };
 
-class ForcedAttackers {
-    constructor(ring, conflictType, attackers) {
-        this.ring = ring;
-        this.conflictType = conflictType;
-        this.attackers = attackers;
-    }
-
-    getNumberOfAttackers() {
-        return this.attackers.length;
-    }
-}
-
-class ForcedAttackersMatrix {
-    constructor(player, characters, game) {
-        this.player = player;
-        this.characters = characters;
-        this.attackers = {};
-        this.maximumAttackers = 0;
-        this.defaultAttackers = [];
-        this.buildMatrix(game);
-    }
-
-    isCombinationValid(ring, conflictType) {
-        if (this.maximumAttackers === 0) {
-            return true;
-        }
-        return this.attackers[ring.name][conflictType].getNumberOfAttackers() === this.maximumAttackers;
-    }
-
-    buildMatrix(game) {
-        const rings = [game.rings.air, game.rings.earth, game.rings.fire, game.rings.void, game.rings.water];
-        const conflictTypes = ['military', 'political'];
-
-        this.maximumAttackers = 0;
-        this.defaultRing = game.rings.air;
-        this.defaultType = 'military';
-        rings.forEach(ring => {
-            this.attackers[ring.name] = {}
-            conflictTypes.forEach(type => {
-                let attackers = this.getForcedAttackers(ring, type);
-                this.attackers[ring.name][type] = new ForcedAttackers(ring, type, attackers);
-                if (attackers.length > this.maximumAttackers) {
-                    this.maximumAttackers = attackers.length;
-                    this.defaultRing = ring;
-                    this.defaultType = type;
-                }
-            })
-        })
-    }
-
-    getForcedAttackers(ring, conflictType) {
-        if (!this.player.hasLegalConflictDeclaration({ type: conflictType, ring: ring })) {
-            return 0;
-        }
-
-        if (this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
-            return this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
-        }
-
-        return this.characters.filter(card =>
-            card.canDeclareAsAttacker(conflictType, ring) &&
-            card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === conflictType));
-    }
-}
-
 class InitiateConflictPrompt extends UiPrompt {
-    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing) {
+    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing, forcedAttackers = null) {
         super(game);
         this.conflict = conflict;
         this.choosingPlayer = choosingPlayer;
@@ -86,10 +22,15 @@ class InitiateConflictPrompt extends UiPrompt {
         this.canPass = canPass;
         this.selectedDefenders = [];
         this.covertRemaining = false;
-        this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
-        if (this.forcedAttackers.maximumAttackers > 0) {
-            this.canPass = false;
+        this.forcedAttackers = forcedAttackers;
+
+        if(forcedAttackers === null) {
+            this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
+            if(this.forcedAttackers.maximumAttackers > 0) {
+                this.canPass = false;
+            }
         }
+
         this.checkForMustSelect();
     }
 
@@ -102,16 +43,16 @@ class InitiateConflictPrompt extends UiPrompt {
     }
 
     checkForMustSelect() {
-        if (this.forcedAttackers.maximumAttackers > 0) {
+        if(this.forcedAttackers.maximumAttackers > 0) {
             this.conflict.ring = this.forcedAttackers.defaultRing;
-            if (this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
+            if(this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
                 this.conflict.ring.flipConflictType();
             }
             for(const card of this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
                 if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
                     this.selectCard(card);
                 }
-            }    
+            }
         }
     }
 
@@ -187,9 +128,9 @@ class InitiateConflictPrompt extends UiPrompt {
 
             if(!player.hasLegalConflictDeclaration({ type, ring, province: this.conflict.conflictProvince })) {
                 ring.flipConflictType();
-            } else if (polValid && !milValid && type === 'military') {
+            } else if(polValid && !milValid && type === 'military') {
                 ring.flipConflictType();
-            } else if (milValid && !polValid && type === 'political') {
+            } else if(milValid && !polValid && type === 'political') {
                 ring.flipConflictType();
             } else if(this.conflict.attackers.some(card => !card.canDeclareAsAttacker(type, ring))) {
                 ring.flipConflictType();
@@ -208,10 +149,10 @@ class InitiateConflictPrompt extends UiPrompt {
         });
 
         _.each(this.forcedAttackers.getForcedAttackers(ring, ring.conflictType), card => {
-            if (!this.conflict.attackers.includes(card)) {
+            if(!this.conflict.attackers.includes(card)) {
                 this.selectCard(card);
             }
-        })
+        });
 
         this.conflict.calculateSkill(true);
         this.recalculateCovert();
@@ -228,7 +169,7 @@ class InitiateConflictPrompt extends UiPrompt {
                 return false;
             }
 
-            if (!this.forcedAttackers.isCombinationValid(ring, newType)) {
+            if(!this.forcedAttackers.isCombinationValid(ring, newType)) {
                 return false;
             }
 

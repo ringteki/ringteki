@@ -6,7 +6,7 @@ describe('All Out Assault', function() {
                     phase: 'draw',
                     player1: {
                         inPlay: ['kakita-yoshi', 'doji-fumiki', 'maker-of-keepsakes'],
-                        hand: ['all-out-assault'],
+                        hand: ['all-out-assault']
                     },
                     player2: {
                         inPlay: ['doji-whisperer', 'doji-challenger']
@@ -106,7 +106,7 @@ describe('All Out Assault', function() {
                     phase: 'draw',
                     player1: {
                         inPlay: ['bayushi-liar', 'matsu-berserker', 'alibi-artist', 'fire-tensai-acolyte'],
-                        hand: ['all-out-assault'],
+                        hand: ['all-out-assault']
                     },
                     player2: {
                     }
@@ -169,14 +169,14 @@ describe('All Out Assault', function() {
                 expect(this.player1).toHavePrompt('Political Earth Conflict');
             });
         });
-        
+
         describe('Tadakatsu', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'draw',
                     player1: {
                         inPlay: ['bayushi-liar', 'matsu-berserker', 'alibi-artist', 'fire-tensai-acolyte', 'young-warrior'],
-                        hand: ['all-out-assault'],
+                        hand: ['all-out-assault']
                     },
                     player2: {
                         inPlay: ['togashi-tadakatsu']
@@ -200,11 +200,12 @@ describe('All Out Assault', function() {
             it('Should force you to pick the fire ring for your opponent due to Fire Tensai Acolyte', function() {
                 this.noMoreActions();
 
-                expect(this.player2).toHavePrompt('hi');
-
-                // expect(this.player1).toHavePrompt('Political Fire Conflict');
-                // this.player1.clickRing('fire');
-                // expect(this.player1).toHavePrompt('Political Fire Conflict');
+                expect(this.player2).toHavePrompt('Choose a ring for player1\'s conflict');
+                expect(this.player2).not.toBeAbleToSelectRing('air');
+                expect(this.player2).not.toBeAbleToSelectRing('earth');
+                expect(this.player2).toBeAbleToSelectRing('fire');
+                expect(this.player2).not.toBeAbleToSelectRing('void');
+                expect(this.player2).not.toBeAbleToSelectRing('water');
             });
         });
     });
