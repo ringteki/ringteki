@@ -3,8 +3,12 @@ const InitateConflictPrompt = require('../../../build/server/game/gamesteps/conf
 describe('InitateConflictPrompt: ', function() {
     beforeEach(function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseEvent', 'promptWithHandlerMenu', 'getFrameworkContext', 'resetClocks']);
+        this.airRing = { element: 'air' };
+        this.earthRing = { element: 'earth' };
         this.fireRing = { element: 'fire' };
-        this.gameSpy.rings = { fire: this.fireRing };
+        this.voidRing = { element: 'void' };
+        this.waterRing = { element: 'water' };
+        this.gameSpy.rings = { air: this.airRing, earth: this.earthRing, fire: this.fireRing, void: this.voidRing, water: this.waterRing };
         this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'getEffects']);
         this.playerSpy.getLegalConflictTypes.and.returnValue(['military', 'political']);
         this.playerSpy.cardsInPlay = [];

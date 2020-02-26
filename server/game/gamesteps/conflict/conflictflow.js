@@ -61,7 +61,7 @@ class ConflictFlow extends BaseStepWithPipeline {
 
     promptForNewConflict() {
         let forcedAttackers = new ForcedAttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
-        if(forcedAttackers.maximumAttackers > 0) {
+        if(!forcedAttackers.canPass) {
             this.canPass = false;
         }
 

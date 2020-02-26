@@ -26,7 +26,7 @@ class InitiateConflictPrompt extends UiPrompt {
 
         if(forcedAttackers === null) {
             this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
-            if(this.forcedAttackers.maximumAttackers > 0) {
+            if(!this.forcedAttackers.canPass) {
                 this.canPass = false;
             }
         }

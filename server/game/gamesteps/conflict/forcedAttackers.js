@@ -19,6 +19,7 @@ class ForcedAttackersMatrix {
         this.attackers = {};
         this.maximumAttackers = 0;
         this.defaultAttackers = [];
+        this.canPass = true;
         this.buildMatrix(game);
     }
 
@@ -56,7 +57,11 @@ class ForcedAttackersMatrix {
         }
 
         if(this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
-            return this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
+            let forced = this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
+            if (forced.length > 0) {
+                this.canPass = false;
+            }
+            return forced;
         }
 
         return this.characters.filter(card =>
