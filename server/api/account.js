@@ -165,18 +165,6 @@ module.exports.init = function(server, options) {
 
         let passwordHash = await hashPassword(req.body.password, 10);
 
-        let requireActivation = configService.getValue('requireActivation');
-
-        if(requireActivation) {
-            let expiration = moment().add(7, 'days');
-            let formattedExpiration = expiration.format('YYYYMMDD-HH:mm:ss');
-            let hmac = crypto.createHmac('sha512', configService.getValue('hmacSecret'));
-
-            let activationToken = hmac.update(`ACTIVATE ${req.body.username} ${formattedExpiration}`).digest('hex');
-            newUser.activationToken = activationToken;
-            newUser.activationTokenExpiry = formattedExpiration;
-        }
-
         let ip = req.get('x-real-ip');
         if(!ip) {
             ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -192,6 +180,8 @@ module.exports.init = function(server, options) {
             return res.send({ success: false, message: 'An error occurred registering your account, please try again later.' });
         }
 
+        let requireActivation = configService.getValue('requireActivation');
+
         let newUser = {
             password: passwordHash,
             registered: new Date(),
@@ -203,12 +193,20 @@ module.exports.init = function(server, options) {
         };
 
         user = await userService.addUser(newUser);
+
         if(requireActivation) {
             let url = `${req.protocol}://${req.get('host')}/activation?id=${user._id}&token=${newUser.activationToken}`;
             let emailText = `Hi,\n\nSomeone, hopefully you, has requested an account to be created on ${appName} (${req.protocol}://${req.get('host')}).  If this was you, click this link ${url} to complete the process.\n\n` +
                 'If you did not request this please disregard this email.\n' +
                 'Kind regards,\n\n' +
                 `${appName} team`;
+            let expiration = moment().add(7, 'days');
+            let formattedExpiration = expiration.format('YYYYMMDD-HH:mm:ss');
+            let hmac = crypto.createHmac('sha512', configService.getValue('hmacSecret'));
+
+            let activationToken = hmac.update(`ACTIVATE ${req.body.username} ${formattedExpiration}`).digest('hex');
+            newUser.activationToken = activationToken;
+            newUser.activationTokenExpiry = formattedExpiration;
 
             await sendEmail(user.email, `${appName} - Account activation`, emailText);
         }
