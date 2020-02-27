@@ -193,6 +193,47 @@ const Costs = {
             promptsPlayer: true
         };
     },
+    variableFateCost: function (amount = -1) {
+        return {
+            canPay: function (context) {
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                return costModifiers < 0 || context.game.actions.loseFate().canAffect(context.player, context);
+            },
+            resolve: function (context, result) {
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                let max = context.player.fate - costModifiers;
+                if (amount >= 0) {
+                    max = Math.min(amount, context.player.fate);
+                }
+                if (!context.game.actions.loseFate().canAffect(context.player, context)) {
+                    max = Math.min(max, -costModifiers);
+                }
+                let choices = Array.from(Array(max), (x, i) => String(i + 1));
+                if(result.canCancel) {
+                    choices.push('Cancel');
+                }
+                context.game.promptWithHandlerMenu(context.player, {
+                    activePromptTitle: 'Choose how much fate to pay',
+                    context: context,
+                    choices: choices,
+                    choiceHandler: choice => {
+                        if(choice === 'Cancel') {
+                            context.costs.variableFateCost = 0;
+                            result.cancelled = true;
+                        } else {
+                            context.costs.variableFateCost = Math.max(0, parseInt(choice));
+                        }
+                    }
+                });
+            },
+            payEvent: function (context) {
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                let action = context.game.actions.loseFate({ amount: context.costs.variableFateCost + costModifiers });
+                return action.getEvent(context.player, context);
+            },
+            promptsPlayer: true
+        };
+    },
     returnRings: function (amount = -1) {
         return {
             canPay: function (context) {
