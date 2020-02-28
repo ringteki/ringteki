@@ -193,10 +193,10 @@ const Costs = {
             promptsPlayer: true
         };
     },
-    returnRings: function (amount = -1) {
+    returnRings: function (amount = -1, ringCondition = (ring, context) => true) { // eslint-disable-line no-unused-vars
         return {
             canPay: function (context) {
-                return Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name);
+                return Object.values(context.game.rings).some(ring => ringCondition(ring, context) && ring.claimedBy === context.player.name);
             },
             resolve: function (context, result) {
                 let chosenRings = [];
@@ -212,7 +212,7 @@ const Costs = {
                         activePromptTitle: 'Choose a ring to return',
                         context: context,
                         buttons: buttons,
-                        ringCondition: ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring),
+                        ringCondition: ring => ringCondition(ring, context) && ring.claimedBy === context.player.name && !chosenRings.includes(ring),
                         onSelect: (player, ring) => {
                             chosenRings.push(ring);
                             if(Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring) && (amount < 0 || chosenRings.length < amount))) {
