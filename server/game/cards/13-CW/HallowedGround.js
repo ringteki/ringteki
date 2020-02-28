@@ -8,7 +8,19 @@ class HallowedGround extends DrawCard {
             targetController: Players.Opponent,
             condition: context => context.game.rings.fire.isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerCannot({
-                cannot: 'placeFateWhenPlayingCharacter'
+                cannot: 'placeFateWhenPlayingCharacter',
+                restrict: 'source'
+            })
+        });
+
+        this.persistentEffect({
+            targetController: Players.Opponent,
+            condition: context => context.game.rings.air.isConsideredClaimed(context.player.opponent),
+            effect: AbilityDsl.effects.playerDelayedEffect({
+                when: {
+                    afterConflict: (event, context) => event.conflict.loser === context.player.opponent && event.conflict.conflictUnopposed
+                },
+                gameAction: AbilityDsl.actions.loseHonor()
             })
         });
     }
