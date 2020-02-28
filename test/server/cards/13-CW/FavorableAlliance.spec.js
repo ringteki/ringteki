@@ -132,6 +132,8 @@ describe('Favorable Alliance', function() {
             expect(this.player1).toHavePrompt('Choose how much fate to pay');
             expect(this.player1).toHavePromptButton('1');
             expect(this.player1).toHavePromptButton('2');
+            expect(this.player1).not.toHavePromptButton('3');
+            expect(this.player1).not.toHavePromptButton('4');
             this.player1.clickPrompt('2');
             expect(this.voice.location).toBe('hand');
             expect(this.katana.location).toBe('hand');

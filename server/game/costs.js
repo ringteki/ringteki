@@ -228,8 +228,15 @@ const Costs = {
             },
             payEvent: function (context) {
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
-                let action = context.game.actions.loseFate({ amount: context.costs.variableFateCost + costModifiers });
-                return action.getEvent(context.player, context);
+                let cost = context.costs.variableFateCost + costModifiers;
+                if (cost > 0) {
+                    let action = context.game.actions.loseFate({ amount: cost });
+                    return action.getEvent(context.player, context);
+                }
+                else {
+                    let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate thanks to discounts
+                    return action.getEvent(context.player, context);
+                }
             },
             promptsPlayer: true
         };
