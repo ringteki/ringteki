@@ -195,22 +195,19 @@ const Costs = {
     },
     variableFateCost: function (properties = {}) {
         return {
-            getDefaultProperties: function() {
-
-            },
             canPay: function (context) {
-                let minAmount = properties.minAmount ? properties.minAmount : 1;
+                let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 return costModifiers < 0 || (context.player.fate >= minAmount + costModifiers && context.game.actions.loseFate().canAffect(context.player, context));
             },
             resolve: function (context, result) {
-                let maxAmount = properties.amount ? properties.amount : -1;
-                let minAmount = properties.minAmount ? properties.minAmount : 1;
+                let maxAmount = properties.maxAmount ? (_.isFunction(properties.maxAmount) ? properties.maxAmount(context) : properties.maxAmount) : -1;
+                let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 let max = context.player.fate - costModifiers;
                 let min = minAmount;
                 if(maxAmount >= 0) {
-                    max = Math.min(maxAmount, context.player.fate);
+                    max = Math.min(maxAmount, context.player.fate - costModifiers);
                 }
                 if(!context.game.actions.loseFate().canAffect(context.player, context)) {
                     max = Math.min(max, -costModifiers);

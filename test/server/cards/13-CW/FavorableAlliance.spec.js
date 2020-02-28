@@ -184,5 +184,65 @@ describe('Favorable Alliance', function() {
             this.player1.clickCard(this.alliance);
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
+
+        it('should only let you pick cards up to the amount in your discard', function() {
+            this.player1.fate = 14;
+            let fate = this.player1.fate;
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.alliance);
+            expect(this.player1).toHavePrompt('Choose a value for X');
+            expect(this.player1).toHavePromptButton('1');
+            expect(this.player1).toHavePromptButton('2');
+            expect(this.player1).toHavePromptButton('3');
+            expect(this.player1).toHavePromptButton('4');
+            expect(this.player1).toHavePromptButton('5');
+            expect(this.player1).toHavePromptButton('6');
+            expect(this.player1).not.toHavePromptButton('7');
+            expect(this.player1).not.toHavePromptButton('8');
+            this.player1.clickPrompt('6');
+            expect(this.player1.hand.length).toBe(6);
+            expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to draw 6 cards');
+            expect(this.player1.fate).toBe(fate - 6);
+        });
+
+        it('should work with Yoshi and a maximum deck size', function() {
+            this.player1.fate = 12;
+            this.player1.player.imperialFavor = 'military';
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi],
+                defenders: [],
+                type: 'military',
+                province: this.garden
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.yoshi);
+            expect(this.voice.location).toBe('hand');
+            expect(this.katana.location).toBe('hand');
+            expect(this.fashion.location).toBe('hand');
+
+            this.player1.moveCard(this.fashion, 'conflict deck');
+            this.player1.moveCard(this.katana, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+
+            this.player2.pass();
+
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.alliance);
+            expect(this.player1).toHavePrompt('Choose a value for X');
+            expect(this.player1).toHavePromptButton('1');
+            expect(this.player1).toHavePromptButton('2');
+            expect(this.player1).toHavePromptButton('3');
+            expect(this.player1).toHavePromptButton('4');
+            expect(this.player1).toHavePromptButton('5');
+            expect(this.player1).toHavePromptButton('6');
+            expect(this.player1).not.toHavePromptButton('7');
+            expect(this.player1).not.toHavePromptButton('8');
+            this.player1.clickPrompt('6');
+            expect(this.player1.hand.length).toBe(6);
+            expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to draw 6 cards');
+            expect(this.player1.fate).toBe(fate - 4);
+        });
     });
 });
