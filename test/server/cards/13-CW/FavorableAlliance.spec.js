@@ -142,5 +142,47 @@ describe('Favorable Alliance', function() {
             expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to draw 2 cards');
             expect(this.player1.fate).toBe(fate);
         });
+
+        it('should work with Tetsuko - able to afford to play the card', function() {
+            this.player1.fate = 2;
+            this.player1.player.imperialFavor = 'military';
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.tetsuko],
+                defenders: [],
+                type: 'military'
+            });
+
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.alliance);
+            expect(this.player1).toHavePrompt('Choose a value for X');
+            expect(this.player1).toHavePromptButton('1');
+            expect(this.player1).not.toHavePromptButton('2');
+            expect(this.player1).not.toHavePromptButton('3');
+            expect(this.player1).not.toHavePromptButton('4');
+            this.player1.clickPrompt('1');
+            expect(this.voice.location).toBe('hand');
+            expect(this.player1.hand.length).toBe(1);
+            expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to draw 1 cards');
+            expect(this.player1.fate).toBe(fate - 2);
+        });
+
+        it('should work with Tetsuko - unable to afford to play the card', function() {
+            this.player1.fate = 1;
+            this.player1.player.imperialFavor = 'military';
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.tetsuko],
+                defenders: [],
+                type: 'military'
+            });
+
+            this.player1.clickCard(this.alliance);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
     });
 });

@@ -201,7 +201,7 @@ const Costs = {
             canPay: function (context) {
                 let minAmount = properties.minAmount ? properties.minAmount : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
-                return costModifiers < 0 || (context.player.fate + costModifiers >= minAmount && context.game.actions.loseFate().canAffect(context.player, context));
+                return costModifiers < 0 || (context.player.fate >= minAmount + costModifiers && context.game.actions.loseFate().canAffect(context.player, context));
             },
             resolve: function (context, result) {
                 let maxAmount = properties.amount ? properties.amount : -1;
@@ -209,10 +209,10 @@ const Costs = {
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 let max = context.player.fate - costModifiers;
                 let min = minAmount;
-                if (maxAmount >= 0) {
+                if(maxAmount >= 0) {
                     max = Math.min(maxAmount, context.player.fate);
                 }
-                if (!context.game.actions.loseFate().canAffect(context.player, context)) {
+                if(!context.game.actions.loseFate().canAffect(context.player, context)) {
                     max = Math.min(max, -costModifiers);
                 }
                 let choices = Array.from(Array((max + 1) - min), (x, i) => String(i + min));
@@ -235,15 +235,15 @@ const Costs = {
             },
             payEvent: function (context) {
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
-                let cost = context.costs.variableFateCost + costModifiers;
-                if (cost > 0) {
+                let cost = context.costs.variableFateCost + Math.min(0, costModifiers); //+ve cost modifiers are applied by the engine
+                if(cost > 0) {
                     let action = context.game.actions.loseFate({ amount: cost });
                     return action.getEvent(context.player, context);
                 }
-                else {
-                    let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
-                    return action.getEvent(context.player, context);
-                }
+
+                let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
+                return action.getEvent(context.player, context);
+
             },
             promptsPlayer: true
         };
