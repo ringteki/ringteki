@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
-const { Players, Durations, Locations, Decks } = require('../../Constants');
+const { Locations } = require('../../Constants');
 
 class FavorableAlliance extends DrawCard {
     PILENAME = 'favorable-alliance';
@@ -15,7 +15,6 @@ class FavorableAlliance extends DrawCard {
             }),
             effect: 'set aside {1} card{2}',
             effectArgs: context => [context.costs.variableFateCost, context.costs.variableFateCost > 1 ? 's' : ''],
-            // gameAction: AbilityDsl.actions.draw(context => ({ amount: context.costs.variableFateCost }))
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.lookAt(context=> ({
                     target: context.player.conflictDeck.first(context.costs.variableFateCost),
@@ -37,37 +36,10 @@ class FavorableAlliance extends DrawCard {
                                 effect: [
                                     AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card])
                                 ]
-                            }));    
-                        })
+                            }));
+                        });
                     }
                 })
-                // AbilityDsl.actions.playerLastingEffect(context => ({
-                //     targetController: Players.Self,
-                //     duration: Durations.Custom,
-                //     until: {
-                //         onCardMoved: event => {
-                //             let favorableCard = context.player.additionalPiles[this.PILENAME].contains(event.card) && event.originalLocation === Locations.RemovedFromGame;
-                //             if (favorableCard) {
-                //                 context.player.additionalPiles[this.PILENAME].splice(context.player.additionalPiles[this.PILENAME].indexOf(event.card), 1);
-                //             }
-                //             return favorableCard;
-                //         }
-                //     },
-                //     effect: [
-                //         AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, context.player.conflictDeck.first(context.costs.variableFateCost)),
-                //     ]
-                // })),
-                // AbilityDsl.actions.moveCard(context => {
-                //     let cards = context.player.conflictDeck.first(context.costs.variableFateCost);
-                //     if(!(this.PILENAME in context.player.additionalPiles)) {
-                //         context.player.createAdditionalPile(this.PILENAME);
-                //     }
-                //     context.player.additionalPiles[this.PILENAME].cards = context.player.additionalPiles[this.PILENAME].cards.concat(cards);
-                //     return {
-                //         target: cards,
-                //         destination: Locations.RemovedFromGame
-                //     }
-                // })
             ])
         });
     }

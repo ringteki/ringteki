@@ -22,10 +22,9 @@ class DrawCard extends BaseCard {
         this.printedCost = parseInt(this.cardData.cost);
 
         if(!_.isNumber(this.printedCost) || isNaN(this.printedCost)) {
-            if (this.type === CardTypes.Event) {
+            if(this.type === CardTypes.Event) {
                 this.printedCost = 0;
-            }
-            else {
+            } else {
                 this.printedCost = null;
             }
         }

@@ -286,6 +286,12 @@ describe('Favorable Alliance', function() {
                 expect(this.yoshi.attachments.toArray()).toContain(this.katana);
             });
 
+            it('should not be able to play cards removed from the game by opponent', function() {
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                this.player2.clickCard(this.katana);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
             it('should not allow re-playing cards that get moved back into RFG after being played', function() {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
