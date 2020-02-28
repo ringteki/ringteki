@@ -8,8 +8,7 @@ class HallowedGround extends DrawCard {
             targetController: Players.Opponent,
             condition: context => context.game.rings.fire.isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerCannot({
-                cannot: 'placeFateWhenPlayingCharacter',
-                restrict: 'source'
+                cannot: 'placeFateWhenPlayingCharacter'
             })
         });
 
@@ -20,6 +19,9 @@ class HallowedGround extends DrawCard {
                 when: {
                     afterConflict: (event, context) => event.conflict.loser === context.player.opponent && event.conflict.conflictUnopposed
                 },
+                message: '{0} loses 1 honor due to the constant effect of {1}',
+                messageArgs: effectContext => [effectContext.player.opponent, effectContext.source],
+                multipleTrigger: true,
                 gameAction: AbilityDsl.actions.loseHonor()
             })
         });
