@@ -193,27 +193,34 @@ const Costs = {
             promptsPlayer: true
         };
     },
-    variableFateCost: function (amount = -1) {
+    variableFateCost: function (properties = {}) {
         return {
+            getDefaultProperties: function() {
+
+            },
             canPay: function (context) {
+                let minAmount = properties.minAmount ? properties.minAmount : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
-                return costModifiers < 0 || context.game.actions.loseFate().canAffect(context.player, context);
+                return costModifiers < 0 || (context.player.fate + costModifiers >= minAmount && context.game.actions.loseFate().canAffect(context.player, context));
             },
             resolve: function (context, result) {
+                let maxAmount = properties.amount ? properties.amount : -1;
+                let minAmount = properties.minAmount ? properties.minAmount : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 let max = context.player.fate - costModifiers;
-                if (amount >= 0) {
-                    max = Math.min(amount, context.player.fate);
+                let min = minAmount;
+                if (maxAmount >= 0) {
+                    max = Math.min(maxAmount, context.player.fate);
                 }
                 if (!context.game.actions.loseFate().canAffect(context.player, context)) {
                     max = Math.min(max, -costModifiers);
                 }
-                let choices = Array.from(Array(max), (x, i) => String(i + 1));
+                let choices = Array.from(Array((max + 1) - min), (x, i) => String(i + min));
                 if(result.canCancel) {
                     choices.push('Cancel');
                 }
                 context.game.promptWithHandlerMenu(context.player, {
-                    activePromptTitle: 'Choose how much fate to pay',
+                    activePromptTitle: properties.activePromptTitle ? properties.activePromptTitle : 'Choose how much fate to pay',
                     context: context,
                     choices: choices,
                     choiceHandler: choice => {
@@ -234,7 +241,7 @@ const Costs = {
                     return action.getEvent(context.player, context);
                 }
                 else {
-                    let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate thanks to discounts
+                    let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
                     return action.getEvent(context.player, context);
                 }
             },

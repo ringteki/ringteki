@@ -45,7 +45,7 @@ describe('Favorable Alliance', function() {
             let fate = this.player1.fate;
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.alliance);
-            expect(this.player1).toHavePrompt('Choose how much fate to pay');
+            expect(this.player1).toHavePrompt('Choose a value for X');
             expect(this.player1).toHavePromptButton('1');
             expect(this.player1).toHavePromptButton('2');
             expect(this.player1).toHavePromptButton('3');
@@ -85,7 +85,7 @@ describe('Favorable Alliance', function() {
 
             let fate = this.player1.fate;
             this.player1.clickCard(this.alliance);
-            expect(this.player1).toHavePrompt('Choose how much fate to pay');
+            expect(this.player1).toHavePrompt('Choose a value for X');
             expect(this.player1).toHavePromptButton('1');
             expect(this.player1).toHavePromptButton('2');
             expect(this.player1).toHavePromptButton('3');
@@ -129,7 +129,7 @@ describe('Favorable Alliance', function() {
 
             let fate = this.player1.fate;
             this.player1.clickCard(this.alliance);
-            expect(this.player1).toHavePrompt('Choose how much fate to pay');
+            expect(this.player1).toHavePrompt('Choose a value for X');
             expect(this.player1).toHavePromptButton('1');
             expect(this.player1).toHavePromptButton('2');
             expect(this.player1).not.toHavePromptButton('3');
