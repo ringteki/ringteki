@@ -79,7 +79,7 @@ describe('Hallowed Ground', function() {
                 this.player2.claimRing('air');
                 this.noMoreActions();
                 expect(this.player1).toHavePrompt('Fire Ring');
-                expect(this.getChatLogs(3)).toContain('Player2 loses 1 honor due to the constant effect of Hallowed Ground');
+                expect(this.getChatLogs(3)).toContain('player2 loses 1 honor due to the constant effect of Hallowed Ground');
                 expect(this.player2.honor).toBe(this.startingHonor - 2);
             });
 
