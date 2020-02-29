@@ -49,7 +49,7 @@ class DynastyPhase extends Phase {
                         this.game.applyGameAction(null, { flipDynasty: card });
                         revealedCards.push(card);
                     }
-                })
+                });
             }
             if(revealedCards.length > 0) {
                 this.game.queueSimpleStep(() => this.game.addMessage('{0} reveals {1}', player, revealedCards));

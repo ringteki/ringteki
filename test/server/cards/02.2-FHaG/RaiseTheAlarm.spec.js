@@ -4,7 +4,7 @@ describe('Raise The Alarm', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger'],
+                    inPlay: ['doji-challenger']
                 },
                 player2: {
                     hand: ['raise-the-alarm'],

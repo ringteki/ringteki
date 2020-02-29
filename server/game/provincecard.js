@@ -100,7 +100,7 @@ class ProvinceCard extends BaseCard {
                             ]
                         });
                     }
-                })
+                });
             }
         }
     }

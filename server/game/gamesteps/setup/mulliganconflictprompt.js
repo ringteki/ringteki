@@ -49,7 +49,7 @@ class MulliganConflictPrompt extends MulliganDynastyPrompt {
                     if(card) {
                         card.facedown = true;
                     }
-                })
+                });
             });
             player.clearSelectedCards();
             player.clearSelectableCards();

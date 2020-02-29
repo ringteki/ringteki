@@ -22,7 +22,7 @@ describe('Force of the River', function() {
                 this.kisada = this.player1.findCardByName('hida-kisada');
                 this.liar = this.player1.findCardByName('bayushi-liar');
                 this.storehouse = this.player1.findCardByName('imperial-storehouse');
-    
+
                 this.player1.playAttachment(this.river, this.doomed);
                 this.garden = this.player1.findCardByName('manicured-garden');
 
@@ -30,7 +30,7 @@ describe('Force of the River', function() {
                 this.player1.moveCard(this.storehouse, this.garden.location);
                 this.player1.moveCard(this.kisada, this.garden.location);
                 this.player1.moveCard(this.liar, this.garden.location);
-    
+
                 this.kuwanan.facedown = false;
                 this.kisada.facedown = true;
                 this.storehouse.facedown = true;
@@ -41,7 +41,7 @@ describe('Force of the River', function() {
                     attackers: [this.doomed],
                     defenders: [],
                     type: 'military'
-                });    
+                });
             });
 
             it('should put all facedown cards in a province into play as a spirit of the river', function() {
@@ -57,7 +57,9 @@ describe('Force of the River', function() {
                 expect(this.liar.location).toBe('removed from game');
                 expect(this.liar.facedown).toBe(true);
 
-                expect(this.game.currentConflict.attackers.length >= 4).toBe(true);
+                let attackersValid = this.game.currentConflict.attackers.length >= 4;
+
+                expect(attackersValid).toBe(true);
             });
         });
     });
