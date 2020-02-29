@@ -44,7 +44,7 @@ describe('Hallowed Ground', function() {
                         dynastyDiscard: ['hallowed-ground']
                     },
                     player2: {
-                        inPlay: ['righteous-magistrate'],
+                        inPlay: ['righteous-magistrate', 'solemn-scholar'],
                         honor: 11
                     }
                 });
@@ -53,6 +53,7 @@ describe('Hallowed Ground', function() {
                 this.hunter = this.player1.findCardByName('shadowlands-hunter');
 
                 this.magistrate = this.player2.findCardByName('righteous-magistrate');
+                this.scholar = this.player2.findCardByName('solemn-scholar');
                 this.startingHonor = this.player2.honor;
                 this.noMoreActions();
             });
@@ -101,7 +102,7 @@ describe('Hallowed Ground', function() {
                     ring: 'fire',
                     type: 'military',
                     attackers: [this.hunter],
-                    defenders: []
+                    defenders: [this.scholar]
                 });
                 this.player2.claimRing('air');
                 this.noMoreActions();
