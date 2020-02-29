@@ -83,22 +83,24 @@ class ProvinceCard extends BaseCard {
             if(this.location === Locations.StrongholdProvince) {
                 this.game.recordWinner(this.controller.opponent, 'conquest');
             } else {
-                let dynastyCard = this.controller.getDynastyCardInProvince(this.location);
-                if(dynastyCard) {
-                    let promptTitle = 'Do you wish to discard ' + (dynastyCard.facedown ? 'the facedown card' : dynastyCard.name) + '?';
-                    this.game.promptWithHandlerMenu(this.controller.opponent, {
-                        activePromptTitle: promptTitle,
-                        source: 'Break ' + this.name,
-                        choices: ['Yes', 'No'],
-                        handlers: [
-                            () => {
-                                this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard);
-                                this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
-                            },
-                            () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard)
-                        ]
-                    });
-                }
+                let dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
+                dynastyCards.forEach(dynastyCard => {
+                    if(dynastyCard) {
+                        let promptTitle = 'Do you wish to discard ' + (dynastyCard.facedown ? 'the facedown card' : dynastyCard.name) + '?';
+                        this.game.promptWithHandlerMenu(this.controller.opponent, {
+                            activePromptTitle: promptTitle,
+                            source: 'Break ' + this.name,
+                            choices: ['Yes', 'No'],
+                            handlers: [
+                                () => {
+                                    this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard);
+                                    this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
+                                },
+                                () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard)
+                            ]
+                        });
+                    }
+                })
             }
         }
     }
