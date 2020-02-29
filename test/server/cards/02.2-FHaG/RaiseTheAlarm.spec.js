@@ -31,16 +31,17 @@ describe('Raise The Alarm', function() {
             this.kisada.facedown = true;
             this.storehouse.facedown = true;
             this.liar.facedown = true;
-        });
 
-        it('should allow choosing a facedown card in the province', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
                 defenders: [],
-                type: 'military'
+                type: 'military',
+                province: this.garden
             });
+        });
 
+        it('should allow choosing a facedown card in the province', function() {
             this.player2.clickCard(this.alarm);
             expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
             expect(this.player2).toBeAbleToSelect(this.kisada);
@@ -48,13 +49,6 @@ describe('Raise The Alarm', function() {
         });
 
         it('should put a character into play', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: [],
-                type: 'military'
-            });
-
             this.player2.clickCard(this.alarm);
             expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
             expect(this.player2).toBeAbleToSelect(this.kisada);
@@ -68,13 +62,6 @@ describe('Raise The Alarm', function() {
         });
 
         it('should do nothing if you reveal a holding', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: [],
-                type: 'military'
-            });
-
             this.player2.clickCard(this.alarm);
             expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
             expect(this.player2).toBeAbleToSelect(this.kisada);
@@ -87,13 +74,6 @@ describe('Raise The Alarm', function() {
         });
 
         it('should do nothing if you reveal a dash character', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: [],
-                type: 'military'
-            });
-
             this.player2.clickCard(this.alarm);
             expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
             expect(this.player2).toBeAbleToSelect(this.kisada);
