@@ -13,8 +13,8 @@ class HirumaOutpost extends DrawCard {
                         if(event.conflict.attackingPlayer === context.player) {
                             return false;
                         }
-                        let card = context.player.getDynastyCardInProvince(event.conflict.conflictProvince.location);
-                        return !card || card.facedown || card.type !== CardTypes.Holding;
+                        let cards = context.player.getDynastyCardsInProvince(event.conflict.conflictProvince.location);
+                        return !cards.some(card => !card.facedown && card.type === CardTypes.Holding);
                     }
                 },
                 gameAction: ability.actions.loseHonor()
