@@ -2,6 +2,7 @@ const _ = require('underscore');
 
 const AbilityLimit = require('./abilitylimit.js');
 const CopyCharacter = require('./Effects/CopyCharacter');
+const GainAllAbiliites = require('./Effects/GainAllAbilities.js');
 const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
 const GainAbility = require('./Effects/GainAbility');
@@ -49,6 +50,7 @@ const Effects = {
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),
     gainAbility: (abilityType, properties) => EffectBuilder.card.static(EffectNames.GainAbility, new GainAbility(abilityType, properties)),
+    gainAllAbilities: (character) => EffectBuilder.card.static(EffectNames.GainAllAbilities, new GainAllAbiliites(character)),
     gainExtraFateWhenPlayed: (amount = 1) => EffectBuilder.card.flexible(EffectNames.GainExtraFateWhenPlayed, amount),
     gainPlayAction: (playActionClass) => EffectBuilder.card.detached(EffectNames.GainPlayAction, {
         apply: card => {
