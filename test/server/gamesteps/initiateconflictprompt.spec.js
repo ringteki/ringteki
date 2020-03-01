@@ -10,7 +10,7 @@ describe('InitateConflictPrompt: ', function() {
         this.waterRing = { element: 'water' };
         this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'checkRestrictions']);
         this.gameSpy.rings = { air: this.airRing, earth: this.earthRing, fire: this.fireRing, void: this.voidRing, water: this.waterRing };
-        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'getEffects']);
+        this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan', 'getLegalConflictTypes', 'hasLegalConflictDeclaration', 'getEffects', 'checkRestrictions']);
         this.playerSpy.getLegalConflictTypes.and.returnValue(['military', 'political']);
         this.playerSpy.cardsInPlay = [];
         this.conflictSpy = jasmine.createSpyObj('conflict', ['calculateSkill', 'removeFromConflict', 'addAttacker', 'setDeclarationComplete']);
