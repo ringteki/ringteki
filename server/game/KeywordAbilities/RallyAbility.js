@@ -1,5 +1,6 @@
 const TriggeredAbility = require('../triggeredability.js');
 const { AbilityTypes, Locations } = require('../Constants');
+const AbilityDsl = require('../abilitydsl.js');
 
 class RallyAbility extends TriggeredAbility {
     constructor(game, card) {
@@ -9,6 +10,7 @@ class RallyAbility extends TriggeredAbility {
                     [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(event.card.location) &&
                     context.source.hasRally()
             },
+            limit: AbilityDsl.limit.unlimitedPerConflict(),
             location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
             title: card.name + '\'s Rally',
             printedAbility: false,

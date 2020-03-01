@@ -82,7 +82,41 @@ describe('A Season of War', function() {
                 expect(this.challenger.location).toBe('dynasty deck');
 
                 expect(this.getChatLogs(10)).toContain('player1 places A Season of War faceup in province 1 due to A Season of War\'s Rally');
-            });     
+            });
+            
+            it('when revealed via card effect, should trigger', function() {
+                this.keepDynasty();
+                this.player1.reduceDeckToNumber('dynasty deck', 0);
+                this.player1.moveCard(this.prodigy, 'dynasty deck');
+                this.player1.moveCard(this.kisada, 'dynasty deck');
+                this.player1.moveCard(this.challenger, 'dynasty deck');
+                this.player1.moveCard(this.season2, 'dynasty deck');
+
+                this.keepConflict();
+
+                expect(this.season.location).toBe('province 1');
+                expect(this.season.facedown).toBe(false);
+                expect(this.season2.location).toBe('province 1');
+                expect(this.season2.facedown).toBe(false);
+
+                expect(this.prodigy.location).toBe('dynasty deck');
+                expect(this.kisada.location).toBe('dynasty deck');
+                expect(this.challenger.location).toBe('dynasty deck');
+
+                expect(this.getChatLogs(10)).toContain('player1 places A Season of War faceup in province 1 due to A Season of War\'s Rally');
+
+                this.season.facedown = true;
+                this.game.checkGameState(true);
+                this.player1.clickCard(this.nerishma);
+                this.player1.clickCard(this.season);
+
+                expect(this.getChatLogs(10)).toContain('player1 places Doji Challenger faceup in province 1 due to A Season of War\'s Rally');
+
+                expect(this.season.location).toBe('province 1');
+                expect(this.season.facedown).toBe(false);
+                expect(this.challenger.location).toBe('province 1');
+                expect(this.challenger.facedown).toBe(false);
+            }); 
         });   
 
         // //Testing Dynasty Event restrictions
