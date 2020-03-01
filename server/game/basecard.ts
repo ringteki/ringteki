@@ -27,7 +27,8 @@ const ValidKeywords = [
     'sincerity',
     'courtesy',
     'pride',
-    'covert'
+    'covert',
+    'rally'
 ];
 
 class BaseCard extends EffectSource {
@@ -249,7 +250,7 @@ class BaseCard extends EffectSource {
         if(this.facedown) {
             return false;
         }
-        if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold].includes(this.type)) {
+        if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold, CardTypes.Event].includes(this.type)) {
             return this.isInProvince();
         }
         return this.location === Locations.PlayArea;
@@ -489,8 +490,14 @@ class BaseCard extends EffectSource {
         });
 
         this.printedKeywords.forEach(keyword => {
+            let location = undefined;
+            if (keyword === 'rally') {
+                location = Locations.Any
+            }
+
             this.persistentEffect({
-                effect: AbilityDsl.effects.addKeyword(keyword)
+                effect: AbilityDsl.effects.addKeyword(keyword),
+                location: location
             });
         });
     }

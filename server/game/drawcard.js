@@ -5,6 +5,7 @@ const DuplicateUniqueAction = require('./duplicateuniqueaction.js');
 const CourtesyAbility = require('./KeywordAbilities/CourtesyAbility');
 const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
+const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatusToken = require('./StatusToken');
 const StatModifier = require('./StatModifier');
 
@@ -49,6 +50,9 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new PrideAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
+        }
+        if (this.isDynasty) {
+            this.abilities.reactions.push(new RallyAbility(this.game, this));
         }
     }
 
@@ -98,6 +102,10 @@ class DrawCard extends BaseCard {
 
     hasCourtesy() {
         return this.hasKeyword('courtesy');
+    }
+
+    hasRally() {
+        return this.hasKeyword('rally');
     }
 
     getCost() {

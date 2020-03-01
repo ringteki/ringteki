@@ -12,8 +12,13 @@ class RallyAbility extends TriggeredAbility {
             location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
             title: card.name + '\'s Rally',
             printedAbility: false,
-            message: '{0} places the  faceup in a province due to {1}\'s Rally',
-            messageArgs: context => [context.player, context.source],
+            message: '{0} places {1} faceup in {2} due to {3}\'s Rally',
+            messageArgs: context => [
+                context.player, 
+                context.player.dynastyDeck.first(), 
+                context.player.getProvinceCardInProvince(context.source.location).facedown ? context.source.location : context.player.getProvinceCardInProvince(context.source.location),
+                context.source
+            ],
             handler: context => {
                 let cardFromDeck = context.player.dynastyDeck.first();
                 context.player.moveCard(cardFromDeck, context.source.location);

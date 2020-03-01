@@ -20,8 +20,10 @@ describe('Asako Togama', function() {
             this.prodigy = this.player1.findCardByName('prodigy-of-the-waves');
             this.kisada = this.player1.findCardByName('hida-kisada');
 
+            this.shameful = this.player1.findCardByName('shameful-display', 'province 1');
             this.player1.placeCardInProvince(this.season, 'province 1');
             this.season.facedown = true;
+            this.shameful.facedown = false;
 
             this.keepDynasty();
             this.player1.reduceDeckToNumber('dynasty deck', 0);
