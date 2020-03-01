@@ -90,6 +90,10 @@ class BaseCard extends EffectSource {
             actions = mostRecentEffect.value.getActions(this);
         }
         let effectActions = this.getEffects(EffectNames.GainAbility).filter(ability => ability.abilityType === AbilityTypes.Action);
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
+        }
         return actions.concat(effectActions);
     }
 
@@ -101,6 +105,10 @@ class BaseCard extends EffectSource {
             reactions = mostRecentEffect.value.getReactions(this);
         }
         let effectReactions = this.getEffects(EffectNames.GainAbility).filter(ability => TriggeredAbilityTypes.includes(ability.abilityType));
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
+        }
         return reactions.concat(effectReactions);
     }
 
@@ -109,6 +117,10 @@ class BaseCard extends EffectSource {
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
             return gainedPersistentEffects.concat(mostRecentEffect.value.getPersistentEffects());
+        }
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
         }
         return this.isBlank() ? gainedPersistentEffects : this.abilities.persistentEffects.concat(gainedPersistentEffects);
     }
