@@ -43,7 +43,7 @@ describe('Kyuden Hida', function() {
                 expect(this.borderlands.location).toBe('dynasty deck');
                 expect(this.hidaGuardian.location).toBe('dynasty deck');
                 expect(this.getChatLogs(2)).toContain('player1 plays Hida Kisada with 2 additional fate');
-                expect(this.getChatLogs(2)).toContain('player1 discards Favorable Ground, Imperial Storehouse');
+                expect(this.getChatLogs(2)).toContain('player1 discards Favorable Ground and Imperial Storehouse');
             });
 
             it('should discard all 3 cards if none are taken', function() {
@@ -59,7 +59,7 @@ describe('Kyuden Hida', function() {
                 expect(this.borderlands.location).toBe('dynasty deck');
                 expect(this.hidaGuardian.location).toBe('dynasty deck');
                 expect(this.getChatLogs(2)).toContain('player1 chooses not to play a character');
-                expect(this.getChatLogs(2)).toContain('player1 discards Hida Kisada, Favorable Ground, Imperial Storehouse');
+                expect(this.getChatLogs(2)).toContain('player1 discards Hida Kisada, Favorable Ground and Imperial Storehouse');
             });
 
             it('should discard all 3 cards if prompt is cancelled', function() {
@@ -81,7 +81,7 @@ describe('Kyuden Hida', function() {
                 expect(this.borderlands.location).toBe('dynasty deck');
                 expect(this.hidaGuardian.location).toBe('dynasty deck');
                 expect(this.getChatLogs(2)).toContain('player1 chooses not to play a character');
-                expect(this.getChatLogs(2)).toContain('player1 discards Hida Kisada, Favorable Ground, Imperial Storehouse');
+                expect(this.getChatLogs(2)).toContain('player1 discards Hida Kisada, Favorable Ground and Imperial Storehouse');
             });
         });
 

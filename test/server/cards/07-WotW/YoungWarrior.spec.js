@@ -5,28 +5,30 @@ describe('Young Warrior', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['young-warrior', 'utaku-yumino']
+                        inPlay: ['young-warrior', 'utaku-yumino', 'young-warrior']
                     },
                     player2: {
                         inPlay: ['serene-warrior'],
-                        hand: ['pacifism']
+                        hand: ['pacifism', 'stolen-breath']
                     }
                 });
-                this.youngWarrior = this.player1.findCardByName('young-warrior');
+                this.youngWarrior = this.player1.filterCardsByName('young-warrior')[0];
+                this.youngWarrior2 = this.player1.filterCardsByName('young-warrior')[1];
                 this.yumino = this.player1.findCardByName('utaku-yumino');
                 this.warrior = this.player2.findCardByName('serene-warrior');
+                this.youngWarrior2.bowed = true;
             });
 
             it('should automatically add Young Warrior to attackers', function() {
                 this.noMoreActions();
-                expect(this.player1).toHavePrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
                 expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
             });
 
             it('should not allow removing Young Warrior from the conflict as an attacker', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.youngWarrior);
-                expect(this.player1).toHavePrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
                 expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
             });
 
@@ -63,17 +65,17 @@ describe('Young Warrior', function() {
                 });
 
                 it('should automatically add Young Warrior to attackers', function() {
-                    expect(this.player1).toHavePrompt('Initiate Conflict');
+                    expect(this.player1).toHavePrompt('Political Air Conflict');
                     expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
                 });
 
-                it('should automatically flip the ring to military', function() {
+                it('should automatically flip the ring to political', function() {
                     this.player1.clickRing('air');
                     expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
                     expect(this.game.rings.air.conflictType).toBe('political');
                 });
 
-                it('should not allow flipping the ring to political', function() {
+                it('should not allow flipping the ring to military', function() {
                     this.player1.clickRing('air');
                     expect(this.youngWarrior.inConflict).toBe(true);
                     this.player1.clickRing('air');
@@ -111,6 +113,33 @@ describe('Young Warrior', function() {
                     this.noMoreActions();
                     expect(this.player1).toHavePrompt('Initiate Conflict');
                     expect(this.game.currentConflict.attackers).not.toContain(this.youngWarrior);
+                });
+            });
+
+            describe('when Young Warrior has Pacifism and another has Stolen Breath', function() {
+                beforeEach(function() {
+                    this.youngWarrior2.bowed = false;
+                    this.player1.pass();
+                    this.player2.playAttachment('pacifism', this.youngWarrior);
+                    this.player1.pass();
+                    this.player2.playAttachment('stolen-breath', this.youngWarrior2);
+                    this.noMoreActions();
+                });
+
+                it('should automatically add Young Warrior to attackers', function() {
+                    expect(this.player1).toHavePrompt('Military Air Conflict');
+                    expect(this.game.currentConflict.attackers).toContain(this.youngWarrior2);
+                });
+
+                it('should allow flipping the ring and automatically add to attackers', function() {
+                    this.player1.clickRing('air');
+                    expect(this.game.rings.air.conflictType).toBe('political');
+                    expect(this.game.currentConflict.attackers).toContain(this.youngWarrior);
+                    expect(this.game.currentConflict.attackers).not.toContain(this.youngWarrior2);
+                    this.player1.clickRing('air');
+                    expect(this.game.rings.air.conflictType).toBe('military');
+                    expect(this.game.currentConflict.attackers).not.toContain(this.youngWarrior);
+                    expect(this.game.currentConflict.attackers).toContain(this.youngWarrior2);
                 });
             });
         });

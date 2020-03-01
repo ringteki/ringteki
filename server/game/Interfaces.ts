@@ -27,6 +27,7 @@ interface TargetSelect extends BaseTarget {
 
 interface TargetRing extends BaseTarget {
     mode: TargetModes.Ring;
+    optional?: boolean;
     ringCondition: (ring: Ring, context?: AbilityContext) => boolean;
 };
 
@@ -44,7 +45,7 @@ interface TargetToken extends BaseTarget {
 
 interface BaseTargetCard extends BaseTarget {
     cardType?: CardTypes | CardTypes[];
-    controller?: Players;
+    controller?: ((context: AbilityContext) => Players) | Players;
     location?: Locations | Locations[];
     optional?: boolean;
 };

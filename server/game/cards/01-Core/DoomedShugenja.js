@@ -6,7 +6,7 @@ class DoomedShugenja extends DrawCard {
         this.persistentEffect({
             location: Locations.Any,
             effect: ability.effects.playerCannot({
-                cannot: 'placeFateWhenPlayingCharacter',
+                cannot: 'placeFateWhenPlayingCharacterFromProvince',
                 restricts: 'source'
             })
         });

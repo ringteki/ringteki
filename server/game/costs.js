@@ -5,7 +5,7 @@ const GameActions = require('./GameActions/GameActions');
 const GameActionCost = require('./costs/GameActionCost');
 const MetaActionCost = require('./costs/MetaActionCost');
 const Event = require('./Events/Event');
-const { EventNames, Locations, Players, TargetModes } = require('./Constants');
+const { EventNames, Locations, Players, TargetModes, PlayTypes } = require('./Constants');
 
 function getSelectCost(action, properties, activePromptTitle) {
     return new MetaActionCost(GameActions.selectCard(Object.assign({ gameAction: action }, properties)), activePromptTitle);
@@ -161,12 +161,13 @@ const Costs = {
         gameAction: GameActions.placeFateOnRing(context => ({ amount, origin: context.player }))
     }), 'Select a ring to place fate on'),
     giveFateToOpponent: (amount = 1) => new GameActionCost(GameActions.takeFate(context => ({ target: context.player, amount }))),
-    variableHonorCost: function (amount) {
+    variableHonorCost: function (amountFunc) {
         return {
             canPay: function (context) {
-                return context.game.actions.loseHonor().canAffect(context.player, context);
+                return amountFunc(context) > 0 && context.game.actions.loseHonor().canAffect(context.player, context);
             },
             resolve: function (context, result) {
+                let amount = amountFunc(context);
                 let max = Math.min(amount, context.player.honor);
                 let choices = Array.from(Array(max), (x, i) => String(i + 1));
                 if(result.canCancel) {
@@ -193,10 +194,62 @@ const Costs = {
             promptsPlayer: true
         };
     },
-    returnRings: function (amount = -1) {
+    variableFateCost: function (properties = {}) {
         return {
             canPay: function (context) {
-                return Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name);
+                let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                return costModifiers < 0 || (context.player.fate >= minAmount + costModifiers && context.game.actions.loseFate().canAffect(context.player, context));
+            },
+            resolve: function (context, result) {
+                let maxAmount = properties.maxAmount ? (_.isFunction(properties.maxAmount) ? properties.maxAmount(context) : properties.maxAmount) : -1;
+                let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                let max = context.player.fate - costModifiers;
+                let min = minAmount;
+                if(maxAmount >= 0) {
+                    max = Math.min(maxAmount, context.player.fate - costModifiers);
+                }
+                if(!context.game.actions.loseFate().canAffect(context.player, context)) {
+                    max = Math.min(max, -costModifiers);
+                }
+                let choices = Array.from(Array((max + 1) - min), (x, i) => String(i + min));
+                if(result.canCancel) {
+                    choices.push('Cancel');
+                }
+                context.game.promptWithHandlerMenu(context.player, {
+                    activePromptTitle: properties.activePromptTitle ? properties.activePromptTitle : 'Choose how much fate to pay',
+                    context: context,
+                    choices: choices,
+                    choiceHandler: choice => {
+                        if(choice === 'Cancel') {
+                            context.costs.variableFateCost = 0;
+                            result.cancelled = true;
+                        } else {
+                            context.costs.variableFateCost = Math.max(0, parseInt(choice));
+                        }
+                    }
+                });
+            },
+            payEvent: function (context) {
+                let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+                let cost = context.costs.variableFateCost + Math.min(0, costModifiers); //+ve cost modifiers are applied by the engine
+                if(cost > 0) {
+                    let action = context.game.actions.loseFate({ amount: cost });
+                    return action.getEvent(context.player, context);
+                }
+
+                let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
+                return action.getEvent(context.player, context);
+
+            },
+            promptsPlayer: true
+        };
+    },
+    returnRings: function (amount = -1, ringCondition = (ring, context) => true) { // eslint-disable-line no-unused-vars
+        return {
+            canPay: function (context) {
+                return Object.values(context.game.rings).some(ring => ringCondition(ring, context) && ring.claimedBy === context.player.name);
             },
             resolve: function (context, result) {
                 let chosenRings = [];
@@ -212,7 +265,7 @@ const Costs = {
                         activePromptTitle: 'Choose a ring to return',
                         context: context,
                         buttons: buttons,
-                        ringCondition: ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring),
+                        ringCondition: ring => ringCondition(ring, context) && ring.claimedBy === context.player.name && !chosenRings.includes(ring),
                         onSelect: (player, ring) => {
                             chosenRings.push(ring);
                             if(Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring) && (amount < 0 || chosenRings.length < amount))) {
@@ -247,7 +300,13 @@ const Costs = {
             },
             resolve: function (context, result) {
                 let extrafate = context.player.fate - context.player.getReducedCost(type, context.source);
-                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacter', context) || !context.player.checkRestrictions('spendFate', context)) {
+                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacter', context)) {
+                    extrafate = 0;
+                }
+                if(!context.player.checkRestrictions('placeFateWhenPlayingCharacterFromProvince', context) && type === PlayTypes.PlayFromProvince) {
+                    extrafate = 0;
+                }
+                if(!context.player.checkRestrictions('spendFate', context)) {
                     extrafate = 0;
                 }
                 let choices = [];
@@ -383,6 +442,50 @@ const Costs = {
             payEvent: function (context) {
                 let action = context.game.actions.discardCard({ target: context.costs.discardCardsExactlyVariableX });
                 return action.getEvent(context.costs.discardCardsExactlyVariableX, context);
+            },
+            promptsPlayer: true
+        };
+    },
+
+    optionalFateCost: function (amount) {
+        return {
+            canPay: function () {
+                return true;
+            },
+            resolve: function (context, result) {
+                let fateAvailable = true;
+                if(context.player.fate < amount) {
+                    fateAvailable = false;
+                }
+                if(!context.player.checkRestrictions('spendFate', context)) {
+                    fateAvailable = false;
+                }
+                let choices = [];
+                let handlers = [];
+                context.costs.optionalFateCost = 0;
+
+                if(fateAvailable) {
+                    choices = ['Yes', 'No'];
+                    handlers = [() => context.costs.optionalFateCost = amount, () => context.costs.optionalFateCost = 0];
+                }
+                if(fateAvailable && result.canCancel) {
+                    choices.push('Cancel');
+                    handlers.push(() => {
+                        result.cancelled = true;
+                    });
+                }
+
+                if(choices.length > 0) {
+                    context.game.promptWithHandlerMenu(context.player, {
+                        activePromptTitle: 'Spend ' + amount + ' fate?',
+                        source: context.source,
+                        choices:  choices,
+                        handlers: handlers
+                    });
+                }
+            },
+            pay: function (context) {
+                context.player.fate -= context.costs.optionalFateCost;
             },
             promptsPlayer: true
         };
