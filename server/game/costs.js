@@ -161,12 +161,13 @@ const Costs = {
         gameAction: GameActions.placeFateOnRing(context => ({ amount, origin: context.player }))
     }), 'Select a ring to place fate on'),
     giveFateToOpponent: (amount = 1) => new GameActionCost(GameActions.takeFate(context => ({ target: context.player, amount }))),
-    variableHonorCost: function (amount) {
+    variableHonorCost: function (amountFunc) {
         return {
             canPay: function (context) {
-                return context.game.actions.loseHonor().canAffect(context.player, context);
+                return amountFunc(context) > 0 && context.game.actions.loseHonor().canAffect(context.player, context);
             },
             resolve: function (context, result) {
+                let amount = amountFunc(context);
                 let max = Math.min(amount, context.player.honor);
                 let choices = Array.from(Array(max), (x, i) => String(i + 1));
                 if(result.canCancel) {
