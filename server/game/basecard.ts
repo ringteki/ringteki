@@ -250,7 +250,7 @@ class BaseCard extends EffectSource {
         if(this.facedown) {
             return false;
         }
-        if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold, CardTypes.Event].includes(this.type)) {
+        if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold].includes(this.type)) {
             return this.isInProvince();
         }
         return this.location === Locations.PlayArea;
