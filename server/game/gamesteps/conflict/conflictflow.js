@@ -9,6 +9,7 @@ const ConflictActionWindow = require('./conflictactionwindow.js');
 const InitiateConflictPrompt = require('./initiateconflictprompt.js');
 const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
+const ForcedAttackersMatrix = require('./forcedAttackers.js');
 
 const { Players, CardTypes, EventNames, EffectNames } = require('../../Constants');
 
@@ -59,32 +60,46 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     promptForNewConflict() {
+        let forcedAttackers = new ForcedAttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
+        if(!forcedAttackers.canPass) {
+            this.canPass = false;
+        }
+
         if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-            this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass));
+            this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
             return;
         }
-        this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
-            source: 'Declare Conflict',
-            activePromptTitle: 'Do you wish to declare a conflict?',
-            choices: ['Declare a conflict', 'Pass conflict opportunity'],
-            handlers: [
-                () => this.game.promptForRingSelect(this.conflict.defendingPlayer, {
-                    activePromptTitle: 'Choose a ring for ' + this.conflict.attackingPlayer.name + '\'s conflict',
-                    source: 'Defender chooses conflict ring',
-                    waitingPromptTitle: 'Waiting for defender to choose conflict ring',
-                    ringCondition: ring => this.conflict.attackingPlayer.hasLegalConflictDeclaration({ ring }),
-                    onSelect: (player, ring) => {
-                        if(!this.conflict.attackingPlayer.hasLegalConflictDeclaration({ type: ring.conflictType, ring })) {
-                            ring.flipConflictType();
-                        }
-                        this.conflict.ring = ring;
-                        ring.contested = true;
-                        this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false));
-                        return true;
-                    }
-                }),
-                () => this.conflict.passConflict()
-            ]
+
+        if(this.canPass) {
+            this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
+                source: 'Declare Conflict',
+                activePromptTitle: 'Do you wish to declare a conflict?',
+                choices: ['Declare a conflict', 'Pass conflict opportunity'],
+                handlers: [
+                    () => this.defenderChoosesRing(forcedAttackers),
+                    () => this.conflict.passConflict()
+                ]
+            });
+        } else {
+            this.defenderChoosesRing(forcedAttackers);
+        }
+    }
+
+    defenderChoosesRing(forcedAttackers) {
+        this.game.promptForRingSelect(this.conflict.defendingPlayer, {
+            activePromptTitle: 'Choose a ring for ' + this.conflict.attackingPlayer.name + '\'s conflict',
+            source: 'Defender chooses conflict ring',
+            waitingPromptTitle: 'Waiting for defender to choose conflict ring',
+            ringCondition: ring => this.conflict.attackingPlayer.hasLegalConflictDeclaration({ ring }) && (forcedAttackers.isCombinationValid(ring, 'political') || forcedAttackers.isCombinationValid(ring, 'military')),
+            onSelect: (player, ring) => {
+                if(!this.conflict.attackingPlayer.hasLegalConflictDeclaration({ type: ring.conflictType, ring })) {
+                    ring.flipConflictType();
+                }
+                this.conflict.ring = ring;
+                ring.contested = true;
+                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false, false, forcedAttackers));
+                return true;
+            }
         });
     }
 
@@ -135,11 +150,20 @@ class ConflictFlow extends BaseStepWithPipeline {
         // - a legal combination of covert targets and covert attackers
         // - no remaining covert
 
+        //We should make sure that each target is legally assigned - for Vine Tattoo and reactions like Tengu & Yasamura
         if(targets.length === contexts.length) {
             for(let i = 0; i < targets.length; i++) {
+                //Unfortunately we need to N^2 this to match everyone up
                 let context = contexts[i];
-                context['target'] = context.targets.target = targets[i];
-                this.covert.push(context);
+                for(let j = 0; j < targets.length; j++) {
+                    context = contexts[j];
+                    if(!context['target']) {
+                        if(targets[i].checkRestrictions('target', context)) {
+                            context['target'] = context.targets.target = targets[i];
+                            this.covert.push(context);
+                        }
+                    }
+                }
             }
             if(this.covert.every(context => context.targets.target.canBeBypassedByCovert(context))) {
                 return;
@@ -382,7 +406,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             ring.contested = false;
             return;
         }
-        if(this.conflict.winner) {
+        if(this.conflict.winner && this.conflict.winner.checkRestrictions('claimRings', this.game.getFrameworkContext())) {
             this.game.raiseEvent(EventNames.OnClaimRing, { player: this.conflict.winner, conflict: this.conflict, ring:this.conflict.ring }, () => ring.claimRing(this.conflict.winner));
         }
         //Do this lazily for now

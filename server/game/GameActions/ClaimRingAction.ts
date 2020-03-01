@@ -18,6 +18,10 @@ export class ClaimRingAction extends RingAction {
     }
 
     canAffect(ring: Ring, context: AbilityContext): boolean {
+        if(!context.player.checkRestrictions('claimRings', context)) {
+            return false;
+        }
+        
         return ring.claimedBy !== context.player.name && super.canAffect(ring, context);
     }
 

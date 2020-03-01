@@ -1,6 +1,9 @@
 const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
-const { Locations, CardTypes, EffectNames } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
+const ForcedAttackersMatrix = require('./forcedAttackers.js');
+const AbilityContext = require('../../AbilityContext');
+const CovertAbility = require('../../KeywordAbilities/CovertAbility');
 
 const capitalize = {
     military: 'Military',
@@ -13,7 +16,7 @@ const capitalize = {
 };
 
 class InitiateConflictPrompt extends UiPrompt {
-    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing) {
+    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing, forcedAttackers = null) {
         super(game);
         this.conflict = conflict;
         this.choosingPlayer = choosingPlayer;
@@ -21,6 +24,15 @@ class InitiateConflictPrompt extends UiPrompt {
         this.canPass = canPass;
         this.selectedDefenders = [];
         this.covertRemaining = false;
+        this.forcedAttackers = forcedAttackers;
+
+        if(forcedAttackers === null) {
+            this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
+            if(!this.forcedAttackers.canPass) {
+                this.canPass = false;
+            }
+        }
+
         this.checkForMustSelect();
     }
 
@@ -32,15 +44,16 @@ class InitiateConflictPrompt extends UiPrompt {
         return super.continue();
     }
 
-    getMustBeDeclared() {
-        return this.choosingPlayer.cardsInPlay.filter(card =>
-            card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === this.conflict.conflictType));
-    }
-
     checkForMustSelect() {
-        for(const card of this.getMustBeDeclared()) {
-            if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
-                this.selectCard(card);
+        if(this.forcedAttackers.maximumAttackers > 0) {
+            this.conflict.ring = this.forcedAttackers.defaultRing;
+            if(this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
+                this.conflict.ring.flipConflictType();
+            }
+            for(const card of this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
+                if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
+                    this.selectCard(card);
+                }
             }
         }
     }
@@ -111,7 +124,15 @@ class InitiateConflictPrompt extends UiPrompt {
             ring.flipConflictType();
         } else {
             const type = ring.conflictType;
+
+            let polValid = this.forcedAttackers.isCombinationValid(ring, 'political');
+            let milValid = this.forcedAttackers.isCombinationValid(ring, 'military');
+
             if(!player.hasLegalConflictDeclaration({ type, ring, province: this.conflict.conflictProvince })) {
+                ring.flipConflictType();
+            } else if(polValid && !milValid && type === 'military') {
+                ring.flipConflictType();
+            } else if(milValid && !polValid && type === 'political') {
                 ring.flipConflictType();
             } else if(this.conflict.attackers.some(card => !card.canDeclareAsAttacker(type, ring))) {
                 ring.flipConflictType();
@@ -129,6 +150,12 @@ class InitiateConflictPrompt extends UiPrompt {
             }
         });
 
+        _.each(this.forcedAttackers.getForcedAttackers(ring, ring.conflictType), card => {
+            if(!this.conflict.attackers.includes(card)) {
+                this.selectCard(card);
+            }
+        });
+
         this.conflict.calculateSkill(true);
         this.recalculateCovert();
 
@@ -143,13 +170,14 @@ class InitiateConflictPrompt extends UiPrompt {
             if(!player.hasLegalConflictDeclaration({ type: newType, ring, province })) {
                 return false;
             }
-            const mustBeDeclaredAttackers = this.getMustBeDeclared().filter(card => card.inConflict);
-            return mustBeDeclaredAttackers.every(card =>
-                card.canDeclareAsAttacker(newType, ring, province) &&
-                player.hasLegalConflictDeclaration({ type: newType, ring, province })
-            );
+
+            if(!this.forcedAttackers.isCombinationValid(ring, newType)) {
+                return false;
+            }
+
+            return true;
         }
-        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province });
+        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province }) && (this.forcedAttackers.isCombinationValid(ring, 'political') || this.forcedAttackers.isCombinationValid(ring, 'military'));
     }
 
     checkCardCondition(card) {
@@ -162,7 +190,7 @@ class InitiateConflictPrompt extends UiPrompt {
         } else if(card.type === CardTypes.Character && card.location === Locations.PlayArea) {
             if(card.controller === this.choosingPlayer) {
                 if(this.conflict.attackers.includes(card)) {
-                    return !card.getEffects(EffectNames.MustBeDeclaredAsAttacker).some(effect => effect === 'both' || effect === this.conflict.conflictType);
+                    return !this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
                 }
                 return this.choosingPlayer.hasLegalConflictDeclaration({
                     type: this.conflict.conflictType,
@@ -171,7 +199,35 @@ class InitiateConflictPrompt extends UiPrompt {
                     attacker: card
                 });
             }
-            return this.selectedDefenders.includes(card) || !card.isCovert() && this.covertRemaining;
+
+            if(this.selectedDefenders.includes(card)) {
+                return true;
+            }
+            if(card.isCovert() || !this.covertRemaining) {
+                return false;
+            }
+
+            //Make sure the covert is legal
+            let attackersWithCovert = _.filter(this.conflict.attackers, card => card.isCovert());
+            let covertContexts = attackersWithCovert.map(card => new AbilityContext({
+                game: this.game,
+                player: this.conflict.attackingPlayer,
+                source: card,
+                ability: new CovertAbility()
+            }));
+
+            let targetable = false;
+
+            for(const context of covertContexts) {
+                if(context.player.checkRestrictions('initiateKeywords', context)) {
+                    if(card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context)) {
+                        targetable = true;
+                    }
+                }
+            }
+
+            return this.covertRemaining && targetable;
+
         }
         return false;
     }

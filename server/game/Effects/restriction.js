@@ -34,7 +34,8 @@ const checkRestrictions = {
     nonKeywordAbilities: context => !context.ability.isKeywordAbility(),
     nonForcedAbilities: context => context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
     equalOrMoreExpensiveCharacterTriggeredAbilities: (context, effect, card) => context.source.type === CardTypes.Character && !context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
-    equalOrMoreExpensiveCharacterKeywords: (context, effect, card) => context.source.type === CardTypes.Character && context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost
+    equalOrMoreExpensiveCharacterKeywords: (context, effect, card) => context.source.type === CardTypes.Character && context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
+    eventPlayedByHigherBidPlayer: (context, effect, card) => context.source.type === CardTypes.Event && context.player.showBid > card.controller.showBid
 };
 
 const leavePlayTypes = [
