@@ -119,33 +119,79 @@ describe('A Season of War', function() {
             }); 
         });   
 
+        describe('Testing A Season of War', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        inPlay: ['daidoji-nerishma', 'kakita-yoshi'],
+                        dynastyDeck: [],
+                        dynastyDiscard: ['a-season-of-war', 'doji-challenger', 'prodigy-of-the-waves', 'a-season-of-war', 'hida-kisada']
+                    },
+                    player2: {
+                        inPlay: []
+                    }
+                });
+
+                this.season = this.player1.filterCardsByName('a-season-of-war')[0];
+                this.season2 = this.player1.filterCardsByName('a-season-of-war')[1];
+                this.nerishma = this.player1.findCardByName('daidoji-nerishma');
+                this.yoshi = this.player1.findCardByName('kakita-yoshi');
+                this.challenger = this.player1.findCardByName('doji-challenger');
+                this.prodigy = this.player1.findCardByName('prodigy-of-the-waves');
+                this.kisada = this.player1.findCardByName('hida-kisada');
+
+                this.player1.placeCardInProvince(this.season, 'province 1');
+                this.player1.placeCardInProvince(this.challenger, 'province 2');
+                this.player1.placeCardInProvince(this.prodigy, 'province 3');
+                this.player1.placeCardInProvince(this.kisada, 'province 4');
+                this.season.facedown = false;
+                this.challenger.facedown = false;
+                this.prodigy.facedown = false;
+                this.kisada.facedown = false;
+            });
+
+            it('should dishonor someone', function() {
+                let fate = this.player1.fate;
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).toBeAbleToSelect(this.yoshi);
+                expect(this.player1).toBeAbleToSelect(this.nerishma);
+
+                this.player1.clickCard(this.yoshi);
+                expect(this.yoshi.isDishonored).toBe(true);
+                expect(this.player1.fate).toBe(fate - 1);
+
+                expect(this.season.location).toBe('dynasty discard pile');
+            });
+
+            // it('should discard each card in each province', function() {
+
+            // });
+
+            // it('should refill each province faceup', function() {
+
+            // });
+
+            // it('should end the dynasty phase', function() {
+
+            // });
+
+            // it('should start a new dynasty phase', function() {
+
+            // });
+
+            // it('players should not collect fate', function() {
+
+            // });
+
+            // it('new dynasty phase test - those who serve', function() {
+
+            // });
+        });  
+
         // //Testing Dynasty Event restrictions
         // it('should not be able to be played outside of the dynasty phase', function() {
-
-        // });
-
-        // //Testing this event
-        // it('should discard each card in each province', function() {
-
-        // });
-
-        // it('should refill each province faceup', function() {
-
-        // });
-
-        // it('should end the dynasty phase', function() {
-
-        // });
-
-        // it('should start a new dynasty phase', function() {
-
-        // });
-
-        // it('players should not collect fate', function() {
-
-        // });
-
-        // it('new dynasty phase test - those who serve', function() {
 
         // });
     });
