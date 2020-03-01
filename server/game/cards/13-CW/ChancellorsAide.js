@@ -14,8 +14,8 @@ class ChancellorsAide extends DrawCard {
                     mode: TargetModes.Select,
                     targets: true,
                     choices: {
-                        [this.owner.name]: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player })),
-                        [this.owner.opponent.name]: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player.opponent }))
+                        ['Me']: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player })),
+                        ['My opponent']: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player.opponent }))
                     }
                 },
                 oppPlayer: {
@@ -23,13 +23,13 @@ class ChancellorsAide extends DrawCard {
                     targets: true,
                     player: Players.Opponent,
                     choices: {
-                        [this.owner.name]: AbilityDsl.actions.joint([
-                            AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                            AbilityDsl.actions.chosenDiscard(context => ({ target: context.player}))
-                        ]),
-                        [this.owner.opponent.name]: AbilityDsl.actions.joint([
+                        ['Me']: AbilityDsl.actions.joint([
                             AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
                             AbilityDsl.actions.chosenDiscard(context => ({ target: context.player.opponent}))
+                        ]),
+                        ['My opponent']: AbilityDsl.actions.joint([
+                            AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
+                            AbilityDsl.actions.chosenDiscard(context => ({ target: context.player}))
                         ]),
                         ['Done']: () => true
                     }
