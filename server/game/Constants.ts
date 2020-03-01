@@ -130,7 +130,8 @@ export enum EffectNames {
     ResolveConflictEarly = 'resolveConflictEarly',
     SetBaseGlory = "setBaseGlory",
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
-    ForceConflictUnopposed = 'forceConflictUnopposed'
+    ForceConflictUnopposed = 'forceConflictUnopposed',
+    MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
 };
 
 export enum Durations {
