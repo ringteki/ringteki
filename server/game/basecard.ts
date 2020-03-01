@@ -490,15 +490,17 @@ class BaseCard extends EffectSource {
         });
 
         this.printedKeywords.forEach(keyword => {
-            let location = undefined;
             if (keyword === 'rally') {
-                location = Locations.Any
+                this.persistentEffect({
+                    effect: AbilityDsl.effects.addKeyword(keyword),
+                    location: Locations.Any
+                });
+            } else {
+                this.persistentEffect({
+                    effect: AbilityDsl.effects.addKeyword(keyword)
+                });
             }
 
-            this.persistentEffect({
-                effect: AbilityDsl.effects.addKeyword(keyword),
-                location: location
-            });
         });
     }
 
