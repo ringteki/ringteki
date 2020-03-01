@@ -490,7 +490,7 @@ class BaseCard extends EffectSource {
         });
 
         this.printedKeywords.forEach(keyword => {
-            if (keyword === 'rally') {
+            if (keyword === 'rally') { //rally works from "out of play" and needs to be always on
                 this.persistentEffect({
                     effect: AbilityDsl.effects.addKeyword(keyword),
                     location: Locations.Any

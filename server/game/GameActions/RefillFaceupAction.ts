@@ -4,7 +4,7 @@ import Player = require('../player');
 import { Locations } from '../Constants';
 
 export interface RefillFaceupProperties extends PlayerActionProperties {
-    location: Locations;
+    location: Locations | Locations[];
 }
 
 export class RefillFaceupAction extends PlayerAction {
@@ -22,13 +22,19 @@ export class RefillFaceupAction extends PlayerAction {
 
     eventHandler(event, additionalProperties): void {
         let { location } = this.getProperties(event.context, additionalProperties) as RefillFaceupProperties;
-        if(event.player.replaceDynastyCard(location)) {
-            event.context.game.queueSimpleStep(() => {
-                let card = event.player.getDynastyCardInProvince(location);
-                if(card) {
-                    card.facedown = false;
-                }
-            });
+        if (!Array.isArray(location)) {
+            location = [location];
         }
+
+        location.forEach(loc => {
+            if(event.player.replaceDynastyCard(loc)) {
+                event.context.game.queueSimpleStep(() => {
+                    let card = event.player.getDynastyCardInProvince(loc);
+                    if(card) {
+                        card.facedown = false;
+                    }
+                });
+            }
+        });
     }
 }
