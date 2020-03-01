@@ -2,6 +2,8 @@ const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
 const { Locations, CardTypes } = require('../../Constants');
 const ForcedAttackersMatrix = require('./forcedAttackers.js');
+const AbilityContext = require('../../AbilityContext');
+const CovertAbility = require('../../KeywordAbilities/CovertAbility');
 
 const capitalize = {
     military: 'Military',
@@ -197,7 +199,35 @@ class InitiateConflictPrompt extends UiPrompt {
                     attacker: card
                 });
             }
-            return this.selectedDefenders.includes(card) || !card.isCovert() && this.covertRemaining;
+
+            if(this.selectedDefenders.includes(card)) {
+                return true;
+            }
+            if(card.isCovert() || !this.covertRemaining) {
+                return false;
+            }
+
+            //Make sure the covert is legal
+            let attackersWithCovert = _.filter(this.conflict.attackers, card => card.isCovert());
+            let covertContexts = attackersWithCovert.map(card => new AbilityContext({
+                game: this.game,
+                player: this.conflict.attackingPlayer,
+                source: card,
+                ability: new CovertAbility()
+            }));
+
+            let targetable = false;
+
+            for(const context of covertContexts) {
+                if(context.player.checkRestrictions('initiateKeywords', context)) {
+                    if(card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context)) {
+                        targetable = true;
+                    }
+                }
+            }
+
+            return this.covertRemaining && targetable;
+
         }
         return false;
     }
