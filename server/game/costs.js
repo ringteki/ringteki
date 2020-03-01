@@ -161,12 +161,13 @@ const Costs = {
         gameAction: GameActions.placeFateOnRing(context => ({ amount, origin: context.player }))
     }), 'Select a ring to place fate on'),
     giveFateToOpponent: (amount = 1) => new GameActionCost(GameActions.takeFate(context => ({ target: context.player, amount }))),
-    variableHonorCost: function (amount) {
+    variableHonorCost: function (amountFunc) {
         return {
             canPay: function (context) {
-                return context.game.actions.loseHonor().canAffect(context.player, context);
+                return amountFunc(context) > 0 && context.game.actions.loseHonor().canAffect(context.player, context);
             },
             resolve: function (context, result) {
+                let amount = amountFunc(context);
                 let max = Math.min(amount, context.player.honor);
                 let choices = Array.from(Array(max), (x, i) => String(i + 1));
                 if(result.canCancel) {
@@ -245,10 +246,10 @@ const Costs = {
             promptsPlayer: true
         };
     },
-    returnRings: function (amount = -1) {
+    returnRings: function (amount = -1, ringCondition = (ring, context) => true) { // eslint-disable-line no-unused-vars
         return {
             canPay: function (context) {
-                return Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name);
+                return Object.values(context.game.rings).some(ring => ringCondition(ring, context) && ring.claimedBy === context.player.name);
             },
             resolve: function (context, result) {
                 let chosenRings = [];
@@ -264,7 +265,7 @@ const Costs = {
                         activePromptTitle: 'Choose a ring to return',
                         context: context,
                         buttons: buttons,
-                        ringCondition: ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring),
+                        ringCondition: ring => ringCondition(ring, context) && ring.claimedBy === context.player.name && !chosenRings.includes(ring),
                         onSelect: (player, ring) => {
                             chosenRings.push(ring);
                             if(Object.values(context.game.rings).some(ring => ring.claimedBy === context.player.name && !chosenRings.includes(ring) && (amount < 0 || chosenRings.length < amount))) {

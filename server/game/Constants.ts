@@ -59,6 +59,7 @@ export enum EffectNames {
     FateCostToAttack = 'fateCostToAttack',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
+    GainAllAbilities = 'gainAllAbilities',
     GainExtraFateWhenPlayed = 'gainExtraFateWhenPlayed',
     GainPlayAction = 'gainPlayAction',
     HideWhenFaceUp = 'hideWhenFaceUp',
@@ -129,7 +130,8 @@ export enum EffectNames {
     ResolveConflictEarly = 'resolveConflictEarly',
     SetBaseGlory = "setBaseGlory",
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
-    ForceConflictUnopposed = 'forceConflictUnopposed'
+    ForceConflictUnopposed = 'forceConflictUnopposed',
+    MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
 };
 
 export enum Durations {

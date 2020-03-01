@@ -119,7 +119,7 @@ class GameObject {
         targets = targets.concat(this);
         let targetingCost = context.player.getTargetingCost(context.source, targets);
 
-        if(context.stage === Stages.PreTarget) {
+        if(context.stage === Stages.PreTarget || context.stage === Stages.Cost) {
             //We haven't paid the cost yet, so figure out what it will cost to play this so we can know how much fate we'll have available for targeting
             let fateCost = 0;
             if(context.ability.getReducedCost) { //we only want to consider the ability cost, not the card cost
