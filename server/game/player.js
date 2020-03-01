@@ -435,19 +435,15 @@ class Player extends GameObject {
      * Moves the top card of the dynasty deck to the passed province
      * @param {String} location - one of 'province 1', 'province 2', 'province 3', 'province 4'
      */
-    replaceDynastyCard(location, faceup) {
+    replaceDynastyCard(location) {
         if(this.getSourceList(location).size() > 1) {
             return false;
         }
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
-            this.game.queueSimpleStep(() => this.replaceDynastyCard(location, faceup));
+            this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            let card = this.dynastyDeck.first();
-            this.moveCard(card, location);
-            if (faceup) {
-                card.facedown = false;
-            }
+            this.moveCard(this.dynastyDeck.first(), location);
         }
         return true;
     }

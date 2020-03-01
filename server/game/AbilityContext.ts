@@ -78,15 +78,15 @@ class AbilityContext {
         return new AbilityContext(Object.assign(this.getProps(), newProps));
     }
 
-    refillProvince(player: Player, location: Locations, faceup: boolean = false): void {
-        this.provincesToRefill.push({ player, location, faceup });
+    refillProvince(player: Player, location: Locations): void {
+        this.provincesToRefill.push({ player, location });
     }
 
     refill(): void {
         for(let player of this.game.getPlayersInFirstPlayerOrder()) {
             for(let refill of this.provincesToRefill.filter(refill => refill.player === player)) {
                 this.game.queueSimpleStep(() => {
-                    player.replaceDynastyCard(refill.location, refill.faceup);
+                    player.replaceDynastyCard(refill.location);
                     return true;
                 });
             }

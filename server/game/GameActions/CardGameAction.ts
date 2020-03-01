@@ -167,6 +167,6 @@ export class CardGameAction extends GameAction {
             return;
         }
         const context = !!additionalProperties.replacementEffect ? event.context.event.context : event.context;
-        context.refillProvince(card.controller, card.location, event.refillFaceUp);
+        context.refillProvince(card.controller, card.location);
     }
 }

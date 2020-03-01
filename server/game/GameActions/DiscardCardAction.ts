@@ -4,7 +4,6 @@ import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 
 export interface DiscardCardProperties extends CardActionProperties {
-    refillFaceUp?: boolean;
 }
 
 export class DiscardCardAction extends CardGameAction {
@@ -13,9 +12,6 @@ export class DiscardCardAction extends CardGameAction {
     cost = 'discarding {0}';
     effect = 'discard {0}';
     targetType = [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding];
-    defaultProperties: DiscardCardProperties = {
-        refillFaceUp: false
-    };
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
         return (card.location !== Locations.Hand || card.controller.checkRestrictions('discard', context)) && 
@@ -34,16 +30,13 @@ export class DiscardCardAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, cards, context: AbilityContext, additionalProperties): void {
-        let properties = this.getProperties(context) as DiscardCardProperties;
-
         if(!cards) {
-            cards = properties.target;
+            cards = this.getProperties(context, additionalProperties).target;
         }
         if(!Array.isArray(cards)) {
             cards = [cards];
         }
         event.cards = cards;
-        event.refillFaceUp = properties.refillFaceUp;
         event.context = context;
     }
 
