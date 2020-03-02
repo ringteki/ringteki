@@ -1,6 +1,6 @@
 const StrongholdCard = require('../../strongholdcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
-const { CardTypes, Phases, Locations } = require('../../Constants');
+const { CardTypes, Phases, Locations, PlayTypes } = require('../../Constants');
 
 class KyudenHida extends StrongholdCard {
     setupCardAbilities() {
@@ -19,27 +19,28 @@ class KyudenHida extends StrongholdCard {
                     let cards = [];
                     context.player.dynastyDeck.first(3).forEach(card => {
                         context.player.moveCard(card, Locations.DynastyDiscardPile);
-                        cards = cards.concat(card.name);
+                        cards = cards.concat(card);
                     });
                     this.game.addMessage('{0} chooses not to play a character', context.player);
-                    this.game.addMessage('{0} discards {1}', context.player, cards.join(', '));
+                    this.game.addMessage('{0} discards {1}', context.player, cards);
                     return true;
                 }],
                 gameAction: AbilityDsl.actions.playCard({
                     resetOnCancel: false,
+                    playType: PlayTypes.PlayFromProvince,
                     postHandler: hidaContext => {
                         let cards = [];
                         let card = hidaContext.source;
                         if(card.location !== Locations.PlayArea) {
                             this.game.addMessage('{0} chooses not to play a character', context.player);
                             context.player.moveCard(card, Locations.DynastyDiscardPile);
-                            cards = cards.concat(card.name);
+                            cards = cards.concat(card);
                         }
                         context.player.dynastyDeck.first(2).forEach(card => {
                             context.player.moveCard(card, Locations.DynastyDiscardPile);
-                            cards = cards.concat(card.name);
+                            cards = cards.concat(card);
                         });
-                        this.game.addMessage('{0} discards {1}', context.player, cards.join(', '));
+                        this.game.addMessage('{0} discards {1}', context.player, cards);
                     }
                 })
             }))

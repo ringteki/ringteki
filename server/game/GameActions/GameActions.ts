@@ -74,6 +74,7 @@ import { TurnCardFacedownAction, TurnCardFacedownProperties } from './TurnCardFa
 import { GloryCountAction, GloryCountProperties } from './GloryCountAction';
 import { ClaimFavorAction, ClaimFavorProperties } from './ClaimFavorAction';
 import { RingActionProperties } from './RingAction';
+import { MoveConflictAction, MoveConflictProperties } from './MoveConflictAction';
 
 const GameActions = {
     // card
@@ -111,6 +112,7 @@ const GameActions = {
     sacrifice: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory, true),
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
+    moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
@@ -147,6 +149,8 @@ const GameActions = {
     // general actions
     cancel: (propertyFactory: CancelActionProperties | ((context: TriggeredAbilityContext) => CancelActionProperties) = {}) => new CancelAction(propertyFactory),
     handler: (propertyFactory: HandlerProperties | ((context: TriggeredAbilityContext) => HandlerProperties)) => new HandlerAction(propertyFactory),
+    noAction: () => new HandlerAction(),
+
     // meta actions
     cardMenu: (propertyFactory: CardMenuProperties | ((context: TriggeredAbilityContext) => CardMenuProperties)) => new CardMenuAction(propertyFactory),
     chooseAction: (propertyFactory: ChooseActionProperties | ((context: TriggeredAbilityContext) => ChooseActionProperties)) => new ChooseGameAction(propertyFactory), // choices, activePromptTitle = 'Select one'

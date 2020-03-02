@@ -625,6 +625,13 @@ class Player extends GameObject {
         return Math.max(reducedCost, 0);
     }
 
+    getTotalCostModifiers(playingType, card, target, ignoreType = false) {
+        var baseCost = 0;
+        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target, ignoreType));
+        var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card, this), baseCost);
+        return reducedCost;
+    }
+
     getAvailableAlternateFate(playingType, context) {
         const card = context.source;
         let alternateFatePools = this.getAlternateFatePools(playingType, card);
