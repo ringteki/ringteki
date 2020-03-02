@@ -3,6 +3,7 @@ const BaseCard = require('./basecard');
 const _ = require('underscore');
 
 const { Locations, EffectNames } = require('./Constants');
+const AbilityDsl = require('./abilitydsl.js');
 
 class ProvinceCard extends BaseCard {
     constructor(owner, cardData) {
@@ -11,6 +12,12 @@ class ProvinceCard extends BaseCard {
         this.isProvince = true;
         this.isBroken = false;
         this.menu = _([{ command: 'break', text: 'Break/unbreak this province' }, { command: 'hide', text: 'Flip face down' }]);
+
+        this.persistentEffect({
+            condition: context => context.source.hasEminent(),
+            location: Locations.Any,
+            effect: AbilityDsl.effects.cardCannot('turnFacedown')
+        });
     }
 
     get strength() {
@@ -104,11 +111,11 @@ class ProvinceCard extends BaseCard {
     }
 
     cannotBeStrongholdProvince() {
-        return false;
+        return this.hasEminent();
     }
 
     startsGameFaceup() {
-        return false;
+        return this.hasEminent();
     }
 
     hideWhenFacedown() {
@@ -135,6 +142,11 @@ class ProvinceCard extends BaseCard {
         return (
             !this.isBroken
         );
+    }
+
+    hasEminent() {
+        //Facedown provinces are out of play and their effects don't evaluate, so we check for the printed keyword
+        return this.hasKeyword('eminent') || (!this.isBlank() && this.hasPrintedKeyword('eminent'));
     }
 }
 

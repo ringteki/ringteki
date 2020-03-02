@@ -38,8 +38,6 @@ class DrawCard extends BaseCard {
         this.isDynasty = cardData.side === 'dynasty';
         this.personalHonor = null;
 
-        this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
-
         this.menu = _([
             { command: 'bow', text: 'Bow/Ready' },
             { command: 'honor', text: 'Honor' },
@@ -68,16 +66,6 @@ class DrawCard extends BaseCard {
             return this.cardData.political === null || this.cardData.political === undefined ?
                 NaN : isNaN(parseInt(this.cardData.political)) ? 0 : parseInt(this.cardData.political);
         }
-    }
-
-    hasKeyword(keyword) {
-        let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
-        let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
-        return addKeywordEffects.length > loseKeywordEffects.length;
-    }
-
-    hasPrintedKeyword(keyword) {
-        return this.printedKeywords.includes(keyword.toLowerCase());
     }
 
     isLimited() {
