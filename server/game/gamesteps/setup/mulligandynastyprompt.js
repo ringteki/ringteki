@@ -25,7 +25,7 @@ class MulliganDynastyPrompt extends AllPlayerPrompt {
     highlightSelectableCards() {
         _.each(this.game.getPlayers(), player => {
             if(!this.selectableCards[player.name]) {
-                this.selectableCards[player.name] = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].map(location => player.getDynastyCardInProvince(location));
+                this.selectableCards[player.name] = _.flatten([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].map(location => player.getDynastyCardsInProvince(location)));
             }
             player.setSelectableCards(this.selectableCards[player.name]);
         });

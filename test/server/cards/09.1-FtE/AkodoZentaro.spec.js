@@ -6,7 +6,7 @@
                     phase: 'conflict',
                     player1: {
                         inPlay: ['akodo-zentaro', 'miya-mystic'],
-                        dynastyDiscard: ['matsu-berserker']
+                        dynastyDiscard: ['matsu-berserker', 'doji-kuwanan', 'hida-kisada', 'imperial-storehouse', 'bayushi-liar']
                     },
                     player2: {
                         inPlay: ['wandering-ronin'],
@@ -23,6 +23,15 @@
                 this.matsuBerserker = this.player1.placeCardInProvince('matsu-berserker', 'province 3');
                 this.shamefulDisplay4 = this.player1.findCardByName('shameful-display', 'province 4');
                 this.shamefulDisplaySH = this.player1.findCardByName('shameful-display', 'stronghold province');
+
+                this.kuwanan = this.player1.findCardByName('doji-kuwanan');
+                this.kisada = this.player1.findCardByName('hida-kisada');
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.storehouse = this.player1.findCardByName('imperial-storehouse');
+                this.player1.moveCard(this.kuwanan, 'province 3');
+                this.player1.moveCard(this.storehouse, 'province 3');
+                this.player1.moveCard(this.kisada, 'province 3');
+                this.player1.moveCard(this.liar, 'province 3');
 
                 this.wanderingRonin = this.player2.findCardByName('wandering-ronin');
                 this.imperialStorehouse = this.player2.placeCardInProvince('imperial-storehouse', 'province 1');
@@ -118,12 +127,20 @@
                 });
                 this.player2.pass();
                 expect(this.matsuBerserker.location).toBe('province 3');
+                expect(this.kuwanan.location).toBe('province 3');
+                expect(this.kisada.location).toBe('province 3');
+                expect(this.storehouse.location).toBe('province 3');
+                expect(this.liar.location).toBe('province 3');
                 this.player1.clickCard(this.akodoZentaro);
                 this.player1.clickCard(this.imperialStorehouse);
                 this.player1.clickCard(this.shamefulDisplay3);
                 expect(this.imperialStorehouse.location).toBe('province 3');
                 expect(this.player1.player.provinceThree.toArray()).toContain(this.imperialStorehouse);
                 expect(this.matsuBerserker.location).toBe('dynasty discard pile');
+                expect(this.kuwanan.location).toBe('dynasty discard pile');
+                expect(this.kisada.location).toBe('dynasty discard pile');
+                expect(this.storehouse.location).toBe('dynasty discard pile');
+                expect(this.liar.location).toBe('dynasty discard pile');
             });
 
             it('should discard the chosen holding if there is no valid province to move it to', function() {

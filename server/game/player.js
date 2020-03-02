@@ -237,7 +237,11 @@ class Player extends GameObject {
      */
     getDynastyCardsInProvince(location) {
         let province = this.getSourceList(location);
-        return province.filter(card => card.isDynasty);
+        let cards = province.filter(card => card.isDynasty);
+        if(!Array.isArray(cards)) {
+            cards = [cards];
+        }
+        return cards;
     }
 
     /**

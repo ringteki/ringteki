@@ -43,11 +43,13 @@ class DynastyPhase extends Phase {
         _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
             let revealedCards = [];
             for(let province of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]) {
-                let card = player.getDynastyCardInProvince(province);
-                if(card && card.facedown) {
-                    this.game.applyGameAction(null, { flipDynasty: card });
-                    revealedCards.push(card);
-                }
+                let cards = player.getDynastyCardsInProvince(province);
+                cards.forEach(card => {
+                    if(card && card.facedown) {
+                        this.game.applyGameAction(null, { flipDynasty: card });
+                        revealedCards.push(card);
+                    }
+                });
             }
             if(revealedCards.length > 0) {
                 this.game.queueSimpleStep(() => this.game.addMessage('{0} reveals {1}', player, revealedCards));
