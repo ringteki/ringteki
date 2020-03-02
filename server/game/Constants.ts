@@ -55,9 +55,11 @@ export enum EffectNames {
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
+    EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
+    GainAllAbilities = 'gainAllAbilities',
     GainExtraFateWhenPlayed = 'gainExtraFateWhenPlayed',
     GainPlayAction = 'gainPlayAction',
     HideWhenFaceUp = 'hideWhenFaceUp',
@@ -128,7 +130,8 @@ export enum EffectNames {
     ResolveConflictEarly = 'resolveConflictEarly',
     SetBaseGlory = "setBaseGlory",
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
-    ForceConflictUnopposed = 'forceConflictUnopposed'
+    ForceConflictUnopposed = 'forceConflictUnopposed',
+    MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
 };
 
 export enum Durations {
@@ -269,6 +272,7 @@ export enum EventNames {
     OnPassActionPhasePriority = 'onPassActionPhasePriority',
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
+    OnConflictMoved = 'onConflictMoved',
     Unnamed = 'unnamedEvent'
 };
 
