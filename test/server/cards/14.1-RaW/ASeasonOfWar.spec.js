@@ -228,10 +228,6 @@ describe('A Season of War', function() {
                 expect(this.acolyte.facedown).toBe(false);
             });
 
-            it('should end the dynasty phase', function() {
-
-            });
-
             it('should start a new dynasty phase - testing with on phase started reactions', function() {
                 this.player1.player.imperialFavor = 'military';
                 this.player1.clickCard(this.season);
@@ -284,18 +280,96 @@ describe('A Season of War', function() {
 
             it('should properly progress to the draw phase, and then finally go to the discard pile', function() {
                 this.player1.clickCard(this.season);
+                expect(this.season.location).toBe('being played');
                 this.noMoreActions();
-                expect(this.player1).toHavePrompt('hi');
-                this.player1.pass();
+                expect(this.season.location).toBe('dynasty discard pile');
                 expect(this.game.currentPhase).toBe('draw');
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
             });
+
+            it('chat messages', function() {
+                this.player1.clickCard(this.season);
+                expect(this.getChatLogs(10)).toContain('player1 plays A Season of War to discard all cards in all provinces, and refill each province faceup');
+                expect(this.getChatLogs(10)).toContain('The dynasty phase is ended due to the effects of A Season of War');
+                expect(this.getChatLogs(10)).toContain('A Season of War has started a new dynasty phase!');
+            });
+        });
+        
+        
+        describe('Testing that a dynasty event can only be played in the dynasty phase', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        dynastyDeck: [],
+                        hand: ['way-of-the-crane'],
+                        dynastyDiscard: ['a-season-of-war']
+                    },
+                    player2: {
+                        hand: ['those-who-serve']
+                    }
+                });
+
+                this.season = this.player1.findCardByName('a-season-of-war');
+                this.player1.placeCardInProvince(this.season, 'province 1');
+                this.season.facedown = false;
+                this.thoseWhoServe = this.player2.findCardByName('those-who-serve');
+            });
+
+            it('should be playable in the dynasty phase', function() {
+                expect(this.game.currentPhase).toBe('dynasty');
+                this.player1.clickCard(this.season);
+                expect(this.getChatLogs(10)).toContain('player1 plays A Season of War to discard all cards in all provinces, and refill each province faceup');
+            });
+
+            it('should not be playable in the draw phase', function() {
+                this.player1.player.promptedActionWindows.draw = true;
+                this.player2.player.promptedActionWindows.draw = true;
+                this.noMoreActions();
+                expect(this.game.currentPhase).toBe('draw');
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                expect(this.game.currentPhase).toBe('draw');
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.game.currentPhase).toBe('draw');
+            });
+
+            it('should not be playable in the conflict phase', function() {
+                this.noMoreActions();
+                expect(this.game.currentPhase).toBe('draw');
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                expect(this.game.currentPhase).toBe('conflict');
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.game.currentPhase).toBe('conflict');
+            });
+
+            it('should not be playable in the fate phase', function() {
+                this.player1.player.promptedActionWindows.fate = true;
+                this.player2.player.promptedActionWindows.fate = true;
+                this.noMoreActions();
+                expect(this.game.currentPhase).toBe('draw');
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                expect(this.game.currentPhase).toBe('conflict');
+                expect(this.player1).toHavePrompt('Action Window');
+                this.noMoreActions();
+                this.noMoreActions();
+                this.noMoreActions();
+                this.noMoreActions();
+                this.noMoreActions();
+
+                expect(this.game.currentPhase).toBe('fate');
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.game.currentPhase).toBe('fate');
+            });
         });  
-
-        // //Testing Dynasty Event restrictions
-        // it('should not be able to be played outside of the dynasty phase', function() {
-
-        // });
     });
 });

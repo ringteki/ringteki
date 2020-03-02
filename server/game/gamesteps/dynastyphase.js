@@ -65,7 +65,9 @@ class DynastyPhase extends Phase {
     }
 
     dynastyActionWindowStep() {
-        this.game.queueStep(new DynastyActionWindow(this.game));
+        let window = new DynastyActionWindow(this.game);
+        this.currentActionWindow = window;
+        this.game.queueStep(window);
     }
 
 }

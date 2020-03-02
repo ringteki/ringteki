@@ -7,6 +7,7 @@ class ASeasonOfWar extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Discard all cards from provinces,  refill faceup, and start a new dynasty phase',
+            effect: 'discard all cards in all provinces, and refill each province faceup',
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.discardCard(context => ({
                     target: context.player.getDynastyCardsInProvince(Locations.Provinces).concat(context.player.opponent ?
