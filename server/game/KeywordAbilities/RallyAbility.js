@@ -1,6 +1,5 @@
 const TriggeredAbility = require('../triggeredability.js');
 const { AbilityTypes, Locations } = require('../Constants');
-const AbilityDsl = require('../abilitydsl.js');
 
 class RallyAbility extends TriggeredAbility {
     constructor(game, card) {
