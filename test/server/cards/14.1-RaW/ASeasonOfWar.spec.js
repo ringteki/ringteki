@@ -106,6 +106,7 @@ describe('A Season of War', function() {
                 expect(this.getChatLogs(10)).toContain('player1 places A Season of War faceup in province 1 due to A Season of War\'s Rally');
 
                 this.season.facedown = true;
+                this.season.leavesPlay();
                 this.game.checkGameState(true);
                 this.player1.clickCard(this.nerishma);
                 this.player1.clickCard(this.season);

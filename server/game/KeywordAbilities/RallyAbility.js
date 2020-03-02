@@ -10,7 +10,6 @@ class RallyAbility extends TriggeredAbility {
                     [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(event.card.location) &&
                     context.source.hasRally()
             },
-            limit: AbilityDsl.limit.unlimitedPerConflict(),
             location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
             title: card.name + '\'s Rally',
             printedAbility: false,
