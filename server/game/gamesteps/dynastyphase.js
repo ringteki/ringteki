@@ -17,8 +17,9 @@ I Dynasty Phase
  */
 
 class DynastyPhase extends Phase {
-    constructor(game) {
+    constructor(game, gainFate = true) {
         super(game, Phases.Dynasty);
+        this.gainFate = gainFate;
         this.initialise([
             new SimpleStep(game, () => this.beginDynasty()),
             new SimpleStep(game, () => this.flipDynastyCards()),
@@ -56,9 +57,11 @@ class DynastyPhase extends Phase {
     }
 
     collectFate() {
-        _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
-            player.collectFate();
-        });
+        if (this.gainFate) {
+            _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
+                player.collectFate();
+            });
+        }
     }
 
     dynastyActionWindowStep() {

@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes } = require('../../Constants');
+const DynastyPhase = require('../../gamesteps/dynastyphase.js');
+const { Locations, Durations, Phases } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class ASeasonOfWar extends DrawCard {
@@ -18,8 +19,33 @@ class ASeasonOfWar extends DrawCard {
                 AbilityDsl.actions.refillFaceup(context => ({
                     target: context.player.opponent,
                     location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]
-                }))
-            ])
+                })),
+            ]),
+            then: ({
+                gameAction: AbilityDsl.actions.sequential([
+                    AbilityDsl.actions.playerLastingEffect({
+                        duration: Durations.UntilEndOfRound,
+                        effect: AbilityDsl.effects.playerDelayedEffect({
+                            when: {
+                                onPhaseEnded: event => event.phase === Phases.Dynasty
+                            },
+                            message: '{0} has started a new dynasty phase!',
+                            messageArgs: context => [context.source],
+                            gameAction: AbilityDsl.actions.handler({
+                                handler: context => context.game.queueStep(new DynastyPhase(context.game, false))
+                            })
+                        })
+                    }),
+                    AbilityDsl.actions.handler({
+                        handler: context => {
+                            this.game.addMessage('The dynasty phase is ended due to the effects of {0}', context.source);
+                            if (context.game.currentPhaseObject) {
+                                context.game.currentPhaseObject.endPhase();
+                            }
+                        }
+                    })
+                ])
+            })
         });
     }
 }

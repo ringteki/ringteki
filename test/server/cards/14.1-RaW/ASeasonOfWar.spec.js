@@ -124,12 +124,14 @@ describe('A Season of War', function() {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
-                        inPlay: ['daidoji-nerishma', 'kakita-yoshi', 'kakita-toshimoko', 'matsu-berserker', 'ikoma-prodigy', 'doji-challenger', 'prodigy-of-the-waves', 'hida-kisada', 'aranat'],
+                        inPlay: ['daidoji-nerishma', 'kakita-yoshi', 'kakita-toshimoko', 'matsu-berserker', 'ikoma-prodigy', 'doji-challenger', 'prodigy-of-the-waves', 'hida-kisada', 'aranat', 'kakita-ryoku'],
                         dynastyDeck: [],
+                        hand: ['way-of-the-crane'],
                         dynastyDiscard: ['a-season-of-war', 'a-season-of-war']
                     },
                     player2: {
-                        inPlay: ['acolyte-of-koyane', 'adept-of-the-waves', 'agasha-hiyori', 'agasha-shunsen', 'agasha-sumiko', 'agasha-swordsmith', 'agasha-taiko', 'akodo-kaede', 'akodo-makoto']
+                        inPlay: ['acolyte-of-koyane', 'adept-of-the-waves', 'agasha-hiyori', 'agasha-shunsen', 'agasha-sumiko', 'agasha-swordsmith', 'agasha-taiko', 'akodo-kaede', 'akodo-makoto'],
+                        hand: ['those-who-serve']
                     }
                 });
 
@@ -144,6 +146,7 @@ describe('A Season of War', function() {
                 this.ikomaProdigy = this.player1.findCardByName('prodigy-of-the-waves');
                 this.kisada = this.player1.findCardByName('hida-kisada');
                 this.aranat = this.player1.findCardByName('aranat');
+                this.ryoku = this.player1.findCardByName('kakita-ryoku');
 
                 this.player1.placeCardInProvince(this.season, 'province 1');
                 this.player1.placeCardInProvince(this.challenger, 'province 2');
@@ -183,31 +186,13 @@ describe('A Season of War', function() {
                 this.player2.moveCard(this.shunsen, 'dynasty deck');
 
                 this.player2.moveCard(this.makoto, 'province 3');
+
+                this.thoseWhoServe = this.player2.findCardByName('those-who-serve');
             });
-
-            // it('should refill the province', function() {
-            //     let fate = this.player1.fate;
-            //     this.player1.reduceDeckToNumber('dynasty deck', 0);
-            //     this.player1.moveCard(this.challenger, 'dynasty deck');
-
-            //     expect(this.challenger.location).toBe('dynasty deck');
-            //     this.player1.clickCard(this.season);
-            //     expect(this.player1).toHavePrompt('Choose a character');
-            //     expect(this.player1).toBeAbleToSelect(this.yoshi);
-            //     expect(this.player1).toBeAbleToSelect(this.nerishma);
-
-            //     this.player1.clickCard(this.yoshi);
-            //     expect(this.yoshi.isDishonored).toBe(true);
-            //     expect(this.player1.fate).toBe(fate - 1);
-
-            //     expect(this.season.location).toBe('dynasty discard pile');
-            //     expect(this.challenger.location).toBe('province 1');
-            //     expect(this.challenger.facedown).toBe(true);
-            // });
 
             it('should discard each card in each province', function() {
                 this.player1.clickCard(this.season);
-                expect(this.season.location).toBe('dynasty discard pile');
+                expect(this.season.location).toBe('being played');
                 expect(this.challenger.location).toBe('dynasty discard pile');
                 expect(this.prodigy.location).toBe('dynasty discard pile');
                 expect(this.kisada.location).toBe('dynasty discard pile');
@@ -243,21 +228,69 @@ describe('A Season of War', function() {
                 expect(this.acolyte.facedown).toBe(false);
             });
 
-            // it('should end the dynasty phase', function() {
+            it('should end the dynasty phase', function() {
 
-            // });
+            });
 
-            // it('should start a new dynasty phase', function() {
+            it('should start a new dynasty phase - testing with on phase started reactions', function() {
+                this.player1.player.imperialFavor = 'military';
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.ryoku);
+                this.player1.clickCard(this.ryoku);
+                this.player1.clickCard(this.ryoku);
+                expect(this.ryoku.isHonored).toBe(true);
+            });
 
-            // });
+            it('should start a new dynasty phase - testing with Those Who Serve', function() {
+                this.player1.clickCard('way-of-the-crane');
+                this.player1.clickCard(this.ryoku);
+                this.player2.clickCard(this.thoseWhoServe);
+                expect(this.player1).toHavePrompt('Play cards from provinces');
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Play cards from provinces');
+                this.player1.pass();
 
-            // it('players should not collect fate', function() {
+                expect(this.acolyte.location).toBe('province 4');
+                let fate = this.player2.fate;
+                this.player2.clickCard(this.acolyte);
+                this.player2.clickPrompt('0');
+                expect(this.player2.fate).toBe(fate - 3); //no discount
+                expect(this.acolyte.location).toBe('play area');
+            });
 
-            // });
+            it('should start a new dynasty phase - testing with passing', function() {
+                this.player1.clickCard('way-of-the-crane');
+                this.player1.clickCard(this.ryoku);
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Play cards from provinces');
+                this.player1.clickCard(this.season);
+                expect(this.player1).toHavePrompt('Play cards from provinces');
+                this.player1.pass();
+                expect(this.player2).toHavePrompt('Play cards from provinces');
+                expect(this.acolyte.location).toBe('province 4');
+                this.player2.clickCard(this.acolyte);
+                this.player2.clickPrompt('0');
+                expect(this.acolyte.location).toBe('play area');
+            });
 
-            // it('new dynasty phase test - those who serve', function() {
+            it('players should not collect fate', function() {
+                let p1Fate = this.player1.fate;
+                let p2Fate = this.player2.fate;
+                this.player1.clickCard(this.season);
+                expect(this.player1.fate).toBe(p1Fate - 1); //-1 from Season of War
+                expect(this.player2.fate).toBe(p2Fate);
+            });
 
-            // });
+            it('should properly progress to the draw phase, and then finally go to the discard pile', function() {
+                this.player1.clickCard(this.season);
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('hi');
+                this.player1.pass();
+                expect(this.game.currentPhase).toBe('draw');
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+            });
         });  
 
         // //Testing Dynasty Event restrictions

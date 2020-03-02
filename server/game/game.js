@@ -64,6 +64,7 @@ class Game extends EventEmitter {
         this.currentDuel = null;
         this.manualMode = false;
         this.currentPhase = '';
+        this.currentPhaseObject = null;
         this.password = details.password;
         this.roundNumber = 0;
 

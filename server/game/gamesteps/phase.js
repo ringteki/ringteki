@@ -27,6 +27,7 @@ class Phase extends BaseStepWithPipeline {
     startPhase() {
         this.game.raiseEvent(EventNames.OnPhaseStarted, { phase: this.name }, () => {
             this.game.currentPhase = this.name;
+            this.game.currentPhaseObject = this;
             if(this.name !== 'setup') {
                 this.game.addAlert('endofround', 'turn: {0} - {1} phase', this.game.roundNumber, this.name);
             }
@@ -36,6 +37,7 @@ class Phase extends BaseStepWithPipeline {
     endPhase() {
         this.game.raiseEvent(EventNames.OnPhaseEnded, { phase: this.name });
         this.game.currentPhase = '';
+        this.game.currentPhaseObject = null;
     }
 }
 
