@@ -50,7 +50,7 @@ class CardAction extends CardAbility {
             return 'province';
         }
 
-        if (!ignoredRequirements.includes('phase') && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== 'dynasty') {
+        if(!ignoredRequirements.includes('phase') && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== 'dynasty') {
             return 'phase';
         }
 

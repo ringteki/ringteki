@@ -57,7 +57,7 @@ class DynastyPhase extends Phase {
     }
 
     collectFate() {
-        if (this.gainFate) {
+        if(this.gainFate) {
             _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
                 player.collectFate();
             });

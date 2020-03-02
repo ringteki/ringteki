@@ -38,7 +38,7 @@ class Phase extends BaseStepWithPipeline {
     endPhase() {
         //This block is currently only hooked into the dynasty phase, for A Season of War.
         //If another card is printed which ends a phase, make sure that the phase action window is completed properly when the card is played!
-        if (this.currentActionWindow && !this.currentActionWindow.isComplete()) {
+        if(this.currentActionWindow && !this.currentActionWindow.isComplete()) {
             this.currentActionWindow.complete();
             this.currentActionWindow = null;
         }

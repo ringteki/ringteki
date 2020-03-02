@@ -6,7 +6,7 @@ describe('Seeker of Knowledge', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['shrine-maiden'],
-                        hand: ['seeker-of-knowledge', 'assassination'],
+                        hand: ['seeker-of-knowledge', 'assassination']
                     },
                     player2: {
                         provinces: ['defend-the-wall'],

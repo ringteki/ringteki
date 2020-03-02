@@ -16,8 +16,8 @@ class RallyAbility extends TriggeredAbility {
             printedAbility: false,
             message: '{0} places {1} faceup in {2} due to {3}\'s Rally',
             messageArgs: context => [
-                context.player, 
-                context.player.dynastyDeck.first(), 
+                context.player,
+                context.player.dynastyDeck.first(),
                 context.player.getProvinceCardInProvince(context.source.location).facedown ? context.source.location : context.player.getProvinceCardInProvince(context.source.location),
                 context.source
             ],

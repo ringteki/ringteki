@@ -51,7 +51,7 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new PrideAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
         }
-        if (this.isDynasty) {
+        if(this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this.game, this));
         }
     }

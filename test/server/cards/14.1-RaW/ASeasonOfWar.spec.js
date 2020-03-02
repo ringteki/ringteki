@@ -83,7 +83,7 @@ describe('A Season of War', function() {
 
                 expect(this.getChatLogs(10)).toContain('player1 places A Season of War faceup in province 1 due to A Season of War\'s Rally');
             });
-            
+
             it('when revealed via card effect, should trigger', function() {
                 this.keepDynasty();
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
@@ -116,8 +116,8 @@ describe('A Season of War', function() {
                 expect(this.season.facedown).toBe(false);
                 expect(this.challenger.location).toBe('province 1');
                 expect(this.challenger.facedown).toBe(false);
-            }); 
-        });   
+            });
+        });
 
         describe('Testing A Season of War', function() {
             beforeEach(function() {
@@ -295,8 +295,8 @@ describe('A Season of War', function() {
                 expect(this.getChatLogs(10)).toContain('A Season of War has started a new dynasty phase!');
             });
         });
-        
-        
+
+
         describe('Testing that a dynasty event can only be played in the dynasty phase', function() {
             beforeEach(function() {
                 this.setupTest({
@@ -370,6 +370,6 @@ describe('A Season of War', function() {
                 expect(this.player1).toHavePrompt('Action Window');
                 expect(this.game.currentPhase).toBe('fate');
             });
-        });  
+        });
     });
 });

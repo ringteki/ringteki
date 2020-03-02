@@ -20,7 +20,7 @@ class ASeasonOfWar extends DrawCard {
                 AbilityDsl.actions.refillFaceup(context => ({
                     target: context.player.opponent,
                     location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]
-                })),
+                }))
             ]),
             then: ({
                 gameAction: AbilityDsl.actions.sequential([
@@ -40,7 +40,7 @@ class ASeasonOfWar extends DrawCard {
                     AbilityDsl.actions.handler({
                         handler: context => {
                             this.game.addMessage('The dynasty phase is ended due to the effects of {0}', context.source);
-                            if (context.game.currentPhaseObject) {
+                            if(context.game.currentPhaseObject) {
                                 context.game.currentPhaseObject.endPhase();
                             }
                         }
