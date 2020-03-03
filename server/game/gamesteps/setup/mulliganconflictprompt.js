@@ -44,10 +44,12 @@ class MulliganConflictPrompt extends MulliganDynastyPrompt {
                 this.game.addMessage('{0} has kept all conflict cards', player);
             }
             _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour], location => {
-                let card = player.getDynastyCardInProvince(location);
-                if(card) {
-                    card.facedown = true;
-                }
+                let cards = player.getDynastyCardsInProvince(location);
+                cards.forEach(card => {
+                    if(card) {
+                        card.facedown = true;
+                    }
+                });
             });
             player.clearSelectedCards();
             player.clearSelectableCards();

@@ -29,10 +29,12 @@ export class RefillFaceupAction extends PlayerAction {
         location.forEach(loc => {
             if(event.player.replaceDynastyCard(loc)) {
                 event.context.game.queueSimpleStep(() => {
-                    let card = event.player.getDynastyCardInProvince(loc);
-                    if(card) {
-                        card.facedown = false;
-                    }
+                    let cards = event.player.getDynastyCardsInProvince(loc);
+                    cards.forEach(card => {
+                        if(card) {
+                            card.facedown = false;
+                        }
+                    });
                 });
             }
         });
