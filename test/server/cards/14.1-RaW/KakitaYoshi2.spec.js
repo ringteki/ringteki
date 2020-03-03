@@ -98,6 +98,8 @@ describe('Way of the Open Hand', function() {
             expect(this.berserker.isDishonored).toBe(true);
             expect(this.mirumotoRaitsugu.isDishonored).toBe(true);
             expect(this.yoshi.isDishonored).toBe(true);
+
+            expect(this.getChatLogs(3)).toContain('player1 uses Kakita Yoshi to dishonor Matsu Berserker, Mirumoto Raitsugu and Kakita Yoshi');
         });
 
         it('should count broken provinces', function() {

@@ -6,8 +6,6 @@ class KakitaYoshi2 extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Dishonor characters',
-            // effect: 'discard {1} and dishonor {2}',
-            // effectArgs: context => [context.costs.discardCardsUpToVariableX.map(a => a.name).sort().join(', '), context.target],
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isAttacking() && event.conflict.conflictType === 'political'
             },
