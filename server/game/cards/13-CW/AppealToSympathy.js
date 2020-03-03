@@ -14,7 +14,7 @@ class AppealToSympathy extends DrawCard {
                 AbilityDsl.actions.cancel(),
                 AbilityDsl.actions.moveCard(context => ({
                     target: context.event.card,
-                    destination: Locations.ConflictDeck
+                    destination: context.event.card.isConflict ? Locations.ConflictDeck : Locations.DynastyDiscardPile
                 }))
             ])
         });

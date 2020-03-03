@@ -132,7 +132,8 @@ describe('A Season of War', function() {
                     },
                     player2: {
                         inPlay: ['acolyte-of-koyane', 'adept-of-the-waves', 'agasha-hiyori', 'agasha-shunsen', 'agasha-sumiko', 'agasha-swordsmith', 'agasha-taiko', 'akodo-kaede', 'akodo-makoto'],
-                        hand: ['those-who-serve']
+                        hand: ['those-who-serve'],
+                        conflictDiscard: ['appeal-to-sympathy']
                     }
                 });
 
@@ -189,6 +190,7 @@ describe('A Season of War', function() {
                 this.player2.moveCard(this.makoto, 'province 3');
 
                 this.thoseWhoServe = this.player2.findCardByName('those-who-serve');
+                this.appeal = this.player2.findCardByName('appeal-to-sympathy');
             });
 
             it('should discard each card in each province', function() {
@@ -287,6 +289,15 @@ describe('A Season of War', function() {
                 expect(this.game.currentPhase).toBe('draw');
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
+            });
+
+            it('cancel via appeal to sympathy', function() {
+                this.player2.moveCard(this.appeal, 'hand');
+                this.player1.clickCard(this.season);
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.appeal);
+                this.player2.clickCard(this.appeal);
+                expect(this.season.location).toBe('dynasty discard pile');
             });
 
             it('chat messages', function() {
