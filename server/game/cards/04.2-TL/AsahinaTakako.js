@@ -22,7 +22,7 @@ class AsahinaTakako extends DrawCard {
                         'Discard': AbilityDsl.actions.discardCard({ target: context.target }),
                         'Switch with another card': AbilityDsl.actions.selectCard({
                             activePromptTitle: 'Choose a card to switch with',
-                            cardType: [CardTypes.Character, CardTypes.Holding],
+                            cardType: [CardTypes.Character, CardTypes.Holding, CardTypes.Event],
                             location: Locations.Provinces,
                             controller: Players.Self,
                             message: '{0} switches {1} in {2} and {3} in {4}',
@@ -32,7 +32,8 @@ class AsahinaTakako extends DrawCard {
                             ],
                             gameAction: AbilityDsl.actions.moveCard({
                                 destination: context.target.location,
-                                switch: true
+                                switch: true,
+                                switchTarget: context.target
                             })
                         })
                     }

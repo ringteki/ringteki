@@ -21,7 +21,7 @@ class EmperorsSummons extends ProvinceCard {
                     subActionProperties: card => ({ destination: card.location }),
                     gameAction: AbilityDsl.actions.moveCard({ discardDestinationCards: true, faceup: true }),
                     message: '{1} chooses to place {2} in {0} discarding {3}',
-                    messageArgs: (card, player, properties) => [card.location, player, properties.target, player.getDynastyCardInProvince(card.location)]
+                    messageArgs: (card, player, properties) => [card.location, player, properties.target, player.getDynastyCardsInProvince(card.location)]
                 })
             })),
             effect: 'choose a character to place in a province'
