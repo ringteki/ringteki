@@ -32,7 +32,7 @@ describe('White Horde Vanguard', function() {
 
             this.player1.pass();
             this.player2.clickCard(this.wayOCrane);
-            this.player2.clickCard(this.whisperer)
+            this.player2.clickCard(this.whisperer);
             this.noMoreActions();
         });
 
