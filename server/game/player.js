@@ -436,7 +436,7 @@ class Player extends GameObject {
     }
 
     /**
-     * Moves the top card of the dynasty deck to the passed province
+     * Moves the top cards of the dynasty deck to the passed province
      * @param {String} location - one of 'province 1', 'province 2', 'province 3', 'province 4'
      */
     replaceDynastyCard(location) {
@@ -447,8 +447,32 @@ class Player extends GameObject {
             this.deckRanOutOfCards('dynasty');
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            this.moveCard(this.dynastyDeck.first(), location);
+            let province = this.getProvinceCardInProvince(location);
+            let refillAmount = 1;
+            if(province) {
+                let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
+                if(amount) {
+                    refillAmount = amount;
+                }
+            }
+
+            this.refillProvince(location, refillAmount);
         }
+        return true;
+    }
+
+    refillProvince(location, refillAmount) {
+        let i = 0;
+        for(i = 0; i < refillAmount; i++) {
+            if(this.dynastyDeck.size() === 0) {
+                this.deckRanOutOfCards('dynasty');
+                this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i));
+                return true;
+            }
+            this.moveCard(this.dynastyDeck.first(), location);
+
+        }
+
         return true;
     }
 
