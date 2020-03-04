@@ -7,7 +7,6 @@ class Phase extends BaseStepWithPipeline {
         super(game);
         this.name = name;
         this.steps = [];
-        this.currentActionWindow = null;
     }
 
     initialise(steps) {
