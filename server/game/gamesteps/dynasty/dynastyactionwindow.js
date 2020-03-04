@@ -1,5 +1,5 @@
 const ActionWindow = require('../actionwindow.js');
-const { EventNames } = require('../../Constants');
+const { EventNames, EffectNames } = require('../../Constants');
 
 class DynastyActionWindow extends ActionWindow {
     constructor(game) {
@@ -32,6 +32,16 @@ class DynastyActionWindow extends ActionWindow {
     }
 
     nextPlayer() {
+        if(this.currentPlayer.anyEffect(EffectNames.RestartDynastyPhase)) {
+            let effectSource = this.currentPlayer.mostRecentEffect(EffectNames.RestartDynastyPhase);
+            this.game.addMessage('The dynasty phase is ended due to the effects of {0}', effectSource);
+            this.complete();
+        } else if(this.currentPlayer.opponent && this.currentPlayer.opponent.anyEffect(EffectNames.RestartDynastyPhase)) {
+            let effectSource = this.currentPlayer.mostRecentEffect(EffectNames.RestartDynastyPhase);
+            this.game.addMessage('The dynasty phase is ended due to the effects of {0}', effectSource);
+            this.complete();
+        }
+
         let otherPlayer = this.currentPlayer.opponent;
         if(otherPlayer && !otherPlayer.passedDynasty) {
             this.currentPlayer = otherPlayer;

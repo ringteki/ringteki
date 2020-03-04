@@ -3,7 +3,7 @@ const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const DynastyActionWindow = require('./dynasty/dynastyactionwindow.js');
-const { Locations, Phases } = require('../Constants');
+const { Locations, Phases, EffectNames } = require('../Constants');
 
 /*
 I Dynasty Phase
@@ -26,6 +26,8 @@ class DynastyPhase extends Phase {
             new SimpleStep(game, () => this.collectFate()),
             new SimpleStep(game, () => this.dynastyActionWindowStep())
         ]);
+
+        this.steps = this.steps.concat([new SimpleStep(game, () => this.checkForRepeatDynasty())]);
     }
 
     createPhase() {
@@ -70,6 +72,19 @@ class DynastyPhase extends Phase {
         let window = new DynastyActionWindow(this.game);
         this.currentActionWindow = window;
         this.game.queueStep(window);
+    }
+
+    checkForRepeatDynasty() {
+        let restarted = false;
+        this.game.getPlayersInFirstPlayerOrder().forEach(player => {
+            if(!restarted && player.anyEffect(EffectNames.RestartDynastyPhase)) {
+                restarted = true;
+                let effectSource = player.mostRecentEffect(EffectNames.RestartDynastyPhase);
+                this.game.addMessage('{0} has started a new dynasty phase!', effectSource);
+                let dynastyPhase = new DynastyPhase(this.game, false);
+                this.game.queueStep(dynastyPhase);
+            }
+        });
     }
 
 }

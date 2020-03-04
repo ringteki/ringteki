@@ -132,7 +132,8 @@ export enum EffectNames {
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
     ForceConflictUnopposed = 'forceConflictUnopposed',
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
-    RefillProvinceTo = 'refillProvinceTo'
+    RefillProvinceTo = 'refillProvinceTo',
+    RestartDynastyPhase = 'restartDynastyPhase',
 };
 
 export enum Durations {
