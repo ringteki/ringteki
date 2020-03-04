@@ -6,7 +6,9 @@ class CityOfTheRichFrog extends ProvinceCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: () => this.game.currentPhase !== 'setup',
-            effect: AbilityDsl.effects.refillProvinceTo(3)
+            effect: AbilityDsl.effects.specialProvinceRefill((player, location) => {
+                player.refillProvince(location, 3);
+            })
         });
 
         this.persistentEffect({

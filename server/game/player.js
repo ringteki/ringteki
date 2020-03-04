@@ -448,15 +448,15 @@ class Player extends GameObject {
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
             let province = this.getProvinceCardInProvince(location);
-            let refillAmount = 1;
             if(province) {
-                let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
-                if(amount) {
-                    refillAmount = amount;
+                let refillFunc = province.mostRecentEffect(EffectNames.SpecialProvinceRefill);
+                if (refillFunc) {
+                    refillFunc(this, location);
                 }
             }
-
-            this.refillProvince(location, refillAmount);
+            else {
+                this.refillProvince(location, 1);
+            }
         }
         return true;
     }
