@@ -1,4 +1,4 @@
-describe('A Game of Letters', function() {
+describe('Sharing Shinseis Wisdom', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
