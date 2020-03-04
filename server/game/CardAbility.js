@@ -79,7 +79,7 @@ class CardAbility extends ThenAbility {
             this.card.owner.registerAbilityMax(this.maxIdentifier, this.max);
         }
 
-        if(card.getType() === CardTypes.Event) {
+        if(card.getType() === CardTypes.Event && !this.isKeywordAbility()) {
             this.cost = this.cost.concat(Costs.payReduceableFateCost());
         }
     }
