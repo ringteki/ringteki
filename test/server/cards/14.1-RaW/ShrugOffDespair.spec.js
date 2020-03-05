@@ -19,7 +19,7 @@ describe('Shrug Off Despair', function() {
             this.shrugOffDespair.facedown = false;
             this.manicuredGarden.facedown = false;
 
-            this.game.checkGameState();
+            this.game.checkGameState(true);
         });
 
         it('should move the conflict to itself when at another province', function() {
@@ -32,7 +32,9 @@ describe('Shrug Off Despair', function() {
                 province: this.manicuredGarden
             });
 
+            expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.shrugOffDespair);
+            expect(this.getChatLogs(10)).toContain('player2 uses Shrug Off Despair to move the conflict to Shrug Off Despair');
             expect(this.game.currentConflict.conflictProvince).toBe(this.shrugOffDespair);
         });
     });

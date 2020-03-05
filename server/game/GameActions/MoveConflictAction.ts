@@ -28,7 +28,7 @@ export class MoveConflictAction extends CardGameAction {
 
     eventHandler(event, additionalProperties): void {
         let context = event.context;
-        let newProvince = context.target;
+        let newProvince = event.card;
 
         newProvince.inConflict = true;
         context.game.currentConflict.conflictProvince.inConflict = false;
