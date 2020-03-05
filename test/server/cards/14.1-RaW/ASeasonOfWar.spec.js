@@ -161,11 +161,9 @@ describe('A Season of War', function() {
                 expect(this.player2.fate).toBe(p2Fate);
             });
 
-            it('should properly progress to the draw phase, and then finally go to the discard pile', function() {
+            it('should properly progress to the draw phase', function() {
                 this.player1.clickCard(this.season);
-                expect(this.season.location).toBe('dynasty discard pile');
                 this.noMoreActions();
-                expect(this.season.location).toBe('dynasty discard pile');
                 expect(this.game.currentPhase).toBe('draw');
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
