@@ -447,11 +447,34 @@ class Player extends GameObject {
             this.deckRanOutOfCards('dynasty');
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            this.moveCard(this.dynastyDeck.first(), location);
+            let province = this.getProvinceCardInProvince(location);
+            let refillAmount = 1;
+            if(province) {
+                let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
+                if(amount) {
+                    refillAmount = amount;
+                }
+            }
+
+            this.refillProvince(location, refillAmount);
         }
         return true;
     }
 
+    refillProvince(location, refillAmount) {
+        let i = 0;
+        for(i = 0; i < refillAmount; i++) {
+            if(this.dynastyDeck.size() === 0) {
+                this.deckRanOutOfCards('dynasty');
+                this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i));
+                return true;
+            }
+            this.moveCard(this.dynastyDeck.first(), location);
+
+        }
+
+        return true;
+    }
     /**
      * Shuffles the conflict deck, emitting an event and displaying a message in chat
      */
