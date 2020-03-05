@@ -11,7 +11,7 @@ export class TurnCardFacedownAction extends CardGameAction {
     eventName = EventNames.OnCardTurnedFacedown;
     cost = 'turning {0} facedown';
     effect = 'turn {0} facedown';
-    targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Province];
+    targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Province, CardTypes.Event];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
         return !card.facedown && super.canAffect(card, context) && card.isInProvince();

@@ -6,7 +6,7 @@ class MountaintopStatuary extends DrawCard {
         this.reaction({
             title: 'Move this to stronghold province',
             when: {
-                onDynastyCardTurnedFaceup: (event, context) => event.card === context.source
+                onCardRevealed: (event, context) => event.card === context.source
             },
             effect: 'move it to their stronghold province',
             gameAction: ability.actions.moveCard({ destination: Locations.StrongholdProvince })

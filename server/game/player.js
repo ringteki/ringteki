@@ -921,7 +921,7 @@ class Player extends GameObject {
             holding: dynastyCardLocations,
             conflictCharacter: [...conflictCardLocations, Locations.PlayArea],
             dynastyCharacter: [...dynastyCardLocations, Locations.PlayArea],
-            event: [...conflictCardLocations, Locations.BeingPlayed],
+            event: _.uniq([...conflictCardLocations, ...dynastyCardLocations, Locations.BeingPlayed]),
             attachment: [...conflictCardLocations, Locations.PlayArea]
         };
 
