@@ -33,70 +33,70 @@ describe('Prepared Ambush', function() {
             this.samuraiOfIntegrity.facedown = false;
         });
 
-        // it('should be able to played on a province', function() {
-        //     this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
-        //     expect(this.preparedAmbush.parent).toBe(this.ancestralLands);
-        // });
+        it('should be able to played on a province', function() {
+            this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
+            expect(this.preparedAmbush.parent).toBe(this.ancestralLands);
+        });
 
-        // it('should allow you to play characters during conflicts at the attached province', function() {
-        //     this.noMoreActions();
+        it('should allow you to play characters during conflicts at the attached province', function() {
+            this.noMoreActions();
 
-        //     this.initiateConflict({
-        //         attackers: [this.zentaro, this.matsuBerseker],
-        //         defenders: [this.akodoToturi],
-        //         province: this.ancestralLands
-        //     });
+            this.initiateConflict({
+                attackers: [this.zentaro, this.matsuBerseker],
+                defenders: [this.akodoToturi],
+                province: this.ancestralLands
+            });
 
-        //     this.player2.pass();
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.clickCard(this.matsuBerseker);
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.matsuBerseker);
-        //     expect(this.player1).toHavePrompt('Choose additional fate');
-        //     this.player1.clickPrompt('0');
-        //     expect(this.matsuBerseker.location).toBe('play area');
-        //     expect(this.game.currentConflict.attackers).toContain(this.matsuBerseker);
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.matsuBerseker);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
+            this.player2.pass();
+            this.player1.clickCard(this.matsuBerseker);
+            expect(this.player1).toHavePrompt('Choose additional fate');
+            this.player1.clickPrompt('0');
+            expect(this.matsuBerseker.location).toBe('play area');
+            expect(this.game.currentConflict.attackers).toContain(this.matsuBerseker);
 
-        //     expect(this.getChatLogs(3)).toContain('player1 plays Matsu Berserker into the conflict with 0 additional fate');
-        // });
+            expect(this.getChatLogs(3)).toContain('player1 plays Matsu Berserker into the conflict with 0 additional fate');
+        });
 
-        // it('should not allow you to play characters during conflicts at the non-attached province', function() {
-        //     this.noMoreActions();
+        it('should not allow you to play characters during conflicts at the non-attached province', function() {
+            this.noMoreActions();
 
-        //     this.initiateConflict({
-        //         attackers: [this.zentaro, this.matsuBerseker],
-        //         defenders: [this.akodoToturi],
-        //         province: this.garden
-        //     });
+            this.initiateConflict({
+                attackers: [this.zentaro, this.matsuBerseker],
+                defenders: [this.akodoToturi],
+                province: this.garden
+            });
 
-        //     this.player2.pass();
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.clickCard(this.matsuBerseker);
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.matsuBerseker);
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        // });
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.matsuBerseker);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
+            this.player2.pass();
+            this.player1.clickCard(this.matsuBerseker);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
 
-        // it('should not allow opponent to play characters', function() {
-        //     this.noMoreActions();
+        it('should not allow opponent to play characters', function() {
+            this.noMoreActions();
 
-        //     this.initiateConflict({
-        //         attackers: [this.zentaro, this.matsuBerseker],
-        //         defenders: [this.akodoToturi],
-        //         province: this.garden
-        //     });
+            this.initiateConflict({
+                attackers: [this.zentaro, this.matsuBerseker],
+                defenders: [this.akodoToturi],
+                province: this.garden
+            });
 
-        //     this.player2.pass();
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
-        //     expect(this.player2).toHavePrompt('Conflict Action Window');
-        //     this.player2.clickCard(this.samuraiOfIntegrity);
-        //     expect(this.player2).toHavePrompt('Conflict Action Window');
-        // });
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.playAttachment(this.preparedAmbush, this.ancestralLands);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.samuraiOfIntegrity);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
 
         it('should not attach to a broken province', function() {
             this.ancestralLands.isBroken = true;
