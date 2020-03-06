@@ -22,10 +22,14 @@ class TotalWarfare extends DrawCard {
     }
 
     canPlayOn(source) {
-        return source && source.getType() === 'province' && this.getType() === CardTypes.Attachment;
+        return source && source.getType() === 'province' && !source.isBroken && this.getType() === CardTypes.Attachment;
     }
 
     canAttach(parent) {
+        if(parent.type === CardTypes.Province && parent.isBroken) {
+            return false;
+        }
+
         return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }

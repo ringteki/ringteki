@@ -124,7 +124,7 @@ describe('Prepared Ambush', function() {
             this.player1.clickPrompt('No');
             this.player1.clickPrompt('Don\'t Resolve');
             expect(this.preparedAmbush.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(10)).toBe('conflict discard pile');
+            expect(this.getChatLogs(10)).toContain('Prepared Ambush is discarded from Ancestral Lands as it is no longer legally attached');
         });
 
         it('shouldn\'t be able to have two battlefields at the same time', function() {

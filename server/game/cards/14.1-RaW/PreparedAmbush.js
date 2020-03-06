@@ -1,13 +1,13 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const PlayCharacterAction = require('../../playcharacteraction');
-const { Locations, PlayTypes, CardTypes, EffectNames } = require('../../Constants');
+const { Locations, PlayTypes, CardTypes } = require('../../Constants');
 
 class PreparedAmbushPlayAction extends PlayCharacterAction {
     constructor(card) {
         super(card, true);
     }
-    
+
     createContext(player = this.card.controller) {
         const context = super.createContext(player);
         context.playType = PlayTypes.PlayFromHand;
@@ -23,7 +23,7 @@ class PreparedAmbushPlayAction extends PlayCharacterAction {
 class PreparedAmbush extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 },
+            limitTrait: { 'battlefield': 1 }
         });
 
         this.persistentEffect({
