@@ -8,11 +8,13 @@ describe('Our Foe Does Not Wait', function() {
                         dynastyDiscard: ['imperial-storehouse', 'shika-matchmaker', 'solemn-scholar', 'seventh-tower', 'watchtower-of-valor' ,'favorable-ground', 'hida-kisada', 'artisan-academy', 'hall-of-victories'],
                         inPlay: ['shrine-maiden'],
                         hand: ['our-foe-does-not-wait'],
+                        conflictDiscard: ['our-foe-does-not-wait'],
                         dynastyDeckSize: 4
                     }
                 });
 
-                this.ourFoe = this.player1.findCardByName('our-foe-does-not-wait');
+                this.ourFoe = this.player1.findCardByName('our-foe-does-not-wait', 'hand');
+                this.ourFoe2 = this.player1.findCardByName('our-foe-does-not-wait', 'conflict discard pile');
                 this.shika = this.player1.findCardByName('shika-matchmaker');
                 this.seventhTower = this.player1.findCardByName('seventh-tower');
                 this.scholar = this.player1.findCardByName('solemn-scholar');
@@ -83,6 +85,14 @@ describe('Our Foe Does Not Wait', function() {
                 this.player1.clickCard(this.p1);
                 this.player1.clickPrompt('Solemn Scholar');
                 expect(this.player1.provinces['province 1'].dynastyCards.length).toBe(cards + 1);
+            });
+
+            it('should only let you use one per conflict', function() {
+                this.player1.moveCard(this.ourFoe2, 'hand');
+                this.player1.clickCard(this.ourFoe);
+                this.player1.clickCard(this.p1);
+                this.player1.clickPrompt('Solemn Scholar');
+                expect(this.player1).toHavePrompt('Action Window');
             });
         });
     });

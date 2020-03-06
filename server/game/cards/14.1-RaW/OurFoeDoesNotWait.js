@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const { Locations, Players, CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
 
 class OurFoeDoesNotWait extends DrawCard {
     setupCardAbilities() {
@@ -9,6 +10,7 @@ class OurFoeDoesNotWait extends DrawCard {
                 onConflictPass: (event, context) => event.conflict.attackingPlayer === context.player
 
             },
+            max: AbilityDsl.limit.perConflict(1),
             effect: 'look at the top eight cards of their dynasty deck',
             target: {
                 cardType: CardTypes.Province,
