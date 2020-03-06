@@ -144,7 +144,7 @@ class ProvinceCard extends BaseCard {
         }
 
         return (
-            !this.isBroken
+            true//!this.isBroken
         );
     }
 
