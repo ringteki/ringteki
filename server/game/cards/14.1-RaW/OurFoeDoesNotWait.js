@@ -24,6 +24,7 @@ class OurFoeDoesNotWait extends DrawCard {
                     let provinceLocation = context.target.location;
                     context.player.moveCard(cardFromDeck, provinceLocation);
                     cardFromDeck.facedown = false;
+                    context.player.shuffleDynastyDeck();
                     this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, context.target.facedown ? 'a facedown province' : context.target.name);
                 }
             })
