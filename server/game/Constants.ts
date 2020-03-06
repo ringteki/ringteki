@@ -133,6 +133,8 @@ export enum EffectNames {
     ForceConflictUnopposed = 'forceConflictUnopposed',
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
     RefillProvinceTo = 'refillProvinceTo',
+    RestartDynastyPhase = 'restartDynastyPhase',
+    StrongholdCanBeAttacked = 'strongholdCanBeAttacked'
 };
 
 export enum Durations {

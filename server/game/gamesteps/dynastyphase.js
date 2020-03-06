@@ -3,7 +3,7 @@ const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const DynastyActionWindow = require('./dynasty/dynastyactionwindow.js');
-const { Locations, Phases } = require('../Constants');
+const { Locations, Phases, EffectNames } = require('../Constants');
 
 /*
 I Dynasty Phase
@@ -17,14 +17,17 @@ I Dynasty Phase
  */
 
 class DynastyPhase extends Phase {
-    constructor(game) {
+    constructor(game, gainFate = true) {
         super(game, Phases.Dynasty);
+        this.gainFate = gainFate;
         this.initialise([
             new SimpleStep(game, () => this.beginDynasty()),
             new SimpleStep(game, () => this.flipDynastyCards()),
             new SimpleStep(game, () => this.collectFate()),
             new SimpleStep(game, () => this.dynastyActionWindowStep())
         ]);
+
+        this.steps = this.steps.concat([new SimpleStep(game, () => this.checkForRepeatDynasty())]);
     }
 
     createPhase() {
@@ -58,15 +61,29 @@ class DynastyPhase extends Phase {
     }
 
     collectFate() {
-        _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
-            player.collectFate();
-        });
+        if(this.gainFate) {
+            _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
+                player.collectFate();
+            });
+        }
     }
 
     dynastyActionWindowStep() {
         this.game.queueStep(new DynastyActionWindow(this.game));
     }
 
+    checkForRepeatDynasty() {
+        let restarted = false;
+        this.game.getPlayersInFirstPlayerOrder().forEach(player => {
+            if(!restarted && player.anyEffect(EffectNames.RestartDynastyPhase)) {
+                restarted = true;
+                let effectSource = player.mostRecentEffect(EffectNames.RestartDynastyPhase);
+                this.game.addMessage('{0} has started a new dynasty phase!', effectSource);
+                let dynastyPhase = new DynastyPhase(this.game, false);
+                this.game.queueStep(dynastyPhase);
+            }
+        });
+    }
 }
 
 module.exports = DynastyPhase;

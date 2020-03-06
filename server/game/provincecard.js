@@ -72,7 +72,9 @@ class ProvinceCard extends BaseCard {
 
     canBeAttacked() {
         return !this.isBroken && !this.anyEffect(EffectNames.CannotBeAttacked) &&
-            (this.location !== Locations.StrongholdProvince || this.controller.getProvinces(card => card.isBroken).length > 2);
+            (this.location !== Locations.StrongholdProvince ||
+            this.controller.getProvinces(card => card.isBroken).length > 2 ||
+            this.controller.anyEffect(EffectNames.StrongholdCanBeAttacked));
     }
 
     canDeclare(type, ring) { // eslint-disable-line no-unused-vars
