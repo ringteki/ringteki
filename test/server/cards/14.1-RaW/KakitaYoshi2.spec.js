@@ -1,4 +1,4 @@
-describe('Way of the Open Hand', function() {
+describe('Kakita Yoshi 2', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
