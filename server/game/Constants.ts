@@ -132,6 +132,7 @@ export enum EffectNames {
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
     ForceConflictUnopposed = 'forceConflictUnopposed',
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
+    RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked'
 };
@@ -177,6 +178,7 @@ export enum TargetModes {
 };
 
 export enum Phases {
+    Setup = 'setup',
     Dynasty = 'dynasty',
     Draw = 'draw',
     Conflict = 'conflict',

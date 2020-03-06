@@ -80,6 +80,7 @@ class SetupPhase extends Phase {
             player.honor = player.stronghold.cardData.honor;
             player.readyToStart = true;
         });
+        this.endPhase();
     }
 }
 
