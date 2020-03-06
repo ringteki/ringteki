@@ -17,16 +17,10 @@ class CityOfTheRichFrog extends ProvinceCard {
                 },
                 message: '{0} fills to 3 cards!',
                 messageArgs: effectContext => [effectContext.source],
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.moveCard(context => ({
-                        target: context.player.dynastyDeck.first(),
-                        destination: context.source.location
-                    })),
-                    AbilityDsl.actions.moveCard(context => ({
-                        target: context.player.dynastyDeck.first(),
-                        destination: context.source.location
-                    }))
-                ])
+                gameAction: AbilityDsl.actions.fillProvince(context => ({
+                    location: context.source.location,
+                    fillTo: 3
+                }))
             })
         });
     }

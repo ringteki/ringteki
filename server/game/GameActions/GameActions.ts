@@ -21,6 +21,7 @@ import { DiscardStatusAction, DiscardStatusProperties } from './DiscardStatusAct
 import { DishonorAction, DishonorProperties } from './DishonorAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
+import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
 import { GainFateAction, GainFateProperties } from './GainFateAction';
 import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
@@ -118,6 +119,7 @@ const GameActions = {
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
     discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
     draw: (propertyFactory: DrawProperties | ((context: TriggeredAbilityContext) => DrawProperties) = {}) => new DrawAction(propertyFactory), // amount = 1
+    fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
     gainHonor: (propertyFactory: GainHonorProperties | ((context: TriggeredAbilityContext) => GainHonorProperties) = {}) => new GainHonorAction(propertyFactory), // amount = 1
     initiateConflict: (propertyFactory: InitiateConflictProperties | ((context: TriggeredAbilityContext) => InitiateConflictProperties) = {}) => new InitiateConflictAction(propertyFactory), // canPass = true
