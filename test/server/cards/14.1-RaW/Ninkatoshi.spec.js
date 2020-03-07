@@ -25,6 +25,7 @@ describe('Ninkatoshi', function() {
             this.manicured1.facedown = false;
             this.pilgrimage.facedown = false;
             this.game.checkGameState();
+            this.player1.pass();
         });
 
         it('should lower the province strength of enemy province by 1', function() {
