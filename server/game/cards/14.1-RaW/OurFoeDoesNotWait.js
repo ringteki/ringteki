@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Players, CardTypes } = require('../../Constants');
+const { Locations, Players, CardTypes, Decks } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class OurFoeDoesNotWait extends DrawCard {
@@ -18,18 +18,12 @@ class OurFoeDoesNotWait extends DrawCard {
                 location: Locations.Provinces,
                 cardCondition: card => card.location !== Locations.StrongholdProvince && !card.isBroken
             },
-            handler: context => this.game.promptWithHandlerMenu(context.player, {
-                activePromptTitle: 'Choose a card to place in a province',
-                context: context,
-                cards: context.player.dynastyDeck.first(8),
-                cardHandler: cardFromDeck => {
-                    let provinceLocation = context.target.location;
-                    context.player.moveCard(cardFromDeck, provinceLocation);
-                    cardFromDeck.facedown = false;
-                    context.player.shuffleDynastyDeck();
-                    this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, context.target.facedown ? 'a facedown province' : context.target.name);
-                }
-            })
+            gameAction: AbilityDsl.actions.deckSearch(context => ({
+                amount: 8,
+                deck: Decks.DynastyDeck,
+                faceup: true,
+                destination: context.target.location
+            }))
         });
     }
 }

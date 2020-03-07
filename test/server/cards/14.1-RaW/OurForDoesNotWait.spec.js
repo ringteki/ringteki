@@ -61,7 +61,7 @@ describe('Our Foe Does Not Wait', function() {
             it('should let you pick any of the 8 cards', function() {
                 this.player1.clickCard(this.ourFoe);
                 this.player1.clickCard(this.p1);
-                expect(this.player1).toHavePrompt('Choose a card to place in a province');
+                expect(this.player1).toHavePrompt('Select a card to reveal');
                 expect(this.player1).toHavePromptButton('Imperial Storehouse');
                 expect(this.player1).toHavePromptButton('Shika Matchmaker');
                 expect(this.player1).toHavePromptButton('Solemn Scholar');
@@ -77,6 +77,7 @@ describe('Our Foe Does Not Wait', function() {
                 this.player1.clickCard(this.p1);
                 this.player1.clickPrompt('Solemn Scholar');
                 expect(this.scholar.location).toBe('province 1');
+                expect(this.scholar.facedown).toBe(false);
             });
 
             it('should stack the card in the province', function() {
