@@ -8,7 +8,7 @@ class EducatedHeimin extends DrawCard {
             condition: context => !!context.source.parent,
             targetLocation: Locations.Provinces,
             match: (card, context) => card === context.source.parent,
-            effect: AbilityDsl.effects.customRefillProvince((player, province, postHandler) => {
+            effect: AbilityDsl.effects.customRefillProvince((player, province) => {
                 let cards = [];
                 if (province.facedown) {
                     cards = player.dynastyDeck.first(4);
@@ -28,7 +28,6 @@ class EducatedHeimin extends DrawCard {
                             player.moveCard(card, Locations.DynastyDiscardPile);
                         })
                         this.game.addMessage('{0} chooses a card to put into {1} and discards {2} from the constant effect of Educated Heimin', player, province.facedown ? 'a facedown province' : province.name, cards);
-                        postHandler();
                     }
                 })
             })

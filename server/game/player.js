@@ -463,25 +463,25 @@ class Player extends GameObject {
     }
 
     refillProvince(location, refillAmount) {
-        let i = 0;
-        for(i = 0; i < refillAmount; i++) {
-            if(this.dynastyDeck.size() === 0) {
-                this.deckRanOutOfCards('dynasty');
-                this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i));
-                return true;
-            }
-            let province = this.getProvinceCardInProvince(location);
-            if (province) {
-                let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
-                if (refillFunc) {
-                    refillFunc(this, province, () => this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i)));
-                    return true;
-                }
-            }
-            
+        if (refillAmount <= 0) {
+            return true;
+        }
+
+        if(this.dynastyDeck.size() === 0) {
+            this.deckRanOutOfCards('dynasty');
+            this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount));
+            return true;
+        }
+        let province = this.getProvinceCardInProvince(location);
+        let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
+        if (refillFunc) {
+            refillFunc(this, province);
+        }
+        else {
             this.moveCard(this.dynastyDeck.first(), location);
         }
 
+        this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - 1));
         return true;
     }
     /**
