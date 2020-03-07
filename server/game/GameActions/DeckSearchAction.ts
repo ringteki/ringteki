@@ -10,6 +10,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     amount?: number;
     numCards?: number;
     reveal?: boolean;
+    faceup?: boolean;
     destination?: Locations;
     deck?: Decks;
     shuffle?: Boolean;
@@ -30,6 +31,7 @@ export class DeckSearchAction extends PlayerAction {
         deck: Decks.ConflictDeck,
         selectedCardsHandler: null,
         shuffle: true,
+        faceup: false,
         reveal: true
     };
 
@@ -181,6 +183,9 @@ export class DeckSearchAction extends PlayerAction {
 
             selectedCards.forEach(card  => {
                 event.player.moveCard(card, properties.destination);
+                if(properties.faceup) {
+                    card.facedown = false;
+                }
             });            
         }
         else
