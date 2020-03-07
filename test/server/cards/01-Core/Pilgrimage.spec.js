@@ -65,7 +65,6 @@ describe('Pilgrimage', function() {
                 it('should take effect before interrupts can trigger', function() {
                     this.player1.clickCard('togashi-mitsu-2');
                     this.player1.clickRing('water');
-                    expect(this.player1).not.toBeAbleToSelect('restored-heirloom');
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                     expect(this.getChatLogs(3)).toContain('Pilgrimage cancels the ring effect');
                 });
