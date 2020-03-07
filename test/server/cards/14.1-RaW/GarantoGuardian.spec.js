@@ -67,6 +67,22 @@ describe('Garanto Guardian', function() {
                 expect(this.player2).toBeAbleToSelectRing('fire');
                 expect(this.player2).toBeAbleToSelectRing('water');
             });
+
+            it('should let you choose the ring even if it is claimed', function() {
+                this.player1.claimRing('air');
+                this.initiateConflict({
+                    province: 'manicured-garden',
+                    ring: 'earth',
+                    type: 'military',
+                    attackers: [this.wanderer],
+                    defenders: [this.guardian]
+                });
+                this.noMoreActions();
+                this.player2.clickCard(this.guardian);
+                expect(this.player2).toBeAbleToSelectRing('air');
+                this.player2.clickRing('air');
+                expect(this.player2).toHavePrompt('Air ring');
+            });
         });
     });
 });
