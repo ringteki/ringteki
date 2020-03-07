@@ -11,7 +11,7 @@ class ParalyzingDelicacy extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
-                    effect: AbilityDsl.effects.modifyMilitarySkill(this.getFaceDownProvinceCards(context))
+                    effect: AbilityDsl.effects.modifyMilitarySkill(-this.getFaceDownProvinceCards(context))
                 }))
             },
             effect: 'give {1} -{2}{3}',

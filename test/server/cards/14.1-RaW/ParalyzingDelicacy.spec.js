@@ -62,6 +62,7 @@ describe('Paralyzing Delicacy', function() {
             this.tsuki.facedown = false;
             this.game.checkGameState(true);
 
+            const initialNerishmaSkill = this.nerishma.getMilitarySkill();
             this.player2.pass();
             this.player1.clickCard(this.paralyzingDelicacy);
 
@@ -72,6 +73,7 @@ describe('Paralyzing Delicacy', function() {
 
             this.player1.clickCard(this.nerishma);
 
+            expect(this.nerishma.getMilitarySkill()).toBe(initialNerishmaSkill - 3);
             expect(this.getChatLogs(5)).toContain('player1 plays Paralyzing Delicacy to give Daidoji Nerishma -3military');
         });
     });
