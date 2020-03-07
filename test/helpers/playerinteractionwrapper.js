@@ -411,7 +411,7 @@ class PlayerInteractionWrapper {
         }
         if(card.location !== location) {
             let oldLocation = card.location;
-            if (this.player.getDynastyCardInProvince(location)) {
+            if(this.player.getDynastyCardInProvince(location)) {
                 this.player.moveCard(this.player.getDynastyCardInProvince(location), 'dynasty deck');
             }
             this.player.moveCard(card, location);
