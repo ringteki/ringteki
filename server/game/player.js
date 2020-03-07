@@ -440,14 +440,15 @@ class Player extends GameObject {
      * @param {String} location - one of 'province 1', 'province 2', 'province 3', 'province 4'
      */
     replaceDynastyCard(location) {
-        if(this.getSourceList(location).size() > 1) {
+        let province = this.getProvinceCardInProvince(location);
+
+        if(!province || this.getSourceList(location).size() > 1) {
             return false;
         }
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            let province = this.getProvinceCardInProvince(location);
             let refillAmount = 1;
             if(province) {
                 let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
@@ -469,8 +470,16 @@ class Player extends GameObject {
                 this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i));
                 return true;
             }
+            let province = this.getProvinceCardInProvince(location);
+            if (province) {
+                let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
+                if (refillFunc) {
+                    refillFunc(this, province, () => this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i)));
+                    return true;
+                }
+            }
+            
             this.moveCard(this.dynastyDeck.first(), location);
-
         }
 
         return true;
