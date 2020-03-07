@@ -8,13 +8,13 @@ describe('Pilgrimage', function() {
                         dynastyDeck: ['akodo-toturi'],
                         dynastyDiscard: ['shintao-monastery','shintao-monastery','shintao-monastery','shintao-monastery'],
                         inPlay: ['tattooed-wanderer', 'togashi-mitsu-2'],
-                        hand: ['seeker-of-knowledge', 'fine-katana', 'charge', 'restored-heirloom']
+                        hand: ['seeker-of-knowledge', 'fine-katana', 'charge', 'restored-heirloom', 'chasing-the-sun']
                     },
                     player2: {
                         role: 'keeper-of-water',
-                        provinces: ['pilgrimage'],
+                        provinces: ['pilgrimage','entrenched-position'],
                         inPlay: [],
-                        hand: ['display-of-power',],
+                        hand: ['display-of-power'],
                         dynastyDeck: ['keeper-initiate']
                     }
                 });
@@ -75,7 +75,8 @@ describe('Pilgrimage', function() {
                 beforeEach(function() {
                     this.player1.clickCard('fine-katana');
                     this.player1.clickCard('togashi-mitsu-2');
-                    this.noMoreActions();
+                    this.player2.pass();
+                    this.player1.pass();
                 });
 
                 it('should not cancel the effects of the conflict ring', function() {
@@ -88,6 +89,31 @@ describe('Pilgrimage', function() {
                     this.player2.clickCard('display-of-power');
                     this.player1.clickPrompt('No');
                     expect(this.player2).toHavePrompt('Earth Ring');
+                });
+            });
+
+            describe('when the conflict is moved elsewhere', function() {
+                beforeEach(function() {
+                    this.player1.clickCard('chasing-the-sun');
+                    this.player1.clickCard(this.player2.findCardByName('entrenched-position'));
+                    this.player2.pass();
+                });
+
+                it('should not cancel the effects of the conflict ring', function() {
+                    this.noMoreActions();
+                    expect(this.player1).toHavePrompt('Earth Ring');
+                });
+
+                it('should not cancel conflict ring resolution due to card effects', function() {
+                    this.player1.pass();
+                    this.player2.clickCard('display-of-power');
+                    expect(this.player2).toHavePrompt('Earth Ring');
+                });
+
+                it('should not cancel other ring effects resolved by cards', function() {
+                    this.player1.clickCard('togashi-mitsu-2');
+                    this.player1.clickRing('fire');
+                    expect(this.player1).toHavePrompt('Fire Ring');
                 });
             });
         });
