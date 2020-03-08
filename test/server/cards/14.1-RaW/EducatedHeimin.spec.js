@@ -4,7 +4,6 @@ describe('Educated Heimin', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: [],
                     fate: 20,
                     hand: ['educated-heimin'],
                     dynastyDiscard: ['akodo-zentaro', 'matsu-berserker', 'doji-whisperer', 'moto-chagatai', 'samurai-of-integrity', 'akodo-toturi'],
@@ -14,6 +13,7 @@ describe('Educated Heimin', function() {
                 player2: {
                     inPlay: ['naive-student'],
                     dynastyDiscard: ['bustling-academy'],
+                    provinces: ['fertile-fields'],
                     hand: ['sabotage']
                 }
             });
@@ -33,12 +33,18 @@ describe('Educated Heimin', function() {
             this.garden = this.player1.findCardByName('manicured-garden');
             this.frog = this.player1.findCardByName('city-of-the-rich-frog');
             this.eminient = this.player1.findCardByName('kakudaira');
+            this.fields = this.player2.findCardByName('fertile-fields');
 
             this.player2.placeCardInProvince(this.academy, 'province 1');
         });
 
-        it('should be able to played on a province', function() {
-            this.player1.playAttachment(this.heimin, this.garden);
+        it('should be able to played on a province you control', function() {
+            this.player1.clickCard(this.heimin);
+            expect(this.player1).toBeAbleToSelect(this.garden);
+            expect(this.player1).toBeAbleToSelect(this.eminient);
+            expect(this.player1).toBeAbleToSelect(this.frog);
+            expect(this.player1).not.toBeAbleToSelect(this.fields);
+            this.player1.clickCard(this.garden);
             expect(this.heimin.parent).toBe(this.garden);
         });
 
@@ -57,10 +63,10 @@ describe('Educated Heimin', function() {
             this.player2.clickCard(this.academy);
             let cards = this.player1.player.getDynastyCardsInProvince(this.garden.location);
             cards.forEach(card => {
-                if (card !== this.kuwanan) {
+                if(card !== this.kuwanan) {
                     this.player1.moveCard(card, 'dynasty discard pile');
                 }
-            })
+            });
             expect(this.player1.player.getDynastyCardsInProvince(this.garden.location).length).toBe(1);
             this.player2.clickCard(this.kuwanan);
 
@@ -95,10 +101,10 @@ describe('Educated Heimin', function() {
             this.player2.clickCard(this.academy);
             let cards = this.player1.player.getDynastyCardsInProvince(this.eminient.location);
             cards.forEach(card => {
-                if (card !== this.kuwanan) {
+                if(card !== this.kuwanan) {
                     this.player1.moveCard(card, 'dynasty discard pile');
                 }
-            })
+            });
             this.player2.clickCard(this.kuwanan);
 
             expect(this.player1).toHavePrompt('Choose a card to refill the province with');
@@ -129,10 +135,10 @@ describe('Educated Heimin', function() {
             this.player2.clickCard(this.academy);
             let cards = this.player1.player.getDynastyCardsInProvince(this.frog.location);
             cards.forEach(card => {
-                if (card !== this.kuwanan) {
+                if(card !== this.kuwanan) {
                     this.player1.moveCard(card, 'dynasty discard pile');
                 }
-            })
+            });
             this.player2.clickCard(this.kuwanan);
 
             expect(this.player1).toHavePrompt('Choose a card to refill the province with');
@@ -190,10 +196,10 @@ describe('Educated Heimin', function() {
             this.player2.clickCard('sabotage');
             let cards = this.player1.player.getDynastyCardsInProvince(this.garden.location);
             cards.forEach(card => {
-                if (card !== this.kuwanan) {
+                if(card !== this.kuwanan) {
                     this.player1.moveCard(card, 'dynasty discard pile');
                 }
-            })
+            });
             this.player2.clickCard(this.kuwanan);
 
             expect(this.player1).toHavePrompt('Choose a card to refill the province with');
