@@ -14,6 +14,7 @@ describe('Governors Spy', function() {
             });
 
             this.spy = this.player1.findCardByName('governor-s-spy');
+            this.hantei = this.player2.findCardByName('hantei-xxxviii');
 
             this.whisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 1');
             this.challenger = this.player1.placeCardInProvince('doji-challenger', 'province 2');
@@ -117,7 +118,7 @@ describe('Governors Spy', function() {
             expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
 
             this.player1.clickCard(this.p2_4);
-            expect(this.getChatLogs(3)).toContain('player1 places a card');
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
 
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Liar');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
@@ -127,7 +128,7 @@ describe('Governors Spy', function() {
             expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
 
             this.player1.clickCard(this.p2_1);
-            expect(this.getChatLogs(3)).toContain('player1 places a card');
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
 
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Manipulator');
             expect(this.player1).not.toBeAbleToSelect(this.p2_1);
@@ -137,7 +138,7 @@ describe('Governors Spy', function() {
             expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
 
             this.player1.clickCard(this.p2_3);
-            expect(this.getChatLogs(3)).toContain('player1 places a card');
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
 
             expect(this.player1).toHavePrompt('Choose a province for Blackmail Artist');
             expect(this.player1).not.toBeAbleToSelect(this.p2_1);
@@ -147,13 +148,198 @@ describe('Governors Spy', function() {
             expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
 
             this.player1.clickCard(this.p2_2);
-            expect(this.getChatLogs(3)).toContain('player1 places a card');
-            expect(this.getChatLogs(3)).toContain('player1 had finished placing cards');
+            expect(this.getChatLogs(4)).toContain('player1 places a card');
+            expect(this.getChatLogs(3)).toContain('player1 has finished placing cards');
 
             expect(this.alibi.location).toBe('province 4');
             expect(this.liar.location).toBe('province 1');
             expect(this.manipulator.location).toBe('province 3');
             expect(this.blackmail.location).toBe('province 2');
+        });
+
+        it('should prompt you to put each card into a province, letting you double up if possible', function() {
+            this.noMoreActions();
+
+            this.player2.moveCard(this.shoju, 'province 1');
+            this.player2.moveCard(this.asami, 'province 1');
+
+            this.initiateConflict({
+                attackers: [this.spy],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.spy);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player2');
+
+            expect(this.player1).toHavePrompt('Choose a province for Alibi Artist');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_4);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Bayushi Liar');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_1);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Bayushi Manipulator');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_3);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Bayushi Shoju');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_Stronghold);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Blackmail Artist');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_1);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Yogo Asami');
+            expect(this.player1).not.toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).not.toBeAbleToSelect(this.p2_3);
+            expect(this.player1).not.toBeAbleToSelect(this.p2_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_2);
+            expect(this.getChatLogs(4)).toContain('player1 places a card');
+            expect(this.getChatLogs(3)).toContain('player1 has finished placing cards');
+
+            expect(this.alibi.location).toBe('province 4');
+            expect(this.liar.location).toBe('province 1');
+            expect(this.manipulator.location).toBe('province 3');
+            expect(this.shoju.location).toBe('stronghold province');
+            expect(this.blackmail.location).toBe('province 1');
+            expect(this.asami.location).toBe('province 2');
+        });
+
+        it('should work with both players', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.spy],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.spy);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player1');
+
+            expect(this.player1).toHavePrompt('Choose a province for Daidoji Uji');
+            expect(this.player1).toBeAbleToSelect(this.p1_1);
+            expect(this.player1).toBeAbleToSelect(this.p1_2);
+            expect(this.player1).toBeAbleToSelect(this.p1_3);
+            expect(this.player1).toBeAbleToSelect(this.p1_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_Stronghold);
+
+            this.player1.clickCard(this.p1_4);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Doji Challenger');
+            expect(this.player1).toBeAbleToSelect(this.p1_1);
+            expect(this.player1).toBeAbleToSelect(this.p1_2);
+            expect(this.player1).toBeAbleToSelect(this.p1_3);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_Stronghold);
+
+            this.player1.clickCard(this.p1_1);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Doji Kuwanan');
+            expect(this.player1).not.toBeAbleToSelect(this.p1_1);
+            expect(this.player1).toBeAbleToSelect(this.p1_2);
+            expect(this.player1).toBeAbleToSelect(this.p1_3);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_Stronghold);
+
+            this.player1.clickCard(this.p1_3);
+            expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Choose a province for Doji Whisperer');
+            expect(this.player1).not.toBeAbleToSelect(this.p1_1);
+            expect(this.player1).toBeAbleToSelect(this.p1_2);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_3);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_Stronghold);
+
+            this.player1.clickCard(this.p1_2);
+            expect(this.getChatLogs(4)).toContain('player1 places a card');
+            expect(this.getChatLogs(3)).toContain('player1 has finished placing cards');
+
+            expect(this.uji.location).toBe('province 4');
+            expect(this.challenger.location).toBe('province 1');
+            expect(this.kuwanan.location).toBe('province 3');
+            expect(this.whisperer.location).toBe('province 2');
+        });
+
+        it('should work with Hantei', function() {
+            this.player2.moveCard(this.hantei, 'play area');
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.spy],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.spy);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player2');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.hantei);
+            this.player2.clickCard(this.hantei);
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('player1');
+            expect(this.player2).toHavePromptButton('player2');
+            this.player2.clickPrompt('player1');
+
+            expect(this.whisperer.facedown).toBe(true);
+            expect(this.challenger.facedown).toBe(true);
+            expect(this.kuwanan.facedown).toBe(true);
+            expect(this.uji.facedown).toBe(true);
+            expect(this.player1).toHavePrompt('Choose a province for Daidoji Uji');
         });
     });
 });
