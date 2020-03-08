@@ -114,7 +114,7 @@ class ConflictFlow extends BaseStepWithPipeline {
 
     payAttackerCosts() {
         const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
-        if(totalFateCost > 0) {
+        if(!this.conflict.conflictPassed && totalFateCost > 0) {
             this.game.addMessage('{0} pays {1} fate to declare his attackers', this.conflict.attackingPlayer, totalFateCost);
             const costEvents = [];
             Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));

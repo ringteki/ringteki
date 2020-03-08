@@ -65,6 +65,19 @@ describe('Caravan Guard', function() {
                 expect(this.player2).toHavePrompt('Choose Defenders');
                 expect(this.player1.fate).toBe(5);
             });
+
+            it('should not deduct fate when Caravan Guard is declared and then the attack is cancelled', function() {
+                this.player1.fate = 1;
+                this.noMoreActions();
+                this.player1.clickCard(this.caravanGuard1);
+                this.player1.clickCard(this.doomedShugenja);
+                this.player1.clickRing('fire');
+                this.player1.clickCard(this.caravanGuard1);
+                expect(this.caravanGuard1.inConflict).toBe(true);
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+                expect(this.player1.fate).toBe(1);
+            });
         });
     });
 });
