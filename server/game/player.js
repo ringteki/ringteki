@@ -440,14 +440,15 @@ class Player extends GameObject {
      * @param {String} location - one of 'province 1', 'province 2', 'province 3', 'province 4'
      */
     replaceDynastyCard(location) {
-        if(this.getSourceList(location).size() > 1) {
+        let province = this.getProvinceCardInProvince(location);
+
+        if(!province || this.getSourceList(location).size() > 1) {
             return false;
         }
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            let province = this.getProvinceCardInProvince(location);
             let refillAmount = 1;
             if(province) {
                 let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
@@ -462,17 +463,24 @@ class Player extends GameObject {
     }
 
     refillProvince(location, refillAmount) {
-        let i = 0;
-        for(i = 0; i < refillAmount; i++) {
-            if(this.dynastyDeck.size() === 0) {
-                this.deckRanOutOfCards('dynasty');
-                this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - i));
-                return true;
-            }
-            this.moveCard(this.dynastyDeck.first(), location);
-
+        if(refillAmount <= 0) {
+            return true;
         }
 
+        if(this.dynastyDeck.size() === 0) {
+            this.deckRanOutOfCards('dynasty');
+            this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount));
+            return true;
+        }
+        let province = this.getProvinceCardInProvince(location);
+        let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
+        if(refillFunc) {
+            refillFunc(this, province);
+        } else {
+            this.moveCard(this.dynastyDeck.first(), location);
+        }
+
+        this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - 1));
         return true;
     }
     /**

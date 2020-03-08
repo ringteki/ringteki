@@ -52,6 +52,7 @@ export enum EffectNames {
     ChangeType = 'changeType',
     CopyCharacter = 'copyCharacter',
     CustomEffect = 'customEffect',
+    CustomProvinceRefillEffect = 'customProvinceRefillEffect',
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
