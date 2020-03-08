@@ -8,8 +8,8 @@ export interface FlipDynastyProperties extends CardActionProperties {
 
 export class FlipDynastyAction extends CardGameAction {
     name = 'reveal';
-    eventName = EventNames.OnDynastyCardTurnedFaceup;
-    targetType = [CardTypes.Character, CardTypes.Holding];
+    eventName = EventNames.OnCardRevealed;
+    targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Event];
     
     getEffectMessage(context): [string, any[]] {
         let properties = this.getProperties(context);

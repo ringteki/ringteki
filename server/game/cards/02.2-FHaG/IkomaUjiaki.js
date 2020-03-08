@@ -9,18 +9,20 @@ class IkomaUjiaki extends DrawCard {
             title: 'Put 2 characters into play',
             cost: ability.costs.discardImperialFavor(),
             condition: context => context.source.isParticipating() && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].some(location => {
-                let card = context.player.getDynastyCardInProvince(location);
-                return card && card.facedown;
+                let cards = context.player.getDynastyCardsInProvince(location);
+                return cards.some(card => card.facedown);
             }),
             effect: 'to reveal all their facedown dynasty cards',
             handler: context => {
                 let revealedCards = [];
                 _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour], location => {
-                    let card = context.player.getDynastyCardInProvince(location);
-                    if(card && card.facedown) {
-                        revealedCards.push(card);
-                        card.facedown = false;
-                    }
+                    let cards = context.player.getDynastyCardsInProvince(location);
+                    cards.forEach(card => {
+                        if(card && card.facedown) {
+                            revealedCards.push(card);
+                            card.facedown = false;
+                        }
+                    });
                 });
                 if(revealedCards.length > 0) {
                     this.game.promptForSelect(context.player, {

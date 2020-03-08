@@ -2,10 +2,12 @@ import { CardGameAction, CardActionProperties} from './CardGameAction';
 import { CardTypes, Locations, EffectNames } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
+import DrawCard = require('../drawcard');
 
 export interface MoveCardProperties extends CardActionProperties {
     destination?: Locations;
     switch?: boolean;
+    switchTarget?: DrawCard;
     shuffle?: boolean;
     faceup?: boolean;
     bottom?: boolean;
@@ -19,6 +21,7 @@ export class MoveCardAction extends CardGameAction {
     defaultProperties: MoveCardProperties = {
         destination: null,
         switch: false,
+        switchTarget: null,
         shuffle: false,
         faceup: false,
         bottom: false,
@@ -59,8 +62,8 @@ export class MoveCardAction extends CardGameAction {
         let card = event.card;
         event.cardStateWhenMoved = card.createSnapshot();
         let properties = this.getProperties(context, additionalProperties) as MoveCardProperties;        
-        if(properties.switch) {
-            let otherCard = card.controller.getDynastyCardInProvince(properties.destination);
+        if(properties.switch && properties.switchTarget) {
+            let otherCard = properties.switchTarget;
             card.owner.moveCard(otherCard, card.location);
         } else {
             this.checkForRefillProvince(card, event, additionalProperties);

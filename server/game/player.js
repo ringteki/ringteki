@@ -237,7 +237,11 @@ class Player extends GameObject {
      */
     getDynastyCardsInProvince(location) {
         let province = this.getSourceList(location);
-        return province.filter(card => card.isDynasty);
+        let cards = province.filter(card => card.isDynasty);
+        if(!Array.isArray(cards)) {
+            cards = [cards];
+        }
+        return cards;
     }
 
     /**
@@ -436,18 +440,49 @@ class Player extends GameObject {
      * @param {String} location - one of 'province 1', 'province 2', 'province 3', 'province 4'
      */
     replaceDynastyCard(location) {
-        if(this.getSourceList(location).size() > 1) {
+        let province = this.getProvinceCardInProvince(location);
+
+        if(!province || this.getSourceList(location).size() > 1) {
             return false;
         }
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
             this.game.queueSimpleStep(() => this.replaceDynastyCard(location));
         } else {
-            this.moveCard(this.dynastyDeck.first(), location);
+            let refillAmount = 1;
+            if(province) {
+                let amount = province.mostRecentEffect(EffectNames.RefillProvinceTo);
+                if(amount) {
+                    refillAmount = amount;
+                }
+            }
+
+            this.refillProvince(location, refillAmount);
         }
         return true;
     }
 
+    refillProvince(location, refillAmount) {
+        if(refillAmount <= 0) {
+            return true;
+        }
+
+        if(this.dynastyDeck.size() === 0) {
+            this.deckRanOutOfCards('dynasty');
+            this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount));
+            return true;
+        }
+        let province = this.getProvinceCardInProvince(location);
+        let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
+        if(refillFunc) {
+            refillFunc(this, province);
+        } else {
+            this.moveCard(this.dynastyDeck.first(), location);
+        }
+
+        this.game.queueSimpleStep(() => this.refillProvince(location, refillAmount - 1));
+        return true;
+    }
     /**
      * Shuffles the conflict deck, emitting an event and displaying a message in chat
      */
@@ -917,7 +952,7 @@ class Player extends GameObject {
             holding: dynastyCardLocations,
             conflictCharacter: [...conflictCardLocations, Locations.PlayArea],
             dynastyCharacter: [...dynastyCardLocations, Locations.PlayArea],
-            event: [...conflictCardLocations, Locations.BeingPlayed],
+            event: _.uniq([...conflictCardLocations, ...dynastyCardLocations, Locations.BeingPlayed]),
             attachment: [...conflictCardLocations, Locations.PlayArea]
         };
 

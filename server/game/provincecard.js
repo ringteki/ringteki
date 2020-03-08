@@ -3,6 +3,7 @@ const BaseCard = require('./basecard');
 const _ = require('underscore');
 
 const { Locations, EffectNames } = require('./Constants');
+const AbilityDsl = require('./abilitydsl.js');
 
 class ProvinceCard extends BaseCard {
     constructor(owner, cardData) {
@@ -11,6 +12,12 @@ class ProvinceCard extends BaseCard {
         this.isProvince = true;
         this.isBroken = false;
         this.menu = _([{ command: 'break', text: 'Break/unbreak this province' }, { command: 'hide', text: 'Flip face down' }]);
+
+        this.persistentEffect({
+            condition: context => context.source.hasEminent(),
+            location: Locations.Any,
+            effect: AbilityDsl.effects.cardCannot('turnFacedown')
+        });
     }
 
     get strength() {
@@ -65,7 +72,9 @@ class ProvinceCard extends BaseCard {
 
     canBeAttacked() {
         return !this.isBroken && !this.anyEffect(EffectNames.CannotBeAttacked) &&
-            (this.location !== Locations.StrongholdProvince || this.controller.getProvinces(card => card.isBroken).length > 2);
+            (this.location !== Locations.StrongholdProvince ||
+            this.controller.getProvinces(card => card.isBroken).length > 2 ||
+            this.controller.anyEffect(EffectNames.StrongholdCanBeAttacked));
     }
 
     canDeclare(type, ring) { // eslint-disable-line no-unused-vars
@@ -83,32 +92,34 @@ class ProvinceCard extends BaseCard {
             if(this.location === Locations.StrongholdProvince) {
                 this.game.recordWinner(this.controller.opponent, 'conquest');
             } else {
-                let dynastyCard = this.controller.getDynastyCardInProvince(this.location);
-                if(dynastyCard) {
-                    let promptTitle = 'Do you wish to discard ' + (dynastyCard.facedown ? 'the facedown card' : dynastyCard.name) + '?';
-                    this.game.promptWithHandlerMenu(this.controller.opponent, {
-                        activePromptTitle: promptTitle,
-                        source: 'Break ' + this.name,
-                        choices: ['Yes', 'No'],
-                        handlers: [
-                            () => {
-                                this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard);
-                                this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
-                            },
-                            () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard)
-                        ]
-                    });
-                }
+                let dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
+                dynastyCards.forEach(dynastyCard => {
+                    if(dynastyCard) {
+                        let promptTitle = 'Do you wish to discard ' + (dynastyCard.facedown ? 'the facedown card' : dynastyCard.name) + '?';
+                        this.game.promptWithHandlerMenu(this.controller.opponent, {
+                            activePromptTitle: promptTitle,
+                            source: 'Break ' + this.name,
+                            choices: ['Yes', 'No'],
+                            handlers: [
+                                () => {
+                                    this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard);
+                                    this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
+                                },
+                                () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard)
+                            ]
+                        });
+                    }
+                });
             }
         }
     }
 
     cannotBeStrongholdProvince() {
-        return false;
+        return this.hasEminent();
     }
 
     startsGameFaceup() {
-        return false;
+        return this.hasEminent();
     }
 
     hideWhenFacedown() {
@@ -133,8 +144,13 @@ class ProvinceCard extends BaseCard {
         }
 
         return (
-            !this.isBroken
+            true//!this.isBroken
         );
+    }
+
+    hasEminent() {
+        //Facedown provinces are out of play and their effects don't evaluate, so we check for the printed keyword
+        return this.hasKeyword('eminent') || (!this.isBlank() && this.hasPrintedKeyword('eminent'));
     }
 }
 

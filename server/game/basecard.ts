@@ -27,7 +27,9 @@ const ValidKeywords = [
     'sincerity',
     'courtesy',
     'pride',
-    'covert'
+    'covert',
+    'rally',
+    'eminent'
 ];
 
 class BaseCard extends EffectSource {
@@ -71,6 +73,7 @@ class BaseCard extends EffectSource {
         this.childCards = [];
 
         this.setupCardAbilities(AbilityDsl);
+        this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
         this.applyAttachmentBonus();
     }
 
@@ -231,6 +234,16 @@ class BaseCard extends EffectSource {
 
     composure(properties): void {
         this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure() }, properties));
+    }
+
+    hasKeyword(keyword) {
+        let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
+        let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
+        return addKeywordEffects.length > loseKeywordEffects.length;
+    }
+
+    hasPrintedKeyword(keyword) {
+        return this.printedKeywords.includes(keyword.toLowerCase());
     }
 
     hasTrait(trait: string): boolean {

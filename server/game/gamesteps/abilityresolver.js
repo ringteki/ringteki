@@ -207,7 +207,11 @@ class AbilityResolver extends BaseStepWithPipeline {
 
     moveEventCardToDiscard() {
         if(this.context.source.location === Locations.BeingPlayed) {
-            this.context.player.moveCard(this.context.source, Locations.ConflictDiscardPile);
+            if(this.context.source.isDynasty) {
+                this.context.player.moveCard(this.context.source, Locations.DynastyDiscardPile);
+            } else {
+                this.context.player.moveCard(this.context.source, Locations.ConflictDiscardPile);
+            }
         }
     }
 
