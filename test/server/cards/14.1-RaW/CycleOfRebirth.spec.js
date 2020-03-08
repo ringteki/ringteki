@@ -65,8 +65,7 @@ describe('Cycle of Rebirth', function() {
                 expect(this.player1).toHavePrompt('Cycle of Rebirth');
                 this.player1.clickCard(this.zentaro);
 
-                expect(this.zentaro.location).toBe('dynasty deck');
-                expect(this.cycleOfRebirth.location).toBe('dynasty deck');
+                expect(this.getChatLogs(3)).toContain('player1 plays Cycle of Rebirth to shuffle Akodo Zentarō and Cycle of Rebirth into player1\'s dynasty deck');
 
                 expect(this.player1.player.getDynastyCardsInProvince(zentaroLocation).every(card => card.facedown === false)).toBe(true);
                 expect(this.player1.player.getDynastyCardsInProvince(rebirthLocation).every(card => card.facedown === false)).toBe(true);
