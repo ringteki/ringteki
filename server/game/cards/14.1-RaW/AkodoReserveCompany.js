@@ -10,7 +10,7 @@ class AkodoReserveCompany extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.controller === context.player,
-                gameAction: AbiltiyDsl.actions.multiple([
+                gameAction: AbiltiyDsl.actions.joint([
                     AbiltiyDsl.actions.moveToConflict(context => ({ target: context.source })),
                     AbiltiyDsl.actions.sendHome()
                 ])

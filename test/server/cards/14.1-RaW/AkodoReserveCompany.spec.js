@@ -9,9 +9,9 @@ describe('Akodo Reserve Company', function() {
                         hand: ['total-warfare']
                     },
                     player2: {
-                        inPlay: ['venerable-historian'],
+                        inPlay: ['venerable-historian', 'solemn-scholar'],
                         provinces: ['fertile-fields'],
-                        hand: ['let-go']
+                        hand: ['let-go', 'grasp-of-earth']
                     }
                 });
 
@@ -22,6 +22,10 @@ describe('Akodo Reserve Company', function() {
                 this.player1.playAttachment(this.totalWarfare, this.fields);
 
                 this.historian = this.player2.findCardByName('venerable-historian');
+                this.scholar = this.player2.findCardByName('solemn-scholar');
+                this.graspOfEarth = this.player2.findCardByName('grasp-of-earth');
+
+                this.player2.playAttachment(this.graspOfEarth, this.scholar);
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -54,6 +58,16 @@ describe('Akodo Reserve Company', function() {
                 this.player1.clickCard(this.shono);
                 expect(this.shono.isParticipating()).toBe(false);
                 expect(this.company.isParticipating()).toBe(true);
+            });
+
+            it('should not move the chosen character home if Akodo Reserve company can\'t move in', function() {
+                this.player2.clickCard(this.graspOfEarth);
+
+                this.player1.clickCard(this.company);
+                this.player1.clickCard(this.shono);
+                expect(this.shono.isParticipating()).toBe(true);
+                expect(this.company.isParticipating()).toBe(false);
+                expect(this.player1).toHavePrompt('conflict action window');
             });
         });
     });
