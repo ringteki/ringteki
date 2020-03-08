@@ -5,7 +5,7 @@ describe('Cycle of Rebirth', function() {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
-                        dynastyDiscard: ['akodo-zentaro', 'matsu-berserker', 'doji-whisperer', 'cycle-of-rebirth', 'akodo-toturi', 'matsu-tsuko'],
+                        dynastyDiscard: ['akodo-zentaro', 'matsu-berserker', 'doji-whisperer', 'cycle-of-rebirth', 'akodo-toturi', 'matsu-tsuko', 'shinjo-shono'],
                         provinces: ['ancestral-lands', 'shameful-display', 'midnight-revels']
                     },
                     player2: {
@@ -54,13 +54,10 @@ describe('Cycle of Rebirth', function() {
                 expect(this.player1).toHavePrompt('Cycle of Rebirth');
                 this.player1.clickCard(this.zentaro);
 
-                expect(this.zentaro.location).toBe('dynasty deck');
-                expect(this.cycleOfRebirth.location).toBe('dynasty deck');
+                expect(this.getChatLogs(3)).toContain('player1 plays Cycle of Rebirth to shuffle Akodo Zentarō and Cycle of Rebirth into player1\'s dynasty deck');
             });
 
             it('should refill both positions', function() {
-                this.akodoToturi = this.player1.moveCard('akodo-toturi', 'dynasty deck');
-                this.matsuTsuko = this.player1.moveCard('matsu-tsuko', 'dynasty deck');
                 this.player1.clickCard(this.cycleOfRebirth);
 
                 const zentaroLocation = this.zentaro.location;
@@ -71,8 +68,8 @@ describe('Cycle of Rebirth', function() {
                 expect(this.zentaro.location).toBe('dynasty deck');
                 expect(this.cycleOfRebirth.location).toBe('dynasty deck');
 
-                expect(this.akodoToturi.location).toBe(zentaroLocation);
-                expect(this.matsuTsuko.location).toBe(rebirthLocation);
+                expect(this.player1.player.getDynastyCardsInProvince(zentaroLocation).every(card => card.facedown === false)).toBe(true);
+                expect(this.player1.player.getDynastyCardsInProvince(rebirthLocation).every(card => card.facedown === false)).toBe(true);
             });
         });
     });
