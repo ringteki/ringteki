@@ -75,7 +75,7 @@ describe('Expert Interpreter', function() {
             expect(this.player2).toHavePromptButton('Done');
         });
 
-        it('should display correct message (opponent chooses a ring)', function() {
+        it('should transfer honor and display correct message (opponent chooses a ring)', function() {
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
             this.noMoreActions();
@@ -83,17 +83,20 @@ describe('Expert Interpreter', function() {
             this.player1.clickRing('air');
             this.player2.clickRing('fire');
             expect(this.getChatLogs(3)).toContain('player1 uses Expert Interpreter to prevent characters from entering play while the Air Ring is contested.  player2 gives player1 1 honor to also apply this effect to the Fire Ring');
-
             expect(this.player1.honor).toBe(p1Honor + 1);
             expect(this.player2.honor).toBe(p2Honor - 1);
         });
 
-        it('should display correct message (opponent does not choose a ring)', function() {
+        it('should NOT transfer honor and display correct message (opponent does not choose a ring)', function() {
+            let p1Honor = this.player1.honor;
+            let p2Honor = this.player2.honor;
             this.noMoreActions();
             this.player1.clickCard(this.interpreter);
             this.player1.clickRing('air');
             this.player2.clickPrompt('Done');
             expect(this.getChatLogs(3)).toContain('player1 uses Expert Interpreter to prevent characters from entering play while the Air Ring is contested');
+            expect(this.player1.honor).toBe(p1Honor);
+            expect(this.player2.honor).toBe(p2Honor);
         });
 
         describe('Should stop characters from entering play during conflicts with the selected ring - ', function() {
