@@ -463,7 +463,7 @@ class Player extends GameObject {
     }
 
     refillProvince(location, refillAmount) {
-        if (refillAmount <= 0) {
+        if(refillAmount <= 0) {
             return true;
         }
 
@@ -474,10 +474,9 @@ class Player extends GameObject {
         }
         let province = this.getProvinceCardInProvince(location);
         let refillFunc = province.mostRecentEffect(EffectNames.CustomProvinceRefillEffect);
-        if (refillFunc) {
+        if(refillFunc) {
             refillFunc(this, province);
-        }
-        else {
+        } else {
             this.moveCard(this.dynastyDeck.first(), location);
         }
 
