@@ -55,6 +55,7 @@ describe('Cycle of Rebirth', function() {
                 this.player1.clickCard(this.zentaro);
 
                 expect(this.getChatLogs(3)).toContain('player1 plays Cycle of Rebirth to shuffle Akodo Zentarō and Cycle of Rebirth into player1\'s dynasty deck');
+                expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
             });
 
             it('should refill both positions', function() {
@@ -69,6 +70,7 @@ describe('Cycle of Rebirth', function() {
 
                 expect(this.player1.player.getDynastyCardsInProvince(zentaroLocation).every(card => card.facedown === false)).toBe(true);
                 expect(this.player1.player.getDynastyCardsInProvince(rebirthLocation).every(card => card.facedown === false)).toBe(true);
+                expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
             });
         });
     });
