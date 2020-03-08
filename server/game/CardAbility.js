@@ -227,7 +227,7 @@ class CardAbility extends ThenAbility {
     }
 
     isCardPlayed() {
-        return this.card.getType() === CardTypes.Event;
+        return this.card.getType() === CardTypes.Event && !this.card.isDynasty;
     }
 
     isTriggeredAbility() {
