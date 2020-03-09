@@ -55,7 +55,7 @@ describe('Finger of Jade', function() {
             });
 
             it('should prompt the player for their own abilities when the correct setting is activated', function() {
-                this.player2.player.optionSettings.cancelOwnAbilities = true;
+                this.player2.player.keywordSettings.cancelOwnAbilities = true;
                 this.fingerOfJade = this.player2.playAttachment('finger-of-jade', 'doomed-shugenja');
                 this.noMoreActions();
                 this.initiateConflict({

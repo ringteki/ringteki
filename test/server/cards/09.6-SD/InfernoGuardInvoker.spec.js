@@ -15,7 +15,7 @@ describe('Inferno Guard Invoker', function() {
                     }
                 });
 
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
 
                 this.infernoGuardInvoker = this.player1.findCardByName('inferno-guard-invoker');
                 this.sereneWarrior = this.player1.findCardByName('serene-warrior');

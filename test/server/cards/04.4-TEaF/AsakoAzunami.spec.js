@@ -104,7 +104,7 @@ describe('Asako Azunami', function() {
             });
 
             it('should work when multiple rings are being resolved', function() {
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
                 this.initiateConflict({
                     ring: 'water',
                     attackers: ['asako-azunami', 'isawa-kaede'],

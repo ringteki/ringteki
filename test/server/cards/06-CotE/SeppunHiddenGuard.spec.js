@@ -20,13 +20,13 @@ describe('Seppun Hidden Guard', function() {
                     attackers: ['kudaka', 'seppun-hidden-guard', 'isawa-uona', 'adept-of-the-waves'],
                     defenders: ['mirumoto-raitsugu']
                 });
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
                 this.mirumotoRaitsugu = this.player2.findCardByName('mirumoto-raitsugu');
                 this.kudaka = this.player1.findCardByName('kudaka');
                 this.seppunHiddenGuard = this.player1.findCardByName('seppun-hidden-guard');
                 this.isawaUona = this.player1.findCardByName('isawa-uona');
                 this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
-                this.player1.player.optionSettings.cancelOwnAbilities = true;
+                this.player1.player.keywordSettings.cancelOwnAbilities = true;
             });
 
             it('it should be able to cancel Raitsugu\'s duel', function() {

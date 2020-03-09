@@ -40,7 +40,7 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
         if(this.choices.length === 0) {
             return true;
         }
-        if(this.choices.length === 1 || !this.currentPlayer.optionSettings.orderForcedAbilities) {
+        if(this.choices.length === 1 || !this.currentPlayer.keywordSettings.orderForcedAbilities) {
             this.resolveAbility(this.choices[0]);
             return false;
         }

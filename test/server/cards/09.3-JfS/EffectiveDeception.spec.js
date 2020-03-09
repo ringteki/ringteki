@@ -15,7 +15,7 @@ describe('Effective Deception', function() {
                     }
                 });
 
-                this.player2.player.optionSettings.cancelOwnAbilities = true;
+                this.player2.player.keywordSettings.cancelOwnAbilities = true;
 
                 this.brashSamurai = this.player1.findCardByName('brash-samurai');
                 this.aPerfectCut = this.player1.findCardByName('a-perfect-cut');

@@ -51,9 +51,9 @@ describe('the DrawCard', function() {
             this.game = new Game({}, { gameService: this.gameService });
             this.spy = spyOn(this.game, 'checkWinCondition');
 
-            this.player = new Player(1, { username: 'foo', settings: { optionSettings: {} } }, false, this.game);
+            this.player = new Player(1, { username: 'foo', settings: { keywordSettings: {} } }, false, this.game);
             this.player.noTimer = true;
-            this.player2 = new Player(2, { username: 'bar', settings: { optionSettings: {} } }, false, this.game);
+            this.player2 = new Player(2, { username: 'bar', settings: { keywordSettings: {} } }, false, this.game);
 
             this.game.playersAndSpectators['foo'] = this.player;
             this.game.playersAndSpectators['bar'] = this.player2;

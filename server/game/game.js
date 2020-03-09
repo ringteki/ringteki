@@ -751,13 +751,13 @@ class Game extends EventEmitter {
      * @param {Boolean} toggle - the new setting of the toggle
      * @returns {undefined}
      */
-    toggleOptionSetting(playerName, settingName, toggle) {
+    toggleKeywordSetting(playerName, settingName, toggle) {
         var player = this.getPlayerByName(playerName);
         if(!player) {
             return;
         }
 
-        player.optionSettings[settingName] = toggle;
+        player.keywordSettings[settingName] = toggle;
     }
 
     toggleManualMode(playerName) {

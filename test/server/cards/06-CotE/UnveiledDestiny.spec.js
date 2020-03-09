@@ -24,7 +24,7 @@ describe('Unveiled Destiny', function() {
                     attackers: ['shrine-maiden'],
                     defenders: ['shinjo-outrider']
                 });
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
                 this.shrineMaiden = this.player1.findCardByName('shrine-maiden');
                 this.shrineMaiden.modifyFate(1);
             });

@@ -22,7 +22,7 @@ describe('Isawa Kaede', function() {
                     attackers: ['isawa-kaede'],
                     defenders: ['shinjo-outrider']
                 });
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
                 this.shibaTsukune = this.player1.findCardByName('shiba-tsukune');
                 this.shibaTsukune.modifyFate(1);
                 this.isawaKaede = this.player1.findCardByName('isawa-kaede');

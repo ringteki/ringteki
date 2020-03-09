@@ -86,7 +86,7 @@ class Player extends GameObject {
         };
         this.timerSettings = user.settings.timerSettings || {};
         this.timerSettings.windowTimer = user.settings.windowTimer;
-        this.optionSettings = user.settings.optionSettings;
+        this.keywordSettings = user.settings.keywordSettings;
         this.resetTimerAtEndOfRound = false;
 
         this.promptState = new PlayerPromptState(this);

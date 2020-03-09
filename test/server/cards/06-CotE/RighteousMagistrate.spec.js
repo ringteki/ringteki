@@ -22,7 +22,7 @@ describe('Righteous magistrate', function() {
                     attackers: ['shinjo-outrider', 'shiba-tsukune'],
                     defenders: ['righteous-magistrate', 'shrine-maiden']
                 });
-                this.player1.player.optionSettings.orderForcedAbilities = true;
+                this.player1.player.keywordSettings.orderForcedAbilities = true;
                 this.righteousMagistrate = this.player2.findCardByName('righteous-magistrate');
                 this.shrineMaiden = this.player2.findCardByName('shrine-maiden');
                 this.shibaTsukune = this.player1.findCardByName('shiba-tsukune');

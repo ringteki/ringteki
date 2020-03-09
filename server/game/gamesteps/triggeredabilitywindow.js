@@ -62,7 +62,7 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
             return true;
         }
         // remove any choices which involve the current player canceling their own abilities
-        if(this.abilityType === AbilityTypes.WouldInterrupt && !this.currentPlayer.optionSettings.cancelOwnAbilities) {
+        if(this.abilityType === AbilityTypes.WouldInterrupt && !this.currentPlayer.keywordSettings.cancelOwnAbilities) {
             this.choices = this.choices.filter(context => !(
                 context.player === this.currentPlayer &&
                 context.event.name === EventNames.OnInitiateAbilityEffects &&

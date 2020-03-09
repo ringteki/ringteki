@@ -19,7 +19,7 @@ class SimultaneousEffectWindow extends ForcedTriggeredAbilityWindow {
         if(choices.length === 0) {
             return true;
         }
-        if(choices.length === 1 || !this.currentPlayer.optionSettings.orderForcedAbilities) {
+        if(choices.length === 1 || !this.currentPlayer.keywordSettings.orderForcedAbilities) {
             this.resolveEffect(choices[0]);
         } else {
             this.promptBetweenChoices(choices);
