@@ -66,6 +66,7 @@ class Player extends GameObject {
 
         this.clock = ClockSelector.for(this, clockdetails);
 
+        this.limitedPlayed = 0;
         this.deck = {};
         this.costReducers = [];
         this.playableLocations = [
@@ -588,7 +589,6 @@ class Player extends GameObject {
         this.fate = 0;
         this.honor = 0;
         this.readyToStart = false;
-        this.limitedPlayed = 0;
         this.maxLimited = 1;
         this.firstPlayer = false;
     }
@@ -788,7 +788,6 @@ class Player extends GameObject {
         });
 
         this.passedDynasty = false;
-        this.limitedPlayed = 0;
         this.conflictOpportunities.military = 1;
         this.conflictOpportunities.political = 1;
         this.conflictOpportunities.total = 2;

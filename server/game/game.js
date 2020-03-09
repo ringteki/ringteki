@@ -819,6 +819,8 @@ class Game extends EventEmitter {
      * @returns {undefined}
      */
     beginRound() {
+        this.resetLimitedForPlayer();
+        this.roundNumber++;
         this.raiseEvent(EventNames.OnBeginRound);
         this.queueStep(new DynastyPhase(this));
         this.queueStep(new DrawPhase(this));
@@ -831,6 +833,13 @@ class Game extends EventEmitter {
 
     roundEnded() {
         this.raiseEvent(EventNames.OnRoundEnded);
+    }
+
+    resetLimitedForPlayer() {
+        var players = this.getPlayers();
+        players.forEach(player => {
+            player.limitedPlayed = 0;
+        });
     }
 
     /*
