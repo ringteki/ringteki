@@ -10,11 +10,11 @@ const merchantOfCuriositiesCost = function () {
         resolve: function (context, result) {
             let honorAvailable = true;
             let cardAvailable = true;
-            if(context.player.opponent && (!context.game.actions.loseHonor().canAffect(context.player.opponent, context) || !context.game.actions.gainHonor().canAffect(context.player, context))) {
+            if(!context.player.opponent || !context.game.actions.loseHonor().canAffect(context.player.opponent, context) || !context.game.actions.gainHonor().canAffect(context.player, context)) {
                 honorAvailable = false;
             }
 
-            if(context.player.opponent && (!context.game.actions.chosenDiscard().canAffect(context.player.opponent, context))) {
+            if(!context.player.opponent || !context.game.actions.chosenDiscard().canAffect(context.player.opponent, context)) {
                 cardAvailable = false;
             }
 
