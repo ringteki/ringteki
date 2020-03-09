@@ -31,7 +31,9 @@ class DynastyPhase extends Phase {
     }
 
     createPhase() {
-        this.game.roundNumber++;
+        if(this.gainFate) {
+            this.game.roundNumber++;
+        }
         this.game.conflictRecord = [];
         super.createPhase();
     }
