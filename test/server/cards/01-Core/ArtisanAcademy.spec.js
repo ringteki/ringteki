@@ -26,7 +26,7 @@ describe('Artisan Academy', function() {
 
             it('should add a playable location', function() {
                 this.player1.clickCard(this.artisanAcademy);
-                expect(this.player1.player.playableLocations.length).toBe(6);
+                expect(this.player1.player.playableLocations.length).toBe(7); //stronghold became a playable location by default
             });
 
             it('should make the top card playable if it\'s an attachment', function() {
