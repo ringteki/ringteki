@@ -127,6 +127,8 @@ describe('Rally Keyword', function() {
             expect(this.season.facedown).toBe(false);
             expect(this.player1.player.getDynastyCardsInProvince('province 1').length).toBe(2);
             expect(this.getChatLogs(10)).toContain('player1 places a card faceup in province 1 due to A Season of War\'s Rally');
+            expect(this.getChatLogs(10)).toContain('player1\'s dynasty deck has run out of cards, so they lose 5 honor');
+            expect(this.getChatLogs(10)).toContain('player1 is shuffling their dynasty deck');
         });
     });
 });
