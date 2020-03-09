@@ -74,7 +74,8 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceOne),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceTwo),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree),
-            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour)
+            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour),
+            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
         ];
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
         this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
