@@ -1,11 +1,12 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players, CardTypes } = require('../../Constants');
+const { Players, CardTypes, TargetModes } = require('../../Constants');
 
 class CalledToWar extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Place a fate on a bushi',
+            cost: AbilityDsl.costs.optionalHonorTransferFromOpponentCost(),
             targets: {
                 myCharacter: {
                     cardType: CardTypes.Character,
@@ -16,11 +17,9 @@ class CalledToWar extends DrawCard {
                     player: Players.Opponent,
                     cardType: CardTypes.Character,
                     optional: true,
-                    cardCondition: card => card.hasTrait('bushi'),
-                    gameAction: AbilityDsl.actions.joint([
-                        AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                        AbilityDsl.actions.placeFate()
-                    ])
+                    hideIfNoLegalTargets: true,
+                    cardCondition: (card, context) => card.hasTrait('bushi') && context.costs.optionalHonorTransferFromOpponentCostPaid,
+                    gameAction: AbilityDsl.actions.placeFate()
                 }
             },
             effect: 'place a fate on {1}{2}',

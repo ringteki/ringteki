@@ -12,6 +12,7 @@ import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } fro
 interface BaseTarget {
     activePromptTitle?: string;
     player?: ((context: AbilityContext) => Players) | Players;
+    hideIfNoLegalTargets?: boolean;
     gameAction?: GameAction | GameAction[];
 };
 
