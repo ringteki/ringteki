@@ -462,6 +462,19 @@ class Player extends GameObject {
         return true;
     }
 
+    triggerRally(location) {
+        if(this.dynastyDeck.size() === 0) {
+            this.deckRanOutOfCards('dynasty');
+            this.game.queueSimpleStep(() => this.triggerRally(location));
+        } else {
+            let cardFromDeck = this.dynastyDeck.first();
+            this.moveCard(cardFromDeck, location);
+            cardFromDeck.facedown = false;
+            return true;
+        }
+        return true;
+    }
+
     refillProvince(location, refillAmount) {
         if(refillAmount <= 0) {
             return true;

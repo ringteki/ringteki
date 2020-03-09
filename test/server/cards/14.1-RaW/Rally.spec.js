@@ -117,5 +117,16 @@ describe('Rally Keyword', function() {
             expect(this.challenger.location).toBe('province 1');
             expect(this.challenger.facedown).toBe(false);
         });
+
+        it('should work if your deck is empty', function() {
+            this.keepDynasty();
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.keepConflict();
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.player1.player.getDynastyCardsInProvince('province 1').length).toBe(2);
+            expect(this.getChatLogs(10)).toContain('player1 places a card faceup in province 1 due to A Season of War\'s Rally');
+        });
     });
 });
