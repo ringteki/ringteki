@@ -184,6 +184,12 @@ describe('A Season of War', function() {
                 expect(this.getChatLogs(10)).toContain('The dynasty phase is ended due to the effects of A Season of War');
                 expect(this.getChatLogs(10)).toContain('A Season of War has started a new dynasty phase!');
             });
+
+            it('decking yourself should not cause multiple honor losses', function() {
+                this.player1.reduceDeckToNumber('dynasty deck', 1);
+                this.player1.clickCard(this.season);
+                expect(this.getChatLogs(10).filter(a => a === 'player1\'s dynasty deck has run out of cards, so they lose 5 honor').length).toBe(1);
+            });
         });
 
 
