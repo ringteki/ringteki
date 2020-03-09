@@ -17,6 +17,10 @@ class UpToVariableXCardSelector extends BaseCardSelector {
     hasExceededLimit(selectedCards, context) {
         return selectedCards.length > this.numCardsFunc(context);
     }
+
+    hasEnoughTargets(context, choosingPlayer) {
+        return this.numCardsFunc(context) > 0 && super.hasEnoughTargets(context, choosingPlayer);
+    }
 }
 
 module.exports = UpToVariableXCardSelector;

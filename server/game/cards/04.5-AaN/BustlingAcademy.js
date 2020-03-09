@@ -9,7 +9,7 @@ class BustlingAcademy extends DrawCard {
             condition: context => context.player.cardsInPlay.any(card => card.hasTrait('scholar')) && context.player.opponent,
             target: {
                 location: Locations.Provinces,
-                cardType: [CardTypes.Character, CardTypes.Holding],
+                cardType: [CardTypes.Character, CardTypes.Holding, CardTypes.Event],
                 gameAction: AbilityDsl.actions.moveCard({ destination: Locations.DynastyDiscardPile })
             },
             effect: 'discard {0} and refill it faceup',

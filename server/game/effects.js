@@ -43,6 +43,7 @@ const Effects = {
     contributeToConflict: (player) => EffectBuilder.card.flexible(EffectNames.ContributeToConflict, player),
     copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
+    customRefillProvince: (refillFunc) => EffectBuilder.card.static(EffectNames.CustomProvinceRefillEffect, refillFunc), //refillFunc: (Player, ProvinceCard) => { }
     delayedEffect: (properties) => EffectBuilder.card.static(EffectNames.DelayedEffect, properties),
     doesNotBow: () => EffectBuilder.card.static(EffectNames.DoesNotBow),
     doesNotReady: () => EffectBuilder.card.static(EffectNames.DoesNotReady),
@@ -84,6 +85,7 @@ const Effects = {
     mustBeChosen: (properties) => EffectBuilder.card.static(EffectNames.MustBeChosen, new Restriction(Object.assign({ type: 'target' }, properties))),
     mustBeDeclaredAsAttacker: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttacker, type),
     mustBeDeclaredAsDefender: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsDefender, type),
+    refillProvinceTo: (refillAmount) => EffectBuilder.card.flexible(EffectNames.RefillProvinceTo, refillAmount),
     setBaseDash: (type) => EffectBuilder.card.static(EffectNames.SetBaseDash, type),
     setBaseMilitarySkill: (value) => EffectBuilder.card.static(EffectNames.SetBaseMilitarySkill, value),
     setBasePoliticalSkill: (value) => EffectBuilder.card.static(EffectNames.SetBasePoliticalSkill, value),
@@ -167,6 +169,8 @@ const Effects = {
     showTopDynastyCard: () => EffectBuilder.player.static(EffectNames.ShowTopDynastyCard),
     eventsCannotBeCancelled: () => EffectBuilder.player.static(EffectNames.EventsCannotBeCancelled),
     mustDeclareMaximumAttackers: (type = 'both') => EffectBuilder.player.static(EffectNames.MustDeclareMaximumAttackers, type),
+    restartDynastyPhase: (source) => EffectBuilder.player.static(EffectNames.RestartDynastyPhase, source),
+    strongholdCanBeAttacked: () => EffectBuilder.player.static(EffectNames.StrongholdCanBeAttacked),
     // Conflict effects
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),
     changeConflictSkillFunction: (func) => EffectBuilder.conflict.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks

@@ -1,22 +1,26 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations, Players } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class RaiseTheAlarm extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Flip a dynasty card',
             condition: context => this.game.isDuringConflict('military') && context.player.isDefendingPlayer(),
             cannotBeMirrored: true,
             effect: 'flip the card in the conflict province faceup',
-            gameAction: ability.actions.flipDynasty(context => ({
-                target: context.player.getDynastyCardInProvince(this.game.currentConflict.conflictProvince.location)
-            })),
+            target: {
+                controller: Players.Self,
+                location: Locations.Provinces,
+                cardCondition: card => card.location === this.game.currentConflict.conflictProvince.location && card.facedown,
+                gameAction: AbilityDsl.actions.flipDynasty()
+            },
             then: context => ({
                 handler: () => {
-                    let card = context.player.getDynastyCardInProvince(this.game.currentConflict.conflictProvince.location);
+                    let card = context.target;
                     if(card.type === CardTypes.Character && card.allowGameAction('putIntoConflict', context)) {
                         this.game.addMessage('{0} is revealed and brought into the conflict!', card);
-                        ability.actions.putIntoConflict().resolve(card, context);
+                        AbilityDsl.actions.putIntoConflict().resolve(card, context);
                     } else {
                         this.game.addMessage('{0} is revealed but cannot be brought into the conflict!', card);
                     }

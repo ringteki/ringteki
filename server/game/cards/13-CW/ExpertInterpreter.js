@@ -13,7 +13,7 @@ class ExpertInterpreter extends DrawCard {
                 myRing: {
                     mode: TargetModes.Ring,
                     ringCondition: () => true,
-                    gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                    gameAction: AbilityDsl.actions.ringLastingEffect(context => ({
                         duration: Durations.UntilEndOfPhase,
                         targetController: Players.Any,
                         condition: () => this.game.currentConflict && this.game.currentConflict.ring === context.rings.myRing,
@@ -29,8 +29,10 @@ class ExpertInterpreter extends DrawCard {
                     mode: TargetModes.Ring,
                     ringCondition: () => true,
                     gameAction: AbilityDsl.actions.joint([
-                        AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                        AbilityDsl.actions.playerLastingEffect(context => ({
+                        AbilityDsl.actions.takeHonor(context => ({
+                            target: context.player.opponent
+                        })),
+                        AbilityDsl.actions.ringLastingEffect(context => ({
                             duration: Durations.UntilEndOfPhase,
                             targetController: Players.Any,
                             condition: () => this.game.currentConflict && this.game.currentConflict.ring === context.rings.oppRing,
