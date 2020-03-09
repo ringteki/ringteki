@@ -491,13 +491,17 @@ const Costs = {
         };
     },
 
-    optionalHonorTransferFromOpponentCost: function () {
+    optionalHonorTransferFromOpponentCost: function (canPayFunc = (context) => true) {
         return {
             canPay: function () {
                 return true;
             },
             resolve: function (context, result) {
                 context.costs.optionalHonorTransferFromOpponentCostPaid = false;
+
+                if (!canPayFunc(context)) {
+                    return;
+                }
 
                 if (!context.player.opponent) {
                     return;
