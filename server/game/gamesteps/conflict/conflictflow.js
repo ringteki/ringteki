@@ -11,7 +11,7 @@ const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
 const ForcedAttackersMatrix = require('./forcedAttackers.js');
 
-const { Players, CardTypes, EventNames, EffectNames } = require('../../Constants');
+const { Players, CardTypes, EventNames, EffectNames, Locations} = require('../../Constants');
 
 /**
 Conflict Resolution
@@ -207,9 +207,9 @@ class ConflictFlow extends BaseStepWithPipeline {
         if(this.conflict.conflictPassed) {
             return;
         }
-
-        this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, this.conflict.conflictProvince, this.conflict.ring);
-
+        let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
+        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? this.conflict.conflictProvince : provinceSlot;
+        this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, provinceName, this.conflict.ring);
         let ring = this.conflict.ring;
         let events = [this.game.getEvent(EventNames.OnConflictDeclared, {
             conflict: this.conflict,
@@ -217,24 +217,40 @@ class ConflictFlow extends BaseStepWithPipeline {
             ring: ring,
             attackers: this.conflict.attackers.slice(),
             ringFate: ring.fate
+        }, () => {
+            //"OnConflictAnnounced" represents the "After a conflict is declared but before a province is revealed" event window
+            let innerEvents = [this.game.getEvent(EventNames.OnConflictAnnounced, {
+                conflict: this.conflict,
+                type: this.conflict.conflictType,
+                ring: ring,
+                attackers: this.conflict.attackers.slice(),
+                ringFate: ring.fate
+            }, () => {
+                //Now that ConflictAnnounced interrupt window is closed, we lock in the "declared province" for the conflict
+                if(!this.conflict.isSinglePlayer) {
+                    this.conflict.conflictProvince.inConflict = true;
+                }
+                this.conflict.declaredProvince = this.conflict.conflictProvince;
+            })];
+            if(ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
+                this.game.actions.takeFateFromRing({
+                    origin: ring,
+                    recipient: this.conflict.attackingPlayer,
+                    amount: ring.fate
+                }).addEventsToArray(innerEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+                this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, ring.fate, ring);
+            }
+            this.game.openEventWindow(innerEvents);
         })];
 
-        if(ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
-            this.game.actions.takeFateFromRing({
-                origin: ring,
-                recipient: this.conflict.attackingPlayer,
-                amount: ring.fate
-            }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-            this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, ring.fate, ring);
-        }
-
         if(!this.conflict.isSinglePlayer) {
-            this.conflict.conflictProvince.inConflict = true;
             this.game.actions.reveal({
+                chatMessage: true,
                 target: this.conflict.conflictProvince,
                 onDeclaration: true
             }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
         }
+
 
         this.game.openEventWindow(events);
     }
