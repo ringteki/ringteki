@@ -7,7 +7,7 @@ describe('A Season of War', function() {
                     player1: {
                         inPlay: ['daidoji-nerishma', 'kakita-yoshi', 'kakita-toshimoko', 'matsu-berserker', 'ikoma-prodigy', 'doji-challenger', 'prodigy-of-the-waves', 'hida-kisada', 'aranat', 'kakita-ryoku'],
                         dynastyDeck: [],
-                        hand: ['way-of-the-crane'],
+                        hand: ['way-of-the-crane', 'those-who-serve'],
                         dynastyDiscard: ['a-season-of-war', 'a-season-of-war']
                     },
                     player2: {
@@ -29,6 +29,7 @@ describe('A Season of War', function() {
                 this.kisada = this.player1.findCardByName('hida-kisada');
                 this.aranat = this.player1.findCardByName('aranat');
                 this.ryoku = this.player1.findCardByName('kakita-ryoku');
+                this.twsP1 = this.player1.findCardByName('those-who-serve');
 
                 this.player1.placeCardInProvince(this.season, 'province 1');
                 this.player1.placeCardInProvince(this.challenger, 'province 2');
@@ -161,6 +162,19 @@ describe('A Season of War', function() {
                 expect(this.player2.fate).toBe(p2Fate);
             });
 
+            it('players should not start a new round', function() {
+                this.player1.clickCard(this.season);
+                expect(this.game.roundNumber).toBe(1);
+            });
+
+            it('players should not reset limited count', function() {
+                this.player1.clickCard(this.twsP1);
+                expect(this.player1.player.limitedPlayed).toBe(1);
+                this.player2.pass();
+                this.player1.clickCard(this.season);
+                expect(this.player1.player.limitedPlayed).toBe(1);
+            });
+
             it('should properly progress to the draw phase', function() {
                 this.player1.clickCard(this.season);
                 this.noMoreActions();
@@ -183,6 +197,12 @@ describe('A Season of War', function() {
                 expect(this.getChatLogs(10)).toContain('player1 plays A Season of War to discard all cards in all provinces, and refill each province faceup');
                 expect(this.getChatLogs(10)).toContain('The dynasty phase is ended due to the effects of A Season of War');
                 expect(this.getChatLogs(10)).toContain('A Season of War has started a new dynasty phase!');
+            });
+
+            it('decking yourself should not cause multiple honor losses', function() {
+                this.player1.reduceDeckToNumber('dynasty deck', 1);
+                this.player1.clickCard(this.season);
+                expect(this.getChatLogs(10).filter(a => a === 'player1\'s dynasty deck has run out of cards, so they lose 5 honor').length).toBe(1);
             });
         });
 

@@ -94,6 +94,15 @@ describe('Our Foe Does Not Wait', function() {
                 this.player1.clickCard(this.p1);
                 this.player1.clickPrompt('Solemn Scholar');
                 expect(this.player1).toHavePrompt('Action Window');
+
+                this.player1.pass();
+                this.player2.pass();
+                this.noMoreActions();
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.ourFoe2);
             });
         });
     });

@@ -15,14 +15,12 @@ class RallyAbility extends TriggeredAbility {
             message: '{0} places {1} faceup in {2} due to {3}\'s Rally',
             messageArgs: context => [
                 context.player,
-                context.player.dynastyDeck.first(),
+                context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
                 context.player.getProvinceCardInProvince(context.source.location).facedown ? context.source.location : context.player.getProvinceCardInProvince(context.source.location),
                 context.source
             ],
             handler: context => {
-                let cardFromDeck = context.player.dynastyDeck.first();
-                context.player.moveCard(cardFromDeck, context.source.location);
-                cardFromDeck.facedown = false;
+                context.player.triggerRally(context.source.location);
             }
         });
     }

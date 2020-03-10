@@ -66,6 +66,7 @@ class Player extends GameObject {
 
         this.clock = ClockSelector.for(this, clockdetails);
 
+        this.limitedPlayed = 0;
         this.deck = {};
         this.costReducers = [];
         this.playableLocations = [
@@ -73,7 +74,8 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceOne),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceTwo),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree),
-            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour)
+            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour),
+            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
         ];
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
         this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
@@ -462,6 +464,19 @@ class Player extends GameObject {
         return true;
     }
 
+    triggerRally(location) {
+        if(this.dynastyDeck.size() === 0) {
+            this.deckRanOutOfCards('dynasty');
+            this.game.queueSimpleStep(() => this.triggerRally(location));
+        } else {
+            let cardFromDeck = this.dynastyDeck.first();
+            this.moveCard(cardFromDeck, location);
+            cardFromDeck.facedown = false;
+            return true;
+        }
+        return true;
+    }
+
     refillProvince(location, refillAmount) {
         if(refillAmount <= 0) {
             return true;
@@ -575,7 +590,6 @@ class Player extends GameObject {
         this.fate = 0;
         this.honor = 0;
         this.readyToStart = false;
-        this.limitedPlayed = 0;
         this.maxLimited = 1;
         this.firstPlayer = false;
     }
@@ -775,7 +789,6 @@ class Player extends GameObject {
         });
 
         this.passedDynasty = false;
-        this.limitedPlayed = 0;
         this.conflictOpportunities.military = 1;
         this.conflictOpportunities.political = 1;
         this.conflictOpportunities.total = 2;
