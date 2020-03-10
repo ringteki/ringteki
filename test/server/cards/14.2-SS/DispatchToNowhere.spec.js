@@ -8,7 +8,7 @@ describe('Dispatch To Nowhere', function() {
                     dynastyDiscard: ['dispatch-to-nowhere', 'daidoji-uji']
                 },
                 player2: {
-                    inPlay: ['yogo-hiroue', 'matsu-berserker'],
+                    inPlay: ['yogo-hiroue', 'matsu-berserker']
                 }
             });
 

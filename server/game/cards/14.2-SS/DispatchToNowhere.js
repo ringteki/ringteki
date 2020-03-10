@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Players, CardTypes } = require('../../Constants');
+const { CardTypes } = require('../../Constants');
 const AbiltiyDsl = require('../../abilitydsl');
 
 class DispatchToNowhere extends DrawCard {
