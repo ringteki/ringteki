@@ -207,8 +207,10 @@ class ConflictFlow extends BaseStepWithPipeline {
         if(this.conflict.conflictPassed) {
             return;
         }
+
+        this.conflict.conflictStarted = false;
         let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
-        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? this.conflict.conflictProvince : provinceSlot;
+        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? provinceSlot : this.conflict.conflictProvince;
         this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, provinceName, this.conflict.ring);
         let ring = this.conflict.ring;
         let events = [this.game.getEvent(EventNames.OnConflictDeclared, {
@@ -227,36 +229,44 @@ class ConflictFlow extends BaseStepWithPipeline {
                 ringFate: ring.fate
             }, () => {
                 //Now that ConflictAnnounced interrupt window is closed, we lock in the "declared province" for the conflict
+                if (!this.conflict.attackers.some(a => a.location === Locations.PlayArea)) {
+                    this.conflict.conflictFailedToInitiate = true;
+                    this.game.addMessage('{0} has failed to initiate a conflict because they no longer have any legal attackers', this.conflict.attackingPlayer);
+                    return;
+                }
+
                 if(!this.conflict.isSinglePlayer) {
                     this.conflict.conflictProvince.inConflict = true;
                 }
+                this.conflict.conflictStarted = true;
                 this.conflict.declaredProvince = this.conflict.conflictProvince;
+                let innerInnerEvents = [];
+                if(ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
+                    this.game.actions.takeFateFromRing({
+                        origin: ring,
+                        recipient: this.conflict.attackingPlayer,
+                        amount: ring.fate
+                    }).addEventsToArray(innerInnerEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+                    this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, ring.fate, ring);
+                }
+    
+                if(!this.conflict.isSinglePlayer) {
+                    this.game.actions.reveal({
+                        chatMessage: true,
+                        target: this.conflict.conflictProvince,
+                        onDeclaration: true
+                    }).addEventsToArray(innerInnerEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+                }    
+                this.game.openEventWindow(innerInnerEvents);    
             })];
-            if(ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
-                this.game.actions.takeFateFromRing({
-                    origin: ring,
-                    recipient: this.conflict.attackingPlayer,
-                    amount: ring.fate
-                }).addEventsToArray(innerEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-                this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, ring.fate, ring);
-            }
             this.game.openEventWindow(innerEvents);
         })];
-
-        if(!this.conflict.isSinglePlayer) {
-            this.game.actions.reveal({
-                chatMessage: true,
-                target: this.conflict.conflictProvince,
-                onDeclaration: true
-            }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-        }
-
 
         this.game.openEventWindow(events);
     }
 
     announceAttackerSkill() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -264,7 +274,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     promptForDefenders() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -272,7 +282,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     announceDefenderSkill() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -289,14 +299,14 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     openConflictActionWindow() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
         this.queueStep(new ConflictActionWindow(this.game, 'Conflict Action Window', this.conflict));
     }
 
     determineWinner() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -345,7 +355,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     afterConflict() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -381,7 +391,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     applyUnopposed() {
-        if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -392,7 +402,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     checkBreakProvince() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.game.manualMode) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.game.manualMode || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -403,7 +413,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     resolveRingEffects() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -413,7 +423,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     claimRing() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -433,7 +443,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     returnHome() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 

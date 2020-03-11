@@ -17,6 +17,8 @@ class Conflict extends GameObject {
         this.defendersChosen = false;
         this.conflictProvince = conflictProvince;
         this.declaredProvince = conflictProvince;
+        this.conflictStarted = false;
+        this.conflictFailedToInitiate = false;
         this.conflictPassed = false;
         this.conflictTypeSwitched = false;
         this.conflictUnopposed = false;

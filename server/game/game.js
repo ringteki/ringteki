@@ -266,6 +266,8 @@ class Game extends EventEmitter {
     isDuringConflict(types) {
         if(!this.currentConflict) {
             return false;
+        } else if (this.currentConflict && !this.currentConflict.conflictStarted) {
+            return false;
         } else if(!types) {
             return true;
         } else if(!Array.isArray(types)) {

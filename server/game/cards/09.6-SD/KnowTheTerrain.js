@@ -14,6 +14,7 @@ class KnowTheTerrain extends DrawCard {
             handler: context => this.game.promptForSelect(context.player, {
                 activePromptTitle: 'Choose an unbroken province',
                 cardType: CardTypes.Province,
+                context: context,
                 location: Locations.Provinces,
                 controller: Players.Self,
                 cardCondition: card => card.location !== Locations.StrongholdProvince && !card.isBroken && card.facedown && card !== this.game.currentConflict.conflictProvince,
