@@ -278,7 +278,7 @@ export enum EventNames {
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
     OnConflictMoved = 'onConflictMoved',
-    OnConflictAnnounced = 'onConflictAnnounced',
+    OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     Unnamed = 'unnamedEvent'
 };
 
