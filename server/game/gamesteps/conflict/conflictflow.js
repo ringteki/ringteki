@@ -65,24 +65,32 @@ class ConflictFlow extends BaseStepWithPipeline {
             this.canPass = false;
         }
 
-        if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-            this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
-            return;
-        }
+        let events = [this.game.getEvent(EventNames.OnConflictOpportunityAvailable, {
+            forcedAttackers: forcedAttackers,
+            type: this.conflict.conflictType,
+            player: this.conflict.attackingPlayer
+        }, () => {
+            if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
+                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
+                return;
+            }
 
-        if(this.canPass) {
-            this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
-                source: 'Declare Conflict',
-                activePromptTitle: 'Do you wish to declare a conflict?',
-                choices: ['Declare a conflict', 'Pass conflict opportunity'],
-                handlers: [
-                    () => this.defenderChoosesRing(forcedAttackers),
-                    () => this.conflict.passConflict()
-                ]
-            });
-        } else {
-            this.defenderChoosesRing(forcedAttackers);
-        }
+            if(this.canPass) {
+                this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
+                    source: 'Declare Conflict',
+                    activePromptTitle: 'Do you wish to declare a conflict?',
+                    choices: ['Declare a conflict', 'Pass conflict opportunity'],
+                    handlers: [
+                        () => this.defenderChoosesRing(forcedAttackers),
+                        () => this.conflict.passConflict()
+                    ]
+                });
+            } else {
+                this.defenderChoosesRing(forcedAttackers);
+            }
+        })];
+
+        this.game.openEventWindow(events);
     }
 
     defenderChoosesRing(forcedAttackers) {
