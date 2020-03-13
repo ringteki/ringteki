@@ -70,23 +70,30 @@ class ConflictFlow extends BaseStepWithPipeline {
             type: this.conflict.conflictType,
             player: this.conflict.attackingPlayer
         }, () => {
-            if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
-                return;
+            let defendersFirst = this.conflict.attackingPlayer.anyEffect(EffectNames.DefendersChosenFirstDuringConflict);
+            if (defendersFirst) {
+                let numberOfAttackers = this.conflict.attackingPlayer.mostRecentEffect(EffectNames.DefendersChosenFirstDuringConflict);
+                this.promptForDefenders(true);
             }
+            {
+                if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
+                    this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
+                    return;
+                }
 
-            if(this.canPass) {
-                this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
-                    source: 'Declare Conflict',
-                    activePromptTitle: 'Do you wish to declare a conflict?',
-                    choices: ['Declare a conflict', 'Pass conflict opportunity'],
-                    handlers: [
-                        () => this.defenderChoosesRing(forcedAttackers),
-                        () => this.conflict.passConflict()
-                    ]
-                });
-            } else {
-                this.defenderChoosesRing(forcedAttackers);
+                if(this.canPass) {
+                    this.game.promptWithHandlerMenu(this.conflict.attackingPlayer, {
+                        source: 'Declare Conflict',
+                        activePromptTitle: 'Do you wish to declare a conflict?',
+                        choices: ['Declare a conflict', 'Pass conflict opportunity'],
+                        handlers: [
+                            () => this.defenderChoosesRing(forcedAttackers),
+                            () => this.conflict.passConflict()
+                        ]
+                    });
+                } else {
+                    this.defenderChoosesRing(forcedAttackers);
+                }
             }
         })];
 
@@ -255,8 +262,12 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.game.addMessage('{0} has initiated a {1} conflict with skill {2}', this.conflict.attackingPlayer, this.conflict.conflictType, this.conflict.attackerSkill);
     }
 
-    promptForDefenders() {
+    promptForDefenders(override = false) {
         if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+            return;
+        }
+
+        if (!override && this.conflict.attackingPlayer.anyEffect(EffectNames.DefendersChosenFirstDuringConflict)) {
             return;
         }
 

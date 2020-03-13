@@ -45,7 +45,7 @@ class InitiateConflictPrompt extends UiPrompt {
     }
 
     checkForMustSelect() {
-        if(this.forcedAttackers.requiredNumberOfAttackers > 0) {
+        if(this.forcedAttackers.forcedNumberOfAttackers > 0) {
             this.conflict.ring = this.forcedAttackers.defaultRing;
             if(this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
                 this.conflict.ring.flipConflictType();

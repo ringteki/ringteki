@@ -757,7 +757,9 @@ class DrawCard extends BaseCard {
 
     canParticipateAsDefender(conflictType = this.game.currentConflict.conflictType) {
         let effects = this.getEffects(EffectNames.CannotParticipateAsDefender);
-        return !effects.some(value => value === 'both' || value === conflictType) && !this.hasDash(conflictType);
+        let hasDash = conflictType ? this.hasDash(conflictType) : false;
+
+        return !effects.some(value => value === 'both' || value === conflictType) && !hasDash;
     }
 
     bowsOnReturnHome() {
