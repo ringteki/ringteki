@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const { CardTypes } = require('../../Constants');
-const AbiltiyDsl = require('../../abilitydsl');
+const AbilityDsl = require('../../abilitydsl');
 
 class DispatchToNowhere extends DrawCard {
     setupCardAbilities() {
@@ -9,7 +9,7 @@ class DispatchToNowhere extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.fate === 0,
-                gameAction: AbiltiyDsl.actions.discardFromPlay()
+                gameAction: AbilityDsl.actions.discardFromPlay()
             }
         });
     }
