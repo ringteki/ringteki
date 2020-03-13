@@ -34,9 +34,9 @@ class SelectDefendersPrompt extends UiPrompt {
     activePrompt() {
         let promptTitle = (capitalize[this.conflict.conflictType] + ' ' + capitalize[this.conflict.element] + ' Conflict: '
             + this.conflict.attackerSkill + ' vs ' + this.conflict.defenderSkill);
-        
-        if (!this.conflict.conflictType || !this.conflict.element) {
-            promptTitle = 'Declaring defenders before attackers'
+
+        if(!this.conflict.conflictType || !this.conflict.element) {
+            promptTitle = 'Declaring defenders before attackers';
         }
         return {
             menuTitle: 'Choose defenders',

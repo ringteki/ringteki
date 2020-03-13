@@ -93,7 +93,7 @@ class InitiateConflictPrompt extends UiPrompt {
                 } else {
                     menuTitle = capitalize[this.conflict.conflictType] + ' skill: '.concat(this.conflict.attackerSkill);
                 }
-                if (this.conflict.attackers.length === this.forcedAttackers.requiredNumberOfAttackers || this.forcedAttackers.requiredNumberOfAttackers <= 0) {
+                if(this.conflict.attackers.length === this.forcedAttackers.requiredNumberOfAttackers || this.forcedAttackers.requiredNumberOfAttackers <= 0) {
                     buttons.unshift({ text: 'Initiate Conflict', arg: 'done' });
                 }
             }
@@ -192,7 +192,19 @@ class InitiateConflictPrompt extends UiPrompt {
         } else if(card.type === CardTypes.Character && card.location === Locations.PlayArea) {
             if(card.controller === this.choosingPlayer) {
                 if(this.conflict.attackers.includes(card)) {
-                    return !this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
+                    let forced = this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
+                    let extraAttackers = this.forcedAttackers.requiredNumberOfAttackers > 0 ? this.conflict.attackers.length > this.forcedAttackers.requiredNumberOfAttackers : false;
+                    let enoughForcedRemaining = true;
+
+                    if(forced && extraAttackers) {
+                        let forcedRemainingCount = this.conflict.attackers.filter(a =>
+                            this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(a)).length - 1; //-1 because we're trying to remove a character from the list
+                        if(forcedRemainingCount < this.forcedAttackers.requiredNumberOfAttackers) {
+                            enoughForcedRemaining = false;
+                        }
+                    }
+
+                    return !forced || (extraAttackers && enoughForcedRemaining);
                 }
                 return this.choosingPlayer.hasLegalConflictDeclaration({
                     type: this.conflict.conflictType,

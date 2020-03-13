@@ -32,7 +32,7 @@ class SevenStingsKeep extends StrongholdCard {
     }
 
     getChoices(context) {
-        let min = Math.max(1, context.event.forcedAttackers.forcedNumberOfAttackers);
+        let min = 1; //Math.max(1, context.event.forcedAttackers.forcedNumberOfAttackers);
         let max = context.event.forcedAttackers.maximumNumberOfAttackers;
         let array = [];
         let i = min;

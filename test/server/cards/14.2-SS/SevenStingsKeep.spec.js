@@ -87,7 +87,7 @@ describe('Seven Stings Keep', function() {
                 this.player1.clickCard(this.keep);
                 expect(this.player1).toHavePrompt('Choose how many characters will be attacking');
                 expect(this.player1).not.toHavePromptButton('0');
-                expect(this.player1).not.toHavePromptButton('1');
+                expect(this.player1).toHavePromptButton('1');
                 expect(this.player1).toHavePromptButton('2');
                 expect(this.player1).toHavePromptButton('3');
                 expect(this.player1).toHavePromptButton('4');
@@ -242,6 +242,152 @@ describe('Seven Stings Keep', function() {
 
                 expect(this.levy.bowed).toBe(true);
                 expect(this.game.currentConflict.defenders).not.toContain(this.levy);
+            });
+        });
+
+        describe('Seven Stings Keep\'s - Young Warrior interaction', function() {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['bayushi-liar', 'alibi-artist', 'matsu-berserker', 'young-warrior', 'young-warrior'],
+                        stronghold: ['seven-stings-keep']
+                    },
+                    player2: {
+                        inPlay: ['kakita-toshimoko']
+                    }
+                });
+
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.artist = this.player1.findCardByName('alibi-artist');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.warrior1 = this.player1.filterCardsByName('young-warrior')[0];
+                this.warrior2 = this.player1.filterCardsByName('young-warrior')[1];
+                this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+                this.keep = this.player1.findCardByName('seven-stings-keep');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+            });
+
+            it('should automatically assign both the young warriors, and allow you to remove one (but not both)', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                expect(this.player1).toHavePrompt('Choose how many characters will be attacking');
+                this.player1.clickPrompt('1');
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+                expect(this.game.currentConflict.attackers).toContain(this.warrior1);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                this.player1.clickCard(this.shamefulDisplay);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior1);
+                expect(this.game.currentConflict.attackers).not.toContain(this.warrior1);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.berserker);
+                expect(this.game.currentConflict.attackers).toContain(this.berserker);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.berserker);
+                expect(this.game.currentConflict.attackers).not.toContain(this.berserker);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior1);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior1);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).not.toContain(this.warrior2);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+            });
+        });
+
+        describe('Seven Stings Keep\'s - All out Assault interaction', function() {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'draw',
+                    player1: {
+                        inPlay: ['bayushi-liar', 'alibi-artist', 'matsu-berserker', 'young-warrior', 'young-warrior'],
+                        hand: ['all-out-assault'],
+                        stronghold: ['seven-stings-keep']
+                    },
+                    player2: {
+                        inPlay: ['kakita-toshimoko']
+                    }
+                });
+
+                this.assault = this.player1.findCardByName('all-out-assault');
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.artist = this.player1.findCardByName('alibi-artist');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.warrior1 = this.player1.filterCardsByName('young-warrior')[0];
+                this.warrior2 = this.player1.filterCardsByName('young-warrior')[1];
+                this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+                this.keep = this.player1.findCardByName('seven-stings-keep');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+
+                this.noMoreActions();
+                this.player1.clickCard(this.assault);
+            });
+
+            it('should change the default conflict selection but otherwise should do nothing (copied the same test as above)', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                expect(this.player1).toHavePrompt('Choose how many characters will be attacking');
+                this.player1.clickPrompt('1');
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).toHavePrompt('Political Air Conflict');
+                expect(this.game.currentConflict.attackers).not.toContain(this.liar);
+                expect(this.game.currentConflict.attackers).not.toContain(this.artist);
+                this.player1.clickRing('air');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+                expect(this.game.currentConflict.attackers).toContain(this.warrior1);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                this.player1.clickCard(this.shamefulDisplay);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior1);
+                expect(this.game.currentConflict.attackers).not.toContain(this.warrior1);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.berserker);
+                expect(this.game.currentConflict.attackers).toContain(this.berserker);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior2);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.berserker);
+                expect(this.game.currentConflict.attackers).not.toContain(this.berserker);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior1);
+                expect(this.game.currentConflict.attackers).toContain(this.warrior1);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.warrior2);
+                expect(this.game.currentConflict.attackers).not.toContain(this.warrior2);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
             });
         });
     });
