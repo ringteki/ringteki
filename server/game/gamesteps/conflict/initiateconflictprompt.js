@@ -93,7 +93,9 @@ class InitiateConflictPrompt extends UiPrompt {
                 } else {
                     menuTitle = capitalize[this.conflict.conflictType] + ' skill: '.concat(this.conflict.attackerSkill);
                 }
-                buttons.unshift({ text: 'Initiate Conflict', arg: 'done' });
+                if (this.conflict.attackers.length === this.forcedAttackers.requiredNumberOfAttackers || this.forcedAttackers.requiredNumberOfAttackers <= 0) {
+                    buttons.unshift({ text: 'Initiate Conflict', arg: 'done' });
+                }
             }
         }
 

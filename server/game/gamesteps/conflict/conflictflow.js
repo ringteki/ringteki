@@ -72,7 +72,8 @@ class ConflictFlow extends BaseStepWithPipeline {
         }, () => {
             let defendersFirst = this.conflict.attackingPlayer.anyEffect(EffectNames.DefendersChosenFirstDuringConflict);
             if (defendersFirst) {
-                let numberOfAttackers = this.conflict.attackingPlayer.mostRecentEffect(EffectNames.DefendersChosenFirstDuringConflict);
+                forcedAttackers.requiredNumberOfAttackers = this.conflict.attackingPlayer.mostRecentEffect(EffectNames.DefendersChosenFirstDuringConflict);
+                this.canPass = false;
                 this.promptForDefenders(true);
             }
             {

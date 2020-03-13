@@ -127,6 +127,7 @@ describe('Seven Stings Keep', function() {
                 this.takako = this.player2.findCardByName('asahina-takako');
                 this.levy = this.player2.findCardByName('ashigaru-levy');
                 this.keep = this.player1.findCardByName('seven-stings-keep');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
             });
 
             it('should prompt opponent to choose defenders - testing with dashes', function() {
@@ -177,6 +178,70 @@ describe('Seven Stings Keep', function() {
                 expect(this.game.currentConflict.defenders).toContain(this.takako);
                 expect(this.game.currentConflict.defenders).toContain(this.levy);
                 expect(this.game.currentConflict.defenders).toContain(this.toshimoko);
+            });
+
+            it('should not let you pass the conflict', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                this.player1.clickPrompt('1');
+                this.player2.clickCard(this.takako);
+                this.player2.clickCard(this.levy);
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).toHavePrompt('Initiate Conflict');
+                expect(this.player1).not.toHavePromptButton('Pass Conflict');
+            });
+
+            it('should only let you initiate the conflict if you select the right number of attackers', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                this.player1.clickPrompt('1');
+                this.player2.clickCard(this.takako);
+                this.player2.clickCard(this.levy);
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).toHavePrompt('Initiate Conflict');
+                this.player1.clickRing('fire');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+                expect(this.player1).toHavePrompt('Choose province to attack');
+                this.player1.clickCard(this.shamefulDisplay);
+                expect(this.player1).toHavePrompt('Choose attackers');
+
+                this.player1.clickCard(this.artist);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+
+                this.player1.clickCard(this.liar);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+            });
+
+            it('should skip the select defenders stage and start the conflict', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                this.player1.clickPrompt('1');
+                this.player2.clickCard(this.takako);
+                this.player2.clickCard(this.levy);
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).toHavePrompt('Initiate Conflict');
+                this.player1.clickRing('fire');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Political Fire Conflict');
+                expect(this.player1).toHavePrompt('Choose province to attack');
+                this.player1.clickCard(this.shamefulDisplay);
+                this.player1.clickCard(this.artist);
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(10)).toContain('Ashigaru Levy cannot participate in the conflict any more and is sent home bowed');
+                expect(this.getChatLogs(10)).toContain('player1 is initiating a political conflict at Shameful Display, contesting Fire Ring');
+                expect(this.getChatLogs(10)).toContain('player1 has initiated a political conflict with skill 2');
+                expect(this.getChatLogs(10)).toContain('player2 has defended with skill 8');
+
+                expect(this.levy.bowed).toBe(true);
+                expect(this.game.currentConflict.defenders).not.toContain(this.levy);
             });
         });
     });
