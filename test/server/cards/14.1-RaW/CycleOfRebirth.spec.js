@@ -84,6 +84,7 @@ describe('Cycle of Rebirth', function() {
                 expect(this.getChatLogs(3)).toContain('player1 is shuffling their dynasty deck');
                 expect(this.getChatLogs(3)).toContain('player2 is shuffling their dynasty deck');
                 expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
+                expect(this.yokuni.location).not.toBe('dynasty discard pile');
             });
         });
     });
