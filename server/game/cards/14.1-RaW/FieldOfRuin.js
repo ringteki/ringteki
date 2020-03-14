@@ -22,7 +22,7 @@ class FieldOfRuin extends DrawCard {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
             gameAction: AbilityDsl.actions.discardCard(context => ({
-                target: context.source.controller.getDynastyCardsInProvince(context.source.parent.location)
+                target: context.source.parent.controller.getDynastyCardsInProvince(context.source.parent.location)
             })),
             effect: 'discard each card in the attached province'
         });
