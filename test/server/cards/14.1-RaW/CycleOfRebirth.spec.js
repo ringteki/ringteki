@@ -55,6 +55,7 @@ describe('Cycle of Rebirth', function() {
                 this.player1.clickCard(this.zentaro);
 
                 expect(this.getChatLogs(3)).toContain('player1 plays Cycle of Rebirth to shuffle Akodo Zentarō and Cycle of Rebirth into player1\'s dynasty deck');
+                expect(this.getChatLogs(3)).toContain('player1 is shuffling their dynasty deck');
                 expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
             });
 
@@ -70,6 +71,18 @@ describe('Cycle of Rebirth', function() {
 
                 expect(this.player1.player.getDynastyCardsInProvince(zentaroLocation).every(card => card.facedown === false)).toBe(true);
                 expect(this.player1.player.getDynastyCardsInProvince(rebirthLocation).every(card => card.facedown === false)).toBe(true);
+                expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
+            });
+
+            it('should shuffle Cycle of Rebirth and targeted card back into the deck - enemy', function() {
+                this.player1.clickCard(this.cycleOfRebirth);
+
+                expect(this.player1).toHavePrompt('Cycle of Rebirth');
+                this.player1.clickCard(this.yokuni);
+
+                expect(this.getChatLogs(10)).toContain('player1 plays Cycle of Rebirth to shuffle Togashi Yokuni into player2\'s dynasty deck. Cycle of Rebirth is shuffled into player1\'s dynasty deck');
+                expect(this.getChatLogs(3)).toContain('player1 is shuffling their dynasty deck');
+                expect(this.getChatLogs(3)).toContain('player2 is shuffling their dynasty deck');
                 expect(this.cycleOfRebirth.location).not.toBe('dynasty discard pile');
             });
         });

@@ -13,16 +13,44 @@ class CycleOfRebirth extends DrawCard {
                 cardCondition: card => card.type !== CardTypes.Province && card.type !== CardTypes.Stronghold
             },
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.moveCard(context => ({
-                    destination: Locations.DynastyDeck,
-                    target: [context.target, context.source],
-                    shuffle: true
-                })),
+                AbilityDsl.actions.conditional({
+                    condition: context => context.target.controller === context.source.controller,
+                    trueGameAction: AbilityDsl.actions.moveCard(context => ({
+                        destination: Locations.DynastyDeck,
+                        target: [context.target, context.source],
+                        shuffle: true
+                    })),
+                    falseGameAction: AbilityDsl.actions.multiple([
+                        AbilityDsl.actions.moveCard(context => ({
+                            destination: Locations.DynastyDeck,
+                            target: context.target,
+                            shuffle: true
+                        })),
+                        AbilityDsl.actions.moveCard(context => ({
+                            destination: Locations.DynastyDeck,
+                            target: context.source,
+                            shuffle: true
+                        }))
+                    ])
+                }),
                 AbilityDsl.actions.refillFaceup(context => ({
                     target: [context.target.controller, context.source.controller],
                     location: [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]
                 }))
-            ])
+            ]),
+            effect: 'shuffle {1}{3}{4} into {2}\'s dynasty deck{5}{6}{7}{8}{9}',
+            effectArgs: context => [
+                context.target,
+                context.target.controller,
+                context.target.controller === context.source.controller ? ' and ' : '',
+                context.target.controller === context.source.controller ? context.source : '',
+                context.target.controller !== context.source.controller ? '. ' : '',
+                context.target.controller !== context.source.controller ? context.source : '',
+                context.target.controller !== context.source.controller ? ' is shuffled into ' : '',
+                context.target.controller !== context.source.controller ? context.source.controller : '',
+                context.target.controller !== context.source.controller ? '\'s dynasty deck' : '',
+                context.source.controller
+            ]
         });
     }
 }
