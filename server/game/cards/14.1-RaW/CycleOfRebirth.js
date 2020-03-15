@@ -13,26 +13,18 @@ class CycleOfRebirth extends DrawCard {
                 cardCondition: card => card.type !== CardTypes.Province && card.type !== CardTypes.Stronghold
             },
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.conditional({
-                    condition: context => context.target.controller === context.source.controller,
-                    trueGameAction: AbilityDsl.actions.moveCard(context => ({
+                AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.moveCard(context => ({
                         destination: Locations.DynastyDeck,
-                        target: [context.target, context.source],
+                        target: context.target,
                         shuffle: true
                     })),
-                    falseGameAction: AbilityDsl.actions.multiple([
-                        AbilityDsl.actions.moveCard(context => ({
-                            destination: Locations.DynastyDeck,
-                            target: context.target,
-                            shuffle: true
-                        })),
-                        AbilityDsl.actions.moveCard(context => ({
-                            destination: Locations.DynastyDeck,
-                            target: context.source,
-                            shuffle: true
-                        }))
-                    ])
-                }),
+                    AbilityDsl.actions.moveCard(context => ({
+                        destination: Locations.DynastyDeck,
+                        target: context.source,
+                        shuffle: true
+                    }))
+                ]),
                 AbilityDsl.actions.refillFaceup(context => ({
                     target: [context.target.controller, context.source.controller],
                     location: [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]
