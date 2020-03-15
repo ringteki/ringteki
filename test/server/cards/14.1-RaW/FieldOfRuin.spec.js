@@ -10,6 +10,8 @@ describe('Field of Ruin', function() {
                         provinces: ['ancestral-lands', 'manicured-garden']
                     },
                     player2: {
+                        dynastyDiscard: ['kakita-toshimoko', 'doji-challenger', 'kakita-yoshi'],
+                        provinces: ['entrenched-position']
                     }
                 });
 
@@ -19,15 +21,19 @@ describe('Field of Ruin', function() {
                 this.fieldOfRuin = this.player1.findCardByName('field-of-ruin');
                 this.ancestralLands = this.player1.findCardByName('ancestral-lands');
 
+                this.toshimoko = this.player2.placeCardInProvince('kakita-toshimoko', 'province 1');
+                this.challenger = this.player2.moveCard('doji-challenger', 'province 1');
+                this.yoshi = this.player2.moveCard('kakita-yoshi', 'province 1');
+                this.entrenched = this.player2.findCardByName('entrenched-position');
+
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
-
-                this.player1.playAttachment(this.fieldOfRuin, this.ancestralLands);
-
-                this.noMoreActions();
             });
 
             it('should trigger at the start of the conflict phase', function() {
+                this.player1.playAttachment(this.fieldOfRuin, this.ancestralLands);
+                this.noMoreActions();
+
                 expect(this.matsuBerseker.location).toBe('province 1');
                 expect(this.whisperer.location).toBe('province 1');
                 expect(this.zentaro.location).toBe('province 1');
@@ -36,7 +42,10 @@ describe('Field of Ruin', function() {
                 expect(this.player1).toBeAbleToSelect(this.fieldOfRuin);
             });
 
-            it('should discard each card in the province', function() {
+            it('should discard each card in the province - my province', function() {
+                this.player1.playAttachment(this.fieldOfRuin, this.ancestralLands);
+                this.noMoreActions();
+
                 expect(this.matsuBerseker.location).toBe('province 1');
                 expect(this.whisperer.location).toBe('province 1');
                 expect(this.zentaro.location).toBe('province 1');
@@ -49,7 +58,25 @@ describe('Field of Ruin', function() {
                 expect(this.whisperer.location).toBe('dynasty discard pile');
                 expect(this.zentaro.location).toBe('dynasty discard pile');
             });
+
+            it('should discard each card in the province - opponent\'s province', function() {
+                this.player1.playAttachment(this.fieldOfRuin, this.entrenched);
+                this.noMoreActions();
+
+                expect(this.toshimoko.location).toBe('province 1');
+                expect(this.challenger.location).toBe('province 1');
+                expect(this.yoshi.location).toBe('province 1');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.fieldOfRuin);
+                this.player1.clickCard(this.fieldOfRuin);
+
+                expect(this.toshimoko.location).toBe('dynasty discard pile');
+                expect(this.challenger.location).toBe('dynasty discard pile');
+                expect(this.yoshi.location).toBe('dynasty discard pile');
+            });
         });
+
         describe('Field of Ruin as a province attachment', function() {
             beforeEach(function() {
                 this.setupTest({
