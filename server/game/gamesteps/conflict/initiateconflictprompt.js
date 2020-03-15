@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
 const { Locations, CardTypes } = require('../../Constants');
-const AttackersMatrix = require('./forcedAttackers.js');
+const AttackersMatrix = require('./attackersMatrix.js');
 const AbilityContext = require('../../AbilityContext');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
 

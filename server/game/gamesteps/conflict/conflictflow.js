@@ -9,7 +9,7 @@ const ConflictActionWindow = require('./conflictactionwindow.js');
 const InitiateConflictPrompt = require('./initiateconflictprompt.js');
 const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
-const AttackersMatrix = require('./forcedAttackers.js');
+const AttackersMatrix = require('./attackersMatrix.js');
 
 const { Players, CardTypes, EventNames, EffectNames } = require('../../Constants');
 
