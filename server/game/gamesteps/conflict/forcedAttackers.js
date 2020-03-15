@@ -1,6 +1,6 @@
 const { EffectNames } = require('../../Constants');
 
-class ForcedAttackers {
+class AttackerInfo {
     constructor(ring, conflictType, availableAttackers, forcedAttackersDueToDeclarationAmountRequirement, forcedAttackersDueToDeclarationRequirement) {
         this.ring = ring;
         this.conflictType = conflictType;
@@ -18,7 +18,7 @@ class ForcedAttackers {
     }
 }
 
-class ForcedAttackersMatrix {
+class AttackersMatrix {
     constructor(player, characters, game) {
         this.player = player;
         this.characters = characters;
@@ -54,7 +54,7 @@ class ForcedAttackersMatrix {
                 let forcedAttackersDueToDeclarationAmountRequirement = this.getForcedAttackersByDeclarationAmountRequirement(ring, type);
                 let forcedAttackersDueToDeclarationRequirement = this.getForcedAttackersByDeclarationRequirement(ring, type);
                 let availableAttackers = this.getAvailableAttackers(ring, type);
-                let matrix = new ForcedAttackers(ring, type, availableAttackers, forcedAttackersDueToDeclarationAmountRequirement, forcedAttackersDueToDeclarationRequirement);
+                let matrix = new AttackerInfo(ring, type, availableAttackers, forcedAttackersDueToDeclarationAmountRequirement, forcedAttackersDueToDeclarationRequirement);
                 this.attackers[ring.name][type] = matrix;
                 if(matrix.getMaximumAvailableAttackers() > this.maximumNumberOfAttackers) {
                     this.maximumNumberOfAttackers = matrix.getMaximumAvailableAttackers();
@@ -114,4 +114,4 @@ class ForcedAttackersMatrix {
     }
 }
 
-module.exports = ForcedAttackersMatrix;
+module.exports = AttackersMatrix;

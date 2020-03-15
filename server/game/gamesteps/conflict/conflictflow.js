@@ -9,7 +9,7 @@ const ConflictActionWindow = require('./conflictactionwindow.js');
 const InitiateConflictPrompt = require('./initiateconflictprompt.js');
 const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
-const ForcedAttackersMatrix = require('./forcedAttackers.js');
+const AttackersMatrix = require('./forcedAttackers.js');
 
 const { Players, CardTypes, EventNames, EffectNames } = require('../../Constants');
 
@@ -60,23 +60,23 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     promptForNewConflict() {
-        let forcedAttackers = new ForcedAttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
-        if(!forcedAttackers.canPass) {
+        let attackerMatrix = new AttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
+        if(!attackerMatrix.canPass) {
             this.canPass = false;
         }
 
         let events = [this.game.getEvent(EventNames.OnConflictOpportunityAvailable, {
-            forcedAttackers: forcedAttackers,
+            attackerMatrix: attackerMatrix,
             type: this.conflict.conflictType,
             player: this.conflict.attackingPlayer
         }, () => {
             if(this.conflict.attackingPlayer.anyEffect(EffectNames.DefendersChosenFirstDuringConflict)) {
-                forcedAttackers.requiredNumberOfAttackers = this.conflict.attackingPlayer.mostRecentEffect(EffectNames.DefendersChosenFirstDuringConflict);
+                attackerMatrix.requiredNumberOfAttackers = this.conflict.attackingPlayer.mostRecentEffect(EffectNames.DefendersChosenFirstDuringConflict);
                 this.canPass = false;
                 this.promptForDefenders(true);
             }
             if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
+                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, attackerMatrix));
                 return;
             }
 
@@ -86,31 +86,31 @@ class ConflictFlow extends BaseStepWithPipeline {
                     activePromptTitle: 'Do you wish to declare a conflict?',
                     choices: ['Declare a conflict', 'Pass conflict opportunity'],
                     handlers: [
-                        () => this.defenderChoosesRing(forcedAttackers),
+                        () => this.defenderChoosesRing(attackerMatrix),
                         () => this.conflict.passConflict()
                     ]
                 });
             } else {
-                this.defenderChoosesRing(forcedAttackers);
+                this.defenderChoosesRing(attackerMatrix);
             }
         })];
 
         this.game.openEventWindow(events);
     }
 
-    defenderChoosesRing(forcedAttackers) {
+    defenderChoosesRing(attackerMatrix) {
         this.game.promptForRingSelect(this.conflict.defendingPlayer, {
             activePromptTitle: 'Choose a ring for ' + this.conflict.attackingPlayer.name + '\'s conflict',
             source: 'Defender chooses conflict ring',
             waitingPromptTitle: 'Waiting for defender to choose conflict ring',
-            ringCondition: ring => this.conflict.attackingPlayer.hasLegalConflictDeclaration({ ring }) && (forcedAttackers.isCombinationValid(ring, 'political') || forcedAttackers.isCombinationValid(ring, 'military')),
+            ringCondition: ring => this.conflict.attackingPlayer.hasLegalConflictDeclaration({ ring }) && (attackerMatrix.isCombinationValid(ring, 'political') || attackerMatrix.isCombinationValid(ring, 'military')),
             onSelect: (player, ring) => {
                 if(!this.conflict.attackingPlayer.hasLegalConflictDeclaration({ type: ring.conflictType, ring })) {
                     ring.flipConflictType();
                 }
                 this.conflict.ring = ring;
                 ring.contested = true;
-                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false, false, forcedAttackers));
+                this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false, false, attackerMatrix));
                 return true;
             }
         });
