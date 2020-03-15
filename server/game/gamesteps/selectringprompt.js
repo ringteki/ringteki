@@ -79,7 +79,7 @@ class SelectRingPrompt extends UiPrompt {
     }
 
     continue() {
-        if (this.properties.hideIfNoLegalTargets && this.properties.optional && this.getSelectableRings().length === 0) {
+        if(this.properties.hideIfNoLegalTargets && this.properties.optional && this.getSelectableRings().length === 0) {
             this.complete();
         }
 
@@ -98,7 +98,7 @@ class SelectRingPrompt extends UiPrompt {
         let selectableRings = _.filter(this.game.rings, ring => {
             return this.properties.ringCondition(ring, this.context);
         });
-        
+
         return selectableRings;
     }
 

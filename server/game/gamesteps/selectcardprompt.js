@@ -122,10 +122,10 @@ class SelectCardPrompt extends UiPrompt {
     }
 
     continue() {
-        if (this.hideIfNoLegalTargets && this.selector.optional && !this.selector.hasEnoughTargets(this.context, this.choosingPlayer)) {
+        if(this.hideIfNoLegalTargets && this.selector.optional && !this.selector.hasEnoughTargets(this.context, this.choosingPlayer)) {
             this.complete();
         }
-        
+
         if(!this.isComplete()) {
             this.highlightSelectableCards();
         }

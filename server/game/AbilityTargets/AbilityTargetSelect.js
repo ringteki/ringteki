@@ -61,10 +61,10 @@ class AbilityTargetSelect {
         if(targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
             return;
         }
-        if (this.properties.condition && !this.properties.condition(context)) {
+        if(this.properties.condition && !this.properties.condition(context)) {
             return;
         }
-        
+
         let player = this.properties.targets && context.choosingPlayerOverride || this.getChoosingPlayer(context);
         if(player === context.player.opponent && context.stage === Stages.PreTarget) {
             targetResults.delayTargeting = this;
