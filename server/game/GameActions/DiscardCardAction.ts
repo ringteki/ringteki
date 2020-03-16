@@ -36,6 +36,7 @@ export class DiscardCardAction extends CardGameAction {
         if(!Array.isArray(cards)) {
             cards = [cards];
         }
+        event.originalLocations = cards.map(a => a.location);
         event.cards = cards;
         event.context = context;
     }
