@@ -135,11 +135,20 @@ class ConflictFlow extends BaseStepWithPipeline {
         // - a legal combination of covert targets and covert attackers
         // - no remaining covert
 
+        //We should make sure that each target is legally assigned - for Vine Tattoo and reactions like Tengu & Yasamura
         if(targets.length === contexts.length) {
             for(let i = 0; i < targets.length; i++) {
+                //Unfortunately we need to N^2 this to match everyone up
                 let context = contexts[i];
-                context['target'] = context.targets.target = targets[i];
-                this.covert.push(context);
+                for(let j = 0; j < targets.length; j++) {
+                    context = contexts[j];
+                    if(!context['target']) {
+                        if(targets[i].checkRestrictions('target', context)) {
+                            context['target'] = context.targets.target = targets[i];
+                            this.covert.push(context);
+                        }
+                    }
+                }
             }
             if(this.covert.every(context => context.targets.target.canBeBypassedByCovert(context))) {
                 return;

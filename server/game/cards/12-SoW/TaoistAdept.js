@@ -9,29 +9,21 @@ class TaoistAdept extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Military,
                 message: 'choose whether to place a fate on a ring',
-                gameAction: duel => AbilityDsl.actions.menuPrompt(context => ({
-                    activePromptTitle: 'Place a fate on a ring?',
+                gameAction: duel => AbilityDsl.actions.selectRing(context => ({
+                    activePromptTitle: 'Choose a ring to receive a fate',
                     player: (duel.winner && duel.winner.controller === context.player) ? Players.Self : Players.Opponent,
-                    choices: duel.winner ? ['Yes', 'No'] : [],
-                    choiceHandler: (choice, displayMessage) => {
-                        if(displayMessage && choice === 'Yes') {
-                            this.game.promptForRingSelect(duel.winner.controller, {
-                                activePromptTitle: 'Choose a ring to receive a fate',
-                                player: duel.winner.controller,
-                                context: context,
-                                ringCondition: ring => ring.isUnclaimed(),
-                                onSelect: (player, ring) => {
-                                    context.game.addMessage('{0} chooses to place a fate on the {1}', player, ring);
-                                    this.game.applyGameAction(context, { placeFateOnRing: ring });
-                                }
-                            });
+                    message: '{0} places a fate on the {1}',
+                    messageArgs: (ring, player) => [player, ring],
+                    ringCondition: ring => duel.winner && ring.isUnclaimed(),
+                    gameAction: AbilityDsl.actions.placeFateOnRing(),
+                    optional: true,
+                    onMenuCommand: (player, arg) => {
+                        if(arg === 'done') {
+                            this.game.addMessage(player.name + ' chooses not to place a fate on a ring');
+                            return true;
                         }
-                        if(displayMessage && choice === 'No') {
-                            context.game.addMessage('{0} chooses not to place a fate on a ring', duel.winner.controller);
-                        }
-                        return [];
-                    },
-                    gameAction: AbilityDsl.actions.placeFateOnRing()
+                        return true;
+                    }
                 }))
             }
         });

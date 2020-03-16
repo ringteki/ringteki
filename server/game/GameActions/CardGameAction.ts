@@ -1,3 +1,4 @@
+import _ = require('underscore');
 import { GameAction, GameActionProperties } from './GameAction';
 import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
@@ -33,19 +34,33 @@ export class CardGameAction extends GameAction {
             const additionalCosts = card.getEffects(EffectNames.UnlessActionCost).filter(properties => properties.actionName === this.name);
 
             if (context.player && context.ability && context.ability.targets && context.ability.targets.length > 0) {
-                const targetingCosts = context.player.getTargetingCost(context.source, card);
-                if (targetingCosts > 0) {
-                    let properties = { amount: targetingCosts, target: context.player };
-                    let cost = new LoseFateAction(properties);
-                    if (cost.canAffect(context.player, context)) {
-                        context.game.addMessage('{0} pays {1} fate in order to target {2}', context.player, targetingCosts, card.name);
-                        cost.resolve(context.player, context);
-                    }
-                    else { 
-                        context.game.addMessage('{0} cannot pay {1} fate in order to target {2}', context.player, targetingCosts, card.name);
-                        allCostsPaid = false;
-                    }
+                let targetForCost = [card];
+
+                if (context.targets.challenger && context.targets.duelTarget) { //duels act weird, we need to handle targeting differently for them to work
+                    let duelTargets = _.flatten(_.values(context.targets));
+                    targetForCost = targetForCost.concat(duelTargets);
                 }
+                
+                targetForCost.forEach(costTarget => {
+                    const targetingCosts = context.player.getTargetingCost(context.source, costTarget);
+                    //we should only resolve the targeting costs once per card per target, even if it has multiple abilities - so track who we've already paid to target
+                    if ((!context.costs || !context.costs.targetingCostPaid || !context.costs.targetingCostPaid.includes(costTarget) ) && targetingCosts > 0) {
+                        if (!context.costs.targetingCostPaid) {
+                            context.costs.targetingCostPaid = []
+                        }
+                        context.costs.targetingCostPaid.push(costTarget);
+                        let properties = { amount: targetingCosts, target: context.player };
+                        let cost = new LoseFateAction(properties);
+                        if (cost.canAffect(context.player, context)) {
+                            context.game.addMessage('{0} pays {1} fate in order to target {2}', context.player, targetingCosts, costTarget.name);
+                            cost.resolve(context.player, context);
+                        }
+                        else { 
+                            context.game.addMessage('{0} cannot pay {1} fate in order to target {2}', context.player, targetingCosts, costTarget.name);
+                            allCostsPaid = false;
+                        }
+                    }
+                });
             }
             
             if(additionalCosts.length > 0) {

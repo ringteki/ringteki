@@ -10,12 +10,12 @@ class FormalInvitation extends DrawCard {
         });
     }
 
-    canAttach(card, context) {
+    canAttach(card) {
         if(card.getType() === CardTypes.Character && card.getGlory() < 2) {
             return false;
         }
 
-        return super.canAttach(card, context);
+        return super.canAttach(card);
     }
 }
 

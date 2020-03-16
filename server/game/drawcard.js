@@ -19,7 +19,11 @@ class DrawCard extends BaseCard {
 
         this.printedMilitarySkill = this.getPrintedSkill('military');
         this.printedPoliticalSkill = this.getPrintedSkill('political');
-        this.printedCost = this.cardData.cost;
+        this.printedCost = parseInt(this.cardData.cost);
+
+        if(!_.isNumber(this.printedCost) || isNaN(this.printedCost)) {
+            this.printedCost = null;
+        }
         this.printedGlory = parseInt(cardData.glory);
         this.printedStrengthBonus = parseInt(cardData.strength_bonus);
         this.fate = 0;

@@ -65,7 +65,7 @@ describe('Bayushi Shoju 2', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-shoju-2', 'eager-scout'],
+                        inPlay: ['bayushi-shoju-2', 'eager-scout', 'hantei-xxxviii'],
                         hand: ['way-of-the-crab']
                     },
                     player2: {
@@ -76,6 +76,7 @@ describe('Bayushi Shoju 2', function() {
                 this.bayushiShoju = this.player1.findCardByName('bayushi-shoju-2');
                 this.diplomat = this.player2.findCardByName('fawning-diplomat');
                 this.scout = this.player1.findCardByName('eager-scout');
+                this.hantei = this.player1.findCardByName('hantei-xxxviii');
                 this.wayOfTheCrab = this.player1.findCardByName('way-of-the-crab');
                 this.player1.player.imperialFavor = 'military';
                 this.game.checkGameState(true); //lock in the favor
@@ -96,6 +97,24 @@ describe('Bayushi Shoju 2', function() {
 
                 expect(this.player1.player.imperialFavor).toBe('');
                 expect(this.player2.player.imperialFavor).toBe('');
+            });
+
+            it('should not discard Hantei', function() {
+                expect(this.player1.player.imperialFavor).toBe('military');
+                expect(this.player2.player.imperialFavor).toBe('');
+
+                this.player1.clickCard(this.wayOfTheCrab);
+                this.player1.clickCard(this.scout);
+                this.player2.clickCard(this.diplomat);
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                this.player2.clickCard(this.diplomat);
+                this.player2.clickPrompt('Military');
+                expect(this.getChatLogs(2)).toContain('player2 claims the Emperor\'s military favor!');
+                expect(this.getChatLogs(1)).toContain('The imperial favor is discarded as player2 cannot have it');
+
+                expect(this.player1.player.imperialFavor).toBe('');
+                expect(this.player2.player.imperialFavor).toBe('');
+                expect(this.hantei.location).toBe('play area');
             });
         });
 
