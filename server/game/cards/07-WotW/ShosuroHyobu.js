@@ -10,7 +10,7 @@ class ShosuroHyobu extends DrawCard {
                 onCardsDiscardedFromHand: (event, context) =>
                     event.cards && event.cards.some(a => a.owner === context.player.opponent) && event.context.ability.isCardAbility(),
                 onCardsDiscarded: (event, context) =>
-                    event.cards && event.originalLocations && event.originalLocations.some(a => a === Locations.Hand) && event.cards.some(a => a.owner === context.player.opponent) && event.context.ability.isCardAbility()
+                    event.cards && event.originalCardStateInfo && event.originalCardStateInfo.some(a => a.location === Locations.Hand && a.owner === context.player.opponent) && event.context.ability.isCardAbility()
             },
             target: {
                 cardType: CardTypes.Character,
