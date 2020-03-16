@@ -53,7 +53,9 @@ class SelectRingPrompt extends UiPrompt {
             ringCondition: () => true,
             onSelect: () => true,
             onMenuCommand: () => true,
-            onCancel: () => true
+            onCancel: () => true,
+            optional: false,
+            hideIfNoLegalTargets: false
         };
     }
 
@@ -77,6 +79,10 @@ class SelectRingPrompt extends UiPrompt {
     }
 
     continue() {
+        if(this.properties.hideIfNoLegalTargets && this.properties.optional && this.getSelectableRings().length === 0) {
+            this.complete();
+        }
+
         if(!this.isComplete()) {
             this.highlightSelectableRings();
         }
@@ -85,10 +91,15 @@ class SelectRingPrompt extends UiPrompt {
     }
 
     highlightSelectableRings() {
+        this.choosingPlayer.setSelectableRings(this.getSelectableRings());
+    }
+
+    getSelectableRings() {
         let selectableRings = _.filter(this.game.rings, ring => {
             return this.properties.ringCondition(ring, this.context);
         });
-        this.choosingPlayer.setSelectableRings(selectableRings);
+
+        return selectableRings;
     }
 
     activePrompt() {
