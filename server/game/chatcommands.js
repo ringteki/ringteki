@@ -219,10 +219,13 @@ class ChatCommands {
 
     reveal(player) {
         this.game.promptForSelect(player, {
-            activePromptTitle: 'Select a card',
-            cardCondition: card => card.facedown && card.controller === player,
+            activePromptTitle: 'Select a card to reveal',
+            waitingPromptTitle: 'Waiting for opponent to reveal a facedown card',
+            location: Locations.Provinces,
+            controller: Players.Self,
+            cardCondition: card => card.facedown,
             onSelect: (player, card) => {
-                card.facedown = false;
+                GameActions.reveal({ target: card }).resolve(player, this.game.getFrameworkContext());
                 this.game.addMessage('{0} reveals {1}', player, card);
                 return true;
             }

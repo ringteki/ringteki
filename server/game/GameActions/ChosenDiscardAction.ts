@@ -6,11 +6,13 @@ import { Locations, Players, TargetModes, EventNames } from '../Constants';
 
 export interface ChosenDiscardProperties extends PlayerActionProperties {
     amount?: number;
+    targets?: boolean;
 }
 
 export class ChosenDiscardAction extends PlayerAction {
     defaultProperties: ChosenDiscardProperties = {
-        amount: 1
+        amount: 1,
+        targets: true
     };
     name = 'discard';
     eventName = EventNames.OnCardsDiscardedFromHand;
@@ -33,7 +35,7 @@ export class ChosenDiscardAction extends PlayerAction {
         for(let player of properties.target as Player[]) {
             let amount = Math.min(player.hand.size(), properties.amount);
             if(amount > 0) {
-                if(context.choosingPlayerOverride && context.choosingPlayerOverride !== player) {
+                if(properties.targets && context.choosingPlayerOverride && context.choosingPlayerOverride !== player) {
                     let event = this.getEvent(player, context) as any;
                     event.cards = player.hand.shuffle().slice(0, amount);
                     events.push(event);

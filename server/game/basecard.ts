@@ -27,7 +27,9 @@ const ValidKeywords = [
     'sincerity',
     'courtesy',
     'pride',
-    'covert'
+    'covert',
+    'rally',
+    'eminent'
 ];
 
 class BaseCard extends EffectSource {
@@ -71,6 +73,7 @@ class BaseCard extends EffectSource {
         this.childCards = [];
 
         this.setupCardAbilities(AbilityDsl);
+        this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
         this.applyAttachmentBonus();
     }
 
@@ -90,6 +93,10 @@ class BaseCard extends EffectSource {
             actions = mostRecentEffect.value.getActions(this);
         }
         let effectActions = this.getEffects(EffectNames.GainAbility).filter(ability => ability.abilityType === AbilityTypes.Action);
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
+        }
         return actions.concat(effectActions);
     }
 
@@ -101,6 +108,10 @@ class BaseCard extends EffectSource {
             reactions = mostRecentEffect.value.getReactions(this);
         }
         let effectReactions = this.getEffects(EffectNames.GainAbility).filter(ability => TriggeredAbilityTypes.includes(ability.abilityType));
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
+        }
         return reactions.concat(effectReactions);
     }
 
@@ -109,6 +120,10 @@ class BaseCard extends EffectSource {
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
             return gainedPersistentEffects.concat(mostRecentEffect.value.getPersistentEffects());
+        }
+        if(this.anyEffect(EffectNames.GainAllAbilities)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
+            effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
         }
         return this.isBlank() ? gainedPersistentEffects : this.abilities.persistentEffects.concat(gainedPersistentEffects);
     }
@@ -219,6 +234,16 @@ class BaseCard extends EffectSource {
 
     composure(properties): void {
         this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure() }, properties));
+    }
+
+    hasKeyword(keyword) {
+        let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
+        let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
+        return addKeywordEffects.length > loseKeywordEffects.length;
+    }
+
+    hasPrintedKeyword(keyword) {
+        return this.printedKeywords.includes(keyword.toLowerCase());
     }
 
     hasTrait(trait: string): boolean {
@@ -536,7 +561,6 @@ class BaseCard extends EffectSource {
             this.game.promptForSelect(this.controller, {
                 activePromptTitle: 'Choose an attachment to discard',
                 waitingPromptTitle: 'Waiting for opponent to choose an attachment to discard',
-                controller: Players.Self,
                 cardCondition: card => card.parent === this && card.isRestricted(),
                 onSelect: (player, card) => {
                     this.game.addMessage('{0} discards {1} from {2} due to too many Restricted attachments', player, card, card.parent);

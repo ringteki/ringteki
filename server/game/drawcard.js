@@ -5,6 +5,7 @@ const DuplicateUniqueAction = require('./duplicateuniqueaction.js');
 const CourtesyAbility = require('./KeywordAbilities/CourtesyAbility');
 const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
+const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatusToken = require('./StatusToken');
 const StatModifier = require('./StatModifier');
 
@@ -22,7 +23,11 @@ class DrawCard extends BaseCard {
         this.printedCost = parseInt(this.cardData.cost);
 
         if(!_.isNumber(this.printedCost) || isNaN(this.printedCost)) {
-            this.printedCost = null;
+            if(this.type === CardTypes.Event) {
+                this.printedCost = 0;
+            } else {
+                this.printedCost = null;
+            }
         }
         this.printedGlory = parseInt(cardData.glory);
         this.printedStrengthBonus = parseInt(cardData.strength_bonus);
@@ -32,8 +37,6 @@ class DrawCard extends BaseCard {
         this.isConflict = cardData.side === 'conflict';
         this.isDynasty = cardData.side === 'dynasty';
         this.personalHonor = null;
-
-        this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
 
         this.menu = _([
             { command: 'bow', text: 'Bow/Ready' },
@@ -50,6 +53,9 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new PrideAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
         }
+        if(this.isDynasty) {
+            this.abilities.reactions.push(new RallyAbility(this.game, this));
+        }
     }
 
     getPrintedSkill(type) {
@@ -60,16 +66,6 @@ class DrawCard extends BaseCard {
             return this.cardData.political === null || this.cardData.political === undefined ?
                 NaN : isNaN(parseInt(this.cardData.political)) ? 0 : parseInt(this.cardData.political);
         }
-    }
-
-    hasKeyword(keyword) {
-        let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
-        let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
-        return addKeywordEffects.length > loseKeywordEffects.length;
-    }
-
-    hasPrintedKeyword(keyword) {
-        return this.printedKeywords.includes(keyword.toLowerCase());
     }
 
     isLimited() {
@@ -98,6 +94,11 @@ class DrawCard extends BaseCard {
 
     hasCourtesy() {
         return this.hasKeyword('courtesy');
+    }
+
+    hasRally() {
+        //Facedown cards are out of play and their keywords don't update until after the reveal reaction window is done, so we need to check for the printed keyword
+        return this.hasKeyword('rally') || (!this.isBlank() && this.hasPrintedKeyword('rally'));
     }
 
     getCost() {

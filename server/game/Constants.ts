@@ -52,12 +52,15 @@ export enum EffectNames {
     ChangeType = 'changeType',
     CopyCharacter = 'copyCharacter',
     CustomEffect = 'customEffect',
+    CustomProvinceRefillEffect = 'customProvinceRefillEffect',
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
+    EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
+    GainAllAbilities = 'gainAllAbilities',
     GainExtraFateWhenPlayed = 'gainExtraFateWhenPlayed',
     GainPlayAction = 'gainPlayAction',
     HideWhenFaceUp = 'hideWhenFaceUp',
@@ -128,7 +131,11 @@ export enum EffectNames {
     ResolveConflictEarly = 'resolveConflictEarly',
     SetBaseGlory = "setBaseGlory",
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
-    ForceConflictUnopposed = 'forceConflictUnopposed'
+    ForceConflictUnopposed = 'forceConflictUnopposed',
+    MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
+    RefillProvinceTo = 'refillProvinceTo',
+    RestartDynastyPhase = 'restartDynastyPhase',
+    StrongholdCanBeAttacked = 'strongholdCanBeAttacked'
 };
 
 export enum Durations {
@@ -172,6 +179,7 @@ export enum TargetModes {
 };
 
 export enum Phases {
+    Setup = 'setup',
     Dynasty = 'dynasty',
     Draw = 'draw',
     Conflict = 'conflict',
@@ -269,6 +277,7 @@ export enum EventNames {
     OnPassActionPhasePriority = 'onPassActionPhasePriority',
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
+    OnConflictMoved = 'onConflictMoved',
     Unnamed = 'unnamedEvent'
 };
 

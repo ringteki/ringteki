@@ -53,6 +53,8 @@ export class SelectRingAction extends RingAction {
             return;
         } else if(!Object.values(context.game.rings).some((ring: Ring): boolean => properties.ringCondition(ring, context))) {
             return;
+        } else if (!this.hasLegalTarget(context, additionalProperties)) {
+            return;
         }
         let player = properties.player === Players.Opponent ? context.player.opponent : context.player;
         if(properties.targets && context.choosingPlayerOverride) {

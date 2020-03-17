@@ -44,6 +44,10 @@ class RepeatableAbilityLimit extends FixedAbilityLimit {
     constructor(max, eventName) {
         super(max);
 
+        if(!Array.isArray(eventName)) {
+            eventName = [eventName];
+        }
+
         this.eventName = eventName;
         this.resetHandler = () => this.reset();
     }
@@ -53,11 +57,15 @@ class RepeatableAbilityLimit extends FixedAbilityLimit {
     }
 
     registerEvents(eventEmitter) {
-        eventEmitter.on(this.eventName, this.resetHandler);
+        this.eventName.forEach(eventN => {
+            eventEmitter.on(eventN, this.resetHandler);
+        });
     }
 
     unregisterEvents(eventEmitter) {
-        eventEmitter.removeListener(this.eventName, this.resetHandler);
+        this.eventName.forEach(eventN => {
+            eventEmitter.removeListener(eventN, this.resetHandler);
+        });
     }
 }
 
@@ -73,6 +81,10 @@ AbilityLimit.repeatable = function(max, eventName) {
 
 AbilityLimit.perConflict = function(max) {
     return new RepeatableAbilityLimit(max, EventNames.OnConflictFinished);
+};
+
+AbilityLimit.perConflictOpportunity = function(max) {
+    return new RepeatableAbilityLimit(max, [EventNames.OnConflictFinished, EventNames.OnConflictPass]);
 };
 
 AbilityLimit.perPhase = function(max) {

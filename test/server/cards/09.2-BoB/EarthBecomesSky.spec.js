@@ -5,9 +5,10 @@ describe('EarthBecomesSky', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
+                        stronghold: ['shizuka-toshi'],
                         inPlay: ['brash-samurai','border-rider', 'doji-whisperer'],
                         provinces: ['magistrate-station'],
-                        hand: []
+                        hand: ['fine-katana']
                     },
                     player2: {
                         inPlay: ['naive-student'],
@@ -18,7 +19,8 @@ describe('EarthBecomesSky', function() {
                 this.borderRider = this.player1.findCardByName('border-rider');
                 this.dojiWhisperer = this.player1.findCardByName('doji-whisperer');
                 this.station = this.player1.findCardByName('magistrate-station');
-
+                this.shizuka = this.player1.findCardByName('shizuka-toshi');
+                this.katana = this.player1.findCardByName('fine-katana');
                 this.student = this.player2.findCardByName('naive-student');
                 this.earthBecomesSky = this.player2.findCardByName('earth-becomes-sky');
             });
@@ -37,6 +39,22 @@ describe('EarthBecomesSky', function() {
                 expect(this.player2).toBeAbleToSelect(this.earthBecomesSky);
                 this.player2.clickCard(this.earthBecomesSky);
                 expect(this.dojiWhisperer.bowed).toBe(true);
+            });
+
+            it('should not work on strongholds or attachments', function() {
+                this.shizuka.bow();
+                this.player1.playAttachment(this.katana,this.dojiWhisperer);
+                this.katana.bow();
+                this.noMoreActions();
+                this.flow.finishConflictPhase();
+                expect(this.game.currentPhase).toBe('fate');
+                expect(this.shizuka.bowed).toBe(true);
+                expect(this.katana.bowed).toBe(true);
+                this.player1.clickPrompt('Done');
+                this.player2.clickPrompt('Done');
+                expect(this.shizuka.bowed).toBe(false);
+                expect(this.katana.bowed).toBe(false);
+                expect(this.player2).not.toHavePrompt('Triggered Abilities');
             });
 
             it('should work after a character readies from its own ability', function() {

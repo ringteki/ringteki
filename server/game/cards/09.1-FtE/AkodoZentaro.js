@@ -18,7 +18,7 @@ class AkodoZentaro extends DrawCard {
                         location: Locations.Provinces,
                         controller: Players.Self,
                         cardCondition: card => card.location !== Locations.StrongholdProvince && !card.isBroken,
-                        subActionProperties: card => ({ destination: card.location, target: context.player.getDynastyCardInProvince(card.location) }),
+                        subActionProperties: card => ({ destination: card.location, target: context.player.getDynastyCardsInProvince(card.location) }),
                         gameAction: AbilityDsl.actions.multiple([
                             AbilityDsl.actions.moveCard({
                                 target: context.target,
