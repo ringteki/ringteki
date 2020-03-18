@@ -34,143 +34,143 @@ describe('Know the Terrain', function() {
                 this.noMoreActions();
             });
 
-            // it('should interrupt the province being revealed if it is facedown', function() {
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     expect(this.player2).toBeAbleToSelect(this.p2Terrain);
-            //     expect(this.rally.facedown).toBe(true);
-            // });
+            it('should interrupt the province being revealed if it is facedown', function() {
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.p2Terrain);
+                expect(this.rally.facedown).toBe(true);
+            });
 
-            // it('should not interrupt the province being revealed if it is faceup', function() {
-            //     this.rally.facedown = false;
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Choose Defenders');
-            //     expect(this.rally.facedown).toBe(false);
-            // });
+            it('should not interrupt the province being revealed if it is faceup', function() {
+                this.rally.facedown = false;
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Choose Defenders');
+                expect(this.rally.facedown).toBe(false);
+            });
 
-            // it('should not interrupt the province being revealed if it is the stronghold province', function() {
-            //     this.rally.isBroken = true;
-            //     this.cache.isBroken = true;
-            //     this.garden.isBroken = true;
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.shameful
-            //     });
-            //     expect(this.player2).toHavePrompt('Choose Defenders');
-            //     expect(this.shameful.facedown).toBe(false);
-            // });
+            it('should not interrupt the province being revealed if it is the stronghold province', function() {
+                this.rally.isBroken = true;
+                this.cache.isBroken = true;
+                this.garden.isBroken = true;
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.shameful
+                });
+                expect(this.player2).toHavePrompt('Choose Defenders');
+                expect(this.shameful.facedown).toBe(false);
+            });
 
-            // it('should not interrupt a province being revealed after conflict declaration', function() {
-            //     this.rally.facedown = false;
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         defenders: [],
-            //         province: this.rally
-            //     });
+            it('should not interrupt a province being revealed after conflict declaration', function() {
+                this.rally.facedown = false;
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    defenders: [],
+                    province: this.rally
+                });
 
-            //     this.player2.clickCard(this.talisman);
-            //     this.player2.clickCard(this.endless);
-            //     expect(this.player2).toHavePrompt('Waiting for opponent to take an action or pass');
-            //     expect(this.player1).toHavePrompt('Conflict Action Window');
-            // });
+                this.player2.clickCard(this.talisman);
+                this.player2.clickCard(this.endless);
+                expect(this.player2).toHavePrompt('Waiting for opponent to take an action or pass');
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
 
-            // it('should let you select a facedown unbroken non-stronghold province that is not being attacked', function() {
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     expect(this.player2).toBeAbleToSelect(this.p2Terrain);
-            //     expect(this.rally.facedown).toBe(true);
-            //     this.player2.clickCard(this.p2Terrain);
-            //     expect(this.player2).not.toBeAbleToSelect(this.rally);
-            //     expect(this.player2).toBeAbleToSelect(this.endless);
-            //     expect(this.player2).toBeAbleToSelect(this.cache);
-            //     expect(this.player2).toBeAbleToSelect(this.garden);
-            //     expect(this.player2).not.toBeAbleToSelect(this.shameful);
-            // });
+            it('should let you select a facedown unbroken non-stronghold province that is not being attacked', function() {
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.p2Terrain);
+                expect(this.rally.facedown).toBe(true);
+                this.player2.clickCard(this.p2Terrain);
+                expect(this.player2).not.toBeAbleToSelect(this.rally);
+                expect(this.player2).toBeAbleToSelect(this.endless);
+                expect(this.player2).toBeAbleToSelect(this.cache);
+                expect(this.player2).toBeAbleToSelect(this.garden);
+                expect(this.player2).not.toBeAbleToSelect(this.shameful);
+            });
 
-            // it('should not let you select faceup or broken provinces', function() {
-            //     this.cache.facedown = false;
-            //     this.endless.facedown = false;
-            //     this.endless.isBroken = true;
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     expect(this.player2).toBeAbleToSelect(this.p2Terrain);
-            //     expect(this.rally.facedown).toBe(true);
-            //     this.player2.clickCard(this.p2Terrain);
-            //     expect(this.player2).not.toBeAbleToSelect(this.rally);
-            //     expect(this.player2).not.toBeAbleToSelect(this.endless);
-            //     expect(this.player2).not.toBeAbleToSelect(this.cache);
-            //     expect(this.player2).toBeAbleToSelect(this.garden);
-            //     expect(this.player2).not.toBeAbleToSelect(this.shameful);
-            // });
+            it('should not let you select faceup or broken provinces', function() {
+                this.cache.facedown = false;
+                this.endless.facedown = false;
+                this.endless.isBroken = true;
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.p2Terrain);
+                expect(this.rally.facedown).toBe(true);
+                this.player2.clickCard(this.p2Terrain);
+                expect(this.player2).not.toBeAbleToSelect(this.rally);
+                expect(this.player2).not.toBeAbleToSelect(this.endless);
+                expect(this.player2).not.toBeAbleToSelect(this.cache);
+                expect(this.player2).toBeAbleToSelect(this.garden);
+                expect(this.player2).not.toBeAbleToSelect(this.shameful);
+            });
 
-            // it('should switch the provinces', function() {
-            //     let rallyLocation = this.rally.location;
-            //     let gardenLocation = this.garden.location;
+            it('should switch the provinces', function() {
+                let rallyLocation = this.rally.location;
+                let gardenLocation = this.garden.location;
 
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     expect(this.player2).toBeAbleToSelect(this.p2Terrain);
-            //     expect(this.rally.facedown).toBe(true);
-            //     this.player2.clickCard(this.p2Terrain);
-            //     expect(this.player2).not.toBeAbleToSelect(this.rally);
-            //     expect(this.player2).toBeAbleToSelect(this.endless);
-            //     expect(this.player2).toBeAbleToSelect(this.cache);
-            //     expect(this.player2).toBeAbleToSelect(this.garden);
-            //     expect(this.player2).not.toBeAbleToSelect(this.shameful);
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.p2Terrain);
+                expect(this.rally.facedown).toBe(true);
+                this.player2.clickCard(this.p2Terrain);
+                expect(this.player2).not.toBeAbleToSelect(this.rally);
+                expect(this.player2).toBeAbleToSelect(this.endless);
+                expect(this.player2).toBeAbleToSelect(this.cache);
+                expect(this.player2).toBeAbleToSelect(this.garden);
+                expect(this.player2).not.toBeAbleToSelect(this.shameful);
 
-            //     this.player2.clickCard(this.garden);
-            //     expect(this.rally.facedown).toBe(true);
-            //     expect(this.garden.facedown).toBe(false);
-            //     expect(this.rally.location).toBe(gardenLocation);
-            //     expect(this.garden.location).toBe(rallyLocation);
-            //     expect(this.getChatLogs(4)).toContain('player1 is initiating a military conflict at province 2, contesting Air Ring');
-            //     expect(this.getChatLogs(3)).toContain('player2 plays Know the Terrain to switch the attacked province card');
-            //     expect(this.getChatLogs(2)).toContain('player1 reveals Manicured Garden due to Framework effect');
-            // });
+                this.player2.clickCard(this.garden);
+                expect(this.rally.facedown).toBe(true);
+                expect(this.garden.facedown).toBe(false);
+                expect(this.rally.location).toBe(gardenLocation);
+                expect(this.garden.location).toBe(rallyLocation);
+                expect(this.getChatLogs(4)).toContain('player1 is initiating a military conflict at province 2, contesting Air Ring');
+                expect(this.getChatLogs(3)).toContain('player2 plays Know the Terrain to switch the attacked province card');
+                expect(this.getChatLogs(2)).toContain('player1 reveals Manicured Garden due to Framework effect');
+            });
 
-            // it('should allow reactions on the new provinces to be used', function() {
-            //     this.initiateConflict({
-            //         type: 'military',
-            //         attackers: [this.rider],
-            //         province: this.rally
-            //     });
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     expect(this.player2).toBeAbleToSelect(this.p2Terrain);
-            //     expect(this.rally.facedown).toBe(true);
-            //     this.player2.clickCard(this.p2Terrain);
-            //     expect(this.player2).not.toBeAbleToSelect(this.rally);
-            //     expect(this.player2).toBeAbleToSelect(this.endless);
-            //     expect(this.player2).toBeAbleToSelect(this.cache);
-            //     expect(this.player2).toBeAbleToSelect(this.garden);
-            //     expect(this.player2).not.toBeAbleToSelect(this.shameful);
+            it('should allow reactions on the new provinces to be used', function() {
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.rider],
+                    province: this.rally
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.p2Terrain);
+                expect(this.rally.facedown).toBe(true);
+                this.player2.clickCard(this.p2Terrain);
+                expect(this.player2).not.toBeAbleToSelect(this.rally);
+                expect(this.player2).toBeAbleToSelect(this.endless);
+                expect(this.player2).toBeAbleToSelect(this.cache);
+                expect(this.player2).toBeAbleToSelect(this.garden);
+                expect(this.player2).not.toBeAbleToSelect(this.shameful);
 
-            //     this.player2.clickCard(this.cache);
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            //     this.player2.clickCard(this.cache);
-            //     expect(this.player2).toHavePrompt('Select a card to put in your hand');
-            // });
+                this.player2.clickCard(this.cache);
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                this.player2.clickCard(this.cache);
+                expect(this.player2).toHavePrompt('Select a card to put in your hand');
+            });
         });
 
         describe('Checking edge case interactions', function() {

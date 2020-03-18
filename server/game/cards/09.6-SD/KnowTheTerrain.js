@@ -8,7 +8,7 @@ class KnowTheTerrain extends DrawCard {
             effect: 'switch the attacked province card',
             when: {
                 onConflictDeclaredBeforeProvinceReveal: (event, context) => event.conflict.conflictProvince.facedown &&
-                    context.player.isDefendingPlayer() &&
+                    event.conflict.defendingPlayer === context.player &&
                     event.conflict.conflictProvince.location !== Locations.StrongholdProvince
             },
             handler: context => this.game.promptForSelect(context.player, {
@@ -17,9 +17,9 @@ class KnowTheTerrain extends DrawCard {
                 context: context,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => card.location !== Locations.StrongholdProvince && !card.isBroken && card.facedown && card !== this.game.currentConflict.conflictProvince,
+                cardCondition: (card, context) => card.location !== Locations.StrongholdProvince && !card.isBroken && card.facedown && card !== context.event.conflict.conflictProvince,
                 onSelect: (player, card) => {
-                    let attackedprovince = this.game.currentConflict.conflictProvince;
+                    let attackedprovince = context.event.conflict.conflictProvince;
                     let chosenProvince = card;
                     let attackedLocation = attackedprovince.location;
                     let chosenLocation = chosenProvince.location;
@@ -27,8 +27,8 @@ class KnowTheTerrain extends DrawCard {
                     context.player.moveCard(chosenProvince, attackedLocation);
 
                     chosenProvince.inConflict = true;
-                    this.game.currentConflict.conflictProvince.inConflict = false;
-                    this.game.currentConflict.conflictProvince = chosenProvince;
+                    context.event.conflict.conflictProvince.inConflict = false;
+                    context.event.conflict.conflictProvince = chosenProvince;
                     return true;
                 }
             })
