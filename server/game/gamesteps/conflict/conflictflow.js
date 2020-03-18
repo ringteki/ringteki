@@ -58,7 +58,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.game.raiseEvent(EventNames.OnConflictDeclared, { conflict: this.conflict }, event => {
             this.game.queueSimpleStep(() => this.promptForNewConflict());
             this.game.queueSimpleStep(() => {
-                if(!this.conflict.conflictPassed) {
+                if(!this.conflict.conflictPassed && !this.conflict.conflictFailedToInitiate) {
                     event.type = this.conflict.type;
                     event.ring = this.conflict.ring;
                     event.attackers = this.conflict.attackers.slice();
