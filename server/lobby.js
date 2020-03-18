@@ -3,7 +3,7 @@ const Socket = require('./socket.js');
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 const moment = require('moment');
-const { validateDeck } = require('ringteki-deck-helper');
+const { validateDeck, formatDeckAsFullCards } = require('ringteki-deck-helper');
 
 const logger = require('./log.js');
 const version = moment(require('../version.js'));
@@ -15,6 +15,7 @@ const CardService = require('./services/CardService.js');
 const User = require('./models/User');
 const { sortBy } = require('./Array');
 
+const Factions = require('./game/Factions');
 
 
 class Lobby {
@@ -618,7 +619,13 @@ class Lobby {
         return Promise.all([this.cardService.getAllCards(), this.cardService.getAllPacks(), this.deckService.getById(deckId)])
             .then(results => {
                 let [cards, packs, deck] = results;
-                let formattedDeck = formatDeckAsFullCards(deck, { cards: cards });
+                let factions = [];
+                
+                for(const faction of Factions) {
+                    factions[faction.value] = faction;
+                }
+
+                let formattedDeck = formatDeckAsFullCards(deck, { cards: cards, factions: factions });
 
                 formattedDeck.status = validateDeck(deck, { packs: packs, includeExtendedStatus: false });
                 game.selectDeck(socket.user.username, formattedDeck);
