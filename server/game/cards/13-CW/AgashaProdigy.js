@@ -6,6 +6,9 @@ class AgashaProdigys extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Discard a card to try and attach it to a character',
+            cost: AbilityDsl.costs.optionalHonorTransferFromOpponentCost(context => {
+                return context.player.opponent && context.player.opponent.conflictDeck.size() > 0;
+            }),
             targets: {
                 myCharacter: {
                     cardType: CardTypes.Character,
@@ -26,20 +29,19 @@ class AgashaProdigys extends DrawCard {
                     player: Players.Opponent,
                     cardType: CardTypes.Character,
                     optional: true,
-                    gameAction: AbilityDsl.actions.joint([
-                        AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                        AbilityDsl.actions.sequential([
-                            AbilityDsl.actions.discardCard(context => ({
-                                target: context.targets.oppCharacter.length !== 0 ? context.player.opponent.conflictDeck.first() : []
-                            })),
-                            AbilityDsl.actions.ifAble(context => ({
-                                ifAbleAction: AbilityDsl.actions.attach({
-                                    target: context.targets.oppCharacter,
-                                    attachment: this.getDiscardedCards(context).length > 1 ? this.getDiscardedCards(context)[1] : false
-                                }),
-                                otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: [] })
-                            }))
-                        ])
+                    hideIfNoLegalTargets: true,
+                    cardCondition: (card, context) => context.costs.optionalHonorTransferFromOpponentCostPaid,
+                    gameAction: AbilityDsl.actions.sequential([
+                        AbilityDsl.actions.discardCard(context => ({
+                            target: context.targets.oppCharacter ? context.player.opponent.conflictDeck.first() : []
+                        })),
+                        AbilityDsl.actions.ifAble(context => ({
+                            ifAbleAction: AbilityDsl.actions.attach({
+                                target: context.targets.oppCharacter,
+                                attachment: this.getDiscardedCards(context).length > 1 ? this.getDiscardedCards(context)[1] : false
+                            }),
+                            otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: [] })
+                        }))
                     ])
                 }
             },
