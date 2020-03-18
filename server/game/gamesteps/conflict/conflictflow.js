@@ -63,6 +63,8 @@ class ConflictFlow extends BaseStepWithPipeline {
                     event.ring = this.conflict.ring;
                     event.attackers = this.conflict.attackers.slice();
                     event.ringFate = this.conflict.ring.fate;
+                } else {
+                    event.cancel();
                 }
             });
             this.game.queueSimpleStep(() => this.payAttackerCosts());
