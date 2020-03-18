@@ -156,7 +156,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 _.each(this.conflict.attackers, card => card.inConflict = true);
                 this.game.recordConflict(this.conflict);
                 const events = [];
-                if(this.conflict.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
+                if(this.conflict.ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
                     this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, this.conflict.ring.fate, this.conflict.ring);
                     this.game.actions.takeFateFromRing({
                         origin: this.conflict.ring,
