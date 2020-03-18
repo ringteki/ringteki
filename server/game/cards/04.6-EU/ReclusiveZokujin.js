@@ -3,7 +3,7 @@ const DrawCard = require('../../drawcard.js');
 class ReclusiveZokujin extends DrawCard {
     setupCardAbilities(ability) {
         this.persistentEffect({
-            condition: () => this.game.isDuringConflict('earth'),
+            condition: () => this.game.isConflictBeingDeclared('earth'),
             effect: [
                 ability.effects.addKeyword('covert'),
                 ability.effects.immunity({

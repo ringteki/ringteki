@@ -10,7 +10,7 @@ class AdeptOfTheWaves extends DrawCard {
                 cardType: CardTypes.Character,
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     duration: Durations.UntilEndOfPhase,
-                    condition: () => this.game.isDuringConflict('water'),
+                    condition: () => this.game.isConflictBeingDeclared('water'),
                     effect: AbilityDsl.effects.addKeyword('covert')
                 }))
             },
