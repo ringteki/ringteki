@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class SubterraneanGuile extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            condition: context => this.game.isDuringConflict('military') && this.isHoldingOnUnbrokenProvince(context),
+            condition: context => this.game.isConflictBeingDeclared('military') && this.isHoldingOnUnbrokenProvince(context),
             effect: AbilityDsl.effects.addKeyword('covert')
         });
     }
