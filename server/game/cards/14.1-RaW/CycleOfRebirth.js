@@ -7,6 +7,7 @@ class CycleOfRebirth extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Shuffle this and target into deck',
+            max: AbilityDsl.limit.perRound(1),
             target: {
                 location: Locations.Provinces,
                 controller: Players.Any,
