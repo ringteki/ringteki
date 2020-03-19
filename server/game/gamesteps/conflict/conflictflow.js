@@ -158,7 +158,6 @@ class ConflictFlow extends BaseStepWithPipeline {
             if(this.conflict.attackers.some(a => a.location === Locations.PlayArea)) {
                 this.game.updateCurrentConflict(this.conflict);
                 this.conflict.declaredProvince = this.conflict.conflictProvince;
-                this.conflict.conflictStarted = true;
                 _.each(this.conflict.attackers, card => card.inConflict = true);
                 this.game.recordConflict(this.conflict);
                 const events = [];
@@ -264,7 +263,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     revealProvince() {
-        if(!this.game.currentConflict || this.conflict.isSinglePlayer) {
+        if(!this.game.currentConflict || this.conflict.isSinglePlayer || this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
