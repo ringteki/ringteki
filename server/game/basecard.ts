@@ -405,15 +405,15 @@ class BaseCard extends EffectSource {
     }
 
     isAttacking(): boolean {
-        return this.game.isDuringConflict() && this.game.currentConflict.isAttacking(this);
+        return this.game.currentConflict && this.game.currentConflict.isAttacking(this);
     }
 
     isDefending(): boolean {
-        return this.game.isDuringConflict() && this.game.currentConflict.isDefending(this);
+        return this.game.currentConflict && this.game.currentConflict.isDefending(this);
     }
 
     isParticipating(): boolean {
-        return this.game.isDuringConflict() && this.game.currentConflict.isParticipating(this);
+        return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
 
     isUnique(): boolean{
