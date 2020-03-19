@@ -1,13 +1,14 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, CharacterStatus, Locations, Players } = require('../../Constants');
+const { CardTypes, CharacterStatus, Locations, Players, PlayTypes } = require('../../Constants');
 
 class ShinseisLastHope extends ProvinceCard {
     setupCardAbilities() {
         this.persistentEffect({
             effect: AbilityDsl.effects.reduceCost({
                 amount: 2,
-                match: (card, source) => card.location === source.location
+                match: (card, source) => card.location === source.location,
+                playingTypes: PlayTypes.PlayFromProvince
             })
         });
 
