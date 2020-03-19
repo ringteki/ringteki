@@ -54,6 +54,28 @@ describe('Shinsei\'s Last Hope', function() {
             expect(this.kageyu.isDishonored).toBe(true);
         });
 
+        it('should reduce the character cost by 2 and enter dishonored and make it so dishonor token can\'t be moved - disguised characters', function() {
+            this.player1.pass();
+            this.player2.pass();
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+
+            this.dojiWhisperer.dishonor();
+            this.preKageyuFate = this.player1.fate;
+            this.preKageyuHonor = this.player1.honor;
+
+            expect(this.lastHope.facedown).toBe(false);
+            expect(this.player1).toHavePrompt('Action Window');
+
+            this.player1.clickCard(this.kageyu);
+            this.player1.clickCard(this.dojiWhisperer);
+
+            expect(this.player1.fate).toBe(this.preKageyuFate - (this.kageyu.printedCost - this.dojiWhisperer.printedCost - 2));
+            expect(this.player1.honor).toBe(this.preKageyuHonor - 1); // Kageyu enters play dishonored so the token can't be moved
+            expect(this.kageyu.location).toBe('play area');
+            expect(this.kageyu.isDishonored).toBe(true);
+        });
+
         it('should not have cost reduced and enter dishonored - play as if from hand', function() {
             this.player1.pass();
             this.player2.pass();
