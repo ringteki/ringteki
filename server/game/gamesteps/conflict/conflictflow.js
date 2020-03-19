@@ -69,6 +69,11 @@ class ConflictFlow extends BaseStepWithPipeline {
             });
             this.game.queueSimpleStep(() => this.payAttackerCosts());
             this.game.queueSimpleStep(() => this.initiateConflict());
+            this.game.queueSimpleStep(() => {
+                if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
+                    event.cancel();
+                }
+            });
             this.game.queueSimpleStep(() => this.revealProvince());
         });
     }
@@ -80,7 +85,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
 
         if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-            this.game.currentConflict = this.conflict;
+            this.game.updateCurrentConflict(this.conflict);
             this.game.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
             return;
         }
@@ -112,7 +117,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 }
                 this.conflict.ring = ring;
                 ring.contested = true;
-                this.game.currentConflict = this.conflict;
+                this.game.updateCurrentConflict(this.conflict);
                 this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false, false, forcedAttackers));
                 return true;
             }
@@ -120,7 +125,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     payAttackerCosts() {
-        this.game.currentConflict = null;
+        this.game.updateCurrentConflict(null);
         if(!this.conflict.conflictPassed) {
             const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
             if(!this.conflict.conflictPassed && totalFateCost > 0) {
@@ -149,9 +154,9 @@ class ConflictFlow extends BaseStepWithPipeline {
             ringFate: this.conflict.ring.fate
         };
 
-        this.game.currentConflict = this.conflict;
         this.game.raiseEvent(EventNames.OnConflictDeclaredBeforeProvinceReveal, params, () => {
             if(this.conflict.attackers.some(a => a.location === Locations.PlayArea)) {
+                this.game.updateCurrentConflict(this.conflict);
                 this.conflict.declaredProvince = this.conflict.conflictProvince;
                 this.conflict.conflictStarted = true;
                 _.each(this.conflict.attackers, card => card.inConflict = true);

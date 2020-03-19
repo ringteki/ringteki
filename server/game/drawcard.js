@@ -725,7 +725,7 @@ class DrawCard extends BaseCard {
     }
 
     canDeclareAsAttacker(conflictType, ring, province) { // eslint-disable-line no-unused-vars
-        const attackers = this.game.isConflictBeingDeclared() ? this.game.currentConflict.attackers : [];
+        const attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
         if(attackers.concat(this).reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) > this.controller.fate) {
             return false;
         }

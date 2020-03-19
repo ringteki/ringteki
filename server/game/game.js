@@ -266,8 +266,6 @@ class Game extends EventEmitter {
     isDuringConflict(types) {
         if(!this.currentConflict) {
             return false;
-        } else if(this.currentConflict && !this.currentConflict.conflictStarted) {
-            return false;
         } else if(!types) {
             return true;
         } else if(!Array.isArray(types)) {
@@ -1000,6 +998,11 @@ class Game extends EventEmitter {
     initiateConflict(player, canPass, forcedDeclaredType) {
         const conflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
         this.queueStep(new ConflictFlow(this, conflict, canPass));
+    }
+
+    updateCurrentConflict(conflict) {
+        this.currentConflict = conflict;
+        this.checkGameState(true);
     }
 
     /**
