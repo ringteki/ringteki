@@ -274,17 +274,6 @@ class Game extends EventEmitter {
         return types.every(type => this.currentConflict.elements.concat(this.currentConflict.conflictType).includes(type));
     }
 
-    isConflictBeingDeclared(types) {
-        if(!this.currentConflict) {
-            return false;
-        } else if(!types) {
-            return true;
-        } else if(!Array.isArray(types)) {
-            types = [types];
-        }
-        return types.every(type => this.currentConflict.elements.concat(this.currentConflict.conflictType).includes(type));
-    }
-
     recordConflict(conflict) {
         this.conflictRecord.push({
             attackingPlayer: conflict.attackingPlayer,
