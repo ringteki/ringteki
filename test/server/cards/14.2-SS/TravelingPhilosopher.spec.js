@@ -1,4 +1,4 @@
-describe('Kakudaira', function() {
+describe('Traveling Philosopher', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
