@@ -390,5 +390,41 @@ describe('Seven Stings Keep', function() {
                 expect(this.player1).toHavePromptButton('Initiate Conflict');
             });
         });
+
+        describe('Seven Stings Keep - Caravan Guards', function() {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        fate: 1,
+                        inPlay: ['caravan-guard', 'caravan-guard', 'matsu-berserker'],
+                        stronghold: ['seven-stings-keep']
+                    },
+                    player2: {
+                        inPlay: ['kakita-toshimoko', 'asahina-takako', 'ashigaru-levy']
+                    }
+                });
+
+                this.guard1 = this.player1.filterCardsByName('caravan-guard')[0];
+                this.guard2 = this.player1.filterCardsByName('caravan-guard')[1];
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+                this.takako = this.player2.findCardByName('asahina-takako');
+                this.levy = this.player2.findCardByName('ashigaru-levy');
+                this.keep = this.player1.findCardByName('seven-stings-keep');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+            });
+
+            it('should not allow you to pick 3', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                this.player1.clickCard(this.keep);
+                expect(this.player1).toHavePrompt('Choose how many characters will be attacking');
+                expect(this.player1).not.toHavePromptButton('0');
+                expect(this.player1).toHavePromptButton('1');
+                expect(this.player1).toHavePromptButton('2');
+                expect(this.player1).not.toHavePromptButton('3');
+            });
+        });
     });
 });

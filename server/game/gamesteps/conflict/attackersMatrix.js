@@ -28,6 +28,7 @@ class AttackersMatrix {
         this.maximumNumberOfAttackers = 0; //For Seven Stings Keep
         this.defaultAttackers = [];
         this.canPass = true;
+        this.game = game;
         this.buildMatrix(game);
     }
 
@@ -74,7 +75,18 @@ class AttackersMatrix {
             return [];
         }
 
-        return this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
+        let cards = this.characters;
+        let originalAttackers = [...this.game.currentConflict.attackers];
+        let availableAttackers = [];
+        cards.forEach(card => {
+            if(card.canDeclareAsAttacker(conflictType, ring)) {
+                availableAttackers.push(card);
+                this.game.currentConflict.attackers.push(card);
+            }
+        });
+
+        this.game.currentConflict.attackers = originalAttackers;
+        return availableAttackers;
     }
 
     getForcedAttackers(ring, conflictType) {
@@ -91,11 +103,20 @@ class AttackersMatrix {
         }
 
         if(this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
-            let forced = this.characters.filter(card => card.canDeclareAsAttacker(conflictType, ring));
-            if(forced.length > 0) {
+            let cards = this.characters;
+            let originalAttackers = [...this.game.currentConflict.attackers];
+            let forcedAttackers = [];
+            cards.forEach(card => {
+                if(card.canDeclareAsAttacker(conflictType, ring)) {
+                    forcedAttackers.push(card);
+                    this.game.currentConflict.attackers.push(card);
+                }
+            });
+            this.game.currentConflict.attackers = originalAttackers;
+            if(forcedAttackers.length > 0) {
                 this.canPass = false;
             }
-            return forced;
+            return forcedAttackers;
         }
 
         return this.characters.filter(card =>

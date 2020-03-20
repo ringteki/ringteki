@@ -213,5 +213,41 @@ describe('All Out Assault', function() {
                 expect(this.player2).not.toBeAbleToSelectRing('water');
             });
         });
+
+        describe('Caravan Guards', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'draw',
+                    player1: {
+                        fate: 3,
+                        inPlay: ['caravan-guard', 'caravan-guard', 'caravan-guard'],
+                        hand: ['all-out-assault']
+                    },
+                    player2: {
+                    }
+                });
+
+                this.guard1 = this.player1.filterCardsByName('caravan-guard')[0];
+                this.guard2 = this.player1.filterCardsByName('caravan-guard')[1];
+                this.guard3 = this.player1.filterCardsByName('caravan-guard')[2];
+                this.assault = this.player1.findCardByName('all-out-assault');
+
+                this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay2 = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                this.noMoreActions();
+                this.player1.clickCard(this.assault);
+            });
+
+            it('should force you to assign as many caravan guards as you have fate', function() {
+                this.noMoreActions();
+
+                expect(this.game.currentConflict.attackers).toContain(this.guard1);
+                expect(this.game.currentConflict.attackers).toContain(this.guard2);
+                expect(this.game.currentConflict.attackers).not.toContain(this.guard3);
+            });
+        });
     });
 });
