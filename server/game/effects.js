@@ -47,6 +47,7 @@ const Effects = {
     delayedEffect: (properties) => EffectBuilder.card.static(EffectNames.DelayedEffect, properties),
     doesNotBow: () => EffectBuilder.card.static(EffectNames.DoesNotBow),
     doesNotReady: () => EffectBuilder.card.static(EffectNames.DoesNotReady),
+    entersPlayWithStatus: (status) => EffectBuilder.card.static(EffectNames.EntersPlayWithStatus, status),
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectNames.EntersPlayForOpponent),
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),

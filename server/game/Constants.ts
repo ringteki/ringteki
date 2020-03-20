@@ -19,6 +19,11 @@ export enum Locations {
     Role = 'role'
 };
 
+export enum CharacterStatus {
+    Honored = 'honored',
+    Dishonored = 'dishonored'
+}
+
 export enum Decks {
     ConflictDeck = 'conflict deck',
     DynastyDeck = 'dynasty deck'
@@ -56,6 +61,7 @@ export enum EffectNames {
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
+    EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
     FateCostToTarget = 'fateCostToTarget',

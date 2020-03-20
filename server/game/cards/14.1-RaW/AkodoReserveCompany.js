@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const { CardTypes, Locations } = require('../../Constants');
-const AbiltiyDsl = require('../../abilitydsl');
+const AbilityDsl = require('../../abilitydsl');
 
 class AkodoReserveCompany extends DrawCard {
     setupCardAbilities() {
@@ -10,9 +10,9 @@ class AkodoReserveCompany extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.controller === context.player,
-                gameAction: AbiltiyDsl.actions.joint([
-                    AbiltiyDsl.actions.moveToConflict(context => ({ target: context.source })),
-                    AbiltiyDsl.actions.sendHome()
+                gameAction: AbilityDsl.actions.joint([
+                    AbilityDsl.actions.moveToConflict(context => ({ target: context.source })),
+                    AbilityDsl.actions.sendHome()
                 ])
             }
         });

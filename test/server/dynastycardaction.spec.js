@@ -4,9 +4,10 @@ describe('DynastyCardAction', function () {
     beforeEach(function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'on', 'removeListener', 'getEvent', 'openEventWindow']);
         this.playerSpy = jasmine.createSpyObj('player', ['isCardInPlayableLocation', 'replaceDynastyCard', 'getMinimumCost']);
-        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'canPlay', 'isLimited', 'anotherUniqueInPlay', 'sumEffects']);
+        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'canPlay', 'isLimited', 'anotherUniqueInPlay', 'sumEffects', 'getEffects']);
         this.windowSpy = jasmine.createSpyObj('window', ['markActionAsTaken']);
         this.cardSpy.sumEffects.and.returnValue(0);
+        this.cardSpy.getEffects.and.returnValue([]);
         this.cardSpy.isDynasty = true;
         this.cardSpy.controller = this.playerSpy;
         this.cardSpy.owner = this.playerSpy;
