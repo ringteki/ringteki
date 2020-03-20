@@ -1,4 +1,4 @@
-describe('Countryside Trader', function() {
+describe('Highlight the Flaws', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
