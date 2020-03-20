@@ -63,8 +63,6 @@ class ConflictFlow extends BaseStepWithPipeline {
                     event.ring = this.conflict.ring;
                     event.attackers = this.conflict.attackers.slice();
                     event.ringFate = this.conflict.ring.fate;
-                } else {
-                    event.cancel();
                 }
             });
             this.game.queueSimpleStep(() => this.payAttackerCosts());
@@ -154,7 +152,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             ringFate: this.conflict.ring.fate
         };
 
-        this.game.raiseEvent(EventNames.OnConflictDeclaredBeforeProvinceReveal, params, () => {
+        this.game.raiseEvent(EventNames.OnConflictDeclaredBeforeProvinceReveal, params, event => {
             if(this.conflict.attackers.some(a => a.location === Locations.PlayArea)) {
                 this.game.updateCurrentConflict(this.conflict);
                 this.conflict.declaredProvince = this.conflict.conflictProvince;
@@ -177,6 +175,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             } else {
                 this.game.addMessage('{0} has failed to initiate a conflict because they no longer have any legal attackers', this.conflict.attackingPlayer);
                 this.conflict.conflictFailedToInitiate = true;
+                event.cancel();
             }
         });
     }

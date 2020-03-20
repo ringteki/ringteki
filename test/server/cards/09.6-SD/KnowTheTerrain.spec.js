@@ -184,6 +184,7 @@ describe('Know the Terrain', function() {
                     player2: {
                         inPlay: ['bayushi-kachiko', 'togashi-mitsu'],
                         hand: ['know-the-terrain', 'castigated', 'mantra-of-fire'],
+                        conflictDiscard: ['the-crashing-wave'],
                         provinces: ['endless-plains', 'rally-to-the-cause', 'secret-cache', 'manicured-garden'],
                         role: 'keeper-of-void'
                     }
@@ -204,6 +205,7 @@ describe('Know the Terrain', function() {
                 this.terrain = this.player2.findCardByName('know-the-terrain');
                 this.mantra = this.player2.findCardByName('mantra-of-fire');
                 this.mitsu = this.player2.findCardByName('togashi-mitsu');
+                this.crashingWave = this.player2.findCardByName('the-crashing-wave');
 
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
@@ -341,6 +343,50 @@ describe('Know the Terrain', function() {
                 this.noMoreActions();
                 this.player1.clickPrompt('Don\'t Resolve');
                 this.kiyono.bowed = false;
+                this.noMoreActions();
+                this.player2.passConflict();
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.kiyono],
+                    province: this.rally,
+                    ring: 'fire'
+                });
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.terrain);
+                expect(this.rally.facedown).toBe(true);
+                this.player2.clickCard(this.terrain);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.edict);
+                this.player1.clickCard(this.edict);
+                this.player1.clickCard(this.kiyono);
+                expect (this.kiyono.location).toBe('dynasty discard pile');
+                expect(this.player1.fate).toBe(fate);
+                expect(this.getChatLogs(3)).toContain('player1 has failed to initiate a conflict because they no longer have any legal attackers');
+                expect(this.player2).not.toHavePrompt('Triggered Abilities');
+                expect(this.player1).toHavePrompt('Action Window');
+            });
+
+            it('if the conflict fizzles should not allow reactions to declaration (crashing wave)', function() {
+                let fate = this.player1.fate;
+                this.player1.moveCard(this.edict, 'hand');
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.kiyono],
+                    defenders: [],
+                    province: this.garden,
+                    ring: 'air'
+                });
+
+                this.player2.clickCard(this.castigated);
+                this.player2.clickCard(this.kiyono);
+
+                this.noMoreActions();
+                this.player1.clickPrompt('Don\'t Resolve');
+                this.kiyono.bowed = false;
+                this.player2.moveCard(this.crashingWave, 'hand');
                 this.noMoreActions();
                 this.player2.passConflict();
                 this.noMoreActions();
