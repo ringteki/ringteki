@@ -5,7 +5,7 @@ const { Durations } = require('../../Constants');
 class SevenStingsKeep extends StrongholdCard {
     setupCardAbilities() {
         this.interrupt({
-            title: 'Special Conflict',
+            title: 'Force defenders to assign first',
             when: {
                 onConflictOpportunityAvailable: (event, context) => event.player === context.player
             },
