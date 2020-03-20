@@ -6,7 +6,7 @@ class DrivenByCourage extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'give target character +2/+2',
-            condition: context => context.game.isDuringConflict() && context.game.currentConflict.conflictProvince.element.includes(Elements.Air),
+            conflictProvinceCondition: province => province.isElement(Elements.Air),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,

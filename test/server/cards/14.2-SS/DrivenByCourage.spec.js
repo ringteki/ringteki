@@ -82,6 +82,22 @@ describe('Driven by Courage', function() {
                 this.player2.clickCard(this.courage);
                 expect(this.player2).toHavePrompt('Driven By Courage');
             });
+
+            it('should work at your opponents air province', function() {
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+                this.noMoreActions();
+                this.initiateConflict({
+                    province: this.fields,
+                    ring: 'earth',
+                    type: 'military',
+                    attackers: [this.maiden],
+                    defenders: [this.wanderer]
+                });
+                this.player1.pass();
+                this.player2.clickCard(this.courage);
+                expect(this.player2).toHavePrompt('Driven By Courage');
+            });
         });
     });
 });
