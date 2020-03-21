@@ -170,6 +170,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 events.push(this.game.getEvent(EventNames.Unnamed, {}, () => {
                     this.game.queueSimpleStep(() => this.promptForCovert());
                     this.game.queueSimpleStep(() => this.resolveCovert());
+                    this.game.queueSimpleStep(() => this.game.raiseEvent(EventNames.OnTheCrashingWave, params, () => {}));    
                 }));
                 this.game.openThenEventWindow(events);
             } else {

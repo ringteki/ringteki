@@ -285,7 +285,7 @@ describe('The Crashing Wave', function() {
                 this.player2.clickCard(this.wave);
             });
 
-            it('should trigger after Yuikimi', function() {
+            it('should trigger before Yuikimi', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -293,8 +293,8 @@ describe('The Crashing Wave', function() {
                     province: this.garden,
                     ring: 'void'
                 });
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.yuikimi);
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player1).not.toBeAbleToSelect(this.yuikimi);
             });
 
             it('should allow the conflict to continue even if your only attacker dies', function() {
