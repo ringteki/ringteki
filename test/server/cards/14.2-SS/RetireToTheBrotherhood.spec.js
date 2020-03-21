@@ -53,8 +53,6 @@ describe('Retire To The Brotherhood', function() {
         });
 
         it('base case', function() {
-            // this.player1.moveCard(this.netsu, 'play area');
-            // this.player1.playAttachment(this.reprieve, this.berserker);
             this.noMoreActions();
             expect(this.retire.facedown).toBe(true);
 
@@ -67,9 +65,6 @@ describe('Retire To The Brotherhood', function() {
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.retire);
             this.player2.clickCard(this.retire);
-            // expect(this.player1).toHavePrompt('Triggered Abilities');
-            // expect(this.player1).toBeAbleToSelect(this.reprieve);
-            // this.player1.clickCard(this.reprieve);
             expect(this.berserker.location).toBe('dynasty discard pile');
             expect(this.tsukune.location).not.toBe('dynasty discard pile');
             expect(this.shoju.location).toBe('dynasty discard pile');
@@ -92,6 +87,78 @@ describe('Retire To The Brotherhood', function() {
             expect(this.game.currentConflict.attackers).not.toContain(this.shoju2);
             expect(this.game.currentConflict.defenders).not.toContain(this.chagatai);
             expect(this.game.currentConflict.defenders).not.toContain(this.kageyu);
+        });
+
+        it('stopping leaving play', function() {
+            this.player1.playAttachment(this.reprieve, this.berserker);
+            this.noMoreActions();
+            expect(this.retire.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.retire,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.retire);
+            this.player2.clickCard(this.retire);
+            expect(this.getChatLogs(1)).toContain('player2 uses Retire to the Brotherhood to discard Doji Whisperer, Daidoji Uji, Matsu Berserker, Bayushi Shoju and Doji Challenger');
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.reprieve);
+            this.player1.clickCard(this.reprieve);
+            expect(this.berserker.location).not.toBe('dynasty discard pile');
+            expect(this.tsukune.location).not.toBe('dynasty discard pile');
+            expect(this.shoju.location).toBe('dynasty discard pile');
+            expect(this.challenger.location).toBe('dynasty discard pile');
+            expect(this.dojiWhisperer.location).toBe('dynasty discard pile');
+            expect(this.uji.location).toBe('dynasty discard pile');
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Reprieve to prevent Matsu Berserker from leaving play');
+            expect(this.getChatLogs(10)).toContain('player2 reveals Moto Chagatai and Daidoji Kageyu');
+            expect(this.getChatLogs(10)).toContain('player1 reveals Dispatch to Nowhere, Windswept Yurt, Shiba Tsukune and Bayushi Shoju');
+            expect(this.getChatLogs(10)).toContain('player2 puts Moto Chagatai and Daidoji Kageyu into play');
+            expect(this.getChatLogs(10)).toContain('player1 puts Bayushi Shoju into play');
+            expect(this.getChatLogs(10)).toContain('player2 is shuffling their dynasty deck');
+            expect(this.getChatLogs(10)).toContain('player1 is shuffling their dynasty deck');
+
+            expect(this.shoju2.location).toBe('play area');
+            expect(this.chagatai.location).toBe('play area');
+            expect(this.kageyu.location).toBe('play area');
+        });
+
+        it('Netsu + What happens if you don\'t discard anyone, + what happens if all you do is flip unique dupes', function() {
+            this.player1.moveCard(this.netsu, 'play area');
+            this.noMoreActions();
+            expect(this.retire.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.retire,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.retire);
+            this.player2.clickCard(this.retire);
+
+            expect(this.berserker.location).not.toBe('dynasty discard pile');
+            expect(this.netsu.location).toBe('dynasty discard pile');
+            expect(this.tsukune.location).not.toBe('dynasty discard pile');
+            expect(this.shoju.location).not.toBe('dynasty discard pile');
+            expect(this.challenger.location).not.toBe('dynasty discard pile');
+            expect(this.dojiWhisperer.location).not.toBe('dynasty discard pile');
+            expect(this.uji.location).not.toBe('dynasty discard pile');
+
+            expect(this.getChatLogs(10)).toContain('player2 uses Retire to the Brotherhood to discard Doji Whisperer, Daidoji Uji, Matsu Berserker, Bayushi Shoju, Doji Challenger and Daidoji Netsu');
+            expect(this.getChatLogs(10)).toContain('player1 reveals Dispatch to Nowhere, Windswept Yurt and Shiba Tsukune');
+            expect(this.getChatLogs(10)).toContain('player2 is shuffling their dynasty deck');
+            expect(this.getChatLogs(10)).toContain('player1 is shuffling their dynasty deck');
+
+            expect(this.shoju2.location).toBe('dynasty deck');
+            expect(this.chagatai.location).toBe('dynasty deck');
+            expect(this.kageyu.location).toBe('dynasty deck');
         });
     });
 });
