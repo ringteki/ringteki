@@ -7,7 +7,7 @@ class MidnightRevels extends ProvinceCard {
         this.reaction({
             title: 'Bow a character',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
             target: {
                 cardType: CardTypes.Character,

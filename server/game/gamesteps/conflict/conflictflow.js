@@ -11,7 +11,7 @@ const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
 const ForcedAttackersMatrix = require('./forcedAttackers.js');
 
-const { Players, CardTypes, EventNames, EffectNames } = require('../../Constants');
+const { Players, CardTypes, EventNames, EffectNames, Locations} = require('../../Constants');
 
 /**
 Conflict Resolution
@@ -34,12 +34,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.canPass = canPass;
         this.pipeline.initialise([
             new SimpleStep(this.game, () => this.resetCards()),
-            new SimpleStep(this.game, () => this.promptForNewConflict()),
-            new SimpleStep(this.game, () => this.initiateConflict()),
-            new SimpleStep(this.game, () => this.payAttackerCosts()),
-            new SimpleStep(this.game, () => this.promptForCovert()),
-            new SimpleStep(this.game, () => this.resolveCovert()),
-            new SimpleStep(this.game, () => this.raiseDeclarationEvents()),
+            new SimpleStep(this.game, () => this.declareConflict()),
             new SimpleStep(this.game, () => this.announceAttackerSkill()),
             new SimpleStep(this.game, () => this.promptForDefenders()),
             new SimpleStep(this.game, () => this.announceDefenderSkill()),
@@ -59,6 +54,28 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.conflict.resetCards();
     }
 
+    declareConflict() {
+        this.game.raiseEvent(EventNames.OnConflictDeclared, { conflict: this.conflict }, event => {
+            this.game.queueSimpleStep(() => this.promptForNewConflict());
+            this.game.queueSimpleStep(() => {
+                if(!this.conflict.conflictPassed && !this.conflict.conflictFailedToInitiate) {
+                    event.type = this.conflict.type;
+                    event.ring = this.conflict.ring;
+                    event.attackers = this.conflict.attackers.slice();
+                    event.ringFate = this.conflict.ring.fate;
+                }
+            });
+            this.game.queueSimpleStep(() => this.payAttackerCosts());
+            this.game.queueSimpleStep(() => this.initiateConflict());
+            this.game.queueSimpleStep(() => {
+                if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
+                    event.cancel();
+                }
+            });
+            this.game.queueSimpleStep(() => this.revealProvince());
+        });
+    }
+
     promptForNewConflict() {
         let forcedAttackers = new ForcedAttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
         if(!forcedAttackers.canPass) {
@@ -66,7 +83,8 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
 
         if(this.conflict.attackingPlayer.checkRestrictions('chooseConflictRing', this.game.getFrameworkContext()) || !this.conflict.attackingPlayer.opponent) {
-            this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
+            this.game.updateCurrentConflict(this.conflict);
+            this.game.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, true, this.canPass, forcedAttackers));
             return;
         }
 
@@ -97,10 +115,24 @@ class ConflictFlow extends BaseStepWithPipeline {
                 }
                 this.conflict.ring = ring;
                 ring.contested = true;
+                this.game.updateCurrentConflict(this.conflict);
                 this.pipeline.queueStep(new InitiateConflictPrompt(this.game, this.conflict, this.conflict.attackingPlayer, false, false, forcedAttackers));
                 return true;
             }
         });
+    }
+
+    payAttackerCosts() {
+        this.game.updateCurrentConflict(null);
+        if(!this.conflict.conflictPassed) {
+            const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
+            if(!this.conflict.conflictPassed && totalFateCost > 0) {
+                this.game.addMessage('{0} pays {1} fate to declare his attackers', this.conflict.attackingPlayer, totalFateCost);
+                const costEvents = [];
+                Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+                this.game.openEventWindow(costEvents);
+            }
+        }
     }
 
     initiateConflict() {
@@ -108,18 +140,45 @@ class ConflictFlow extends BaseStepWithPipeline {
             return;
         }
 
-        _.each(this.conflict.attackers, card => card.inConflict = true);
-        this.game.recordConflict(this.conflict);
-    }
+        let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
+        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? provinceSlot : this.conflict.conflictProvince;
+        this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, provinceName, this.conflict.ring);
 
-    payAttackerCosts() {
-        const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
-        if(!this.conflict.conflictPassed && totalFateCost > 0) {
-            this.game.addMessage('{0} pays {1} fate to declare his attackers', this.conflict.attackingPlayer, totalFateCost);
-            const costEvents = [];
-            Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-            this.game.openEventWindow(costEvents);
-        }
+        const params = {
+            conflict: this.conflict,
+            type: this.conflict.conflictType,
+            ring: this.conflict.ring,
+            attackers: this.conflict.attackers.slice(),
+            ringFate: this.conflict.ring.fate
+        };
+
+        this.game.openThenEventWindow(this.game.getEvent(EventNames.OnConflictDeclaredBeforeProvinceReveal, params, event => {
+            if(this.conflict.attackers.some(a => a.location === Locations.PlayArea)) {
+                this.game.updateCurrentConflict(this.conflict);
+                this.conflict.declaredProvince = this.conflict.conflictProvince;
+                _.each(this.conflict.attackers, card => card.inConflict = true);
+                this.game.recordConflict(this.conflict);
+                const events = [];
+                if(this.conflict.ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
+                    this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, this.conflict.ring.fate, this.conflict.ring);
+                    this.game.actions.takeFateFromRing({
+                        origin: this.conflict.ring,
+                        recipient: this.conflict.attackingPlayer,
+                        amount: this.conflict.ring.fate
+                    }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+                }
+                events.push(this.game.getEvent(EventNames.Unnamed, {}, () => {
+                    this.game.queueSimpleStep(() => this.promptForCovert());
+                    this.game.queueSimpleStep(() => this.resolveCovert());
+                }));
+                this.game.openThenEventWindow(events);
+                this.game.raiseEvent(EventNames.OnTheCrashingWave, { conflict: this.conflict });
+            } else {
+                this.game.addMessage('{0} has failed to initiate a conflict because they no longer have any legal attackers', this.conflict.attackingPlayer);
+                this.conflict.conflictFailedToInitiate = true;
+                event.cancel();
+            }
+        }));
     }
 
     promptForCovert() {
@@ -200,47 +259,25 @@ class ConflictFlow extends BaseStepWithPipeline {
             () => context.target.covert = true
         ));
         events = events.concat(this.covert.map(context => this.game.getEvent(EventNames.OnCovertResolved, { card: context.source, context: context })));
-        this.game.openEventWindow(events);
+        this.game.openThenEventWindow(events);
     }
 
-    raiseDeclarationEvents() {
-        if(this.conflict.conflictPassed) {
+    revealProvince() {
+        if(!this.game.currentConflict || this.conflict.isSinglePlayer || this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
-        this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, this.conflict.conflictProvince, this.conflict.ring);
-
-        let ring = this.conflict.ring;
-        let events = [this.game.getEvent(EventNames.OnConflictDeclared, {
-            conflict: this.conflict,
-            type: this.conflict.conflictType,
-            ring: ring,
-            attackers: this.conflict.attackers.slice(),
-            ringFate: ring.fate
-        })];
-
-        if(ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
-            this.game.actions.takeFateFromRing({
-                origin: ring,
-                recipient: this.conflict.attackingPlayer,
-                amount: ring.fate
-            }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-            this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, ring.fate, ring);
-        }
-
-        if(!this.conflict.isSinglePlayer) {
-            this.conflict.conflictProvince.inConflict = true;
-            this.game.actions.reveal({
-                target: this.conflict.conflictProvince,
-                onDeclaration: true
-            }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
-        }
-
-        this.game.openEventWindow(events);
+        const events = [];
+        this.game.actions.reveal({
+            chatMessage: true,
+            target: this.conflict.conflictProvince,
+            onDeclaration: true
+        }).addEventsToArray(events, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+        this.game.openThenEventWindow(events);
     }
 
     announceAttackerSkill() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -248,7 +285,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     promptForDefenders() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -256,7 +293,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     announceDefenderSkill() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -273,14 +310,14 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     openConflictActionWindow() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
         this.queueStep(new ConflictActionWindow(this.game, 'Conflict Action Window', this.conflict));
     }
 
     determineWinner() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -329,7 +366,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     afterConflict() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -365,7 +402,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     applyUnopposed() {
-        if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer) {
+        if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -376,7 +413,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     checkBreakProvince() {
-        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.game.manualMode) {
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.game.manualMode || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -387,7 +424,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     resolveRingEffects() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -397,7 +434,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     claimRing() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
@@ -417,7 +454,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     returnHome() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
