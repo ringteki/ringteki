@@ -113,7 +113,6 @@ describe('Spectral Visitation', function() {
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
             this.player2.clickCard(this.spectralVisitation);
-            this.player2.clickPrompt('pay costs first');
             this.player2.clickCard(this.toshimoko);
 
             expect(this.toshimoko.location).toBe('play area');

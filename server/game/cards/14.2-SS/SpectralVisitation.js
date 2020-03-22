@@ -24,6 +24,7 @@ class SpectralVisitation extends ProvinceCard {
     setupCardAbilities() {
         this.reaction({
             title: 'put a character from your discard pile into play',
+            cannotTargetFirst: true,
             when: {
                 onCardRevealed: (event, context) => context.source === event.card
             },
