@@ -76,17 +76,6 @@ class ConflictFlow extends BaseStepWithPipeline {
         });
     }
 
-    raiseDeclarationEvent(ringFate) {
-        let events = [this.game.getEvent(EventNames.OnConflictDeclared, {
-            conflict: this.conflict,
-            type: this.conflict.conflictType,
-            ring: this.conflict.ring,
-            attackers: this.conflict.attackers.slice(),
-            ringFate: ringFate
-        })];
-        this.game.openThenEventWindow(events);
-    }
-
     promptForNewConflict() {
         let forcedAttackers = new ForcedAttackersMatrix(this.conflict.attackingPlayer, this.conflict.attackingPlayer.cardsInPlay, this.game);
         if(!forcedAttackers.canPass) {
