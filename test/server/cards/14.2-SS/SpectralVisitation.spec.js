@@ -57,7 +57,7 @@ describe('Spectral Visitation', function() {
             expect(this.player2).not.toBeAbleToSelect(this.spectralVisitation);
         });
 
-        it('should discard the top 4 cards of your dynasty deck to activate', function() {
+        it('should not allow you to target enemy dynasty discard pile', function() {
             this.noMoreActions();
             expect(this.spectralVisitation.facedown).toBe(true);
 
@@ -69,6 +69,54 @@ describe('Spectral Visitation', function() {
 
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+
+            expect(this.player2).not.toBeAbleToSelect(this.shoju);
+        });
+
+        it('should discard the top 4 cards of your dynasty deck to activate', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.player2.player.moveCard(this.toshimoko, 'dynasty deck');
+            expect(this.toshimoko.location).toBe('dynasty deck');
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+            this.player2.clickCard(this.yoshi);
+
+            expect(this.toshimoko.location).toBe('dynasty discard pile');
+            expect(this.yoshi.location).toBe('play area');
+        });
+
+        it('the cards discarded should be viable as targets for the ability', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.player2.reduceDeckToNumber('dynasty deck', 3);
+            this.player2.player.moveCard(this.toshimoko, 'dynasty deck');
+            expect(this.toshimoko.location).toBe('dynasty deck');
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+            this.player2.clickPrompt('pay costs first');
+            this.player2.clickCard(this.toshimoko);
+
+            expect(this.toshimoko.location).toBe('play area');
         });
     });
 });

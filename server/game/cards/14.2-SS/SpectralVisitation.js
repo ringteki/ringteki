@@ -5,14 +5,18 @@ const { CardTypes, Locations, Players, Durations, Phases } = require('../../Cons
 
 const spectralVisitationCost = () => ({
     action: { name: 'spectralVisitationCost', getCostMessage: () => ['discard the top 4 dynasty cards', []] },
-    canPay: (context) => _.chain(context.player.dynastyDeck).size() >= 4,
+    canPay: function (context) {
+        return context.player.dynastyDeck.size() >= 4;
+    },
     resolve: function(context) {
-        const discardedCards = context.player.dynastyDeck.first(4);
+        context.costs.spectralVisitationCost = context.player.dynastyDeck.first(4);
+    },
+    pay: function(context) {
+        const discardedCards = context.costs.spectralVisitationCost;
         discardedCards.slice(0, 4).forEach(card => {
             card.controller.moveCard(card, Locations.DynastyDiscardPile);
         });
-    },
-    pay: () => true
+    }
 });
 
 
