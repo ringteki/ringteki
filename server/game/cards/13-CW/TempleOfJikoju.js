@@ -11,7 +11,7 @@ class TempleOfJikoju extends ProvinceCard {
         this.forcedReaction({
             title: 'Place one fate on the unclaimed air ring',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source && context.game.rings.air.isUnclaimed()
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source && context.game.rings.air.isUnclaimed()
             },
             gameAction: AbilityDsl.actions.placeFateOnRing(context => ({ target: context.game.rings.air }))
         });

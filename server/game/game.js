@@ -985,8 +985,13 @@ class Game extends EventEmitter {
     }
 
     initiateConflict(player, canPass, forcedDeclaredType) {
-        this.currentConflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
-        this.queueStep(new ConflictFlow(this, this.currentConflict, canPass));
+        const conflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
+        this.queueStep(new ConflictFlow(this, conflict, canPass));
+    }
+
+    updateCurrentConflict(conflict) {
+        this.currentConflict = conflict;
+        this.checkGameState(true);
     }
 
     /**
