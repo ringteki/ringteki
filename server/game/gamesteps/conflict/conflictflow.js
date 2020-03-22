@@ -55,25 +55,20 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     declareConflict() {
-        this.game.raiseEvent(EventNames.OnConflictDeclared, { conflict: this.conflict }, event => {
-            this.game.queueSimpleStep(() => this.promptForNewConflict());
-            this.game.queueSimpleStep(() => {
-                if(!this.conflict.conflictPassed && !this.conflict.conflictFailedToInitiate) {
-                    event.type = this.conflict.type;
-                    event.ring = this.conflict.ring;
-                    event.attackers = this.conflict.attackers.slice();
-                    event.ringFate = this.conflict.ring.fate;
-                }
-            });
-            this.game.queueSimpleStep(() => this.payAttackerCosts());
-            this.game.queueSimpleStep(() => this.initiateConflict());
-            this.game.queueSimpleStep(() => {
-                if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
-                    event.cancel();
-                }
-            });
-            this.game.queueSimpleStep(() => this.revealProvince());
-        });
+        this.game.queueSimpleStep(() => this.promptForNewConflict());
+        this.game.queueSimpleStep(() => this.payAttackerCosts());
+        this.game.queueSimpleStep(() => this.initiateConflict());
+    }
+
+    raiseDeclarationEvent(ringFate) {
+        let events = [this.game.getEvent(EventNames.OnConflictDeclared, {
+            conflict: this.conflict,
+            type: this.conflict.conflictType,
+            ring: this.conflict.ring,
+            attackers: this.conflict.attackers.slice(),
+            ringFate: ringFate
+        })];
+        this.game.openThenEventWindow(events);
     }
 
     promptForNewConflict() {
@@ -159,6 +154,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 _.each(this.conflict.attackers, card => card.inConflict = true);
                 this.game.recordConflict(this.conflict);
                 const events = [];
+                let ringFate = this.conflict.ring.fate;
                 if(this.conflict.ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
                     this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, this.conflict.ring.fate, this.conflict.ring);
                     this.game.actions.takeFateFromRing({
@@ -170,7 +166,9 @@ class ConflictFlow extends BaseStepWithPipeline {
                 events.push(this.game.getEvent(EventNames.Unnamed, {}, () => {
                     this.game.queueSimpleStep(() => this.promptForCovert());
                     this.game.queueSimpleStep(() => this.resolveCovert());
-                    this.game.queueSimpleStep(() => this.game.raiseEvent(EventNames.OnTheCrashingWave, params, () => {}));    
+                    this.game.queueSimpleStep(() => this.game.raiseEvent(EventNames.OnTheCrashingWave, params, () => {}));
+                    this.game.queueSimpleStep(() => this.revealProvince());
+                    this.game.queueSimpleStep(() => this.raiseDeclarationEvent(ringFate));
                 }));
                 this.game.openThenEventWindow(events);
             } else {
