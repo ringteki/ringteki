@@ -1,6 +1,5 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
-const _ = require('underscore');
 const { CardTypes, Locations, Players, Durations, Phases } = require('../../Constants');
 
 const spectralVisitationCost = () => ({
