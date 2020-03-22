@@ -32,7 +32,37 @@ describe('Spectral Visitation', function() {
 
             this.initiateConflict({
                 attackers: [this.berserker],
-                defenders: [],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+        });
+
+        it('should not trigger if your deck doesn\'t have enough cards', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.player2.reduceDeckToNumber('dynasty deck', 3);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Choose defenders');
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).not.toBeAbleToSelect(this.spectralVisitation);
+        });
+
+        it('should discard the top 4 cards of your dynasty deck to activate', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
                 province: this.spectralVisitation,
                 type: 'military'
             });

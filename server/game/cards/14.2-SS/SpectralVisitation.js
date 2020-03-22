@@ -1,6 +1,20 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
+const _ = require('underscore');
 const { CardTypes, Locations, Players, Durations, Phases } = require('../../Constants');
+
+const spectralVisitationCost = () => ({
+    action: { name: 'spectralVisitationCost', getCostMessage: () => ['discard the top 4 dynasty cards', []] },
+    canPay: (context) => _.chain(context.player.dynastyDeck).size() >= 4,
+    resolve: function(context) {
+        const discardedCards = context.player.dynastyDeck.first(4);
+        discardedCards.slice(0, 4).forEach(card => {
+            card.controller.moveCard(card, Locations.DynastyDiscardPile);
+        });
+    },
+    pay: () => true
+});
+
 
 class SpectralVisitation extends ProvinceCard {
     setupCardAbilities() {
@@ -9,9 +23,7 @@ class SpectralVisitation extends ProvinceCard {
             when: {
                 onCardRevealed: (event, context) => context.source === event.card
             },
-            cost: AbilityDsl.costs.discardCard(context => ({
-                target: context.player.dynastyDeck.first(4)
-            })),
+            cost: [spectralVisitationCost()],
             target: {
                 location: Locations.DynastyDiscardPile,
                 cardType: CardTypes.Character,
