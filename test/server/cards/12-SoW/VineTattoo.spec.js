@@ -205,7 +205,7 @@ describe('Vine Tattoo', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.tengu);
             this.player1.clickCard(this.tengu);
-            expect(this.getChatLogs(3)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
+            expect(this.getChatLogs(4)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
         });
 
         it('Covert Test - reaction to covert should be on the right target (switching selection order)', function() {
@@ -222,7 +222,7 @@ describe('Vine Tattoo', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.tengu);
             this.player1.clickCard(this.tengu);
-            expect(this.getChatLogs(3)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
+            expect(this.getChatLogs(4)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
         });
     });
 });

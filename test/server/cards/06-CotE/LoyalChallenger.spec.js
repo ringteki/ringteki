@@ -145,9 +145,11 @@ describe('Loyal Challenger', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
+                        honor: 11,
                         inPlay: ['loyal-challenger']
                     },
                     player2: {
+                        honor: 11,
                         inPlay: ['agasha-swordsmith']
                     }
                 });
@@ -182,6 +184,24 @@ describe('Loyal Challenger', function() {
                 expect(this.player2).toHavePrompt('Action Window');
                 this.player2.clickCard(this.agashaSwordsmith);
                 expect(this.player2).toHavePrompt('Agasha Swordsmith');
+            });
+
+            it('when Loyal Challenger loses its own duel, its constant ability should not work', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.loyalChallenger],
+                    defenders: [this.agashaSwordsmith],
+                    type: 'military'
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.loyalChallenger);
+                this.player1.clickCard(this.agashaSwordsmith);
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('3');
+                expect(this.player1.honor).toBe(13);
+                expect(this.loyalChallenger.isBlank()).toBe(true);
+                this.noMoreActions();
+                expect(this.player1.honor).toBe(13);
             });
         });
     });

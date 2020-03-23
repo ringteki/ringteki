@@ -66,6 +66,10 @@ describe('Expert Interpreter', function() {
             this.noMoreActions();
             this.player1.clickCard(this.interpreter);
             this.player1.clickRing('air');
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('Yes');
             expect(this.player2).toHavePrompt('Choose a ring');
             expect(this.player2).toBeAbleToSelectRing('air');
             expect(this.player2).toBeAbleToSelectRing('earth');
@@ -81,6 +85,7 @@ describe('Expert Interpreter', function() {
             this.noMoreActions();
             this.player1.clickCard(this.interpreter);
             this.player1.clickRing('air');
+            this.player2.clickPrompt('Yes');
             this.player2.clickRing('fire');
             expect(this.getChatLogs(3)).toContain('player1 uses Expert Interpreter to prevent characters from entering play while the Air Ring is contested.  player2 gives player1 1 honor to also apply this effect to the Fire Ring');
             expect(this.player1.honor).toBe(p1Honor + 1);
@@ -93,7 +98,7 @@ describe('Expert Interpreter', function() {
             this.noMoreActions();
             this.player1.clickCard(this.interpreter);
             this.player1.clickRing('air');
-            this.player2.clickPrompt('Done');
+            this.player2.clickPrompt('No');
             expect(this.getChatLogs(3)).toContain('player1 uses Expert Interpreter to prevent characters from entering play while the Air Ring is contested');
             expect(this.player1.honor).toBe(p1Honor);
             expect(this.player2.honor).toBe(p2Honor);
@@ -104,7 +109,7 @@ describe('Expert Interpreter', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.interpreter);
                 this.player1.clickRing('air');
-                this.player2.clickPrompt('Done');
+                this.player2.clickPrompt('No');
                 this.noMoreActions();
                 this.initiateConflict({
                     ring: 'air',
@@ -201,6 +206,7 @@ describe('Expert Interpreter', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.interpreter);
                 this.player1.clickRing('air');
+                this.player2.clickPrompt('Yes');
                 this.player2.clickRing('earth');
                 this.noMoreActions();
                 this.initiateConflict({
@@ -224,7 +230,7 @@ describe('Expert Interpreter', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.interpreter);
                 this.player1.clickRing('air');
-                this.player2.clickPrompt('Done');
+                this.player2.clickPrompt('No');
                 this.noMoreActions();
                 this.initiateConflict({
                     ring: 'fire',
@@ -320,7 +326,7 @@ describe('Expert Interpreter', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.interpreter);
                 this.player1.clickRing('air');
-                this.player2.clickPrompt('Done');
+                this.player2.clickPrompt('No');
                 this.noMoreActions();
                 this.initiateConflict({
                     ring: 'fire',

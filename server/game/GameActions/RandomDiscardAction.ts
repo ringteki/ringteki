@@ -18,7 +18,7 @@ export class RandomDiscardAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties: RandomDiscardProperties = this.getProperties(context);
-        return ['make {0} discard {1} cards at random', [properties.target, properties.amount]];
+        return ['make {0} discard {1} {2} at random', [properties.target, properties.amount, properties.amount > 1 ? 'cards' : 'card']];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
@@ -40,6 +40,7 @@ export class RandomDiscardAction extends PlayerAction {
             return;
         }
         let cardsToDiscard = player.hand.shuffle().slice(0, amount);
+        event.cards = cardsToDiscard;
         event.discardedCards = cardsToDiscard;
         player.game.addMessage('{0} discards {1} at random', player, cardsToDiscard);
 

@@ -75,6 +75,7 @@ class SelectCardPrompt extends UiPrompt {
             this.properties.cardCondition = (card, context) =>
                 cardCondition(card, context) && this.properties.gameAction.some(gameAction => gameAction.canAffect(card, context));
         }
+        this.hideIfNoLegalTargets = properties.hideIfNoLegalTargets;
         this.selector = properties.selector || CardSelector.for(this.properties);
         this.selectedCards = [];
         if(properties.mustSelect) {
@@ -96,7 +97,8 @@ class SelectCardPrompt extends UiPrompt {
             cardCondition: () => true,
             onSelect: () => true,
             onMenuCommand: () => true,
-            onCancel: () => true
+            onCancel: () => true,
+            hideIfNoLegalTargets: false
         };
     }
 
@@ -120,6 +122,10 @@ class SelectCardPrompt extends UiPrompt {
     }
 
     continue() {
+        if(this.hideIfNoLegalTargets && this.selector.optional && !this.selector.hasEnoughTargets(this.context, this.choosingPlayer)) {
+            this.complete();
+        }
+
         if(!this.isComplete()) {
             this.highlightSelectableCards();
         }

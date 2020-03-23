@@ -39,6 +39,10 @@ describe('Agasha Prodigy', function() {
             expect(this.player1).toBeAbleToSelect(this.ikomaProdigy);
             expect(this.player1).toBeAbleToSelect(this.magistrate);
             this.player1.clickCard(this.agashaProdigy);
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('Yes');
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.agashaProdigy);
             expect(this.player2).toBeAbleToSelect(this.ikomaProdigy);
@@ -51,8 +55,12 @@ describe('Agasha Prodigy', function() {
 
             this.player1.clickCard(this.agashaProdigy);
             this.player1.clickCard(this.agashaProdigy);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toHavePromptButton('Done');
+
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('No');
+            expect(this.player2).toHavePrompt('Action Window');
         });
 
         it('should discard the top card of each deck then try to attach it', function() {
@@ -61,6 +69,7 @@ describe('Agasha Prodigy', function() {
 
             this.player1.clickCard(this.agashaProdigy);
             this.player1.clickCard(this.agashaProdigy);
+            this.player2.clickPrompt('Yes');
             this.player2.clickCard(this.magistrate);
 
             expect(this.player1.honor).toBe(11);
@@ -78,7 +87,7 @@ describe('Agasha Prodigy', function() {
 
             this.player1.clickCard(this.agashaProdigy);
             this.player1.clickCard(this.agashaProdigy);
-            this.player2.clickPrompt('Done');
+            this.player2.clickPrompt('No');
 
             expect(this.player1.honor).toBe(10);
             expect(this.player2.honor).toBe(10);
@@ -94,6 +103,7 @@ describe('Agasha Prodigy', function() {
 
             this.player1.clickCard(this.agashaProdigy);
             this.player1.clickCard(this.agashaProdigy);
+            this.player2.clickPrompt('Yes');
             this.player2.clickCard(this.magistrate);
 
             expect(this.player1.honor).toBe(11);
@@ -116,16 +126,12 @@ describe('Agasha Prodigy', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should be able to be triggered if your opponent\'s deck is empty, but they shouldn\'t be allowed to choose a character', function() {
+        it('should be able to be triggered if your opponent\'s deck is empty, but they shouldn\'t be allowed to choose to give you an honor', function() {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player1).toHavePrompt('Choose a character');
             this.player1.clickCard(this.agashaProdigy);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).not.toBeAbleToSelect(this.agashaProdigy);
-            expect(this.player2).not.toBeAbleToSelect(this.ikomaProdigy);
-            expect(this.player2).not.toBeAbleToSelect(this.magistrate);
-            expect(this.player2).toHavePromptButton('Done');
+            expect(this.player2).toHavePrompt('Action Window');
         });
 
         it('should not allow choosing a character if you cannot give the honor', function() {
@@ -142,11 +148,7 @@ describe('Agasha Prodigy', function() {
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player1).toHavePrompt('Choose a character');
             this.player1.clickCard(this.agashaProdigy);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).not.toBeAbleToSelect(this.agashaProdigy);
-            expect(this.player2).not.toBeAbleToSelect(this.ikomaProdigy);
-            expect(this.player2).not.toBeAbleToSelect(this.magistrate);
-            this.player2.clickPrompt('Done');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
             expect(this.getChatLogs(3)).toContain('player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy');
 
             expect(this.agashaProdigy.attachments.toArray()).toContain(this.katana);

@@ -50,6 +50,10 @@ describe('Roadside Inn', function() {
             expect(this.player1).toBeAbleToSelect(this.dojiWhisperer);
             expect(this.player1).toBeAbleToSelect(this.solemnScholar);
             this.player1.clickCard(this.matsuBerserker);
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('Yes');
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player2).toBeAbleToSelect(this.ikomaProdigy);
@@ -79,6 +83,10 @@ describe('Roadside Inn', function() {
             expect(this.player1).toBeAbleToSelect(this.dojiWhisperer);
             expect(this.player1).toBeAbleToSelect(this.solemnScholar);
             this.player1.clickCard(this.matsuBerserker);
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('Yes');
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player2).toBeAbleToSelect(this.ikomaProdigy);
@@ -121,12 +129,7 @@ describe('Roadside Inn', function() {
             expect(this.player1).toBeAbleToSelect(this.dojiWhisperer);
             expect(this.player1).toBeAbleToSelect(this.solemnScholar);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).not.toBeAbleToSelect(this.matsuBerserker);
-            expect(this.player2).not.toBeAbleToSelect(this.ikomaProdigy);
-            expect(this.player2).not.toBeAbleToSelect(this.dojiWhisperer);
-            expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
-            this.player2.clickPrompt('Done');
+            expect(this.player2).not.toHavePrompt('Give an honor to your opponent?');
             expect(this.getChatLogs(1)).toContain('player1 uses Roadside Inn to place a fate from their pool on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
@@ -147,9 +150,12 @@ describe('Roadside Inn', function() {
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toHavePromptButton('Done');
-            this.player2.clickPrompt('Done');
+
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('No');
+            expect(this.player2).not.toHavePrompt('Choose a character');
             expect(this.getChatLogs(1)).toContain('player1 uses Roadside Inn to place a fate from their pool on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);

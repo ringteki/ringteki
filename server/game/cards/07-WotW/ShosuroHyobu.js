@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 
 class ShosuroHyobu extends DrawCard {
     setupCardAbilities() {
@@ -8,11 +8,9 @@ class ShosuroHyobu extends DrawCard {
             title: 'Dishonor a character',
             when: {
                 onCardsDiscardedFromHand: (event, context) =>
-                    context.player.opponent === event.context.player && (event.context.ability.isCardAbility() || !event.context.ability.isCardPlayed()) &&
-                    [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(event.context.source.type),
+                    event.cards && event.cards.some(a => a.owner === context.player.opponent) && event.context.ability.isCardAbility(),
                 onCardsDiscarded: (event, context) =>
-                    context.player.opponent === event.context.player && (event.context.ability.isCardAbility() || !event.context.ability.isCardPlayed()) &&
-                    [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(event.context.source.type)
+                    event.cards && event.originalCardStateInfo && event.originalCardStateInfo.some(a => a.location === Locations.Hand && a.owner === context.player.opponent) && event.context.ability.isCardAbility()
             },
             target: {
                 cardType: CardTypes.Character,
