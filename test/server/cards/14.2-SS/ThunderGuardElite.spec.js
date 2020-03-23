@@ -1,4 +1,4 @@
-describe('Disciple Of Shinsei', function() {
+describe('Thunder Guard Elite', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
