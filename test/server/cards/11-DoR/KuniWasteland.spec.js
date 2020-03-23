@@ -106,5 +106,52 @@ describe('Kuni Wasteland', function() {
                 expect(this.challenger.location).toBe('removed from game');
             });
         });
+
+        describe('Testing with Yuikimi and Tengu', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['kitsuki-yuikimi','tengu-sensei']
+                    },
+                    player2: {
+                        inPlay: ['doji-whisperer'],
+                        provinces: ['kuni-wasteland']
+                    }
+                });
+                this.yuikimi = this.player1.findCardByName('kitsuki-yuikimi');
+                this.tengu = this.player1.findCardByName('tengu-sensei');
+
+                this.whisperer = this.player2.findCardByName('doji-whisperer');
+                this.wasteland = this.player2.findCardByName('kuni-wasteland');
+
+                this.wasteland.facedown = true;
+                this.game.rings.void.fate = 1;
+            });
+
+            it('should stop reactions to taking fate from rings even if face down', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.yuikimi],
+                    province: this.wasteland,
+                    ring: 'void'
+                });
+
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player2).toHavePrompt('Choose Defenders');
+            });
+
+            it('should stop reactions to covert even if facedown', function() {
+                this.noMoreActions();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.wasteland);
+                this.player1.clickCard(this.tengu);
+                this.player1.clickCard(this.whisperer);
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player2).toHavePrompt('Choose Defenders');
+            });
+        });
     });
 });

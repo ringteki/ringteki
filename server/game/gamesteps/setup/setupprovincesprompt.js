@@ -97,7 +97,7 @@ class SetupProvincesPrompt extends AllPlayerPrompt {
         this.clickedDone[player.uuid] = true;
         this.game.addMessage('{0} has placed their provinces', player);
         player.moveCard(this.strongholdProvince[player.uuid], Locations.StrongholdProvince);
-        let provinces = this.selectedCards[player.uuid].concat(_.shuffle(this.selectableCards[player.uuid]));
+        let provinces = _.uniq(this.selectedCards[player.uuid].concat(_.shuffle(this.selectableCards[player.uuid])));
         for(let i = 1; i < 5; i++) {
             let provinceCard = provinces[i - 1];
             if(!provinceCard.startsGameFaceup()) {

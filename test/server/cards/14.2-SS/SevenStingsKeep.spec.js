@@ -236,7 +236,8 @@ describe('Seven Stings Keep', function() {
                 this.player1.clickPrompt('Initiate Conflict');
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 expect(this.getChatLogs(10)).toContain('Ashigaru Levy cannot participate in the conflict any more and is sent home bowed');
-                expect(this.getChatLogs(10)).toContain('player1 is initiating a political conflict at Shameful Display, contesting Fire Ring');
+                expect(this.getChatLogs(10)).toContain('player1 is initiating a political conflict at province 1, contesting Fire Ring');
+                expect(this.getChatLogs(10)).toContain('player1 reveals Shameful Display due to Framework effect');
                 expect(this.getChatLogs(10)).toContain('player1 has initiated a political conflict with skill 2');
                 expect(this.getChatLogs(10)).toContain('player2 has defended with skill 8');
 

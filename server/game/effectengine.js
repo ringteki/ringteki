@@ -28,7 +28,7 @@ class EffectEngine {
     checkDelayedEffects(events) {
         let effectsToTrigger = [];
         const effectsToRemove = [];
-        for(const effect of this.effects.filter(effect => effect.effect.type === EffectNames.DelayedEffect)) {
+        for(const effect of this.effects.filter(effect => effect.isEffectActive() && effect.effect.type === EffectNames.DelayedEffect)) {
             const properties = effect.effect.getValue();
             if(properties.condition) {
                 if(properties.condition(effect.context)) {

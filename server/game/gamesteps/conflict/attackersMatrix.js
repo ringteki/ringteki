@@ -76,16 +76,12 @@ class AttackersMatrix {
         }
 
         let cards = this.characters;
-        let originalAttackers = [...this.game.currentConflict.attackers];
         let availableAttackers = [];
         cards.forEach(card => {
-            if(card.canDeclareAsAttacker(conflictType, ring)) {
+            if(card.canDeclareAsAttacker(conflictType, ring, '', availableAttackers)) {
                 availableAttackers.push(card);
-                this.game.currentConflict.attackers.push(card);
             }
         });
-
-        this.game.currentConflict.attackers = originalAttackers;
         return availableAttackers;
     }
 
@@ -104,15 +100,12 @@ class AttackersMatrix {
 
         if(this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {
             let cards = this.characters;
-            let originalAttackers = [...this.game.currentConflict.attackers];
             let forcedAttackers = [];
             cards.forEach(card => {
-                if(card.canDeclareAsAttacker(conflictType, ring)) {
+                if(card.canDeclareAsAttacker(conflictType, ring, '', forcedAttackers)) {
                     forcedAttackers.push(card);
-                    this.game.currentConflict.attackers.push(card);
                 }
             });
-            this.game.currentConflict.attackers = originalAttackers;
             if(forcedAttackers.length > 0) {
                 this.canPass = false;
             }

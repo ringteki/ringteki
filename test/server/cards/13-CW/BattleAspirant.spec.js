@@ -1,6 +1,6 @@
-describe('Young Warrior', function() {
+describe('Battle Aspirant', function() {
     integration(function() {
-        describe('Young Warrior\'s ability', function() {
+        describe('Battle Aspirant\'s ability', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',

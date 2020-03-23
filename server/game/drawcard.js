@@ -724,8 +724,11 @@ class DrawCard extends BaseCard {
         return !this.isCovert() && this.checkRestrictions('applyCovert', context);
     }
 
-    canDeclareAsAttacker(conflictType, ring, province) { // eslint-disable-line no-unused-vars
-        const attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
+    canDeclareAsAttacker(conflictType, ring, province, incomingAttackers = undefined) { // eslint-disable-line no-unused-vars
+        let attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
+        if(incomingAttackers) {
+            attackers = incomingAttackers;
+        }
         if(attackers.concat(this).reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) > this.controller.fate) {
             return false;
         }

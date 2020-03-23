@@ -6,6 +6,9 @@ class RoadsideInn extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Place a fate on a character',
+            cost: AbilityDsl.costs.optionalHonorTransferFromOpponentCost(context => {
+                return context.player.opponent.fate > 0;
+            }),
             when: {
                 onPhaseStarted: event => event.phase === Phases.Fate
             },
@@ -18,10 +21,9 @@ class RoadsideInn extends DrawCard {
                     player: Players.Opponent,
                     cardType: CardTypes.Character,
                     optional: true,
-                    gameAction: AbilityDsl.actions.joint([
-                        AbilityDsl.actions.takeHonor(context => ({ target: context.player.opponent })),
-                        AbilityDsl.actions.placeFate(context => ({ origin: context.player.opponent }))
-                    ])
+                    hideIfNoLegalTargets: true,
+                    cardCondition: (card, context) => context.costs.optionalHonorTransferFromOpponentCostPaid,
+                    gameAction: AbilityDsl.actions.placeFate(context => ({ origin: context.player.opponent }))
                 }
             },
             effect: 'place a fate from their pool on {1}{2}',
