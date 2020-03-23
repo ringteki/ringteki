@@ -17,7 +17,7 @@ class KitsukiKagi extends DrawCard {
                     gameAction: AbilityDsl.actions.moveCard({ destination: Locations.RemovedFromGame })
                 },
                 second: {
-                    activePromptTitle: 'Choose a cards',
+                    activePromptTitle: 'Choose a card',
                     dependsOn: 'first',
                     optional: true,
                     location: [Locations.DynastyDiscardPile, Locations.ConflictDiscardPile],
