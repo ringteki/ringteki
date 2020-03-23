@@ -31,7 +31,11 @@ describe('Called to War', function() {
             expect(this.player1).toBeAbleToSelect(this.shibaTsukune);
             expect(this.player1).not.toBeAbleToSelect(this.solemnScholar);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('Yes');
+
             expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player2).not.toBeAbleToSelect(this.ikomaProdigy);
             expect(this.player2).toBeAbleToSelect(this.shibaTsukune);
@@ -52,11 +56,13 @@ describe('Called to War', function() {
             expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player1).not.toBeAbleToSelect(this.ikomaProdigy);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toBeAbleToSelect(this.shibaTsukune);
-            expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
-            expect(this.player2).toHavePromptButton('Done');
-            this.player2.clickPrompt('Done');
+
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('No');
+
+            expect(this.player2).toHavePrompt('Action Window');
             expect(this.getChatLogs(1)).toContain('player1 plays Called to War to place a fate on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
@@ -80,10 +86,6 @@ describe('Called to War', function() {
             expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player1).not.toBeAbleToSelect(this.ikomaProdigy);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).not.toBeAbleToSelect(this.shibaTsukune);
-            expect(this.player2).not.toBeAbleToSelect(this.solemnScholar);
-            this.player2.clickPrompt('Done');
             expect(this.getChatLogs(3)).toContain('player1 plays Called to War to place a fate on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
@@ -99,10 +101,10 @@ describe('Called to War', function() {
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
             this.player1.clickCard(this.matsuBerserker);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
-            expect(this.player2).toHavePromptButton('Done');
-            this.player2.clickPrompt('Done');
+            expect(this.player2).toHavePrompt('Give an honor to your opponent?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+            this.player2.clickPrompt('No');
             expect(this.getChatLogs(1)).toContain('player1 plays Called to War to place a fate on Matsu Berserker');
 
             expect(this.matsuBerserker.fate).toBe(1);
@@ -125,6 +127,7 @@ describe('Called to War', function() {
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.shibaTsukune);
             this.player1.clickCard(this.shibaTsukune);
+            this.player2.clickPrompt('Yes');
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.shibaTsukune);
             this.player2.clickCard(this.shibaTsukune);

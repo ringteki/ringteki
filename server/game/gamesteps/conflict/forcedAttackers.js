@@ -53,7 +53,7 @@ class ForcedAttackersMatrix {
 
     getForcedAttackers(ring, conflictType) {
         if(!this.player.hasLegalConflictDeclaration({ type: conflictType, ring: ring })) {
-            return 0;
+            return [];
         }
 
         if(this.player.getEffects(EffectNames.MustDeclareMaximumAttackers).some(effect => effect === 'both' || effect === conflictType)) {

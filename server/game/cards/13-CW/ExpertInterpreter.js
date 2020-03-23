@@ -6,6 +6,7 @@ class ExpertInterpreter extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Prevent characters from entering play while contesting a ring',
+            cost: AbilityDsl.costs.optionalHonorTransferFromOpponentCost(),
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
@@ -26,22 +27,18 @@ class ExpertInterpreter extends DrawCard {
                 oppRing: {
                     player: Players.Opponent,
                     optional: true,
+                    hideIfNoLegalTargets: true,
                     mode: TargetModes.Ring,
-                    ringCondition: () => true,
-                    gameAction: AbilityDsl.actions.joint([
-                        AbilityDsl.actions.takeHonor(context => ({
-                            target: context.player.opponent
-                        })),
-                        AbilityDsl.actions.ringLastingEffect(context => ({
-                            duration: Durations.UntilEndOfPhase,
-                            targetController: Players.Any,
-                            condition: () => this.game.currentConflict && this.game.currentConflict.ring === context.rings.oppRing,
-                            effect: AbilityDsl.effects.playerCannot({
-                                cannot: 'enterPlay',
-                                restricts: 'characters'
-                            })
-                        }))
-                    ])
+                    ringCondition: (ring, context) => context.costs.optionalHonorTransferFromOpponentCostPaid,
+                    gameAction: AbilityDsl.actions.ringLastingEffect(context => ({
+                        duration: Durations.UntilEndOfPhase,
+                        targetController: Players.Any,
+                        condition: () => this.game.currentConflict && this.game.currentConflict.ring === context.rings.oppRing,
+                        effect: AbilityDsl.effects.playerCannot({
+                            cannot: 'enterPlay',
+                            restricts: 'characters'
+                        })
+                    }))
                 }
             },
             effect: 'prevent characters from entering play while the {1} is contested{2}',

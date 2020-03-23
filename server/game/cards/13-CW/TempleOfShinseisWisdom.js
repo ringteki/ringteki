@@ -11,7 +11,7 @@ class TempleOfShinseisWisdom extends ProvinceCard {
         this.forcedReaction({
             title: 'Place one fate on the unclaimed void ring',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source && context.game.rings.void.isUnclaimed()
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source && context.game.rings.void.isUnclaimed()
             },
             gameAction: AbilityDsl.actions.placeFateOnRing(context => ({ target: context.game.rings.void }))
         });

@@ -34,7 +34,7 @@ class AbilityTargetRing {
     }
 
     hasLegalTarget(context) {
-        return _.any(context.game.rings, ring => this.ringCondition(ring, context));
+        return _.any(context.game.rings, ring => this.properties.optional || this.ringCondition(ring, context));
     }
 
     getGameAction(context) {

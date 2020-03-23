@@ -6,7 +6,7 @@ class EndlessPlains extends ProvinceCard {
         this.reaction({
             title: 'Force opponent to discard a character',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
             cost: ability.costs.breakSelf(),
             target: {

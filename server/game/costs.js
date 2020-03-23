@@ -489,6 +489,57 @@ const Costs = {
             },
             promptsPlayer: true
         };
+    },
+
+    optionalHonorTransferFromOpponentCost: function (canPayFunc = (context) => true) { // eslint-disable-line no-unused-vars
+        return {
+            canPay: function () {
+                return true;
+            },
+            resolve: function (context, result) { // eslint-disable-line no-unused-vars
+                context.costs.optionalHonorTransferFromOpponentCostPaid = false;
+
+                if(!canPayFunc(context)) {
+                    return;
+                }
+
+                if(!context.player.opponent) {
+                    return;
+                }
+
+                let honorAvailable = true;
+                if(!context.game.actions.loseHonor().canAffect(context.player.opponent, context) || !context.game.actions.gainHonor().canAffect(context.player, context)) {
+                    honorAvailable = false;
+                }
+
+                if(honorAvailable) {
+                    context.game.promptWithHandlerMenu(context.player.opponent, {
+                        activePromptTitle: 'Give an honor to your opponent?',
+                        source: context.source,
+                        choices: ['Yes', 'No'],
+                        handlers: [
+                            () => context.costs.optionalHonorTransferFromOpponentCostPaid = true,
+                            () => context.costs.optionalHonorTransferFromOpponentCostPaid = false
+                        ]
+                    });
+                }
+            },
+            payEvent: function (context) {
+                if(context.costs.optionalHonorTransferFromOpponentCostPaid) {
+                    let events = [];
+
+                    let honorAction = context.game.actions.takeHonor({ target: context.player.opponent });
+                    events.push(honorAction.getEvent(context.player.opponent, context));
+
+                    return events;
+                }
+
+                let action = context.game.actions.handler(); //this is a do-nothing event to allow you to opt out and not scuttle the event
+                return action.getEvent(context.player, context);
+
+            },
+            promptsPlayer: true
+        };
     }
 };
 
