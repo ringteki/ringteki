@@ -43,7 +43,7 @@ class Logistics extends DrawCard {
                                 destination: context.targets.province.location
                             })
                         })),
-                        AbilityDsl.actions.draw(context => ({ target: this.isBattlefieldInPlay() ? context.player : [] }))
+                        AbilityDsl.actions.draw(context => ({ target: context.game.isTraitInPlay('battlefield') ? context.player : [] }))
                     ])
                 }
             },
@@ -51,15 +51,8 @@ class Logistics extends DrawCard {
             effectArgs: context => [
                 context.targets.cardInProvince.facedown ? 'a facedown card' : context.targets.cardInProvince,
                 context.targets.province.facedown ? context.targets.province.location : context.targets.province,
-                this.isBattlefieldInPlay() ? ' and draw a card' : ''
+                context.game.isTraitInPlay('battlefield') ? ' and draw a card' : ''
             ]
-        });
-    }
-
-    isBattlefieldInPlay() {
-        return this.game.allCards.some(card => {
-            return card.hasTrait('battlefield') && !card.facedown &&
-            (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
         });
     }
 }
