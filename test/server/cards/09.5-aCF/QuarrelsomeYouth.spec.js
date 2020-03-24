@@ -49,7 +49,7 @@ describe('Quarrelsome Youth', function() {
                 this.player1.clickCard(this.youth);
                 expect(this.player2).not.toHavePrompt('Choose a card to discard');
                 expect(this.player2.player.hand.size()).toBe(player2hand - 1);
-                expect(this.getChatLog(1)).toContain('player1 uses Quarrelsome Youth to make player2 discard 1 cards at random');
+                expect(this.getChatLog(1)).toContain('player1 uses Quarrelsome Youth to make player2 discard 1 card at random');
             });
 
             it('should not make your opponent discard a card at random if you have more cards when youth loses conflict as an attacker', function() {

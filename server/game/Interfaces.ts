@@ -12,6 +12,7 @@ import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } fro
 interface BaseTarget {
     activePromptTitle?: string;
     player?: ((context: AbilityContext) => Players) | Players;
+    hideIfNoLegalTargets?: boolean;
     gameAction?: GameAction | GameAction[];
 };
 
@@ -22,6 +23,7 @@ interface ChoicesInterface {
 interface TargetSelect extends BaseTarget {
     mode: TargetModes.Select;
     choices: ChoicesInterface;
+    condition?: (context: AbilityContext) => boolean;
     targets?: boolean;
 };
 

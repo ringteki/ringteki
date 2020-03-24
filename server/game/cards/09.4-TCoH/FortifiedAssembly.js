@@ -7,7 +7,7 @@ class FortifiedAssembly extends ProvinceCard {
         this.reaction({
             title: 'Place an honor token on this province',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
             gameAction: AbilityDsl.actions.addToken(),
             effect: 'put an honor token on {0}',

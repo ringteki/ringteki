@@ -253,6 +253,16 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
+    /**
+     * Returns if a card is in play (characters, attachments, provinces, holdings) that has the passed trait
+     * @param {string} trait
+     * @returns {boolean} true/false if the trait is in pay
+     */
+    isTraitInPlay(trait) {
+        return this.getPlayers().some(player => player.isTraitInPlay(trait));
+    }
+
+
     createToken(card) {
         let token = new SpiritOfTheRiver(card);
         this.allCards.push(token);
@@ -985,8 +995,13 @@ class Game extends EventEmitter {
     }
 
     initiateConflict(player, canPass, forcedDeclaredType) {
-        this.currentConflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
-        this.queueStep(new ConflictFlow(this, this.currentConflict, canPass));
+        const conflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
+        this.queueStep(new ConflictFlow(this, conflict, canPass));
+    }
+
+    updateCurrentConflict(conflict) {
+        this.currentConflict = conflict;
+        this.checkGameState(true);
     }
 
     /**

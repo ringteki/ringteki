@@ -218,6 +218,19 @@ class Player extends GameObject {
         return cardsToReturn;
     }
 
+    /**
+     * Returns if a card is in play (characters, attachments, provinces, holdings) that has the passed trait
+     * @param {string} trait
+     * @returns {boolean} true/false if the trait is in pay
+     */
+    isTraitInPlay(trait) {
+        return this.game.allCards.some(card => {
+            return card.controller === this && card.hasTrait(trait) && !card.facedown &&
+            (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
+        });
+    }
+
+
     areLocationsAdjacent(location1, location2) {
         let index1 = provinceLocations.indexOf(location1);
         let index2 = provinceLocations.indexOf(location2);
