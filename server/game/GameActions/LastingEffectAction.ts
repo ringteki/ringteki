@@ -7,7 +7,7 @@ export interface LastingEffectGeneralProperties extends GameActionProperties {
     duration?: Durations;
     condition?: (context: AbilityContext) => boolean;
     until?: WhenType;
-    effect: any;
+    effect?: any;
 }
 
 export interface LastingEffectProperties extends LastingEffectGeneralProperties {
@@ -37,6 +37,7 @@ export class LastingEffectAction extends GameAction {
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties): void {
+        let properties = this.getProperties(context, additionalProperties);
         if(this.hasLegalTarget(context, additionalProperties)) {
             events.push(this.getEvent(null, context, additionalProperties));
         }

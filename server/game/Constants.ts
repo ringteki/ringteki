@@ -142,6 +142,7 @@ export enum EffectNames {
     RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
+    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict'
 };
 
 export enum Durations {
@@ -219,6 +220,7 @@ export enum EventNames {
     OnConflictInitiated = 'onConflictInitiated',
     OnDuelInitiated = 'onDuelInitiated',
     OnConflictDeclared = 'onConflictDeclared',
+    OnConflictOpportunityAvailable = 'onConflictOpportunityAvailable',
     OnCovertResolved = 'onCovertResolved',
     OnCardRevealed = 'onCardRevealed',
     OnCardTurnedFacedown = 'onCardTurnedFacedown',
