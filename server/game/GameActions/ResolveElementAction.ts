@@ -4,7 +4,7 @@ import Player = require('../player');
 import RingEffects = require('../RingEffects');
 import Ring = require('../ring');
 import { RingAction, RingActionProperties} from './RingAction';
-import { EventNames } from '../Constants';
+import { EventNames, EffectNames } from '../Constants';
 
 export interface ResolveElementProperties extends RingActionProperties {
     physicalRing?: Ring;
@@ -48,6 +48,14 @@ export class ResolveElementAction extends RingAction {
     }
 
     eventHandler(event): void {
+        const cannotResolveRingEffects = event.context.player.getEffects(EffectNames.CannotResolveRings);
+
+        if(cannotResolveRingEffects.length) {
+            event.context.game.addMessage('{0}\'s ring effect is cancelled.', event.context.player)
+            event.cancel();
+            return;
+        }
+
         event.context.game.resolveAbility(RingEffects.contextFor(event.player, event.ring.element, event.optional));
     }
 }

@@ -122,6 +122,7 @@ export enum EffectNames {
     CannotDeclareConflictsOfType = 'cannotDeclareConflictsOfType',
     CanPlayFromOwn = 'canPlayFromOwn',
     CanPlayFromOpponents = 'canPlayFromOpponents',
+    CannotResolveRings = "cannotResolveRings",
     ChangePlayerGloryModifier = 'gloryModifier',
     ChangePlayerSkillModifier = 'conflictSkillModifier',
     GainActionPhasePriority = 'actionPhasePriority',
@@ -141,7 +142,7 @@ export enum EffectNames {
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
     RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
-    StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
+    StrongholdCanBeAttacked = 'strongholdCanBeAttacked'
 };
 
 export enum Durations {

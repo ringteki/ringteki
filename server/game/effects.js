@@ -144,6 +144,7 @@ const Effects = {
         },
         unapply: (player, context, location) => player.removePlayableLocation(location)
     }),
+    cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
     changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
     customDetachedPlayer: (properties) => EffectBuilder.player.detached(EffectNames.CustomEffect, properties),

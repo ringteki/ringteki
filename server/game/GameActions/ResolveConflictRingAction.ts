@@ -3,7 +3,7 @@ import { ResolveElementAction } from './ResolveElementAction';
 import Player = require('../player');
 import Ring = require('../ring');
 import { RingAction, RingActionProperties} from './RingAction';
-import { EventNames } from '../Constants';
+import { EventNames, EffectNames } from '../Constants';
 
 export class ResolveConflictRingAction extends RingAction {
     name = 'resolveRing';
@@ -25,11 +25,19 @@ export class ResolveConflictRingAction extends RingAction {
         event.player = context.player;
     }
 
-    eventHandler(event, additionalProperties): void {
+    eventHandler(event): void {
         if(event.name !== this.eventName) {
             return;
         }
-        let properties: RingActionProperties = this.getProperties(event.context, additionalProperties);
+
+        const cannotResolveRingEffects = event.context.player.getEffects(EffectNames.CannotResolveRings);
+
+        if(cannotResolveRingEffects.length) {
+            event.context.game.addMessage('{0}\'s ring effect is cancelled.', event.context.player)
+            event.cancel();
+            return;
+        }
+
         let elements = event.ring.getElements();
         let player = event.player
         if(elements.length === 1) {
@@ -49,7 +57,7 @@ export class ResolveConflictRingAction extends RingAction {
             activePromptTitle = chosenElements.reduce((string, element) => string + ' ' + element, activePromptTitle + '\nChosen elements:');
         }
         let buttons = [];
-        
+
         elements.map(element => buttons.push({text:element.slice(0,1).toUpperCase() + element.slice(1) + " Ring", arg: element}));
         if(chosenElements.length > 0) {
             buttons.push({ text: 'Done', arg: 'done' });
