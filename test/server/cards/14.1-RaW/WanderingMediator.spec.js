@@ -19,6 +19,12 @@ describe('Wandering Mediator', function() {
                 this.manicured = this.player2.findCardByName('manicured-garden');
             });
 
+            it ('should not work outside of conflict', function() {
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.wanderingMediator);
+                expect(this.player1).toHavePrompt('Action Window');
+            });
+
             it('can move it to a conflict at an air province', function() {
                 this.noMoreActions();
                 this.initiateConflict({
