@@ -7,13 +7,11 @@ class MountaintopVigil extends DrawCard {
         this.action({
             title: 'cancel all ring effects',
             condition: () => this.game.isDuringConflict(),
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.playerLastingEffect({
-                    duration: Durations.UntilEndOfConflict,
-                    targetController: Players.Any,
-                    effect: AbilityDsl.effects.cannotResolveRings()
-                })
-            ])
+            gameAction: AbilityDsl.actions.playerLastingEffect({
+                duration: Durations.UntilEndOfConflict,
+                targetController: Players.Any,
+                effect: AbilityDsl.effects.cannotResolveRings()
+            })
         });
     }
 }
