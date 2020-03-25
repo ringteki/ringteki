@@ -122,6 +122,7 @@ export enum EffectNames {
     CannotDeclareConflictsOfType = 'cannotDeclareConflictsOfType',
     CanPlayFromOwn = 'canPlayFromOwn',
     CanPlayFromOpponents = 'canPlayFromOpponents',
+    CannotResolveRings = "cannotResolveRings",
     ChangePlayerGloryModifier = 'gloryModifier',
     ChangePlayerSkillModifier = 'conflictSkillModifier',
     GainActionPhasePriority = 'actionPhasePriority',
