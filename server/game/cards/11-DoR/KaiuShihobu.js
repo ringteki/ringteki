@@ -15,7 +15,7 @@ class KaiuShihobu extends DrawCard {
                 destination: Locations.UnderneathStronghold,
                 selectedCardsHandler: (context, event, cards) => {
                     if(cards.length > 0) {
-                        this.game.addMessage('{0} selects {1}', event.player, cards.map(e => e.name).sort().join(', '));
+                        this.game.addMessage('{0} selects {1}', event.player, cards);
                         cards.forEach(card => {
                             event.player.stronghold.addChildCard(card, Locations.UnderneathStronghold);
                             card.lastingEffect(() => ({
@@ -66,8 +66,12 @@ class KaiuShihobu extends DrawCard {
                     context.player.moveCard(card, Locations.DynastyDiscardPile);
                 });
             },
-            effect: 'discard {1}, replacing it with a facedown holding',
-            effectArgs: context => context.player.getDynastyCardsInProvince(context.targets.second.location).map(e => e.name).sort().join(', ')
+            effect: 'discard {1}, replacing {2} with {3}',
+            effectArgs: context => [
+                context.player.getDynastyCardsInProvince(context.targets.second.location),
+                context.player.getDynastyCardsInProvince(context.targets.second.location).length > 1 ? 'them' : 'it',
+                context.targets.first
+            ]
         });
     }
 }

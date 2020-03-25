@@ -25,7 +25,7 @@ class FrontlineEngineer extends DrawCard {
                 }],
                 cardHandler: cardFromDeck => {
                     let cards = context.player.getDynastyCardsInProvince(this.game.currentConflict.conflictProvince.location);
-                    this.game.addMessage('{0} discards {1}, replacing it with {2}', context.player, cards.map(e => e.name).join(', '), cardFromDeck);
+                    this.game.addMessage('{0} discards {1}, replacing it with {2}', context.player, cards, cardFromDeck);
                     context.player.moveCard(cardFromDeck, this.game.currentConflict.conflictProvince.location);
                     cardFromDeck.facedown = false;
                     cards.forEach(element => {
