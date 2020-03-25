@@ -227,6 +227,7 @@ export enum EventNames {
     OnDefendersDeclared = 'onDefendersDeclared',
     AfterConflict = 'afterConflict',
     OnBreakProvince = 'onBreakProvince',
+    OnRestoreProvince = 'onRestoreProvince',
     OnResolveConflictRing = 'onResolveConflictRing',
     OnResolveRingElement = 'onResolveRingElement',
     OnClaimRing = 'onClaimRing',
