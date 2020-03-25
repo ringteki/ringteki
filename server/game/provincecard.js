@@ -87,6 +87,7 @@ class ProvinceCard extends BaseCard {
 
     breakProvince() {
         this.isBroken = true;
+        this.removeAllTokens();
         if(this.controller.opponent) {
             this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
             if(this.location === Locations.StrongholdProvince) {
@@ -112,6 +113,11 @@ class ProvinceCard extends BaseCard {
                 });
             }
         }
+    }
+
+    restoreProvince() {
+        this.isBroken = false;
+        this.facedown = false;
     }
 
     cannotBeStrongholdProvince() {
@@ -144,7 +150,7 @@ class ProvinceCard extends BaseCard {
         }
 
         return (
-            true//!this.isBroken
+            true
         );
     }
 

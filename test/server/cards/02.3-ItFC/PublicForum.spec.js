@@ -46,6 +46,32 @@ describe('Public Forum', function() {
                 expect(this.publicForum.isBroken).toBe(false);
                 expect(this.player2).toHavePrompt('Air Ring');
             });
+
+            it('should discard the honor token when it breaks', function() {
+                this.noMoreActions();
+                this.player1.clickCard(this.publicForum);
+                expect(this.publicForum.hasToken('honor')).toBe(true);
+                expect(this.publicForum.getTokenCount('honor')).toBe(1);
+                expect(this.publicForum.isBroken).toBe(false);
+                this.player2.clickPrompt('Don\'t Resolve');
+                this.aranat.bowed = false;
+                this.noMoreActions();
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    attackers: [this.aranat],
+                    defenders: [],
+                    type: 'political',
+                    ring: 'earth',
+                    province: this.publicForum
+                });
+                this.noMoreActions();
+                expect(this.publicForum.isBroken).toBe(true);
+                this.player2.clickPrompt('No');
+                this.player2.clickPrompt('Don\'t Resolve');
+                expect(this.publicForum.hasToken('honor')).toBe(false);
+                expect(this.publicForum.getTokenCount('honor')).toBe(0);
+            });
         });
     });
 });
