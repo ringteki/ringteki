@@ -6,7 +6,7 @@ class WayOfTheOpenHand extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Send home opponent\'s character',
-            condition: () => this.game.currentConflict.conflictProvince.location !== Locations.StrongholdProvince,
+            condition: context => context.game.isDuringConflict() && context.game.currentConflict.conflictProvince.location !== Locations.StrongholdProvince,
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.controller !== context.player,

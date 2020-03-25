@@ -1,18 +1,18 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes, Locations } = require('../../Constants');
-const AbiltiyDsl = require('../../abilitydsl');
+const { CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
 
 class AkodoReserveCompany extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow an attacking character',
-            condition: () => this.game.isDuringConflict() && this.game.allCards.some(card => card.hasTrait('battlefield') && card.location.includes(Locations.PlayArea)),
+            condition: context => context.game.isDuringConflict() && context.game.isTraitInPlay('battlefield'),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.controller === context.player,
-                gameAction: AbiltiyDsl.actions.joint([
-                    AbiltiyDsl.actions.moveToConflict(context => ({ target: context.source })),
-                    AbiltiyDsl.actions.sendHome()
+                gameAction: AbilityDsl.actions.joint([
+                    AbilityDsl.actions.moveToConflict(context => ({ target: context.source })),
+                    AbilityDsl.actions.sendHome()
                 ])
             }
         });

@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
 const { Locations, CardTypes } = require('../../Constants');
-const ForcedAttackersMatrix = require('./forcedAttackers.js');
+const AttackersMatrix = require('./attackersMatrix.js');
 const AbilityContext = require('../../AbilityContext');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
 
@@ -16,7 +16,7 @@ const capitalize = {
 };
 
 class InitiateConflictPrompt extends UiPrompt {
-    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing, forcedAttackers = null) {
+    constructor(game, conflict, choosingPlayer, attackerChoosesRing = true, canPass = attackerChoosesRing, attackerMatrix = null) {
         super(game);
         this.conflict = conflict;
         this.choosingPlayer = choosingPlayer;
@@ -24,11 +24,11 @@ class InitiateConflictPrompt extends UiPrompt {
         this.canPass = canPass;
         this.selectedDefenders = [];
         this.covertRemaining = false;
-        this.forcedAttackers = forcedAttackers;
+        this.attackerMatrix = attackerMatrix;
 
-        if(forcedAttackers === null) {
-            this.forcedAttackers = new ForcedAttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
-            if(!this.forcedAttackers.canPass) {
+        if(attackerMatrix === null) {
+            this.attackerMatrix = new AttackersMatrix(this.choosingPlayer, this.choosingPlayer.cardsInPlay, this.game);
+            if(!this.attackerMatrix.canPass) {
                 this.canPass = false;
             }
         }
@@ -45,12 +45,12 @@ class InitiateConflictPrompt extends UiPrompt {
     }
 
     checkForMustSelect() {
-        if(this.forcedAttackers.maximumAttackers > 0) {
-            this.conflict.ring = this.forcedAttackers.defaultRing;
-            if(this.conflict.ring.conflictType !== this.forcedAttackers.defaultType) {
+        if(this.attackerMatrix.forcedNumberOfAttackers > 0) {
+            this.conflict.ring = this.attackerMatrix.defaultRing;
+            if(this.conflict.ring.conflictType !== this.attackerMatrix.defaultType) {
                 this.conflict.ring.flipConflictType();
             }
-            for(const card of this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
+            for(const card of this.attackerMatrix.getForcedAttackers(this.conflict.ring, this.conflict.conflictType)) {
                 if(this.checkCardCondition(card) && !this.conflict.attackers.includes(card)) {
                     this.selectCard(card);
                 }
@@ -93,7 +93,9 @@ class InitiateConflictPrompt extends UiPrompt {
                 } else {
                     menuTitle = capitalize[this.conflict.conflictType] + ' skill: '.concat(this.conflict.attackerSkill);
                 }
-                buttons.unshift({ text: 'Initiate Conflict', arg: 'done' });
+                if(this.conflict.attackers.length === this.attackerMatrix.requiredNumberOfAttackers || this.attackerMatrix.requiredNumberOfAttackers <= 0) {
+                    buttons.unshift({ text: 'Initiate Conflict', arg: 'done' });
+                }
             }
         }
 
@@ -125,8 +127,8 @@ class InitiateConflictPrompt extends UiPrompt {
         } else {
             const type = ring.conflictType;
 
-            let polValid = this.forcedAttackers.isCombinationValid(ring, 'political');
-            let milValid = this.forcedAttackers.isCombinationValid(ring, 'military');
+            let polValid = this.attackerMatrix.isCombinationValid(ring, 'political');
+            let milValid = this.attackerMatrix.isCombinationValid(ring, 'military');
 
             if(!player.hasLegalConflictDeclaration({ type, ring, province: this.conflict.conflictProvince })) {
                 ring.flipConflictType();
@@ -150,7 +152,7 @@ class InitiateConflictPrompt extends UiPrompt {
             }
         });
 
-        _.each(this.forcedAttackers.getForcedAttackers(ring, ring.conflictType), card => {
+        _.each(this.attackerMatrix.getForcedAttackers(ring, ring.conflictType), card => {
             if(!this.conflict.attackers.includes(card)) {
                 this.selectCard(card);
             }
@@ -171,13 +173,13 @@ class InitiateConflictPrompt extends UiPrompt {
                 return false;
             }
 
-            if(!this.forcedAttackers.isCombinationValid(ring, newType)) {
+            if(!this.attackerMatrix.isCombinationValid(ring, newType)) {
                 return false;
             }
 
             return true;
         }
-        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province }) && (this.forcedAttackers.isCombinationValid(ring, 'political') || this.forcedAttackers.isCombinationValid(ring, 'military'));
+        return this.attackerChoosesRing && player.hasLegalConflictDeclaration({ ring, province }) && (this.attackerMatrix.isCombinationValid(ring, 'political') || this.attackerMatrix.isCombinationValid(ring, 'military'));
     }
 
     checkCardCondition(card) {
@@ -190,7 +192,19 @@ class InitiateConflictPrompt extends UiPrompt {
         } else if(card.type === CardTypes.Character && card.location === Locations.PlayArea) {
             if(card.controller === this.choosingPlayer) {
                 if(this.conflict.attackers.includes(card)) {
-                    return !this.forcedAttackers.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
+                    let forced = this.attackerMatrix.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(card);
+                    let extraAttackers = this.attackerMatrix.requiredNumberOfAttackers > 0 ? this.conflict.attackers.length > this.attackerMatrix.requiredNumberOfAttackers : false;
+                    let enoughForcedRemaining = true;
+
+                    if(forced && extraAttackers) {
+                        let forcedRemainingCount = this.conflict.attackers.filter(a =>
+                            this.attackerMatrix.getForcedAttackers(this.conflict.ring, this.conflict.conflictType).includes(a)).length - 1; //-1 because we're trying to remove a character from the list
+                        if(forcedRemainingCount < this.attackerMatrix.requiredNumberOfAttackers) {
+                            enoughForcedRemaining = false;
+                        }
+                    }
+
+                    return !forced || (extraAttackers && enoughForcedRemaining);
                 }
                 return this.choosingPlayer.hasLegalConflictDeclaration({
                     type: this.conflict.conflictType,

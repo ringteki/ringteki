@@ -47,6 +47,7 @@ const Effects = {
     delayedEffect: (properties) => EffectBuilder.card.static(EffectNames.DelayedEffect, properties),
     doesNotBow: () => EffectBuilder.card.static(EffectNames.DoesNotBow),
     doesNotReady: () => EffectBuilder.card.static(EffectNames.DoesNotReady),
+    entersPlayWithStatus: (status) => EffectBuilder.card.static(EffectNames.EntersPlayWithStatus, status),
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectNames.EntersPlayForOpponent),
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),
@@ -143,6 +144,7 @@ const Effects = {
         },
         unapply: (player, context, location) => player.removePlayableLocation(location)
     }),
+    cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
     changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
     customDetachedPlayer: (properties) => EffectBuilder.player.detached(EffectNames.CustomEffect, properties),
@@ -171,6 +173,7 @@ const Effects = {
     mustDeclareMaximumAttackers: (type = 'both') => EffectBuilder.player.static(EffectNames.MustDeclareMaximumAttackers, type),
     restartDynastyPhase: (source) => EffectBuilder.player.static(EffectNames.RestartDynastyPhase, source),
     strongholdCanBeAttacked: () => EffectBuilder.player.static(EffectNames.StrongholdCanBeAttacked),
+    defendersChosenFirstDuringConflict: (amountOfAttackers) => EffectBuilder.player.static(EffectNames.DefendersChosenFirstDuringConflict, amountOfAttackers),
     // Conflict effects
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),
     changeConflictSkillFunction: (func) => EffectBuilder.conflict.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks

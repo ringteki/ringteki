@@ -108,7 +108,7 @@ describe('Dishonorable Assault', function() {
                 expect(this.whisperer.isDishonored).toBe(true);
                 expect(this.youth.isDishonored).toBe(true);
 
-                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Fine Katana, Ornate Fan and dishonor Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Fine Katana and Ornate Fan and dishonor Doji Whisperer and Moto Youth');
             });
 
             it('Should not let you choose more characters than you chose cards', function() {
@@ -138,7 +138,7 @@ describe('Dishonorable Assault', function() {
                 expect(this.youth.isDishonored).toBe(true);
                 expect(this.harrier.isDishonored).toBe(false);
 
-                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Fine Katana, Ornate Fan and dishonor Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Fine Katana and Ornate Fan and dishonor Doji Whisperer and Moto Youth');
             });
 
             it('Should not let you choose more cards than you have targets', function() {
@@ -168,7 +168,7 @@ describe('Dishonorable Assault', function() {
                 expect(this.whisperer.isDishonored).toBe(true);
                 expect(this.youth.isDishonored).toBe(true);
 
-                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Fine Katana, Ornate Fan and dishonor Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(3)).toContain('player2 uses Dishonorable Assault to discard Ornate Fan and Fine Katana and dishonor Doji Whisperer and Moto Youth');
             });
 
             it('Should not let you choose less characters than you discarded cards', function() {
@@ -265,7 +265,7 @@ describe('Dishonorable Assault', function() {
                 expect(this.youth.isDishonored).toBe(true);
 
                 expect(this.getChatLogs(2)).toContain('player1 uses Shosuro Hyobu to dishonor Doji Challenger');
-                expect(this.getChatLogs(1)).toContain('player2 uses Dishonorable Assault to discard Fine Katana, Ornate Fan and dishonor Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(1)).toContain('player2 uses Dishonorable Assault to discard Fine Katana and Ornate Fan and dishonor Doji Whisperer and Moto Youth');
             });
 
             it('should allow Omoidasu to trigger', function() {
