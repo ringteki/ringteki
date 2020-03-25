@@ -34,7 +34,7 @@ describe('Never Yield', function() {
             expect(this.player1).toBeAbleToSelect(this.neverYield);
         });
 
-        it('should trigger on opponent\'s attack', function() {
+        it('should not trigger on opponent\'s attack', function() {
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
