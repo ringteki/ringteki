@@ -18,7 +18,7 @@ export class RestoreProvinceAction extends CardGameAction {
         if(!card.isProvince) {
             return false;
         }
-        if(card.isProvince && !card.isBroken) {
+        if(!card.isBroken) {
             return false;
         }
         return super.canAffect(card, context);
