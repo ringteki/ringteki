@@ -38,7 +38,8 @@ class DynastyCardAction extends BaseAction {
 
     executeHandler(context) {
         const extraFate = context.source.sumEffects(EffectNames.GainExtraFateWhenPlayed);
-        let enterPlayEvent = GameActions.putIntoPlay({ fate: context.chooseFate + extraFate }).getEvent(context.source, context);
+        const status = context.source.getEffects(EffectNames.EntersPlayWithStatus)[0] || '';
+        let enterPlayEvent = GameActions.putIntoPlay({ fate: context.chooseFate + extraFate, status }).getEvent(context.source, context);
         let cardPlayedEvent = context.game.getEvent(EventNames.OnCardPlayed, {
             player: context.player,
             card: context.source,

@@ -452,6 +452,11 @@ class BaseCard extends EffectSource {
         return !!this.tokens[type];
     }
 
+    removeAllTokens(): void {
+        let keys = Object.keys(this.tokens);
+        keys.forEach(key => this.removeToken(key, this.tokens[key]));
+    }
+
     removeToken(type: string, number: number): void {
         this.tokens[type] -= number;
 

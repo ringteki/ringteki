@@ -19,6 +19,11 @@ export enum Locations {
     Role = 'role'
 };
 
+export enum CharacterStatus {
+    Honored = 'honored',
+    Dishonored = 'dishonored'
+}
+
 export enum Decks {
     ConflictDeck = 'conflict deck',
     DynastyDeck = 'dynasty deck'
@@ -56,6 +61,7 @@ export enum EffectNames {
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
+    EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
     FateCostToTarget = 'fateCostToTarget',
@@ -116,6 +122,7 @@ export enum EffectNames {
     CannotDeclareConflictsOfType = 'cannotDeclareConflictsOfType',
     CanPlayFromOwn = 'canPlayFromOwn',
     CanPlayFromOpponents = 'canPlayFromOpponents',
+    CannotResolveRings = "cannotResolveRings",
     ChangePlayerGloryModifier = 'gloryModifier',
     ChangePlayerSkillModifier = 'conflictSkillModifier',
     GainActionPhasePriority = 'actionPhasePriority',
@@ -135,7 +142,8 @@ export enum EffectNames {
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
     RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
-    StrongholdCanBeAttacked = 'strongholdCanBeAttacked'
+    StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
+    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict'
 };
 
 export enum Durations {
@@ -213,12 +221,14 @@ export enum EventNames {
     OnConflictInitiated = 'onConflictInitiated',
     OnDuelInitiated = 'onDuelInitiated',
     OnConflictDeclared = 'onConflictDeclared',
+    OnConflictOpportunityAvailable = 'onConflictOpportunityAvailable',
     OnCovertResolved = 'onCovertResolved',
     OnCardRevealed = 'onCardRevealed',
     OnCardTurnedFacedown = 'onCardTurnedFacedown',
     OnDefendersDeclared = 'onDefendersDeclared',
     AfterConflict = 'afterConflict',
     OnBreakProvince = 'onBreakProvince',
+    OnRestoreProvince = 'onRestoreProvince',
     OnResolveConflictRing = 'onResolveConflictRing',
     OnResolveRingElement = 'onResolveRingElement',
     OnClaimRing = 'onClaimRing',
