@@ -4,9 +4,10 @@ const _ = require('underscore');
 import monk from 'monk';
 
 const GameService = require('./services/GameService.js');
-const config = require('./config');
+const ServiceFactory = require('./services/ServiceFactory.js');
+let configService = ServiceFactory.configService();
 
-let db = monk(config.dbPath);
+let db = monk(configService.getValue('dbPath'));
 let gameService = new GameService(db);
 
 let args = process.argv.slice(2);
