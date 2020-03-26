@@ -1,18 +1,18 @@
 const zmq = require('zeromq');
 const router = zmq.socket('router');
 const logger = require('./log.js');
-const monk = require('monk');
+import monk from 'monk';
 const EventEmitter = require('events');
 
 const GameService = require('./services/GameService.js');
 const ServiceFactory = require('./services/ServiceFactory.js');
 
-class GameRouter extends EventEmitter {
+export class GameRouter extends EventEmitter {
     constructor(config) {
         super();
 
         let configService = ServiceFactory.configService();
-        
+
         this.workers = {};
         this.gameService = new GameService(monk(configService.getValue('dbPath')));
 
@@ -102,7 +102,7 @@ class GameRouter extends EventEmitter {
         return true;
     }
 
-     toggleNode(nodeName) {
+    toggleNode(nodeName) {
         let worker = this.workers[nodeName];
         if(!worker) {
             return false;
@@ -258,5 +258,3 @@ class GameRouter extends EventEmitter {
         }
     }
 }
-
-module.exports = GameRouter;

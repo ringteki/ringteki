@@ -1,7 +1,7 @@
 /*eslint no-console: 0*/
 
 const _ = require('underscore');
-const monk = require('monk');
+import monk from 'monk';
 
 const GameService = require('./services/GameService.js');
 const config = require('./config');

@@ -20,6 +20,7 @@ class PendingGame {
         this.gameChat = new GameChat();
         this.node = null;
         this.started = false;
+        this.rematch = false;
     }
 
     // Getters
