@@ -160,5 +160,48 @@ describe('Retire To The Brotherhood', function() {
             expect(this.chagatai.location).toBe('dynasty deck');
             expect(this.kageyu.location).toBe('dynasty deck');
         });
+
+        it('reported bug', function() {
+            this.noMoreActions();
+            expect(this.retire.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.retire,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.retire);
+            this.player2.clickCard(this.retire);
+            expect(this.berserker.location).toBe('dynasty discard pile');
+            expect(this.tsukune.location).not.toBe('dynasty discard pile');
+            expect(this.shoju.location).toBe('dynasty discard pile');
+            expect(this.challenger.location).toBe('dynasty discard pile');
+            expect(this.dojiWhisperer.location).toBe('dynasty discard pile');
+            expect(this.uji.location).toBe('dynasty discard pile');
+
+            expect(this.shoju2.location).toBe('play area');
+            expect(this.chagatai.location).toBe('play area');
+            expect(this.kageyu.location).toBe('play area');
+
+            expect(this.game.currentConflict.attackers).not.toContain(this.shoju2);
+            expect(this.game.currentConflict.attackers).not.toContain(this.chagatai);
+            expect(this.game.currentConflict.attackers).not.toContain(this.kageyu);
+            expect(this.game.currentConflict.defenders).not.toContain(this.shoju2);
+            expect(this.game.currentConflict.defenders).not.toContain(this.chagatai);
+            expect(this.game.currentConflict.defenders).not.toContain(this.kageyu);
+
+            expect(this.shoju2.controller).toBe(this.player1.player);
+            expect(this.kageyu.controller).toBe(this.player2.player);
+            expect(this.chagatai.controller).toBe(this.player2.player);
+
+            expect(this.player1.player.cardsInPlay).toContain(this.shoju2);
+            expect(this.player2.player.cardsInPlay).not.toContain(this.shoju2);
+            expect(this.player1.player.cardsInPlay).not.toContain(this.kageyu);
+            expect(this.player2.player.cardsInPlay).toContain(this.kageyu);
+            expect(this.player1.player.cardsInPlay).not.toContain(this.chagatai);
+            expect(this.player2.player.cardsInPlay).toContain(this.chagatai);
+        });
     });
 });
