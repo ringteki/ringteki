@@ -85,7 +85,6 @@ describe('Kyuden Hida', function() {
                 expect(this.getChatLogs(2)).toContain('player1 discards Hida Kisada, Favorable Ground and Imperial Storehouse');
             });
 
-
             it('should properly discard cards even if the deck is shuffled', function() {
                 this.player1.moveCard(this.dealbroker, 'dynasty deck');
                 this.player1.clickCard(this.kyudenHida);
@@ -99,9 +98,9 @@ describe('Kyuden Hida', function() {
                 expect(this.player1).toHavePromptButton('2');
                 this.player1.clickPrompt('0');
 
+                expect(this.kisada.location).toBe('dynasty discard pile');
+                expect(this.favorableGround.location).toBe('dynasty discard pile');
                 expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.storehouse.location).toBe('dynasty deck');
-                expect(this.favorableGround.location).toBe('dynasty deck');
 
                 this.player1.clickCard(this.dealbroker);
                 this.player1.clickPrompt('Hida Guardian');
@@ -116,7 +115,7 @@ describe('Kyuden Hida', function() {
                 expect(this.getChatLogs(5)).toContain('player1 discards Hida Kisada and Favorable Ground');
             });
 
-            it('should not discard if you put the card into play', function() {
+            it('should discard before triggering reactions to entering play', function() {
                 this.player1.moveCard(this.dealbroker, 'dynasty deck');
                 this.player1.moveCard(this.hidaGuardian, 'dynasty discard pile');
                 this.player1.moveCard(this.hidaGuardian, 'dynasty deck');
@@ -131,19 +130,19 @@ describe('Kyuden Hida', function() {
                 expect(this.player1).toHavePromptButton('2');
                 this.player1.clickPrompt('0');
 
+                expect(this.hidaGuardian.location).toBe('dynasty discard pile');
+                expect(this.kisada.location).toBe('dynasty discard pile');
                 expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.storehouse.location).toBe('dynasty deck');
-                expect(this.favorableGround.location).toBe('dynasty deck');
 
                 this.player1.clickCard(this.dealbroker);
-                this.player1.clickPrompt('Hida Guardian');
-                expect(this.kisada.location).toBe('dynasty discard pile');
-                expect(this.hidaGuardian.location).toBe('play area');
+                expect(this.player1).not.toHavePromptButton('Hida Guardian');
+                this.player1.clickPrompt('Don\'t choose a character');
 
                 expect(this.getChatLogs(5)).toContain('player1 plays Favorable Dealbroker with 0 additional fate');
                 expect(this.getChatLogs(5)).toContain('player1 uses Favorable Dealbroker to search their dynasty deck for a character that costs 1 and put it into play');
+                expect(this.getChatLogs(5)).toContain('player1 chooses not to put a character into play');
                 expect(this.getChatLogs(5)).toContain('player1 is shuffling their dynasty deck');
-                expect(this.getChatLogs(5)).toContain('player1 discards Hida Kisada');
+                expect(this.getChatLogs(5)).toContain('player1 discards Hida Guardian and Hida Kisada');
             });
 
             it('should work if you have less than 3 cards', function() {
