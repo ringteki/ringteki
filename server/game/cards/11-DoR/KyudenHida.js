@@ -29,25 +29,26 @@ class KyudenHida extends StrongholdCard {
                         this.game.addMessage('{0} discards {1}', context.player, cards);
                         return true;
                     }],
-                    gameAction: AbilityDsl.actions.playCard({
-                        resetOnCancel: false,
-                        playType: PlayTypes.PlayFromProvince,
-                        postHandler: hidaContext => {
-                            let cards = this.kyudenHidaCards;
-                            let card = hidaContext.source;
-                            if(card.location !== Locations.PlayArea) {
-                                this.game.addMessage('{0} chooses not to play a character', context.player);
-                            }
-                            let discardedCards = [];
-                            cards.forEach(card => {
+                    gameAction: AbilityDsl.actions.multiple([
+                        AbilityDsl.actions.playCard({
+                            resetOnCancel: false,
+                            playType: PlayTypes.PlayFromProvince,
+                            postHandler: hidaContext => {
+                                let card = hidaContext.source;
+                                let discardedCards = this.kyudenHidaCards;
                                 if(card.location !== Locations.PlayArea) {
-                                    discardedCards.push(card);
-                                    context.player.moveCard(card, Locations.DynastyDiscardPile);
+                                    this.game.addMessage('{0} chooses not to play a character', context.player);
+                                } else {
+                                    discardedCards = this.kyudenHidaCards.filter(a => a !== card);
                                 }
-                            });
-                            this.game.addMessage('{0} discards {1}', context.player, discardedCards);
-                        }
-                    })
+                                this.game.addMessage('{0} discards {1}', context.player, discardedCards);
+                            }
+                        }),
+                        AbilityDsl.actions.moveCard(context => ({
+                            target: this.kyudenHidaCards.filter(a => a !== context.target),
+                            destination: Locations.DynastyDiscardPile
+                        }))
+                    ])
                 }))
             ])
         });
