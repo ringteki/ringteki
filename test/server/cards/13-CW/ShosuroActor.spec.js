@@ -155,13 +155,13 @@ describe('Shosuro Actor - Copying Business', function() {
             expect(this.shosuroActress.location).toBe('play area');
         });
 
-        it('should not copy clan alignment from the target', function() {
+        it('should copy clan alignment from the target', function() {
             this.player1.clickCard(this.actor);
             this.player1.clickCard(this.nitenMaster);
             this.player2.pass();
             this.player1.clickCard('way-of-the-scorpion');
             expect(this.player1).toHavePrompt('Way of the Scorpion');
-            expect(this.player1).not.toBeAbleToSelect(this.actor);
+            expect(this.player1).toBeAbleToSelect(this.actor);
         });
 
         it('should copy reactions from the target', function() {
