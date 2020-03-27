@@ -45,13 +45,13 @@ class CardService {
 
     getRestrictedList() {
         return this.cards.find({ is_restricted: true }).catch(err => {
-            logger.info(error);
+            logger.info(err);
         });
     }
 
     getBannedList() {
         return this.cards.find({ is_banned: true }).catch(err => {
-            logger.info(error);
+            logger.info(err);
         });
     }
 }
