@@ -8,7 +8,7 @@ class KyudenIsawa extends StrongholdCard {
             title: 'Play a spell event from discard',
             cost: [
                 AbilityDsl.costs.bowSelf(),
-                AbilityDsl.costs.discardCard({ cardCondition: card => card.hasTrait('spell') })
+                AbilityDsl.costs.discardCard({ cardCondition: card => card.hasTrait('spell') && card.type === CardTypes.Event })
             ],
             condition: () => this.game.isDuringConflict(),
             effect: 'play a spell event from discard',

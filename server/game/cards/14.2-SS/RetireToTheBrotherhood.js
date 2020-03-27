@@ -1,5 +1,5 @@
 const ProvinceCard = require('../../provincecard.js');
-const { CardTypes, Players, Locations } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class RetireToTheBrotherhood extends ProvinceCard {
@@ -27,12 +27,10 @@ class RetireToTheBrotherhood extends ProvinceCard {
                 ]),
                 AbilityDsl.actions.multiple([
                     AbilityDsl.actions.putIntoPlay(context => ({
-                        target: this.getCharacters(context, context.player),
-                        controller: Players.Self
+                        target: this.getCharacters(context, context.player)
                     })),
-                    AbilityDsl.actions.putIntoPlay(context => ({
-                        target: this.getCharacters(context, context.player.opponent),
-                        controller: Players.Opponent
+                    AbilityDsl.actions.opponentPutIntoPlay(context => ({
+                        target: this.getCharacters(context, context.player.opponent)
                     }))
                 ]),
                 AbilityDsl.actions.handler({ //just for the display message

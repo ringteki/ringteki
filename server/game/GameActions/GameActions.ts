@@ -46,6 +46,7 @@ import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
+import { OpponentPutIntoPlayAction, OpponentPutIntoPlayProperties } from './OpponentPutIntoPlayAction';
 import { RandomDiscardAction, RandomDiscardProperties } from './RandomDiscardAction';
 import { ReadyAction, ReadyProperties } from './ReadyAction';
 import { RefillFaceupAction, RefillFaceupProperties } from './RefillFaceupAction';
@@ -104,6 +105,7 @@ const GameActions = {
     performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
     putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary
     putIntoPlay: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
+    opponentPutIntoPlay: (propertyFactory: OpponentPutIntoPlayProperties | ((context: TriggeredAbilityContext) => OpponentPutIntoPlayProperties) = {}) => new OpponentPutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
     ready: (propertyFactory: ReadyProperties | ((context: TriggeredAbilityContext) => ReadyProperties) = {}) => new ReadyAction(propertyFactory),
     removeFate: (propertyFactory: RemoveFateProperties | ((context: TriggeredAbilityContext) => RemoveFateProperties) = {}) => new RemoveFateAction(propertyFactory), // amount = 1, recipient
     removeFromGame: (propertyFactory: RemoveFromGameProperties | ((context: TriggeredAbilityContext) => RemoveFromGameProperties) = {}) => new RemoveFromGameAction(propertyFactory),

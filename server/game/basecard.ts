@@ -258,11 +258,14 @@ class BaseCard extends EffectSource {
     }
 
     isFaction(faction: string): boolean {
+        let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        let cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
+
         faction = faction.toLowerCase();
         if(faction === 'neutral') {
-            return this.printedFaction === faction && !this.anyEffect(EffectNames.AddFaction);
+            return cardFaction === faction && !this.anyEffect(EffectNames.AddFaction);
         }
-        return this.printedFaction === faction || this.getEffects(EffectNames.AddFaction).includes(faction);
+        return cardFaction === faction || this.getEffects(EffectNames.AddFaction).includes(faction);
     }
 
     isInProvince(): boolean {
