@@ -5,7 +5,7 @@ class PerceptiveKitsuki extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Look at your opponent\'s hand',
-            condition: context => context.source.isParticipating(),
+            condition: context => context.source.isParticipating() && context.player.opponent,
             cost: AbilityDsl.costs.returnRings(1),
             effect: 'look at {1}\'s hand',
             effectArgs: context => context.player.opponent,

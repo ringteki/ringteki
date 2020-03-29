@@ -36,8 +36,10 @@ class TradingOnTheSandRoad extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     targetController: Players.Opponent,
                     duration: Durations.UntilEndOfRound,
+                    condition: context => context.player.opponent,
                     effect: [
-                        AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, context.player.opponent.conflictDeck.first(4)),
+                        AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame,
+                            context.player.opponent ? context.player.opponent.conflictDeck.first(4) : []),
                         AbilityDsl.effects.canPlayFromOpponents(
                             Locations.RemovedFromGame,
                             context.player.opponent ? context.player.conflictDeck.first(4) : []

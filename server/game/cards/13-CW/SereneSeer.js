@@ -6,7 +6,7 @@ class SereneSeer extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Look at a province',
-            condition: context => this.game.rings.void.isConsideredClaimed(context.player.opponent),
+            condition: context => context.player.opponent && this.game.rings.void.isConsideredClaimed(context.player.opponent),
             effect: 'look at a province',
             gameAction: AbilityDsl.actions.selectCard({
                 activePromptTitle: 'Choose a province to look at',

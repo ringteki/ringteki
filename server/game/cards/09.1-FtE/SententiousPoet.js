@@ -8,12 +8,14 @@ class SententiousPoet extends DrawCard {
             title: 'Gain 1 fate',
             when: {
                 onSpendFate: (event, context) =>
+                    context.player.opponent &&
                     event.context.player === context.player.opponent &&
                     event.amount > 0 &&
                     event.context.stage === Stages.Cost &&
                     event.context.ability.isCardPlayed() &&
                     context.source.isParticipating(),
                 onMoveFate: (event, context) =>
+                    context.player.opponent &&
                     event.context.ability.isCardPlayed() &&
                     event.context.player === context.player.opponent &&
                     event.fate > 0 &&

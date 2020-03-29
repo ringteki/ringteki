@@ -14,7 +14,7 @@ class RighteousDelegate extends DrawCard {
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: this.game.currentConflict.getCharacters(context.player)
                         .filter(card => !card.hasTrait('bushi'))
-                        .concat(this.game.currentConflict.getCharacters(context.player.opponent)
+                        .concat((context.player.opponent ? this.game.currentConflict.getCharacters(context.player.opponent) : [])
                             .filter(card => !card.hasTrait('bushi'))
                         ),
                     effect: AbilityDsl.effects.modifyBothSkills(1),
@@ -23,7 +23,7 @@ class RighteousDelegate extends DrawCard {
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: this.game.currentConflict.getCharacters(context.player)
                         .filter(card => card.hasTrait('bushi'))
-                        .concat(this.game.currentConflict.getCharacters(context.player.opponent)
+                        .concat((context.player.opponent ? this.game.currentConflict.getCharacters(context.player.opponent) : [])
                             .filter(card => card.hasTrait('bushi'))
                         ),
                     effect: AbilityDsl.effects.modifyBothSkills(-1),

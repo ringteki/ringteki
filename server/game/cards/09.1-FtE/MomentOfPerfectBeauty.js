@@ -7,6 +7,7 @@ class MomentOfPerfectBeauty extends DrawCard {
         this.action({
             title: 'One more action and then end the conflict',
             condition: context => this.game.isDuringConflict() &&
+                    context.player.opponent &&
                     this.game.currentConflict.getNumberOfParticipantsFor(context.player, card => card.isHonored) >
                     this.game.currentConflict.getNumberOfParticipantsFor(context.player.opponent, card => card.isHonored),
             gameAction: AbilityDsl.actions.playerLastingEffect({

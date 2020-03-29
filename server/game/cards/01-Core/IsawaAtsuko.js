@@ -12,7 +12,7 @@ class IsawaAtsuko extends DrawCard {
                     effect: ability.effects.modifyBothSkills(1)
                 })),
                 ability.actions.cardLastingEffect(context => ({
-                    target: this.game.currentConflict.getCharacters(context.player.opponent),
+                    target: context.player.opponent ? this.game.currentConflict.getCharacters(context.player.opponent) : [],
                     effect: ability.effects.modifyBothSkills(-1)
                 }))
             ]

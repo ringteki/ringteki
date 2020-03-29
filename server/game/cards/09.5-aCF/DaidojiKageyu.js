@@ -7,6 +7,7 @@ class DaidojiKageyu extends DrawCard {
             title: 'Draw cards',
             condition: context => this.game.isDuringConflict('political') &&
                 context.source.isParticipating() &&
+                context.player.opponent &&
                 this.game.currentConflict.getNumberOfCardsPlayed(context.player.opponent) > 0,
             gameAction: AbilityDsl.actions.draw(context => ({ amount: this.game.currentConflict.getNumberOfCardsPlayed(context.player.opponent) })),
             effect: 'draw {1} card{2}',

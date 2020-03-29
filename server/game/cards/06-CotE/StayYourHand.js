@@ -7,6 +7,7 @@ class StayYourHand extends DrawCard {
             title: 'Cancel a duel',
             when: {
                 onDuelInitiated: (event, context) =>
+                    context.player.opponent &&
                     event.context.player === context.player.opponent &&
                     (_.some(event.context.targets, (card) => card.controller === context.player) ||
                     (event.context.targets.target && _.some(event.context.targets.target, (card) => card.controller === context.player)))

@@ -9,7 +9,7 @@ class DeceptiveOffer extends DrawCard {
                 character: {
                     cardType: CardTypes.Character,
                     controller: Players.Self,
-                    cardCondition: card => card.isParticipating()
+                    cardCondition: (card, context) => card.isParticipating() && context.player.opponent
                 },
                 select: {
                     mode: TargetModes.Select,

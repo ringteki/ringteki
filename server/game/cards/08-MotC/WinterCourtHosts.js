@@ -8,7 +8,8 @@ class WinterCourtHosts extends DrawCard {
             limit: AbilityDsl.limit.unlimitedPerConflict(),
             when: {
                 onCardPlayed: (event, context) => {
-                    return event.player === context.player.opponent &&
+                    return context.player.opponent &&
+                        event.player === context.player.opponent &&
                         context.source.isParticipating() &&
                         context.player.honor > context.player.opponent.honor;
                 }

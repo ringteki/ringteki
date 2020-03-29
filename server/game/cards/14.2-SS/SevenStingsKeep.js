@@ -7,7 +7,7 @@ class SevenStingsKeep extends StrongholdCard {
         this.interrupt({
             title: 'Force defenders to assign first',
             when: {
-                onConflictOpportunityAvailable: (event, context) => event.player === context.player
+                onConflictOpportunityAvailable: (event, context) => context.player.opponent && event.player === context.player
             },
             cost: [AbilityDsl.costs.bowSelf()],
             effect: 'to force {1} to declare defenders before attackers are chosen this conflict',

@@ -6,7 +6,7 @@ class WayOfTheChrysanthemum extends DrawCard {
             title: 'Gain extra honor after bid',
             max: ability.limit.perRound(1),
             when: {
-                onTransferHonor: (event, context) => event.player === context.player.opponent && event.afterBid
+                onTransferHonor: (event, context) => context.player.opponent && event.player === context.player.opponent && event.afterBid
             },
             cannotBeMirrored: true,
             gameAction: ability.actions.gainHonor(context => ({ amount: context.event.amount }))

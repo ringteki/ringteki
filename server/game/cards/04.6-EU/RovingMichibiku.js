@@ -6,7 +6,7 @@ class RovingMichibiku extends DrawCard {
         this.reaction({
             title: 'Take a ring from opponent\'s claimed pool',
             when: {
-                afterConflict: (event, context) => context.source.isAttacking() && event.conflict.winner === context.player
+                afterConflict: (event, context) => context.source.isAttacking() && event.conflict.winner === context.player && context.player.opponent
             },
             gameAction: AbilityDsl.actions.selectRing(context => ({
                 activePromptTitle: 'Choose a ring to take',

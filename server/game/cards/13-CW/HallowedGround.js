@@ -6,7 +6,7 @@ class HallowedGround extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             targetController: Players.Opponent,
-            condition: context => context.game.rings.fire.isConsideredClaimed(context.player.opponent),
+            condition: context => context.player.opponent && context.game.rings.fire.isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerCannot({
                 cannot: 'placeFateWhenPlayingCharacter'
             })
@@ -14,7 +14,7 @@ class HallowedGround extends DrawCard {
 
         this.persistentEffect({
             targetController: Players.Opponent,
-            condition: context => context.game.rings.air.isConsideredClaimed(context.player.opponent),
+            condition: context => context.player.opponent && context.game.rings.air.isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerDelayedEffect({
                 when: {
                     afterConflict: (event, context) => event.conflict.loser === context.player.opponent && event.conflict.conflictUnopposed

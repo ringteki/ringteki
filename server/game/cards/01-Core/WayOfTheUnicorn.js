@@ -6,7 +6,7 @@ class WayOfTheUnicorn extends DrawCard {
         this.wouldInterrupt({
             title: 'Keep the first player token',
             when: {
-                onPassFirstPlayer: (event, context) => event.player === context.player.opponent
+                onPassFirstPlayer: (event, context) => context.player.opponent && event.player === context.player.opponent
             },
             cannotBeMirrored: true,
             effect: 'keep the first player token',

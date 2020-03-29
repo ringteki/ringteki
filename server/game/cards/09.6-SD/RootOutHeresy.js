@@ -5,7 +5,7 @@ class RootOutHeresy extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Discard a card at random from your oppoent\'s hand',
-            condition: () => this.game.isDuringConflict('political'),
+            condition: context => this.game.isDuringConflict('political') && context.player.opponent,
             gameAction: AbilityDsl.actions.discardAtRandom(context => ({ target: context.player.opponent })),
             then: context => ({
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => {

@@ -7,7 +7,7 @@ class MantraOfAir extends DrawCard {
         this.reaction({
             title: 'Honor a monk and draw a card',
             when: {
-                onConflictDeclared: (event, context) => event.ring.hasElement('air') && event.conflict.attackingPlayer === context.player.opponent
+                onConflictDeclared: (event, context) => event.ring.hasElement('air') && context.player.opponent && event.conflict.attackingPlayer === context.player.opponent
             },
             target: {
                 cardType: CardTypes.Character,

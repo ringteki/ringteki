@@ -7,6 +7,7 @@ class WildfireKick extends DrawCard {
             title: 'Give opponent\'s characters -2/-2',
             condition: context =>
                 this.game.isDuringConflict() &&
+                context.player.opponent &&
                 this.game.currentConflict.getNumberOfCardsPlayed(context.player) >= 3,
             target: {
                 cardCondition: card => card.isParticipating() && card.hasTrait('monk')

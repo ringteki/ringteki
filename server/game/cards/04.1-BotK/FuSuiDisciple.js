@@ -12,7 +12,7 @@ class FuSuiDisciple extends DrawCard {
                     targets: true,
                     choices: {
                         [this.owner.name]: context => context.game.rings.air.isConsideredClaimed(this.owner),
-                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings.air.isConsideredClaimed(this.owner.opponent)
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.player.opponent && context.game.rings.air.isConsideredClaimed(this.owner.opponent)
                     }
                 },
                 character: {
