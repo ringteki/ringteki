@@ -11,7 +11,8 @@ class ThoseWhoServe extends DrawCard {
                 duration: Durations.UntilEndOfPhase,
                 effect: ability.effects.reduceCost({
                     match: card => card.type === CardTypes.Character,
-                    amount: 1
+                    amount: 1,
+                    costFloor: 1
                 })
             })
         });
