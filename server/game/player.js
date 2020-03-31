@@ -685,13 +685,12 @@ class Player extends GameObject {
         var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target, ignoreType));
         var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card, this), baseCost);
         var costFloor = 0;
-        if(baseCost > 0) {
-            matchingReducers.forEach(a => {
-                if(a.costFloor && a.costFloor > costFloor) {
-                    costFloor = a.costFloor;
-                }
-            });
-        }
+        matchingReducers.forEach(a => {
+            if(a.costFloor && a.costFloor > costFloor) {
+                costFloor = a.costFloor;
+            }
+        });
+        costFloor = Math.min(costFloor, baseCost);
         return Math.max(reducedCost, 0, costFloor);
     }
 
