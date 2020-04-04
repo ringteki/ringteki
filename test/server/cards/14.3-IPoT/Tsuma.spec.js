@@ -1,4 +1,4 @@
-describe('Shinsei\'s Last Hope', function() {
+describe('Tsuma', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
