@@ -50,7 +50,7 @@ describe('Tsuma', function() {
             expect(this.kageyu.isHonored).toBe(true);
         });
 
-        it('should have the character enter shonored and make it so honor token can\'t be moved - disguised characters', function() {
+        it('should have the character enter honored and make it so honor token can\'t be moved - disguised characters', function() {
             this.player1.pass();
             this.player2.pass();
             this.player1.clickPrompt('1');
