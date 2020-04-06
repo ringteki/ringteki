@@ -823,7 +823,7 @@ class Game extends EventEmitter {
                 this.continue();
                 return false;
             }
-        }    
+        }
 
         this.pipeline.initialise([
             new SetupPhase(this),
