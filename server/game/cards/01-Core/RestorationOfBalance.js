@@ -5,7 +5,7 @@ class RestorationOfBalance extends ProvinceCard {
         this.interrupt({
             title: 'Force opponent to discard to 4 cards',
             when: {
-                onBreakProvince: (event, context) => event.card === context.source
+                onBreakProvince: (event, context) => event.card === context.source && context.player.opponent
             },
             gameAction: ability.actions.chosenDiscard(context => ({
                 amount: Math.max(0, context.player.opponent.hand.size() - 4)

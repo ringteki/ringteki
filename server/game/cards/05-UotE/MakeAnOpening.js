@@ -7,6 +7,7 @@ class MakeAnOpening extends DrawCard {
             title: 'Give -X/-X to opposing character, where X is the difference between current honor dial bid values',
             condition: context =>
                 this.game.isDuringConflict() &&
+                context.player.opponent &&
                 this.game.currentConflict.getNumberOfParticipantsFor(context.player) >= 1 &&
                 this.game.currentConflict.getNumberOfParticipantsFor(context.player.opponent) >= 1 &&
                 context.player.showBid &&

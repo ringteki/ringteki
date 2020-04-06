@@ -8,6 +8,7 @@ class NegotiationTable extends DrawCard {
         this.selectedChoices = [];
         this.action({
             title: 'Make opponent pick from several options',
+            condition: context => context.player.opponent,
             handler: context => {
                 let choices = [];
                 let handlers = [];

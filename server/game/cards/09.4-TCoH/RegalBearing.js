@@ -7,6 +7,7 @@ class RegalBearing extends DrawCard {
             title: 'Lower bid and draw bid difference as cards',
             max: AbilityDsl.limit.perConflict(1),
             condition: context => context.game.isDuringConflict('political') &&
+                context.player.opponent &&
                 context.player.anyCardsInPlay(card => card.isParticipating() && card.hasTrait('courtier')),
             effect: 'set their bid dial to 1 and draw {1} cards.',
             effectArgs: context => this.getHonorDialDifference(context),

@@ -40,7 +40,9 @@ export class TransferHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        event.player.modifyHonor(-event.amount);
-        event.player.opponent.modifyHonor(event.amount);
+        if(event.player && event.player.opponent) {
+            event.player.modifyHonor(-event.amount);
+            event.player.opponent.modifyHonor(event.amount);    
+        }
     }
 }
