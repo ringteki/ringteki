@@ -22,7 +22,6 @@ class BreachOfEtiquette extends DrawCard {
                     })
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
-                    condition: context => context.player.opponent,
                     targetController: Players.Opponent,
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {

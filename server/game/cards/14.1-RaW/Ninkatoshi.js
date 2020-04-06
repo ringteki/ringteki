@@ -16,7 +16,7 @@ class Ninkatoshi extends ProvinceCard {
         this.persistentEffect({
             targetLocation: Locations.Provinces,
             targetController: Players.Opponent,
-            condition: context => context.player.opponent,
+            condition: () => true,
             match: (card, context) => card.type === CardTypes.Province && card.controller === context.player.opponent,
             effect: AbilityDsl.effects.modifyProvinceStrength(-1)
         });

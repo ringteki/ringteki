@@ -30,7 +30,7 @@ class ShiroKitsuki extends StrongholdCard {
         this.reaction({
             title: 'Name a card',
             when: {
-                onConflictDeclared: (event, context) => context.player.opponent
+                onConflictDeclared: () => true
             },
             cost: [shiroKitsukiCost()],
             limit: AbilityDsl.limit.unlimitedPerConflict(),

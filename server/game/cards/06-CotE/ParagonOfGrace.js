@@ -7,7 +7,6 @@ class ParagonOfGrace extends DrawCard {
             title: 'Discard opponent\'s card',
             condition: context =>
                 context.source.isParticipating() &&
-                context.player.opponent &&
                 this.game.currentConflict.getNumberOfParticipantsFor(context.source.controller) === 1,
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.discardAtRandom(context => ({ target: context.source.isHonored ? context.player.opponent : [] })),

@@ -5,7 +5,7 @@ class EmissaryOfLies extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move a character home',
-            condition: context => context.source.isParticipating() && context.player.opponent,
+            condition: context => context.source.isParticipating(),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.controller === context.player.opponent

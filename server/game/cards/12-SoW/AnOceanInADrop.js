@@ -13,17 +13,20 @@ class AnOceanInADrop extends DrawCard {
                 targets: true,
                 choices:  {
                     [this.owner.name]: AbilityDsl.actions.sequential(this.getGameActions(this.owner)),
-                    [this.owner.opponent && this.owner.opponent.name || 'NA']: this.owner.opponent && AbilityDsl.actions.sequential(this.getGameActions(this.owner.opponent))
+                    [this.owner.opponent && this.owner.opponent.name || 'NA']: AbilityDsl.actions.sequential(this.getGameActions(this.owner.opponent))
                 }
             },
             effect: 'place {1}\'s hand on the bottom of their deck and have them draw {2} cards',
-            effectArgs: (context) => context.select === this.owner.name ?
+            effectArgs: (context) => (context.select === this.owner.name || !this.owner.opponent) ?
                 [this.owner.name, context.player.hand.value().length] :
                 [this.owner.opponent.name, context.player.opponent.hand.value().length]
         });
     }
 
     getGameActions(player) {
+        if(!player) {
+            return [];
+        }
         return [
             AbilityDsl.actions.moveCard(() => ({
                 shuffle: false,
