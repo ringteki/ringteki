@@ -18,7 +18,6 @@ class DojiHotaru2 extends DrawCard {
             when: {
                 onCardPlayed: (event, context) => {
                     return context.source.isParticipating() &&
-                        context.player.opponent &&
                         event.player === context.player.opponent;
                 }
             },

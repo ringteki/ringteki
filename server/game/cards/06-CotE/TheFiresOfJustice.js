@@ -7,7 +7,7 @@ class TheFiresOfJustice extends DrawCard {
         this.reaction({
             title: 'Remove fate or move fate to a character',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictType === 'military' && context.player.opponent
+                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictType === 'military'
             },
             targets: {
                 character: {

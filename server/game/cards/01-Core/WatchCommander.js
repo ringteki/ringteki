@@ -11,7 +11,7 @@ class WatchCommander extends DrawCard {
             title: 'Force opponent to lose 1 honor',
             limit: ability.limit.unlimitedPerConflict(),
             when: {
-                onCardPlayed: (event, context) => context.player.opponent && event.player === context.player.opponent && context.source.parent.isParticipating()
+                onCardPlayed: (event, context) => event.player === context.player.opponent && context.source.parent.isParticipating()
             },
             gameAction: ability.actions.loseHonor()
         });

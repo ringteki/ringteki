@@ -8,7 +8,6 @@ class Compass extends DrawCard {
             when: {
                 onCardRevealed: (event, context) =>
                     event.card && event.card.type === CardTypes.Province &&
-                    context.player.opponent &&
                     event.card.controller === context.player.opponent &&
                     context.source && context.source.parent && context.source.parent.isParticipating() &&
                     (context.player.dynastyDeck.size() > 0 || context.player.conflictDeck.size() > 0)

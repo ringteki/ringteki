@@ -10,7 +10,6 @@ class EarthBecomesSky extends DrawCard {
             when: {
                 onCardReadied: (event, context) =>
                     event.card.type === CardTypes.Character &&
-                    context.player.opponent &&
                     event.card.controller === context.player.opponent
             },
             gameAction: AbilityDsl.actions.bow(context => ({ target: context.event.card }))

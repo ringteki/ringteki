@@ -14,7 +14,7 @@ class DisguisedProtector extends DrawCard {
                 ability.actions.playerLastingEffect(context => ({
                     condition: context => context.player.opponent,
                     targetController: Players.Opponent,
-                    effect: ability.effects.changePlayerSkillModifier(context.player.opponent.showBid)
+                    effect: ability.effects.changePlayerSkillModifier(context.player.opponent ? context.player.opponent.showBid : 0)
                 }))
             ]
         });

@@ -5,7 +5,7 @@ class IntimidatingHida extends DrawCard {
         this.reaction({
             title: 'Make opponent lose honor',
             when: {
-                onConflictPass: (event, context) => context.player.opponent && event.conflict.attackingPlayer === context.player.opponent
+                onConflictPass: (event, context) => event.conflict.attackingPlayer === context.player.opponent
             },
             gameAction: ability.actions.loseHonor()
         });

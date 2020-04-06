@@ -7,7 +7,6 @@ class TogashiIchi extends DrawCard {
         this.action({
             title: 'Break the province',
             condition: context => context.source.isAttacking() &&
-                context.player.opponent &&
                 (this.game.currentConflict.getNumberOfCardsPlayed(context.player) + this.game.currentConflict.getNumberOfCardsPlayed(context.player.opponent)) >= 10 &&
                 this.game.currentConflict.conflictProvince.location !== Locations.StrongholdProvince,
             gameAction: AbilityDsl.actions.break(context => ({

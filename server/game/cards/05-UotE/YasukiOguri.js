@@ -7,7 +7,7 @@ class YasukiOguri extends DrawCard {
             title: 'Gain +1/+1',
             limit: ability.limit.unlimitedPerConflict(),
             when: {
-                onCardPlayed: (event, context) => context.player.opponent && event.player === context.player.opponent && event.card.type === CardTypes.Event && context.source.isDefending()
+                onCardPlayed: (event, context) => event.player === context.player.opponent && event.card.type === CardTypes.Event && context.source.isDefending()
             },
             effect: 'give him +1{1}/+1{2}',
             effectArgs: () => ['military', 'political'],

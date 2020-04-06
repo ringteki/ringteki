@@ -18,7 +18,7 @@ class WithstandTheDarkness extends DrawCard {
         this.reaction({
             when: {
                 onCardPlayed: (event, context) => {
-                    if(event.card.type === CardTypes.Event && context.player.opponent && event.card.controller === context.player.opponent) {
+                    if(event.card.type === CardTypes.Event && event.card.controller === context.player.opponent) {
                         currentTargets = this.getLegalWithstandTargets(event, context);
                         return currentTargets.length > 0;
                     }
