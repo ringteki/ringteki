@@ -9,7 +9,7 @@ class FearsomeMystic extends DrawCard {
 
         this.action({
             title: 'Remove fate from characters',
-            condition: context => context.source.isParticipating() && context.player.opponent,
+            condition: context => context.source.isParticipating(),
             gameAction: ability.actions.removeFate(context => ({
                 target: this.game.currentConflict.getCharacters(context.player.opponent).filter(card => card.getGlory() < context.source.getGlory())
             }))
