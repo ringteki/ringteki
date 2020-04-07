@@ -210,6 +210,10 @@ class Conflict extends GameObject {
         } else if(player === 'defender') {
             player = this.defendingPlayer;
         }
+        if(!player) {
+            return [];
+        }
+
         let characters = this.getCharacters(player);
         if(predicate) {
             return characters.filter(predicate).length;

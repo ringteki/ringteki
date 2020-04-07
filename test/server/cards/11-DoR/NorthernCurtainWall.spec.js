@@ -9,7 +9,7 @@ describe('Northern Curtain Wall', function() {
                     },
                     player2: {
                         inPlay: ['hida-kisada'],
-                        dynastyDiscard: ['watchtower-of-valor', 'northern-curtain-wall', 'imperial-storehouse']
+                        dynastyDiscard: ['watchtower-of-valor', 'northern-curtain-wall', 'imperial-storehouse', 'third-whisker-warrens', 'kaiu-forges', 'river-of-the-last-stand', 'seventh-tower']
                     }
                 });
 
@@ -32,6 +32,26 @@ describe('Northern Curtain Wall', function() {
                 expect(this.p2.getStrength()).toBe(3 + 4);
                 expect(this.p3.getStrength()).toBe(3 + 1);
                 expect(this.p4.getStrength()).toBe(3);
+            });
+
+            it('testing for each wall - third whisker warrens', function () {
+                this.player2.placeCardInProvince('third-whisker-warrens', 'province 1');
+                expect(this.p1.getStrength()).toBe(3 + 1 + 2);
+            });
+
+            it('testing for each wall - kaiu forges', function () {
+                this.player2.placeCardInProvince('kaiu-forges', 'province 1');
+                expect(this.p1.getStrength()).toBe(3 + 3 + 2);
+            });
+
+            it('testing for each wall - river of the last stand', function () {
+                this.player2.placeCardInProvince('river-of-the-last-stand', 'province 1');
+                expect(this.p1.getStrength()).toBe(3 + 0 + 2);
+            });
+
+            it('testing for each wall - seventh tower', function () {
+                this.player2.placeCardInProvince('seventh-tower', 'province 1');
+                expect(this.p1.getStrength()).toBe(3 + 2 + 2);
             });
         });
     });

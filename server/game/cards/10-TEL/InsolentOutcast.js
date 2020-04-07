@@ -3,7 +3,7 @@ const DrawCard = require('../../drawcard.js');
 class InsolentOutcast extends DrawCard {
     setupCardAbilities(ability) {
         this.persistentEffect({
-            effect: ability.effects.modifyBothSkills((card, context) => this.getNoOfHonoredCharacters(context.player.opponent))
+            effect: ability.effects.modifyBothSkills((card, context) => context.player.opponent && this.getNoOfHonoredCharacters(context.player.opponent))
         });
     }
 

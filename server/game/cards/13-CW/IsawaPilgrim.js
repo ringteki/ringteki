@@ -6,7 +6,7 @@ class IsawaPilgrim extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Give control of this character',
-            condition: context => context.game.rings.water.isConsideredClaimed(context.player.opponent),
+            condition: context => context.player.opponent && context.game.rings.water.isConsideredClaimed(context.player.opponent),
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 effect: AbilityDsl.effects.takeControl(context.player.opponent),
                 duration: Durations.Custom

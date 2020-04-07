@@ -681,10 +681,15 @@ class Player extends GameObject {
      * @param target BaseCard
      */
     getReducedCost(playingType, card, target, ignoreType = false) {
-        var baseCost = card.getCost();
-        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target, ignoreType));
-        var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card, this), baseCost);
-        return Math.max(reducedCost, 0);
+        var matchingReducers = this.costReducers.filter(reducer => reducer.canReduce(playingType, card, target, ignoreType));
+        var costIncreases = matchingReducers.filter(a => a.getAmount(card, this) < 0).reduce((cost, reducer) => cost - reducer.getAmount(card, this), 0);
+        var costDecreases = matchingReducers.filter(a => a.getAmount(card, this) > 0).reduce((cost, reducer) => cost + reducer.getAmount(card, this), 0);
+
+        var baseCost = card.getCost() + costIncreases;
+        var reducedCost = baseCost - costDecreases;
+
+        var costFloor = Math.min(baseCost, Math.max(...matchingReducers.map(a => a.costFloor)));
+        return Math.max(reducedCost, costFloor);
     }
 
     getTotalCostModifiers(playingType, card, target, ignoreType = false) {
@@ -1380,11 +1385,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown()) {
+        if(this.isTopConflictCardShown() && this.conflictDeck) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown()) {
+        if(this.isTopDynastyCardShown() && this.dynastyDeck) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 

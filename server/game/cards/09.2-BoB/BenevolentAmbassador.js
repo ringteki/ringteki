@@ -9,7 +9,7 @@ class BenevolentAmbassador extends DrawCard {
                 afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player
             },
             gameAction: AbilityDsl.actions.gainHonor(context => ({
-                target: [context.player, context.player.opponent]
+                target: context.game.getPlayers()
             }))
         });
     }

@@ -48,6 +48,10 @@ export class DuelAction extends CardGameAction {
     }
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
+        if(!context.player.opponent) {
+            return false;
+        }
+
         let properties = this.getProperties(context, additionalProperties);
         if(!super.canAffect(card, context)) {
             return false;

@@ -806,11 +806,23 @@ class Game extends EventEmitter {
 
         if(playerWithNoStronghold) {
             this.queueSimpleStep(() => {
-                this.addMessage('{0} does not have a stronghold in their decklist', playerWithNoStronghold);
+                this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
                 return false;
             });
             this.continue();
             return false;
+        }
+
+        for(let player of this.getPlayers()) {
+            let numProvinces = this.provinceCards.filter(a => a.controller === player);
+            if(numProvinces.length !== 5) {
+                this.queueSimpleStep(() => {
+                    this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                    return false;
+                });
+                this.continue();
+                return false;
+            }
         }
 
         this.pipeline.initialise([
@@ -1012,6 +1024,9 @@ class Game extends EventEmitter {
      */
     takeControl(player, card) {
         if(card.controller === player || !card.checkRestrictions(EffectNames.TakeControl, this.getFrameworkContext())) {
+            return;
+        }
+        if(!player || !player.cardsInPlay) {
             return;
         }
         card.controller.removeCardFromPile(card);

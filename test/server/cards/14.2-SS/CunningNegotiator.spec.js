@@ -5,6 +5,7 @@ describe('Cunning Negotiator', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['cunning-negotiator'],
+                    hand: ['shinjo-ambusher'],
                     provinces: ['brother-s-gift-dojo']
                 },
                 player2: {
@@ -15,6 +16,7 @@ describe('Cunning Negotiator', function() {
 
             this.cunning = this.player1.findCardByName('cunning-negotiator');
             this.cunning2 = this.player2.findCardByName('cunning-negotiator');
+            this.ambusher = this.player1.findCardByName('shinjo-ambusher');
             this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
             this.restoration = this.player2.findCardByName('restoration-of-balance', 'province 2');
             this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
@@ -64,7 +66,7 @@ describe('Cunning Negotiator', function() {
             expect(this.getChatLogs(10)).toContain('The duel has no effect');
         });
 
-        it('should trigger the province ability for the winner', function() {
+        it('should let the winner choose to trigger the province ability - controller wins', function() {
             this.noMoreActions();
 
             this.initiateConflict({
@@ -77,9 +79,72 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player2).toHavePromptButton('Yes');
+            expect(this.player2).toHavePromptButton('No');
+        });
+
+        it('should let the winner choose to trigger the province ability - controller loses', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.cunning],
+                defenders: [this.cunning2],
+                type: 'political',
+                province: this.manicuredGarden
+            });
+            this.player2.clickCard(this.cunning2);
+            this.player1.clickCard(this.cunning);
+            this.player1.clickPrompt('2');
+            this.player2.clickPrompt('1');
+            expect(this.player1).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player1).toHavePromptButton('Yes');
+            expect(this.player1).toHavePromptButton('No');
+        });
+
+        it('should trigger the province ability for the winner', function() {
+            this.noMoreActions();
+            let fate = this.player2.fate;
+
+            this.initiateConflict({
+                attackers: [this.cunning],
+                defenders: [this.cunning2],
+                type: 'political',
+                province: this.manicuredGarden
+            });
+            this.player2.clickCard(this.cunning2);
+            this.player1.clickCard(this.cunning);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('2');
+            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            this.player2.clickPrompt('Yes');
             expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to trigger Manicured Garden\'s ability');
             expect(this.getChatLogs(10)).toContain('player2 uses Manicured Garden to gain 1 fate');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player2.fate).toBe(fate + 1);
+        });
+
+        it('should do nothing if you decline triggering the province ability', function() {
+            this.noMoreActions();
+            let fate = this.player2.fate;
+
+            this.initiateConflict({
+                attackers: [this.cunning],
+                defenders: [this.cunning2],
+                type: 'political',
+                province: this.manicuredGarden
+            });
+            this.player2.clickCard(this.cunning2);
+            this.player1.clickCard(this.cunning);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('2');
+            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            this.player2.clickPrompt('No');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
+            expect(this.getChatLogs(10)).toContain('player2 chooses not to trigger Manicured Garden\'s ability');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player2.fate).toBe(fate);
         });
 
         it('should prevent using the province if you use the duel first', function() {
@@ -96,6 +161,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
+            this.player2.clickPrompt('Yes');
             this.player1.pass();
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.manicuredGarden);
@@ -119,6 +185,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
+            this.player2.clickPrompt('Yes');
             expect(this.player2.fate).toBe(fate + 2);
         });
 
@@ -137,6 +204,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('2');
             this.player2.clickPrompt('1');
+            this.player1.clickPrompt('Yes');
             this.player1.pass();
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.manicuredGarden);
@@ -197,6 +265,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('2');
             this.player2.clickPrompt('1');
+            this.player1.clickPrompt('Yes');
             expect(this.player1).toHavePrompt('Meditations on the Tao');
             expect(this.player1).toBeAbleToSelect(this.cunning);
             expect(this.player1).not.toBeAbleToSelect(this.cunning2);
@@ -222,6 +291,7 @@ describe('Cunning Negotiator', function() {
 
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2'); //-1 honor
+            this.player2.clickPrompt('Yes');
 
             expect(this.cunning2.isAttacking()).toBe(true);
             expect(this.player2).toHavePrompt('Choose a character');
@@ -233,6 +303,32 @@ describe('Cunning Negotiator', function() {
             expect(this.cunning2.isAttacking()).toBe(false);
 
             expect(this.getChatLogs(5)).toContain('player2 uses Brother’s Gift Dōjō, losing 1 honor to send Cunning Negotiator home');
+        });
+
+        it('shinjo ambusher should prevent the duel from triggering the province', function() {
+            this.noMoreActions();
+            let fate = this.player2.fate;
+
+            this.initiateConflict({
+                attackers: [this.cunning],
+                defenders: [this.cunning2],
+                type: 'political',
+                province: this.manicuredGarden
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.ambusher);
+            this.player1.clickPrompt('0');
+            this.player1.clickPrompt('Conflict');
+            this.player1.clickCard(this.ambusher);
+
+            this.player2.clickCard(this.cunning2);
+            this.player1.clickCard(this.cunning);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('2');
+            this.player1.pass();
+            expect(this.getChatLogs(5)).toContain('The duel has no effect');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.player2.fate).toBe(fate);
         });
     });
 });

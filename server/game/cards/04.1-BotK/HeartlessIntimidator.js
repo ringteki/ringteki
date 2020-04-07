@@ -10,7 +10,7 @@ class HeartlessIntimidator extends DrawCard {
                 onTransferHonor: (event, context) => event.player === context.player.opponent && event.amount > 0
             },
             gameAction: ability.actions.discardCard(context => ({
-                target: context.player.opponent.conflictDeck.first()
+                target: context.player.opponent ? context.player.opponent.conflictDeck.first() : []
             })),
             effect: 'discard the top card of {1}\'s conflict deck',
             effectArgs: context => context.player.opponent

@@ -22,6 +22,10 @@ class KuroiMori extends ProvinceCard {
             effectArgs: context => context.select.toLowerCase()
         });
     }
+
+    cannotBeStrongholdProvince() {
+        return true;
+    }
 }
 
 KuroiMori.id = 'kuroi-mori';

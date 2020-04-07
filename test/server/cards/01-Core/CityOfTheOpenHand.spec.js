@@ -39,24 +39,17 @@ describe('City of the Open Hand', function() {
             it('should work if player is less honorable', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.cityOfTheOpenHand);
-                expect(this.player1).toHavePrompt('City of the Open Hand');
-                expect(this.player1).toHavePromptButton('Gain 1 Honor');
-                expect(this.player1).toHavePromptButton('Make opponent lose 1 honor');
+                expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('should make the player gain 1 honor', function() {
-                this.player2.pass();
-                this.player1.clickCard(this.cityOfTheOpenHand);
-                this.player1.clickPrompt('Gain 1 Honor');
-                expect(this.player1.honor).toBe(11);
-                expect(this.cityOfTheOpenHand.bowed).toBe(true);
-            });
+            it('should steal an honor', function() {
+                let p1Honor = this.player1.honor;
+                let p2Honor = this.player2.honor;
 
-            it('should make the opponent lose 1 honor', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.cityOfTheOpenHand);
-                this.player1.clickPrompt('Make opponent lose 1 honor');
-                expect(this.player2.honor).toBe(11);
+                expect(this.player1.honor).toBe(p1Honor + 1);
+                expect(this.player2.honor).toBe(p2Honor - 1);
                 expect(this.cityOfTheOpenHand.bowed).toBe(true);
             });
 
