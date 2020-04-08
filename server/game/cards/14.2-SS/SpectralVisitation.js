@@ -39,7 +39,7 @@ class SpectralVisitation extends ProvinceCard {
                 })),
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.target,
-                    duration: Durations.UntilEndOfPhase,
+                    duration: Durations.UntilEndOfRound,
                     effect: AbilityDsl.effects.delayedEffect({
                         when: {
                             onPhaseEnded: (event) => event.phase === Phases.Conflict
