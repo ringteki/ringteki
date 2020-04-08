@@ -18,7 +18,7 @@ class TheWealthOfTheCrane extends DrawCard {
         this.action({
             title: 'Look at your dynasty deck',
             effect: 'look at the top ten cards of their dynasty deck',
-            condition: context => context.player.dynastyDeck.size() >= 4,
+            condition: context => context.player.dynastyDeck.size() > 0,
             max: AbilityDsl.limit.perPhase(1),
             handler: context => {
                 let cards = context.player.dynastyDeck.first(10);
@@ -35,6 +35,11 @@ class TheWealthOfTheCrane extends DrawCard {
             activePromptTitle: 'Choose a card to put into ' + context.player.getProvinceCardInProvince(targetLocation).name,
             context: context,
             cards: cards,
+            choices: cards.length < this.getRemainingLocations(targetLocation) ? ['Put nothing in this province'] : [],
+            handlers: [() => {
+                this.resolveWealth(context, cards, this.getNextLocation(targetLocation));
+                return true;
+            }],
             cardHandler: cardFromDeck => {
                 let province = context.player.getProvinceCardInProvince(targetLocation);
                 context.player.moveCard(cardFromDeck, targetLocation);
@@ -45,6 +50,22 @@ class TheWealthOfTheCrane extends DrawCard {
                 this.resolveWealth(context, cards, this.getNextLocation(targetLocation));
             }
         });
+    }
+
+    getRemainingLocations(targetLocation) {
+        if(targetLocation === Locations.ProvinceOne) {
+            return 4;
+        }
+        if(targetLocation === Locations.ProvinceTwo) {
+            return 3;
+        }
+        if(targetLocation === Locations.ProvinceThree) {
+            return 2;
+        }
+        if(targetLocation === Locations.ProvinceFour) {
+            return 1;
+        }
+        return 0;
     }
 
     getNextLocation(targetLocation) {

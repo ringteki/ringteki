@@ -59,6 +59,7 @@ describe('The Wealth of the Crane', function() {
             expect(this.player1).toHavePromptButton('Aranat');
             expect(this.player1).not.toHavePromptButton('Cancel');
             expect(this.player1).not.toHavePromptButton('Done');
+            expect(this.player1).not.toHavePromptButton('Put nothing in this province');
         });
 
         it('should put the chosen card into the province and prompt you for the next province', function() {
@@ -257,7 +258,8 @@ describe('The Wealth of the Crane', function() {
                 expect(this.player1).toHavePromptButton('Aranat');
             });
 
-            it('should not be playable with less than 4 cards', function() {
+            it('should let you skip provinces if you have less than 4 cards', function() {
+                this.player1.moveCard(this.dojiWhisperer, 'dynasty discard pile');
                 this.player1.moveCard(this.yoshi, 'dynasty discard pile');
                 this.player1.moveCard(this.kageyu, 'dynasty discard pile');
                 this.player1.moveCard(this.chagatai, 'dynasty discard pile');
@@ -266,6 +268,93 @@ describe('The Wealth of the Crane', function() {
                 this.player1.moveCard(this.dispatch, 'dynasty discard pile');
                 this.player1.moveCard(this.storehouse, 'dynasty discard pile');
                 this.player1.moveCard(this.aranat, 'dynasty discard pile');
+
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.wealth);
+                expect(this.player1).toHavePrompt('Choose a card to put into Manicured Garden');
+                expect(this.player1).not.toHavePromptButton('Doji Whisperer');
+                expect(this.player1).not.toHavePromptButton('Kakita Yoshi');
+                expect(this.player1).toHavePromptButton('Kakita Toshimoko');
+                expect(this.player1).not.toHavePromptButton('Daidoji Kageyu');
+                expect(this.player1).not.toHavePromptButton('Moto Chagatai');
+                expect(this.player1).toHavePromptButton('Favorable Ground');
+                expect(this.player1).not.toHavePromptButton('Imperial Storehouse');
+                expect(this.player1).not.toHavePromptButton('Iron Mine');
+                expect(this.player1).not.toHavePromptButton('A Season of War');
+                expect(this.player1).not.toHavePromptButton('Dispatch to Nowhere');
+                expect(this.player1).not.toHavePromptButton('Aranat');
+                expect(this.player1).toHavePromptButton('Put nothing in this province');
+
+                this.player1.clickPrompt('Put nothing in this province');
+
+                expect(this.player1).toHavePrompt('Choose a card to put into Endless Plains');
+                expect(this.player1).not.toHavePromptButton('Doji Whisperer');
+                expect(this.player1).not.toHavePromptButton('Kakita Yoshi');
+                expect(this.player1).toHavePromptButton('Kakita Toshimoko');
+                expect(this.player1).not.toHavePromptButton('Daidoji Kageyu');
+                expect(this.player1).not.toHavePromptButton('Moto Chagatai');
+                expect(this.player1).toHavePromptButton('Favorable Ground');
+                expect(this.player1).not.toHavePromptButton('Imperial Storehouse');
+                expect(this.player1).not.toHavePromptButton('Iron Mine');
+                expect(this.player1).not.toHavePromptButton('A Season of War');
+                expect(this.player1).not.toHavePromptButton('Dispatch to Nowhere');
+                expect(this.player1).not.toHavePromptButton('Aranat');
+                expect(this.player1).toHavePromptButton('Put nothing in this province');
+                this.player1.clickPrompt('Put nothing in this province');
+
+                expect(this.player1).toHavePrompt('Choose a card to put into Fertile Fields');
+                expect(this.player1).not.toHavePromptButton('Doji Whisperer');
+                expect(this.player1).not.toHavePromptButton('Kakita Yoshi');
+                expect(this.player1).toHavePromptButton('Kakita Toshimoko');
+                expect(this.player1).not.toHavePromptButton('Daidoji Kageyu');
+                expect(this.player1).not.toHavePromptButton('Moto Chagatai');
+                expect(this.player1).toHavePromptButton('Favorable Ground');
+                expect(this.player1).not.toHavePromptButton('Imperial Storehouse');
+                expect(this.player1).not.toHavePromptButton('Iron Mine');
+                expect(this.player1).not.toHavePromptButton('A Season of War');
+                expect(this.player1).not.toHavePromptButton('Dispatch to Nowhere');
+                expect(this.player1).not.toHavePromptButton('Aranat');
+                expect(this.player1).not.toHavePromptButton('Put nothing in this province');
+
+                this.player1.clickPrompt('Kakita Toshimoko');
+                expect(this.player1).toHavePrompt('Choose a card to put into Magistrate Station');
+                expect(this.player1).not.toHavePromptButton('Put nothing in this province');
+                this.player1.clickPrompt('Favorable Ground');
+                expect(this.player2).toHavePrompt('Action Window');
+            });
+
+            it('should bail out if you run out of cards', function() {
+                this.player1.moveCard(this.dojiWhisperer, 'dynasty discard pile');
+                this.player1.moveCard(this.yoshi, 'dynasty discard pile');
+                this.player1.moveCard(this.kageyu, 'dynasty discard pile');
+                this.player1.moveCard(this.chagatai, 'dynasty discard pile');
+                this.player1.moveCard(this.mine, 'dynasty discard pile');
+                this.player1.moveCard(this.season, 'dynasty discard pile');
+                this.player1.moveCard(this.dispatch, 'dynasty discard pile');
+                this.player1.moveCard(this.storehouse, 'dynasty discard pile');
+                this.player1.moveCard(this.aranat, 'dynasty discard pile');
+
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.wealth);
+                expect(this.player1).toHavePrompt('Choose a card to put into Manicured Garden');
+                this.player1.clickPrompt('Kakita Toshimoko');
+                expect(this.player1).toHavePrompt('Choose a card to put into Endless Plains');
+                this.player1.clickPrompt('Favorable Ground');
+                expect(this.player2).toHavePrompt('Action Window');
+            });
+
+            it('should not work at 0 cards', function() {
+                this.player1.moveCard(this.dojiWhisperer, 'dynasty discard pile');
+                this.player1.moveCard(this.yoshi, 'dynasty discard pile');
+                this.player1.moveCard(this.kageyu, 'dynasty discard pile');
+                this.player1.moveCard(this.chagatai, 'dynasty discard pile');
+                this.player1.moveCard(this.mine, 'dynasty discard pile');
+                this.player1.moveCard(this.season, 'dynasty discard pile');
+                this.player1.moveCard(this.dispatch, 'dynasty discard pile');
+                this.player1.moveCard(this.storehouse, 'dynasty discard pile');
+                this.player1.moveCard(this.aranat, 'dynasty discard pile');
+                this.player1.moveCard(this.toshimoko, 'dynasty discard pile');
+                this.player1.moveCard(this.favorable, 'dynasty discard pile');
 
                 expect(this.player1).toHavePrompt('Action Window');
                 this.player1.clickCard(this.wealth);
