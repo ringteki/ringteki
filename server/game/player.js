@@ -540,6 +540,13 @@ class Player extends GameObject {
         this.conflictOpportunities.total++;
     }
 
+    removeConflictOpportunity(type) {
+        if(type) {
+            this.conflictOpportunities[type] = Math.max(this.conflictOpportunities[type] - 1, 0);
+        }
+        this.conflictOpportunities.total = Math.max(this.conflictOpportunities.total - 1, 0);
+    }
+
     /**
      * Returns the number of conflict opportunities remaining for this player
      * @param {String} type - one of 'military', 'political', ''
