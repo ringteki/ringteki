@@ -13,7 +13,7 @@ class AsahinaTakako extends DrawCard {
         this.action({
             title: 'Discard a card or switch with another card',
             target: {
-                cardType: [CardTypes.Character, CardTypes.Holding],
+                cardType: [CardTypes.Character, CardTypes.Holding, CardTypes.Event],
                 location: Locations.Provinces,
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.chooseAction(context => ({
