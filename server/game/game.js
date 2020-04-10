@@ -63,6 +63,7 @@ class Game extends EventEmitter {
         this.currentConflict = null;
         this.currentDuel = null;
         this.manualMode = false;
+        this.skirmishMode = !!options.skirmishMode;
         this.currentPhase = '';
         this.password = details.password;
         this.roundNumber = 0;
@@ -504,8 +505,9 @@ class Game extends EventEmitter {
      * function doesn't check to see if a conquest victory has been achieved)
      */
     checkWinCondition() {
+        let honorRequiredToWin = this.skirmishMode ? 12 : 25;
         for(const player of this.getPlayersInFirstPlayerOrder()) {
-            if(player.honor >= 25) {
+            if(player.honor >= honorRequiredToWin) {
                 this.recordWinner(player, 'honor');
             } else if(player.opponent && player.opponent.honor <= 0) {
                 this.recordWinner(player, 'dishonor');
@@ -794,7 +796,7 @@ class Game extends EventEmitter {
 
         for(let player of this.getPlayers()) {
             player.initialise();
-            if(!player.stronghold) {
+            if(!this.skirmishMode && !player.stronghold) {
                 playerWithNoStronghold = player;
             }
         }

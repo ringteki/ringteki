@@ -439,7 +439,7 @@ class Player extends GameObject {
     deckRanOutOfCards(deck) {
         let discardPile = this.getSourceList(deck + ' discard pile');
         this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose 5 honor', this, deck);
-        GameActions.loseHonor({ amount: 5 }).resolve(this, this.game.getFrameworkContext());
+        GameActions.loseHonor({ amount: this.game.skirmishMode ? 3 : 5 }).resolve(this, this.game.getFrameworkContext());
         this.game.queueSimpleStep(() => {
             discardPile.each(card => this.moveCard(card, deck + ' deck'));
             if(deck === 'dynasty') {
@@ -809,7 +809,7 @@ class Player extends GameObject {
         this.passedDynasty = false;
         this.conflictOpportunities.military = 1;
         this.conflictOpportunities.political = 1;
-        this.conflictOpportunities.total = 2;
+        this.conflictOpportunities.total = this.game.skirmishMode ? 1 : 2;
     }
 
     collectFate() {
@@ -1075,6 +1075,10 @@ class Player extends GameObject {
         if(this.opponent) {
             this.opponent.loseImperialFavor();
         }
+        if(this.game.skirmishMode) {
+            this.imperialFavor = 'both';
+            return;
+        }
         let handlers = _.map(['military', 'political'], type => {
             return () => {
                 this.imperialFavor = type;
@@ -1208,7 +1212,7 @@ class Player extends GameObject {
      * Returns the amount of fate this player gets from their stronghold a turn
      */
     getTotalIncome() {
-        return this.stronghold.cardData.fate;
+        return this.game.skirmishMode ? 6 : this.stronghold.cardData.fate;
     }
 
     /**

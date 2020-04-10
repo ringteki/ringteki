@@ -38,25 +38,46 @@ class Duel {
     }
 
     getTotalsForDisplay() {
-        return this.challenger.name + ': ' + this.getChallengerStatisticTotal().toString() + ' vs ' + this.getTargetStatisticTotal().toString() + ': ' + this.getTargetName();
+        let [challengerTotal, targetTotal] = this.getTotals(this.getChallengerStatisticTotal(), this.getTargetStatisticTotal());
+        return this.challenger.name + ': ' + challengerTotal.toString() + ' vs ' + targetTotal.toString() + ': ' + this.getTargetName();
+    }
+
+    getTotals(challengerTotal, targetTotal) {
+        if(this.game.skirmish) {
+            if(challengerTotal > targetTotal) {
+                challengerTotal = 1;
+                targetTotal = 0;
+            } else if(challengerTotal < targetTotal) {
+                challengerTotal = 0;
+                targetTotal = 1;
+            } else {
+                challengerTotal = 0;
+                targetTotal = 0;
+            }
+        }
+        if(this.bidFinished) {
+            challengerTotal += this.challenger.controller.honorBid;
+            if(Array.isArray(this.target) && this.target.length) {
+                targetTotal += this.target[0].controller.honorBid;
+            } else {
+                targetTotal += this.target.controller.honorBid;
+            }
+        }
+        return [challengerTotal, targetTotal];
     }
 
     getChallengerStatisticTotal() {
         if(this.challenger.location !== Locations.PlayArea) {
             return '-';
         }
-        let total = this.getSkillStatistic(this.challenger);
-        total += this.bidFinished ? this.challenger.controller.honorBid : 0;
-        return total;
+        return this.getSkillStatistic(this.challenger);
     }
 
     getTargetStatisticTotal() {
         if(this.target.every(card => card.location !== Locations.PlayArea)) {
             return '-';
         }
-        let total = this.target.reduce((sum, card) => sum + this.getSkillStatistic(card), 0);
-        total += this.bidFinished ? this.challenger.controller.opponent.honorBid : 0;
-        return total;
+        return this.target.reduce((sum, card) => sum + this.getSkillStatistic(card), 0);
     }
 
     getTargetName() {
@@ -81,14 +102,18 @@ class Duel {
             if(challengerTotal > 0) {
                 this.winner = this.challenger;
             }
-        } else if(challengerTotal > targetTotal) {
-            // Both alive, challenger wins
-            this.winner = this.challenger;
-            this.loser = this.target;
-        } else if(challengerTotal < targetTotal) {
-            // Both alive, target wins
-            this.winner = this.target;
-            this.loser = this.challenger;
+        } else {
+            [challengerTotal, targetTotal] = this.getTotals(challengerTotal, targetTotal);
+
+            if(challengerTotal > targetTotal) {
+                // Both alive, challenger wins
+                this.winner = this.challenger;
+                this.loser = this.target;
+            } else if(challengerTotal < targetTotal) {
+                // Both alive, target wins
+                this.winner = this.target;
+                this.loser = this.challenger;
+            }
         }
         if(Array.isArray(this.loser)) {
             this.loser = _.reject(this.loser, (card) => !card.checkRestrictions('loseDuels', card.game.getFrameworkContext()));

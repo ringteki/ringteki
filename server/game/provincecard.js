@@ -6,7 +6,7 @@ const { Locations, EffectNames } = require('./Constants');
 const AbilityDsl = require('./abilitydsl.js');
 
 class ProvinceCard extends BaseCard {
-    constructor(owner, cardData) {
+    constructor(owner, cardData = { strength: 3, element: [] }) {
         super(owner, cardData);
 
         this.isProvince = true;
@@ -90,7 +90,7 @@ class ProvinceCard extends BaseCard {
         this.removeAllTokens();
         if(this.controller.opponent) {
             this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
-            if(this.location === Locations.StrongholdProvince) {
+            if(this.location === Locations.StrongholdProvince || this.game.skirmishMode && this.controller.getProvinces(card => card.isBroken).length > 2) {
                 this.game.recordWinner(this.controller.opponent, 'conquest');
             } else {
                 let dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
