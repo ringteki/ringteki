@@ -4,7 +4,6 @@ const AbilityDsl = require('../../abilitydsl');
 class Shori extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            myControl: true,
             unique: true,
             faction: 'lion'
         });
