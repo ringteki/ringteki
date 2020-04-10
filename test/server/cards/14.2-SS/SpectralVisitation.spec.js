@@ -8,7 +8,6 @@ describe('Spectral Visitation', function() {
                     dynastyDiscard: ['bayushi-shoju']
                 },
                 player2: {
-                    inPlay: ['doji-whisperer', 'daidoji-uji'],
                     dynastyDiscard: ['kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai'],
                     provinces: ['spectral-visitation', 'manicured-garden']
                 }
@@ -17,7 +16,6 @@ describe('Spectral Visitation', function() {
             this.berserker = this.player1.findCardByName('matsu-berserker');
             this.shoju = this.player1.findCardByName('bayushi-shoju');
 
-            this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
             this.spectralVisitation = this.player2.findCardByName('spectral-visitation');
             this.manicured = this.player2.findCardByName('manicured-garden');
             this.yoshi = this.player2.findCardByName('kakita-yoshi');
@@ -116,6 +114,38 @@ describe('Spectral Visitation', function() {
             this.player2.clickCard(this.toshimoko);
 
             expect(this.toshimoko.location).toBe('play area');
+        });
+
+        it('should place on the bottom of the deck at the end of the phase', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.player2.player.moveCard(this.toshimoko, 'dynasty deck');
+            expect(this.toshimoko.location).toBe('dynasty deck');
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+            this.player2.clickCard(this.yoshi);
+            expect(this.yoshi.location).toBe('play area');
+            this.berserker.bowed = true;
+            this.player2.clickPrompt('Done');
+            this.noMoreActions();
+            this.noMoreActions();
+            this.player2.passConflict();
+            this.noMoreActions();
+            this.noMoreActions();
+            this.player2.passConflict();
+            this.noMoreActions();
+            this.player2.clickPrompt('Military');
+            expect(this.game.currentPhase).toBe('fate');
+            expect(this.yoshi.location).toBe('dynasty deck');
         });
     });
 });
