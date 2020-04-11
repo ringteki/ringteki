@@ -21,7 +21,7 @@ class TranquilPhilosopher extends DrawCard {
                     AbilityDsl.actions.gainHonor(context => ({ target: context.player }))
                 ])
             },
-            effect: '{1}{2}{3}',//'move 1 fate from {0} to an unclaimed ring, then gain 1 honor',
+            effect: '{1}{2}{3}',
             effectArgs: context => context.ring.fate > 0 ?
                 ['move 1 fate from the ', context.ring, ' to an unclaimed ring, then gain 1 honor'] :
                 ['gain 1 honor', '', '']
