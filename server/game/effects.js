@@ -40,6 +40,10 @@ const Effects = {
     cardCannot: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ type: properties.cannot || properties }, properties))),
     changeContributionFunction: (func) => EffectBuilder.card.static(EffectNames.ChangeContributionFunction, func),
     changeType: (type) => EffectBuilder.card.static(EffectNames.ChangeType, type),
+    characterProvidesAdditionalConflict: (type) => EffectBuilder.card.detached(EffectNames.AdditionalConflict, {
+        apply: card => card.controller.addConflictOpportunity(type),
+        unapply: card => card.controller.removeConflictOpportunity(type)
+    }),
     contributeToConflict: (player) => EffectBuilder.card.flexible(EffectNames.ContributeToConflict, player),
     copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
