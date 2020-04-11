@@ -2,7 +2,7 @@ const BaseAbility = require('../baseability.js');
 const { CardTypes } = require('../Constants');
 
 class VoidRingEffect extends BaseAbility {
-    constructor(optional = true) {
+    constructor(optional = true, skirmishMode = false) { // eslint-disable-line no-unused-vars
         super({
             target: {
                 activePromptTitle: 'Choose character to remove fate from',

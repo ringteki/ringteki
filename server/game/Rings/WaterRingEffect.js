@@ -2,14 +2,19 @@ const BaseAbility = require('../baseability.js');
 const { Locations, CardTypes } = require('../Constants');
 
 class WaterRingEffect extends BaseAbility {
-    constructor(optional = true) {
+    constructor(optional = true, skirmishMode = false) {
+        let cardCondition = (card, context) => card.location === Locations.PlayArea && ((card.fate === 0 && card.allowGameAction('bow', context)) || card.bowed);
+        if(skirmishMode) {
+            cardCondition = (card, context) => card.location === Locations.PlayArea && card.fate <= 1 &&
+                (card.ready && card.allowGameAction('bow', context) || card.bowed && card.allowGameAction('ready', context));
+        }
         super({
             target: {
                 activePromptTitle: 'Choose character to bow or unbow',
                 source: 'Water Ring',
                 buttons: optional ? [{ text: 'Don\'t resolve', arg: 'dontResolve' }] : [],
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) => card.location === Locations.PlayArea && ((card.fate === 0 && card.allowGameAction('bow', context)) || card.bowed)
+                cardCondition: cardCondition
             }
         });
         this.cannotTargetFirst = true;

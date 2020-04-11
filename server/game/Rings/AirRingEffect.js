@@ -2,17 +2,20 @@ const BaseAbility = require('../baseability.js');
 const { TargetModes } = require('../Constants');
 
 class AirRingEffect extends BaseAbility {
-    constructor(optional = true) {
+    constructor(optional = true, skirmishMode = false) {
+        let choices = {
+            'Don\'t resolve': () => optional,
+            'Take 1 Honor from opponent': context => context.player.opponent
+        };
+        if(!skirmishMode) {
+            choices['Gain 2 Honor'] = () => true;
+        }
         super({
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Choose an effect to resolve',
                 source: 'Air Ring',
-                choices: {
-                    'Gain 2 Honor': () => true,
-                    'Take 1 Honor from opponent': context => context.player.opponent,
-                    'Don\'t resolve': () => optional
-                }
+                choices: choices
             }
         });
         this.title = 'Air Ring Effect';

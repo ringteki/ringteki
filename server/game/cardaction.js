@@ -1,5 +1,5 @@
 const CardAbility = require('./CardAbility.js');
-const { AbilityTypes, CardTypes } = require('./Constants');
+const { AbilityTypes, CardTypes, Phases, PlayTypes } = require('./Constants');
 
 /**
  * Represents an action ability provided by card text.
@@ -50,11 +50,15 @@ class CardAction extends CardAbility {
             return 'province';
         }
 
-        if(!ignoredRequirements.includes('phase') && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== 'dynasty') {
+        if(!ignoredRequirements.includes('phase') && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== Phases.Dynasty) {
             return 'phase';
         }
 
         if(!ignoredRequirements.includes('phase') && this.phase !== 'any' && this.phase !== this.game.currentPhase) {
+            return 'phase';
+        }
+
+        if(!ignoredRequirements.includes('phase') && this.game.skirmishMode && this.game.currentConflict === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
             return 'phase';
         }
 
