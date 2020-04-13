@@ -38,7 +38,7 @@ describe('Spectral Visitation', function() {
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
         });
 
-        it('should not trigger if your deck doesn\'t have enough cards', function() {
+        it('should trigger if your deck doesn\'t have enough cards', function() {
             this.noMoreActions();
             expect(this.spectralVisitation.facedown).toBe(true);
 
@@ -50,9 +50,9 @@ describe('Spectral Visitation', function() {
                 type: 'military'
             });
 
-            expect(this.player2).toHavePrompt('Choose defenders');
-            expect(this.player2).not.toHavePrompt('Triggered Abilities');
-            expect(this.player2).not.toBeAbleToSelect(this.spectralVisitation);
+            expect(this.player2).not.toHavePrompt('Choose defenders');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
         });
 
         it('should not allow you to target enemy dynasty discard pile', function() {
@@ -146,6 +146,43 @@ describe('Spectral Visitation', function() {
             this.player2.clickPrompt('Military');
             expect(this.game.currentPhase).toBe('fate');
             expect(this.yoshi.location).toBe('dynasty deck');
+        });
+    });
+});
+
+describe('Spectral Visitation with no character in the discard pile', function () {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['matsu-berserker'],
+                    dynastyDiscard: ['bayushi-shoju']
+                },
+                player2: {
+                    provinces: ['spectral-visitation', 'manicured-garden']
+                }
+            });
+
+            this.berserker = this.player1.findCardByName('matsu-berserker');
+            this.shoju = this.player1.findCardByName('bayushi-shoju');
+
+            this.spectralVisitation = this.player2.findCardByName('spectral-visitation');
+            this.manicured = this.player2.findCardByName('manicured-garden');
+        });
+
+        it('should trigger when it is revealed, even without any characters in discard - functional errata', function() {
+            this.noMoreActions();
+            expect(this.spectralVisitation.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                province: this.spectralVisitation,
+                type: 'military'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
         });
     });
 });
