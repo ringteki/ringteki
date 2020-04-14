@@ -15,8 +15,8 @@ class ChancellorsAide extends DrawCard {
                     mode: TargetModes.Select,
                     targets: true,
                     choices: {
-                        ['Me']: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player })),
-                        ['My opponent']: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player.opponent }))
+                        [this.owner.name]: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player })),
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: AbilityDsl.actions.chosenDiscard(context => ({ target: context.player.opponent }))
                     }
                 },
                 oppPlayer: {
@@ -25,8 +25,8 @@ class ChancellorsAide extends DrawCard {
                     player: Players.Opponent,
                     condition: context => context.costs.optionalHonorTransferFromOpponentCostPaid,
                     choices: {
-                        ['Me']: AbilityDsl.actions.chosenDiscard(choiceContext => ({ target: choiceContext.player.opponent })),
-                        ['My opponent']: AbilityDsl.actions.chosenDiscard(choiceContext => ({ target: choiceContext.player }))
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: AbilityDsl.actions.chosenDiscard(choiceContext => ({ target: choiceContext.player.opponent })),
+                        [this.owner.name]: AbilityDsl.actions.chosenDiscard(choiceContext => ({ target: choiceContext.player }))
                     }
                 }
             },
