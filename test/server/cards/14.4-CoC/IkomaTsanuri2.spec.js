@@ -1,0 +1,170 @@
+describe('Countryside Trader', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['countryside-trader', 'ikoma-tsanuri-2'],
+                    provinces: ['kenson-no-gakka', 'abandoning-honor', 'brother-s-gift-dojo'],
+                    hand: ['cloud-the-mind', 'fine-katana', 'ornate-fan']
+                },
+                player2: {
+                    inPlay: ['countryside-trader', 'cunning-negotiator'],
+                    provinces: ['midnight-revels', 'upholding-authority', 'manicured-garden', 'meditations-on-the-tao']
+                }
+            });
+
+            this.trader = this.player1.findCardByName('countryside-trader');
+            this.kensonNoGakka = this.player1.findCardByName('kenson-no-gakka', 'province 1');
+            this.upholding = this.player2.findCardByName('upholding-authority', 'province 2');
+            this.brothersGiftDojo = this.player1.findCardByName('brother-s-gift-dojo', 'province 3');
+
+            this.trader2 = this.player2.findCardByName('countryside-trader');
+            this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
+            this.abandoning = this.player1.findCardByName('abandoning-honor', 'province 2');
+            this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
+            this.meditations = this.player2.findCardByName('meditations-on-the-tao', 'province 4');
+
+            this.tsanuri = this.player1.findCardByName('ikoma-tsanuri-2');
+            this.negotiator = this.player2.findCardByName('cunning-negotiator');
+
+            this.revels.facedown = false;
+            this.manicuredGarden.facedown = false;
+
+            this.trader.fate = 1;
+            this.trader2.fate = 1;
+
+            this.game.checkGameState(true);
+        });
+
+        it('should prevent triggering reactions', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                type: 'military',
+                province: this.revels
+            });
+            expect(this.player2).toHavePrompt('Choose Defenders');
+            this.player2.clickPrompt('Done');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should prevent triggering actions', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                defenders: [this.negotiator],
+                type: 'military',
+                province: this.manicuredGarden
+            });
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.manicuredGarden);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should prevent triggering interrupts', function() {
+            this.tsanuri.honor();
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                defenders: [],
+                type: 'military',
+                province: this.upholding
+            });
+            this.noMoreActions();
+            expect(this.upholding.isBroken).toBe(true);
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should prevent abilities that trigger the province', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                defenders: [this.negotiator],
+                type: 'military',
+                province: this.manicuredGarden
+            });
+            let fate = this.player2.fate;
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.negotiator);
+            this.player1.clickCard(this.tsanuri);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+            expect(this.player2.fate).toBe(fate);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(10)).toContain('The duel has no effect');
+        });
+
+        it('should not prevent Tsanuri\'s controller from using abilities that trigger the province', function() {
+            this.noMoreActions();
+            this.tsanuri.honor();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                defenders: [this.negotiator],
+                type: 'military',
+                province: this.manicuredGarden
+            });
+            let fate = this.player1.fate;
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.negotiator);
+            this.player1.clickCard(this.tsanuri);
+            this.player1.clickPrompt('5');
+            this.player2.clickPrompt('1');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
+            expect(this.player1).toHavePrompt('Do you want to trigger Manicured Garden?');
+            this.player1.clickPrompt('Yes');
+            expect(this.player1.fate).toBe(fate + 1);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should not prevent abilities that resolve the province', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.negotiator.dishonor();
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.trader2],
+                defenders: [this.tsanuri],
+                type: 'military',
+                province: this.abandoning
+            });
+            this.player1.pass();
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.trader2);
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toBeAbleToSelect(this.negotiator);
+            this.player2.clickCard(this.negotiator);
+            expect(this.negotiator.location).toBe('dynasty discard pile');
+        });
+
+        it('should prevent abilities that trigger the province when Tsanuri is defending', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.negotiator],
+                defenders: [this.tsanuri],
+                type: 'military',
+                province: this.brothersGiftDojo
+            });
+            this.player1.pass();
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.negotiator);
+            this.player1.clickCard(this.tsanuri);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(10)).toContain('The duel has no effect');
+        });
+    });
+});

@@ -432,7 +432,8 @@ class BaseCard extends EffectSource {
     }
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
-        return super.checkRestrictions(actionType, context) && this.controller.checkRestrictions(actionType, context);
+        let player = context.player || this.controller;
+        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context);
     }
 
 
