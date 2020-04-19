@@ -82,6 +82,7 @@ describe('Under Siege', function() {
             expect(this.crane.location).toBe('conflict discard pile');
             expect(this.shame.location).toBe('conflict deck');
             expect(this.player2.hand.length).toBe(1);
+            expect(this.katana.location).toBe('hand');
         });
 
         it('should discard any cards drawn during the conflict', function() {
@@ -186,6 +187,7 @@ describe('Under Siege', function() {
             expect(this.crane2.location).toBe('conflict discard pile');
             expect(this.shame2.location).toBe('conflict deck');
             expect(this.player1.hand.length).toBe(1);
+            expect(this.fan.location).toBe('hand');
         });
 
         it('chat messages', function() {

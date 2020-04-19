@@ -9,6 +9,7 @@ class UnderSiege extends DrawCard {
             when: {
                 onConflictDeclared: (event, context) => context.game.currentConflict && context.game.currentConflict.defendingPlayer
             },
+            max: AbilityDsl.limit.perConflict(1),
             effect: 'place {1} under siege!',
             effectArgs: context => [context.game.currentConflict.defendingPlayer],
             gameAction: AbilityDsl.actions.sequential([
