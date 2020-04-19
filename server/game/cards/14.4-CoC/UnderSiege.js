@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class UnderSiege extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Bow a character',
+            title: 'Place defender under siege',
             when: {
                 onConflictDeclared: (event, context) => context.game.currentConflict && context.game.currentConflict.defendingPlayer
             },
