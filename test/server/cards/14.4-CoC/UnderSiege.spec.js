@@ -81,6 +81,7 @@ describe('Under Siege', function() {
             expect(this.assassination.location).toBe('conflict discard pile');
             expect(this.crane.location).toBe('conflict discard pile');
             expect(this.shame.location).toBe('conflict deck');
+            expect(this.player2.hand.length).toBe(1);
         });
 
         it('should discard any cards drawn during the conflict', function() {
@@ -157,7 +158,7 @@ describe('Under Siege', function() {
             expect(this.shame.location).toBe('conflict deck');
         });
 
-        it('should remove the defenders hand from the game and draw 5 cards', function() {
+        it('should remove the defenders hand from the game and draw 5 cards (Self defending)', function() {
             this.player1.passConflict();
             this.noMoreActions();
             this.initiateConflict({
@@ -184,6 +185,22 @@ describe('Under Siege', function() {
             expect(this.assassination2.location).toBe('conflict discard pile');
             expect(this.crane2.location).toBe('conflict discard pile');
             expect(this.shame2.location).toBe('conflict deck');
+            expect(this.player1.hand.length).toBe(1);
+        });
+
+        it('chat messages', function() {
+            this.initiateConflict({
+                attackers: [this.wanderer]
+            });
+            this.player1.clickCard(this.siege);
+            this.player2.clickPrompt('Done');
+            this.noMoreActions();
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.player1).toHavePrompt('Action Window');
+            expect(this.getChatLogs(20)).toContain('player1 plays Under Siege to place player2 under siege!');
+            expect(this.getChatLogs(20)).toContain('player2 sets their hand aside and draws 5 cards');
+            expect(this.getChatLogs(20)).toContain('player2 discards Way of the Crane, Assassination, Court Games, Way of the Dragon and Backhanded Compliment');
+            expect(this.getChatLogs(20)).toContain('player2 picks up their original hand');
         });
     });
 });

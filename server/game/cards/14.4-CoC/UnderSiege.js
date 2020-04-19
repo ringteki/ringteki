@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Durations } = require('../../Constants');
+const { Locations, Durations, Players } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class UnderSiege extends DrawCard {
@@ -9,28 +9,21 @@ class UnderSiege extends DrawCard {
             when: {
                 onConflictDeclared: (event, context) => context.game.currentConflict && context.game.currentConflict.defendingPlayer
             },
-            effect: 'do a bunch of stuff',
+            effect: 'place {1} under siege!',
+            effectArgs: context => [context.game.currentConflict.defendingPlayer],
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     duration: Durations.UntilEndOfRound,
-                    targetController: context.game.currentConflict.defendingPlayer,
+                    targetController: context.game.currentConflict.defendingPlayer === context.player ? Players.Self : Players.Opponent,
                     effect: [
-                        AbilityDsl.effects.delayedEffect({
+                        AbilityDsl.effects.playerDelayedEffect({
                             when: {
                                 onConflictFinished: () => true
                             },
-                            gameAction: AbilityDsl.actions.discardCard(context => {
-                                let cards = [];
-                                if(context.game.conflictRecord && context.game.conflictRecord.length > 0) {
-                                    let conflict = context.game.conflictRecord[context.game.conflictRecord.length - 1];
-                                    if(conflict.attackingPlayer && conflict.attackingPlayer.opponent) {
-                                        cards = conflict.attackingPlayer.opponent.hand.value();
-                                    }
-                                }
-                                return ({
-                                    target: cards
-                                });
-                            })
+                            gameAction: AbilityDsl.actions.chosenDiscard(() => ({
+                                amount: 1000, //discard the entire hand
+                                extraMessage: '{0} picks up their original hand'
+                            }))
                         })
                     ]
                 })),
@@ -41,7 +34,7 @@ class UnderSiege extends DrawCard {
                             handler: context => {
                                 let player = context.game.currentConflict.defendingPlayer;
                                 let cards = player.hand.value();
-                                this.game.addMessage('{0} sets their hand aside', player);
+                                this.game.addMessage('{0} sets their hand aside and draws 5 cards', player);
                                 if(cards.length > 0) {
                                     cards.forEach(card => {
                                         player.moveCard(card, Locations.RemovedFromGame);
