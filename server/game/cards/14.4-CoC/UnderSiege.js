@@ -19,9 +19,18 @@ class UnderSiege extends DrawCard {
                             when: {
                                 onConflictFinished: () => true
                             },
-                            gameAction: AbilityDsl.actions.discardCard(context => ({
-                                target: context.game.conflictRecord[context.game.conflictRecord.length - 1].attackingPlayer.opponent.hand.value()
-                            }))
+                            gameAction: AbilityDsl.actions.discardCard(context => {
+                                let cards = [];
+                                if(context.game.conflictRecord && context.game.conflictRecord.length > 0) {
+                                    let conflict = context.game.conflictRecord[context.game.conflictRecord.length - 1];
+                                    if(conflict.attackingPlayer && conflict.attackingPlayer.opponent) {
+                                        cards = conflict.attackingPlayer.opponent.hand.value();
+                                    }
+                                }
+                                return ({
+                                    target: cards
+                                });
+                            })
                         })
                     ]
                 })),
