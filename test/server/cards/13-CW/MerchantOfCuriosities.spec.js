@@ -65,6 +65,7 @@ describe('Merchant of Curiosities', function() {
             expect(this.player1.honor).toBe(11);
             expect(this.player2.honor).toBe(9);
 
+            expect(this.getChatLogs(2)).toContain('player2 chooses to discard a card and give player1 1 honor');
             expect(this.getChatLogs(1)).toContain('player1 uses Merchant of Curiosities, discarding Voice of Honor to draw a card.  player2 gives player1 1 honor to discard Fine Katana and draw a card');
         });
 
