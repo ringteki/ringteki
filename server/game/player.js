@@ -1340,6 +1340,7 @@ class Player extends GameObject {
                 removedFromGame: this.getSummaryForCardList(this.removedFromGame, activePlayer),
                 provinceDeck: this.getSummaryForCardList(this.provinceDeck, activePlayer, true)
             },
+            cardsPlayedThisConflict: this.game.currentConflict ? this.game.currentConflict.getNumberOfCardsPlayed(this) : NaN,
             disconnected: this.disconnected,
             faction: this.faction,
             firstPlayer: this.firstPlayer,
