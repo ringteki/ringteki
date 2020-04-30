@@ -717,11 +717,11 @@ class BaseCard extends EffectSource {
         if(isActivePlayer ? this.facedown && this.hideWhenFacedown() : (this.facedown || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
             let state = {
                 controller: this.controller.getShortSummary(),
-                menu: this.getMenu(),
+                menu: isActivePlayer ? this.getMenu() : undefined,
                 facedown: true,
                 inConflict: this.inConflict,
                 location: this.location,
-                uuid: this.uuid
+                uuid: isActivePlayer ? this.uuid : undefined
             };
             return Object.assign(state, selectionState);
         }
