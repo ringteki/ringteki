@@ -34,7 +34,7 @@ describe('Kitsuki Chiari', function() {
             this.initiateConflict({
                 attackers: [this.isawaTadaka],
                 province: this.p1
-            });            
+            });
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.chiari);
         });
@@ -109,10 +109,10 @@ describe('Kitsuki Chiari', function() {
         it('should not react when opponent\'s province is revealed', function() {
             this.player1.passConflict();
             this.noMoreActions();
-            
+
             this.initiateConflict({
                 attackers: [this.chiari]
-            });            
+            });
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
         });
 

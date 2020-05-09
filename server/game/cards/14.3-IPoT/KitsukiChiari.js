@@ -6,7 +6,7 @@ class KitsukiChiari extends DrawCard {
         this.reaction({
             title: 'Name a card',
             when: {
-                onCardRevealed: (event, context) => event.card.isProvince &&  event.card.controller === context.source.controller && 
+                onCardRevealed: (event, context) => event.card.isProvince && event.card.controller === context.source.controller &&
                     context.source.controller.opponent && context.source.controller.opponent.hand.size() > 0
             },
             cost: [kitsukiChiariCost()],
@@ -33,7 +33,7 @@ class KitsukiChiari extends DrawCard {
     }
 
     allowAttachment(attachment) {
-        if (attachment.hasTrait('poison') && !this.isBlank()) {
+        if(attachment.hasTrait('poison') && !this.isBlank()) {
             return false;
         }
 
