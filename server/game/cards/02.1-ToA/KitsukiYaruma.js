@@ -19,7 +19,7 @@ class KitsukiYaruma extends DrawCard {
     }
 
     allowAttachment(attachment) {
-        if (attachment.hasTrait('poison') && !this.isBlank()) {
+        if(attachment.hasTrait('poison') && !this.isBlank()) {
             return false;
         }
 
