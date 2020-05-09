@@ -31,6 +31,14 @@ class KitsukiChiari extends DrawCard {
         context.costs.kitsukiChiariCost = cardName;
         return true;
     }
+
+    allowAttachment(attachment) {
+        if (attachment.hasTrait('poison') && !this.isBlank()) {
+            return false;
+        }
+
+        return super.allowAttachment(attachment);
+    }
 }
 
 const kitsukiChiariCost = function() {
