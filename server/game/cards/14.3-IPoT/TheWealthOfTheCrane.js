@@ -29,6 +29,7 @@ class TheWealthOfTheCrane extends DrawCard {
 
     resolveWealth(context, cards, targetLocation) {
         if(!cards || cards.length <= 0 || !targetLocation) {
+            context.player.shuffleDynastyDeck();
             return;
         }
         this.game.promptWithHandlerMenu(context.player, {

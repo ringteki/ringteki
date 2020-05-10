@@ -120,6 +120,33 @@ describe('The Wealth of the Crane', function() {
             expect(this.player1.player.getDynastyCardsInProvince('province 4').length).toBe(p4Count + 1);
         });
 
+        it('should shuffle', function() {
+            this.player1.clickCard(this.wealth);
+            expect(this.player1).toHavePrompt('The Wealth of the Crane');
+            this.player1.clickPrompt('Kakita Yoshi');
+            this.player1.clickPrompt('Daidoji Kageyu');
+            this.player1.clickPrompt('Iron Mine');
+            this.player1.clickPrompt('A Season of War');
+            expect(this.getChatLogs(1)).toContain('player1 is shuffling their dynasty deck');
+        });
+
+        it('testing chat messages', function() {
+            this.p2.facedown = false;
+            this.player1.clickCard(this.wealth);
+            this.player1.clickPrompt('Kakita Yoshi');
+            this.player1.clickPrompt('Daidoji Kageyu');
+            this.player1.clickPrompt('Iron Mine');
+            this.player1.clickPrompt('A Season of War');
+
+            expect(this.getChatLogs(10)).toContain('player1 plays The Wealth of the Crane to look at the top ten cards of their dynasty deck');
+            expect(this.getChatLogs(10)).toContain('player1 puts Kakita Yoshi into a facedown province');
+            expect(this.getChatLogs(10)).toContain('player1 puts Daidoji Kageyu into Endless Plains');
+            expect(this.getChatLogs(10)).toContain('player1 puts Iron Mine into a facedown province');
+            expect(this.getChatLogs(10)).toContain('player1 puts A Season of War into a facedown province');
+            expect(this.getChatLogs(1)).toContain('player1 is shuffling their dynasty deck');
+
+        });
+
         describe('Cost Reduction', function() {
             it('should cost 5 with no faceup provinces', function() {
                 let fate = this.player1.fate;
