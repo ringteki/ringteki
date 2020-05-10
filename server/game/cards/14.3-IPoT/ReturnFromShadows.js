@@ -6,6 +6,7 @@ class ReturnFromShadows extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Blank and reveal a province',
+            max: AbilityDsl.limit.perConflict(1),
             when: {
                 afterConflict: (event, context) => event.conflict && event.conflict.winner === context.player && event.conflict.conflictUnopposed
             },
