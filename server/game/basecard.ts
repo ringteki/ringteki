@@ -18,7 +18,7 @@ import DynastyCardAction = require('./dynastycardaction');
 import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
-
+const StatusToken = require('./StatusToken');
 
 const ValidKeywords = [
     'ancestral',
@@ -701,6 +701,49 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
+    
+    setPersonalHonor(token) {
+        if(this.personalHonor && token !== this.personalHonor) {
+            this.personalHonor.setCard(null);
+        }
+        this.personalHonor = token || null;
+        if(this.personalHonor) {
+            this.personalHonor.setCard(this);
+        }
+    }
+
+    get isHonored() {
+        return !!this.personalHonor && !!this.personalHonor.honored;
+    }
+
+    honor() {
+        if(this.isHonored) {
+            return;
+        } else if(this.isDishonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, true));
+        }
+    }
+
+    get isDishonored() {
+        return !!this.personalHonor && !!this.personalHonor.dishonored;
+    }
+
+    dishonor() {
+        if(this.isDishonored) {
+            return;
+        } if(this.isHonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, false));
+        }
+    }
+
+    makeOrdinary() {
+        this.setPersonalHonor(null);
+    }
+
     getShortSummaryForControls(activePlayer) {
         if(this.facedown && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
@@ -736,6 +779,8 @@ class BaseCard extends EffectSource {
             showPopup: this.showPopup,
             tokens: this.tokens,
             type: this.getType(),
+            isDishonored: this.isDishonored,
+            isHonored: this.isHonored,
             uuid: this.uuid
         };
 

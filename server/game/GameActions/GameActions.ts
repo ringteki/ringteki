@@ -19,6 +19,7 @@ import { DiscardFromPlayAction, DiscardFromPlayProperties } from './DiscardFromP
 import { DiscardCardAction, DiscardCardProperties } from './DiscardCardAction';
 import { DiscardStatusAction, DiscardStatusProperties } from './DiscardStatusAction';
 import { DishonorAction, DishonorProperties } from './DishonorAction';
+import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
@@ -95,6 +96,7 @@ const GameActions = {
     discardCard: (propertyFactory: DiscardCardProperties | ((context: TriggeredAbilityContext) => DiscardCardProperties) = {}) => new DiscardCardAction(propertyFactory),
     discardFromPlay: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory),
     dishonor: (propertyFactory: DishonorProperties | ((context: TriggeredAbilityContext) => DishonorProperties) = {}) => new DishonorAction(propertyFactory),
+    dishonorProvince: (propertyFactory: DishonorProvinceProperties | ((context: TriggeredAbilityContext) => DishonorProvinceProperties) = {}) => new DishonorProvinceAction(propertyFactory),
     duel: (propertyFactory: DuelProperties | ((context: TriggeredAbilityContext) => DuelProperties)) => new DuelAction(propertyFactory), // type, challenger, resolutionHandler, costHandler
     flipDynasty: (propertyFactory: FlipDynastyProperties | ((context: TriggeredAbilityContext) => FlipDynastyProperties) = {}) => new FlipDynastyAction(propertyFactory),
     honor: (propertyFactory: HonorProperties | ((context: TriggeredAbilityContext) => HonorProperties) = {}) => new HonorAction(propertyFactory),
