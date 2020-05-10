@@ -82,7 +82,7 @@ class ProvinceCard extends BaseCard {
     }
 
     isBlank() {
-        return this.isBroken || super.isBlank();
+        return this.isBroken || this.isDishonored || super.isBlank();
     }
 
     breakProvince() {
