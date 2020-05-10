@@ -102,6 +102,19 @@ describe('Shiro Kitsuki', function() {
                 this.player1.clickRing('earth');
                 expect(this.game.rings.earth.conflictType).toBe('political');
             });
+
+            it('testing messages', function() {
+                this.player1.clickCard(this.shiroKitsuki);
+                this.player1.chooseCardInPrompt(this.fineKatana.name, 'card-name');
+                this.player2.clickPrompt('Done');
+                this.player2.playAttachment(this.fineKatana, this.adept);
+                this.game.rings.earth.conflictType = 'military';
+                expect(this.game.rings.earth.conflictType).toBe('military');
+                this.player1.clickRing('earth');
+                expect(this.game.rings.earth.conflictType).toBe('political');
+                expect(this.getChatLogs(10)).toContain('player1 uses Shiro Kitsuki, naming Fine Katana to claim a ring whenever player2 plays a card named Fine Katana');
+                expect(this.getChatLogs(10)).toContain('player1 claims the Earth Ring');
+            });
         });
     });
 });

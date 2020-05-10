@@ -36,6 +36,7 @@ import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingE
 import { LookAtAction, LookAtProperties } from './LookAtAction';
 import { LoseFateProperties, LoseFateAction } from './LoseFateAction';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction';
+import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction';
 import { MoveCardAction, MoveCardProperties } from './MoveCardAction';
@@ -124,6 +125,7 @@ const GameActions = {
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
     discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
+    discardMatching: (propertyFactory: MatchingDiscardProperties | ((context: TriggeredAbilityContext) => MatchingDiscardProperties) = {}) => new MatchingDiscardAction(propertyFactory), // amount = 1
     draw: (propertyFactory: DrawProperties | ((context: TriggeredAbilityContext) => DrawProperties) = {}) => new DrawAction(propertyFactory), // amount = 1
     fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
