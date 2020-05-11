@@ -415,6 +415,7 @@ class Lobby {
             return;
         }
 
+        console.log('GAME', game);
         var gameNode = this.router.startGame(game);
         if(!gameNode) {
             return;

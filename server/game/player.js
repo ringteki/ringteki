@@ -90,6 +90,7 @@ class Player extends GameObject {
         this.timerSettings.windowTimer = user.settings.windowTimer;
         this.optionSettings = user.settings.optionSettings;
         this.resetTimerAtEndOfRound = false;
+        this.honorEvents = [];
 
         this.promptState = new PlayerPromptState(this);
     }
@@ -1051,12 +1052,29 @@ class Player extends GameObject {
         return this.getEffects(EffectNames.ChangePlayerSkillModifier).reduce((total, value) => total + value, 0);
     }
 
+    honorGained(round = null, phase = null, onlyPositive = false) {
+        return this.honorEvents()
+            .filter(event => !round || event.round === round)
+            .filter(event => !phase || event.phase === phase)
+            .filter(event => !onlyPositive || event.amount > 0)
+            .reduce((total, value) => total + value, 0);
+    }
+
     modifyFate(amount) {
         this.fate = Math.max(0, this.fate + amount);
     }
 
     modifyHonor(amount) {
         this.honor = Math.max(0, this.honor + amount);
+        this.honorEvents.push({
+            amount,
+            phase: this.game.currentPhase,
+            round: this.game.roundNumber
+        });
+    }
+
+    resetHonorEvents(round, phase) {
+        this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
     }
 
     /**
