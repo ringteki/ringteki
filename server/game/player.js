@@ -1319,7 +1319,7 @@ class Player extends GameObject {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown(activePlayer) {
+    isTopDynastyCardShown(activePlayer = undefined) {
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
