@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Players, EventNames, EffectNames } = require('../../Constants');
+const { Locations, Players, EventNames } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 const EventRegistrar = require('../../eventregistrar');
 
@@ -9,13 +9,13 @@ class MasterTactician extends DrawCard {
         this.mostRecentEvent = null;
         this.cardsPlayedThisRound = 0;
         this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([ EventNames.OnRoundEnded, EventNames.OnCharacterEntersPlay ]);
+        this.eventRegistrar.register([EventNames.OnRoundEnded, EventNames.OnCharacterEntersPlay]);
 
         this.persistentEffect({
             effect: AbilityDsl.effects.delayedEffect({
                 when: {
-                    onCardPlayed: (event, context) => { 
-                        if (this.cardsPlayedThisRound >= MAXIMUM_CARDS_ALLOWED) {
+                    onCardPlayed: (event, context) => {
+                        if(this.cardsPlayedThisRound >= MAXIMUM_CARDS_ALLOWED) {
                             return false;
                         }
                         this.mostRecentEvent = event;
@@ -26,7 +26,7 @@ class MasterTactician extends DrawCard {
                 },
                 gameAction: AbilityDsl.actions.handler({
                     handler: context => {
-                        if (this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck && this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck !== this) {
+                        if(this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck && this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck !== this) {
                             return;
                         }
                         this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck = this;
@@ -58,7 +58,7 @@ class MasterTactician extends DrawCard {
     }
 
     onCharacterEntersPlay(event) {
-        if (event.card === this) {
+        if(event.card === this) {
             this.cardsPlayedThisRound = 0;
         }
     }

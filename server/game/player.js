@@ -403,8 +403,8 @@ class Player extends GameObject {
             return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
         }
 
-        let location = this.playableLocations.find(location => location.contains(card))
-        if (location) {
+        let location = this.playableLocations.find(location => location.contains(card));
+        if(location) {
             return location.playingType;
         }
 
@@ -1307,7 +1307,7 @@ class Player extends GameObject {
     }
 
     isTopConflictCardShown(activePlayer = undefined) {
-        if (!activePlayer || activePlayer === this) {
+        if(!activePlayer || activePlayer === this) {
             return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
         }
 
@@ -1318,7 +1318,7 @@ class Player extends GameObject {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown(activePlayer = undefined) {
+    isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
