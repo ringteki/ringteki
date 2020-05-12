@@ -390,8 +390,25 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return true;
+        }
+
         return _.any(this.playableLocations, location =>
             (!playingType || location.playingType === playingType) && location.contains(card));
+    }
+
+    findPlayType(card) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
+        }
+
+        let location = this.playableLocations.find(location => location.contains(card))
+        if (location) {
+            return location.playingType;
+        }
+
+        return undefined;
     }
 
     /**

@@ -1,1 +1,550 @@
-placeholder
+/*
+Required Edge Case Tests:
+
+Pillow Book
+*/
+
+describe('Master Tactician', function() {
+    integration(function() {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['master-tactician', 'kitsu-motso'],
+                    hand: ['prepared-ambush', 'fine-katana'],
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan']
+                },
+                player2: {
+                    hand: ['mirumoto-s-fury', 'backhanded-compliment']
+                }
+            });
+
+            this.motso = this.player1.findCardByName('kitsu-motso');
+            this.tactician = this.player1.findCardByName('master-tactician');
+            this.ambush = this.player1.findCardByName('prepared-ambush');
+            this.voice = this.player1.findCardByName('voice-of-honor');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
+            this.tactical = this.player1.findCardByName('tactical-ingenuity');
+            this.katana = this.player1.findCardByName('fine-katana');
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.fury = this.player2.findCardByName('mirumoto-s-fury');
+            this.province = this.player2.findCardByName('shameful-display', 'province 1');
+            this.backhanded = this.player2.findCardByName('backhanded-compliment');
+
+            this.player1.moveCard(this.fan, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+            this.player1.moveCard(this.soul, 'conflict deck');
+            this.player1.moveCard(this.tactical, 'conflict deck');
+        });
+
+        describe('Looking at the top card', function() {
+            it('should let you look at the top card while a battlefield is in play and this is participating', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+            });
+
+            it('should not let you look at the top card while a battlefield is not in play and this is participating', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+            });
+
+            it('should not let you look at the top card while a battlefield is in play and this is not participating', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.motso],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+            });
+        });
+
+        describe('Playing the top card', function() {
+            it('should let you play the top card while a battlefield is in play and this is participating', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should not let you play the top card while a battlefield is not in play and this is participating', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should not let you play the top card while a battlefield is in play and this is not participating', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.motso],
+                    defenders: []
+                });
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
+
+        describe('Max 3 cards', function() {
+            it('should let you play three cards, but look at the fourth', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.soul);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.isHonored).toBe(true);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.clickCard(this.fury);
+                this.player2.clickCard(this.tactician);
+    
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.voice);
+                this.player1.clickCard(this.voice);
+
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.fan);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
+
+        describe('easy edge cases', function () {
+            it('should not let you play a card that was already played from the top of your deck', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.soul);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.isHonored).toBe(true);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.soul);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should not count cards that move from the top of your deck (due to drawing as an example)', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.clickCard(this.backhanded);
+                this.player2.clickPrompt('player1');
+    
+                this.player1.clickCard(this.soul);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.isHonored).toBe(true);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.clickCard(this.fury);
+                this.player2.clickCard(this.tactician);
+    
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.voice);
+                this.player1.clickCard(this.voice);
+
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.fan);
+                expect(this.player1).toHavePrompt('Ornate Fan');
+            });
+
+            it('effect should not persist if card moves from the top of the deck', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+    
+                this.player2.pass();
+    
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.tactician);
+                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+    
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+
+                this.player1.moveCard(this.fan, 'hand');
+                this.player1.moveCard(this.fan, 'conflict deck');
+
+                this.player2.pass();
+                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.soul);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
+    });
+});
+
+
+describe('Two Master Tacticians', function() {
+    integration(function() {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['master-tactician', 'master-tactician'],
+                    hand: ['prepared-ambush', 'fine-katana'],
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan', 'seal-of-the-crane', 'seal-of-the-lion', 'seal-of-the-dragon']
+                },
+                player2: {
+                    hand: ['mirumoto-s-fury']
+                }
+            });
+
+            this.tactician = this.player1.filterCardsByName('master-tactician')[0];
+            this.tactician2 = this.player1.filterCardsByName('master-tactician')[1];
+            this.ambush = this.player1.findCardByName('prepared-ambush');
+            this.voice = this.player1.findCardByName('voice-of-honor');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
+            this.tactical = this.player1.findCardByName('tactical-ingenuity');
+            this.katana = this.player1.findCardByName('fine-katana');
+
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.crane = this.player1.findCardByName('seal-of-the-crane');
+            this.lion = this.player1.findCardByName('seal-of-the-lion');
+            this.dragon = this.player1.findCardByName('seal-of-the-dragon');
+
+            this.fury = this.player2.findCardByName('mirumoto-s-fury');
+            this.province = this.player2.findCardByName('shameful-display', 'province 1');
+
+            this.player1.player.optionSettings.orderForcedAbilities = true;
+
+            this.player1.moveCard(this.dragon, 'conflict deck');
+            this.player1.moveCard(this.lion, 'conflict deck');
+            this.player1.moveCard(this.crane, 'conflict deck');
+            this.player1.moveCard(this.fan, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+            this.player1.moveCard(this.soul, 'conflict deck');
+            this.player1.moveCard(this.tactical, 'conflict deck');
+
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.tactician, this.tactician2],
+                defenders: []
+            });
+        });
+
+        it('should let first player pick which tactician gets credited the card - all from first tactician, then all from second tactician', function () {
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Order Simultaneous effects');
+            this.player1.clickPromptButtonIndex(0);
+            
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+            expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.isHonored).toBe(true);
+            this.player1.clickPromptButtonIndex(0);
+
+            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+            expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
+            expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.voice);
+            this.player1.clickCard(this.voice);
+            this.player1.clickPromptButtonIndex(0);
+
+            this.player1.clickCard(this.fan);
+            this.player1.clickCard(this.tactician2);
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.tactician2);
+            this.player2.pass();
+            this.player1.clickCard(this.lion);
+            this.player1.clickCard(this.tactician2);
+
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician2.attachments.toArray()).toContain(this.fan);
+            expect(this.tactician2.attachments.toArray()).toContain(this.crane);
+            expect(this.tactician2.attachments.toArray()).toContain(this.lion);
+        });
+
+        it('should let first player pick which tactician gets credited the card - mixing it up', function () {
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.player1).toHavePrompt('Order Simultaneous effects');
+            this.player1.clickPromptButtonIndex(0);
+            
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            this.player2.pass();
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.isHonored).toBe(true);
+            this.player1.clickPromptButtonIndex(1);
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.voice);
+            this.player1.clickCard(this.voice);
+            this.player1.clickPromptButtonIndex(0);
+
+            this.player1.clickCard(this.fan);
+            this.player1.clickCard(this.tactician2);
+            this.player1.clickPromptButtonIndex(1);
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.tactician2);
+            this.player1.clickPromptButtonIndex(0);
+            this.player2.pass();
+            this.player1.clickCard(this.lion);
+            this.player1.clickCard(this.tactician2);
+        });
+
+        it('should not let 7 cards be played', function () {
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.player1).toHavePrompt('Order Simultaneous effects');
+            this.player1.clickPromptButtonIndex(0);
+            
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            this.player2.pass();
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.isHonored).toBe(true);
+            this.player1.clickPromptButtonIndex(1);
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.voice);
+            this.player1.clickCard(this.voice);
+            this.player1.clickPromptButtonIndex(0);
+
+            this.player1.clickCard(this.fan);
+            this.player1.clickCard(this.tactician2);
+            this.player1.clickPromptButtonIndex(1);
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.tactician2);
+            this.player1.clickPromptButtonIndex(0);
+            this.player2.pass();
+            this.player1.clickCard(this.lion);
+            this.player1.clickCard(this.tactician2);
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.dragon);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+    });
+});
+
+describe('Master Tactician - Edge Cases', function() {
+    integration(function() {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['master-tactician'],
+                    hand: ['prepared-ambush', 'fine-katana'],
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan']
+                },
+                player2: {
+                    inPlay: ['utaku-tetsuko'],
+                    hand: ['mirumoto-s-fury', 'backhanded-compliment']
+                }
+            });
+
+            this.tetsuko = this.player2.findCardByName('utaku-tetsuko');
+            this.tactician = this.player1.findCardByName('master-tactician');
+            this.ambush = this.player1.findCardByName('prepared-ambush');
+            this.voice = this.player1.findCardByName('voice-of-honor');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
+            this.tactical = this.player1.findCardByName('tactical-ingenuity');
+            this.katana = this.player1.findCardByName('fine-katana');
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.fury = this.player2.findCardByName('mirumoto-s-fury');
+            this.province = this.player2.findCardByName('shameful-display', 'province 1');
+            this.backhanded = this.player2.findCardByName('backhanded-compliment');
+
+            this.player1.moveCard(this.fan, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+            this.player1.moveCard(this.soul, 'conflict deck');
+            this.player1.moveCard(this.tactical, 'conflict deck');
+        });
+
+        it('Tetsuko should increase cost to play cards', function () {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.tetsuko],
+                defenders: [this.tactician]
+            });
+            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+            
+            let fate = this.player1.fate;
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            expect(this.player1.fate).toBe(fate - 1); //tetsuko tax
+        });
+    });
+});

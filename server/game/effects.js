@@ -29,6 +29,23 @@ const Effects = {
     attachmentUniqueRestriction: () => EffectBuilder.card.static(EffectNames.AttachmentUniqueRestriction),
     blank: (blankTraits = false) => EffectBuilder.card.static(EffectNames.Blank, blankTraits),
     calculatePrintedMilitarySkill: (func) => EffectBuilder.card.static(EffectNames.CalculatePrintedMilitarySkill, func),
+    canPlayFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, playType),
+    // canPlayedFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.detached(EffectNames.CanPlayFromOutOfPlay, {
+    //     apply: card => {
+    //         if (card.type === CardTypes.Event) {
+    //             for(const reaction of card.reactions) {
+    //                 reaction.registerEvents();
+    //             }
+    //         }
+    //     },
+    //     unapply: card => {
+    //     //     if (card.type === CardTypes.Event && card.location === location) {
+    //     //         for(const reaction of card.reactions) {
+    //     //             reaction.unregisterEvents();
+    //     //         }
+    //     //     }
+    //     }
+    // }),
     canBeSeenWhenFacedown: () => EffectBuilder.card.static(EffectNames.CanBeSeenWhenFacedown),
     canOnlyBeDeclaredAsAttackerWithElement: (element) => EffectBuilder.card.flexible(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement, element),
     cannotApplyLastingEffects: (condition) => EffectBuilder.card.static(EffectNames.CannotApplyLastingEffects, condition),

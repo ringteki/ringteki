@@ -1,27 +1,75 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes, PlayTypes, Players } = require('../../Constants');
-const PlayDisguisedCharacterAction = require('../../PlayDisguisedCharacterAction.js');
+const { Locations, Players, EventNames } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
-const PlayCharacterAction = require('../../playcharacteraction');
+const EventRegistrar = require('../../eventregistrar');
 
 class MasterTactician extends DrawCard {
     setupCardAbilities() {
+        const MAXIMUM_CARDS_ALLOWED = 3;
+        this.mostRecentEvent = null;
+        this.cardsPlayedThisRound = 0;
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([ EventNames.OnRoundEnded, EventNames.OnCharacterEntersPlay ]);
+
         this.persistentEffect({
-            condition: context => context.source.isParticipating(),
+            effect: AbilityDsl.effects.delayedEffect({
+                when: {
+                    onCardPlayed: (event, context) => { 
+                        if (this.cardsPlayedThisRound >= MAXIMUM_CARDS_ALLOWED) {
+                            return false;
+                        }
+                        this.mostRecentEvent = event;
+                        return (event.originalLocation === Locations.ConflictDeck &&
+                        event.originallyOnTopOfConflictDeck && event.player === context.source.controller && !event.tactician &&
+                        context.source.isParticipating()) && context.game.isTraitInPlay('battlefield');
+                    }
+                },
+                gameAction: AbilityDsl.actions.handler({
+                    handler: context => {
+                        if (this.mostRecentEvent.tactician && this.mostRecentEvent.tactician !== this) {
+                            return;
+                        }
+                        this.mostRecentEvent.tactician = this;
+                        this.cardsPlayedThisRound++;
+                        this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} uses remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound);
+                    }
+                })
+            })
+        });
+
+        this.persistentEffect({
+            condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating() && this.cardsPlayedThisRound < MAXIMUM_CARDS_ALLOWED,
             targetLocation: Locations.ConflictDeck,
             match: (card, context) => {
                 return context && card === context.player.conflictDeck.first();
             },
-            effect: [
-                AbilityDsl.effects.hideWhenFaceUp()
-            ]
+            effect: AbilityDsl.effects.canPlayFromOutOfPlay(),
         });
 
         this.persistentEffect({
-            condition: context => context.source.isParticipating(),
-            targetController: Players.Self,
-            effect: AbilityDsl.effects.showTopDynastyCard()
+            condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating(),
+            targetLocation: Locations.ConflictDeck,
+            match: (card, context) => {
+                return context && card === context.player.conflictDeck.first();
+            },
+            effect: AbilityDsl.effects.hideWhenFaceUp(),
         });
+
+        this.persistentEffect({
+            condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating(),
+            targetController: Players.Self,
+            effect: AbilityDsl.effects.showTopConflictCard()
+        });
+    }
+
+    onRoundEnded() {
+        this.cardsPlayedThisRound = 0;
+    }
+
+    onCharacterEntersPlay(event) {
+        if (event.card === this) {
+            this.cardsPlayedThisRound = 0;
+        }
     }
 }
 
