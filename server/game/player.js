@@ -356,6 +356,22 @@ class Player extends GameObject {
     }
 
     /**
+     * Returns the total number of faceup province cards controlled by this player
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfFacedownProvinces(predicate = () => true) {
+        return this.getProvinces(card => card.facedown && predicate(card)).length;
+    }
+
+    /**
+     * Returns the total number of faceup province cards controlled by this player's opponent
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
+        return this.opponent && this.opponent.getNumberOfFacedownProvinces(predicate) || 0;
+    }
+
+    /**
      * Returns the total number of characters and attachments controlled by this player which match the passed predicate
      * @param {Function} predicate - DrawCard => Int
      */
