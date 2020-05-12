@@ -28,9 +28,10 @@ export class GainHonorAction extends PlayerAction {
         if (!wouldGainAnyHonor)
             return false;
 
-        const honorGainLimitPerPhase = context.player.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = context.player.honorGained(context.game.roundNumber, context.game.currentPhase, true);
-        if(honorGainLimitPerPhase && honorGainedThisPhase >=  honorGainLimitPerPhase)
+        const honorGainLimitPerPhase = player.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
+        const honorGainedThisPhase = player.honorGained(context.game.roundNumber, context.game.currentPhase, true);
+
+        if(honorGainLimitPerPhase && honorGainedThisPhase >= honorGainLimitPerPhase)
             return false;
 
         return super.canAffect(player, context);
@@ -47,6 +48,16 @@ export class GainHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        event.player.modifyHonor(event.amount);
+        const honorGainLimitPerPhase = event.player.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
+        const honorGainedThisPhase = event.player.honorGained(event.context.game.roundNumber, event.context.game.currentPhase, true);
+
+        if(!honorGainLimitPerPhase) {
+            event.player.modifyHonor(event.amount);
+        } else {
+            const maxAmountToTransfer = honorGainLimitPerPhase - honorGainedThisPhase;
+            const amountToTransfer = Math.min(event.amount, maxAmountToTransfer);
+
+            event.player.modifyHonor(amountToTransfer);
+        }
     }
 }

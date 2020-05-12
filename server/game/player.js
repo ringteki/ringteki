@@ -1053,11 +1053,11 @@ class Player extends GameObject {
     }
 
     honorGained(round = null, phase = null, onlyPositive = false) {
-        return this.honorEvents()
+        return this.honorEvents
             .filter(event => !round || event.round === round)
             .filter(event => !phase || event.phase === phase)
             .filter(event => !onlyPositive || event.amount > 0)
-            .reduce((total, value) => total + value, 0);
+            .reduce((total, event) => total + event.amount, 0);
     }
 
     modifyFate(amount) {

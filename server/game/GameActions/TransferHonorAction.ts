@@ -34,8 +34,8 @@ export class TransferHonorAction extends PlayerAction {
         if(!gainsHonor)
             return false;
 
-        const honorGainLimitPerPhase = context.player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = context.player.opponent.honorGained(context.game.roundNumber, context.game.currentPhase, true);
+        const honorGainLimitPerPhase = player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
+        const honorGainedThisPhase = player.opponent.honorGained(context.game.roundNumber, context.game.currentPhase, true);
         if(honorGainLimitPerPhase && honorGainedThisPhase >= honorGainLimitPerPhase)
             return false;
 
@@ -50,8 +50,8 @@ export class TransferHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        const honorGainLimitPerPhase = event.context.player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = event.context.player.opponent.honorGained(event.context.game.roundNumber, event.context.game.currentPhase, true);
+        const honorGainLimitPerPhase = event.player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
+        const honorGainedThisPhase = event.player.opponent.honorGained(event.context.game.roundNumber, event.context.game.currentPhase, true);
 
         if(!honorGainLimitPerPhase) {
             event.player.modifyHonor(-event.amount);
