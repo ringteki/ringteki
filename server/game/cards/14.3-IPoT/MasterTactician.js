@@ -31,7 +31,7 @@ class MasterTactician extends DrawCard {
                         }
                         this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck = this;
                         this.cardsPlayedThisRound++;
-                        this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} uses remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound);
+                        this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} use{3} remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
                     }
                 })
             })
