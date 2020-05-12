@@ -143,7 +143,8 @@ export enum EffectNames {
     RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
-    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict'
+    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
+    LimitHonorGainPerPhase = "limitHonorGainPerPhase"
 };
 
 export enum Durations {

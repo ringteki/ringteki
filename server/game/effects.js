@@ -148,6 +148,7 @@ const Effects = {
         },
         unapply: (player, context, location) => player.removePlayableLocation(location)
     }),
+    limitHonorGainPerPhase: (amount) => EffectBuilder.player.static(EffectNames.LimitHonorGainPerPhase, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
     changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
