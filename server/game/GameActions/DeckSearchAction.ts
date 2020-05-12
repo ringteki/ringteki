@@ -3,11 +3,12 @@ import { Locations, EventNames, TargetModes, Decks } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import Player = require('../player');
+const _ = require('underscore');
 
 export interface DeckSearchProperties extends PlayerActionProperties {
     targetMode?: TargetModes;
     activePromptTitle?: string;
-    amount?: number;
+    amount?: number | ((context: AbilityContext) => number);
     numCards?: number;
     reveal?: boolean;
     faceup?: boolean;
@@ -35,6 +36,13 @@ export class DeckSearchAction extends PlayerAction {
         reveal: true
     };
 
+    getAmount(amount, context) : number {
+        if(_.isFunction(amount)) {
+            return amount(context);
+        }
+        return amount;
+    }
+
     getProperties(context: AbilityContext, additionalProperties = {}): DeckSearchProperties {
         let properties = super.getProperties(context, additionalProperties) as DeckSearchProperties;
         if(properties.reveal === undefined) {
@@ -47,15 +55,17 @@ export class DeckSearchAction extends PlayerAction {
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as DeckSearchProperties;
         let message = 'search their deck';
-        if(properties.amount > 0) {
-            message = 'look at the top ' + (properties.amount > 1 ? properties.amount + ' cards' : 'card') + ' of their deck';
+        let amount = this.getAmount(properties.amount, context); 
+        if(amount > 0) {
+            message = 'look at the top ' + (amount > 1 ? amount + ' cards' : 'card') + ' of their deck';
         }
         return [message, []];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
-        return properties.amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
+        let amount = this.getAmount(properties.amount, context); 
+        return amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
     }
 
     defaultTargets(context: AbilityContext): Player[] {
@@ -64,8 +74,9 @@ export class DeckSearchAction extends PlayerAction {
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
         let { amount } = this.getProperties(context, additionalProperties) as DeckSearchProperties;        
+        let fAmount = this.getAmount(amount, context); 
         super.addPropertiesToEvent(event, player, context, additionalProperties);
-        event.amount = amount;
+        event.amount = fAmount;
     }
 
     eventHandler(event, additionalProperties): void {
