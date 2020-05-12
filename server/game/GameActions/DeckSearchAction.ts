@@ -3,7 +3,6 @@ import { Locations, EventNames, TargetModes, Decks } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import Player = require('../player');
-const _ = require('underscore');
 
 export interface DeckSearchProperties extends PlayerActionProperties {
     targetMode?: TargetModes;
@@ -37,7 +36,7 @@ export class DeckSearchAction extends PlayerAction {
     };
 
     getAmount(amount, context) : number {
-        if(_.isFunction(amount)) {
+        if (typeof amount === 'function') {
             return amount(context);
         }
         return amount;
