@@ -1312,7 +1312,6 @@ class Player extends GameObject {
         }
 
         return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
-        // return this.anyEffect(EffectNames.ShowTopConflictCard);
     }
 
     eventsCannotBeCancelled() {
