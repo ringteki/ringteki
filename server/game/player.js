@@ -1306,15 +1306,20 @@ class Player extends GameObject {
         this.game.addMessage('{0} reveals a bid of {1}', this, bid);
     }
 
-    isTopConflictCardShown() {
-        return this.anyEffect(EffectNames.ShowTopConflictCard);
+    isTopConflictCardShown(activePlayer = undefined) {
+        if (!activePlayer || activePlayer === this) {
+            return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
+        }
+
+        return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
+        // return this.anyEffect(EffectNames.ShowTopConflictCard);
     }
 
     eventsCannotBeCancelled() {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown() {
+    isTopDynastyCardShown(activePlayer) {
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
@@ -1404,11 +1409,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown()) {
+        if(this.isTopConflictCardShown(activePlayer)) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown()) {
+        if(this.isTopDynastyCardShown(activePlayer)) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 

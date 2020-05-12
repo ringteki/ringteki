@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Players, EventNames } = require('../../Constants');
+const { Locations, Players, EventNames, EffectNames } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 const EventRegistrar = require('../../eventregistrar');
 
@@ -20,16 +20,16 @@ class MasterTactician extends DrawCard {
                         }
                         this.mostRecentEvent = event;
                         return (event.originalLocation === Locations.ConflictDeck &&
-                        event.originallyOnTopOfConflictDeck && event.player === context.source.controller && !event.tactician &&
+                        event.originallyOnTopOfConflictDeck && event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDeck &&
                         context.source.isParticipating()) && context.game.isTraitInPlay('battlefield');
                     }
                 },
                 gameAction: AbilityDsl.actions.handler({
                     handler: context => {
-                        if (this.mostRecentEvent.tactician && this.mostRecentEvent.tactician !== this) {
+                        if (this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck && this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck !== this) {
                             return;
                         }
-                        this.mostRecentEvent.tactician = this;
+                        this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck = this;
                         this.cardsPlayedThisRound++;
                         this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} uses remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound);
                     }
@@ -43,22 +43,13 @@ class MasterTactician extends DrawCard {
             match: (card, context) => {
                 return context && card === context.player.conflictDeck.first();
             },
-            effect: AbilityDsl.effects.canPlayFromOutOfPlay(),
-        });
-
-        this.persistentEffect({
-            condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating(),
-            targetLocation: Locations.ConflictDeck,
-            match: (card, context) => {
-                return context && card === context.player.conflictDeck.first();
-            },
-            effect: AbilityDsl.effects.hideWhenFaceUp(),
+            effect: AbilityDsl.effects.canPlayFromOutOfPlay()
         });
 
         this.persistentEffect({
             condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating(),
             targetController: Players.Self,
-            effect: AbilityDsl.effects.showTopConflictCard()
+            effect: AbilityDsl.effects.showTopConflictCard(Players.Self)
         });
     }
 

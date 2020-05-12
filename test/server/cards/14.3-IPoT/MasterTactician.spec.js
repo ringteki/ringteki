@@ -47,8 +47,8 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
             it('should not let you look at the top card while a battlefield is not in play and this is participating', function () {
@@ -58,8 +58,8 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
             it('should not let you look at the top card while a battlefield is in play and this is not participating', function () {
@@ -71,8 +71,8 @@ describe('Master Tactician', function() {
                     attackers: [this.motso],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
         });
 
@@ -137,8 +137,8 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.pass();
     
@@ -146,9 +146,8 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.attachments.toArray()).toContain(this.tactical);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.pass();
     
@@ -156,10 +155,8 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.isHonored).toBe(true);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.clickCard(this.fury);
                 this.player2.clickCard(this.tactician);
@@ -168,11 +165,8 @@ describe('Master Tactician', function() {
                 expect(this.player1).toBeAbleToSelect(this.voice);
                 this.player1.clickCard(this.voice);
 
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
 
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.fan);
@@ -190,8 +184,8 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.pass();
     
@@ -199,9 +193,8 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.attachments.toArray()).toContain(this.tactical);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.pass();
     
@@ -209,10 +202,8 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.isHonored).toBe(true);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.pass();
     
@@ -230,18 +221,17 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
-    
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
                 this.player2.pass();
     
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.attachments.toArray()).toContain(this.tactical);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.clickCard(this.backhanded);
                 this.player2.clickPrompt('player1');
@@ -250,10 +240,8 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.isHonored).toBe(true);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
     
                 this.player2.clickCard(this.fury);
                 this.player2.clickCard(this.tactician);
@@ -262,11 +250,8 @@ describe('Master Tactician', function() {
                 expect(this.player1).toBeAbleToSelect(this.voice);
                 this.player1.clickCard(this.voice);
 
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
 
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.fan);
@@ -282,25 +267,22 @@ describe('Master Tactician', function() {
                     attackers: [this.tactician],
                     defenders: []
                 });
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
-    
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
                 this.player2.pass();
     
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
                 expect(this.tactician.attachments.toArray()).toContain(this.tactical);
     
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-                expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
 
                 this.player1.moveCard(this.fan, 'hand');
                 this.player1.moveCard(this.fan, 'conflict deck');
 
                 this.player2.pass();
-                expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-                expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.soul);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -372,9 +354,8 @@ describe('Two Master Tacticians', function() {
             
             expect(this.tactician.attachments.toArray()).toContain(this.tactical);
 
-            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-            expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
 
             this.player2.pass();
 
@@ -383,10 +364,8 @@ describe('Two Master Tacticians', function() {
             expect(this.tactician.isHonored).toBe(true);
             this.player1.clickPromptButtonIndex(0);
 
-            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(false);
-            expect(this.soul.anyEffect('hideWhenFaceUp')).toBe(false);
-            expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
 
             this.player2.clickCard(this.fury);
             this.player2.clickCard(this.tactician);
@@ -535,9 +514,9 @@ describe('Master Tactician - Edge Cases', function() {
                 attackers: [this.tetsuko],
                 defenders: [this.tactician]
             });
-            expect(this.player1.player.isTopConflictCardShown()).toBe(true);
-            expect(this.tactical.anyEffect('hideWhenFaceUp')).toBe(true);
-            
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+        
             let fate = this.player1.fate;
 
             this.player1.clickCard(this.tactical);
@@ -545,6 +524,86 @@ describe('Master Tactician - Edge Cases', function() {
             expect(this.tactician.attachments.toArray()).toContain(this.tactical);
 
             expect(this.player1.fate).toBe(fate - 1); //tetsuko tax
+        });
+    });
+});
+
+describe('Master Tactician - Pillow Book', function() {
+    integration(function() {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['master-tactician'],
+                    hand: ['prepared-ambush', 'pillow-book'],
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan']
+                },
+                player2: {
+                    hand: ['mirumoto-s-fury', 'backhanded-compliment']
+                }
+            });
+
+            this.player1.player.optionSettings.orderForcedAbilities = true;
+
+            this.tactician = this.player1.findCardByName('master-tactician');
+            this.ambush = this.player1.findCardByName('prepared-ambush');
+            this.voice = this.player1.findCardByName('voice-of-honor');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
+            this.tactical = this.player1.findCardByName('tactical-ingenuity');
+            this.book = this.player1.findCardByName('pillow-book');
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.fury = this.player2.findCardByName('mirumoto-s-fury');
+            this.province = this.player2.findCardByName('shameful-display', 'province 1');
+            this.backhanded = this.player2.findCardByName('backhanded-compliment');
+
+            this.player1.moveCard(this.fan, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+            this.player1.moveCard(this.soul, 'conflict deck');
+            this.player1.moveCard(this.tactical, 'conflict deck');
+        });
+
+        it('Pillow Book should override Master Tactician', function () {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.player2.pass();
+            this.player1.playAttachment(this.book, this.tactician);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.tactician],
+                defenders: []
+            });
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+            this.player2.pass();
+
+            this.player1.clickCard(this.book);
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
+        });
+
+        it('Pillow Book should not use up a Master Tactician use', function () {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.player2.pass();
+            this.player1.playAttachment(this.book, this.tactician);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.tactician],
+                defenders: []
+            });
+            this.player2.pass();
+
+            this.player1.clickCard(this.book);
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            expect(this.getChatLogs(10)).toContain('hi');
         });
     });
 });
