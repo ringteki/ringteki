@@ -2,6 +2,7 @@ import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
 import { EventNames, EffectNames } from '../Constants';
+import HonorLogic from './Shared/HonorLogic';
 
 export interface TransferHonorProperties extends PlayerActionProperties {
     amount?: number;
@@ -34,9 +35,8 @@ export class TransferHonorAction extends PlayerAction {
         if(!gainsHonor)
             return false;
 
-        const honorGainLimitPerPhase = player.opponent.getEffects && player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = player.opponent.honorGained && player.opponent.honorGained(context.game.roundNumber, context.game.currentPhase, true);
-        if(honorGainLimitPerPhase && honorGainedThisPhase >= honorGainLimitPerPhase)
+        var [hasLimit, amountToTransfer] = HonorLogic.CalculateHonorLimit(player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        if(hasLimit && !amountToTransfer)
             return false;
 
         return player.opponent && super.canAffect(player, context);
@@ -50,18 +50,9 @@ export class TransferHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        const honorGainLimitPerPhase = event.player.opponent.getEffects && event.player.opponent.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = event.player.opponent.honorGained && event.player.opponent.honorGained(event.context.game.roundNumber, event.context.game.currentPhase, true);
+        var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player.opponent, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
 
-        if(!honorGainLimitPerPhase) {
-            event.player.modifyHonor(-event.amount);
-            event.player.opponent.modifyHonor(event.amount);
-        } else {
-            const maxAmountToTransfer = honorGainLimitPerPhase - honorGainedThisPhase;
-            const amountToTransfer = Math.min(event.amount, maxAmountToTransfer);
-
-            event.player.modifyHonor(-amountToTransfer);
-            event.player.opponent.modifyHonor(amountToTransfer);
-        }
+        event.player.modifyHonor(-amountToTransfer);
+        event.player.opponent.modifyHonor(amountToTransfer);
     }
 }

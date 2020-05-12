@@ -1074,6 +1074,7 @@ class Player extends GameObject {
     }
 
     resetHonorEvents(round, phase) {
+        // in case a phase is restarded during the same round, reset honor tracking of that phase.
         this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
     }
 

@@ -2,6 +2,7 @@ import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
 import { EventNames, EffectNames } from '../Constants';
+import HonorLogic from './Shared/HonorLogic';
 
 export interface GainHonorProperties extends PlayerActionProperties {
     amount?: number;
@@ -28,10 +29,9 @@ export class GainHonorAction extends PlayerAction {
         if (!wouldGainAnyHonor)
             return false;
 
-        const honorGainLimitPerPhase = player.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = player.honorGained(context.game.roundNumber, context.game.currentPhase, true);
+        var [hasHonorLimit, amountToTransfer] = HonorLogic.CalculateHonorLimit(player, context.game.roundNumber, context.game.currentPhase, properties.amount);
 
-        if(honorGainLimitPerPhase && honorGainedThisPhase >= honorGainLimitPerPhase)
+        if(hasHonorLimit && !amountToTransfer)
             return false;
 
         return super.canAffect(player, context);
@@ -48,16 +48,7 @@ export class GainHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        const honorGainLimitPerPhase = event.player.getEffects(EffectNames.LimitHonorGainPerPhase).reduce((total, value) => total + value, 0);
-        const honorGainedThisPhase = event.player.honorGained(event.context.game.roundNumber, event.context.game.currentPhase, true);
-
-        if(!honorGainLimitPerPhase) {
-            event.player.modifyHonor(event.amount);
-        } else {
-            const maxAmountToTransfer = honorGainLimitPerPhase - honorGainedThisPhase;
-            const amountToTransfer = Math.min(event.amount, maxAmountToTransfer);
-
-            event.player.modifyHonor(amountToTransfer);
-        }
+        var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
+        event.player.modifyHonor(amountToTransfer);
     }
 }
