@@ -67,5 +67,31 @@ describe('Lost Papers', function() {
             expect(this.player1).not.toBeAbleToSelect(this.lostPapers);
             expect(this.player1).toHavePrompt('Play cards from provinces');
         });
+
+        it('should not work when not revealed - revealed outside dynasty phase (draw phase)', function() {
+            this.challenger.fate = 3;
+            this.whisperer.fate = 2;
+            this.hiroue.fate = 3;
+            this.berserker.fate = 1;
+
+            this.player1.pass();
+            this.player2.pass();
+
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+
+            expect(this.lostPapers.facedown).toBe(true);
+            this.player1.clickCard(this.stagingGround);
+            this.player1.clickCard(this.lostPapers);
+            this.player1.clickPrompt('Done');
+            expect(this.lostPapers.facedown).toBe(false);
+            expect(this.player1).not.toHavePrompt('triggered abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.lostPapers);
+
+            this.player1.clickCard(this.lostPapers);
+            this.player1.clickCard(this.hiroue);
+            expect(this.hiroue.bowed).toBe(false);
+            expect(this.player2).toHavePrompt('Action Window');
+        });
     });
 });
