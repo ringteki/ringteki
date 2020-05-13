@@ -39,17 +39,18 @@ describe('Chancellor\'s Aide', function() {
                 expect(this.player2).toHavePromptButton('Yes');
                 expect(this.player2).toHavePromptButton('No');
                 this.player2.clickPrompt('Yes');
+                expect(this.getChatLogs(1)).toContain('player2 chooses to give player1 1 honor');
 
                 expect(this.player1).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player1).toHavePromptButton('Me');
-                expect(this.player1).toHavePromptButton('My opponent');
+                expect(this.player1).toHavePromptButton('player1');
+                expect(this.player1).toHavePromptButton('player2');
                 expect(this.player1).not.toHavePromptButton('Done');
 
-                this.player1.clickPrompt('Me');
+                this.player1.clickPrompt('player1');
 
                 expect(this.player2).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player2).toHavePromptButton('Me');
-                expect(this.player2).toHavePromptButton('My opponent');
+                expect(this.player2).toHavePromptButton('player1');
+                expect(this.player2).toHavePromptButton('player2');
             });
 
             it('works when only the owner of Chancellor\'s Aide chooses a player', function() {
@@ -66,11 +67,11 @@ describe('Chancellor\'s Aide', function() {
                 this.player2.clickPrompt('No');
 
                 expect(this.player1).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player1).toHavePromptButton('Me');
-                expect(this.player1).toHavePromptButton('My opponent');
+                expect(this.player1).toHavePromptButton('player1');
+                expect(this.player1).toHavePromptButton('player2');
                 expect(this.player1).not.toHavePromptButton('Done');
 
-                this.player1.clickPrompt('My opponent');
+                this.player1.clickPrompt('player2');
 
                 expect(this.player2).toHavePrompt('Choose a card to discard');
                 this.player2.clickCard(this.jade2);
@@ -95,17 +96,17 @@ describe('Chancellor\'s Aide', function() {
                 this.player2.clickPrompt('Yes');
 
                 expect(this.player1).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player1).toHavePromptButton('Me');
-                expect(this.player1).toHavePromptButton('My opponent');
+                expect(this.player1).toHavePromptButton('player1');
+                expect(this.player1).toHavePromptButton('player2');
                 expect(this.player1).not.toHavePromptButton('Done');
 
-                this.player1.clickPrompt('My opponent');
+                this.player1.clickPrompt('player2');
 
                 expect(this.player2).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player2).toHavePromptButton('Me');
-                expect(this.player2).toHavePromptButton('My opponent');
+                expect(this.player2).toHavePromptButton('player1');
+                expect(this.player2).toHavePromptButton('player2');
 
-                this.player2.clickPrompt('My opponent');
+                this.player2.clickPrompt('player1');
 
                 expect(this.player2).toHavePrompt('Choose a card to discard');
                 this.player2.clickCard(this.jade2);
@@ -133,17 +134,17 @@ describe('Chancellor\'s Aide', function() {
                 this.player2.clickPrompt('Yes');
 
                 expect(this.player1).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player1).toHavePromptButton('Me');
-                expect(this.player1).toHavePromptButton('My opponent');
+                expect(this.player1).toHavePromptButton('player1');
+                expect(this.player1).toHavePromptButton('player2');
                 expect(this.player1).not.toHavePromptButton('Done');
 
-                this.player1.clickPrompt('Me');
+                this.player1.clickPrompt('player1');
 
                 expect(this.player2).toHavePrompt('Chancellor\'s Aide');
-                expect(this.player2).toHavePromptButton('Me');
-                expect(this.player2).toHavePromptButton('My opponent');
+                expect(this.player2).toHavePromptButton('player1');
+                expect(this.player2).toHavePromptButton('player2');
 
-                this.player2.clickPrompt('Me');
+                this.player2.clickPrompt('player2');
 
                 expect(this.player1).toHavePrompt('Choose a card to discard');
                 this.player1.clickCard(this.jade);

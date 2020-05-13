@@ -52,7 +52,9 @@ export class TransferHonorAction extends PlayerAction {
     eventHandler(event): void {
         var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player.opponent, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
 
-        event.player.modifyHonor(-amountToTransfer);
-        event.player.opponent.modifyHonor(amountToTransfer);
+        if(event.player && event.player.opponent) {
+            event.player.modifyHonor(-amountToTransfer);
+            event.player.opponent.modifyHonor(amountToTransfer);
+        }
     }
 }

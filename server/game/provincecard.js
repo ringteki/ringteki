@@ -132,6 +132,22 @@ class ProvinceCard extends BaseCard {
         return false;
     }
 
+    getMenu() {
+        let menu = super.getMenu();
+
+        if(menu) {
+            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.controller === this.game.currentConflict.conflictProvince.controller) {
+                menu.push({ command: 'move_conflict', text: 'Move Conflict'});
+            }
+
+            if(this.controller.getDynastyCardsInProvince(this.location).length <= 0) {
+                menu.push({ command: 'refill', text: 'Refill Province'});
+            }
+        }
+
+        return menu;
+    }
+
     getSummary(activePlayer, hideWhenFaceup) {
         let baseSummary = super.getSummary(activePlayer, hideWhenFaceup);
 

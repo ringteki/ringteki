@@ -2,6 +2,7 @@ const bannedList = {
     version: '12',
     cards: [
         'guest-of-honor',
+        'spyglass',
         'charge',
         'isawa-tadaka',
         'karada-district',

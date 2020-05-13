@@ -1,12 +1,11 @@
 const restrictedList = {
     version: '9',
     cards: [
-        'kuroi-mori',
-        'secret-cache',
+        'city-of-the-open-hand',
         'rebuild',
         'mirumoto-s-fury',
         'forged-edict',
-        'spyglass',
+        'duty',
         'embrace-the-void',
         'pathfinder-s-blade',
         'policy-debate',
@@ -14,7 +13,6 @@ const restrictedList = {
         'consumed-by-five-fires',
         'cunning-magistrate',
         'a-fate-worse-than-death',
-        'void-fist',
         'mark-of-shame',
         'magistrate-station',
         'kakita-toshimoko',

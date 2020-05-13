@@ -19,7 +19,7 @@ class Overhear extends DrawCard {
                 messageArgs : cards => ([context.player, cards[0]])
             }))
             ]),
-            condition: context => context.game.isDuringConflict('political'),
+            condition: context => context.game.isDuringConflict('political') && context.player.opponent,
             then: context => {
                 if(context.game.currentConflict.getCharacters(context.player).filter(card => card.hasTrait('courtier')).length < 1) {
                     return;

@@ -191,7 +191,7 @@ describe('Vine Tattoo', function() {
             expect(this.masterAlchemist.covert).toBe(true);
         });
 
-        it('Covert Test - reaction to covert should be on the right target', function() {
+        it('Covert Test - reaction to covert should be on the right target (causes an issue, so we default to manual)', function() {
             this.noMoreActions();
             this.player1.clickRing('air');
             this.player1.clickCard(this.shameful);
@@ -202,13 +202,22 @@ describe('Vine Tattoo', function() {
             this.player1.clickCard(this.masterAlchemist);
             expect(this.masterAlchemist.covert).toBe(true);
             this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Choose covert target for Tengu Sensei');
+            expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
+            expect(this.player1).not.toBeAbleToSelect(this.sotorii);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.player1).toHavePrompt('Choose covert target for Ikoma Ikehata');
+            expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
+            expect(this.player1).toBeAbleToSelect(this.sotorii);
+            this.player1.clickCard(this.sotorii);
+
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.tengu);
             this.player1.clickCard(this.tengu);
             expect(this.getChatLogs(4)).toContain('player1 uses Tengu Sensei to prevent Master Alchemist from attacking this phase');
         });
 
-        it('Covert Test - reaction to covert should be on the right target (switching selection order)', function() {
+        it('Covert Test - reaction to covert should be on the right target (causes an issue, so we default to manual)', function() {
             this.noMoreActions();
             this.player1.clickRing('air');
             this.player1.clickCard(this.shameful);
@@ -219,6 +228,15 @@ describe('Vine Tattoo', function() {
             this.player1.clickCard(this.sotorii);
             expect(this.sotorii.covert).toBe(true);
             this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Choose covert target for Tengu Sensei');
+            expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
+            expect(this.player1).not.toBeAbleToSelect(this.sotorii);
+            this.player1.clickCard(this.masterAlchemist);
+            expect(this.player1).toHavePrompt('Choose covert target for Ikoma Ikehata');
+            expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
+            expect(this.player1).toBeAbleToSelect(this.sotorii);
+            this.player1.clickCard(this.sotorii);
+
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.tengu);
             this.player1.clickCard(this.tengu);

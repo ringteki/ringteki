@@ -528,6 +528,7 @@ const Costs = {
                 if(context.costs.optionalHonorTransferFromOpponentCostPaid) {
                     let events = [];
 
+                    context.game.addMessage('{0} chooses to give {1} 1 honor', context.player.opponent, context.player);
                     let honorAction = context.game.actions.takeHonor({ target: context.player.opponent });
                     events.push(honorAction.getEvent(context.player.opponent, context));
 
