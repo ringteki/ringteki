@@ -1,9 +1,3 @@
-/*
-Required Edge Case Tests:
-
-Pillow Book
-*/
-
 describe('Master Tactician', function() {
     integration(function() {
         beforeEach(function () {
@@ -632,5 +626,125 @@ describe('Master Tactician - Pillow Book', function() {
 
         //     expect(this.getChatLogs(3)).not.toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
         // });
+    });
+});
+
+describe('Master Tactician - Copying', function() {
+    integration(function() {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['shosuro-actor'],
+                    hand: ['prepared-ambush', 'fine-katana'],
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan']
+                },
+                player2: {
+                    inPlay: ['master-tactician'],
+                    hand: ['mirumoto-s-fury', 'backhanded-compliment']
+                }
+            });
+
+            this.actor = this.player1.findCardByName('shosuro-actor');
+            this.tactician = this.player2.findCardByName('master-tactician');
+            this.ambush = this.player1.findCardByName('prepared-ambush');
+            this.voice = this.player1.findCardByName('voice-of-honor');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
+            this.tactical = this.player1.findCardByName('tactical-ingenuity');
+            this.katana = this.player1.findCardByName('fine-katana');
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.fury = this.player2.findCardByName('mirumoto-s-fury');
+            this.province = this.player2.findCardByName('shameful-display', 'province 1');
+            this.backhanded = this.player2.findCardByName('backhanded-compliment');
+
+            this.player1.moveCard(this.fan, 'conflict deck');
+            this.player1.moveCard(this.voice, 'conflict deck');
+            this.player1.moveCard(this.soul, 'conflict deck');
+            this.player1.moveCard(this.tactical, 'conflict deck');
+        });
+
+        describe('Max 3 cards', function() {
+            it('should let you play three cards, but look at the fourth', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.actor],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.actor);
+                this.player1.clickCard(this.tactician);
+
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+                this.player2.pass();
+
+                this.player1.clickCard(this.tactical);
+                this.player1.clickCard(this.actor);
+                expect(this.actor.attachments.toArray()).toContain(this.tactical);
+
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.soul);
+                this.player1.clickCard(this.actor);
+                expect(this.actor.isHonored).toBe(true);
+
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
+                this.player2.clickCard(this.fury);
+                this.player2.clickCard(this.actor);
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.voice);
+                this.player1.clickCard(this.voice);
+
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.fan);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
+
+        it('chat messages', function () {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.actor],
+                defenders: []
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.actor);
+            this.player1.clickCard(this.tactician);
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.actor);
+            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.actor);
+            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)');
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.actor);
+            this.player1.clickCard(this.voice);
+            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
+        });
     });
 });
