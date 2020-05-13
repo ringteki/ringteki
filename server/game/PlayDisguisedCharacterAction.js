@@ -80,6 +80,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
             card: context.source,
             context: context,
             originalLocation: context.source.location,
+            originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
             playType: context.playType
         })];
         const replacedCharacter = context.costs.chooseDisguisedCharacter;

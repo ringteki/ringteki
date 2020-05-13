@@ -7,7 +7,7 @@ const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
 const GainAbility = require('./Effects/GainAbility');
 const EffectBuilder = require('./Effects/EffectBuilder');
-const { EffectNames, PlayTypes, CardTypes } = require('./Constants');
+const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
 
 /* Types of effect
     1. Static effects - do something for a period
@@ -29,6 +29,7 @@ const Effects = {
     attachmentUniqueRestriction: () => EffectBuilder.card.static(EffectNames.AttachmentUniqueRestriction),
     blank: (blankTraits = false) => EffectBuilder.card.static(EffectNames.Blank, blankTraits),
     calculatePrintedMilitarySkill: (func) => EffectBuilder.card.static(EffectNames.CalculatePrintedMilitarySkill, func),
+    canPlayFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, playType),
     canBeSeenWhenFacedown: () => EffectBuilder.card.static(EffectNames.CanBeSeenWhenFacedown),
     canOnlyBeDeclaredAsAttackerWithElement: (element) => EffectBuilder.card.flexible(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement, element),
     cannotApplyLastingEffects: (condition) => EffectBuilder.card.static(EffectNames.CannotApplyLastingEffects, condition),
@@ -172,7 +173,7 @@ const Effects = {
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
     setMaxConflicts: (amount) => EffectBuilder.player.static(EffectNames.SetMaxConflicts, amount),
     setConflictTotalSkill: (value) => EffectBuilder.player.static(EffectNames.SetConflictTotalSkill, value),
-    showTopConflictCard: () => EffectBuilder.player.static(EffectNames.ShowTopConflictCard),
+    showTopConflictCard: (players = Players.Any) => EffectBuilder.player.static(EffectNames.ShowTopConflictCard, players),
     showTopDynastyCard: () => EffectBuilder.player.static(EffectNames.ShowTopDynastyCard),
     eventsCannotBeCancelled: () => EffectBuilder.player.static(EffectNames.EventsCannotBeCancelled),
     mustDeclareMaximumAttackers: (type = 'both') => EffectBuilder.player.static(EffectNames.MustDeclareMaximumAttackers, type),

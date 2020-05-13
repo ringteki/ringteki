@@ -121,6 +121,7 @@ export enum EffectNames {
     AlternateFatePool = 'alternateFatePool',
     CannotDeclareConflictsOfType = 'cannotDeclareConflictsOfType',
     CanPlayFromOwn = 'canPlayFromOwn',
+    CanPlayFromOutOfPlay = 'canPlayFromOutOfPlay',
     CanPlayFromOpponents = 'canPlayFromOpponents',
     CannotResolveRings = "cannotResolveRings",
     ChangePlayerGloryModifier = 'gloryModifier',

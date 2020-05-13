@@ -407,8 +407,25 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return true;
+        }
+
         return _.any(this.playableLocations, location =>
             (!playingType || location.playingType === playingType) && location.contains(card));
+    }
+
+    findPlayType(card) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
+        }
+
+        let location = this.playableLocations.find(location => location.contains(card));
+        if(location) {
+            return location.playingType;
+        }
+
+        return undefined;
     }
 
     /**
@@ -1324,15 +1341,19 @@ class Player extends GameObject {
         this.game.addMessage('{0} reveals a bid of {1}', this, bid);
     }
 
-    isTopConflictCardShown() {
-        return this.anyEffect(EffectNames.ShowTopConflictCard);
+    isTopConflictCardShown(activePlayer = undefined) {
+        if(!activePlayer || activePlayer === this) {
+            return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
+        }
+
+        return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
     }
 
     eventsCannotBeCancelled() {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown() {
+    isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
@@ -1422,11 +1443,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown()) {
+        if(this.isTopConflictCardShown(activePlayer)) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown()) {
+        if(this.isTopDynastyCardShown(activePlayer)) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 
