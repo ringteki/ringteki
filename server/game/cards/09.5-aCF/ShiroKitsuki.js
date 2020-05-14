@@ -2,29 +2,6 @@ const StrongholdCard = require('../../strongholdcard.js');
 const { Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
-const shiroKitsukiCost = function() {
-    return {
-        action: { name: 'shiroKitsukiCost', getCostMessage: () => ['naming {0}', []] },
-        canPay: function() {
-            return true;
-        },
-        resolve: function(context) {
-            context.game.promptWithMenu(context.player, context.source, {
-                context: context,
-                activePrompt: {
-                    menuTitle: 'Name a card',
-                    controls: [
-                        { type: 'card-name', command: 'menuButton', method: 'selectCardName', name: 'card-name' }
-                    ]
-                }
-            });
-        },
-        pay: function() {
-        }
-    };
-
-};
-
 class ShiroKitsuki extends StrongholdCard {
     setupCardAbilities() {
         this.reaction({
@@ -32,7 +9,7 @@ class ShiroKitsuki extends StrongholdCard {
             when: {
                 onConflictDeclared: () => true
             },
-            cost: [shiroKitsukiCost()],
+            cost: AbilityDsl.costs.nameCard(),
             limit: AbilityDsl.limit.unlimitedPerConflict(),
             gameAction: AbilityDsl.actions.playerLastingEffect(playerLastingEffectContext => ({
                 duration: Durations.UntilEndOfConflict,
@@ -40,26 +17,22 @@ class ShiroKitsuki extends StrongholdCard {
                     when: {
                         onCardPlayed: (event, context) => {
                             return event.player === context.player.opponent &&
-                                event.card.name === playerLastingEffectContext.costs.shiroKitsukiCost;
+                                event.card.name === playerLastingEffectContext.costs.nameCardCost;
                         }
                     },
                     multipleTrigger: true,
                     gameAction: AbilityDsl.actions.selectRing(context => ({
                         activePromptTitle: 'Choose a ring to claim',
                         ringCondition: ring => ring.isUnclaimed(),
-                        message: '{0} claim {1}',
+                        message: '{0} claims the {1}',
                         messageArgs: ring => [context.player, ring],
                         gameAction: AbilityDsl.actions.claimRing({ takeFate: true, type: 'political'})
                     }))
                 })
-            }))
+            })),
+            effect: 'claim a ring whenever {1} plays a card named {2}',
+            effectArgs: context => [context.player.opponent, context.costs.nameCardCost]
         });
-    }
-
-    selectCardName(player, cardName, context) {
-        context.game.addMessage('{0} names {1} - if {2} plays copies of this card {0} gets to claim a ring', player, cardName, player.opponent);
-        context.costs.shiroKitsukiCost = cardName;
-        return true;
     }
 }
 

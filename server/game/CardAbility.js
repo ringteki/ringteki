@@ -132,6 +132,10 @@ class CardAbility extends ThenAbility {
             return 'limited';
         }
 
+        if(!ignoredRequirements.includes('phase') && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== 'dynasty') {
+            return 'phase';
+        }
+
         return super.meetsRequirements(context, ignoredRequirements);
     }
 

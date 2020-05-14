@@ -66,6 +66,17 @@ class MenuCommands {
                     game.recordWinner(player.opponent, 'conquest');
                 }
                 break;
+            case 'move_conflict':
+                game.addMessage('{0} moves the conflict to {1}', player, card);
+                card.inConflict = true;
+                game.currentConflict.conflictProvince.inConflict = false;
+                game.currentConflict.conflictProvince = card;
+                card.facedown = false;
+                break;
+            case 'refill':
+                game.addMessage('{0} refills {1}', player, card.facedown ? card.location : card);
+                card.controller.replaceDynastyCard(card.location);
+                break;
         }
     }
 

@@ -1,6 +1,6 @@
-describe('Mantra of Earth', function () {
+describe('Mantra of Air', function () {
     integration(function () {
-        describe('Mantra of Earth\'s ability', function () {
+        describe('Mantra of Air\'s ability', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',

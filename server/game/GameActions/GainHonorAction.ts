@@ -1,7 +1,8 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
-import { EventNames } from '../Constants';
+import { EventNames, EffectNames } from '../Constants';
+import HonorLogic from './Shared/HonorLogic';
 
 export interface GainHonorProperties extends PlayerActionProperties {
     amount?: number;
@@ -23,7 +24,17 @@ export class GainHonorAction extends PlayerAction {
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
         let properties: GainHonorProperties = this.getProperties(context, additionalProperties);
-        return properties.amount === 0 ? false : super.canAffect(player, context);
+        var wouldGainAnyHonor = properties.amount !== 0;
+
+        if (!wouldGainAnyHonor)
+            return false;
+
+        var [hasHonorLimit, amountToTransfer] = HonorLogic.CalculateHonorLimit(player, context.game.roundNumber, context.game.currentPhase, properties.amount);
+
+        if(hasHonorLimit && !amountToTransfer)
+            return false;
+
+        return super.canAffect(player, context);
     }
 
     defaultTargets(context: AbilityContext): Player[] {
@@ -31,12 +42,13 @@ export class GainHonorAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount } = this.getProperties(context, additionalProperties) as GainHonorProperties;        
+        let { amount } = this.getProperties(context, additionalProperties) as GainHonorProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = amount;
     }
 
     eventHandler(event): void {
-        event.player.modifyHonor(event.amount);
+        var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
+        event.player.modifyHonor(amountToTransfer);
     }
 }
