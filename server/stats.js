@@ -1,12 +1,13 @@
 /*eslint no-console: 0*/
 
 const _ = require('underscore');
-const monk = require('monk');
+import monk from 'monk';
 
 const GameService = require('./services/GameService.js');
-const config = require('./config.js');
+const ServiceFactory = require('./services/ServiceFactory.js');
+let configService = ServiceFactory.configService();
 
-let db = monk(config.dbPath);
+let db = monk(configService.getValue('dbPath'));
 let gameService = new GameService(db);
 
 let args = process.argv.slice(2);
