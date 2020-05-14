@@ -4,7 +4,7 @@ const _ = require('underscore');
 const monk = require('monk');
 
 const GameService = require('./services/GameService.js');
-const config = require('./config');
+const config = require('./config.js');
 
 let db = monk(config.dbPath);
 let gameService = new GameService(db);
