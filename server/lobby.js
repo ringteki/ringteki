@@ -169,7 +169,7 @@ export class Lobby {
             versionInfo = moment(ioSocket.handshake.query.version);
         }
 
-        if(!versionInfo || versionInfo < version.releaseDate) {
+        if(!versionInfo || versionInfo.toString() < version.releaseDate) {
             ioSocket.emit('banner', 'Your client version is out of date, please refresh or clear your cache to get the latest version');
         }
 
