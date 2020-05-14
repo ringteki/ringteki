@@ -7,7 +7,7 @@ const api = require('./api');
 const path = require('path');
 const http = require('http');
 const Raven = require('raven');
-import monk from 'monk';
+const monk = require('monk');
 
 /* New */
 const passportJwt = require('passport-jwt');
@@ -38,7 +38,7 @@ const ServiceFactory = require('./services/ServiceFactory.js');
 
 const version = require('../version.js');
 
-export class Server {
+class Server {
     constructor(isDeveloping) {
         this.configService = ServiceFactory.configService();
 
@@ -118,7 +118,7 @@ export class Server {
     }
 }
 
-//module.exports = Server;
+module.exports = Server;
 
 /* 
 class Server {

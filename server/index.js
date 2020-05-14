@@ -1,12 +1,12 @@
-import { Server } from './server.js';
-import { Lobby } from './lobby.js';
+const Server = require('./server.js');
+const Lobby = require('./lobby.js');
 const pmx = require('pmx');
-import monk from 'monk';
+const monk = require('monk');
 const ServiceFactory = require('./services/ServiceFactory.js');
 
 let configService = ServiceFactory.configService();
 
-export default function runServer() {
+function runServer() {
     let options = { db: monk(configService.getValue('dbPath')) };
 
     let server = new Server(process.env.NODE_ENV !== 'production');
@@ -45,3 +45,5 @@ export default function runServer() {
 
     server.run();
 }
+
+module.exports = runServer;

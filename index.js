@@ -1,3 +1,3 @@
-import runServer from './server/index.js';
+const runServer = require('./server');
 
 runServer();

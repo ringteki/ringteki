@@ -1,13 +1,13 @@
 const zmq = require('zeromq');
 const router = zmq.socket('router');
 const logger = require('./log.js');
-import monk from 'monk';
+const monk = require('monk');
 const EventEmitter = require('events');
 
 const GameService = require('./services/GameService.js');
 const ServiceFactory = require('./services/ServiceFactory.js');
 
-export class GameRouter extends EventEmitter {
+class GameRouter extends EventEmitter {
     constructor(config) {
         super();
 
@@ -258,3 +258,6 @@ export class GameRouter extends EventEmitter {
         }
     }
 }
+
+
+module.exports = GameRouter;

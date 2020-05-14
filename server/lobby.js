@@ -8,7 +8,7 @@ const { validateDeck, formatDeckAsFullCards } = require('ringteki-deck-helper');
 const logger = require('./log.js');
 const version = require('../version.js');
 const PendingGame = require('./pendinggame.js');
-import { GameRouter } from './gamerouter.js';
+const GameRouter = require('./gamerouter.js');
 const ServiceFactory = require('./services/ServiceFactory');
 const DeckService = require('./services/DeckService.js');
 const CardService = require('./services/CardService.js');
@@ -18,7 +18,7 @@ const { sortBy } = require('./Array');
 const Factions = require('./game/Factions');
 
 
-export class Lobby {
+class Lobby {
     constructor(server, options = {}) {
         this.sockets = {};
         this.users = {};
@@ -921,3 +921,5 @@ export class Lobby {
         this.broadcastGameList();
     }
 }
+
+module.exports = Lobby;
