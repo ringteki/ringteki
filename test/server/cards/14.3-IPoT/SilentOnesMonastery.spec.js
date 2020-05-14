@@ -98,6 +98,7 @@ describe('Silent Ones Monastery', function() {
                 this.player2.clickPrompt('5');
                 expect(this.player1.honor).toBe(this.preDrawBidHonor + 2);
                 expect(this.player2.honor).toBe(this.preDrawBidHonorSOMPlayer - 2); // 1 to 5 bid, player 2 should technically pay 4, but SOM prevents all but 2
+                expect(this.getChatLogs(10)).toContain('player2 gives player1 2 honor');
             });
 
             it('should count a new dynasty (or other) phase started by an effect like A Season of War as a new phase to count against', function() {
@@ -205,6 +206,7 @@ describe('Silent Ones Monastery', function() {
                 this.player2.pass();
 
                 this.player1.clickPrompt('Gain 2 honor');
+                expect(this.getChatLogs(10)).toContain('player1 resolves the air ring, gaining 1 honor');
                 expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
             });
         });
