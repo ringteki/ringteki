@@ -7,7 +7,7 @@ import Player = require('../player');
 export interface DeckSearchProperties extends PlayerActionProperties {
     targetMode?: TargetModes;
     activePromptTitle?: string;
-    amount?: number;
+    amount?: number | ((context: AbilityContext) => number);
     numCards?: number;
     reveal?: boolean;
     faceup?: boolean;
@@ -35,6 +35,13 @@ export class DeckSearchAction extends PlayerAction {
         reveal: true
     };
 
+    getAmount(amount, context) : number {
+        if (typeof amount === 'function') {
+            return amount(context);
+        }
+        return amount;
+    }
+
     getProperties(context: AbilityContext, additionalProperties = {}): DeckSearchProperties {
         let properties = super.getProperties(context, additionalProperties) as DeckSearchProperties;
         if(properties.reveal === undefined) {
@@ -47,15 +54,17 @@ export class DeckSearchAction extends PlayerAction {
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as DeckSearchProperties;
         let message = 'search their deck';
-        if(properties.amount > 0) {
-            message = 'look at the top ' + (properties.amount > 1 ? properties.amount + ' cards' : 'card') + ' of their deck';
+        let amount = this.getAmount(properties.amount, context); 
+        if(amount > 0) {
+            message = 'look at the top ' + (amount > 1 ? amount + ' cards' : 'card') + ' of their deck';
         }
         return [message, []];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
-        return properties.amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
+        let amount = this.getAmount(properties.amount, context); 
+        return amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
     }
 
     defaultTargets(context: AbilityContext): Player[] {
@@ -64,8 +73,9 @@ export class DeckSearchAction extends PlayerAction {
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
         let { amount } = this.getProperties(context, additionalProperties) as DeckSearchProperties;        
+        let fAmount = this.getAmount(amount, context); 
         super.addPropertiesToEvent(event, player, context, additionalProperties);
-        event.amount = amount;
+        event.amount = fAmount;
     }
 
     eventHandler(event, additionalProperties): void {
@@ -163,10 +173,10 @@ export class DeckSearchAction extends PlayerAction {
             if (properties.reveal) {
                 switch(properties.destination) {
                     case Locations.Hand:
-                        context.game.addMessage('{0} takes {1} and adds {2} to their hand', event.player, selectedCards.map(e => e.name).join(', '), selectedCards.length > 1 ? 'them' : 'it');
+                        context.game.addMessage('{0} takes {1} and adds {2} to their hand', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it');
                         break;
                     default:
-                        context.game.addMessage('{0} selects {1} and moves {2} to {3}', event.player, selectedCards.map(e => e.name).join(', '), selectedCards.length > 1 ? 'them' : 'it', properties.destination);
+                        context.game.addMessage('{0} selects {1} and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);
                         break;
                 }
             }
@@ -176,7 +186,7 @@ export class DeckSearchAction extends PlayerAction {
                         context.game.addMessage('{0} takes {1} into their hand', event.player, selectedCards.length > 1 ? 'cards' : 'a card');
                         break;
                     default:
-                        context.game.addMessage('{0} makes a selection and moves {2} to {3}', event.player, selectedCards.map(e => e.name).join(', '), selectedCards.length > 1 ? 'them' : 'it', properties.destination);
+                        context.game.addMessage('{0} makes a selection and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);
                         break;
                 }
             }

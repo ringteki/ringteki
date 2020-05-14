@@ -253,6 +253,16 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
+    /**
+     * Returns if a card is in play (characters, attachments, provinces, holdings) that has the passed trait
+     * @param {string} trait
+     * @returns {boolean} true/false if the trait is in pay
+     */
+    isTraitInPlay(trait) {
+        return this.getPlayers().some(player => player.isTraitInPlay(trait));
+    }
+
+
     createToken(card) {
         let token = new SpiritOfTheRiver(card);
         this.allCards.push(token);
@@ -796,11 +806,23 @@ class Game extends EventEmitter {
 
         if(playerWithNoStronghold) {
             this.queueSimpleStep(() => {
-                this.addMessage('{0} does not have a stronghold in their decklist', playerWithNoStronghold);
+                this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
                 return false;
             });
             this.continue();
             return false;
+        }
+
+        for(let player of this.getPlayers()) {
+            let numProvinces = this.provinceCards.filter(a => a.controller === player);
+            if(numProvinces.length !== 5) {
+                this.queueSimpleStep(() => {
+                    this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                    return false;
+                });
+                this.continue();
+                return false;
+            }
         }
 
         this.pipeline.initialise([
@@ -985,8 +1007,13 @@ class Game extends EventEmitter {
     }
 
     initiateConflict(player, canPass, forcedDeclaredType) {
-        this.currentConflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
-        this.queueStep(new ConflictFlow(this, this.currentConflict, canPass));
+        const conflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
+        this.queueStep(new ConflictFlow(this, conflict, canPass));
+    }
+
+    updateCurrentConflict(conflict) {
+        this.currentConflict = conflict;
+        this.checkGameState(true);
     }
 
     /**
@@ -997,6 +1024,9 @@ class Game extends EventEmitter {
      */
     takeControl(player, card) {
         if(card.controller === player || !card.checkRestrictions(EffectNames.TakeControl, this.getFrameworkContext())) {
+            return;
+        }
+        if(!player || !player.cardsInPlay) {
             return;
         }
         card.controller.removeCardFromPile(card);

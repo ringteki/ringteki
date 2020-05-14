@@ -18,7 +18,7 @@ import DynastyCardAction = require('./dynastycardaction');
 import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
-
+const StatusToken = require('./StatusToken');
 
 const ValidKeywords = [
     'ancestral',
@@ -258,11 +258,14 @@ class BaseCard extends EffectSource {
     }
 
     isFaction(faction: string): boolean {
+        let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        let cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
+
         faction = faction.toLowerCase();
         if(faction === 'neutral') {
-            return this.printedFaction === faction && !this.anyEffect(EffectNames.AddFaction);
+            return cardFaction === faction && !this.anyEffect(EffectNames.AddFaction);
         }
-        return this.printedFaction === faction || this.getEffects(EffectNames.AddFaction).includes(faction);
+        return cardFaction === faction || this.getEffects(EffectNames.AddFaction).includes(faction);
     }
 
     isInProvince(): boolean {
@@ -450,6 +453,11 @@ class BaseCard extends EffectSource {
 
     hasToken(type: string): boolean {
         return !!this.tokens[type];
+    }
+
+    removeAllTokens(): void {
+        let keys = Object.keys(this.tokens);
+        keys.forEach(key => this.removeToken(key, this.tokens[key]));
     }
 
     removeToken(type: string, number: number): void {
@@ -693,6 +701,49 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
+    
+    setPersonalHonor(token) {
+        if(this.personalHonor && token !== this.personalHonor) {
+            this.personalHonor.setCard(null);
+        }
+        this.personalHonor = token || null;
+        if(this.personalHonor) {
+            this.personalHonor.setCard(this);
+        }
+    }
+
+    get isHonored() {
+        return !!this.personalHonor && !!this.personalHonor.honored;
+    }
+
+    honor() {
+        if(this.isHonored) {
+            return;
+        } else if(this.isDishonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, true));
+        }
+    }
+
+    get isDishonored() {
+        return !!this.personalHonor && !!this.personalHonor.dishonored;
+    }
+
+    dishonor() {
+        if(this.isDishonored) {
+            return;
+        } if(this.isHonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, false));
+        }
+    }
+
+    makeOrdinary() {
+        this.setPersonalHonor(null);
+    }
+
     getShortSummaryForControls(activePlayer) {
         if(this.facedown && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
@@ -709,9 +760,11 @@ class BaseCard extends EffectSource {
         if(isActivePlayer ? this.facedown && this.hideWhenFacedown() : (this.facedown || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
             let state = {
                 controller: this.controller.getShortSummary(),
+                menu: isActivePlayer ? this.getMenu() : undefined,
                 facedown: true,
                 inConflict: this.inConflict,
-                location: this.location
+                location: this.location,
+                uuid: isActivePlayer ? this.uuid : undefined
             };
             return Object.assign(state, selectionState);
         }
@@ -728,6 +781,8 @@ class BaseCard extends EffectSource {
             showPopup: this.showPopup,
             tokens: this.tokens,
             type: this.getType(),
+            isDishonored: this.isDishonored,
+            isHonored: this.isHonored,
             uuid: this.uuid
         };
 

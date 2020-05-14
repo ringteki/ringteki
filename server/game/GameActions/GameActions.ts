@@ -19,6 +19,7 @@ import { DiscardFromPlayAction, DiscardFromPlayProperties } from './DiscardFromP
 import { DiscardCardAction, DiscardCardProperties } from './DiscardCardAction';
 import { DiscardStatusAction, DiscardStatusProperties } from './DiscardStatusAction';
 import { DishonorAction, DishonorProperties } from './DishonorAction';
+import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
@@ -36,6 +37,7 @@ import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingE
 import { LookAtAction, LookAtProperties } from './LookAtAction';
 import { LoseFateProperties, LoseFateAction } from './LoseFateAction';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction';
+import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction';
 import { MoveCardAction, MoveCardProperties } from './MoveCardAction';
@@ -46,12 +48,14 @@ import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
+import { OpponentPutIntoPlayAction, OpponentPutIntoPlayProperties } from './OpponentPutIntoPlayAction';
 import { RandomDiscardAction, RandomDiscardProperties } from './RandomDiscardAction';
 import { ReadyAction, ReadyProperties } from './ReadyAction';
 import { RefillFaceupAction, RefillFaceupProperties } from './RefillFaceupAction';
 import { RemoveFateAction, RemoveFateProperties } from './RemoveFateAction';
 import { RemoveFromGameAction, RemoveFromGameProperties } from './RemoveFromGameAction';
 import { ResolveAbilityAction, ResolveAbilityProperties } from './ResolveAbilityAction';
+import { RestoreProvinceAction, RestoreProvinceProperties } from './RestoreProvinceAction';
 import { ResolveConflictRingAction } from './ResolveConflictRingAction';
 import { ResolveElementAction, ResolveElementProperties } from './ResolveElementAction';
 import { ReturnRingAction, ReturnRingProperties } from './ReturnRingAction';
@@ -71,6 +75,7 @@ import { TakeFateRingAction, TakeFateRingProperties } from './TakeFateRingAction
 import { TakeRingAction, TakeRingProperties } from './TakeRingAction';
 import { TransferFateAction, TransferFateProperties } from './TransferFateAction';
 import { TransferHonorAction, TransferHonorProperties } from './TransferHonorAction';
+import { TriggerAbilityAction, TriggerAbilityProperties } from './TriggerAbilityAction';
 import { TurnCardFacedownAction, TurnCardFacedownProperties } from './TurnCardFacedownAction';
 import { GloryCountAction, GloryCountProperties } from './GloryCountAction';
 import { ClaimFavorAction, ClaimFavorProperties } from './ClaimFavorAction';
@@ -91,6 +96,7 @@ const GameActions = {
     discardCard: (propertyFactory: DiscardCardProperties | ((context: TriggeredAbilityContext) => DiscardCardProperties) = {}) => new DiscardCardAction(propertyFactory),
     discardFromPlay: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory),
     dishonor: (propertyFactory: DishonorProperties | ((context: TriggeredAbilityContext) => DishonorProperties) = {}) => new DishonorAction(propertyFactory),
+    dishonorProvince: (propertyFactory: DishonorProvinceProperties | ((context: TriggeredAbilityContext) => DishonorProvinceProperties) = {}) => new DishonorProvinceAction(propertyFactory),
     duel: (propertyFactory: DuelProperties | ((context: TriggeredAbilityContext) => DuelProperties)) => new DuelAction(propertyFactory), // type, challenger, resolutionHandler, costHandler
     flipDynasty: (propertyFactory: FlipDynastyProperties | ((context: TriggeredAbilityContext) => FlipDynastyProperties) = {}) => new FlipDynastyAction(propertyFactory),
     honor: (propertyFactory: HonorProperties | ((context: TriggeredAbilityContext) => HonorProperties) = {}) => new HonorAction(propertyFactory),
@@ -102,22 +108,26 @@ const GameActions = {
     performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
     putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary
     putIntoPlay: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
+    opponentPutIntoPlay: (propertyFactory: OpponentPutIntoPlayProperties | ((context: TriggeredAbilityContext) => OpponentPutIntoPlayProperties) = {}) => new OpponentPutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
     ready: (propertyFactory: ReadyProperties | ((context: TriggeredAbilityContext) => ReadyProperties) = {}) => new ReadyAction(propertyFactory),
     removeFate: (propertyFactory: RemoveFateProperties | ((context: TriggeredAbilityContext) => RemoveFateProperties) = {}) => new RemoveFateAction(propertyFactory), // amount = 1, recipient
     removeFromGame: (propertyFactory: RemoveFromGameProperties | ((context: TriggeredAbilityContext) => RemoveFromGameProperties) = {}) => new RemoveFromGameAction(propertyFactory),
     resolveAbility: (propertyFactory: ResolveAbilityProperties | ((context: TriggeredAbilityContext) => ResolveAbilityProperties)) => new ResolveAbilityAction(propertyFactory), // ability
+    restoreProvince: (propertyFactory: RestoreProvinceProperties | ((context: TriggeredAbilityContext) => RestoreProvinceProperties) = {}) => new RestoreProvinceAction(propertyFactory),
     returnToDeck: (propertyFactory: ReturnToDeckProperties | ((context: TriggeredAbilityContext) => ReturnToDeckProperties) = {}) => new ReturnToDeckAction(propertyFactory), // bottom = false
     returnToHand: (propertyFactory: ReturnToHandProperties | ((context: TriggeredAbilityContext) => ReturnToHandProperties) = {}) => new ReturnToHandAction(propertyFactory),
     reveal: (propertyFactory: RevealProperties | ((context: TriggeredAbilityContext) => RevealProperties) = {}) => new RevealAction(propertyFactory), // chatMessage = false
     sendHome: (propertyFactory: SendHomeProperties | ((context: TriggeredAbilityContext) => SendHomeProperties) = {}) => new SendHomeAction(propertyFactory),
     sacrifice: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory, true),
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
+    triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
     discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
+    discardMatching: (propertyFactory: MatchingDiscardProperties | ((context: TriggeredAbilityContext) => MatchingDiscardProperties) = {}) => new MatchingDiscardAction(propertyFactory), // amount = 1
     draw: (propertyFactory: DrawProperties | ((context: TriggeredAbilityContext) => DrawProperties) = {}) => new DrawAction(propertyFactory), // amount = 1
     fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1

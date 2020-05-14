@@ -16,6 +16,8 @@ class Conflict extends GameObject {
         this.declarationComplete = false;
         this.defendersChosen = false;
         this.conflictProvince = conflictProvince;
+        this.declaredProvince = conflictProvince;
+        this.conflictFailedToInitiate = false;
         this.conflictPassed = false;
         this.conflictTypeSwitched = false;
         this.conflictUnopposed = false;
@@ -208,6 +210,10 @@ class Conflict extends GameObject {
         } else if(player === 'defender') {
             player = this.defendingPlayer;
         }
+        if(!player) {
+            return [];
+        }
+
         let characters = this.getCharacters(player);
         if(predicate) {
             return characters.filter(predicate).length;

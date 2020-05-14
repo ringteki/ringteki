@@ -30,9 +30,9 @@ export class ReturnToDeckAction extends CardGameAction {
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as ReturnToDeckProperties;
         if(properties.shuffle) {
-            return['shuffle {0} into their deck', [properties.target]]
+            return['shuffle {0} into its owner\'s deck', [properties.target]]
         }
-        return ['return {0} to the ' + (properties.bottom ? 'bottom' : 'top') + ' of their deck', [properties.target]];
+        return ['return {0} to the ' + (properties.bottom ? 'bottom' : 'top') + ' of its owner\'s deck', [properties.target]];
     }
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {

@@ -57,8 +57,8 @@ class AbilityContext {
         this.tokens = properties.tokens || {};
         this.stage = properties.stage || Stages.Effect;
         this.targetAbility = properties.targetAbility;
-        const location = this.player && this.player.playableLocations.find(location => location.contains(this.source));
-        this.playType = location && location.playingType;
+        // const location = this.player && this.player.playableLocations.find(location => location.contains(this.source));
+        this.playType = this.player && this.player.findPlayType(this.source); //location && location.playingType;
     }
 
     copy(newProps: object): AbilityContext {

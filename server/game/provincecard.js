@@ -82,11 +82,12 @@ class ProvinceCard extends BaseCard {
     }
 
     isBlank() {
-        return this.isBroken || super.isBlank();
+        return this.isBroken || this.isDishonored || super.isBlank();
     }
 
     breakProvince() {
         this.isBroken = true;
+        this.removeAllTokens();
         if(this.controller.opponent) {
             this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
             if(this.location === Locations.StrongholdProvince) {
@@ -114,6 +115,11 @@ class ProvinceCard extends BaseCard {
         }
     }
 
+    restoreProvince() {
+        this.isBroken = false;
+        this.facedown = false;
+    }
+
     cannotBeStrongholdProvince() {
         return this.hasEminent();
     }
@@ -124,6 +130,22 @@ class ProvinceCard extends BaseCard {
 
     hideWhenFacedown() {
         return false;
+    }
+
+    getMenu() {
+        let menu = super.getMenu();
+
+        if(menu) {
+            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.controller === this.game.currentConflict.conflictProvince.controller) {
+                menu.push({ command: 'move_conflict', text: 'Move Conflict'});
+            }
+
+            if(this.controller.getDynastyCardsInProvince(this.location).length <= 0) {
+                menu.push({ command: 'refill', text: 'Refill Province'});
+            }
+        }
+
+        return menu;
     }
 
     getSummary(activePlayer, hideWhenFaceup) {
@@ -144,7 +166,7 @@ class ProvinceCard extends BaseCard {
         }
 
         return (
-            true//!this.isBroken
+            true
         );
     }
 

@@ -10,6 +10,7 @@ class UnifiedCompany extends DrawCard {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.player &&
                         context.source.isParticipating() &&
+                        context.player.opponent &&
                         context.player.hand.size() < context.player.opponent.hand.size();
                 }
             },

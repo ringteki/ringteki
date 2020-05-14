@@ -70,6 +70,7 @@ describe('Expert Interpreter', function() {
             expect(this.player2).toHavePromptButton('Yes');
             expect(this.player2).toHavePromptButton('No');
             this.player2.clickPrompt('Yes');
+            expect(this.getChatLogs(1)).toContain('player2 chooses to give player1 1 honor');
             expect(this.player2).toHavePrompt('Choose a ring');
             expect(this.player2).toBeAbleToSelectRing('air');
             expect(this.player2).toBeAbleToSelectRing('earth');

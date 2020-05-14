@@ -11,7 +11,7 @@ class TempleOfOsanoWo extends ProvinceCard {
         this.forcedReaction({
             title: 'Place one fate on the unclaimed earth ring',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.conflictProvince === context.source && context.game.rings.earth.isUnclaimed()
+                onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source && context.game.rings.earth.isUnclaimed()
             },
             gameAction: AbilityDsl.actions.placeFateOnRing(context => ({ target: context.game.rings.earth }))
         });

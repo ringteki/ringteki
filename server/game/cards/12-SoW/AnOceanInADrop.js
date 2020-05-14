@@ -17,13 +17,16 @@ class AnOceanInADrop extends DrawCard {
                 }
             },
             effect: 'place {1}\'s hand on the bottom of their deck and have them draw {2} cards',
-            effectArgs: (context) => context.select === this.owner.name ?
+            effectArgs: (context) => (context.select === this.owner.name || !this.owner.opponent) ?
                 [this.owner.name, context.player.hand.value().length] :
                 [this.owner.opponent.name, context.player.opponent.hand.value().length]
         });
     }
 
     getGameActions(player) {
+        if(!player) {
+            return [];
+        }
         return [
             AbilityDsl.actions.moveCard(() => ({
                 shuffle: false,

@@ -76,6 +76,7 @@ class DynastyPhase extends Phase {
         this.game.getPlayersInFirstPlayerOrder().forEach(player => {
             if(!restarted && player.anyEffect(EffectNames.RestartDynastyPhase)) {
                 restarted = true;
+                player.resetHonorEvents(this.game.roundNumber, this.game.currentPhase);
                 let effectSource = player.mostRecentEffect(EffectNames.RestartDynastyPhase);
                 this.game.addMessage('{0} has started a new dynasty phase!', effectSource);
                 let dynastyPhase = new DynastyPhase(this.game, false);

@@ -7,12 +7,12 @@ class KuniSilencer extends DrawCard {
         this.reaction({
             title: 'Take a ring from opponent\'s claimed pool',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isDefending()
+                afterConflict: (event, context) => context.player.opponent && event.conflict.winner === context.player && context.source.isDefending()
             },
             gameAction: AbilityDsl.actions.selectRing(context => ({
                 activePromptTitle: 'Choose a ring to return',
                 player: Players.Opponent,
-                ringCondition: ring => ring.claimedBy === context.player.opponent.name,
+                ringCondition: ring => context.player.opponent && ring.claimedBy === context.player.opponent.name,
                 message: '{0} returns {1}',
                 messageArgs: ring => [context.player.opponent, ring],
                 gameAction: AbilityDsl.actions.returnRing()

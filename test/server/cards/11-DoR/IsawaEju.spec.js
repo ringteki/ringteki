@@ -68,7 +68,7 @@ describe('Isawa Eju', function() {
                 expect(this.ballista.location).toBe('province 1');
                 expect(this.ballista.facedown).toBe(false);
 
-                expect(this.getChatLogs(5)).toContain('player1 uses Isawa Eju to discard Adept of the Waves, Aranat, Daidoji Uji, Imperial Storehouse and refill the province faceup');
+                expect(this.getChatLogs(5)).toContain('player1 uses Isawa Eju to discard Adept of the Waves, Aranat, Daidoji Uji and Imperial Storehouse and refill the province faceup');
             });
 
             it('should be usable on your opponent provinces', function () {
@@ -88,7 +88,7 @@ describe('Isawa Eju', function() {
                 expect(this.uji2.location).toBe('province 1');
                 expect(this.uji2.facedown).toBe(false);
 
-                expect(this.getChatLogs(5)).toContain('player1 uses Isawa Eju to discard Adept of the Waves, Aranat, Heavy Ballista, Imperial Storehouse and refill the province faceup');
+                expect(this.getChatLogs(5)).toContain('player1 uses Isawa Eju to discard Adept of the Waves, Aranat, Heavy Ballista and Imperial Storehouse and refill the province faceup');
             });
 
             it('should be usable 3 times per round', function () {

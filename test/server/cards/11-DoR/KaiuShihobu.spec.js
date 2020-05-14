@@ -63,7 +63,7 @@ describe('Kaiu Shihobu', function() {
                 expect(this.ancestralArmory.location).toBe('underneath stronghold');
                 expect(this.ancestralShrine.location).not.toBe('underneath stronghold');
 
-                expect(this.getChatLogs(2)).toContain('player1 selects Ancestral Armory, Favorable Ground, Imperial Storehouse');
+                expect(this.getChatLogs(2)).toContain('player1 selects Imperial Storehouse, Favorable Ground and Ancestral Armory');
                 expect(this.getChatLogs(1)).toContain('player1 is shuffling their dynasty deck');
             });
 
@@ -104,6 +104,8 @@ describe('Kaiu Shihobu', function() {
                 expect(this.ancestralArmory.location).toBe('underneath stronghold');
                 expect(this.ancestralShrine.location).not.toBe('underneath stronghold');
 
+                this.player1.placeCardInProvince(this.kisada, 'province 1');
+
                 this.player2.pass();
                 this.player1.clickCard(this.kaiuShihobu);
                 expect(this.player1).toBeAbleToSelect(this.storehouse);
@@ -117,7 +119,7 @@ describe('Kaiu Shihobu', function() {
                 expect(this.storehouse.location).toBe('province 1');
                 expect(this.storehouse.facedown).toBe(false);
 
-                expect(this.getChatLogs(1)).toContain('player1 uses Kaiu Shihobu to discard ' + this.currentCard.name + ', replacing it with a facedown holding');
+                expect(this.getChatLogs(1)).toContain('player1 uses Kaiu Shihobu to discard Hida Kisada, replacing it with Imperial Storehouse');
             });
 
             it('should discard multiple cards if multiple cards are in the province', function() {
@@ -136,7 +138,7 @@ describe('Kaiu Shihobu', function() {
                 expect(this.ancestralArmory.location).toBe('underneath stronghold');
                 expect(this.ancestralShrine.location).not.toBe('underneath stronghold');
 
-                this.player1.moveCard(this.artisanAcademy, 'province 1');
+                this.player1.placeCardInProvince(this.artisanAcademy, 'province 1');
                 this.player1.moveCard(this.hallOfVictories, 'province 1');
                 this.player1.moveCard(this.forgottenLibrary, 'province 1');
 
@@ -153,7 +155,7 @@ describe('Kaiu Shihobu', function() {
                 expect(this.storehouse.location).toBe('province 1');
                 expect(this.storehouse.facedown).toBe(false);
 
-                expect(this.getChatLogs(1)).toContain('player1 uses Kaiu Shihobu to discard ' + this.currentCards.map(e => e.name).sort().join(', ') + ', replacing it with a facedown holding');
+                expect(this.getChatLogs(1)).toContain('player1 uses Kaiu Shihobu to discard Artisan Academy, Hall of Victories and Forgotten Library, replacing them with Imperial Storehouse');
             });
         });
 

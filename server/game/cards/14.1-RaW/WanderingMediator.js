@@ -6,7 +6,7 @@ class WanderingMediator extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move in/out the conflict',
-            condition: context => context.game.currentConflict.conflictProvince.isElement(Elements.Air),
+            condition: context => context.game.isDuringConflict() && context.game.currentConflict.conflictProvince.isElement(Elements.Air),
             gameAction: AbilityDsl.actions.conditional({
                 condition: context => context.source.isParticipating(),
                 trueGameAction: AbilityDsl.actions.sendHome(context => ({

@@ -22,11 +22,16 @@ describe('Way of the Open Hand', function() {
             this.p3 = this.player2.findCardByName('shameful-display', 'province 3');
             this.p4 = this.player2.findCardByName('shameful-display', 'province 4');
             this.pStronghold = this.player2.findCardByName('shameful-display', 'stronghold province');
+        });
 
-            this.noMoreActions();
+        it ('should do nothing outside of a conflict', function() {
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.way);
+            expect(this.player1).toHavePrompt('Action Window');
         });
 
         it('should allow you to send home an opponents character and place a fate on it', function() {
+            this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.matsuTsuko],
                 defenders: [this.mirumotoRaitsugu],
@@ -51,6 +56,7 @@ describe('Way of the Open Hand', function() {
             this.p3.isBroken = true;
             this.game.checkGameState(true);
 
+            this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.matsuTsuko],
                 defenders: [this.mirumotoRaitsugu],
@@ -64,6 +70,7 @@ describe('Way of the Open Hand', function() {
         });
 
         it('should work on defense', function() {
+            this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
 

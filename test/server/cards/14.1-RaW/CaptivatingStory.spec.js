@@ -25,11 +25,16 @@ describe('Captivating Story', function() {
             this.p4 = this.player1.findCardByName('shameful-display', 'province 4');
             this.p4 = this.player1.findCardByName('shameful-display', 'province 4');
             this.pStronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
+        });
 
-            this.noMoreActions();
+        it ('should not work outside of conflicts', function() {
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.story);
+            expect(this.player1).toHavePrompt('Action Window');
         });
 
         it('should not work if you have no faceup provinces and character has no fate', function() {
+            this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi],
                 defenders: [],
@@ -43,6 +48,7 @@ describe('Captivating Story', function() {
         });
 
         it('should work if you have no faceup provinces and character has fate', function() {
+            this.noMoreActions();
             this.yoshi.fate = 1;
             this.initiateConflict({
                 attackers: [this.yoshi],
@@ -58,6 +64,7 @@ describe('Captivating Story', function() {
         });
 
         it('should not be able to trigger when not particiapating alone', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.initiateConflict({
                 attackers: [this.yoshi, this.keepsakes],
@@ -72,6 +79,7 @@ describe('Captivating Story', function() {
         });
 
         it('should give you pol equal to the amount of faceup provinces you have', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             let pol = this.yoshi.getPoliticalSkill();
             this.initiateConflict({
@@ -88,6 +96,7 @@ describe('Captivating Story', function() {
         });
 
         it('should not give you the option to remove a fate if you cannot do it', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.initiateConflict({
                 attackers: [this.yoshi],
@@ -103,6 +112,7 @@ describe('Captivating Story', function() {
         });
 
         it('should let you choose to discard a fate', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p3.facedown = false;
@@ -122,6 +132,7 @@ describe('Captivating Story', function() {
         });
 
         it('should discard the fate to honor the character', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p3.facedown = false;
@@ -147,6 +158,7 @@ describe('Captivating Story', function() {
         });
 
         it('should not discard the fate to honor the character if you say no', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p3.facedown = false;
@@ -171,6 +183,7 @@ describe('Captivating Story', function() {
         });
 
         it('should count broken provinces', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p2.isBroken = true;
@@ -190,6 +203,7 @@ describe('Captivating Story', function() {
         });
 
         it('should count the stronghold', function() {
+            this.noMoreActions();
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p2.isBroken = true;
@@ -211,6 +225,7 @@ describe('Captivating Story', function() {
         });
 
         it('should force you to honor if you have no faceup provinces', function() {
+            this.noMoreActions();
             this.yoshi.fate = 1;
             this.initiateConflict({
                 attackers: [this.yoshi],

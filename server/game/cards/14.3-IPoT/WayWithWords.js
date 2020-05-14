@@ -1,0 +1,23 @@
+import { AbilityTypes } from '../../Constants.js';
+
+const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
+
+class WayWithWords extends DrawCard {
+    setupCardAbilities() {
+        this.whileAttached({
+            effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
+                title: 'Take 1 honor',
+                when: {
+                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player &&
+                                                       context.player.opponent && event.conflict.conflictType === 'political'
+                },
+                gameAction: AbilityDsl.actions.takeHonor()
+            })
+        });
+    }
+}
+
+WayWithWords.id = 'way-with-words';
+
+module.exports = WayWithWords;

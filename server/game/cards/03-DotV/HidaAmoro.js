@@ -18,7 +18,7 @@ class HidaAmoro extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.controller === context.event.conflict.attackingPlayer,
                 message: '{0} sacrifices {1} to {2}',
-                messageArgs: card => [context.player.opponent, card, context.source],
+                messageArgs: card => [context.event.conflict.attackingPlayer, card, context.source],
                 gameAction: AbilityDsl.actions.sacrifice()
             }))
         });

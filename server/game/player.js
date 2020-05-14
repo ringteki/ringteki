@@ -91,6 +91,7 @@ class Player extends GameObject {
         this.keywordSettings = user.settings.keywordSettings;
         this.optionSettings = user.settings.optionSettings || {};
         this.resetTimerAtEndOfRound = false;
+        this.honorEvents = [];
 
         this.promptState = new PlayerPromptState(this);
     }
@@ -219,6 +220,19 @@ class Player extends GameObject {
         return cardsToReturn;
     }
 
+    /**
+     * Returns if a card is in play (characters, attachments, provinces, holdings) that has the passed trait
+     * @param {string} trait
+     * @returns {boolean} true/false if the trait is in pay
+     */
+    isTraitInPlay(trait) {
+        return this.game.allCards.some(card => {
+            return card.controller === this && card.hasTrait(trait) && !card.facedown &&
+            (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
+        });
+    }
+
+
     areLocationsAdjacent(location1, location2) {
         let index1 = provinceLocations.indexOf(location1);
         let index2 = provinceLocations.indexOf(location2);
@@ -344,6 +358,22 @@ class Player extends GameObject {
     }
 
     /**
+     * Returns the total number of faceup province cards controlled by this player
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfFacedownProvinces(predicate = () => true) {
+        return this.getProvinces(card => card.facedown && predicate(card)).length;
+    }
+
+    /**
+     * Returns the total number of faceup province cards controlled by this player's opponent
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
+        return this.opponent && this.opponent.getNumberOfFacedownProvinces(predicate) || 0;
+    }
+
+    /**
      * Returns the total number of characters and attachments controlled by this player which match the passed predicate
      * @param {Function} predicate - DrawCard => Int
      */
@@ -378,8 +408,25 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return true;
+        }
+
         return _.any(this.playableLocations, location =>
             (!playingType || location.playingType === playingType) && location.contains(card));
+    }
+
+    findPlayType(card) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
+        }
+
+        let location = this.playableLocations.find(location => location.contains(card));
+        if(location) {
+            return location.playingType;
+        }
+
+        return undefined;
     }
 
     /**
@@ -528,6 +575,13 @@ class Player extends GameObject {
         this.conflictOpportunities.total++;
     }
 
+    removeConflictOpportunity(type) {
+        if(type) {
+            this.conflictOpportunities[type] = Math.max(this.conflictOpportunities[type] - 1, 0);
+        }
+        this.conflictOpportunities.total = Math.max(this.conflictOpportunities.total - 1, 0);
+    }
+
     /**
      * Returns the number of conflict opportunities remaining for this player
      * @param {String} type - one of 'military', 'political', ''
@@ -669,10 +723,15 @@ class Player extends GameObject {
      * @param target BaseCard
      */
     getReducedCost(playingType, card, target, ignoreType = false) {
-        var baseCost = card.getCost();
-        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target, ignoreType));
-        var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card, this), baseCost);
-        return Math.max(reducedCost, 0);
+        var matchingReducers = this.costReducers.filter(reducer => reducer.canReduce(playingType, card, target, ignoreType));
+        var costIncreases = matchingReducers.filter(a => a.getAmount(card, this) < 0).reduce((cost, reducer) => cost - reducer.getAmount(card, this), 0);
+        var costDecreases = matchingReducers.filter(a => a.getAmount(card, this) > 0).reduce((cost, reducer) => cost + reducer.getAmount(card, this), 0);
+
+        var baseCost = card.getCost() + costIncreases;
+        var reducedCost = baseCost - costDecreases;
+
+        var costFloor = Math.min(baseCost, Math.max(...matchingReducers.map(a => a.costFloor)));
+        return Math.max(reducedCost, costFloor);
     }
 
     getTotalCostModifiers(playingType, card, target, ignoreType = false) {
@@ -1032,12 +1091,30 @@ class Player extends GameObject {
         return this.getEffects(EffectNames.ChangePlayerSkillModifier).reduce((total, value) => total + value, 0);
     }
 
+    honorGained(round = null, phase = null, onlyPositive = false) {
+        return this.honorEvents
+            .filter(event => !round || event.round === round)
+            .filter(event => !phase || event.phase === phase)
+            .filter(event => !onlyPositive || event.amount > 0)
+            .reduce((total, event) => total + event.amount, 0);
+    }
+
     modifyFate(amount) {
         this.fate = Math.max(0, this.fate + amount);
     }
 
     modifyHonor(amount) {
         this.honor = Math.max(0, this.honor + amount);
+        this.honorEvents.push({
+            amount,
+            phase: this.game.currentPhase,
+            round: this.game.roundNumber
+        });
+    }
+
+    resetHonorEvents(round, phase) {
+        // in case a phase is restarded during the same round, reset honor tracking of that phase.
+        this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
     }
 
     /**
@@ -1270,15 +1347,19 @@ class Player extends GameObject {
         this.game.addMessage('{0} reveals a bid of {1}', this, bid);
     }
 
-    isTopConflictCardShown() {
-        return this.anyEffect(EffectNames.ShowTopConflictCard);
+    isTopConflictCardShown(activePlayer = undefined) {
+        if(!activePlayer || activePlayer === this) {
+            return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
+        }
+
+        return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
     }
 
     eventsCannotBeCancelled() {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown() {
+    isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
@@ -1323,6 +1404,7 @@ class Player extends GameObject {
                 removedFromGame: this.getSummaryForCardList(this.removedFromGame, activePlayer),
                 provinceDeck: this.getSummaryForCardList(this.provinceDeck, activePlayer, true)
             },
+            cardsPlayedThisConflict: this.game.currentConflict ? this.game.currentConflict.getNumberOfCardsPlayed(this) : NaN,
             disconnected: this.disconnected,
             faction: this.faction,
             firstPlayer: this.firstPlayer,
@@ -1368,11 +1450,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown()) {
+        if(this.isTopConflictCardShown(activePlayer)) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown()) {
+        if(this.isTopDynastyCardShown(activePlayer)) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 

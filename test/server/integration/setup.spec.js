@@ -104,6 +104,23 @@ describe('setup phase', function() {
                 expect(strongholdProvince.location).toBe('stronghold province');
                 expect(this.player1.player.provinceDeck.size()).toBe(0);
             });
+
+            it('should allow players to place provinces in an order of their choice - selecting less than 4 provinces', function() {
+                let strongholdProvince = this.player1.player.provinceDeck.value()[0];
+                this.player1.clickCard(strongholdProvince);
+                expect(this.player1).toHavePrompt('Choose province order, or press Done to place them at random');
+                let provinces = this.player1.player.provinceDeck.value();
+                for(let i = 1; i < 3; i++) {
+                    this.player1.clickCard(provinces[i]);
+                }
+                this.player1.clickPrompt('Done');
+                for(let i = 1; i < 3; i++) {
+                    expect(provinces[i].location).toBe('province ' + i.toString());
+                }
+                expect(this.player1.currentPrompt().menuTitle).toBe('Waiting for opponent to finish selecting provinces');
+                expect(strongholdProvince.location).toBe('stronghold province');
+                expect(this.player1.player.provinceDeck.size()).toBe(0);
+            });
         });
 
         describe('dynasty mulligans', function() {

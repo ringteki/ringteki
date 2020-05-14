@@ -7,7 +7,7 @@ describe('Kyuden Isawa', function() {
                     player1: {
                         stronghold: 'kyuden-isawa',
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['against-the-waves', 'walking-the-way', 'charge', 'clarity-of-purpose'],
+                        hand: ['against-the-waves', 'walking-the-way', 'charge', 'clarity-of-purpose', 'cloud-the-mind'],
                         dynastyDeck: ['mantis-tenkinja']
                     },
                     player2: {
@@ -16,6 +16,7 @@ describe('Kyuden Isawa', function() {
                     }
                 });
                 this.clarity = this.player1.findCardByName('clarity-of-purpose');
+                this.cloud = this.player1.findCardByName('cloud-the-mind');
                 this.charge = this.player1.findCardByName('charge');
                 this.mantisTenkinja = this.player1.placeCardInProvince('mantis-tenkinja');
                 this.noMoreActions();
@@ -26,6 +27,16 @@ describe('Kyuden Isawa', function() {
                 this.player2.pass();
                 this.againstTheWaves = this.player1.clickCard('against-the-waves');
                 this.adeptOfTheWaves = this.player1.clickCard('adept-of-the-waves');
+            });
+
+            it('should only let you pay with spell events, not other types', function() {
+                this.player2.pass();
+                expect(this.adeptOfTheWaves.bowed).toBe(true);
+                this.kyudenIsawa = this.player1.clickCard('kyuden-isawa');
+                expect(this.player1).toHavePrompt('Select card to discard');
+                expect(this.player1).toBeAbleToSelect(this.clarity);
+                expect(this.player1).not.toBeAbleToSelect(this.cloud);
+                expect(this.player1).not.toBeAbleToSelect(this.charge);
             });
 
             it('should let you discard a spell card from hand to play a spell from the discard pile, and remove it from the game', function() {
