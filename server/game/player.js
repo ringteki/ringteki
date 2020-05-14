@@ -1333,7 +1333,7 @@ class Player extends GameObject {
             numConflictCards: this.conflictDeck.size(),
             numDynastyCards: this.dynastyDeck.size(),
             numProvinceCards: this.provinceDeck.size(),
-            optionSettings: this.optionSettings,
+            keywordSettings: this.keywordSettings,
             phase: this.game.currentPhase,
             promptedActionWindows: this.promptedActionWindows,
             provinces: {
