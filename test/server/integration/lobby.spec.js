@@ -9,7 +9,7 @@ describe('lobby', function() {
         this.userSpy = jasmine.createSpyObj('User', ['getDetails', 'hasUserBlocked']);
         this.userSpy.username = 'test';
         this.userSpy.getDetails.and.returnValue({ username: 'test' });
-        this.userSpy.hasUserBlocked.and.returnValue(false);
+        //this.userSpy.hasUserBlocked.and.returnValue(false);
 
         this.socketSpy.user = { username: 'test'};
         this.socketSpy.id = 'socket1';
@@ -22,7 +22,7 @@ describe('lobby', function() {
         this.messageService = jasmine.createSpyObj('messageService', ['on']);
 
         this.eventService = jasmine.createSpyObj('eventService', ['getEventById']);
-        
+
         this.lobby = new Lobby({}, { io: this.ioSpy, messageService: this.messageService, cardService: this.cardService, deckService: {}, eventService: this.eventService, userService: this.userService, router: this.routerSpy, config: {} });
         this.lobby.sockets[this.socketSpy.id] = this.socketSpy;
     });
