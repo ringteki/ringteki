@@ -42,6 +42,7 @@ class Server {
     constructor(isDeveloping) {
         this.configService = ServiceFactory.configService();
 
+        //@ts-ignore TS2349
         let db = monk(this.configService.getValue('dbPath'));
 
         this.userService = ServiceFactory.userService(db, this.configService);
