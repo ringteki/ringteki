@@ -18,10 +18,10 @@ const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, 
 
 class Player extends GameObject {
     constructor(id, user, owner, game, clockdetails) {
-        super(game, user.userData.username);
+        super(game, user.username);
         
 
-        this.user = user.userData;
+        this.user = user;
         this.emailHash = this.user.emailHash;
         this.id = id;
         this.owner = owner;
@@ -80,7 +80,7 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
         ];
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
-        this.promptedActionWindows = user.userData.promptedActionWindows || { // these flags represent phase settings
+        this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
             dynasty: true,
             draw: true,
             preConflict: true,
@@ -88,10 +88,10 @@ class Player extends GameObject {
             fate: true,
             regroup: true
         };
-        this.timerSettings = user.userData.settings.timerSettings || {};
-        this.timerSettings.windowTimer = user.userData.settings.windowTimer;
-        this.keywordSettings = user.userData.settings.keywordSettings;
-        this.optionSettings = user.userData.settings.optionSettings || {};
+        this.timerSettings = user.settings.timerSettings || {};
+        this.timerSettings.windowTimer = user.settings.windowTimer;
+        this.keywordSettings = user.settings.keywordSettings;
+        this.optionSettings = user.settings.optionSettings || {};
         this.resetTimerAtEndOfRound = false;
         this.honorEvents = [];
 
