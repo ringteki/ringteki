@@ -92,6 +92,9 @@ class AbilityContext {
                 });
             }
         }
+        this.game.queueSimpleStep(() => {
+            this.game.checkGameState(true)
+        });
     }
 
     getProps(): AbilityContextProperties {
