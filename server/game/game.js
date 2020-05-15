@@ -78,7 +78,7 @@ class Game extends EventEmitter {
         this.shortCardData = options.shortCardData || [];
 
         _.each(details.players, player => {
-            this.playersAndSpectators[player.user.username] = new Player(player.id, player.user.userData, this.owner === player.user.username, this, details.clocks);
+            this.playersAndSpectators[player.user.username] = new Player(player.id, player.user, this.owner === player.user.username, this, details.clocks);
         });
 
         _.each(details.spectators, spectator => {
