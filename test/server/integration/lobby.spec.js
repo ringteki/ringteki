@@ -9,7 +9,7 @@ describe('lobby', function() {
         this.userSpy = jasmine.createSpyObj('User', ['getDetails', 'hasUserBlocked']);
         this.userSpy.username = 'test';
         this.userSpy.getDetails.and.returnValue({ username: 'test' });
-        //this.userSpy.hasUserBlocked.and.returnValue(false);
+        this.userSpy.hasUserBlocked.and.returnValue(false);
 
         this.socketSpy.user = { username: 'test'};
         this.socketSpy.id = 'socket1';
