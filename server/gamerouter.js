@@ -14,7 +14,8 @@ class GameRouter extends EventEmitter {
         let configService = ServiceFactory.configService();
 
         this.workers = {};
-        this.gameService = new GameService(monk(configService.getValue('dbPath')));
+        //@ts-ignore TS2349
+        this.gameService = new GameService(monk(configService.getValue('dbPath'))); 
 
         router.bind(`tcp://0.0.0.0:${configService.getValue('mqPort')}`, err => {
             if(err) {
@@ -40,8 +41,8 @@ class GameRouter extends EventEmitter {
 
         node.numGames++;
 
-        this.sendCommand(node.identity, 'STARTGAME', game);
-        //this.sendCommand(node.identity, 'STARTGAME', game.getStartGameDetails());
+        //this.sendCommand(node.identity, 'STARTGAME', game);
+        this.sendCommand(node.identity, 'STARTGAME', game.getStartGameDetails());
         return node;
     }
 

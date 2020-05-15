@@ -18,8 +18,10 @@ const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, 
 
 class Player extends GameObject {
     constructor(id, user, owner, game, clockdetails) {
-        super(game, user.username);
-        this.user = user;
+        super(game, user.userData.username);
+        
+
+        this.user = user.userData;
         this.emailHash = this.user.emailHash;
         this.id = id;
         this.owner = owner;
@@ -78,7 +80,7 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
         ];
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
-        this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
+        this.promptedActionWindows = user.userData.promptedActionWindows || { // these flags represent phase settings
             dynasty: true,
             draw: true,
             preConflict: true,
@@ -86,10 +88,10 @@ class Player extends GameObject {
             fate: true,
             regroup: true
         };
-        this.timerSettings = user.settings.timerSettings || {};
-        this.timerSettings.windowTimer = user.settings.windowTimer;
-        this.keywordSettings = user.settings.keywordSettings;
-        this.optionSettings = user.settings.optionSettings || {};
+        this.timerSettings = user.userData.settings.timerSettings || {};
+        this.timerSettings.windowTimer = user.userData.settings.windowTimer;
+        this.keywordSettings = user.userData.settings.keywordSettings;
+        this.optionSettings = user.userData.settings.optionSettings || {};
         this.resetTimerAtEndOfRound = false;
         this.honorEvents = [];
 
@@ -1429,7 +1431,9 @@ class Player extends GameObject {
             stats: this.getStats(),
             timerSettings: this.timerSettings,
             strongholdProvince: this.getSummaryForCardList(this.strongholdProvince, activePlayer),
-            user: _.omit(this.user, ['password', 'email'])
+            user: {
+                username: this.user.username
+            }
         };
 
         if(this.showConflict) {
@@ -1462,7 +1466,8 @@ class Player extends GameObject {
             state.clock = this.clock.getState();
         }
 
-        return _.extend(state, promptState);
+        //return _.extend(state, promptState);
+        return Object.assign(state, promptState);
     }
 }
 

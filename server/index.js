@@ -7,6 +7,7 @@ const ServiceFactory = require('./services/ServiceFactory.js');
 let configService = ServiceFactory.configService();
 
 function runServer() {
+    //@ts-ignore TS2349
     let options = { db: monk(configService.getValue('dbPath')) };
 
     let server = new Server(process.env.NODE_ENV !== 'production');
