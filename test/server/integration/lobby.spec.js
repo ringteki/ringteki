@@ -6,6 +6,10 @@ describe('lobby', function() {
         this.socketSpy = jasmine.createSpyObj('socket', ['joinChannel', 'send']);
         this.ioSpy = jasmine.createSpyObj('io', ['set', 'use', 'on', 'emit']);
         this.routerSpy = jasmine.createSpyObj('router', ['on']);
+        this.userSpy = jasmine.createSpyObj('User', ['getDetails', 'hasUserBlocked']);
+        this.userSpy.username = 'test';
+        this.userSpy.getDetails.and.returnValue({ username: 'test' });
+        this.userSpy.hasUserBlocked.and.returnValue(false);
 
         this.socketSpy.user = { username: 'test'};
         this.socketSpy.id = 'socket1';
@@ -13,7 +17,13 @@ describe('lobby', function() {
         this.cardService = jasmine.createSpyObj('cardService', ['getTitleCards', 'getAllCards']);
         this.cardService.getAllCards.and.returnValue(Promise.resolve([]));
 
-        this.lobby = new Lobby({}, { io: this.ioSpy, messageService: {}, cardService: this.cardService, deckService: {}, router: this.routerSpy, config: {} });
+        this.userService = jasmine.createSpyObj('userService', ['on']);
+
+        this.messageService = jasmine.createSpyObj('messageService', ['on']);
+
+        this.eventService = jasmine.createSpyObj('eventService', ['getEventById']);
+        
+        this.lobby = new Lobby({}, { io: this.ioSpy, messageService: this.messageService, cardService: this.cardService, deckService: {}, eventService: this.eventService, userService: this.userService, router: this.routerSpy, config: {} });
         this.lobby.sockets[this.socketSpy.id] = this.socketSpy;
     });
 
