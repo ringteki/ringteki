@@ -11,7 +11,7 @@ describe('lobby', function() {
         this.userSpy.getDetails.and.returnValue({ username: 'test' });
         this.userSpy.hasUserBlocked.and.returnValue(false);
 
-        this.socketSpy.user = { username: 'test'};
+        this.socketSpy.user = this.userSpy;
         this.socketSpy.id = 'socket1';
 
         this.cardService = jasmine.createSpyObj('cardService', ['getTitleCards', 'getAllCards']);
