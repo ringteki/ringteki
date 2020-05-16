@@ -103,7 +103,8 @@ class GameObject {
             label: this.name,
             name: this.name,
             facedown: this.facedown,
-            type: this.getType()
+            type: this.getType(),
+            uuid: this.uuid
         };
     }
 
