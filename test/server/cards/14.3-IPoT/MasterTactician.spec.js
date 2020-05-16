@@ -309,6 +309,15 @@ describe('Master Tactician', function() {
             this.player1.clickCard(this.voice);
             expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
         });
+
+        it('Should not let you see the card until after you commit to the conflict', function() {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.noMoreActions();
+            this.player1.clickCard(this.tactician);
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+        });
     });
 });
 
