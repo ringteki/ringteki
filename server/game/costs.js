@@ -541,6 +541,42 @@ const Costs = {
             },
             promptsPlayer: true
         };
+    },
+
+    nameCard: function() {
+        return {
+            selectCardName(player, cardName, context) {
+                context.costs.nameCardCost = cardName;
+                return true;
+            },
+            getActionName(context) { // eslint-disable-line no-unused-vars
+                return 'nameCard';
+            },
+            getCostMessage: (context) => ['naming {1}', [context.costs.nameCardCost]],
+            canPay: function() {
+                return true;
+            },
+            resolve: function(context) {
+                let dummyObject = {
+                    selectCardName: (player, cardName, context) => {
+                        context.costs.nameCardCost = cardName;
+                        return true;
+                    }
+                };
+
+                context.game.promptWithMenu(context.player, dummyObject, {
+                    context: context,
+                    activePrompt: {
+                        menuTitle: 'Name a card',
+                        controls: [
+                            { type: 'card-name', command: 'menuButton', method: 'selectCardName', name: 'card-name' }
+                        ]
+                    }
+                });
+            },
+            pay: function () {
+            }
+        };
     }
 };
 
