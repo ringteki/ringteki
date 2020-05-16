@@ -9,6 +9,7 @@ export interface AttachActionProperties extends CardActionProperties {
     ignoreType?: boolean;
     takeControl?: boolean;
     giveControl?: boolean;
+    ignoreUniqueness?: boolean;
     controlSwitchOptional?: boolean;
 }
 
@@ -20,7 +21,8 @@ export class AttachAction extends CardGameAction {
         ignoreType: false,
         takeControl: false,
         giveControl: false,
-        controlSwitchOptional: false
+        controlSwitchOptional: false,
+        ignoreUniqueness: false
     };
 
     constructor(properties: ((context: AbilityContext) => AttachActionProperties) | AttachActionProperties) {
@@ -46,7 +48,7 @@ export class AttachAction extends CardGameAction {
         };
         if(!context || !context.player || !card || card.location !== Locations.PlayArea && card.type !== CardTypes.Province) {
             return false;
-        } else if(!properties.attachment || properties.attachment.anotherUniqueInPlay(context.player) || !properties.attachment.canAttach(card, canAttachProps)) {
+        } else if(!properties.attachment || (!properties.ignoreUniqueness && properties.attachment.anotherUniqueInPlay(context.player)) || !properties.attachment.canAttach(card, canAttachProps)) {
             return false;
         } else if(!properties.controlSwitchOptional && properties.takeControl && properties.attachment.controller === context.player) {
             return false;
