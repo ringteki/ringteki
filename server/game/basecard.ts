@@ -392,7 +392,7 @@ class BaseCard extends EffectSource {
         }
 
         if(this.facedown) {
-            return [{ command: 'reveal', text: 'Reveal' }];
+            return [{ command: 'click', text: 'Select Card' }, { command: 'reveal', text: 'Reveal' }];
         }
 
         menu.push({ command: 'click', text: 'Select Card' });

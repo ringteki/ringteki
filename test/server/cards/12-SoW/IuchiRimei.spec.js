@@ -5,11 +5,11 @@ describe('Iuchi Rimei', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-kuwanan', 'doomed-shugenja'],
-                    hand: ['fine-katana', 'cloud-the-mind', 'finger-of-jade', 'height-of-fashion', 'force-of-the-river']
+                    hand: ['fine-katana', 'cloud-the-mind', 'finger-of-jade', 'height-of-fashion', 'force-of-the-river', 'talisman-of-the-sun']
                 },
                 player2: {
                     inPlay: ['iuchi-rimei', 'hida-kisada'],
-                    hand: ['ornate-fan', 'calling-in-favors']
+                    hand: ['ornate-fan', 'calling-in-favors', 'talisman-of-the-sun']
                 }
             });
 
@@ -18,6 +18,8 @@ describe('Iuchi Rimei', function() {
             this.fan = this.player2.findCardByName('ornate-fan');
             this.calling = this.player2.findCardByName('calling-in-favors');
 
+            this.talismanP2 = this.player2.findCardByName('talisman-of-the-sun');
+
             this.kuwanan = this.player1.findCardByName('doji-kuwanan');
             this.doomed = this.player1.findCardByName('doomed-shugenja');
             this.cloud = this.player1.findCardByName('cloud-the-mind');
@@ -25,6 +27,8 @@ describe('Iuchi Rimei', function() {
             this.finger = this.player1.findCardByName('finger-of-jade');
             this.fashion = this.player1.findCardByName('height-of-fashion');
             this.river = this.player1.findCardByName('force-of-the-river');
+
+            this.talismanP1 = this.player1.findCardByName('talisman-of-the-sun');
 
             this.player1.playAttachment(this.katana, this.doomed);
             this.player2.playAttachment(this.fan, this.doomed);
@@ -112,6 +116,22 @@ describe('Iuchi Rimei', function() {
             expect(this.river.location).toBe('conflict discard pile');
             expect(this.getChatLogs(3)).toContain('player2 uses Iuchi Rimei to move Force of the River to another character');
             expect(this.getChatLogs(2)).toContain('player2 moves Force of the River to Doji Kuwanan');
+        });
+
+        it('should not discard a unique attachment controlled by both players (moving from opponent character)', function() {
+            this.player2.playAttachment(this.talismanP2, this.rimei);
+            this.player1.playAttachment(this.talismanP1, this.kuwanan);
+
+            this.player2.clickCard(this.rimei);
+            this.player2.clickCard(this.talismanP1);
+            expect(this.player2).toBeAbleToSelect(this.doomed);
+            this.player2.clickCard(this.doomed);
+            expect(this.kuwanan.attachments.toArray()).not.toContain(this.talismanP1);
+            expect(this.doomed.attachments.toArray()).toContain(this.talismanP1);
+            expect(this.talismanP1.location).toBe('play area');
+
+            expect(this.getChatLogs(5)).toContain('player2 uses Iuchi Rimei to move Talisman of the Sun to another character');
+            expect(this.getChatLogs(4)).toContain('player2 moves Talisman of the Sun to Doomed Shugenja');
         });
     });
 });
