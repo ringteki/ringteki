@@ -136,7 +136,7 @@ class ProvinceCard extends BaseCard {
         let menu = super.getMenu();
 
         if(menu) {
-            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.controller === this.game.currentConflict.conflictProvince.controller) {
+            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.game.currentConflict.conflictProvince && this.controller === this.game.currentConflict.conflictProvince.controller) {
                 menu.push({ command: 'move_conflict', text: 'Move Conflict'});
             }
 
