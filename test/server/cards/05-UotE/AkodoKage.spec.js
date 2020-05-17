@@ -70,9 +70,7 @@ describe('Akodo Kage', function() {
                 it('should set the opponents\'s dial equal to the controller\'s', function () {
                     expect(this.player2.player.showBid).toBe(this.player1.player.showBid);
                 });
-
             });
-
         });
     });
 });

@@ -7,7 +7,7 @@ describe('Hida Yakamo', function() {
                     inPlay: ['hida-yakamo']
                 },
                 player2: {
-                    inPlay: ['mirumoto-raitsugu','agasha-sumiko'],
+                    inPlay: ['mirumoto-raitsugu', 'agasha-sumiko'],
                     hand: ['game-of-sadane']
                 }
             });

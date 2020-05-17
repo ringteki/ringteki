@@ -5,7 +5,7 @@ describe('Solitary Strength', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shiba-tsukune','serene-warrior'],
+                        inPlay: ['shiba-tsukune', 'serene-warrior'],
                         hand: ['solitary-strength'],
                         dynastyDeck: ['favorable-ground'],
                         honor: 10

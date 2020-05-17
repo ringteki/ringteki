@@ -47,7 +47,6 @@ describe('Moto Outrider', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-
             it('should not work if not participating', function() {
                 this.initiateConflict({
                     type: 'military',

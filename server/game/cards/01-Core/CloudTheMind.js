@@ -22,4 +22,3 @@ CloudTheMind.id = 'cloud-the-mind';
 
 module.exports = CloudTheMind;
 
-

@@ -52,7 +52,6 @@ describe('Impossible Koan', function() {
             expect(this.hidaAmoro.getBasePoliticalSkill()).toBe(0);
             expect(this.hidaAmoro.getBaseMilitarySkill()).toBe(1);
 
-
             //Should affect characters at home
             expect(this.crisisBreaker.getBaseMilitarySkill()).toBe(1);
             expect(this.crisisBreaker.getBasePoliticalSkill()).toBe(1);
@@ -97,6 +96,5 @@ describe('Impossible Koan', function() {
             this.player2.clickCard(this.koan2);
             expect(this.player2).toHavePrompt('Action Window');
         });
-
     });
 });

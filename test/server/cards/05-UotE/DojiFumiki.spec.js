@@ -5,10 +5,10 @@ describe('Doji Fumiki', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['doji-fumiki','doji-whisperer']
+                        inPlay: ['doji-fumiki', 'doji-whisperer']
                     },
                     player2: {
-                        inPlay: ['akodo-toturi','matsu-berserker']
+                        inPlay: ['akodo-toturi', 'matsu-berserker']
                     }
                 });
                 this.fumiki = this.player1.findCardByName('doji-fumiki');
@@ -34,7 +34,7 @@ describe('Doji Fumiki', function() {
                 this.initiateConflict({
                     type: 'military',
                     attackers: ['doji-fumiki'],
-                    defenders: ['akodo-toturi','matsu-berserker']
+                    defenders: ['akodo-toturi', 'matsu-berserker']
                 });
                 this.berserker.dishonor();
                 this.player2.pass();
@@ -48,7 +48,7 @@ describe('Doji Fumiki', function() {
                 this.initiateConflict({
                     type: 'military',
                     attackers: ['doji-fumiki'],
-                    defenders: ['akodo-toturi','matsu-berserker']
+                    defenders: ['akodo-toturi', 'matsu-berserker']
                 });
                 this.berserker.dishonor();
                 this.player2.pass();

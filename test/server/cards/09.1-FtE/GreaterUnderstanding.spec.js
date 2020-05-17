@@ -17,7 +17,6 @@ describe('Greater Understanding', function() {
                     }
                 });
 
-
                 this.togashiYokuni = this.player1.findCardByName('togashi-yokuni');
                 this.letGo = this.player1.findCardByName('let-go');
                 this.miyaMystic = this.player1.findCardByName('miya-mystic');

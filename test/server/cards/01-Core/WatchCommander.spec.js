@@ -41,7 +41,6 @@ describe('Watch Commander', function () {
                 this.player1.clickCard(this.wanderingRonin);
                 expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander2);
                 expect(this.player1.conflictDiscard).toContain(this.watchCommander);
-
             });
 
             it('should trigger when your opponent plays a card when attached character is participating', function () {
@@ -94,7 +93,6 @@ describe('Watch Commander', function () {
                 expect(this.watchCommander.location).toBe('conflict discard pile');
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
-
         });
     });
 });

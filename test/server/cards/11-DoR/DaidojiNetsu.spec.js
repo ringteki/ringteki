@@ -194,7 +194,6 @@ describe('Daidoji Netsu', function() {
                 expect(this.player1).toHavePrompt('Action Window');
                 expect(this.ujina.location).toBe('play area');
             });
-
         });
 
         describe('Daidoji Netsu\'s ability (Double Netsu)', function() {

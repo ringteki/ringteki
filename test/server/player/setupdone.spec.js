@@ -82,6 +82,5 @@ describe('Player', function() {
             expect(this.player.fate).toBe(0);
         });
         */
-
     });
 });

@@ -12,7 +12,6 @@ class CityOfTheOpenHand extends StrongholdCard {
     }
 }
 
-
 CityOfTheOpenHand.id = 'city-of-the-open-hand';
 
 module.exports = CityOfTheOpenHand;

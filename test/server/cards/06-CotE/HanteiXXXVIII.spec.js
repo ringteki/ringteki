@@ -13,7 +13,7 @@ describe('Hantei XXXVII', function() {
                         fate: 5,
                         honor: 10,
                         inPlay: [
-                            'asako-azunami', 'favored-niece','fu-sui-disciple', 'fawning-diplomat', 'guardian-kami',
+                            'asako-azunami', 'favored-niece', 'fu-sui-disciple', 'fawning-diplomat', 'guardian-kami',
                             'kitsuki-investigator', 'prudent-challenger', 'utaku-kamoko', 'doji-gift-giver', 'togashi-yokuni'
                         ],
                         provinces: ['upholding-authority'],

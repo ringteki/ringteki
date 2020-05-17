@@ -5,12 +5,12 @@ describe('Yogo Preserver', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['yogo-preserver','bayushi-manipulator'],
+                        inPlay: ['yogo-preserver', 'bayushi-manipulator'],
                         hand: ['calling-in-favors']
                     },
                     player2: {
                         inPlay: ['doji-whisperer'],
-                        hand: ['fine-katana','noble-sacrifice','assassination']
+                        hand: ['fine-katana', 'noble-sacrifice', 'assassination']
                     }
                 });
                 this.yogoPreserver = this.player1.findCardByName('yogo-preserver');

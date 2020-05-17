@@ -64,7 +64,7 @@ class GameRouter extends EventEmitter {
             if(!returnedWorker || returnedWorker.numGames > worker.numGames) {
                 returnedWorker = worker;
             }
-        };
+        }
 
         return returnedWorker;
     }
@@ -258,6 +258,5 @@ class GameRouter extends EventEmitter {
         }
     }
 }
-
 
 module.exports = GameRouter;

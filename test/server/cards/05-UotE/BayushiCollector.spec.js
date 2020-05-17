@@ -5,8 +5,8 @@ describe('Bayushi Collector', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-collector','bayushi-liar'],
-                        hand: ['fine-katana','ornate-fan']
+                        inPlay: ['bayushi-collector', 'bayushi-liar'],
+                        hand: ['fine-katana', 'ornate-fan']
                     },
                     player2: {
                         inPlay: []
@@ -16,7 +16,6 @@ describe('Bayushi Collector', function() {
                 this.liar = this.player1.findCardByName('bayushi-liar');
                 this.katana = this.player1.findCardByName('fine-katana');
                 this.fan = this.player1.findCardByName('ornate-fan');
-
             });
 
             it('should only target attachments of dishonored characters', function() {

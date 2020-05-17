@@ -5,8 +5,8 @@ describe('Shiba Sophist', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shiba-sophist','isawa-kaede'],
-                        conflictDeck: ['katana-of-fire','display-of-power','ornate-fan','embrace-the-void','cloud-the-mind'],
+                        inPlay: ['shiba-sophist', 'isawa-kaede'],
+                        conflictDeck: ['katana-of-fire', 'display-of-power', 'ornate-fan', 'embrace-the-void', 'cloud-the-mind'],
                         conflictDeckSize: 5,
                         dynastyDiscard: ['favorable-ground']
                     },

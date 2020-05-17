@@ -6,7 +6,7 @@ describe('Proving Ground', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['doji-challenger'],
-                        hand: ['banzai','game-of-sadane'],
+                        hand: ['banzai', 'game-of-sadane'],
                         dynastyDiscard: ['proving-ground']
                     },
                     player2: {

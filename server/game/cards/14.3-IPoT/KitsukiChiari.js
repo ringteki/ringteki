@@ -42,4 +42,5 @@ class KitsukiChiari extends DrawCard {
 }
 
 KitsukiChiari.id = 'kitsuki-chiari';
+
 module.exports = KitsukiChiari;

@@ -92,6 +92,5 @@ xdescribe('regroup phase', function() {
         // Check Rings are returned
 
         // Check first player token is moved
-
     });
 });

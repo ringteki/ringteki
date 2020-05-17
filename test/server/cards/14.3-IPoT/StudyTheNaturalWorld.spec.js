@@ -116,7 +116,6 @@ describe('Study the Natural World', function() {
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
 
-
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.dairu],

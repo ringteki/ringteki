@@ -8,7 +8,7 @@ describe('Hantei Sotorii', function() {
                         inPlay: ['hantei-sotorii']
                     },
                     player2: {
-                        inPlay: ['akodo-toturi','hantei-sotorii'],
+                        inPlay: ['akodo-toturi', 'hantei-sotorii'],
                         provinces: ['kuroi-mori']
                     }
                 });

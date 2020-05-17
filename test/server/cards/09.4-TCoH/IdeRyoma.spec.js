@@ -5,7 +5,7 @@ describe('Ide Ryoma', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['ide-ryoma', 'kudaka','shinjo-shono']
+                        inPlay: ['ide-ryoma', 'kudaka', 'shinjo-shono']
                     },
                     player2: {
                         inPlay: ['venerable-historian', 'iuchi-wayfinder']

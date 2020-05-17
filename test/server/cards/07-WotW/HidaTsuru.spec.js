@@ -5,7 +5,7 @@ describe('Hida Tsuru', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['hida-tsuru','eager-scout'],
+                        inPlay: ['hida-tsuru', 'eager-scout'],
                         dynastyDeck: ['favorable-ground'],
                         hand : ['steward-of-law']
                     },

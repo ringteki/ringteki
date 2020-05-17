@@ -32,7 +32,6 @@ describe('Ninkatoshi', function() {
             const fertileEnemyBaseStr = this.fertileFields.baseStrength;
             const pilgrimageEnemyBaseStr = this.pilgrimage.baseStrength;
 
-
             expect(this.fertileFields.strength).toBe(fertileEnemyBaseStr - 1);
             expect(this.pilgrimage.strength).toBe(pilgrimageEnemyBaseStr - 1);
         });

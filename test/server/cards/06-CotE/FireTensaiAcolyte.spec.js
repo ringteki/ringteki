@@ -5,7 +5,7 @@ describe('Fire Tensai Acolyte', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['fire-tensai-acolyte','isawa-masahiro'],
+                        inPlay: ['fire-tensai-acolyte', 'isawa-masahiro'],
                         dynastyDiscard: ['favorable-ground']
                     },
                     player2: {
@@ -24,7 +24,7 @@ describe('Fire Tensai Acolyte', function() {
                 this.initiateConflict({
                     type: 'military',
                     ring: 'water',
-                    attackers: ['fire-tensai-acolyte','isawa-masahiro'],
+                    attackers: ['fire-tensai-acolyte', 'isawa-masahiro'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.masahiro);
@@ -36,7 +36,7 @@ describe('Fire Tensai Acolyte', function() {
                 this.initiateConflict({
                     type: 'military',
                     ring: 'fire',
-                    attackers: ['fire-tensai-acolyte','isawa-masahiro'],
+                    attackers: ['fire-tensai-acolyte', 'isawa-masahiro'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.masahiro);

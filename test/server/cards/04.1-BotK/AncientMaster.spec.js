@@ -5,7 +5,7 @@ describe('Ancient Master', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['niten-master','agasha-swordsmith'],
+                        inPlay: ['niten-master', 'agasha-swordsmith'],
                         hand: ['ancient-master'],
                         conflictDeck: ['hurricane-punch', 'centipede-tattoo', 'mantra-of-fire', 'censure', 'ornate-fan'],
                         conflictDeckSize: 5
@@ -70,7 +70,6 @@ describe('Ancient Master', function() {
                 expect(this.player1).toHavePrompt('Ancient Master');
                 this.player1.clickPrompt('Centipede Tattoo');
                 expect(this.player1.player.hand.size()).toBe(handsize + 1);
-
             });
 
             it('should not trigger the reaction when not played as an attachment', function() {

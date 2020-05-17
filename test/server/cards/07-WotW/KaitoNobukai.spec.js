@@ -6,7 +6,7 @@ describe('Kaito Nobukai', function () {
                     phase: 'conflict',
                     player1: {
                         dynastyDiscard: ['favorable-ground'],
-                        inPlay: ['kaito-nobukai', 'asako-diplomat', 'naive-student','adept-of-the-waves']
+                        inPlay: ['kaito-nobukai', 'asako-diplomat', 'naive-student', 'adept-of-the-waves']
                     },
                     player2: {
                         inPlay: ['bayushi-manipulator'],

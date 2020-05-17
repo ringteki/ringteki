@@ -7,7 +7,7 @@ describe('Hiruma Kogoe', function () {
                     player1: {
                         inPlay: ['hiruma-kogoe'],
                         honor: 5,
-                        hand: ['reprieve','fine-katana','ornate-fan']
+                        hand: ['reprieve', 'fine-katana', 'ornate-fan']
                     },
                     player2: {
                         honor:5

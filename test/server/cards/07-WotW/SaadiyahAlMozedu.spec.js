@@ -5,12 +5,12 @@ describe('Saadiyah al-Mozedu', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['saadiyah-al-mozedu','moto-youth'],
+                        inPlay: ['saadiyah-al-mozedu', 'moto-youth'],
                         provinces: ['endless-plains'],
-                        hand: ['fine-katana','ornate-fan']
+                        hand: ['fine-katana', 'ornate-fan']
                     },
                     player2: {
-                        provinces: ['sacred-sanctuary', 'magistrate-station','shameful-display']
+                        provinces: ['sacred-sanctuary', 'magistrate-station', 'shameful-display']
                     }
                 });
 

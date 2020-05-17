@@ -5,7 +5,7 @@ describe('Moto Eviscerator', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['moto-eviscerator','yogo-outcast']
+                        inPlay: ['moto-eviscerator', 'yogo-outcast']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

@@ -43,7 +43,6 @@ describe('Third Whisker Sneak', function() {
             expect(this.player1).toBeAbleToSelect(this.sneak);
         });
 
-
         it('should not work if not participating', function() {
             this.noMoreActions();
 

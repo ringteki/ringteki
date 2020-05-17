@@ -28,4 +28,5 @@ class CourteousScheming extends DrawCard {
 }
 
 CourteousScheming.id = 'courteous-scheming';
+
 module.exports = CourteousScheming;

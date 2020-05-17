@@ -5,9 +5,9 @@ describe('KireiKo', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['honored-general','moto-juro','kitsu-spiritcaller'],
+                        inPlay: ['honored-general', 'moto-juro', 'kitsu-spiritcaller'],
                         dynastyDiscard: ['windswept-yurt'],
-                        hand: ['fine-katana','charge']
+                        hand: ['fine-katana', 'charge']
                     },
                     player2: {
                         inPlay: [],
@@ -52,7 +52,7 @@ describe('KireiKo', function() {
             });
 
             it('should not work after a character bows as a cost', function() {
-                this.player1.player.moveCard(this.juro,'dynasty discard pile');
+                this.player1.player.moveCard(this.juro, 'dynasty discard pile');
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: ['kitsu-spiritcaller'],

@@ -17,4 +17,3 @@ LetGo.id = 'let-go';
 
 module.exports = LetGo;
 
-

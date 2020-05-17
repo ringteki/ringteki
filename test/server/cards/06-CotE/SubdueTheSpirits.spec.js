@@ -7,12 +7,12 @@ describe('Subdue the Spirits', function() {
                     player1: {
                         honor: 11,
                         inPlay: ['adept-of-the-waves', 'meddling-mediator'],
-                        hand: ['subdue-the-spirits', 'seeker-of-knowledge','court-games'],
+                        hand: ['subdue-the-spirits', 'seeker-of-knowledge', 'court-games'],
                         stronghold: ['isawa-mori-seido']
                     },
                     player2: {
                         honor: 10,
-                        inPlay: ['doji-whisperer','apprentice-earthcaller'],
+                        inPlay: ['doji-whisperer', 'apprentice-earthcaller'],
                         hand: ['court-games']
                     }
                 });
@@ -131,7 +131,6 @@ describe('Subdue the Spirits', function() {
                         expect(this.adeptOfTheWaves.getMilitarySkill()).toBe(2);
                         expect(this.adeptOfTheWaves.getPoliticalSkill()).toBe(2);
                     });
-
                 });
             });
         });

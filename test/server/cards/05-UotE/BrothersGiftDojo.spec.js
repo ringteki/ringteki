@@ -16,7 +16,7 @@ describe('Brothers Gift Dojo', function() {
                 });
                 this.bgd = this.player1.findCardByName('brother-s-gift-dojo');
                 this.bgd.facedown = false;
-                this.fg = this.player1.placeCardInProvince('favorable-ground','province 3');
+                this.fg = this.player1.placeCardInProvince('favorable-ground', 'province 3');
                 this.liar = this.player1.findCardByName('bayushi-liar');
 
                 this.noMoreActions();

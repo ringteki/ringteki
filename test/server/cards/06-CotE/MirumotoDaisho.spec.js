@@ -6,7 +6,7 @@ describe('Mirumoto Daisho', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['mirumoto-raitsugu'],
-                        hand: ['mirumoto-daisho','fine-katana','ornate-fan']
+                        hand: ['mirumoto-daisho', 'fine-katana', 'ornate-fan']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

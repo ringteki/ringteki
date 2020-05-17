@@ -44,5 +44,6 @@ class SevenStingsKeep extends StrongholdCard {
 }
 
 SevenStingsKeep.id = 'seven-stings-keep';
+
 module.exports = SevenStingsKeep;
 

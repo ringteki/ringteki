@@ -23,4 +23,5 @@ class SoshiShiori extends DrawCard {
 }
 
 SoshiShiori.id = 'soshi-shiori';
+
 module.exports = SoshiShiori;

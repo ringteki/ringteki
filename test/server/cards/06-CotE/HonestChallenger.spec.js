@@ -174,6 +174,5 @@ describe('Honest Challenger', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
         });
-
     });
 });

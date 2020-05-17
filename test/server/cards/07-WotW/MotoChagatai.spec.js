@@ -58,7 +58,6 @@ describe('Moto Chagatai', function() {
                 expect(this.fertileFields.isBroken).toBe(false);
             });
 
-
             it('should not trigger if public forum is used', function () {
                 this.initiateConflict({
                     type: 'military',

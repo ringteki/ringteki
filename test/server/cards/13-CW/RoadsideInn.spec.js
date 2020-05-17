@@ -117,7 +117,6 @@ describe('Roadside Inn', function() {
             expect(this.dojiWhisperer.location).toBe('play area');
         });
 
-
         it('should not allow selecting a character if you have no fate', function() {
             this.player2.fate = 0;
             this.noMoreActions();

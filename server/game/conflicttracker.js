@@ -72,7 +72,6 @@ class ConflictTracker {
         this.resetForType('fire');
         this.resetForType('water');
         this.resetForType('void');
-
     }
 
     resetForType(conflictType) {

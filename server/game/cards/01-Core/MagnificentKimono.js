@@ -12,4 +12,3 @@ MagnificentKimono.id = 'magnificent-kimono';
 
 module.exports = MagnificentKimono;
 
-

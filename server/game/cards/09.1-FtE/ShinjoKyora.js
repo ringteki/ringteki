@@ -1,7 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbiltyDsl = require('../../abilitydsl');
 
-
 class ShinjoKyora extends DrawCard {
     setupCardAbilities() {
         this.action({

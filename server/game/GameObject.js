@@ -57,7 +57,6 @@ class GameObject {
         return this.checkRestrictions(actionType, context);
     }
 
-
     checkRestrictions(actionType, context) {
         return !this.getEffects(EffectNames.AbilityRestrictions).some(restriction => restriction.isMatch(actionType, context, this));
     }
@@ -145,7 +144,6 @@ class GameObject {
     isParticipating() {
         return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
-
 }
 
 module.exports = GameObject;

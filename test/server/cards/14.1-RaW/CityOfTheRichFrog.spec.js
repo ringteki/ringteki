@@ -82,7 +82,6 @@ describe('City of the Rich Frog', function() {
             expect(cards.length).toBe(3);
         });
 
-
         it('should refill to 3 cards even if you deck yourself while refilling', function() {
             this.keepDynasty();
             this.keepConflict();

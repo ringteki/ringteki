@@ -5,7 +5,7 @@ describe('Armament Artisan', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['armament-artisan', 'doji-whisperer','savvy-politician'],
+                        inPlay: ['armament-artisan', 'doji-whisperer', 'savvy-politician'],
                         hand: ['way-of-the-crane']
                     },
                     player2: {
@@ -20,7 +20,6 @@ describe('Armament Artisan', function() {
                 this.wotCrane = this.player1.findCardByName('way-of-the-crane');
 
                 this.challenger = this.player2.findCardByName('doji-challenger');
-
             });
 
             it('should not trigger when a character controlled by the opponent is honored', function() {

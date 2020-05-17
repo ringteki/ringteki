@@ -438,7 +438,7 @@ module.exports.init = function(server, options) {
         await userService.updateRefreshTokenUsage(refreshToken.id, ip);
 
         res.send({ success: true, user: userObj, token: authToken });
-    }))
+    }));
 
     server.post('/api/account/password-reset-finish', wrapAsync(async (req, res, next) => {
         let resetUser;

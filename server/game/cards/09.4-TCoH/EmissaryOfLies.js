@@ -45,4 +45,5 @@ class EmissaryOfLies extends DrawCard {
 }
 
 EmissaryOfLies.id = 'emissary-of-lies';
+
 module.exports = EmissaryOfLies;

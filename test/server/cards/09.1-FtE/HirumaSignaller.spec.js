@@ -9,7 +9,7 @@ describe('Hiruma Signaller', function() {
                         hand: []
                     },
                     player2: {
-                        inPlay: ['hiruma-signaller','hida-yakamo'],
+                        inPlay: ['hiruma-signaller', 'hida-yakamo'],
                         hand: ['reprieve']
                     }
                 });

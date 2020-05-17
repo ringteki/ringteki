@@ -21,7 +21,6 @@ class KaitoNobukai extends DrawCard {
     }
 }
 
-
 KaitoNobukai.id = 'kaito-nobukai';
 
 module.exports = KaitoNobukai;

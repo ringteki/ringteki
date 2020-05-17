@@ -5,12 +5,12 @@ describe('Tainted Koku', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['togashi-initiate','togashi-mendicant'],
-                        hand: ['fine-katana','let-go']
+                        inPlay: ['togashi-initiate', 'togashi-mendicant'],
+                        hand: ['fine-katana', 'let-go']
                     },
                     player2: {
                         inPlay: ['bayushi-shoju'],
-                        hand: ['tainted-koku','assassination', 'adopted-kin']
+                        hand: ['tainted-koku', 'assassination', 'adopted-kin']
                     }
                 });
                 this.initiate = this.player1.findCardByName('togashi-initiate');
@@ -19,7 +19,6 @@ describe('Tainted Koku', function() {
                 this.koku = this.player2.findCardByName('tainted-koku');
                 this.shoju = this.player2.findCardByName('bayushi-shoju');
                 this.assa = this.player2.findCardByName('assassination');
-
             });
 
             it('should correctly be discarded by Let go ', function() {

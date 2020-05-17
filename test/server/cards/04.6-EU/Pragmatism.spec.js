@@ -41,7 +41,6 @@ describe('Pragmatism', function() {
             });
 
             describe('when controller is more honorable than the opponent', function() {
-
                 beforeEach(function() {
                     this.player2.pass();
                     this.player1.clickCard('pragmatism');

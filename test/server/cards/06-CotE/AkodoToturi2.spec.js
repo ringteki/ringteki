@@ -6,12 +6,12 @@ describe('Akodo Toturi 2', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['akodo-toturi-2', 'matsu-berserker'],
-                        hand: ['banzai', 'fine-katana','kami-unleashed','feral-ningyo', 'assassination']
+                        hand: ['banzai', 'fine-katana', 'kami-unleashed', 'feral-ningyo', 'assassination']
                     },
                     player2: {
-                        inPlay: ['togashi-mitsu','sinister-soshi'],
+                        inPlay: ['togashi-mitsu', 'sinister-soshi'],
                         hand: ['banzai', 'fine-katana', 'kami-unleashed'],
-                        dynastyDiscard: ['hidden-moon-dojo', 'bayushi-liar','back-alley-hideaway','artisan-academy'],
+                        dynastyDiscard: ['hidden-moon-dojo', 'bayushi-liar', 'back-alley-hideaway', 'artisan-academy'],
                         conflictDiscard: ['hurricane-punch']
                     }
                 });

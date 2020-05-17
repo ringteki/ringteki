@@ -6,7 +6,7 @@ describe('Severed From the Stream', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['severed-from-the-stream','against-the-waves']
+                        hand: ['severed-from-the-stream', 'against-the-waves']
                     },
                     player2: {
                         inPlay: ['doji-challenger'],

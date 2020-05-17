@@ -22,4 +22,3 @@ HonoredGeneral.id = 'honored-general';
 
 module.exports = HonoredGeneral;
 
-

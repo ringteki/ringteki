@@ -39,7 +39,7 @@ describe('Insolent Rival', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['insolent-rival','bayushi-manipulator']
+                        inPlay: ['insolent-rival', 'bayushi-manipulator']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

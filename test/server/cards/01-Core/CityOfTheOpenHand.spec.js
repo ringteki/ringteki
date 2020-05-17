@@ -12,7 +12,7 @@ describe('City of the Open Hand', function() {
                     player2: {
                         stronghold: 'city-of-the-open-hand',
                         inPlay: ['righteous-magistrate'],
-                        hand: ['even-the-odds','assassination'],
+                        hand: ['even-the-odds', 'assassination'],
                         honor: 12
                     }
                 });

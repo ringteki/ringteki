@@ -11,7 +11,7 @@ describe('Utaku Tetsuko', function() {
                     },
                     player2: {
                         inPlay: ['doji-whisperer'],
-                        hand: ['ornate-fan','steward-of-law'],
+                        hand: ['ornate-fan', 'steward-of-law'],
                         fate: 2
                     }
                 });

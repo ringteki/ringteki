@@ -95,7 +95,6 @@ describe('Starry Heaven Sanctuary', function() {
                 expect(this.borderlandsDefender.fate).toBe(4);
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.starryHeavenSanctuary);
-
             });
 
             it('should see an additional fate phase as a seperate fate phase', function () {

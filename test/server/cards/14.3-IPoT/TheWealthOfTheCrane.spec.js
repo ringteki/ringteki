@@ -38,7 +38,6 @@ describe('The Wealth of the Crane', function() {
             this.p3 = this.player1.findCardByName('fertile-fields');
             this.p4 = this.player1.findCardByName('magistrate-station');
             this.pStronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
-
         });
 
         it('should let you choose from the top 10 cards of your deck', function() {
@@ -144,7 +143,6 @@ describe('The Wealth of the Crane', function() {
             expect(this.getChatLogs(10)).toContain('player1 puts Iron Mine into a facedown province');
             expect(this.getChatLogs(10)).toContain('player1 puts A Season of War into a facedown province');
             expect(this.getChatLogs(1)).toContain('player1 is shuffling their dynasty deck');
-
         });
 
         describe('Cost Reduction', function() {

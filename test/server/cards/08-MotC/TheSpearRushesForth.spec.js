@@ -5,11 +5,11 @@ describe('The Spear Rushes Forth', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['brash-samurai','kakita-kaezin','doji-whisperer'],
-                        hand: ['the-spear-rushes-forth','young-harrier']
+                        inPlay: ['brash-samurai', 'kakita-kaezin', 'doji-whisperer'],
+                        hand: ['the-spear-rushes-forth', 'young-harrier']
                     },
                     player2: {
-                        inPlay: ['doji-challenger','kakita-yoshi']
+                        inPlay: ['doji-challenger', 'kakita-yoshi']
                     }
                 });
 

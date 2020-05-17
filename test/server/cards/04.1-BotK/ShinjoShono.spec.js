@@ -54,7 +54,6 @@ describe('Shinjo Shono', function() {
                 expect(this.seppunGuardsman.getMilitarySkill()).toBe(2);
                 expect(this.borderRider.getMilitarySkill()).toBe(2);
                 expect(this.borderRider.getPoliticalSkill()).toBe(1);
-
             });
         });
     });

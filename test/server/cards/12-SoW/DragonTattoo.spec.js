@@ -54,7 +54,6 @@ describe('Dragon Tattoo', function() {
             expect(this.player1).not.toBeAbleToSelect(this.kuwanan);
         });
 
-
         it('should react after you target your own character with an event', function() {
             this.noMoreActions();
             this.initiateConflict({

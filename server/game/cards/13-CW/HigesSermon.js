@@ -34,4 +34,3 @@ HigesSermon.id = 'hige-s-sermon';
 
 module.exports = HigesSermon;
 
-

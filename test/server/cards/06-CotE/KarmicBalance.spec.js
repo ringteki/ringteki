@@ -64,7 +64,6 @@ describe('Karmic Balance', function() {
                     expect(this.karmicBalance.location).toBe('removed from game');
                 });
             });
-
         });
     });
 });

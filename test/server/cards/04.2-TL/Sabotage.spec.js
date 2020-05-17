@@ -64,7 +64,6 @@ describe('Sabotage', function() {
                 expect(this.favorableGround.location).toBe('province 1');
                 this.player1.clickCard(this.favorableGround);
                 expect(this.favorableGround.location).toBe('dynasty discard pile');
-
             });
         });
     });

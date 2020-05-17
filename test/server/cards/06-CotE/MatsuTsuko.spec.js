@@ -5,7 +5,7 @@ describe('Matsu Tsuko', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['matsu-tsuko','akodo-toturi'],
+                        inPlay: ['matsu-tsuko', 'akodo-toturi'],
                         hand: ['strength-in-numbers', 'master-of-the-spear', 'sashimono'],
                         honor: 10
                     },

@@ -6,7 +6,7 @@ describe('EarthBecomesSky', function() {
                     phase: 'conflict',
                     player1: {
                         stronghold: ['shizuka-toshi'],
-                        inPlay: ['brash-samurai','border-rider', 'doji-whisperer'],
+                        inPlay: ['brash-samurai', 'border-rider', 'doji-whisperer'],
                         provinces: ['magistrate-station'],
                         hand: ['fine-katana']
                     },
@@ -43,7 +43,7 @@ describe('EarthBecomesSky', function() {
 
             it('should not work on strongholds or attachments', function() {
                 this.shizuka.bow();
-                this.player1.playAttachment(this.katana,this.dojiWhisperer);
+                this.player1.playAttachment(this.katana, this.dojiWhisperer);
                 this.katana.bow();
                 this.noMoreActions();
                 this.flow.finishConflictPhase();

@@ -5,7 +5,7 @@ describe('Market of Kaze-no-Kami', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['togashi-yokuni','doomed-shugenja']
+                        inPlay: ['togashi-yokuni', 'doomed-shugenja']
                     },
                     player2: {
                         inPlay: ['doji-whisperer'],

@@ -21,4 +21,3 @@ DiscipleOfShinsei.id = 'disciple-of-shinsei';
 
 module.exports = DiscipleOfShinsei;
 
-

@@ -40,7 +40,6 @@ describe('Kuni Laboratory', function() {
             });
 
             it('should give +1/+1 to all of the controllers characters in play', function() {
-
                 // progress to conflict phase
                 this.noMoreActions();
                 expect(this.game.currentPhase).toBe('conflict');
@@ -63,7 +62,6 @@ describe('Kuni Laboratory', function() {
             });
 
             it('should give +1/+1 to the controllers character when it is played from hand', function() {
-
                 // progress to conflict phase
                 this.noMoreActions();
                 expect(this.game.currentPhase).toBe('conflict');
@@ -89,7 +87,6 @@ describe('Kuni Laboratory', function() {
             });
 
             it('should not give +1/+1 to the opponents characters in play', function() {
-
                 // progress to conflict phase
                 this.noMoreActions();
                 expect(this.game.currentPhase).toBe('conflict');

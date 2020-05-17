@@ -19,4 +19,5 @@ class ShepherdOfVisages extends DrawCard {
 }
 
 ShepherdOfVisages.id = 'shepherd-of-visages';
+
 module.exports = ShepherdOfVisages;

@@ -10,4 +10,5 @@ class StudentOfWar extends DrawCard {
     }
 }
 StudentOfWar.id = 'student-of-war';
+
 module.exports = StudentOfWar;

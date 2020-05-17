@@ -22,4 +22,3 @@ IsawaMoriSeido.id = 'isawa-mori-seido';
 
 module.exports = IsawaMoriSeido;
 
-

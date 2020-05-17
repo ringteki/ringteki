@@ -12,12 +12,12 @@ class TradingOnTheSandRoad extends DrawCard {
             effect: 'remove the top 4 cards from each player\'s deck and make them playable by both players until the end of the round',
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.cancel(),
-                AbilityDsl.actions.lookAt(context=> ({
+                AbilityDsl.actions.lookAt(context => ({
                     target: context.player.conflictDeck.first(4),
                     message: '{0} removes the top {1} cards from their conflict deck from the game: {2}',
                     messageArgs: cards => [context.player, cards.length, cards]
                 })),
-                AbilityDsl.actions.lookAt(context=> ({
+                AbilityDsl.actions.lookAt(context => ({
                     target: context.player.opponent ? context.player.opponent.conflictDeck.first(4) : [],
                     message: '{0} removes the top {1} cards from their conflict deck from the game: {2}',
                     messageArgs: cards => [context.player.opponent, cards.length, cards]

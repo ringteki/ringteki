@@ -5,9 +5,9 @@ describe('Soshi Aoi', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['soshi-aoi','bayushi-aramoro','bayushi-liar'],
+                        inPlay: ['soshi-aoi', 'bayushi-aramoro', 'bayushi-liar'],
                         honor: 7,
-                        hand: ['sashimono','tattered-missive']
+                        hand: ['sashimono', 'tattered-missive']
                     },
                     player2: {
                         inPlay: []

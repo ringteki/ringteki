@@ -43,7 +43,7 @@ class UserService extends EventEmitter {
     getUserById(id) {
         return this.users.find({ _id: id })
             .then(users => {
-               return users[0] && new User(users[0]);
+                return users[0] && new User(users[0]);
             })
             .catch(err => {
                 logger.error('Error fetching users', err);

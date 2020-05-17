@@ -5,7 +5,7 @@ describe('Gift of Amaterasu', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['akodo-toturi','matsu-berserker'],
+                        inPlay: ['akodo-toturi', 'matsu-berserker'],
                         hand: ['gift-of-amaterasu']
                     },
                     player2: {

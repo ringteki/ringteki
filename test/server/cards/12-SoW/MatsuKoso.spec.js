@@ -49,7 +49,6 @@ describe('Matsu Koso', function() {
             this.player1.passConflict();
             this.noMoreActions();
 
-
             this.initiateConflict({
                 defenders: [this.kitsuMotso, this.matsuKoso, this.matsuBerserker],
                 attackers: [this.solemnScholar, this.shibaTsukune, this.isawaUona],

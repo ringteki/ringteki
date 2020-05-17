@@ -5,7 +5,7 @@ describe('Yasuki Fuzake', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['yasuki-fuzake','eager-scout'],
+                        inPlay: ['yasuki-fuzake', 'eager-scout'],
                         honor: 10
                     },
                     player2: {

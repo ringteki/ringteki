@@ -22,7 +22,6 @@ describe('Miya Library', function () {
                 this.player1.moveCard(this.kanjo, 'dynasty deck');
                 this.player1.moveCard(this.adept, 'dynasty deck');
                 this.player1.moveCard(this.kudaka, 'dynasty deck');
-
             });
 
             it('should allow you to replace the library for satoshi', function () {

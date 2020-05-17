@@ -125,7 +125,6 @@ describe('Shrewd Investigator', function() {
             this.player1.clickCard(this.investigator);
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
-
     });
 });
 

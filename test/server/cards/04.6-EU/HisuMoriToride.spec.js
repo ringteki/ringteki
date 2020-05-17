@@ -22,7 +22,6 @@ describe('Hisu Mori Toride', function() {
                 this.noMoreActions();
             });
 
-
             it('should not trigger when winning a political conflict', function() {
                 this.initiateConflict({
                     type: 'political',
@@ -34,7 +33,6 @@ describe('Hisu Mori Toride', function() {
                 expect(this.player1).toHavePrompt('Air Ring');
                 this.player1.clickPrompt('Don\'t resolve');
             });
-
 
             it('should not trigger when winning a conflict with the same of less participants', function() {
                 this.initiateConflict({

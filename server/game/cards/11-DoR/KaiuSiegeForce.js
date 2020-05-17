@@ -20,4 +20,3 @@ KaiuSiegeForce.id = 'kaiu-siege-force';
 
 module.exports = KaiuSiegeForce;
 
-

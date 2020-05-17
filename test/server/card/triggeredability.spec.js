@@ -102,7 +102,6 @@ describe('TriggeredAbility', function () {
                 handler: () => true
             };
             this.reaction = new TriggeredAbility(this.gameSpy, this.cardSpy, 'reaction', this.properties);
-
         });
 
         it('should unregister all previously registered when event handlers', function() {

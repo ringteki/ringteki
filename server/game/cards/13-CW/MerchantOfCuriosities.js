@@ -65,12 +65,10 @@ const merchantOfCuriositiesCost = function () {
 
             let action = context.game.actions.handler(); //this is a do-nothing event to allow you to opt out and not scuttle the event
             return action.getEvent(context.player, context);
-
         },
         promptsPlayer: true
     };
 };
-
 
 class MerchantOfCuriosities extends DrawCard {
     setupCardAbilities() {
@@ -98,5 +96,6 @@ class MerchantOfCuriosities extends DrawCard {
 }
 
 MerchantOfCuriosities.id = 'merchant-of-curiosities';
+
 module.exports = MerchantOfCuriosities;
 

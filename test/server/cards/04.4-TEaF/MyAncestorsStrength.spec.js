@@ -8,7 +8,7 @@ describe('My Ancestors Strength', function() {
                         fate: 1,
                         inPlay: ['fearsome-mystic', 'asako-diplomat'],
                         hand: ['my-ancestor-s-strength'],
-                        dynastyDiscard: ['fushicho', 'naive-student','isawa-uona']
+                        dynastyDiscard: ['fushicho', 'naive-student', 'isawa-uona']
                     },
                     player2: {
                         inPlay: ['moto-nergui']

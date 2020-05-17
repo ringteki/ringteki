@@ -5,7 +5,7 @@ describe('Our Foe Does Not Wait', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        dynastyDiscard: ['imperial-storehouse', 'shika-matchmaker', 'solemn-scholar', 'seventh-tower', 'watchtower-of-valor' ,'favorable-ground', 'hida-kisada', 'artisan-academy', 'hall-of-victories'],
+                        dynastyDiscard: ['imperial-storehouse', 'shika-matchmaker', 'solemn-scholar', 'seventh-tower', 'watchtower-of-valor', 'favorable-ground', 'hida-kisada', 'artisan-academy', 'hall-of-victories'],
                         inPlay: ['shrine-maiden'],
                         hand: ['our-foe-does-not-wait'],
                         conflictDiscard: ['our-foe-does-not-wait'],

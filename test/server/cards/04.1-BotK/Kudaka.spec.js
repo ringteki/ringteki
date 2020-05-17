@@ -108,7 +108,6 @@ describe('Kudaka', function () {
                         expect(this.player1.hand.length).toBe(2);
                     });
                 });
-
             });
         });
     });

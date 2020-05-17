@@ -5,7 +5,7 @@ describe('Prepared Ambush', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['akodo-zentaro', 'matsu-berserker', 'doji-whisperer', 'moto-chagatai'],
-                    hand: ['prepared-ambush','total-warfare']
+                    hand: ['prepared-ambush', 'total-warfare']
                 },
                 player2: {
                     inPlay: ['samurai-of-integrity', 'akodo-toturi'],

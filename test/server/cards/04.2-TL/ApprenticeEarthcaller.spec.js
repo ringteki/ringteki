@@ -5,12 +5,12 @@ describe('Apprentice Earthcaller', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['apprentice-earthcaller', 'third-tower-guard','crisis-breaker'],
+                        inPlay: ['apprentice-earthcaller', 'third-tower-guard', 'crisis-breaker'],
                         hand: ['fine-katana']
                     },
                     player2: {
                         inPlay: ['togashi-initiate'],
-                        hand: ['hurricane-punch','ornate-fan']
+                        hand: ['hurricane-punch', 'ornate-fan']
                     }
                 });
                 this.apprentice = this.player1.findCardByName('apprentice-earthcaller');
@@ -28,7 +28,7 @@ describe('Apprentice Earthcaller', function() {
 
             it('should only target attacking characters without attachments', function() {
                 this.initiateConflict({
-                    attackers: [this.ttg,this.crisisbreaker],
+                    attackers: [this.ttg, this.crisisbreaker],
                     defenders: [this.togashi]
                 });
                 this.player2.pass();

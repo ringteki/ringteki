@@ -67,7 +67,6 @@ describe('Bayushi\'s Whisperers', function() {
                 it('should prompt to name a card', function () {
                     expect(this.player1).toHavePrompt('Name a card');
                 });
-
             });
 
             describe('if it resolves', function () {
@@ -102,7 +101,6 @@ describe('Bayushi\'s Whisperers', function() {
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                 });
             });
-
         });
     });
 });

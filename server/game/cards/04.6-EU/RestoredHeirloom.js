@@ -11,7 +11,7 @@ class RestoredHeirloom extends DrawCard {
             },
             effect: 'attach {1} to {0} instead of resolving the {2}',
             effectArgs: context => [context.source, context.event.ring],
-            location: [Locations.Hand,Locations.ConflictDiscardPile],
+            location: [Locations.Hand, Locations.ConflictDiscardPile],
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,

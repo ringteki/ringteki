@@ -5,8 +5,8 @@ describe('Ikoma Ikehata', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['ikoma-ikehata','doji-hotaru'],
-                        hand: ['fine-katana','ornate-fan','way-of-the-crane']
+                        inPlay: ['ikoma-ikehata', 'doji-hotaru'],
+                        hand: ['fine-katana', 'ornate-fan', 'way-of-the-crane']
                     },
                     player2: {
                         inPlay: ['miya-mystic']
@@ -116,7 +116,6 @@ describe('Ikoma Ikehata', function() {
                 expect(this.ikehata.isHonored).toBe(true);
                 expect(this.player1.hand.length).toBe(3);
             });
-
         });
     });
 });

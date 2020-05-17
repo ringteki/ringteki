@@ -18,4 +18,3 @@ ThunderGuardElite.id = 'thunder-guard-elite';
 
 module.exports = ThunderGuardElite;
 
-

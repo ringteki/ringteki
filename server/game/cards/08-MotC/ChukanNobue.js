@@ -13,4 +13,5 @@ class ChukanNobue extends DrawCard {
 }
 
 ChukanNobue.id = 'chukan-nobue';
+
 module.exports = ChukanNobue;

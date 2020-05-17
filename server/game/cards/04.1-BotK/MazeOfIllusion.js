@@ -18,7 +18,7 @@ class MazeOfIllusion extends DrawCard {
                 activePromptTitle: 'Choose a value to set your honor dial at',
                 context: context,
                 choices: ['1', '2', '3', '4', '5'],
-                handlers: [1,2,3,4,5].map(value => {
+                handlers: [1, 2, 3, 4, 5].map(value => {
                     return () => this.opponentGuess(value, context);
                 })
             })

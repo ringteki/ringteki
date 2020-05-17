@@ -4,7 +4,7 @@ describe('Tactician\'s Camp', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['akodo-toturi','matsu-berserker'],
+                    inPlay: ['akodo-toturi', 'matsu-berserker'],
                     dynastyDiscard: ['tactician-s-camp']
                 },
                 player2: {
@@ -17,7 +17,6 @@ describe('Tactician\'s Camp', function() {
             this.berserker = this.player1.findCardByName('matsu-berserker');
 
             this.whisperer = this.player2.findCardByName('doji-whisperer');
-
         });
 
         it('should only give honored characters +1 MIL', function() {

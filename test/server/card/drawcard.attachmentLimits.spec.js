@@ -5,11 +5,11 @@ describe('When a card is attached', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['tattooed-wanderer'],
-                    hand: ['ornate-fan','fine-katana','total-warfare']
+                    hand: ['ornate-fan', 'fine-katana', 'total-warfare']
                 },
                 player2: {
                     role: 'keeper-of-water',
-                    provinces: ['pilgrimage','entrenched-position'],
+                    provinces: ['pilgrimage', 'entrenched-position'],
                     inPlay: ['keeper-initiate'],
                     hand: ['honored-blade', 'total-warfare']
                 }
@@ -21,12 +21,11 @@ describe('When a card is attached', function() {
             this.honoredBlade = this.player2.findCardByName('honored-blade');
             this.totalWarfare1 = this.player1.findCardByName('total-warfare');
             this.totalWarfare2 = this.player2.findCardByName('total-warfare');
-            this.player1.playAttachment('ornate-fan',this.testCharacter);
+            this.player1.playAttachment('ornate-fan', this.testCharacter);
             this.player2.pass();
         });
 
         describe('And it has the restricted keyword', function() {
-
             beforeEach(function() {
                 this.player1.playAttachment(this.fineKatana, this.testCharacter);
             });
@@ -38,7 +37,6 @@ describe('When a card is attached', function() {
             });
 
             describe ('And the target has at least two restricted attachments', function() {
-
                 beforeEach(function() {
                     this.player2.playAttachment(this.honoredBlade, this.testCharacter);
                 });
@@ -58,12 +56,11 @@ describe('When a card is attached', function() {
                     });
                 });
             });
-
         });
 
         describe ('And it has a "limit 1" clause', function() {
             beforeEach(function() {
-                this.player1.playAttachment(this.totalWarfare1,this.testProvince);
+                this.player1.playAttachment(this.totalWarfare1, this.testProvince);
             });
 
             it('should attach if the limit will not be exceeded', function() {
@@ -72,7 +69,7 @@ describe('When a card is attached', function() {
             });
 
             it('should remove the old attachment if the limit is exceeded', function() {
-                this.player2.playAttachment(this.totalWarfare2,this.testProvince);
+                this.player2.playAttachment(this.totalWarfare2, this.testProvince);
                 expect(this.testProvince.attachments).toContain(this.totalWarfare2);
                 expect(this.totalWarfare1.location).toBe('conflict discard pile');
             });

@@ -312,7 +312,6 @@ describe('Master Tactician', function() {
     });
 });
 
-
 describe('Two Master Tacticians', function() {
     integration(function() {
         beforeEach(function () {

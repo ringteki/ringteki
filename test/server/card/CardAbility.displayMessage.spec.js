@@ -223,5 +223,4 @@ describe('CardAbility displayMessage', function() {
             expect(this.args[9].message[8]).toBe(this.opponent);
         });
     });
-
 });

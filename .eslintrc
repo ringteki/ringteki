@@ -1,22 +1,20 @@
 {
-  "plugins": [
-    "jasmine"
-  ],
-  "env": {
-    "node": true,
-    "es6": true,
-    "jasmine": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:jasmine/recommended"
-  ],
+  "extends": "eslint:recommended",
   "rules": {
-    "jasmine/no-spec-dupes": 0,
-    "jasmine/no-suite-dupes": 0,
-    "jasmine/missing-expect": 1,
-    "jasmine/new-line-before-expect": 0,
-    "jasmine/prefer-toHaveBeenCalledWith": 0,
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
     "indent": [
       2,
       4,
@@ -96,7 +94,10 @@
       2
     ],
     "no-multiple-empty-lines": [
-      2
+      2,
+      {
+        "max": 1
+      }
     ],
     "eol-last": [
       2
@@ -126,9 +127,29 @@
         }
       }
     ],
-    "no-trailing-spaces": [
-      2
+    "padded-blocks": [
+      "error",
+      "never"
+    ],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "cjs-export"
+      }
     ]
   },
-  "parser": "babel-eslint"
+  "env": {
+    "browser": false,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "modules": false
+    }
+  }
 }

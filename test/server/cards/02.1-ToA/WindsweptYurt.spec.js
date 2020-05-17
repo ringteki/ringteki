@@ -52,7 +52,6 @@ describe('Windswept Yurt', function () {
                 this.newCard = this.player1.player.getDynastyCardInProvince('province 1');
                 expect(this.newCard.facedown).toBe(false);
             });
-
         });
     });
 });

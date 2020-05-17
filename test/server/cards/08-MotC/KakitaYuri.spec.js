@@ -9,7 +9,7 @@ describe('Kakita Yuri', function() {
                         provinces: ['shameful-display']
                     },
                     player2: {
-                        inPlay: ['border-rider', 'iuchi-farseer','moto-youth','ivory-kingdoms-unicorn']
+                        inPlay: ['border-rider', 'iuchi-farseer', 'moto-youth', 'ivory-kingdoms-unicorn']
                     }
                 });
                 this.kakitaYuri = this.player1.findCardByName('kakita-yuri');

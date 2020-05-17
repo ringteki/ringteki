@@ -37,5 +37,6 @@ class ShiroKitsuki extends StrongholdCard {
 }
 
 ShiroKitsuki.id = 'shiro-kitsuki';
+
 module.exports = ShiroKitsuki;
 

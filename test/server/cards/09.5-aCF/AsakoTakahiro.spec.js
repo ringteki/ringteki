@@ -25,7 +25,6 @@ describe('Asako Takahiro', function() {
                     attackers: [this.takahiro, this.brash],
                     defenders: [this.whisperer]
                 });
-
             });
 
             it('should give +2 pol for each honored character in the conflict', function() {

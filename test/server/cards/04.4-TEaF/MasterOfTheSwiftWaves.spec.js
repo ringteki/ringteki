@@ -5,7 +5,7 @@ describe('Master of the Swift Waves', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['master-of-the-swift-waves', 'matsu-berserker','shinjo-shono']
+                        inPlay: ['master-of-the-swift-waves', 'matsu-berserker', 'shinjo-shono']
                     },
                     player2: {
                         inPlay: ['venerable-historian']
@@ -69,14 +69,13 @@ describe('Master of the Swift Waves', function() {
             it('should not trigger without valid targets', function() {
                 this.initiateConflict({
                     type: 'political',
-                    attackers: [this.swift,this.shono],
+                    attackers: [this.swift, this.shono],
                     defenders: [this.historian]
                 });
                 this.player2.pass();
                 this.player1.clickCard(this.swift);
                 expect(this.player1).not.toHavePromptButton('Choose a participating character to send home');
             });
-
         });
     });
 });

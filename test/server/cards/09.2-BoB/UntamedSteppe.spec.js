@@ -7,10 +7,10 @@ describe('Untamed Steppe', function() {
                     player1: {
                         inPlay: ['moto-youth'],
                         provinces: ['fertile-fields', 'meditations-on-the-tao'],
-                        hand: ['fine-katana','ornate-fan']
+                        hand: ['fine-katana', 'ornate-fan']
                     },
                     player2: {
-                        provinces: ['sacred-sanctuary', 'untamed-steppe','shameful-display']
+                        provinces: ['sacred-sanctuary', 'untamed-steppe', 'shameful-display']
                     }
                 });
 

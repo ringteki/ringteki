@@ -6,11 +6,11 @@ describe('Spoils Of War', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['student-of-war'],
-                        hand: ['spoils-of-war','spoils-of-war','fine-katana','ornate-fan','strength-in-numbers']
+                        hand: ['spoils-of-war', 'spoils-of-war', 'fine-katana', 'ornate-fan', 'strength-in-numbers']
                     },
                     player2: {
                         inPlay: ['shinjo-outrider'],
-                        hand: ['fine-katana','spoils-of-war'],
+                        hand: ['fine-katana', 'spoils-of-war'],
                         provinces: ['kuroi-mori']
 
                     }

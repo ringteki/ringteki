@@ -187,8 +187,8 @@ class CardAbility extends ThenAbility {
                 if(card && card.facedown) {
                     card = 'a facedown card';
                 }
-                let [format, args] = ['ERROR - MISSING COST MESSAGE', [' ',' ']];
-                [format,args] = cost.getCostMessage(context);
+                let [format, args] = ['ERROR - MISSING COST MESSAGE', [' ', ' ']];
+                [format, args] = cost.getCostMessage(context);
                 return { message: this.game.gameChat.formatMessage(format, [card].concat(args)) };
             }
         }).filter(obj => obj);

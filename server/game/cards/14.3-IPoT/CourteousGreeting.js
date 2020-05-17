@@ -25,7 +25,6 @@ class CourteousGreeting extends ProvinceCard {
             effectArgs: context => [context.targets.myCharacter, context.targets.oppCharacter]
         });
     }
-
 }
 
 CourteousGreeting.id = 'courteous-greeting';

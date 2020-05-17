@@ -19,5 +19,6 @@ class KyudenKakita extends StrongholdCard {
 }
 
 KyudenKakita.id = 'kyuden-kakita';
+
 module.exports = KyudenKakita;
 

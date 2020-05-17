@@ -6,10 +6,10 @@ describe('Stolen Secrets', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['favored-niece', 'soshi-illusionist'],
-                        hand: ['stolen-secrets','stolen-secrets']
+                        hand: ['stolen-secrets', 'stolen-secrets']
                     },
                     player2: {
-                        hand: ['assassination', 'finger-of-jade', 'tattooed-wanderer', 'kami-unleashed','censure', 'levy']
+                        hand: ['assassination', 'finger-of-jade', 'tattooed-wanderer', 'kami-unleashed', 'censure', 'levy']
                     }
                 });
 

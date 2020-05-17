@@ -88,6 +88,5 @@ describe('Kakudaira', function() {
             expect(this.whisperer.facedown).toBe(false);
             expect(this.getChatLogs(3)).toContain('player1 reveals Doji Challenger and Doji Whisperer due to the constant effect of Kakudaira');
         });
-
     });
 });

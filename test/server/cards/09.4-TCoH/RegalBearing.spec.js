@@ -136,7 +136,6 @@ describe('Regal Bearing', function() {
                     defenders: [this.bayushiAramoro]
                 });
 
-
                 this.player2.pass();
 
                 this.player1.player.showBid = 5;
@@ -196,7 +195,6 @@ describe('Regal Bearing', function() {
                     attackers: [this.ikomaProdigy],
                     defenders: [this.yogoHirue]
                 });
-
 
                 this.player2.pass();
 

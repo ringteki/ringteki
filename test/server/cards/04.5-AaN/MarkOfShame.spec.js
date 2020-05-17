@@ -9,7 +9,7 @@ describe('Mark of Shame', function() {
                         hand: ['mark-of-shame']
                     },
                     player2: {
-                        inPlay: ['akodo-toturi','matsu-berserker']
+                        inPlay: ['akodo-toturi', 'matsu-berserker']
                     }
                 });
                 this.mos = this.player1.findCardByName('mark-of-shame');
@@ -67,7 +67,6 @@ describe('Mark of Shame', function() {
                 this.player1.clickCard(this.zerk);
                 expect(this.zerk.isDishonored).toBe(true);
             });
-
         });
     });
 });

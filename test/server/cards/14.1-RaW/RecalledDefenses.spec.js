@@ -5,23 +5,23 @@ describe('Recalled Defenses', function() {
                 phase: 'dynasty',
                 player1: {
                     inPlay: ['naive-student'],
-                    dynastyDiscard: ['bustling-academy','kanjo-district', 'recalled-defenses']
+                    dynastyDiscard: ['bustling-academy', 'kanjo-district', 'recalled-defenses']
                 },
                 player2: {
-                    inPlay: ['moto-youth','shinjo-scout'],
+                    inPlay: ['moto-youth', 'shinjo-scout'],
                     dynastyDiscard:['shiotome-encampment'],
                     hand: []
                 }
             });
 
-            this.ba = this.player1.placeCardInProvince('bustling-academy','province 1');
-            this.kd = this.player1.placeCardInProvince('kanjo-district','province 2');
+            this.ba = this.player1.placeCardInProvince('bustling-academy', 'province 1');
+            this.kd = this.player1.placeCardInProvince('kanjo-district', 'province 2');
             this.naive = this.player1.findCardByName('naive-student');
             this.defenses = this.player1.placeCardInProvince('recalled-defenses', 'province 3');
             this.player1.moveCard(this.naive, 'province 1');
 
-            this.shio = this.player2.placeCardInProvince('shiotome-encampment','province 1');
-            this.youth = this.player2.placeCardInProvince('moto-youth','province 2');
+            this.shio = this.player2.placeCardInProvince('shiotome-encampment', 'province 1');
+            this.youth = this.player2.placeCardInProvince('moto-youth', 'province 2');
             this.scout = this.player2.findCardByName('shinjo-scout');
         });
 

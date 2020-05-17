@@ -9,7 +9,7 @@ describe('Sage of Gisei Toshi', function() {
                         honor: 11
                     },
                     player2: {
-                        inPlay: ['doji-whisperer','savvy-politician'],
+                        inPlay: ['doji-whisperer', 'savvy-politician'],
                         honor: 10
                     }
                 });

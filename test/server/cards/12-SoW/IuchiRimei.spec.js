@@ -37,7 +37,6 @@ describe('Iuchi Rimei', function() {
             this.player1.playAttachment(this.river, this.doomed);
         });
 
-
         it('should only allow targeting an attachment with cost 1 or less controlled by opponent', function() {
             this.player2.clickCard(this.rimei);
             expect(this.player2).toBeAbleToSelect(this.cloud);

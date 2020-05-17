@@ -6,7 +6,7 @@ describe('Nezumi Infiltrator', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['third-tower-guard'],
-                        hand: ['nezumi-infiltrator','ride-them-down'],
+                        hand: ['nezumi-infiltrator', 'ride-them-down'],
                         provinces: ['defend-the-wall']
                     },
                     player2: {

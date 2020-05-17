@@ -1,7 +1,6 @@
 describe('Appealing to the Fortunes', function() {
     integration(function() {
         describe('Appealing to the Fortunes\'s ability', function() {
-
             describe('when controlling player has a void role', function() {
                 beforeEach(function() {
                     this.setupTest({

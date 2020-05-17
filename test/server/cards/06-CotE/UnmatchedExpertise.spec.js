@@ -10,7 +10,7 @@ describe('Unmatched Expertise', function() {
                     },
                     player2: {
                         inPlay: ['bayushi-shoju'],
-                        hand: ['for-shame','way-of-the-scorpion']
+                        hand: ['for-shame', 'way-of-the-scorpion']
                     }
                 });
                 this.tsukune = this.player1.findCardByName('shiba-tsukune');
@@ -56,7 +56,6 @@ describe('Unmatched Expertise', function() {
                 this.player1.pass();
                 expect(this.expertise.location).toBe('conflict discard pile');
             });
-
         });
     });
 });

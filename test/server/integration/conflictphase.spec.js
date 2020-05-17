@@ -594,7 +594,6 @@ describe('conflict phase', function() {
                     this.keeperOfVoid = this.player2.findCardByName('keeper-of-void');
                     expect(this.player2).toHavePrompt('Triggered Abilities');
                     expect(this.player2).toBeAbleToSelect(this.keeperOfVoid);
-
                 });
 
                 describe('if the defending player wins', function() {

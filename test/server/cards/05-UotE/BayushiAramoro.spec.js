@@ -5,10 +5,10 @@ describe('Bayushi Aramoro', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-aramoro','sinister-soshi']
+                        inPlay: ['bayushi-aramoro', 'sinister-soshi']
                     },
                     player2: {
-                        inPlay: ['doji-whisperer','brash-samurai', 'moto-youth'],
+                        inPlay: ['doji-whisperer', 'brash-samurai', 'moto-youth'],
                         hand: ['noble-sacrifice']
                     }
                 });

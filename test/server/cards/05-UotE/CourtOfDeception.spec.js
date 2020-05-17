@@ -5,14 +5,14 @@ describe('Court of Deception', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-liar','bayushi-yojiro'],
+                        inPlay: ['bayushi-liar', 'bayushi-yojiro'],
                         dynastyDiscard: ['court-of-deception']
                     },
                     player2: {
                         inPlay: ['moto-youth']
                     }
                 });
-                this.CoD = this.player1.placeCardInProvince('court-of-deception','province 1');
+                this.CoD = this.player1.placeCardInProvince('court-of-deception', 'province 1');
                 this.liar = this.player1.findCardByName('bayushi-liar');
                 this.yojiro = this.player1.findCardByName('bayushi-yojiro');
                 this.youth = this.player2.findCardByName('moto-youth');

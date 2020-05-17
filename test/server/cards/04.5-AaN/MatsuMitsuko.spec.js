@@ -5,7 +5,7 @@ describe('Matsu Mitsuko', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['matsu-mitsuko','matsu-berserker','venerable-historian'],
+                        inPlay: ['matsu-mitsuko', 'matsu-berserker', 'venerable-historian'],
                         honor: 11
                     },
                     player2: {
@@ -21,7 +21,6 @@ describe('Matsu Mitsuko', function() {
                 this.scout = this.player2.findCardByName('eager-scout');
                 this.noMoreActions();
             });
-
 
             it('should not work during a political conflict', function() {
                 this.initiateConflict({

@@ -9,7 +9,7 @@ class Sabotage extends DrawCard {
             target: {
                 location: Locations.Provinces,
                 controller: Players.Opponent,
-                cardType: [CardTypes.Character,CardTypes.Holding],
+                cardType: [CardTypes.Character, CardTypes.Holding],
                 gameAction: ability.actions.discardCard()
             }
         });

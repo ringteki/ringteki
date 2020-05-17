@@ -111,7 +111,6 @@ describe('Agasha Hiyori', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.katana);
             });
 
-
             it('should pay fate to an unclaimed ring', function() {
                 let airFate = this.game.rings.air.fate;
                 let playerFate = this.player1.fate;

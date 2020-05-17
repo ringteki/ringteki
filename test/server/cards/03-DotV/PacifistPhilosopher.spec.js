@@ -13,7 +13,6 @@ describe('Pacifist Philosopher', function() {
                 });
 
                 this.pacifistPhilosopher = this.player1.findCardByName('pacifist-philosopher');
-
             });
 
             it('should trigger when a player passes a conflict declaration', function() {

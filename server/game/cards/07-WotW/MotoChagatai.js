@@ -3,7 +3,6 @@ const AbilityDsl = require('../../abilitydsl');
 const EventRegistrar = require('../../eventregistrar.js');
 const { EventNames } = require('../../Constants');
 
-
 class MotoChagatai extends DrawCard {
     setupCardAbilities() {
         this.provinceBroken = false;

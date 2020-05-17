@@ -10,7 +10,7 @@ describe('Heavy Ballista', function() {
                         hand: ['banzai']
                     },
                     player2: {
-                        inPlay: ['doji-whisperer', 'doji-challenger','asahina-artisan']
+                        inPlay: ['doji-whisperer', 'doji-challenger', 'asahina-artisan']
                     }
                 });
                 this.heavyBallista = this.player1.placeCardInProvince('heavy-ballista', 'province 1');
@@ -135,9 +135,7 @@ describe('Heavy Ballista', function() {
                         expect(this.player2).toHavePrompt('Conflict Action Window');
                     });
                 });
-
             });
-
         });
     });
 });

@@ -7,7 +7,7 @@ describe('Heartless Intimidator', function () {
                     player1: {
                         honor: 6,
                         inPlay: ['heartless-intimidator'],
-                        hand: ['backhanded-compliment','policy-debate']
+                        hand: ['backhanded-compliment', 'policy-debate']
                     },
                     player2: {
                         honor: 10,

@@ -6,7 +6,7 @@ describe('Seppun Truthseeker', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['seppun-truthseeker'],
-                        hand: ['ornate-fan','fine-katana']
+                        hand: ['ornate-fan', 'fine-katana']
                     },
                     player2: {
                         inPlay: [],

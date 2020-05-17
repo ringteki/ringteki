@@ -24,7 +24,6 @@ describe('Benevolent Host', function() {
                 this.kakitaYoshi = this.player1.placeCardInProvince('kakita-yoshi', 'province 4');
 
                 this.orator = this.player2.placeCardInProvince('ikoma-orator', 'province 1');
-
             });
 
             it('should trigger after being played', function() {

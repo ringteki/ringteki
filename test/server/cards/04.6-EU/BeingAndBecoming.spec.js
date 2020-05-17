@@ -33,7 +33,7 @@ describe('Being And Becoming', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['togashi-initiate','togashi-mendicant'],
+                        inPlay: ['togashi-initiate', 'togashi-mendicant'],
                         hand: ['being-and-becoming']
                     },
                     player2: {

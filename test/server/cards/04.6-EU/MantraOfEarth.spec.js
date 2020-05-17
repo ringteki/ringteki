@@ -7,7 +7,7 @@ describe('Mantra of Earth', function () {
                     player2: {
                         provinces: ['kuroi-mori'],
                         inPlay: ['child-of-the-plains', 'togashi-initiate'],
-                        hand: ['spreading-the-darkness', 'mantra-of-earth','tattooed-wanderer']
+                        hand: ['spreading-the-darkness', 'mantra-of-earth', 'tattooed-wanderer']
                     },
                     player1: {
                         inPlay: ['solemn-scholar'],

@@ -35,5 +35,6 @@ class UtakuRumaru extends DrawCard {
 }
 
 UtakuRumaru.id = 'utaku-rumaru';
+
 module.exports = UtakuRumaru;
 

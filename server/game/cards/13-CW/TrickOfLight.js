@@ -19,4 +19,5 @@ class TrickOfTheLight extends DrawCard {
 }
 
 TrickOfTheLight.id = 'trick-of-the-light';
+
 module.exports = TrickOfTheLight;

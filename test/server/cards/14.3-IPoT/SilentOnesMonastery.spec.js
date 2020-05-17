@@ -167,7 +167,7 @@ describe('Silent Ones Monastery', function() {
                     phase: 'conflict',
                     player1: {
                         fate: 30,
-                        inPlay: ['daidoji-uji','ikoma-prodigy'],
+                        inPlay: ['daidoji-uji', 'ikoma-prodigy'],
                         provinces: ['manicured-garden', 'shameful-display', 'fertile-fields']
                     },
                     player2: {

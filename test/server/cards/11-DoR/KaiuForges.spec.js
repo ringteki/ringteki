@@ -5,7 +5,7 @@ describe('Kaiu Forges', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        dynastyDiscard: ['kaiu-forges', 'imperial-storehouse', 'seventh-tower', 'watchtower-of-valor' ,'favorable-ground', 'ancestral-armory', 'ancestral-shrine', 'hida-kisada', 'artisan-academy', 'forgotten-library', 'hall-of-victories'],
+                        dynastyDiscard: ['kaiu-forges', 'imperial-storehouse', 'seventh-tower', 'watchtower-of-valor', 'favorable-ground', 'ancestral-armory', 'ancestral-shrine', 'hida-kisada', 'artisan-academy', 'forgotten-library', 'hall-of-victories'],
                         dynastyDeckSize: 4
                     }
                 });

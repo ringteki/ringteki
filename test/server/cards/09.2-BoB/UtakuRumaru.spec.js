@@ -9,7 +9,7 @@ describe('Utaku Rumaru', function() {
                         hand: ['fine-katana']
                     },
                     player2: {
-                        inPlay: ['shinjo-outrider','shinjo-scout']
+                        inPlay: ['shinjo-outrider', 'shinjo-scout']
                     }
                 });
                 this.rumaru = this.player1.findCardByName('utaku-rumaru');

@@ -13,7 +13,7 @@ describe('Asahina Maeko', function() {
                     },
                     player2: {
                         inPlay: ['callow-delegate', 'brash-samurai'],
-                        hand: ['way-of-the-crane', 'ornate-fan','steward-of-law'],
+                        hand: ['way-of-the-crane', 'ornate-fan', 'steward-of-law'],
                         conflictDiscard: ['right-hand-of-the-emperor'],
                         fate: 10,
                         honor: 15

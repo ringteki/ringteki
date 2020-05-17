@@ -62,7 +62,6 @@ describe('Shiro Kitsuki', function() {
                 expect(this.game.rings.earth.isUnclaimed()).toBe(false);
             });
 
-
             it('should work with cards other than the first card played in a conflict (ready for battle as a reaction)', function() {
                 this.player1.clickCard(this.shiroKitsuki);
                 this.player1.chooseCardInPrompt(this.readyForBattle.name, 'card-name');

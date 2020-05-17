@@ -5,8 +5,8 @@ describe('Speak to the Heart', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['border-rider','miya-mystic'],
-                        hand: ['speak-to-the-heart','speak-to-the-heart']
+                        inPlay: ['border-rider', 'miya-mystic'],
+                        hand: ['speak-to-the-heart', 'speak-to-the-heart']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

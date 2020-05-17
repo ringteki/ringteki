@@ -24,7 +24,6 @@ class KikuMatsuri extends ProvinceCard {
             effectArgs: context => [context.targets.myCharacter, context.targets.oppCharacter]
         });
     }
-
 }
 
 KikuMatsuri.id = 'kiku-matsuri';

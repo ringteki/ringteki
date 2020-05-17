@@ -117,7 +117,6 @@ describe('Shinsei\'s Last Hope', function() {
             this.player1.clickCard(this.charge);
             this.player1.clickCard(this.chagatai);
 
-
             expect(this.chagatai.location).toBe('play area');
             expect(this.chagatai.isDishonored).toBe(false);
         });

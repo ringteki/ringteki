@@ -29,7 +29,6 @@ describe('Imperial Storehouse', function () {
                 this.newCard = this.player1.player.getDynastyCardInProvince('province 1');
                 expect(this.newCard).not.toBeUndefined();
             });
-
         });
     });
 });

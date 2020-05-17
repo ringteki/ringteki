@@ -34,7 +34,7 @@ function FormatTitles(titles) {
             return title + ' or ' + string;
         }
         return title + ', ' + string;
-    },'');
+    }, '');
 }
 
 const AbilityWindowTitles = {

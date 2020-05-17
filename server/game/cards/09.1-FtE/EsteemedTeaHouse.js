@@ -26,7 +26,6 @@ class EsteemedTeaHouse extends DrawCard {
     }
 }
 
-
 EsteemedTeaHouse.id = 'esteemed-tea-house';
 
 module.exports = EsteemedTeaHouse;

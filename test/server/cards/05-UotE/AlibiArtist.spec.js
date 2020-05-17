@@ -6,7 +6,7 @@ describe('Alibi Artist', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['alibi-artist'],
-                        hand: ['reprieve','fine-katana','ornate-fan']
+                        hand: ['reprieve', 'fine-katana', 'ornate-fan']
                     },
                     player2: {
                     }

@@ -17,7 +17,6 @@ describe('Adept of the Waves', function() {
                 this.kitsuSpiritcaller = this.player2.findCardByName('kitsu-spiritcaller');
                 this.cloudTheMind = this.player2.findCardByName('cloud-the-mind');
                 this.entrenchedPosition = this.player2.findCardByName('entrenched-position');
-
             });
 
             it('should be able to grant covert to any character', function() {

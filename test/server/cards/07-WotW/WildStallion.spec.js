@@ -5,13 +5,12 @@ describe('Wild Stallion', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['wild-stallion', 'moto-youth','iuchi-wayfinder']
+                        inPlay: ['wild-stallion', 'moto-youth', 'iuchi-wayfinder']
                     }
                 });
                 this.wildStallion = this.player1.findCardByName('wild-stallion');
                 this.motoYouth = this.player1.findCardByName('moto-youth');
                 this.wayfinder = this.player1.findCardByName('iuchi-wayfinder');
-
             });
 
             it('should not trigger if there is no current conflict', function () {

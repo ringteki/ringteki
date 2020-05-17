@@ -89,7 +89,6 @@ describe('Stolen Breath', function() {
                     expect(this.togashiKazue.bowed).toBe(true);
                 });
             });
-
         });
     });
 });

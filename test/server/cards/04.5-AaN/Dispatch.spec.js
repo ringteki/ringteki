@@ -5,7 +5,7 @@ describe('Dispatch', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['moto-youth','miya-mystic','moto-horde'],
+                        inPlay: ['moto-youth', 'miya-mystic', 'moto-horde'],
                         hand: ['dispatch']
                     },
                     player2: {

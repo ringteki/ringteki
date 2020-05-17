@@ -5,8 +5,8 @@ describe('setup phase', function() {
         beforeEach(function() {
             const deck = this.buildDeck('phoenix', [
                 'isawa-mori-seido',
-                'entrenched-position','fertile-fields','shameful-display','elemental-fury', 'meditations-on-the-tao',
-                'otomo-courtier','otomo-courtier','otomo-courtier','otomo-courtier','otomo-courtier',
+                'entrenched-position', 'fertile-fields', 'shameful-display', 'elemental-fury', 'meditations-on-the-tao',
+                'otomo-courtier', 'otomo-courtier', 'otomo-courtier', 'otomo-courtier', 'otomo-courtier',
                 'banzai', 'banzai', 'banzai', 'banzai', 'banzai'
             ]);
             this.player1.selectDeck(deck);

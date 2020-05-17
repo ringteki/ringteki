@@ -5,7 +5,7 @@ describe('Hawk Tattoo', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['tattooed-wanderer', 'agasha-swordsmith' , 'ancient-master'],
+                        inPlay: ['tattooed-wanderer', 'agasha-swordsmith', 'ancient-master'],
                         hand: ['hawk-tattoo']
                     },
                     player2: {
@@ -18,7 +18,7 @@ describe('Hawk Tattoo', function() {
                 this.seppunGuardsman = this.player2.findCardByName('seppun-guardsman');
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: ['ancient-master','agasha-swordsmith'],
+                    attackers: ['ancient-master', 'agasha-swordsmith'],
                     defenders: ['seppun-guardsman']
                 });
                 this.player2.pass();

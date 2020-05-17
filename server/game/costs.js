@@ -241,7 +241,6 @@ const Costs = {
 
                 let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
                 return action.getEvent(context.player, context);
-
             },
             promptsPlayer: true
         };
@@ -537,7 +536,6 @@ const Costs = {
 
                 let action = context.game.actions.handler(); //this is a do-nothing event to allow you to opt out and not scuttle the event
                 return action.getEvent(context.player, context);
-
             },
             promptsPlayer: true
         };

@@ -3,7 +3,6 @@ const { Durations, CardTypes } = require('../../Constants');
 
 class HisuMoriToride extends StrongholdCard {
     setupCardAbilities(ability) {
-
         this.reaction({
             title: 'Gain additional military conflict',
             when: {

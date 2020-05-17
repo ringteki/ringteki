@@ -120,7 +120,6 @@ describe('Player', function() {
                     expect(this.card.attachments).not.toContain(this.attachment);
                 });
             });
-
         });
 
         describe('when the target location is the conflict deck', function() {
@@ -165,6 +164,5 @@ describe('Player', function() {
                 expect(this.player.cardsInPlay.toArray()).toEqual([this.card]);
             });
         });
-
     });
 });

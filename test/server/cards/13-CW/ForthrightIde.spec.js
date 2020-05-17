@@ -5,7 +5,7 @@ describe('Forthright Ide', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['forthright-ide','yogo-outcast', 'kakita-toshimoko'],
+                        inPlay: ['forthright-ide', 'yogo-outcast', 'kakita-toshimoko'],
                         hand: ['let-go']
                     },
                     player2: {

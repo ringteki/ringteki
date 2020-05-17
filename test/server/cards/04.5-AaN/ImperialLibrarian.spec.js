@@ -5,8 +5,8 @@ describe('Imperial Librarian', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['imperial-librarian','agasha-sumiko'],
-                        hand: ['formal-invitation','charge']
+                        inPlay: ['imperial-librarian', 'agasha-sumiko'],
+                        hand: ['formal-invitation', 'charge']
                     },
                     player2: {
                         inPlay: ['akodo-toturi']
@@ -24,7 +24,6 @@ describe('Imperial Librarian', function() {
                 expect(this.toturi.glory).toBe(4);
                 expect(this.sumiko.glory).toBe(2);
             });
-
         });
     });
 });

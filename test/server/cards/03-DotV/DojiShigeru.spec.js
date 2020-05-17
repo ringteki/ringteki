@@ -9,7 +9,7 @@ describe('Doji Shigeru', function() {
                     },
                     player2: {
                         inPlay: ['kaiu-envoy'],
-                        hand: ['fine-katana','kami-unleashed','banzai','court-games']
+                        hand: ['fine-katana', 'kami-unleashed', 'banzai', 'court-games']
                     }
                 });
                 this.dojiShigeru = this.player1.findCardByName('doji-shigeru');

@@ -4,7 +4,7 @@ const { CardTypes } = require('../../Constants');
 class IsawaMasahiro extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
-            title: 'Bow to discard an enemy character' ,
+            title: 'Bow to discard an enemy character',
             condition: () => this.game.isDuringConflict('fire'),
             cost: ability.costs.bowSelf(),
             target: {

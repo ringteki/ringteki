@@ -56,5 +56,6 @@ class KyudenHida extends StrongholdCard {
 }
 
 KyudenHida.id = 'kyuden-hida';
+
 module.exports = KyudenHida;
 

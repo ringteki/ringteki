@@ -67,7 +67,6 @@ describe('Inspired Visionary', function() {
             expect(this.getChatLogs(3)).toContain('player2 is shuffling their conflict deck');
         });
 
-
         it('should allow bowing to shuffle an attachment back into the deck and have the owner draw a card (switching owner)', function() {
             this.player1.playAttachment(this.katana, this.kuwanan);
             this.player2.playAttachment(this.jade, this.toshimoko);

@@ -22,7 +22,6 @@ describe('Embrace Death', function() {
                 this.kuniYori = this.player2.findCardByName('kuni-yori');
 
                 this.noMoreActions();
-
             });
 
             it('should let you trigger it when you lose a conflict with a bushi and discard an enemy character without fate', function () {

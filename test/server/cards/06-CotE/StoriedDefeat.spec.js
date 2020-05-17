@@ -5,7 +5,7 @@ describe('Storied Defeat', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['mirumoto-raitsugu','doomed-shugenja'],
+                        inPlay: ['mirumoto-raitsugu', 'doomed-shugenja'],
                         hand: ['magnificent-triumph', 'storied-defeat']
                     },
                     player2: {

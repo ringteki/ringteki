@@ -5,7 +5,7 @@ describe('Soshi Shiori', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-liar','soshi-shiori'],
+                        inPlay: ['bayushi-liar', 'soshi-shiori'],
                         honor: 12
                     },
                     player2: {

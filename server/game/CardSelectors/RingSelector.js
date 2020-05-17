@@ -15,7 +15,6 @@ class RingSelector extends BaseCardSelector {
     defaultActivePromptTitle() {
         return 'Choose a ring';
     }
-
 }
 
 module.exports = RingSelector;

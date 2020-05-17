@@ -7,7 +7,7 @@ describe('Inventive Mirumoto', function() {
                     player1: {
                         inPlay: ['inventive-mirumoto'],
                         hand: ['ornate-fan'],
-                        conflictDiscard: ['finger-of-jade', 'fine-katana', 'adorned-barcha','erudite-prestige', 'mirumoto-daisho']
+                        conflictDiscard: ['finger-of-jade', 'fine-katana', 'adorned-barcha', 'erudite-prestige', 'mirumoto-daisho']
                     },
                     player2: {
                         conflictDiscard: ['finger-of-jade']

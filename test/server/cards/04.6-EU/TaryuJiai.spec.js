@@ -6,7 +6,7 @@ describe('Taryu Jiai', function() {
                     phase: 'conflict',
                     player1: {
                         honor: 11,
-                        inPlay: ['soshi-illusionist','bayushi-shoju'],
+                        inPlay: ['soshi-illusionist', 'bayushi-shoju'],
                         hand: ['taryu-jiai']
                     },
                     player2: {

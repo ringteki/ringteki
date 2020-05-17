@@ -65,7 +65,6 @@ describe('Shinomen Wayfinders', function() {
                 this.player1.clickPrompt('Conflict');
                 expect(this.player1.player.fate).toBe(4);
             });
-
         });
     });
 });

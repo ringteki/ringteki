@@ -5,7 +5,7 @@ describe('Jewel of the Khamasin', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['moto-youth','shinjo-scout'],
+                        inPlay: ['moto-youth', 'shinjo-scout'],
                         hand: ['jewel-of-the-khamasin']
                     },
                     player2: {

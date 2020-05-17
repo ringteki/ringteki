@@ -20,7 +20,6 @@ describe('Tainted Hero', function() {
                 });
 
                 it('should not be allowed to be declared as an attacker', function() {
-
                     // skip pre-conflict action phase
                     this.noMoreActions();
 
@@ -41,7 +40,6 @@ describe('Tainted Hero', function() {
                 });
 
                 it('should be allowed to be declared as an attacker after sacrificing a friendly character', function() {
-
                     // pre-conflict actions
                     expect(this.player1).toHavePrompt('Initiate an action');
                     this.player1.clickCard(this.taintedHero);
@@ -83,7 +81,6 @@ describe('Tainted Hero', function() {
                 });
 
                 it('should not be allowed to be declared as an defender', function() {
-
                     // skip pre-conflict action phase
                     this.noMoreActions();
 
@@ -107,7 +104,6 @@ describe('Tainted Hero', function() {
                 });
 
                 it('should be allowed to be declared as a defender after sacrificing a friendly character', function() {
-
                     // pre-conflict actions
                     expect(this.player1).toHavePrompt('Initiate an action');
                     this.player1.pass();

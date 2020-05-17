@@ -31,7 +31,6 @@ describe('Borderlands Fortification', function () {
                 expect(this.facedownCard.location).toBe('province 2');
                 expect(this.borderlandsFortification.location).toBe('province 3');
             });
-
         });
     });
 });

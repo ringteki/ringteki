@@ -20,5 +20,6 @@ class WinterCourtHosts extends DrawCard {
 }
 
 WinterCourtHosts.id = 'winter-court-hosts';
+
 module.exports = WinterCourtHosts;
 

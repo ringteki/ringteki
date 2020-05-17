@@ -5,7 +5,7 @@ describe('Honed Nodachi', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shrewd-yasuki','intimidating-hida'],
+                        inPlay: ['shrewd-yasuki', 'intimidating-hida'],
                         hand: ['honed-nodachi']
                     },
                     player2: {
@@ -33,11 +33,11 @@ describe('Honed Nodachi', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['intimidating-hida','shrewd-yasuki'],
-                        hand: ['honed-nodachi','assassination']
+                        inPlay: ['intimidating-hida', 'shrewd-yasuki'],
+                        hand: ['honed-nodachi', 'assassination']
                     },
                     player2: {
-                        inPlay: ['student-of-war','eager-scout'],
+                        inPlay: ['student-of-war', 'eager-scout'],
                         hand: ['game-of-sadane']
                     }
                 });
@@ -58,7 +58,7 @@ describe('Honed Nodachi', function() {
                 this.initiateConflict({
                     type: 'military',
                     attackers: ['intimidating-hida'],
-                    defenders: ['student-of-war','eager-scout']
+                    defenders: ['student-of-war', 'eager-scout']
                 });
                 this.player2.pass();
             });

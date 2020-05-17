@@ -5,7 +5,7 @@ describe('Magistrate Station', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['doji-whisperer','doji-hotaru'],
+                        inPlay: ['doji-whisperer', 'doji-hotaru'],
                         provinces: ['magistrate-station']
                     },
                     player2: {
@@ -31,7 +31,6 @@ describe('Magistrate Station', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.whisperer);
                 expect(this.player1).not.toBeAbleToSelect(this.scout);
             });
-
 
             it('should ready chosen character', function() {
                 this.hotaru.honor();

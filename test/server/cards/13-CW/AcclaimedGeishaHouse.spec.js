@@ -44,7 +44,6 @@ describe('Acclaimed Geisha House', function() {
             expect(this.player1).not.toBeAbleToSelect(this.nergui);
         });
 
-
         it('should let you select a ring after you dishonor a character', function() {
             this.noMoreActions();
             this.initiateConflict({

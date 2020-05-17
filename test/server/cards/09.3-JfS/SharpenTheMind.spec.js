@@ -56,7 +56,6 @@ describe('Sharpen the Mind', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.guidanceOfTheAncestors);
             });
 
-
             it('should discard the chosen card', function() {
                 this.noMoreActions();
                 this.initiateConflict({

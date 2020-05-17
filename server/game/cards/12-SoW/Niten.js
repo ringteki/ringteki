@@ -14,7 +14,6 @@ const nitenCaptureParentCost = function() {
         pay: function() {
         }
     };
-
 };
 
 class Niten extends DrawCard {

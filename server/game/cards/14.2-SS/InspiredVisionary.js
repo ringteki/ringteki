@@ -31,4 +31,3 @@ InspiredVisionary.id = 'inspired-visionary';
 
 module.exports = InspiredVisionary;
 
-

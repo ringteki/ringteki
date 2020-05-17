@@ -33,5 +33,6 @@ class Gossip extends DrawCard {
 }
 
 Gossip.id = 'gossip';
+
 module.exports = Gossip;
 

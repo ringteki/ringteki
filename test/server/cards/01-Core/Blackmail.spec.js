@@ -91,7 +91,6 @@ describe('Blackmail', function() {
                     this.player1.clickCard(this.shibaPeacemaker);
                 });
 
-
                 it('should send the character to the blackmailing players home, bowed', function() {
                     expect(this.shibaPeacemaker.inConflict).toBe(false);
                     expect(this.shibaPeacemaker.bowed).toBe(true);

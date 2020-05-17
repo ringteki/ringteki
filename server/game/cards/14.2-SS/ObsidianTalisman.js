@@ -18,4 +18,3 @@ ObsidianTalisman.id = 'obsidian-talisman';
 
 module.exports = ObsidianTalisman;
 
-

@@ -19,4 +19,3 @@ MiyaMystic.id = 'miya-mystic';
 
 module.exports = MiyaMystic;
 
-

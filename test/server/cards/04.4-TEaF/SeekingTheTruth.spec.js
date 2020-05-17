@@ -74,7 +74,6 @@ describe('Seeking The Truth', function() {
                 expect(this.scout.inConflict).toBe(false);
                 expect(this.scout.bowed).toBe(false);
             });
-
         });
     });
 });

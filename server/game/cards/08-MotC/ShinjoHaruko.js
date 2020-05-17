@@ -18,5 +18,6 @@ class ShinjoHaruko extends DrawCard {
 }
 
 ShinjoHaruko.id = 'shinjo-haruko';
+
 module.exports = ShinjoHaruko;
 

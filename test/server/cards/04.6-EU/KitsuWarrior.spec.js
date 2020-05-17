@@ -8,15 +8,13 @@ describe('Kitsu Warrior', function () {
                         inPlay: ['kitsu-warrior']
                     },
                     player2: {
-                        inPlay: ['doomed-shugenja','eager-scout'],
+                        inPlay: ['doomed-shugenja', 'eager-scout'],
                         hand: ['cloud-the-mind']
                     }
                 });
                 this.kitsu = this.player1.findCardByName('kitsu-warrior');
                 this.shug = this.player2.findCardByName('doomed-shugenja');
                 this.cloud = this.player2.findCardByName('cloud-the-mind');
-
-
             });
 
             it('should correctly give 2 military skill for each military claimed ring', function () {

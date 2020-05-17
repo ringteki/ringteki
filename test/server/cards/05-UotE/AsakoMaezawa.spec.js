@@ -8,7 +8,7 @@ describe('Asako Maezawa', function() {
                         inPlay: ['asako-maezawa', 'adept-of-the-waves']
                     },
                     player2: {
-                        inPlay: ['shinjo-outrider','shinjo-scout']
+                        inPlay: ['shinjo-outrider', 'shinjo-scout']
                     }
                 });
                 this.asako = this.player1.findCardByName('asako-maezawa');

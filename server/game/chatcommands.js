@@ -240,7 +240,6 @@ class ChatCommands {
             waitingPromptTitle: 'Waiting for opponent to set fate',
             cardCondition: card => (card.location === Locations.PlayArea) && card.controller === player,
             onSelect: (p, card) => {
-
                 card.modifyFate(num);
                 this.game.addMessage('{0} uses the /add-fate command to set the fate count of {1} to {2}', p, card, card.getFate());
 
@@ -257,7 +256,6 @@ class ChatCommands {
             waitingPromptTitle: 'Waiting for opponent to set fate',
             cardCondition: card => (card.location === Locations.PlayArea) && card.controller === player,
             onSelect: (p, card) => {
-
                 card.modifyFate(-num);
                 this.game.addMessage('{0} uses the /rem-fate command to set the fate count of {1} to {2}', p, card, card.getFate());
 
@@ -270,7 +268,7 @@ class ChatCommands {
         let ringElement = (args[1]);
         let num = this.getNumberOrDefault(args[2], 1);
 
-        if(_.contains(['air','earth','fire','void','water'], ringElement)) {
+        if(_.contains(['air', 'earth', 'fire', 'void', 'water'], ringElement)) {
             let ring = this.game.rings[ringElement];
 
             ring.modifyFate(num);
@@ -292,7 +290,7 @@ class ChatCommands {
         let ringElement = (args[1]);
         let num = this.getNumberOrDefault(args[2], 1);
 
-        if(_.contains(['air','earth','fire','void','water'], ringElement)) {
+        if(_.contains(['air', 'earth', 'fire', 'void', 'water'], ringElement)) {
             let ring = this.game.rings[ringElement];
 
             ring.modifyFate(-num);
@@ -313,7 +311,7 @@ class ChatCommands {
     claimRing(player, args) {
         let ringElement = (args[1]);
 
-        if(_.contains(['air','earth','fire','void','water'], ringElement)) {
+        if(_.contains(['air', 'earth', 'fire', 'void', 'water'], ringElement)) {
             let ring = this.game.rings[ringElement];
 
             ring.claimRing(player);
@@ -334,7 +332,7 @@ class ChatCommands {
     unclaimRing(player, args) {
         let ringElement = (args[1]);
 
-        if(_.contains(['air','earth','fire','void','water'], ringElement)) {
+        if(_.contains(['air', 'earth', 'fire', 'void', 'water'], ringElement)) {
             let ring = this.game.rings[ringElement];
 
             ring.resetRing();

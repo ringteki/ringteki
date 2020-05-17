@@ -12,4 +12,5 @@ class ImperialLibrarian extends DrawCard {
 }
 
 ImperialLibrarian.id = 'imperial-librarian';
+
 module.exports = ImperialLibrarian;

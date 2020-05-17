@@ -17,7 +17,6 @@ const { sortBy } = require('./Array');
 
 const Factions = require('./game/Factions');
 
-
 class Lobby {
     constructor(server, options = {}) {
         this.sockets = {};
@@ -863,7 +862,7 @@ class Lobby {
     }
 
     onWorkerStarted(nodeName) {
-        Promise.all([this.cardService.getAllCards(), this.cardService.getAllPacks() ])
+        Promise.all([this.cardService.getAllCards(), this.cardService.getAllPacks()])
             .then(results => {
                 let [cards, packs] = results;
                 this.router.sendCommand(nodeName, 'CARDDATA', { cardData: cards, packData: packs });

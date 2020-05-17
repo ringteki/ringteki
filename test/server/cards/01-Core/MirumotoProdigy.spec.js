@@ -32,6 +32,5 @@ describe('Mirumoto Prodigy', function() {
                 expect(this.game.currentConflict.defenders.length).toBe(2);
             });
         });
-
     });
 });

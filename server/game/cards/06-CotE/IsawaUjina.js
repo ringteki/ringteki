@@ -17,7 +17,6 @@ class IsawaUjina extends DrawCard {
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
     }
-
 }
 
 IsawaUjina.id = 'isawa-ujina';

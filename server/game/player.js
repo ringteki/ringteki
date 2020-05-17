@@ -19,7 +19,6 @@ const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, 
 class Player extends GameObject {
     constructor(id, user, owner, game, clockdetails) {
         super(game, user.username);
-        
 
         this.user = user;
         this.emailHash = this.user.emailHash;
@@ -232,7 +231,6 @@ class Player extends GameObject {
             (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
         });
     }
-
 
     areLocationsAdjacent(location1, location2) {
         let index1 = provinceLocations.indexOf(location1);
@@ -1015,7 +1013,6 @@ class Player extends GameObject {
         if(!card) {
             return false;
         }
-
 
         const conflictCardLocations = [Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
         const dynastyCardLocations = [...provinceLocations, Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];

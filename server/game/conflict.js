@@ -115,7 +115,6 @@ class Conflict extends GameObject {
         this.markAsParticipating([defender]);
     }
 
-
     hasElement(element) {
         return this.elements.includes(element);
     }

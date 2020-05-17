@@ -36,7 +36,6 @@ class ConflictEvent extends DrawCard {
 
         return super.canPlay();
     }
-
 }
 
 module.exports = ConflictEvent;

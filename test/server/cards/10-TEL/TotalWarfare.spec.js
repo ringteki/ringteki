@@ -5,7 +5,7 @@ describe('Total Warfare', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['akodo-zentaro', 'matsu-berserker'],
-                    hand: ['total-warfare','total-warfare']
+                    hand: ['total-warfare', 'total-warfare']
                 },
                 player2: {
                     inPlay: ['samurai-of-integrity', 'akodo-toturi'],

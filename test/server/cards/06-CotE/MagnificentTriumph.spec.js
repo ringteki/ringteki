@@ -5,7 +5,7 @@ describe('Magnificent Triumph', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['mirumoto-raitsugu','doomed-shugenja'],
+                        inPlay: ['mirumoto-raitsugu', 'doomed-shugenja'],
                         hand: ['magnificent-triumph']
                     },
                     player2: {
@@ -74,7 +74,6 @@ describe('Magnificent Triumph', function() {
                 expect(this.mirumotoRaitsugu.getMilitarySkill()).toBe(militarySkill);
                 expect(this.mirumotoRaitsugu.getPoliticalSkill()).toBe(politicalSkill);
             });
-
         });
     });
 });

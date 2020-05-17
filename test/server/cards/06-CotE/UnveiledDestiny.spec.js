@@ -58,7 +58,6 @@ describe('Unveiled Destiny', function() {
                 this.noMoreActions();
                 this.player1.clickRing('air');
                 expect(this.player1).toHavePrompt('Air Ring');
-
             });
 
             it('should allow defend the wall to resolve the attackers role element.', function() {

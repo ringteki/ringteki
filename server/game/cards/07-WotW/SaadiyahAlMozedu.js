@@ -19,7 +19,6 @@ class SaadiyahAlMozedu extends DrawCard {
     }
 }
 
-
 SaadiyahAlMozedu.id = 'saadiyah-al-mozedu';
 
 module.exports = SaadiyahAlMozedu;

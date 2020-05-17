@@ -6,10 +6,10 @@ describe('Hand to Hand', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['doji-whisperer', 'savvy-politician'],
-                        hand: ['fine-katana', 'ornate-fan','hand-to-hand']
+                        hand: ['fine-katana', 'ornate-fan', 'hand-to-hand']
                     },
                     player2: {
-                        inPlay: ['borderlands-defender', 'intimidating-hida','steadfast-witch-hunter'],
+                        inPlay: ['borderlands-defender', 'intimidating-hida', 'steadfast-witch-hunter'],
                         hand: ['cloud-the-mind', 'reprieve']
                     }
                 });

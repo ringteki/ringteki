@@ -9,7 +9,7 @@ describe('Wicked Tetsubo', function() {
                         hand: ['wicked-tetsubo']
                     },
                     player2: {
-                        inPlay: ['matsu-berserker','venerable-historian']
+                        inPlay: ['matsu-berserker', 'venerable-historian']
                     }
                 });
 

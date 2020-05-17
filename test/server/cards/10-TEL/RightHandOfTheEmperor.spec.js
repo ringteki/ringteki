@@ -9,7 +9,7 @@ describe('Right Hand of the Emperor', function() {
                         hand: ['right-hand-of-the-emperor', 'sharpen-the-mind']
                     },
                     player2: {
-                        inPlay: ['naive-student','doji-kuwanan'],
+                        inPlay: ['naive-student', 'doji-kuwanan'],
                         hand: ['voice-of-honor', 'way-of-the-crane']
                     }
                 });
@@ -233,7 +233,6 @@ describe('Right Hand of the Emperor', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-
             it('same copy should be playable from discard if cancelled from hand', function() {
                 this.player1.player.honor = 11;
                 this.player2.player.honor = 5;
@@ -328,7 +327,7 @@ describe('Right Hand of the Emperor', function() {
                         hand: ['voice-of-honor', 'way-of-the-crane', 'assassination', 'right-hand-of-the-emperor', 'censure', 'levy']
                     },
                     player2: {
-                        inPlay: ['brash-samurai','doji-kuwanan'],
+                        inPlay: ['brash-samurai', 'doji-kuwanan'],
                         hand: ['stolen-secrets']
                     }
                 });
@@ -379,7 +378,6 @@ describe('Right Hand of the Emperor', function() {
             });
 
             it('should go to the owners discard if played by non-owner and cancelled', function() {
-
                 this.player1.clickCard('way-of-the-crane');
                 this.player1.clickCard(this.dojiChallenger);
                 expect(this.dojiChallenger.isHonored).toBe(true);
@@ -405,7 +403,7 @@ describe('Right Hand of the Emperor', function() {
                     phase: 'draw',
                     player1: {
                         honor: 5,
-                        inPlay: ['guest-of-honor','master-of-gisei-toshi','utaku-tetsuko','akodo-toturi-2']
+                        inPlay: ['guest-of-honor', 'master-of-gisei-toshi', 'utaku-tetsuko', 'akodo-toturi-2']
                     },
                     player2: {
                         honor: 11,
@@ -492,7 +490,7 @@ describe('Right Hand of the Emperor', function() {
                     phase: 'draw',
                     player1: {
                         honor: 5,
-                        inPlay: ['guest-of-honor','master-of-gisei-toshi','utaku-tetsuko','akodo-toturi-2']
+                        inPlay: ['guest-of-honor', 'master-of-gisei-toshi', 'utaku-tetsuko', 'akodo-toturi-2']
                     },
                     player2: {
                         honor: 11,

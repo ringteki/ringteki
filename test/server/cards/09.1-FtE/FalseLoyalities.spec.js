@@ -5,7 +5,7 @@ describe('False Loyalites', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['matsu-berserker','shinjo-shono', 'shrine-maiden'],
+                        inPlay: ['matsu-berserker', 'shinjo-shono', 'shrine-maiden'],
                         honor: 10
                     },
                     player2: {

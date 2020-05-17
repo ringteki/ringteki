@@ -8,7 +8,7 @@ class Overhear extends DrawCard {
         this.action({
             title: 'Place random card on top of deck',
             effect: 'reveal a random card from {1}\'s hand and place it on top of {1}\'s deck',
-            effectArgs: context=> [context.player.opponent],
+            effectArgs: context => [context.player.opponent],
             gameAction:AbilityDsl.actions.sequential([AbilityDsl.actions.moveCard(context => ({
                 target: context.player.opponent && context.player.opponent.hand.shuffle().slice(0, 1),
                 destination: Locations.ConflictDeck

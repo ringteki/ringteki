@@ -6,7 +6,7 @@ describe('Favorable Ground', function () {
                     phase: 'conflict',
                     player1: {
                         dynastyDiscard: ['favorable-ground'],
-                        inPlay: ['adept-of-the-waves', 'asako-diplomat', 'naive-student','shiba-peacemaker']
+                        inPlay: ['adept-of-the-waves', 'asako-diplomat', 'naive-student', 'shiba-peacemaker']
                     },
                     player2: {
                         inPlay: ['bayushi-manipulator']
@@ -94,7 +94,6 @@ describe('Favorable Ground', function () {
                     });
                 });
             });
-
         });
     });
 });

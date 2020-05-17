@@ -5,7 +5,7 @@ describe('Makeshift War Camp', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['ikoma-prodigy', 'akodo-toturi', 'doji-kuwanan'],
-                    hand: ['makeshift-war-camp','total-warfare']
+                    hand: ['makeshift-war-camp', 'total-warfare']
                 },
                 player2: {
                     inPlay: ['matsu-tsuko-2'],

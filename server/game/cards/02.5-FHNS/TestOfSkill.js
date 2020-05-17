@@ -27,7 +27,6 @@ const testOfSkillCost = function() {
         pay: function() {
         }
     };
-
 };
 
 class TestOfSkill extends DrawCard {
@@ -43,7 +42,7 @@ class TestOfSkill extends DrawCard {
             handler: context => {
                 let [matchingCards, cardsToDiscard] = _.partition(context.costs.reveal, card => card.type === context.costs.testOfSkillCost && card.location === Locations.ConflictDeck);
                 //Handle situations where card is played from deck, such as with pillow book
-                matchingCards = _.reject(matchingCards, c=> c.uuid === context.source.uuid);
+                matchingCards = _.reject(matchingCards, c => c.uuid === context.source.uuid);
 
                 let discardHandler = () => {
                     cardsToDiscard = cardsToDiscard.concat(matchingCards);

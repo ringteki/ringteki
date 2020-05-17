@@ -39,7 +39,7 @@ describe('Mirumoto Raitsugu', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['mirumoto-raitsugu','tattooed-wanderer']
+                        inPlay: ['mirumoto-raitsugu', 'tattooed-wanderer']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

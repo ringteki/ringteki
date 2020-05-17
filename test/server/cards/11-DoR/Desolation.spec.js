@@ -14,7 +14,7 @@ describe('Desolation', function() {
                         role: 'keeper-of-void',
                         inPlay: ['shinjo-outrider'],
                         hand: ['talisman-of-the-sun', 'mirumoto-s-fury'],
-                        provinces: ['rally-to-the-cause', 'secret-cache', 'fertile-fields','public-forum']
+                        provinces: ['rally-to-the-cause', 'secret-cache', 'fertile-fields', 'public-forum']
                     }
                 });
                 this.magistrateStation = this.player1.findCardByName('magistrate-station');

@@ -154,7 +154,6 @@ describe('Inferno Guard Invoker', function() {
                 this.player1.clickPrompt('No');
                 this.player1.clickCard(this.sereneWarrior);
 
-
                 this.player2.clickPrompt('Pass');
                 this.player2.clickCard(this.fushicho);
                 this.player2.clickPrompt('Done');

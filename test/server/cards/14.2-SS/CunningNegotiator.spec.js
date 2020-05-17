@@ -213,7 +213,6 @@ describe('Cunning Negotiator', function() {
             expect(this.player2.fate).toBe(fate + 1);
         });
 
-
         it('should do nothing if the attacked province has a reaction', function() {
             this.noMoreActions();
 

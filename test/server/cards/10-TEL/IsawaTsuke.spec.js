@@ -105,7 +105,6 @@ describe('Isawa Tsuke', function() {
 
             this.player2.clickPrompt('yes');
 
-
             expect(this.togashiInitiate.isDishonored).toBe(true);
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });

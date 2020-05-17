@@ -72,7 +72,6 @@ describe('Deceptive Offer', function() {
                 expect(this.player1.player.honor).toBe(11);
                 expect(this.player2.player.honor).toBe(9);
             });
-
         });
     });
 });

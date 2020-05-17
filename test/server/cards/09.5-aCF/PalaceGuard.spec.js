@@ -5,7 +5,7 @@ describe('Palace Guard', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['palace-guard','yogo-hiroue']
+                        inPlay: ['palace-guard', 'yogo-hiroue']
                     },
                     player2: {
                         inPlay: ['doji-challenger']
@@ -23,7 +23,7 @@ describe('Palace Guard', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: ['palace-guard','yogo-hiroue'],
+                    attackers: ['palace-guard', 'yogo-hiroue'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.hiroue);
@@ -36,12 +36,11 @@ describe('Palace Guard', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: ['palace-guard','yogo-hiroue'],
+                    attackers: ['palace-guard', 'yogo-hiroue'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.hiroue);
                 expect(this.game.currentConflict.attackers).toContain(this.palaceGuard);
-
             });
 
             it('should be able to declare as an attacker if opponent is more honorable', function() {
@@ -50,7 +49,7 @@ describe('Palace Guard', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: ['palace-guard','yogo-hiroue'],
+                    attackers: ['palace-guard', 'yogo-hiroue'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.hiroue);
@@ -63,7 +62,7 @@ describe('Palace Guard', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: ['palace-guard','yogo-hiroue'],
+                    attackers: ['palace-guard', 'yogo-hiroue'],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.hiroue);

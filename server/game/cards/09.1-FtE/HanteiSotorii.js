@@ -20,4 +20,5 @@ class HanteiSotorii extends DrawCard {
 }
 
 HanteiSotorii.id = 'hantei-sotorii';
+
 module.exports = HanteiSotorii;

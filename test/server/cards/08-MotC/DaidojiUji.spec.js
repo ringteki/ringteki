@@ -5,15 +5,15 @@ describe('Daidoji Uji', function() {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
-                        inPlay: ['daidoji-uji','akodo-toturi-2'],
-                        dynastyDiscard: ['doji-whisperer','kakita-kaezin'],
-                        hand: ['political-rival','way-of-the-crane','steward-of-law'],
+                        inPlay: ['daidoji-uji', 'akodo-toturi-2'],
+                        dynastyDiscard: ['doji-whisperer', 'kakita-kaezin'],
+                        hand: ['political-rival', 'way-of-the-crane', 'steward-of-law'],
                         fate: 10
                     }
                 });
 
-                this.dojiWhisperer = this.player1.placeCardInProvince('doji-whisperer','province 1');
-                this.kakitaKaezin = this.player1.placeCardInProvince('kakita-kaezin','province 2');
+                this.dojiWhisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 1');
+                this.kakitaKaezin = this.player1.placeCardInProvince('kakita-kaezin', 'province 2');
                 this.daidojiUji = this.player1.findCardByName('daidoji-uji');
                 this.politicalRival = this.player1.findCardByName('political-rival');
                 this.stewardOfLaw = this.player1.findCardByName('steward-of-law');

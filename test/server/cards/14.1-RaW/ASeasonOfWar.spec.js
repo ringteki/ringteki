@@ -206,7 +206,6 @@ describe('A Season of War', function() {
             });
         });
 
-
         describe('Testing that a dynasty event can only be played in the dynasty phase', function() {
             beforeEach(function() {
                 this.setupTest({

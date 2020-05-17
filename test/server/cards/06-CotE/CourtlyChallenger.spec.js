@@ -40,7 +40,6 @@ describe('Courtly Challenger', function() {
                 this.player2.clickPrompt('5');
                 expect(this.courtlyChallenger.isDishonored).toBe(true);
             });
-
         });
 
         describe('when the target leaves play during the duel', function() {
@@ -115,7 +114,6 @@ describe('Courtly Challenger', function() {
                 this.player2.clickPrompt('5');
                 expect(this.player2.player.hand.size()).toBe(handSize + 2);
             });
-
         });
     });
 });

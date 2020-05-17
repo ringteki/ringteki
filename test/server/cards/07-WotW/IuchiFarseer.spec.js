@@ -39,7 +39,6 @@ describe('Iuchi Farseer', function() {
                 expect(this.player1).toBeAbleToSelect(this.shamefulDisplay2);
                 this.player1.clickCard(this.shamefulDisplay2);
                 expect(this.shamefulDisplay2.facedown).toBe(false);
-
             });
         });
 

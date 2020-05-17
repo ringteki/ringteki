@@ -15,4 +15,3 @@ MotoOutrider.id = 'moto-outrider';
 
 module.exports = MotoOutrider;
 
-

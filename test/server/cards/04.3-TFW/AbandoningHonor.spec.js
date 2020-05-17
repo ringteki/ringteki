@@ -5,12 +5,12 @@ describe('Abandoning Honor', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['borderlands-defender','third-tower-guard'],
+                        inPlay: ['borderlands-defender', 'third-tower-guard'],
                         hand:['fine-katana']
                     },
                     player2: {
                         inPlay: ['bayushi-shoju'],
-                        hand: ['way-of-the-scorpion','fiery-madness'],
+                        hand: ['way-of-the-scorpion', 'fiery-madness'],
                         provinces: ['abandoning-honor']
                     }
                 });

@@ -5,7 +5,7 @@ describe('Shosuro Takao', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shosuro-takao','yogo-outcast']
+                        inPlay: ['shosuro-takao', 'yogo-outcast']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']

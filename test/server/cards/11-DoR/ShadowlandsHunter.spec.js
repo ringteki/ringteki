@@ -5,7 +5,7 @@ describe('Shadowlands Hunter', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shadowlands-hunter','yogo-outcast'],
+                        inPlay: ['shadowlands-hunter', 'yogo-outcast'],
                         hand: ['display-of-power']
                     },
                     player2: {

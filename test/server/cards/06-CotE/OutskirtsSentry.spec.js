@@ -5,12 +5,12 @@ describe('Outskirts Sentry', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['outskirts-sentry','shinjo-outrider','shinjo-scout'],
+                        inPlay: ['outskirts-sentry', 'shinjo-outrider', 'shinjo-scout'],
                         hand: ['favored-mount'],
                         dynastyDeck: ['favorable-ground']
                     },
                     player2: {
-                        inPlay: ['shinjo-outrider','matsu-berserker']
+                        inPlay: ['shinjo-outrider', 'matsu-berserker']
                     }
                 });
                 this.fg = this.player1.placeCardInProvince('favorable-ground', 'province 1');

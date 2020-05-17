@@ -115,7 +115,6 @@ class RegroupPhase extends Phase {
     roundEnded() {
         this.game.raiseEvent(EventNames.OnRoundEnded);
     }
-
 }
 
 module.exports = RegroupPhase;

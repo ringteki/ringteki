@@ -56,7 +56,6 @@ describe('Iron Mine', function() {
                     this.newCard = this.player1.player.getDynastyCardInProvince('province 1');
                     expect(this.newCard).not.toBeUndefined();
                 });
-
             });
 
             describe('if the character still leaves play (due to a lasting effect)', function () {
@@ -92,7 +91,6 @@ describe('Iron Mine', function() {
                     expect(this.newCard).not.toBeUndefined();
                 });
             });
-
         });
     });
 });

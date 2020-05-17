@@ -13,7 +13,6 @@ describe('Adept of Shadows', function() {
                 });
                 this.adeptOfShadows = this.player1.findCardByName('adept-of-shadows');
                 this.blackmail = this.player2.findCardByName('blackmail');
-
             });
 
             it('should return it to its owner\'s hand', function() {

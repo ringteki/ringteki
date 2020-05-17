@@ -20,7 +20,6 @@ class WindsPathPlayAction extends PlayCharacterAction {
     }
 }
 
-
 class WindsPath extends ProvinceCard {
     setupCardAbilities() {
         this.persistentEffect({

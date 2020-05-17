@@ -6,11 +6,11 @@ describe('Kakita Kaezin', function() {
                     phase: 'conflict',
                     player1: {
                         honor: 11,
-                        inPlay: ['kakita-kaezin','doji-whisperer']
+                        inPlay: ['kakita-kaezin', 'doji-whisperer']
                     },
                     player2: {
                         honor: 11,
-                        inPlay: ['obstinate-recruit','akodo-gunso']
+                        inPlay: ['obstinate-recruit', 'akodo-gunso']
                     }
                 });
                 this.kakitaKaezin = this.player1.findCardByName('kakita-kaezin');

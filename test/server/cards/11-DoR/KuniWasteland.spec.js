@@ -5,7 +5,7 @@ describe('Kuni Wasteland', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['doji-challenger','isawa-ujina','kaiu-envoy','iuchi-shahai','miwaku-kabe-guard'],
+                        inPlay: ['doji-challenger', 'isawa-ujina', 'kaiu-envoy', 'iuchi-shahai', 'miwaku-kabe-guard'],
                         hand: ['duelist-training']
                     },
                     player2: {
@@ -112,7 +112,7 @@ describe('Kuni Wasteland', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['kitsuki-yuikimi','tengu-sensei']
+                        inPlay: ['kitsuki-yuikimi', 'tengu-sensei']
                     },
                     player2: {
                         inPlay: ['doji-whisperer'],

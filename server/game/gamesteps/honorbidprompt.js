@@ -55,7 +55,6 @@ class HonorBidPrompt extends AllPlayerPrompt {
         }
     }
 
-
     activePrompt(player) {
         let prohibitedBids = this.prohibitedBids[player.uuid] || [];
         let buttons = ['1', '2', '3', '4', '5'].filter(num => !prohibitedBids.includes(num));

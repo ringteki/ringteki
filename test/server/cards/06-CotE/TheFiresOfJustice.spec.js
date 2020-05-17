@@ -141,7 +141,6 @@ describe('The Fires of Justice', function() {
                     expect(this.getChatLogs(1)).toContain('player1 chooses to move 6 fate from player2\'s pool to Doji Challenger');
                 });
             });
-
         });
     });
 });

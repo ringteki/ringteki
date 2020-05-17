@@ -6,10 +6,10 @@ describe('Letter from the Daimyo', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['doji-whisperer'],
-                        hand: ['letter-from-the-daimyo','fine-katana']
+                        hand: ['letter-from-the-daimyo', 'fine-katana']
                     },
                     player2: {
-                        hand: ['banzai', 'charge','political-rival']
+                        hand: ['banzai', 'charge', 'political-rival']
                     }
                 });
                 this.dojiWhisperer = this.player1.findCardByName('doji-whisperer');

@@ -5,7 +5,7 @@ describe('Discourage Pursuit', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shosuro-miyako','bayushi-manipulator'],
+                        inPlay: ['shosuro-miyako', 'bayushi-manipulator'],
                         hand: ['discourage-pursuit']
                     },
                     player2: {

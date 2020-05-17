@@ -24,7 +24,6 @@ describe('Winds Path', function() {
                 this.windsPath = this.player2.findCardByName('wind-s-path', 'province 1');
                 this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 2');
 
-
                 this.player2.placeCardInProvince(this.kitsuWarrior, 'province 1');
                 this.player2.placeCardInProvince(this.doomedShugenja, 'province 2');
                 this.player2.moveCard(this.agashaTaiko, 'province 1');

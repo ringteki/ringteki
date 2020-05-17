@@ -29,4 +29,5 @@ class CloakOfNight extends DrawCard {
 }
 
 CloakOfNight.id = 'cloak-of-night';
+
 module.exports = CloakOfNight;

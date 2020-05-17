@@ -61,7 +61,7 @@ describe('Seeker of Knowledge', function() {
                     type: 'political',
                     ring: 'fire',
                     province: 'defend-the-wall',
-                    attackers: ['shrine-maiden','seeker-of-knowledge'],
+                    attackers: ['shrine-maiden', 'seeker-of-knowledge'],
                     defenders: ['shinjo-outrider']
                 });
                 this.noMoreActions();

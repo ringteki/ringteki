@@ -9,7 +9,7 @@ describe('In Service to My Lord', function() {
                         hand: ['in-service-to-my-lord', 'sharpen-the-mind']
                     },
                     player2: {
-                        inPlay: ['naive-student','doji-kuwanan'],
+                        inPlay: ['naive-student', 'doji-kuwanan'],
                         hand: ['voice-of-honor', 'way-of-the-crane']
                     }
                 });
@@ -200,7 +200,7 @@ describe('In Service to My Lord', function() {
                         hand: ['voice-of-honor', 'way-of-the-crane', 'assassination', 'in-service-to-my-lord', 'censure', 'levy']
                     },
                     player2: {
-                        inPlay: ['brash-samurai','doji-kuwanan'],
+                        inPlay: ['brash-samurai', 'doji-kuwanan'],
                         hand: ['stolen-secrets']
                     }
                 });
@@ -273,7 +273,7 @@ describe('In Service to My Lord', function() {
                 this.setupTest({
                     phase: 'draw',
                     player1: {
-                        inPlay: ['guest-of-honor','master-of-gisei-toshi','utaku-tetsuko','akodo-toturi-2']
+                        inPlay: ['guest-of-honor', 'master-of-gisei-toshi', 'utaku-tetsuko', 'akodo-toturi-2']
                     },
                     player2: {
                         fate: 30,
@@ -358,7 +358,7 @@ describe('In Service to My Lord', function() {
                 this.setupTest({
                     phase: 'draw',
                     player1: {
-                        inPlay: ['guest-of-honor','master-of-gisei-toshi','utaku-tetsuko','akodo-toturi-2']
+                        inPlay: ['guest-of-honor', 'master-of-gisei-toshi', 'utaku-tetsuko', 'akodo-toturi-2']
                     },
                     player2: {
                         fate: 30,

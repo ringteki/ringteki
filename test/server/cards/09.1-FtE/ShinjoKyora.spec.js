@@ -5,7 +5,7 @@ describe('Shinjo Kyora', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shinjo-kyora','moto-youth']
+                        inPlay: ['shinjo-kyora', 'moto-youth']
                     },
                     player2: {
                         inPlay: ['shinjo-kyora']

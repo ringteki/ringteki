@@ -49,7 +49,6 @@ class GameChat {
                         return output.concat(arg.getShortSummary());
                     }
                     return output.concat(arg);
-
                 }
             } else if(!argMatch && fragment) {
                 let splitFragment = fragment.split(' ');

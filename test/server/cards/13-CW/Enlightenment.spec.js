@@ -1,6 +1,5 @@
 describe('Enlightenment', function() {
     integration(function() {
-
         describe('Enlightenment\'s ability', function() {
             beforeEach(function() {
                 this.setupTest({

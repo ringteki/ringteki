@@ -69,11 +69,11 @@ class Game extends EventEmitter {
 
         this.conflictRecord = [];
         this.rings = {
-            air: new Ring(this, 'air','military'),
-            earth: new Ring(this, 'earth','political'),
-            fire: new Ring(this, 'fire','military'),
-            void: new Ring(this, 'void','political'),
-            water: new Ring(this, 'water','military')
+            air: new Ring(this, 'air', 'military'),
+            earth: new Ring(this, 'earth', 'political'),
+            fire: new Ring(this, 'fire', 'military'),
+            void: new Ring(this, 'void', 'political'),
+            water: new Ring(this, 'water', 'military')
         };
         this.shortCardData = options.shortCardData || [];
 
@@ -261,7 +261,6 @@ class Game extends EventEmitter {
     isTraitInPlay(trait) {
         return this.getPlayers().some(player => player.isTraitInPlay(trait));
     }
-
 
     createToken(card) {
         let token = new SpiritOfTheRiver(card);
@@ -521,7 +520,6 @@ class Game extends EventEmitter {
      */
     recordWinner(winner, reason) {
         if(this.winner) {
-
             return;
         }
 

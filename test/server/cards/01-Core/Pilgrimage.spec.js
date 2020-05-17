@@ -6,22 +6,22 @@ describe('Pilgrimage', function() {
                     phase: 'conflict',
                     player1: {
                         dynastyDeck: ['akodo-toturi'],
-                        dynastyDiscard: ['shintao-monastery','shintao-monastery','shintao-monastery','shintao-monastery'],
+                        dynastyDiscard: ['shintao-monastery', 'shintao-monastery', 'shintao-monastery', 'shintao-monastery'],
                         inPlay: ['tattooed-wanderer', 'togashi-mitsu-2'],
                         hand: ['seeker-of-knowledge', 'fine-katana', 'charge', 'restored-heirloom', 'chasing-the-sun']
                     },
                     player2: {
                         role: 'keeper-of-water',
-                        provinces: ['pilgrimage','entrenched-position'],
+                        provinces: ['pilgrimage', 'entrenched-position'],
                         inPlay: [],
                         hand: ['display-of-power'],
                         dynastyDeck: ['keeper-initiate']
                     }
                 });
-                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery','dynasty discard pile'), 'province 1');
-                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery','dynasty discard pile'), 'province 2');
-                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery','dynasty discard pile'), 'province 3');
-                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery','dynasty discard pile'), 'province 4');
+                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery', 'dynasty discard pile'), 'province 1');
+                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery', 'dynasty discard pile'), 'province 2');
+                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery', 'dynasty discard pile'), 'province 3');
+                this.player1.placeCardInProvince(this.player1.findCardByName('shintao-monastery', 'dynasty discard pile'), 'province 4');
                 this.game.checkGameState(true);
                 this.noMoreActions();
                 this.initiateConflict({
@@ -39,7 +39,6 @@ describe('Pilgrimage', function() {
             });
 
             describe('When Pilgrimage is not broken', function() {
-
                 it('should cancel the effects of the conflict ring', function() {
                     this.noMoreActions();
                     expect(this.player1).toHavePrompt('Action Window');
@@ -71,7 +70,6 @@ describe('Pilgrimage', function() {
             });
 
             describe('when pilgrimage is broken', function() {
-
                 beforeEach(function() {
                     this.player1.clickCard('fine-katana');
                     this.player1.clickCard('togashi-mitsu-2');

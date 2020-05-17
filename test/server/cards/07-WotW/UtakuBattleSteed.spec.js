@@ -5,7 +5,7 @@ describe('Utaku Battle Steed', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shiba-tsukune','utaku-yumino','iuchi-shahai'],
+                        inPlay: ['shiba-tsukune', 'utaku-yumino', 'iuchi-shahai'],
                         hand: ['utaku-battle-steed']
                     },
                     player2: {

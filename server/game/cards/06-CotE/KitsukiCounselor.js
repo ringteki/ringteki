@@ -7,4 +7,5 @@ class KitsukiCounselor extends DrawCard {
     }
 }
 KitsukiCounselor.id = 'kitsuki-counselor';
+
 module.exports = KitsukiCounselor;

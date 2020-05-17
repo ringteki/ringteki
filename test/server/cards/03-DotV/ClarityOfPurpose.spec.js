@@ -5,7 +5,7 @@ describe('Clarity of Purpose', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['adept-of-the-waves','asako-diplomat'],
+                        inPlay: ['adept-of-the-waves', 'asako-diplomat'],
                         hand: ['clarity-of-purpose']
                     },
                     player2: {
@@ -92,7 +92,6 @@ describe('Clarity of Purpose', function() {
                 this.player1.clickPrompt('Don\'t Resolve');
                 expect(this.adeptOfTheWaves.bowed).toBe(true);
             });
-
         });
     });
 });

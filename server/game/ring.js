@@ -111,7 +111,6 @@ class Ring extends EffectSource {
     }
 
     getState(activePlayer) {
-
         let selectionState = {};
 
         if(activePlayer) {

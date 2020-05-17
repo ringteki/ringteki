@@ -37,7 +37,6 @@ class GatewayToMeidoPlayDisguisedAction extends PlayDisguisedCharacterAction {
     }
 }
 
-
 class GatewayToMeido extends ProvinceCard {
     setupCardAbilities() {
         this.persistentEffect({

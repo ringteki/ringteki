@@ -14,4 +14,3 @@ BorderRider.id = 'border-rider';
 
 module.exports = BorderRider;
 
-

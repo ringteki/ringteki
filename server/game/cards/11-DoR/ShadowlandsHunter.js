@@ -13,4 +13,3 @@ ShadowlandsHunter.id = 'shadowlands-hunter';
 
 module.exports = ShadowlandsHunter;
 
-

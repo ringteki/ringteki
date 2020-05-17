@@ -9,7 +9,7 @@ describe('Dishonorable Assault', function() {
                     },
                     player2: {
                         provinces: ['dishonorable-assault'],
-                        hand: ['fine-katana','ornate-fan', 'assassination']
+                        hand: ['fine-katana', 'ornate-fan', 'assassination']
                     }
                 });
 
@@ -206,7 +206,7 @@ describe('Dishonorable Assault', function() {
                     player2: {
                         inPlay: ['doji-challenger'],
                         provinces: ['dishonorable-assault'],
-                        hand: ['fine-katana','ornate-fan', 'assassination']
+                        hand: ['fine-katana', 'ornate-fan', 'assassination']
                     }
                 });
 
@@ -407,7 +407,7 @@ describe('Dishonorable Assault', function() {
                     },
                     player2: {
                         provinces: ['dishonorable-assault'],
-                        hand: ['fine-katana','ornate-fan', 'assassination']
+                        hand: ['fine-katana', 'ornate-fan', 'assassination']
                     }
                 });
 
@@ -488,7 +488,7 @@ describe('Dishonorable Assault', function() {
                     },
                     player2: {
                         provinces: ['dishonorable-assault'],
-                        hand: ['fine-katana','ornate-fan', 'assassination']
+                        hand: ['fine-katana', 'ornate-fan', 'assassination']
                     }
                 });
 

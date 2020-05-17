@@ -58,7 +58,7 @@ describe('Tactical Ingenuity', function() {
             expect(this.wayOfTheLion.location).toBe('hand');
         });
 
-        it('should not be blocked by Cloud the Mind',function() {
+        it('should not be blocked by Cloud the Mind', function() {
             this.player1.playAttachment(this.tacticalIngenuity, this.zentaro);
             this.player2.playAttachment('cloud-the-mind', this.zentaro);
             this.noMoreActions();

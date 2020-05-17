@@ -83,7 +83,7 @@ describe('Field of Ruin', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['akodo-zentaro', 'matsu-berserker', 'doji-whisperer'],
-                        hand: ['field-of-ruin','total-warfare']
+                        hand: ['field-of-ruin', 'total-warfare']
                     },
                     player2: {
                         inPlay: ['akodo-toturi'],

@@ -130,6 +130,5 @@ describe('Upholding Authority', function() {
                 this.upholdingAuthority = this.player2.clickCard('upholding-authority');
             });
         });
-
     });
 });
