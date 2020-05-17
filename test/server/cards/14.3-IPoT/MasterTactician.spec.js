@@ -344,7 +344,7 @@ describe('Two Master Tacticians', function() {
             this.fury = this.player2.findCardByName('mirumoto-s-fury');
             this.province = this.player2.findCardByName('shameful-display', 'province 1');
 
-            this.player1.player.optionSettings.orderForcedAbilities = true;
+            this.player1.player.keywordSettings.orderForcedAbilities = true;
 
             this.player1.moveCard(this.dragon, 'conflict deck');
             this.player1.moveCard(this.lion, 'conflict deck');
@@ -564,7 +564,7 @@ describe('Master Tactician - Pillow Book', function() {
                 }
             });
 
-            this.player1.player.optionSettings.orderForcedAbilities = true;
+            this.player1.player.keywordSettings.orderForcedAbilities = true;
 
             this.tactician = this.player1.findCardByName('master-tactician');
             this.ambush = this.player1.findCardByName('prepared-ambush');

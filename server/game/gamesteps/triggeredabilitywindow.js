@@ -95,7 +95,7 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
 
     getPromptForSelectProperties() {
         return _.extend(super.getPromptForSelectProperties(), {
-            selectCard: this.currentPlayer.optionSettings.markCardsUnselectable,
+            selectCard: this.currentPlayer.keywordSettings.markCardsUnselectable,
             buttons: [{ text: 'Pass', arg: 'pass' }],
             onMenuCommand: (player, arg) => {
                 this.pass(player, arg);
