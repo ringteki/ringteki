@@ -7,7 +7,7 @@ class PlayAttachmentAction extends BaseAction {
     constructor(card, ignoreType = false) {
         super(card, [Costs.payTargetDependentFateCost('target', ignoreType)], {
             location: [Locations.PlayArea, Locations.Provinces],
-            gameAction: GameActions.attach(context => ({ attachment: context.source, ignoreType: ignoreType })),
+            gameAction: GameActions.attach(context => ({ attachment: context.source, ignoreType: ignoreType, takeControl: context.source.controller !== context.player })),
             cardCondition: (card, context) => context.source.canPlayOn(card)
         });
         this.title = 'Play this attachment';

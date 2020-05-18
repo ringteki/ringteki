@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes } = require('../../Constants');
+const { Locations, CardTypes, Players } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class InventiveMirumoto extends DrawCard {
@@ -10,6 +10,7 @@ class InventiveMirumoto extends DrawCard {
             target: {
                 cardCondition: card => card.type === CardTypes.Attachment,
                 location: Locations.ConflictDiscardPile,
+                controller: Players.Self,
                 gameAction: AbilityDsl.actions.playCard(context => ({
                     payCosts: true,
                     playCardTarget: attachContext => {

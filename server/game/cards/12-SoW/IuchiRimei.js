@@ -16,7 +16,8 @@ class IuchiRimei extends DrawCard {
                     messageArgs: card => [context.player, context.target, card],
                     gameAction: AbilityDsl.actions.ifAble(context => ({
                         ifAbleAction: AbilityDsl.actions.attach({
-                            attachment: context.target
+                            attachment: context.target,
+                            ignoreUniqueness: true
                         }),
                         otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.target })
                     }))

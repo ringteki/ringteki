@@ -1,8 +1,8 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
-import { EventNames, EffectNames } from '../Constants';
-import HonorLogic from './Shared/HonorLogic';
+import { EventNames } from '../Constants';
+import { CalculateHonorLimit } from './Shared/HonorLogic';
 
 export interface GainHonorProperties extends PlayerActionProperties {
     amount?: number;
@@ -19,7 +19,8 @@ export class GainHonorAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties: GainHonorProperties = this.getProperties(context);
-        return ['gain ' + properties.amount + ' honor', []];
+        var [_, amountToTransfer] = CalculateHonorLimit(context.player, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        return ['gain ' + amountToTransfer + ' honor', []];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
@@ -29,7 +30,7 @@ export class GainHonorAction extends PlayerAction {
         if (!wouldGainAnyHonor)
             return false;
 
-        var [hasHonorLimit, amountToTransfer] = HonorLogic.CalculateHonorLimit(player, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        var [hasHonorLimit, amountToTransfer] = CalculateHonorLimit(player, context.game.roundNumber, context.game.currentPhase, properties.amount);
 
         if(hasHonorLimit && !amountToTransfer)
             return false;
@@ -48,7 +49,7 @@ export class GainHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
+        var [_, amountToTransfer] = CalculateHonorLimit(event.player, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
         event.player.modifyHonor(amountToTransfer);
     }
 }
