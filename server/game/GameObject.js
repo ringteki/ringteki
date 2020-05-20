@@ -146,7 +146,7 @@ class GameObject {
         return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
 
-    
+
     isFacedown() {
         return this.facedown;
     }
