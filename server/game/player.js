@@ -226,7 +226,7 @@ class Player extends GameObject {
      */
     isTraitInPlay(trait) {
         return this.game.allCards.some(card => {
-            return card.controller === this && card.hasTrait(trait) && !card.isFacedown() &&
+            return card.controller === this && card.hasTrait(trait) && card.isFaceup() &&
             (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
         });
     }
@@ -345,7 +345,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFaceupProvinces(predicate = () => true) {
-        return this.getProvinces(card => !card.isFacedown() && predicate(card)).length;
+        return this.getProvinces(card => card.isFaceup() && predicate(card)).length;
     }
 
     /**
