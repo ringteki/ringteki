@@ -154,7 +154,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
 
         let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
-        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? provinceSlot : this.conflict.conflictProvince;
+        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.isFacedown()) ? provinceSlot : this.conflict.conflictProvince;
         this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, provinceName, this.conflict.ring);
 
         const params = {

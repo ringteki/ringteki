@@ -95,7 +95,7 @@ class FatePhase extends Phase {
         _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince], location => {
             let provinceCard = player.getProvinceCardInProvince(location);
             let province = player.getSourceList(location);
-            let dynastyCards = province.filter(card => card.isDynasty && !card.facedown);
+            let dynastyCards = province.filter(card => card.isDynasty && card.isFaceup());
             if(dynastyCards.length > 0 && provinceCard) {
                 if(provinceCard.isBroken && !this.game.skirmishMode) {
                     cardsToDiscard = cardsToDiscard.concat(dynastyCards);

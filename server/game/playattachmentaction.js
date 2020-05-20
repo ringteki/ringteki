@@ -30,7 +30,7 @@ class PlayAttachmentAction extends BaseAction {
     }
 
     displayMessage(context) {
-        if(context.target.type === CardTypes.Province && context.target.facedown) {
+        if(context.target.type === CardTypes.Province && context.target.isFacedown()) {
             context.game.addMessage('{0} plays {1}, attaching it to {2}', context.player, context.source, context.target.location);
         } else {
             context.game.addMessage('{0} plays {1}, attaching it to {2}', context.player, context.source, context.target);

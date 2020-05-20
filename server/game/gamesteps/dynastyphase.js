@@ -47,7 +47,7 @@ class DynastyPhase extends Phase {
             for(let province of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]) {
                 let cards = player.getDynastyCardsInProvince(province);
                 cards.forEach(card => {
-                    if(card && card.facedown) {
+                    if(card && card.isFacedown()) {
                         this.game.applyGameAction(null, { flipDynasty: card });
                         revealedCards.push(card);
                     }

@@ -16,7 +16,7 @@ class RallyAbility extends TriggeredAbility {
             messageArgs: context => [
                 context.player,
                 context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
-                context.player.getProvinceCardInProvince(context.source.location).facedown ? context.source.location : context.player.getProvinceCardInProvince(context.source.location),
+                context.player.getProvinceCardInProvince(context.source.location).isFacedown() ? context.source.location : context.player.getProvinceCardInProvince(context.source.location),
                 context.source
             ],
             handler: context => {

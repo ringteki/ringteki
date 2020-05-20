@@ -226,7 +226,7 @@ class Player extends GameObject {
      */
     isTraitInPlay(trait) {
         return this.game.allCards.some(card => {
-            return card.controller === this && card.hasTrait(trait) && !card.facedown &&
+            return card.controller === this && card.hasTrait(trait) && !card.isFacedown() &&
             (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
         });
     }
@@ -345,7 +345,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFaceupProvinces(predicate = () => true) {
-        return this.getProvinces(card => !card.facedown && predicate(card)).length;
+        return this.getProvinces(card => !card.isFacedown() && predicate(card)).length;
     }
 
     /**
@@ -361,7 +361,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFacedownProvinces(predicate = () => true) {
-        return this.getProvinces(card => card.facedown && predicate(card)).length;
+        return this.getProvinces(card => card.isFacedown() && predicate(card)).length;
     }
 
     /**
@@ -398,7 +398,7 @@ class Player extends GameObject {
      */
     getHoldingsInPlay() {
         return provinceLocations.reduce((array, province) =>
-            array.concat(this.getSourceList(province).filter(card => card.getType() === CardTypes.Holding && !card.facedown)), []);
+            array.concat(this.getSourceList(province).filter(card => card.getType() === CardTypes.Holding && card.isFaceup())), []);
     }
 
     /**
@@ -995,7 +995,7 @@ class Player extends GameObject {
         }
 
         let display = 'a card';
-        if(!card.facedown && source !== Locations.Hand || [Locations.PlayArea, Locations.DynastyDiscardPile, Locations.ConflictDiscardPile, Locations.RemovedFromGame].includes(target)) {
+        if(card.isFaceup() && source !== Locations.Hand || [Locations.PlayArea, Locations.DynastyDiscardPile, Locations.ConflictDiscardPile, Locations.RemovedFromGame].includes(target)) {
             display = card;
         }
 

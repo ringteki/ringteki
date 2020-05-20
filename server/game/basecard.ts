@@ -274,7 +274,7 @@ class BaseCard extends EffectSource {
     }
 
     isInPlay(): boolean {
-        if(this.facedown) {
+        if(this.isFacedown()) {
             return false;
         }
         if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold].includes(this.type)) {
@@ -365,11 +365,11 @@ class BaseCard extends EffectSource {
     }
 
     canTriggerAbilities(context: AbilityContext): boolean {
-        return !this.facedown && this.checkRestrictions('triggerAbilities', context);
+        return this.isFaceup() && this.checkRestrictions('triggerAbilities', context);
     }
 
     canInitiateKeywords(context: AbilityContext): boolean {
-        return !this.facedown && this.checkRestrictions('initiateKeywords', context);
+        return this.isFaceup() && this.checkRestrictions('initiateKeywords', context);
     }
 
     getModifiedLimitMax(player: Player, ability: CardAbility, max: number): number {
@@ -391,7 +391,7 @@ class BaseCard extends EffectSource {
             return undefined;
         }
 
-        if(this.facedown) {
+        if(this.isFacedown()) {
             return [{ command: 'click', text: 'Select Card' }, { command: 'reveal', text: 'Reveal' }];
         }
 
@@ -745,7 +745,7 @@ class BaseCard extends EffectSource {
     }
 
     getShortSummaryForControls(activePlayer) {
-        if(this.facedown && (activePlayer !== this.controller || this.hideWhenFacedown())) {
+        if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
         }
         return super.getShortSummaryForControls(activePlayer);
@@ -757,7 +757,7 @@ class BaseCard extends EffectSource {
 
         // This is my facedown card, but I'm not allowed to look at it
         // OR This is not my card, and it's either facedown or hidden from me
-        if(isActivePlayer ? this.facedown && this.hideWhenFacedown() : (this.facedown || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
+        if(isActivePlayer ? this.isFacedown() && this.hideWhenFacedown() : (this.isFacedown() || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
             let state = {
                 controller: this.controller.getShortSummary(),
                 menu: isActivePlayer ? this.getMenu() : undefined,
@@ -773,7 +773,7 @@ class BaseCard extends EffectSource {
             id: this.cardData.id,
             controlled: this.owner !== this.controller,
             inConflict: this.inConflict,
-            facedown: this.facedown,
+            facedown: this.isFacedown(),
             location: this.location,
             menu: this.getMenu(),
             name: this.cardData.name,

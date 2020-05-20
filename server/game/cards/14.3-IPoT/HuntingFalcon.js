@@ -12,7 +12,7 @@ class HuntingFalcon extends DrawCard {
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
-                cardCondition: card => card.facedown,
+                cardCondition: card => card.isFacedown(),
                 gameAction: AbilityDsl.actions.lookAt()
             }
         });
