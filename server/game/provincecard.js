@@ -174,6 +174,20 @@ class ProvinceCard extends BaseCard {
         //Facedown provinces are out of play and their effects don't evaluate, so we check for the printed keyword
         return this.hasKeyword('eminent') || (!this.isBlank() && this.hasPrintedKeyword('eminent'));
     }
+
+    isFaceup() {
+        if(this.game.skirmishMode) {
+            return false;
+        }
+        return super.isFaceup();
+    }
+
+    isFacedown() {
+        if(this.game.skirmishMode) {
+            return false;
+        }
+        return super.isFacedown();
+    }
 }
 
 module.exports = ProvinceCard;

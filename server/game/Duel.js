@@ -43,7 +43,7 @@ class Duel {
     }
 
     getTotals(challengerTotal, targetTotal) {
-        if(this.game.skirmish) {
+        if(this.game.skirmishMode) {
             if(challengerTotal > targetTotal) {
                 challengerTotal = 1;
                 targetTotal = 0;
