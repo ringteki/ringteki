@@ -182,7 +182,7 @@ class Conflict extends GameObject {
     }
 
     isParticipating(card) {
-        return this.isAttacking(card) || this.isDefending(card);
+        return (this.isAttacking(card) || this.isDefending(card)) && this.declarationComplete;
     }
 
     anyParticipants(predicate) {

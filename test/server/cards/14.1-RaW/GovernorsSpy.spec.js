@@ -110,6 +110,13 @@ describe('Governors Spy', function() {
             expect(this.player1).toHavePromptButton('player2');
             this.player1.clickPrompt('player2');
 
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).toHavePromptButton('Alibi Artist');
+            expect(this.player1).toHavePromptButton('Bayushi Liar');
+            expect(this.player1).toHavePromptButton('Bayushi Manipulator');
+            expect(this.player1).toHavePromptButton('Blackmail Artist');
+            this.player1.clickPrompt('Alibi Artist');
+
             expect(this.player1).toHavePrompt('Choose a province for Alibi Artist');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -119,6 +126,13 @@ describe('Governors Spy', function() {
 
             this.player1.clickCard(this.p2_4);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).not.toHavePromptButton('Alibi Artist');
+            expect(this.player1).toHavePromptButton('Bayushi Liar');
+            expect(this.player1).toHavePromptButton('Bayushi Manipulator');
+            expect(this.player1).toHavePromptButton('Blackmail Artist');
+            this.player1.clickPrompt('Bayushi Liar');
 
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Liar');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
@@ -130,6 +144,13 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_1);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).not.toHavePromptButton('Alibi Artist');
+            expect(this.player1).not.toHavePromptButton('Bayushi Liar');
+            expect(this.player1).toHavePromptButton('Bayushi Manipulator');
+            expect(this.player1).toHavePromptButton('Blackmail Artist');
+            this.player1.clickPrompt('Bayushi Manipulator');
+
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Manipulator');
             expect(this.player1).not.toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -139,6 +160,13 @@ describe('Governors Spy', function() {
 
             this.player1.clickCard(this.p2_3);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
+
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).not.toHavePromptButton('Alibi Artist');
+            expect(this.player1).not.toHavePromptButton('Bayushi Liar');
+            expect(this.player1).not.toHavePromptButton('Bayushi Manipulator');
+            expect(this.player1).toHavePromptButton('Blackmail Artist');
+            this.player1.clickPrompt('Blackmail Artist');
 
             expect(this.player1).toHavePrompt('Choose a province for Blackmail Artist');
             expect(this.player1).not.toBeAbleToSelect(this.p2_1);
@@ -177,6 +205,7 @@ describe('Governors Spy', function() {
             expect(this.player1).toHavePromptButton('player2');
             this.player1.clickPrompt('player2');
 
+            this.player1.clickPrompt('Alibi Artist');
             expect(this.player1).toHavePrompt('Choose a province for Alibi Artist');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -187,6 +216,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_4);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Bayushi Liar');
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Liar');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -197,6 +227,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_1);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Bayushi Manipulator');
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Manipulator');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -207,6 +238,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_3);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Bayushi Shoju');
             expect(this.player1).toHavePrompt('Choose a province for Bayushi Shoju');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -217,6 +249,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_Stronghold);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Blackmail Artist');
             expect(this.player1).toHavePrompt('Choose a province for Blackmail Artist');
             expect(this.player1).toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -227,6 +260,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p2_1);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Yogo Asami');
             expect(this.player1).toHavePrompt('Choose a province for Yogo Asami');
             expect(this.player1).not.toBeAbleToSelect(this.p2_1);
             expect(this.player1).toBeAbleToSelect(this.p2_2);
@@ -263,6 +297,7 @@ describe('Governors Spy', function() {
             expect(this.player1).toHavePromptButton('player2');
             this.player1.clickPrompt('player1');
 
+            this.player1.clickPrompt('Daidoji Uji');
             expect(this.player1).toHavePrompt('Choose a province for Daidoji Uji');
             expect(this.player1).toBeAbleToSelect(this.p1_1);
             expect(this.player1).toBeAbleToSelect(this.p1_2);
@@ -273,6 +308,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p1_4);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Doji Challenger');
             expect(this.player1).toHavePrompt('Choose a province for Doji Challenger');
             expect(this.player1).toBeAbleToSelect(this.p1_1);
             expect(this.player1).toBeAbleToSelect(this.p1_2);
@@ -283,6 +319,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p1_1);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Doji Kuwanan');
             expect(this.player1).toHavePrompt('Choose a province for Doji Kuwanan');
             expect(this.player1).not.toBeAbleToSelect(this.p1_1);
             expect(this.player1).toBeAbleToSelect(this.p1_2);
@@ -293,6 +330,7 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p1_3);
             expect(this.getChatLogs(1)).toContain('player1 places a card');
 
+            this.player1.clickPrompt('Doji Whisperer');
             expect(this.player1).toHavePrompt('Choose a province for Doji Whisperer');
             expect(this.player1).not.toBeAbleToSelect(this.p1_1);
             expect(this.player1).toBeAbleToSelect(this.p1_2);
@@ -339,6 +377,14 @@ describe('Governors Spy', function() {
             expect(this.challenger.facedown).toBe(true);
             expect(this.kuwanan.facedown).toBe(true);
             expect(this.uji.facedown).toBe(true);
+
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).toHavePromptButton('Daidoji Uji');
+            expect(this.player1).toHavePromptButton('Doji Challenger');
+            expect(this.player1).toHavePromptButton('Doji Kuwanan');
+            expect(this.player1).toHavePromptButton('Doji Whisperer');
+            this.player1.clickPrompt('Daidoji Uji');
+
             expect(this.player1).toHavePrompt('Choose a province for Daidoji Uji');
         });
     });

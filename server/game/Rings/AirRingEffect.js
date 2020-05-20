@@ -1,3 +1,5 @@
+const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
+
 const BaseAbility = require('../baseability.js');
 const { TargetModes } = require('../Constants');
 
@@ -25,7 +27,8 @@ class AirRingEffect extends BaseAbility {
 
     executeHandler(context) {
         if(context.select === 'Gain 2 Honor') {
-            context.game.addMessage('{0} resolves the {1} ring, gaining 2 honor', context.player, 'air');
+            let [, amountToTransfer] = CalculateHonorLimit(context.player, context.game.roundNumber, context.game.currentPhase, 2);
+            context.game.addMessage('{0} resolves the {1} ring, gaining {2} honor', context.player, 'air', amountToTransfer);
             context.game.actions.gainHonor({ amount: 2 }).resolve(context.player, context);
         } else if(context.select === 'Take 1 Honor from opponent') {
             context.game.addMessage('{0} resolves the {1} ring, taking 1 honor from {2}', context.player, 'air', context.player.opponent);

@@ -54,6 +54,7 @@ describe('Roadside Inn', function() {
             expect(this.player2).toHavePromptButton('Yes');
             expect(this.player2).toHavePromptButton('No');
             this.player2.clickPrompt('Yes');
+            expect(this.getChatLogs(1)).toContain('player2 chooses to give player1 1 honor');
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
             expect(this.player2).toBeAbleToSelect(this.ikomaProdigy);
