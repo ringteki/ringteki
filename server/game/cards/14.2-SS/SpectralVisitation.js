@@ -1,6 +1,6 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Locations, Players, Durations, Phases } = require('../../Constants');
+const { CardTypes, Locations, Players, Durations } = require('../../Constants');
 
 class SpectralVisitation extends ProvinceCard {
     setupCardAbilities() {
@@ -25,7 +25,7 @@ class SpectralVisitation extends ProvinceCard {
                             duration: Durations.UntilEndOfRound,
                             effect: AbilityDsl.effects.delayedEffect({
                                 when: {
-                                    onPhaseEnded: (event) => event.phase === Phases.Conflict
+                                    onPhaseEnded: () => true
                                 },
                                 message: '{0} returns to the bottom of the deck due to {1}\'s effect',
                                 messageArgs: [this, context.source],

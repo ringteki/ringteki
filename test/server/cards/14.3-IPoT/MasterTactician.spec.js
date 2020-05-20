@@ -496,6 +496,44 @@ describe('Two Master Tacticians', function() {
             this.player1.clickCard(this.dragon);
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
+
+        it('with the prompt off - should still let 6 cards be played', function () {
+            this.player1.player.optionSettings.orderForcedAbilities = false;
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            this.player2.pass();
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.isHonored).toBe(true);
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.voice);
+            this.player1.clickCard(this.voice);
+
+            this.player1.clickCard(this.fan);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.fan);
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.crane);
+            this.player2.pass();
+            this.player1.clickCard(this.lion);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.lion);
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.dragon);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
     });
 });
 
