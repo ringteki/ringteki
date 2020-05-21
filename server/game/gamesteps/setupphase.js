@@ -63,9 +63,15 @@ class SetupPhase extends Phase {
     setupProvinces() {
         if(this.game.skirmishMode) {
             for(let player of this.game.getPlayers()) {
-                for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
-                    player.moveCard(new ProvinceCard(player), location);
-                }
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceThree);
+                // for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
+                //     let province = new ProvinceCard(player);
+                //     player.moveCard(province, location);
+                //     player.preparedDeck.provinceCards.push(province);
+                //     player.preparedDeck.allCards.push(province);
+                // }
             }
         } else {
             this.queueStep(new SetupProvincesPrompt(this.game));

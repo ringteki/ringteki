@@ -800,6 +800,12 @@ class PlayerInteractionWrapper {
             }
         }
     }
+
+    setupSkirmishProvinces() {
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 1'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 2'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 3'));
+    }
 }
 
 module.exports = PlayerInteractionWrapper;

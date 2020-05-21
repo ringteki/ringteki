@@ -169,6 +169,11 @@ global.integration = function(definitions) {
                     });
                 }
 
+                if (this.game.skirmishMode) {
+                    this.player1.setupSkirmishProvinces();
+                    this.player2.setupSkirmishProvinces();
+                }
+
                 if(options.phase !== 'setup') {
                     if(['draw', 'fate'].includes(options.phase)) {
                         this.player1.player.promptedActionWindows[options.phase] = true;

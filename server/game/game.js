@@ -806,24 +806,26 @@ class Game extends EventEmitter {
         }, []));
         this.provinceCards = this.allCards.filter(card => card.isProvince);
 
-        if(playerWithNoStronghold) {
-            this.queueSimpleStep(() => {
-                this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
-                return false;
-            });
-            this.continue();
-            return false;
-        }
-
-        for(let player of this.getPlayers()) {
-            let numProvinces = this.provinceCards.filter(a => a.controller === player);
-            if(numProvinces.length !== 5) {
+        if (!this.skirmishMode) {
+            if(playerWithNoStronghold) {
                 this.queueSimpleStep(() => {
-                    this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                    this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
                     return false;
                 });
                 this.continue();
                 return false;
+            }
+
+            for(let player of this.getPlayers()) {
+                let numProvinces = this.provinceCards.filter(a => a.controller === player);
+                if(numProvinces.length !== 5) {
+                    this.queueSimpleStep(() => {
+                        this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                        return false;
+                    });
+                    this.continue();
+                    return false;
+                }
             }
         }
 

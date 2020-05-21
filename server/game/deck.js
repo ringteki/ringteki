@@ -43,28 +43,39 @@ class Deck {
             }
         });
 
-        this.eachRepeatedCard(this.data.provinceCards, cardData => {
-            if(cardData && cardData.type === CardTypes.Province) {
-                var provinceCard = this.createCard(ProvinceCard, player, cardData);
+        //provinces
+        if (!player.game.skirmishMode) {
+            this.eachRepeatedCard(this.data.provinceCards, cardData => {
+                if(cardData && cardData.type === CardTypes.Province) {
+                    var provinceCard = this.createCard(ProvinceCard, player, cardData);
+                    provinceCard.location = Locations.ProvinceDeck;
+                    result.provinceCards.push(provinceCard);
+                }
+            });
+        } else {
+            for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
+                var provinceCard = new ProvinceCard(player);
                 provinceCard.location = Locations.ProvinceDeck;
                 result.provinceCards.push(provinceCard);
             }
-        });
+        }
 
-        this.eachRepeatedCard(this.data.stronghold, cardData => {
-            if(cardData && cardData.type === CardTypes.Stronghold) {
-                var strongholdCard = this.createCard(StrongholdCard, player, cardData);
-                strongholdCard.location = '';
-                result.stronghold = strongholdCard;
-            }
-        });
-
-        this.eachRepeatedCard(this.data.role, cardData => {
-            if(cardData && cardData.type === CardTypes.Role) {
-                var roleCard = this.createCard(RoleCard, player, cardData);
-                result.role = roleCard;
-            }
-        });
+        //stronghold & role
+        if (!player.game.skirmishMode) {
+            this.eachRepeatedCard(this.data.stronghold, cardData => {
+                if(cardData && cardData.type === CardTypes.Stronghold) {
+                    var strongholdCard = this.createCard(StrongholdCard, player, cardData);
+                    strongholdCard.location = '';
+                    result.stronghold = strongholdCard;
+                }
+            });
+            this.eachRepeatedCard(this.data.role, cardData => {
+                if(cardData && cardData.type === CardTypes.Role) {
+                    var roleCard = this.createCard(RoleCard, player, cardData);
+                    result.role = roleCard;
+                }
+            });
+        }
 
         result.allCards = result.provinceCards.concat(result.conflictCards).concat(result.dynastyCards);
 
