@@ -5,7 +5,7 @@ describe('Skirmish Provinces', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-whisperer', 'shinjo-trailblazer', 'kakita-yoshi-2'],
-                    hand: ['iuchi-wayfinder']
+                    hand: ['iuchi-wayfinder', 'logistics']
                 },
                 player2: {
                     inPlay: ['garanto-guardian'],
@@ -17,6 +17,7 @@ describe('Skirmish Provinces', function() {
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.wayfinder = this.player1.findCardByName('iuchi-wayfinder');
             this.trailblazer = this.player1.findCardByName('shinjo-trailblazer');
+            this.logistics = this.player1.findCardByName('logistics');
             this.guardian = this.player2.findCardByName('garanto-guardian');
             this.province = this.player2.findCardByName('skirmish-province', 'province 1');
         });
@@ -79,7 +80,17 @@ describe('Skirmish Provinces', function() {
         });
 
         it('Should not be able to move cards to province 4', function () {
+            this.player1.player.getProvinceCardInProvince('province 1').isBroken = true;
+            this.player1.player.getProvinceCardInProvince('province 2').isBroken = true;
+            this.player1.player.getProvinceCardInProvince('province 3').isBroken = true;
 
+            this.player2.player.getProvinceCardInProvince('province 1').isBroken = true;
+            this.player2.player.getProvinceCardInProvince('province 2').isBroken = true;
+            this.player2.player.getProvinceCardInProvince('province 3').isBroken = true;
+
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.logistics);
+            expect(this.player1).toHavePrompt('Action Window');
         });
 
         it('Province 4 should not have a card in it', function () {
