@@ -149,10 +149,13 @@ global.integration = function(definitions) {
                 if(!options.player2) {
                     options.player2 = {};
                 }
+                if (options.skirmish) {
+                    this.game.skirmishMode = options.skirmish;
+                }
 
                 //Build decks
-                this.player1.selectDeck(deckBuilder.customDeck(options.player1));
-                this.player2.selectDeck(deckBuilder.customDeck(options.player2));
+                this.player1.selectDeck(deckBuilder.customDeck(options.player1, this.game.skirmishMode));
+                this.player2.selectDeck(deckBuilder.customDeck(options.player2, this.game.skirmishMode));
 
                 this.startGame();
 

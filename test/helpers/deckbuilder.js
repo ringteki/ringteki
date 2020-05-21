@@ -48,7 +48,7 @@ class DeckBuilder {
     /*
         options: as player1 and player2 are described in setupTest #1514
     */
-    customDeck(player = {}) {
+    customDeck(player = {}, skirmishMode = false) {
         let faction = defaultFaction;
         let role = defaultRole;
         let stronghold = defaultStronghold;

@@ -601,6 +601,9 @@ class PlayerInteractionWrapper {
      * @param {!String} card - the province to select
      */
     selectStrongholdProvince(card) {
+        if (this.game.skirmishMode) {
+            return;
+        }
         if(!this.hasPrompt('Select stronghold province')) {
             throw new Error(`${this.name} is not prompted to select a province`);
         }
