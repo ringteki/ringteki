@@ -36,7 +36,7 @@ describe('Skirmish Conflict Phase', function() {
                 defenders: []
             });
 
-            expect(this.getChatLogs(5)).toContain('player1 is initiating a military conflict at a Skirmish Province, contesting Air Ring');
+            expect(this.getChatLogs(5)).toContain('player1 is initiating a military conflict at Skirmish Province, contesting Air Ring');
             expect(this.getChatLogs(5)).toContain('player1 has initiated a military conflict with skill 1');
         });
 
@@ -50,7 +50,7 @@ describe('Skirmish Conflict Phase', function() {
                 defenders: []
             });
 
-            expect(this.getChatLogs(5)).toContain('player1 is initiating a military conflict at a Skirmish Province, contesting Air Ring');
+            expect(this.getChatLogs(5)).toContain('player1 is initiating a military conflict at Skirmish Province, contesting Air Ring');
             expect(this.getChatLogs(5)).toContain('player1 has initiated a military conflict with skill 0');
         });
 
@@ -64,7 +64,7 @@ describe('Skirmish Conflict Phase', function() {
                 defenders: []
             });
 
-            expect(this.getChatLogs(5)).toContain('player1 is initiating a political conflict at a Skirmish Province, contesting Air Ring');
+            expect(this.getChatLogs(5)).toContain('player1 is initiating a political conflict at Skirmish Province, contesting Air Ring');
             expect(this.getChatLogs(5)).toContain('player1 has initiated a political conflict with skill 1');
         });
 
@@ -78,7 +78,7 @@ describe('Skirmish Conflict Phase', function() {
                 defenders: []
             });
 
-            expect(this.getChatLogs(5)).toContain('player1 is initiating a political conflict at a Skirmish Province, contesting Air Ring');
+            expect(this.getChatLogs(5)).toContain('player1 is initiating a political conflict at Skirmish Province, contesting Air Ring');
             expect(this.getChatLogs(5)).toContain('player1 has initiated a political conflict with skill 0');
         });
 

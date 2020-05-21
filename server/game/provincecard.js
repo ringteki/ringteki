@@ -6,7 +6,7 @@ const { Locations, EffectNames } = require('./Constants');
 const AbilityDsl = require('./abilitydsl.js');
 
 class ProvinceCard extends BaseCard {
-    constructor(owner, cardData = { strength: 3, element: [], type: 'province', side: 'province', name: 'a Skirmish Province', id: 'skirmish-province' }) {
+    constructor(owner, cardData = { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province' }) {
         super(owner, cardData);
 
         this.isProvince = true;
