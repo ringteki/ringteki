@@ -73,9 +73,9 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromHand, this, Locations.Hand),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceOne),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceTwo),
-            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree),
+            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree)
         ];
-        if (!this.game.skirmishMode) {
+        if(!this.game.skirmishMode) {
             this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour));
             this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince));
         }

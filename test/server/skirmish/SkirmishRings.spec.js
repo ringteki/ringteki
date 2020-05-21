@@ -37,7 +37,7 @@ describe('Skirmish Ring Effects', function() {
                 ring: 'water'
             });
             this.noMoreActions();
-            
+
             expect(this.player1).not.toBeAbleToSelect(this.scout);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
             expect(this.player1).not.toBeAbleToSelect(this.tsuko);
@@ -82,7 +82,7 @@ describe('Skirmish Ring Effects', function() {
                 ring: 'air'
             });
             this.noMoreActions();
-            
+
             let honor = this.player1.honor;
             let honor2 = this.player2.honor;
 

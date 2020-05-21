@@ -18,7 +18,7 @@ describe('Skirmish Mode - Dynasty Phase', function() {
             this.crane = this.player1.findCardByName('way-of-the-crane');
             this.kireiKo = this.player1.findCardByName('kirei-ko');
         });
-        
+
         describe('Events', function() {
             it('should not allow playing dynasty action events', function() {
                 expect(this.player1).toHavePrompt('Play cards from provinces');
@@ -67,7 +67,7 @@ describe('Normal Mode - Dynasty Phase', function() {
             this.crane = this.player1.findCardByName('way-of-the-crane');
             this.kireiKo = this.player1.findCardByName('kirei-ko');
         });
-        
+
         describe('Events', function() {
             it('should allow playing dynasty action events', function() {
                 expect(this.player1).toHavePrompt('Play cards from provinces');

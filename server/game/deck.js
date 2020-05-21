@@ -44,7 +44,7 @@ class Deck {
         });
 
         //provinces
-        if (!player.game.skirmishMode) {
+        if(!player.game.skirmishMode) {
             this.eachRepeatedCard(this.data.provinceCards, cardData => {
                 if(cardData && cardData.type === CardTypes.Province) {
                     var provinceCard = this.createCard(ProvinceCard, player, cardData);
@@ -53,7 +53,7 @@ class Deck {
                 }
             });
         } else {
-            for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
+            for(let i = 0; i < 3; i++) {
                 var provinceCard = new ProvinceCard(player);
                 provinceCard.location = Locations.ProvinceDeck;
                 result.provinceCards.push(provinceCard);
@@ -61,7 +61,7 @@ class Deck {
         }
 
         //stronghold & role
-        if (!player.game.skirmishMode) {
+        if(!player.game.skirmishMode) {
             this.eachRepeatedCard(this.data.stronghold, cardData => {
                 if(cardData && cardData.type === CardTypes.Stronghold) {
                     var strongholdCard = this.createCard(StrongholdCard, player, cardData);

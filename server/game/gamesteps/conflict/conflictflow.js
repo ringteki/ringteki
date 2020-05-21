@@ -410,12 +410,12 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     applyUnopposed() {
-        if(this.conflict.conflictPassed || this.game.manualMode  || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
+        if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
         }
 
-        if (this.game.skirmishMode) {
-            if (this.conflict.conflictUnopposed) {
+        if(this.game.skirmishMode) {
+            if(this.conflict.conflictUnopposed) {
                 this.game.addMessage('{0} has won an unopposed conflict', this.conflict.winner);
             }
             return;

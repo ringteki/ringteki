@@ -812,7 +812,7 @@ class Game extends EventEmitter {
         }, []));
         this.provinceCards = this.allCards.filter(card => card.isProvince);
 
-        if (!this.skirmishMode) {
+        if(!this.skirmishMode) {
             if(playerWithNoStronghold) {
                 this.queueSimpleStep(() => {
                     this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);

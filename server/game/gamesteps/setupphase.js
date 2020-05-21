@@ -4,7 +4,6 @@ const SimpleStep = require('./simplestep.js');
 const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
 const SetupProvincesPrompt = require('./setup/setupprovincesprompt.js');
-const ProvinceCard = require('../provincecard');
 const { Locations } = require('../Constants');
 
 class SetupPhase extends Phase {
@@ -66,12 +65,6 @@ class SetupPhase extends Phase {
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceThree);
-                // for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
-                //     let province = new ProvinceCard(player);
-                //     player.moveCard(province, location);
-                //     player.preparedDeck.provinceCards.push(province);
-                //     player.preparedDeck.allCards.push(province);
-                // }
             }
         } else {
             this.queueStep(new SetupProvincesPrompt(this.game));

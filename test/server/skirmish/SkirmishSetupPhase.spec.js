@@ -4,7 +4,7 @@ describe('Skirmish Setup Phase', function() {
             this.setupTest({
                 phase: 'setup',
                 player1: {
-                    inPlay: [],
+                    inPlay: []
                 },
                 player2: {
                     inPlay: []
