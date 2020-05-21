@@ -36,7 +36,7 @@ class GainAbility extends EffectValue {
         if(this.abilityType === AbilityTypes.Persistent) {
             const activeLocations = {
                 'play area': [Locations.PlayArea],
-                'province': [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]
+                'province': this.context.game.getProvinceArray()
             };
             this.value = properties;
             if(activeLocations[this.value.location].includes(target.location)) {

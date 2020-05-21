@@ -269,10 +269,9 @@ class BaseCard extends EffectSource {
     }
 
     isInProvince(): boolean {
-        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree,
-            Locations.ProvinceFour, Locations.StrongholdProvince].includes(this.location);
+        return this.game.getProvinceArray().includes(this.location);
     }
-
+    
     isInPlay(): boolean {
         if(this.isFacedown()) {
             return false;
@@ -321,7 +320,7 @@ class BaseCard extends EffectSource {
         const activeLocations = {
             'conflict discard pile': [Locations.ConflictDiscardPile],
             'play area': [Locations.PlayArea],
-            'province': [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]
+            'province': this.game.getProvinceArray()
         };
         if(!activeLocations[Locations.Provinces].includes(from) || !activeLocations[Locations.Provinces].includes(to)) {
             this.removeLastingEffects();

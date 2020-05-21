@@ -43,7 +43,8 @@ export class ReturnToDeckAction extends CardGameAction {
         }
         let index = location.indexOf(Locations.Provinces);
         if(index > -1) {
-            location.splice(index, 1, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince);
+            location.splice(index, 1);
+            location = location.concat(context.game.getProvinceArray());
         }
 
         return (location.includes(Locations.Any) || location.includes(card.location)) && super.canAffect(card, context, additionalProperties);

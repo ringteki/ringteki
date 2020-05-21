@@ -74,9 +74,11 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceOne),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceTwo),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree),
-            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour),
-            new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
         ];
+        if (!this.game.skirmishMode) {
+            this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour));
+            this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince));
+        }
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
         this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
             dynasty: true,
@@ -336,7 +338,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getProvinces(predicate = () => true) {
-        return provinceLocations.reduce((array, location) =>
+        return this.game.getProvinceArray().reduce((array, location) =>
             array.concat(this.getSourceList(location).filter(card => card.type === CardTypes.Province && predicate(card))), []);
     }
 
@@ -397,7 +399,7 @@ class Player extends GameObject {
      * Returns and array of holdings controlled by this player
      */
     getHoldingsInPlay() {
-        return provinceLocations.reduce((array, province) =>
+        return this.game.getProvinceArray().reduce((array, province) =>
             array.concat(this.getSourceList(province).filter(card => card.getType() === CardTypes.Holding && card.isFaceup())), []);
     }
 
@@ -1016,11 +1018,11 @@ class Player extends GameObject {
 
 
         const conflictCardLocations = [Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
-        const dynastyCardLocations = [...provinceLocations, Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
+        const dynastyCardLocations = [...this.game.getProvinceArray(), Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
         const legalLocations = {
             stronghold: [Locations.StrongholdProvince],
             role: [Locations.Role],
-            province: [...provinceLocations, Locations.ProvinceDeck],
+            province: [...this.game.getProvinceArray(), Locations.ProvinceDeck],
             holding: dynastyCardLocations,
             conflictCharacter: [...conflictCardLocations, Locations.PlayArea],
             dynastyCharacter: [...dynastyCardLocations, Locations.PlayArea],
@@ -1197,7 +1199,7 @@ class Player extends GameObject {
 
         let location = card.location;
 
-        if(location === Locations.PlayArea || (card.type === CardTypes.Holding && card.isInProvince() && !provinceLocations.includes(targetLocation))) {
+        if(location === Locations.PlayArea || (card.type === CardTypes.Holding && card.isInProvince() && !this.game.getProvinceArray().includes(targetLocation))) {
             if(card.owner !== this) {
                 card.owner.moveCard(card, targetLocation, options);
                 return;
@@ -1223,13 +1225,13 @@ class Player extends GameObject {
         } else if(location === Locations.BeingPlayed && card.owner !== this) {
             card.owner.moveCard(card, targetLocation, options);
             return;
-        } else if(card.type === CardTypes.Holding && provinceLocations.includes(targetLocation)) {
+        } else if(card.type === CardTypes.Holding && this.game.getProvinceArray().includes(targetLocation)) {
             card.controller = this;
         } else {
             card.controller = card.owner;
         }
 
-        if(provinceLocations.includes(targetLocation)) {
+        if(this.game.getProvinceArray().includes(targetLocation)) {
             if([Locations.DynastyDeck].includes(location)) {
                 card.facedown = true;
             }

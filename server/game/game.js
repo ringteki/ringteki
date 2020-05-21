@@ -36,7 +36,7 @@ const ConflictFlow = require('./gamesteps/conflict/conflictflow.js');
 const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
-const { EffectNames, Phases, EventNames } = require('./Constants');
+const { EffectNames, Phases, EventNames, Locations } = require('./Constants');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -263,6 +263,12 @@ class Game extends EventEmitter {
         return this.getPlayers().some(player => player.isTraitInPlay(trait));
     }
 
+    getProvinceArray() {
+        if(this.skirmishMode) {
+            return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        }
+        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince];
+    }
 
     createToken(card) {
         let token = new SpiritOfTheRiver(card);
