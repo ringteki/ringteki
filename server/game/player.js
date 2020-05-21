@@ -1136,6 +1136,7 @@ class Player extends GameObject {
         }
         if(this.game.skirmishMode) {
             this.imperialFavor = 'both';
+            this.game.addMessage('{0} claims the Emperor\'s favor!', this);
             return;
         }
         let handlers = _.map(['military', 'political'], type => {
