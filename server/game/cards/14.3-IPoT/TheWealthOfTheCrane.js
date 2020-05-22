@@ -54,19 +54,27 @@ class TheWealthOfTheCrane extends DrawCard {
     }
 
     getRemainingLocations(targetLocation) {
+        let offset = 0;
+        if (this.game.skirmishMode) {
+            offset = 2;
+        }
+
+        let returnValue = 0;
+
         if(targetLocation === Locations.ProvinceOne) {
-            return 4;
+            returnValue = 4;
         }
         if(targetLocation === Locations.ProvinceTwo) {
-            return 3;
+            returnValue = 3;
         }
         if(targetLocation === Locations.ProvinceThree) {
-            return 2;
+            returnValue = 2;
         }
         if(targetLocation === Locations.ProvinceFour) {
-            return 1;
+            returnValue = 1;
         }
-        return 0;
+        
+        return Math.max(0, returnValue - offset);
     }
 
     getNextLocation(targetLocation) {
@@ -76,7 +84,7 @@ class TheWealthOfTheCrane extends DrawCard {
         if(targetLocation === Locations.ProvinceTwo) {
             return Locations.ProvinceThree;
         }
-        if(targetLocation === Locations.ProvinceThree) {
+        if(!this.game.skirmishMode && targetLocation === Locations.ProvinceThree) {
             return Locations.ProvinceFour;
         }
         return null;

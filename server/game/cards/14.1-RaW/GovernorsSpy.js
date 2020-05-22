@@ -101,7 +101,11 @@ class GovernorsSpy extends DrawCard {
     isProvinceValidTarget(targetPlayer, cards, province) {
         //Step 1: Identify empty provinces
         let emptyLocations = [];
-        [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].forEach(p => {
+        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        if (!this.game.skirmishMode) {
+            baseLocations.push(Locations.ProvinceFour);
+        }
+        baseLocations.forEach(p => {
             if(!cards.some(card => card.targetLocation === p)) {
                 emptyLocations.push(p);
             }
