@@ -293,11 +293,9 @@ class Game extends EventEmitter {
         });
         if(conflict.conflictPassed) {
             conflict.attackingPlayer.declaredConflictOpportunities[ConflictTypes.Passed]++;
-        }
-        else if(conflict.forcedDeclaredType) {
+        } else if(conflict.forcedDeclaredType) {
             conflict.attackingPlayer.declaredConflictOpportunities[ConflictTypes.Forced]++;
-        }
-        else {
+        } else {
             conflict.attackingPlayer.declaredConflictOpportunities[conflict.declaredType]++;
         }
     }
