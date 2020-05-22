@@ -188,7 +188,7 @@ describe('Skirmish Mode Disabled Cards', function() {
                     player1: {
                         inPlay: [],
                         dynastyDiscard: ['doji-whisperer', 'kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai', 'favorable-ground',
-                        'imperial-storehouse', 'iron-mine', 'a-season-of-war', 'dispatch-to-nowhere', 'aranat'],
+                            'imperial-storehouse', 'iron-mine', 'a-season-of-war', 'dispatch-to-nowhere', 'aranat'],
                         hand: ['the-wealth-of-the-crane']
                     },
                     player2: {
@@ -199,14 +199,14 @@ describe('Skirmish Mode Disabled Cards', function() {
 
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
 
-                this.wealth = this.player1.findCardByName('the-wealth-of-the-crane');    
+                this.wealth = this.player1.findCardByName('the-wealth-of-the-crane');
 
                 this.dojiWhisperer = this.player1.moveCard('doji-whisperer', 'dynasty deck');
                 this.yoshi = this.player1.moveCard('kakita-yoshi', 'dynasty deck');
                 this.toshimoko = this.player1.moveCard('kakita-toshimoko', 'dynasty deck');
                 this.kageyu = this.player1.moveCard('daidoji-kageyu', 'dynasty deck');
                 this.chagatai = this.player1.moveCard('moto-chagatai', 'dynasty deck');
-    
+
                 this.favorable = this.player1.moveCard('favorable-ground', 'dynasty deck');
                 this.storehouse = this.player1.moveCard('imperial-storehouse', 'dynasty deck');
                 this.mine = this.player1.moveCard('iron-mine', 'dynasty deck');
@@ -239,15 +239,15 @@ describe('Skirmish Mode Disabled Cards', function() {
                     },
                     skirmish: true
                 });
-    
+
                 this.spy = this.player1.findCardByName('governor-s-spy');
-    
+
                 this.whisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 1');
                 this.challenger = this.player1.placeCardInProvince('doji-challenger', 'province 2');
                 this.kuwanan = this.player1.placeCardInProvince('doji-kuwanan', 'province 3');
                 this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
                 this.yuri = this.player1.findCardByName('kakita-yuri');
-        
+
                 this.p1_1 = this.player1.findCardByName('skirmish-province-0', 'province 1');
                 this.p1_2 = this.player1.findCardByName('skirmish-province-1', 'province 2');
                 this.p1_3 = this.player1.findCardByName('skirmish-province-2', 'province 3');
@@ -255,15 +255,15 @@ describe('Skirmish Mode Disabled Cards', function() {
 
             it('should prompt you to put each card into a province, letting you double up if possible', function() {
                 this.noMoreActions();
-    
+
                 this.player1.moveCard(this.yuri, 'province 1');
-    
+
                 this.initiateConflict({
                     attackers: [this.spy],
                     defenders: [],
                     type: 'political'
                 });
-    
+
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.spy);
@@ -271,44 +271,44 @@ describe('Skirmish Mode Disabled Cards', function() {
                 expect(this.player1).toHavePromptButton('player1');
                 expect(this.player1).toHavePromptButton('player2');
                 this.player1.clickPrompt('player1');
-    
+
                 this.player1.clickPrompt('Doji Whisperer');
                 expect(this.player1).toHavePrompt('Choose a province for Doji Whisperer');
                 expect(this.player1).toBeAbleToSelect(this.p1_1);
                 expect(this.player1).toBeAbleToSelect(this.p1_2);
                 expect(this.player1).toBeAbleToSelect(this.p1_3);
-    
+
                 this.player1.clickCard(this.p1_1);
                 expect(this.getChatLogs(1)).toContain('player1 places a card');
-    
+
                 this.player1.clickPrompt('Kakita Yuri');
                 expect(this.player1).toHavePrompt('Choose a province for Kakita Yuri');
                 expect(this.player1).toBeAbleToSelect(this.p1_1);
                 expect(this.player1).toBeAbleToSelect(this.p1_2);
                 expect(this.player1).toBeAbleToSelect(this.p1_3);
-    
+
                 this.player1.clickCard(this.p1_1);
                 expect(this.getChatLogs(1)).toContain('player1 places a card');
-    
+
                 this.player1.clickPrompt('Doji Challenger');
                 expect(this.player1).toHavePrompt('Choose a province for Doji Challenger');
                 expect(this.player1).not.toBeAbleToSelect(this.p1_1);
                 expect(this.player1).toBeAbleToSelect(this.p1_2);
                 expect(this.player1).toBeAbleToSelect(this.p1_3);
-    
+
                 this.player1.clickCard(this.p1_3);
                 expect(this.getChatLogs(1)).toContain('player1 places a card');
-    
+
                 this.player1.clickPrompt('Doji Kuwanan');
                 expect(this.player1).toHavePrompt('Choose a province for Doji Kuwanan');
                 expect(this.player1).not.toBeAbleToSelect(this.p1_1);
                 expect(this.player1).toBeAbleToSelect(this.p1_2);
                 expect(this.player1).not.toBeAbleToSelect(this.p1_3);
-    
+
                 this.player1.clickCard(this.p1_2);
                 expect(this.getChatLogs(4)).toContain('player1 places a card');
                 expect(this.getChatLogs(5)).toContain('player1 has finished placing cards');
-    
+
                 expect(this.whisperer.location).toBe('province 1');
                 expect(this.yuri.location).toBe('province 1');
                 expect(this.challenger.location).toBe('province 3');

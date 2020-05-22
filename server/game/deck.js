@@ -91,7 +91,7 @@ class Deck {
     }
 
     getSkirmishProvinceCardData(provinceNumber) {
-        return { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province-' + provinceNumber }
+        return { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province-' + provinceNumber };
     }
 
     eachRepeatedCard(cards, func) {

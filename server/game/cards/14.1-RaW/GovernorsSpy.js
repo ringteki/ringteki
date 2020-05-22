@@ -102,7 +102,7 @@ class GovernorsSpy extends DrawCard {
         //Step 1: Identify empty provinces
         let emptyLocations = [];
         let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if (!this.game.skirmishMode) {
+        if(!this.game.skirmishMode) {
             baseLocations.push(Locations.ProvinceFour);
         }
         baseLocations.forEach(p => {

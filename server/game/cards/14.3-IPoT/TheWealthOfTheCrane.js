@@ -55,7 +55,7 @@ class TheWealthOfTheCrane extends DrawCard {
 
     getRemainingLocations(targetLocation) {
         let offset = 0;
-        if (this.game.skirmishMode) {
+        if(this.game.skirmishMode) {
             offset = 2;
         }
 
@@ -73,7 +73,7 @@ class TheWealthOfTheCrane extends DrawCard {
         if(targetLocation === Locations.ProvinceFour) {
             returnValue = 1;
         }
-        
+
         return Math.max(0, returnValue - offset);
     }
 
