@@ -65,6 +65,7 @@ class SetupPhase extends Phase {
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceThree);
+                player.hideProvinceDeck = true;
             }
         } else {
             this.queueStep(new SetupProvincesPrompt(this.game));

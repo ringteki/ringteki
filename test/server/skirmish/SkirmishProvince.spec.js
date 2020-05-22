@@ -19,7 +19,7 @@ describe('Skirmish Provinces', function() {
             this.trailblazer = this.player1.findCardByName('shinjo-trailblazer');
             this.logistics = this.player1.findCardByName('logistics');
             this.guardian = this.player2.findCardByName('garanto-guardian');
-            this.province = this.player2.findCardByName('skirmish-province', 'province 1');
+            this.province = this.player2.findCardByName('skirmish-province-0', 'province 1');
         });
 
         it('Should not reveal when attacked', function () {

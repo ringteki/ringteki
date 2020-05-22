@@ -40,8 +40,8 @@ describe('Skirmish Fate Phase', function() {
                 this.player1.player.promptedActionWindows.fate = true;
                 this.player2.player.promptedActionWindows.fate = true;
 
-                this.province1 = this.player1.findCardByName('skirmish-province', 'province 2');
-                this.province2 = this.player2.findCardByName('skirmish-province', 'province 2');
+                this.province1 = this.player1.findCardByName('skirmish-province-1', 'province 2');
+                this.province2 = this.player2.findCardByName('skirmish-province-1', 'province 2');
                 this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
                 this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
 

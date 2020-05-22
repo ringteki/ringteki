@@ -54,7 +54,7 @@ class Deck {
             });
         } else {
             for(let i = 0; i < 3; i++) {
-                var provinceCard = new ProvinceCard(player);
+                var provinceCard = new ProvinceCard(player, this.getSkirmishProvinceCardData(i));
                 provinceCard.location = Locations.ProvinceDeck;
                 result.provinceCards.push(provinceCard);
             }
@@ -88,6 +88,10 @@ class Deck {
         }
 
         return result;
+    }
+
+    getSkirmishProvinceCardData(provinceNumber) {
+        return { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province-' + provinceNumber }
     }
 
     eachRepeatedCard(cards, func) {

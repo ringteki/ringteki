@@ -102,7 +102,7 @@ describe('Skirmish Win Conditions', function() {
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.callow = this.player2.findCardByName('callow-delegate');
             this.policyDebate = this.player1.findCardByName('policy-debate');
-            this.province = this.player2.findCardByName('skirmish-province', 'province 1');
+            this.province = this.player2.findCardByName('skirmish-province-0', 'province 1');
 
             this.noMoreActions();
             this.initiateConflict({
