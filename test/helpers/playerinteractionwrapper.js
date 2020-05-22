@@ -640,7 +640,7 @@ class PlayerInteractionWrapper {
         }
         var candidates = this.filterCardsByName(card, 'provinces');
         //Remove any face-down cards
-        candidates = _.reject(candidates, card => card.facedown);
+        candidates = _.reject(candidates, card => card.isFacedown());
         if(candidates.length === 0) {
             throw new Error(`${this.name} cannot play the specified card from the provinces`);
         }

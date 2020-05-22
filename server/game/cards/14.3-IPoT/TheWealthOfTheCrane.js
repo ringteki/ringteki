@@ -45,7 +45,7 @@ class TheWealthOfTheCrane extends DrawCard {
                 let province = context.player.getProvinceCardInProvince(targetLocation);
                 context.player.moveCard(cardFromDeck, targetLocation);
                 cardFromDeck.facedown = false;
-                this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, province.facedown ? 'a facedown province' : province.name);
+                this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, province.isFacedown() ? 'a facedown province' : province.name);
 
                 cards = cards.filter(a => a !== cardFromDeck);
                 this.resolveWealth(context, cards, this.getNextLocation(targetLocation));

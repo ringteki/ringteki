@@ -184,7 +184,7 @@ class CardAbility extends ThenAbility {
         let costMessages = this.cost.map(cost => {
             if(cost.getCostMessage) {
                 let card = context.costs[cost.getActionName(context)];
-                if(card && card.facedown) {
+                if(card && card.isFacedown && card.isFacedown()) {
                     card = 'a facedown card';
                 }
                 let [format, args] = ['ERROR - MISSING COST MESSAGE', [' ',' ']];

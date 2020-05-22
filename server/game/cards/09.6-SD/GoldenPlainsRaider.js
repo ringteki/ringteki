@@ -13,7 +13,7 @@ class GoldenPlainsRaider extends DrawCard {
             target: {
                 location: Locations.Provinces,
                 controller: Players.Opponent,
-                cardCondition: card => !card.facedown && card.type !== CardTypes.Province,
+                cardCondition: card => card.isFaceup() && card.type !== CardTypes.Province,
                 gameAction: AbilityDsl.actions.discardCard()
             }
         });

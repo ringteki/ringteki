@@ -96,17 +96,17 @@ class ProvinceCard extends BaseCard {
                 let dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
                 dynastyCards.forEach(dynastyCard => {
                     if(dynastyCard) {
-                        let promptTitle = 'Do you wish to discard ' + (dynastyCard.facedown ? 'the facedown card' : dynastyCard.name) + '?';
+                        let promptTitle = 'Do you wish to discard ' + (dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name) + '?';
                         this.game.promptWithHandlerMenu(this.controller.opponent, {
                             activePromptTitle: promptTitle,
                             source: 'Break ' + this.name,
                             choices: ['Yes', 'No'],
                             handlers: [
                                 () => {
-                                    this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard);
+                                    this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard);
                                     this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
                                 },
-                                () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.facedown ? 'the facedown card' : dynastyCard)
+                                () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard)
                             ]
                         });
                     }
@@ -173,6 +173,20 @@ class ProvinceCard extends BaseCard {
     hasEminent() {
         //Facedown provinces are out of play and their effects don't evaluate, so we check for the printed keyword
         return this.hasKeyword('eminent') || (!this.isBlank() && this.hasPrintedKeyword('eminent'));
+    }
+
+    isFaceup() {
+        if(this.game.skirmishMode) {
+            return false;
+        }
+        return super.isFaceup();
+    }
+
+    isFacedown() {
+        if(this.game.skirmishMode) {
+            return false;
+        }
+        return super.isFacedown();
     }
 }
 

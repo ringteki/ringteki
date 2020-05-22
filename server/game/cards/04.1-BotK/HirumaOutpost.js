@@ -15,7 +15,7 @@ class HirumaOutpost extends DrawCard {
                             return false;
                         }
                         let cards = context.player.getDynastyCardsInProvince(event.conflict.declaredProvince.location);
-                        return !cards.some(card => !card.facedown && card.type === CardTypes.Holding);
+                        return !cards.some(card => card.isFaceup() && card.type === CardTypes.Holding);
                     }
                 },
                 gameAction: AbilityDsl.actions.loseHonor()

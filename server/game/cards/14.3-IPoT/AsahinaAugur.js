@@ -6,7 +6,7 @@ class AsahinaAugur extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             targetLocation: Locations.Provinces,
-            match: card => card.isDynasty && card.facedown,
+            match: card => card.isDynasty && card.isFacedown(),
             effect: AbilityDsl.effects.canBeSeenWhenFacedown()
         });
 
@@ -19,7 +19,7 @@ class AsahinaAugur extends DrawCard {
                 gameAction: AbilityDsl.actions.discardCard()
             },
             effect: 'discard {1} in {2}',
-            effectArgs: context => [context.target.facedown ? 'a facedown card' : context.target, context.target.location],
+            effectArgs: context => [context.target.isFacedown() ? 'a facedown card' : context.target, context.target.location],
             limit: AbilityDsl.limit.perRound(3)
         });
     }
