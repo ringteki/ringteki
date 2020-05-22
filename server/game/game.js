@@ -36,7 +36,7 @@ const ConflictFlow = require('./gamesteps/conflict/conflictflow.js');
 const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
-const { EffectNames, Phases, EventNames } = require('./Constants');
+const { EffectNames, Phases, EventNames, ConflictTypes } = require('./Constants');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -291,18 +291,14 @@ class Game extends EventEmitter {
             passed: conflict.conflictPassed,
             uuid: conflict.uuid
         });
-        conflict.attackingPlayer.conflictOpportunities.total--;
-        if(conflict.conflictPassed || conflict.forcedDeclaredType) {
-            conflict.attackingPlayer.conflictOpportunities.military = Math.max(
-                conflict.attackingPlayer.conflictOpportunities.military,
-                conflict.attackingPlayer.conflictOpportunities.total
-            );
-            conflict.attackingPlayer.conflictOpportunities.political = Math.max(
-                conflict.attackingPlayer.conflictOpportunities.political,
-                conflict.attackingPlayer.conflictOpportunities.total
-            );
-        } else {
-            conflict.attackingPlayer.conflictOpportunities[conflict.declaredType]--;
+        if(conflict.conflictPassed) {
+            conflict.attackingPlayer.declaredConflictOpportunities[ConflictTypes.Passed]++;
+        }
+        else if(conflict.forcedDeclaredType) {
+            conflict.attackingPlayer.declaredConflictOpportunities[ConflictTypes.Forced]++;
+        }
+        else {
+            conflict.attackingPlayer.declaredConflictOpportunities[conflict.declaredType]++;
         }
     }
 
