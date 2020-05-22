@@ -60,12 +60,12 @@ describe('Khan\'s Ordu', function() {
                     type: 'military'
                 });
                 this.player2.clickCard(this.khansOrdu);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
-                expect(this.player1.player.getConflictOpportunities('political')).toBe(0);
-                expect(this.player1.player.getConflictOpportunities('total')).toBe(1);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(2);
-                expect(this.player2.player.getConflictOpportunities('political')).toBe(0);
-                expect(this.player2.player.getConflictOpportunities('total')).toBe(2);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(2);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
+                expect(this.player2.player.getConflictOpportunities()).toBe(2);
             });
         });
     });

@@ -69,7 +69,7 @@ describe('Ivory Kingdoms Unicorn', function() {
                     defenders: []
                 });
                 this.noMoreActions();
-                expect(this.player1.player.conflictOpportunities['total']).toBe(0);
+                expect(this.player1.player.getConflictOpportunities()).toBe(0);
                 this.player1.clickPrompt('No');
                 this.player1.clickPrompt('Don\'t Resolve');
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
@@ -184,9 +184,9 @@ describe('Ivory Kingdoms Unicorn', function() {
                 this.player1.clickCard(this.iuchiFarseer);
                 this.player1.clickCard(this.shamefulDisplay2);
                 this.player1.clickPrompt('Initiate Conflict');
-                expect(this.player1.player.conflictOpportunities['military']).toBe(1);
-                expect(this.player1.player.conflictOpportunities['political']).toBe(1);
-                expect(this.player1.player.conflictOpportunities['total']).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
             });
         });
     });
