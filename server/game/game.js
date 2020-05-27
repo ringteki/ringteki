@@ -36,7 +36,7 @@ const ConflictFlow = require('./gamesteps/conflict/conflictflow.js');
 const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
-const { EffectNames, Phases, EventNames } = require('./Constants');
+const { EffectNames, Phases, EventNames, Locations } = require('./Constants');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -63,7 +63,7 @@ class Game extends EventEmitter {
         this.currentConflict = null;
         this.currentDuel = null;
         this.manualMode = false;
-        this.skirmishMode = !!options.skirmishMode;
+        this.skirmishMode = details.skirmishMode;
         this.currentPhase = '';
         this.password = details.password;
         this.roundNumber = 0;
@@ -263,6 +263,12 @@ class Game extends EventEmitter {
         return this.getPlayers().some(player => player.isTraitInPlay(trait));
     }
 
+    getProvinceArray() {
+        if(this.skirmishMode) {
+            return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        }
+        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince];
+    }
 
     createToken(card) {
         let token = new SpiritOfTheRiver(card);
@@ -806,24 +812,26 @@ class Game extends EventEmitter {
         }, []));
         this.provinceCards = this.allCards.filter(card => card.isProvince);
 
-        if(playerWithNoStronghold) {
-            this.queueSimpleStep(() => {
-                this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
-                return false;
-            });
-            this.continue();
-            return false;
-        }
-
-        for(let player of this.getPlayers()) {
-            let numProvinces = this.provinceCards.filter(a => a.controller === player);
-            if(numProvinces.length !== 5) {
+        if(!this.skirmishMode) {
+            if(playerWithNoStronghold) {
                 this.queueSimpleStep(() => {
-                    this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                    this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
                     return false;
                 });
                 this.continue();
                 return false;
+            }
+
+            for(let player of this.getPlayers()) {
+                let numProvinces = this.provinceCards.filter(a => a.controller === player);
+                if(numProvinces.length !== 5) {
+                    this.queueSimpleStep(() => {
+                        this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                        return false;
+                    });
+                    this.continue();
+                    return false;
+                }
             }
         }
 
@@ -1202,6 +1210,7 @@ class Game extends EventEmitter {
             players: players,
             winner: this.winner ? this.winner.name : undefined,
             winReason: this.winReason,
+            skirmishMode: this.skirmishMode,
             finishedAt: this.finishedAt
         };
     }
@@ -1245,6 +1254,7 @@ class Game extends EventEmitter {
                     };
                 }),
                 started: this.started,
+                skirmishMode: this.skirmishMode,
                 winner: this.winner ? this.winner.name : undefined
             };
         }
@@ -1296,6 +1306,7 @@ class Game extends EventEmitter {
             players: playerSummaries,
             started: this.started,
             startedAt: this.startedAt,
+            skirmishMode: this.skirmishMode,
             spectators: this.getSpectators().map(spectator => {
                 return {
                     id: spectator.id,

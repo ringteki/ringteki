@@ -3,7 +3,8 @@ const ProvinceCard = require('../../../build/server/game/provincecard.js');
 describe('ProvinceCard', function () {
     beforeEach(function () {
         this.testCard = { code: '111', label: 'test 1(some pack)', name: 'test 1' };
-        this.gameSpy = jasmine.createSpyObj('game', ['emitEvent', 'on']);
+        this.gameSpy = jasmine.createSpyObj('game', ['emitEvent', 'on', 'getProvinceArray']);
+        this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
         this.card = new ProvinceCard({ game: this.gameSpy }, this.testCard);
         this.card.printedType = 'province';
         spyOn(this.card, 'removeLastingEffects');

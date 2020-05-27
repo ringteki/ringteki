@@ -54,7 +54,7 @@ class CardAction extends CardAbility {
             return 'phase';
         }
 
-        if(!ignoredRequirements.includes('phase') && this.game.skirmishMode && this.game.currentConflict === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
+        if(!ignoredRequirements.includes('phase') && this.game.skirmishMode && this.game.currentPhase === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
             return 'phase';
         }
 

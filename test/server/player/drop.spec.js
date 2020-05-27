@@ -4,7 +4,7 @@ const Player = require('../../../build/server/game/player.js');
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'checkGameState', 'emitEvent', 'getOtherPlayer', 'raiseEvent']);
+            this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'checkGameState', 'emitEvent', 'getOtherPlayer', 'raiseEvent', 'getProvinceArray']);
 
             this.player = new Player('1', { username: 'Player 1', settings: {} }, true, this.gameSpy);
             spyOn(this.player, 'moveCard');
@@ -14,6 +14,7 @@ describe('Player', () => {
             this.gameSpy.playersAndSpectators = [];
             this.gameSpy.playersAndSpectators[this.player.name] = this.player;
             this.gameSpy.manualMode = true;
+            this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
 
             this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'isFacedown', 'isFaceup']);
             this.cardSpy.uuid = '1111';

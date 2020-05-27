@@ -45,7 +45,7 @@ class RegroupPhase extends Phase {
     discardFromProvincesForPlayer(player) {
         let cardsToDiscard = [];
         let cardsOnUnbrokenProvinces = [];
-        _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince], location => {
+        _.each(this.game.getProvinceArray(), location => {
             let provinceCard = player.getProvinceCardInProvince(location);
             let province = player.getSourceList(location);
             let dynastyCards = province.filter(card => card.isDynasty && card.isFaceup());

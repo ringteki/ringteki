@@ -4,7 +4,6 @@ const SimpleStep = require('./simplestep.js');
 const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
 const SetupProvincesPrompt = require('./setup/setupprovincesprompt.js');
-const ProvinceCard = require('../provincecard');
 const { Locations } = require('../Constants');
 
 class SetupPhase extends Phase {
@@ -63,9 +62,10 @@ class SetupPhase extends Phase {
     setupProvinces() {
         if(this.game.skirmishMode) {
             for(let player of this.game.getPlayers()) {
-                for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree]) {
-                    player.moveCard(new ProvinceCard(player), location);
-                }
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceThree);
+                player.hideProvinceDeck = true;
             }
         } else {
             this.queueStep(new SetupProvincesPrompt(this.game));

@@ -101,7 +101,7 @@ class CardAbility extends ThenAbility {
 
         if(defaultedLocation.some(location => location === Locations.Provinces)) {
             defaultedLocation = defaultedLocation.filter(location => location !== Locations.Provinces);
-            defaultedLocation = defaultedLocation.concat([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]);
+            defaultedLocation = defaultedLocation.concat(this.game.getProvinceArray());
         }
 
         return defaultedLocation;

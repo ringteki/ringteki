@@ -6,7 +6,7 @@ class RallyAbility extends TriggeredAbility {
         super(game, card, AbilityTypes.ForcedReaction, {
             when: {
                 onCardRevealed: (event, context) => event.card === context.source &&
-                    [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(event.card.location) &&
+                    this.game.getProvinceArray().includes(event.card.location) &&
                     context.source.hasRally()
             },
             location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
