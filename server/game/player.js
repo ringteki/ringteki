@@ -374,11 +374,10 @@ class Player extends GameObject {
         const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
         const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
         let baselineAvailableConflicts = this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political];
-        
-        if (this.game.skirmishMode) {
+
+        if(this.game.skirmishMode) {
             baselineAvailableConflicts = 1;
         }
-
 
 
         if(setConflictType && type === setConflictType) {
