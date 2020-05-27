@@ -324,6 +324,7 @@ class Player extends GameObject {
     getConflictOpportunities() {
         let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
         let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
+        let skirmishModeRRGLimit = this.game.skirmishMode ? 1 : 0;
         if(maxConflicts) {
             return this.getConflictsWhenMaxIsSet(maxConflicts);
         }
@@ -334,7 +335,8 @@ class Player extends GameObject {
         return this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military)
             + this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
             - this.declaredConflictOpportunities[ConflictTypes.Passed]
-            - this.declaredConflictOpportunities[ConflictTypes.Forced];
+            - this.declaredConflictOpportunities[ConflictTypes.Forced]
+            - skirmishModeRRGLimit; //Skirmish you have 1 less conflict per the rules
     }
 
     getRemainingConflictOpportunitiesForType(type) {
@@ -371,9 +373,16 @@ class Player extends GameObject {
         const setConflictType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
         const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
         const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
+        let baselineAvailableConflicts = this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political];
+        
+        if (this.game.skirmishMode) {
+            baselineAvailableConflicts = 1;
+        }
+
+
 
         if(setConflictType && type === setConflictType) {
-            return this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political] + additionalConflictsForType;
+            return baselineAvailableConflicts + additionalConflictEffects.length;
         } else if(setConflictType && type !== setConflictType) {
             return 0;
         }
