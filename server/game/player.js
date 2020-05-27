@@ -13,7 +13,7 @@ const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 const Ring = require('./ring.js');
 
-const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, ConflictTypes, Players } = require('./Constants');
+const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
 
 class Player extends GameObject {
@@ -57,10 +57,15 @@ class Player extends GameObject {
         this.actionPhasePriority = false;
         this.honorBidModifier = 0; // most recent bid modifiers
         this.showBid = 0; // amount shown on the dial
-        this.conflictOpportunities = {
+        this.declaredConflictOpportunities = {
+            military: 0,
+            political: 0,
+            passed: 0,
+            forced: 0 // conflicts that were forced into a certain type. See Ivory Kingsdoms Unicorn
+        };
+        this.defaultAllowedConflicts = {
             military: 1,
-            political: 1,
-            total: 2
+            political: 1
         };
         this.imperialFavor = '';
 
@@ -291,23 +296,6 @@ class Player extends GameObject {
         return this.opponent && this.opponent.showBid > this.showBid;
     }
 
-    getLegalConflictTypes(properties) {
-        let types = properties.type || [ConflictTypes.Military, ConflictTypes.Political];
-        types = Array.isArray(types) ? types : [types];
-        const forcedDeclaredType = properties.forcedDeclaredType || this.game.currentConflict && this.game.currentConflict.forcedDeclaredType;
-        if(forcedDeclaredType) {
-            return [forcedDeclaredType].filter(type =>
-                types.includes(type) &&
-                this.getConflictOpportunities() > 0 &&
-                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
-            );
-        }
-        return types.filter(type =>
-            this.getConflictOpportunities(type) > 0 &&
-            !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
-        );
-    }
-
     hasLegalConflictDeclaration(properties) {
         let conflictType = this.getLegalConflictTypes(properties);
         if(conflictType.length === 0) {
@@ -331,6 +319,67 @@ class Player extends GameObject {
             province.canDeclare(type, ring) &&
             cards.some(card => card.canDeclareAsAttacker(type, ring, province))
         )));
+    }
+
+    getConflictOpportunities() {
+        let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
+        if(maxConflicts) {
+            return this.getConflictsWhenMaxIsSet(maxConflicts);
+        }
+        if(setConflictDeclarationType) {
+            return this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType);
+        }
+
+        return this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military)
+            + this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
+            - this.declaredConflictOpportunities[ConflictTypes.Passed]
+            - this.declaredConflictOpportunities[ConflictTypes.Forced];
+    }
+
+    getRemainingConflictOpportunitiesForType(type) {
+        return this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type];
+    }
+
+    getLegalConflictTypes(properties) {
+        let types = properties.type || [ConflictTypes.Military, ConflictTypes.Political];
+        types = Array.isArray(types) ? types : [types];
+        const forcedDeclaredType = properties.forcedDeclaredType || this.game.currentConflict && this.game.currentConflict.forcedDeclaredType;
+        if(forcedDeclaredType) {
+            return [forcedDeclaredType].filter(type =>
+                types.includes(type) &&
+                this.getConflictOpportunities() > 0 &&
+                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+            );
+        }
+
+        if(this.getConflictOpportunities() === 0) {
+            return [];
+        }
+
+        return types.filter(type =>
+            this.getRemainingConflictOpportunitiesForType(type) > 0 &&
+            !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+        );
+    }
+
+    getConflictsWhenMaxIsSet(maxConflicts) {
+        return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
+    }
+
+    getMaxConflictOpportunitiesForPlayerByType(type) {
+        const setConflictType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
+        const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
+
+        if(setConflictType && type === setConflictType) {
+            return this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political] + additionalConflictsForType;
+        } else if(setConflictType && type !== setConflictType) {
+            return 0;
+        }
+
+        return this.defaultAllowedConflicts[type] + additionalConflictsForType;
+
     }
 
     /**
@@ -567,43 +616,6 @@ class Player extends GameObject {
         }
         this.game.emitEvent(EventNames.OnDeckShuffled, { player: this, deck: Decks.DynastyDeck });
         this.dynastyDeck = _(this.dynastyDeck.shuffle());
-    }
-
-    addConflictOpportunity(type) {
-        if(type) {
-            this.conflictOpportunities[type]++;
-        }
-        this.conflictOpportunities.total++;
-    }
-
-    removeConflictOpportunity(type) {
-        if(type) {
-            this.conflictOpportunities[type] = Math.max(this.conflictOpportunities[type] - 1, 0);
-        }
-        this.conflictOpportunities.total = Math.max(this.conflictOpportunities.total - 1, 0);
-    }
-
-    /**
-     * Returns the number of conflict opportunities remaining for this player
-     * @param {String} type - one of 'military', 'political', ''
-     * @returns {Number} opportunities remaining
-     */
-
-    getConflictOpportunities(type = 'total') {
-        let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
-        let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
-        if(setConflictDeclarationType && type !== 'total') {
-            if(type !== setConflictDeclarationType) {
-                return 0;
-            } else if(maxConflicts) {
-                return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
-            }
-            return this.conflictOpportunities['total'];
-        }
-        if(maxConflicts) {
-            return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
-        }
-        return this.conflictOpportunities[type];
     }
 
     /**
@@ -845,19 +857,24 @@ class Player extends GameObject {
             this.noTimer = false;
         }
 
+        this.resetConflictOpportunities();
+
         this.cardsInPlay.each(card => {
             card.new = false;
         });
-
         this.passedDynasty = false;
-        this.conflictOpportunities.military = 1;
-        this.conflictOpportunities.political = 1;
-        this.conflictOpportunities.total = this.game.skirmishMode ? 1 : 2;
     }
 
     collectFate() {
         this.modifyFate(this.getTotalIncome());
         this.game.raiseEvent(EventNames.OnFateCollected, { player: this });
+    }
+
+    resetConflictOpportunities() {
+        this.declaredConflictOpportunities[ConflictTypes.Military] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Political] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Passed] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Forced] = 0;
     }
 
     showConflictDeck() {
@@ -1389,8 +1406,8 @@ class Player extends GameObject {
             fate: this.fate,
             honor: this.getTotalHonor(),
             conflictsRemaining: this.getConflictOpportunities(),
-            militaryRemaining: this.getConflictOpportunities('military'),
-            politicalRemaining: this.getConflictOpportunities('political')
+            militaryRemaining: this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military),
+            politicalRemaining: this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
         };
     }
 
