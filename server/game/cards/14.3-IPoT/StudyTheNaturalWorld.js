@@ -15,11 +15,28 @@ class StudyTheNaturalWorld extends DrawCard {
                     target: context.game.currentConflict.ring,
                     effect: AbilityDsl.effects.addElement(context.game.currentConflict.conflictProvince.element)
                 })),
-                AbilityDsl.actions.playerLastingEffect({
-                    condition: context => context.game.currentConflict.winner === context.player,
-                    effect: AbilityDsl.effects.modifyConflictElementsToResolve(5),
-                    duration: Durations.UntilEndOfConflict
-                })
+                AbilityDsl.actions.playerLastingEffect(context => ({
+                    effect: AbilityDsl.effects.delayedEffect({
+                        when: {
+                            afterConflict: event =>
+                                context.player === event.conflict.winner
+                        },
+                        gameAction: AbilityDsl.actions.menuPrompt({
+                            activePromptTitle: 'Resolve Ring Effects?',
+                            choices: ['Yes', 'No'],
+                            choiceHandler: (choice, displayMessage) => {
+                                if(displayMessage && choice === 'Yes') {
+                                    context.game.addMessage('{0} chooses to resolve all elements of the contested ring due to the delayed effect of {1}', context.player, context.source);
+                                }
+                                return { target: (choice === 'Yes' ? context.game.currentConflict.ring.getElements() : []) };
+                            },
+                            gameAction: AbilityDsl.actions.resolveRingEffect()
+                        })
+                        // gameAction: AbilityDsl.actions.resolveRingEffect( context2 => ({ target: context2.game.currentConflict.conflictProvince.element })),
+                        // message: '{0} may resolve all elements of the contested ring due to the effect of {1}',
+                        // messageArgs: [context.player, context.source]
+                    })
+                }))
             ])
         });
     }
