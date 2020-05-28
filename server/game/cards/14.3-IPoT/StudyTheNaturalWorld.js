@@ -32,9 +32,6 @@ class StudyTheNaturalWorld extends DrawCard {
                             },
                             gameAction: AbilityDsl.actions.resolveRingEffect()
                         })
-                        // gameAction: AbilityDsl.actions.resolveRingEffect( context2 => ({ target: context2.game.currentConflict.conflictProvince.element })),
-                        // message: '{0} may resolve all elements of the contested ring due to the effect of {1}',
-                        // messageArgs: [context.player, context.source]
                     })
                 }))
             ])
