@@ -116,7 +116,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
                 }));
                 context.game.openThenEventWindow(moveEvents);
             }));
-            context.game.openThenEventWindow(events);
+            context.game.openEventWindow(events);
         });
     }
 

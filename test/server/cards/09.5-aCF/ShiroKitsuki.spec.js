@@ -137,17 +137,16 @@ describe('Shiro Kitsuki', function() {
                 expect(this.player1.hand.length).toBe(hand + 1);
             });
 
-            /*********** CURRENTLY FALING ************/
-            // it('should only trigger once with Miyako', function() {
-            //     this.player1.clickCard(this.shiroKitsuki);
-            //     this.player1.chooseCardInPrompt(this.miyako.name, 'card-name');
-            //     this.player2.clickPrompt('Done');
-            //     this.player2.clickCard(this.miyako);
-            //     this.player2.clickCard(this.adept);
-            //     expect(this.player1).toHavePrompt('Choose a ring to claim');
-            //     this.player1.clickRing('void');
-            //     expect(this.player2).toHavePrompt('Triggered Abilities');
-            // });
+            it('should only trigger once with Miyako', function() {
+                this.player1.clickCard(this.shiroKitsuki);
+                this.player1.chooseCardInPrompt(this.miyako.name, 'card-name');
+                this.player2.clickPrompt('Done');
+                this.player2.clickCard(this.miyako);
+                this.player2.clickCard(this.adept);
+                expect(this.player1).toHavePrompt('Choose a ring to claim');
+                this.player1.clickRing('void');
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+            });
         });
     });
 });
