@@ -16,7 +16,7 @@ class FavorableAlliance extends DrawCard {
             effect: 'set aside {1} card{2}',
             effectArgs: context => [context.costs.variableFateCost, context.costs.variableFateCost > 1 ? 's' : ''],
             gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.lookAt(context=> ({
+                AbilityDsl.actions.lookAt(context => ({
                     target: context.player.conflictDeck.first(context.costs.variableFateCost),
                     message: '{0} sets aside the top {1} card{3} from their conflict deck: {2}',
                     messageArgs: cards => [context.player, cards.length, cards, cards.length > 1 ? 's' : '']

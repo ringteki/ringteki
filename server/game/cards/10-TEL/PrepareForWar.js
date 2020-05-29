@@ -2,7 +2,6 @@ import { CardTypes, Players, TargetModes } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
 
-
 class PrepareForWar extends DrawCard {
     setupCardAbilities() {
         this.action({

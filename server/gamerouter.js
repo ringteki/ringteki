@@ -8,7 +8,7 @@ const GameService = require('./services/GameService.js');
 const ServiceFactory = require('./services/ServiceFactory.js');
 
 class GameRouter extends EventEmitter {
-    constructor(config) {
+    constructor() {
         super();
 
         let configService = ServiceFactory.configService();

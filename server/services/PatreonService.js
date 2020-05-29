@@ -1,7 +1,7 @@
 const patreon = require('patreon');
 const patreonAPI = patreon.patreon;
 const patreonOAuth = patreon.oauth;
-const pledge_schema = require('patreon/dist/schemas/pledge').default;
+const pledge_schema = require('patreon/dist/schemas/pledge').default; // eslint-disable-line camelcase 
 
 const logger = require('../log.js');
 

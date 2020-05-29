@@ -1,5 +1,6 @@
 {
   "extends": "eslint:recommended",
+  "parser": "babel-eslint", // This line is required to fix "unexpected token" errors
   "rules": {
     "arrow-spacing": [
       "error",
@@ -150,6 +151,7 @@
     "ecmaFeatures": {
       "impliedStrict": true,
       "modules": false
-    }
+    },
+    "sourceType": "module"
   }
 }
