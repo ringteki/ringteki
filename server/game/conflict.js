@@ -143,7 +143,7 @@ class Conflict extends GameObject {
             let fate = newRing.fate;
             this.attackingPlayer.modifyFate(newRing.fate);
             newRing.fate = 0;
-            if (fate > 0) {
+            if(fate > 0) {
                 let context = this.game.getFrameworkContext(this.attackingPlayer);
                 this.game.raiseEvent(EventNames.OnMoveFate, { fate: fate, origin: newRing, context: context, recipient: this.attackingPlayer });
             }

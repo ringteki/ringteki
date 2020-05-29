@@ -9,7 +9,7 @@ describe('Shinjo Kyora', function() {
                         hand: ['four-temples-advisor']
                     },
                     player2: {
-                        inPlay: ['shinjo-kyora'],
+                        inPlay: ['shinjo-kyora']
                     }
                 });
                 this.shinjoKyoraP1 = this.player1.findCardByName('shinjo-kyora');
