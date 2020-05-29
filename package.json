@@ -74,6 +74,7 @@
     "eslint": "^6.4.0",
     "eslint-plugin-jasmine": "^2.10.1",
     "faker": "^4.1.0",
-    "jasmine": "^2.8.0"
+    "jasmine": "^2.8.0",
+    "nyc": "^11.3.0"
   }
 }
