@@ -37,7 +37,7 @@ describe('Shosuro Miyako 2', function() {
                 this.dojiWhisperer = this.player1.findCardByName('doji-whisperer');
                 this.dojiHotaru = this.player1.findCardByName('doji-hotaru');
 
-                this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
+                this.adeptOfTheWaves = this.player2.findCardByName('adept-of-the-waves');
             });
 
             it('should be able to disguise over a non-scorpion non-unique character only', function() {
@@ -59,7 +59,8 @@ describe('Shosuro Miyako 2', function() {
                         hand: ['shosuro-miyako-2']
                     },
                     player2: {
-                        inPlay: ['adept-of-the-waves', 'isawa-tadaka']
+                        inPlay: ['adept-of-the-waves', 'isawa-tadaka'],
+                        hand: ['watch-commander']
                     }
                 });
 
@@ -70,6 +71,7 @@ describe('Shosuro Miyako 2', function() {
 
                 this.adeptOfTheWaves = this.player2.findCardByName('adept-of-the-waves');
                 this.isawaTadaka = this.player2.findCardByName('isawa-tadaka');
+                this.watchCommander = this.player2.findCardByName('watch-commander');
             });
 
             it('should trigger when Shosuro Miyako enters play', function() {
@@ -98,6 +100,31 @@ describe('Shosuro Miyako 2', function() {
                 this.player1.clickCard(this.adeptOfTheWaves);
                 expect(this.adeptOfTheWaves.isDishonored).toBe(true);
                 expect(this.getChatLogs(1)).toContain('player1 uses Shosuro Miyako to dishonor Adept of the Waves');
+            });
+
+            it('should only count as playing a card once', function() {
+                this.player1.pass();
+                this.player2.playAttachment(this.watchCommander, this.adeptOfTheWaves);
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.dojiWhisperer],
+                    defenders: [this.adeptOfTheWaves],
+                    ring: 'fire',
+                    type: 'political'
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.shosuroMiyako);
+                this.player1.clickCard(this.dojiWhisperer);
+                this.player1.clickPrompt('Conflict');
+                this.player1.clickCard(this.shosuroMiyako);
+                this.player1.clickCard(this.adeptOfTheWaves);
+                expect(this.adeptOfTheWaves.isDishonored).toBe(true);
+                expect(this.getChatLogs(1)).toContain('player1 uses Shosuro Miyako to dishonor Adept of the Waves');
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.watchCommander);
+                this.player2.clickCard(this.watchCommander);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
             });
         });
     });
