@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { TargetModes, Durations, Phases, Locations, Decks, Players } = require('../../Constants');
+const { TargetModes, Durations, Locations, Decks, Players } = require('../../Constants');
 
 class MasterpiecePainter extends DrawCard {
     setupCardAbilities() {
