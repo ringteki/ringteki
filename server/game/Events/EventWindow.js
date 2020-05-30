@@ -100,9 +100,9 @@ class EventWindow extends BaseStepWithPipeline {
     }
 
     executeHandler() {
-        this.events = _.sortBy(this.events, 'order');
+        this.eventsToExecute = _.sortBy(this.events, 'order');
 
-        _.each(this.events, event => {
+        _.each(this.eventsToExecute, event => {
             // need to checkCondition here to ensure the event won't fizzle due to another event's resolution (e.g. double honoring an ordinary character with YR etc.)
             event.checkCondition();
             if(!event.cancelled) {
@@ -113,7 +113,8 @@ class EventWindow extends BaseStepWithPipeline {
     }
 
     checkGameState() {
-        this.game.checkGameState(_.any(this.events, event => event.handler), this.events);
+        this.eventsToExecute = this.eventsToExecute.filter(event => !event.cancelled);
+        this.game.checkGameState(_.any(this.eventsToExecute, event => event.handler), this.eventsToExecute);
     }
 
     checkThenAbilities() {
