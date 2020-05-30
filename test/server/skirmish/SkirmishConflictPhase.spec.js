@@ -18,12 +18,12 @@ describe('Skirmish Conflict Phase', function() {
 
         it('each player should only have 1 conflict opportunity and it should be of either type', function () {
             expect(this.player1.player.getConflictOpportunities()).toBe(1);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
-            expect(this.player1.player.getConflictOpportunities('political')).toBe(1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
 
             expect(this.player2.player.getConflictOpportunities()).toBe(1);
-            expect(this.player2.player.getConflictOpportunities('military')).toBe(1);
-            expect(this.player2.player.getConflictOpportunities('political')).toBe(1);
+            expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+            expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
         });
 
         it('imperial favor should count skill for both - testing mil with favor', function () {
@@ -133,12 +133,12 @@ describe('Normal Conflict Phase', function() {
 
         it('each player should have 2 conflict opportunities (1 of each type)', function () {
             expect(this.player1.player.getConflictOpportunities()).toBe(2);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
-            expect(this.player1.player.getConflictOpportunities('political')).toBe(1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
 
             expect(this.player2.player.getConflictOpportunities()).toBe(2);
-            expect(this.player2.player.getConflictOpportunities('military')).toBe(1);
-            expect(this.player2.player.getConflictOpportunities('political')).toBe(1);
+            expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+            expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
         });
 
         it('imperial favor should not count skill for both - testing mil with pol favor', function () {

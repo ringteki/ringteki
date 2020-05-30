@@ -63,9 +63,9 @@ describe('Captive Audience', function () {
                     defenders: []
                 });
                 this.player2.clickCard(this.captiveAudience);
-                expect(this.player1.player.getConflictOpportunities('total')).toBe(1);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
-                expect(this.player1.player.getConflictOpportunities('political')).toBe(0);
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
             });
         });
     });
