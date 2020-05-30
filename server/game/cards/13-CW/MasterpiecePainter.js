@@ -35,7 +35,7 @@ const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(cont
         duration: Durations.Custom,
         until: {
             onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
-            onPhaseEnded: event => event.phase === Phases.Conflict,
+            onPhaseEnded: () => true,
             onDeckShuffled: event => event.player === chosenPlayer && event.deck === Decks.ConflictDeck
         },
         effect: [
