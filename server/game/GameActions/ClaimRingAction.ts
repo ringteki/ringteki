@@ -31,10 +31,12 @@ export class ClaimRingAction extends RingAction {
         let context = event.context;
         ring.contested = false;
         ring.conflictType = type;
-        if(takeFate && context.player.checkRestrictions('takeFateFromRings', context)) {
+        if(takeFate && ring.fate > 0 && context.player.checkRestrictions('takeFateFromRings', context)) {
             context.game.addMessage('{0} takes {1} fate from {2}', context.player, ring.fate, ring);
+            let fate = ring.fate;
             context.player.modifyFate(ring.fate);
             ring.removeFate();
+            context.game.raiseEvent(EventNames.OnMoveFate, { fate: fate, origin: ring, context: context, recipient: context.player });
         }
         context.game.raiseEvent(EventNames.OnClaimRing, { player: context.player, conflict: context.conflict, ring:ring }, () => ring.claimRing(context.player));
     }

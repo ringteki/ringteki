@@ -66,6 +66,12 @@ class ProvinceCard extends BaseCard {
         this.facedown = false;
     }
 
+    leavesPlay() {
+        this.removeAllTokens();
+        this.makeOrdinary();
+        super.leavesPlay();
+    }
+
     isConflictProvince() {
         return this.game.currentConflict && this.game.currentConflict.conflictProvince === this;
     }
