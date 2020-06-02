@@ -210,12 +210,12 @@ class ConflictFlow extends BaseStepWithPipeline {
         }));
         contexts = contexts.filter(context => context.source.canInitiateKeywords(context));
 
-        if(contexts.length === 0) {
-            return;
-        }
-
         for(let target of targets) {
             target.covert = false;
+        }
+
+        if(contexts.length === 0) {
+            return;
         }
 
         // Need to have:
