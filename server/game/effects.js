@@ -41,10 +41,6 @@ const Effects = {
     cardCannot: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ type: properties.cannot || properties }, properties))),
     changeContributionFunction: (func) => EffectBuilder.card.static(EffectNames.ChangeContributionFunction, func),
     changeType: (type) => EffectBuilder.card.static(EffectNames.ChangeType, type),
-    characterProvidesAdditionalConflict: (type) => EffectBuilder.card.detached(EffectNames.AdditionalConflict, {
-        apply: card => card.controller.addConflictOpportunity(type),
-        unapply: card => card.controller.removeConflictOpportunity(type)
-    }),
     contributeToConflict: (player) => EffectBuilder.card.flexible(EffectNames.ContributeToConflict, player),
     copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
@@ -116,10 +112,7 @@ const Effects = {
     additionalAction: (amount = 1) => EffectBuilder.player.static(EffectNames.AdditionalAction, amount),
     additionalCardPlayed: (amount = 1) => EffectBuilder.player.flexible(EffectNames.AdditionalCardPlayed, amount),
     additionalCharactersInConflict: (amount) => EffectBuilder.player.flexible(EffectNames.AdditionalCharactersInConflict, amount),
-    additionalConflict: (type) => EffectBuilder.player.detached(EffectNames.AdditionalConflict, {
-        apply: player => player.addConflictOpportunity(type),
-        unapply: () => true
-    }),
+    additionalConflict: (type) => EffectBuilder.player.static(EffectNames.AdditionalConflict, type),
     additionalTriggerCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalTriggerCost, func),
     additionalPlayCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalPlayCost, func),
     alternateFatePool: (match) => EffectBuilder.player.static(EffectNames.AlternateFatePool, match),

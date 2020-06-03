@@ -1,3 +1,5 @@
+import { AbilityTypes, Players } from '../../Constants.js';
+
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 
@@ -10,7 +12,10 @@ class Shori extends DrawCard {
 
         this.whileAttached({
             match: card => card.hasTrait('champion'),
-            effect: AbilityDsl.effects.characterProvidesAdditionalConflict('military')
+            effect: AbilityDsl.effects.gainAbility(AbilityTypes.Persistent ,{
+                targetController: Players.Self,
+                effect: AbilityDsl.effects.additionalConflict('military')
+            })
         });
     }
 }
