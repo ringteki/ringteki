@@ -43,7 +43,6 @@ class PlayAttachmentAction extends BaseAction {
             card: context.source,
             context: context,
             originalLocation: context.source.location,
-            originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
             playType: context.playType
         });
         let takeControl = context.source.controller !== context.player;

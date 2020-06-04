@@ -461,24 +461,6 @@ class PlayerInteractionWrapper {
         this.checkUnserializableGameState();
     }
 
-    clickPromptButtonIndex(index) {
-        var currentPrompt = this.player.currentPrompt();
-
-        if(currentPrompt.buttons.length <= index) {
-            throw new Error(`Couldn't click on Button "${index}" for ${this.player.name}. Current prompt is:\n${this.formatPrompt()}`);
-        }
-
-        var promptButton = currentPrompt.buttons[index];
-
-        if(!promptButton || promptButton.disabled) {
-            throw new Error(`Couldn't click on Button "${index}" for ${this.player.name}. Current prompt is:\n${this.formatPrompt()}`);
-        }
-
-        this.game.menuButton(this.player.name, promptButton.arg, promptButton.uuid, promptButton.method);
-        this.game.continue();
-        this.checkUnserializableGameState();
-    }
-
     chooseCardInPrompt(cardName, controlName) {
 
         var currentPrompt = this.player.currentPrompt();

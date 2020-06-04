@@ -44,8 +44,8 @@ describe('BaseCard', function () {
                     this.summary = this.card.getSummary(this.owner);
                 });
 
-                it('should return no card data except uuid', function () {
-                    expect(this.summary.uuid).not.toBeUndefined();
+                it('should return no card data', function () {
+                    expect(this.summary.uuid).toBeUndefined();
                     expect(this.summary.name).toBeUndefined();
                 });
 

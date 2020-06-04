@@ -75,10 +75,8 @@ describe('Masterpiece Painter', function() {
 
                 this.player2.pass();
 
-                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
-                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
-                expect(this.player2.player.isTopConflictCardShown(this.player1.player)).toBe(false);
-                expect(this.player2.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.player2.player.isTopConflictCardShown()).toBe(false);
 
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.masterpiecePainter);
@@ -94,10 +92,8 @@ describe('Masterpiece Painter', function() {
 
                 this.player1.clickPrompt('player2');
 
-                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
-                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
-                expect(this.player2.player.isTopConflictCardShown(this.player1.player)).toBe(true);
-                expect(this.player2.player.isTopConflictCardShown(this.player2.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.player2.player.isTopConflictCardShown()).toBe(true);
 
                 this.player2.clickCard(this.fan);
                 this.player2.clickCard(this.ikomaProdigy);
@@ -113,10 +109,8 @@ describe('Masterpiece Painter', function() {
 
                 this.player1.clickPrompt('player1 and player2');
 
-                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
-                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
-                expect(this.player2.player.isTopConflictCardShown(this.player1.player)).toBe(true);
-                expect(this.player2.player.isTopConflictCardShown(this.player2.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.player2.player.isTopConflictCardShown()).toBe(true);
 
                 this.player2.clickCard(this.fan);
                 this.player2.clickCard(this.ikomaProdigy);

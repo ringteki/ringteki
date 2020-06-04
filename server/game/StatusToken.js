@@ -1,6 +1,5 @@
 const EffectSource = require('./EffectSource');
 const AbilityDsl = require('./abilitydsl');
-const { CardTypes } = require('./Constants');
 
 class StatusToken extends EffectSource {
     constructor(game, card, isHonored) {
@@ -15,7 +14,7 @@ class StatusToken extends EffectSource {
     }
 
     applyHonorEffects() {
-        if(!this.card || this.card.type !== CardTypes.Character) {
+        if(!this.card) {
             return;
         }
         let amount = this.honored ? card => card.getGlory() : card => 0 - card.getGlory();

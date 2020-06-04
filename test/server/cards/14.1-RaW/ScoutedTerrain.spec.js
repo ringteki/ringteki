@@ -55,7 +55,7 @@ describe('Scouted Terrain', function() {
             this.p4.facedown = false;
             this.game.checkGameState(true);
             this.player1.clickCard(this.terrain);
-            expect(this.getChatLogs(1)).toContain('player1 plays Scouted Terrain to allow player2\'s stronghold to be attacked this phase');
+            expect(this.getChatLogs(1)).toContain('player1 plays Scouted Terrain to allow player2\'s strongohld to be attacked this phase');
         });
 
         it('should allow attacking the stronghold', function() {
