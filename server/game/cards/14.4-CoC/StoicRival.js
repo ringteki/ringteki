@@ -15,6 +15,6 @@ class StoicRival extends DrawCard {
     }
 }
 
-NitenAdept.id = 'stoic-rival';
+StoicRival.id = 'stoic-rival';
 
 module.exports = StoicRival;

@@ -9,7 +9,7 @@ describe('Stoic Rival', function() {
                         hand: ['vine-tattoo','ornate-fan']
                     },
                     player2: {
-                        inPlay: ['shiba-tsukune', 'otomo-courtier']
+                        inPlay: ['shiba-tsukune', 'otomo-courtier'],
 						hand:['ornate-fan','ornate-fan','ornate-fan']
                     }
                 });
