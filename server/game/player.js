@@ -329,7 +329,9 @@ class Player extends GameObject {
             return this.getConflictsWhenMaxIsSet(maxConflicts);
         }
         if(setConflictDeclarationType) {
-            return this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType);
+            return this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType)
+                - this.declaredConflictOpportunities[ConflictTypes.Passed]
+                - this.declaredConflictOpportunities[ConflictTypes.Forced];
         }
 
         return this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military)
