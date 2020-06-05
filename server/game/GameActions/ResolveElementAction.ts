@@ -22,8 +22,10 @@ export class ResolveElementAction extends RingAction {
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties: any = {}): void {
         let properties = this.getProperties(context, additionalProperties) as ResolveElementProperties;
         let target = properties.target as Ring[];
-        if(target.length > 1) {
-            let sortedRings = target.sort((a, b) => {
+        let rings = target.map(element => (typeof element === 'string') ? context.game.rings[element] : element);
+        rings = rings.filter(a => a != undefined);
+        if(rings.length > 1) {
+            let sortedRings = rings.sort((a, b) => {
                 let aPriority = RingEffects.contextFor(context.player, a.element).ability.defaultPriority;
                 let bPriority = RingEffects.contextFor(context.player, b.element).ability.defaultPriority;
                 return context.player.firstPlayer ? aPriority - bPriority : bPriority - aPriority;
@@ -34,8 +36,8 @@ export class ResolveElementAction extends RingAction {
                 handler: () => context.game.openEventWindow(this.getEvent(ring, context, additionalProperties))
             }));
             events.push(new Event(EventNames.Unnamed, {}, () => context.game.openSimultaneousEffectWindow(effectObjects)));
-        } else {
-            events.push(this.getEvent(target[0], context, additionalProperties));
+        } else if (rings.length > 0) {
+            events.push(this.getEvent(rings[0], context, additionalProperties));
         }
     }
 

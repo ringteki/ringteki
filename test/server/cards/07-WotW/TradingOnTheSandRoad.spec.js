@@ -219,6 +219,59 @@ describe('Trading on the Sand Road', function () {
                 expect(this.banzai.location).toBe('conflict discard pile');
             });
         });
+
+        describe('Trading on the Sand Road\'s ability for cards with attach to a character you control', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        inPlay: ['wandering-ronin', 'otomo-courtier'],
+                        hand: ['trading-on-the-sand-road'],
+                        conflictDiscard: ['fine-katana', 'way-of-the-dragon']
+                    },
+                    player2: {
+                        inPlay: ['guardian-kami'],
+                        hand: [],
+                        conflictDiscard: ['court-games', 'banzai', 'let-go']
+                    }
+                });
+
+                this.tradingOnTheSandRoad = this.player1.findCardByName('trading-on-the-sand-road');
+                this.wanderingRonin = this.player1.findCardByName('wandering-ronin');
+                this.wanderingRonin.fate = 2;
+                this.otomoCourtier = this.player1.findCardByName('otomo-courtier');
+                this.fineKatana = this.player1.findCardByName('fine-katana');
+                this.wayOfTheDragon = this.player1.findCardByName('way-of-the-dragon');
+                this.player1.moveCard(this.fineKatana, 'conflict deck');
+                this.player1.moveCard(this.wayOfTheDragon, 'conflict deck');
+
+                this.guardianKami = this.player2.findCardByName('guardian-kami');
+                this.letGo = this.player2.findCardByName('let-go');
+                this.banzai = this.player2.findCardByName('banzai');
+                this.courtGames = this.player2.findCardByName('court-games');
+                this.player2.moveCard(this.letGo, 'conflict deck');
+                this.player2.moveCard(this.courtGames, 'conflict deck');
+                this.player2.moveCard(this.banzai, 'conflict deck');
+
+                this.noMoreActions();
+                this.player1.clickCard(this.tradingOnTheSandRoad);
+            });
+
+            it('should let you attach your own card to a character you control', function () {
+                this.player1.clickCard(this.wayOfTheDragon);
+                expect(this.player1).toBeAbleToSelect(this.wanderingRonin);
+                expect(this.player1).toBeAbleToSelect(this.otomoCourtier);
+                expect(this.player1).not.toBeAbleToSelect(this.guardianKami);
+            });
+
+            it('should let you attach your opponent\'s card to a character you control', function () {
+                this.player1.pass();
+                this.player2.clickCard(this.wayOfTheDragon);
+                expect(this.player2).not.toBeAbleToSelect(this.wanderingRonin);
+                expect(this.player2).not.toBeAbleToSelect(this.otomoCourtier);
+                expect(this.player2).toBeAbleToSelect(this.guardianKami);
+            });
+        });
     });
 });
 

@@ -11,6 +11,7 @@ class CardWrapper {
 
 class GovernorsSpy extends DrawCard {
     dynastyCards = [];
+    unplacedDynastyCards = [];
 
     setupCardAbilities() {
         this.action({
@@ -43,26 +44,50 @@ class GovernorsSpy extends DrawCard {
         });
 
         //Step 3: For each card, choose an eligible province.  This is done via prompt for select, which queues simple steps
-        this.dynastyCards.forEach(card => {
-            this.governorSelectPrompt(context, targetPlayer, card);
-        });
+        this.unplacedDynastyCards = this.dynastyCards.map(a => a.dynastyCard);
+        this.governorSelectPrompt(context, targetPlayer);
 
         context.game.queueSimpleStep(() => this.governorMoveCards(context, targetPlayer));
     }
 
-    governorSelectPrompt(context, targetPlayer, currentCard) {
-        this.game.promptForSelect(context.player, {
-            activePromptTitle: 'Choose a province for ' + currentCard.dynastyCard.name,
+    governorSelectPrompt(context, targetPlayer) {
+        let cardHandler = currentCard => {
+            this.game.promptForSelect(context.player, {
+                activePromptTitle: 'Choose a province for ' + currentCard.name,
+                context: context,
+                location: Locations.Provinces,
+                controller: targetPlayer === context.source.controller ? Players.Self : Players.Opponent,
+                cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(targetPlayer, this.dynastyCards, card),
+                onSelect: (player, card) => {
+                    this.game.addMessage('{0} places a card', player);
+                    this.unplacedDynastyCards = this.unplacedDynastyCards.filter(a => a !== currentCard);
+                    let wrapper = this.dynastyCards.find(a => a.dynastyCard === currentCard);
+                    let location = card.location;
+                    wrapper.targetLocation = location;
+
+                    if(this.unplacedDynastyCards.length > 0) {
+                        this.game.promptWithHandlerMenu(context.player, {
+                            activePromptTitle: 'Select a card to place',
+                            context: context,
+                            cards: this.unplacedDynastyCards,
+                            cardHandler: cardHandler,
+                            handlers: [],
+                            choices: []
+                        });
+                    }
+
+                    return true;
+                }
+            });
+        };
+
+        this.game.promptWithHandlerMenu(context.player, {
+            activePromptTitle: 'Select a card to place',
             context: context,
-            location: Locations.Provinces,
-            controller: targetPlayer === context.source.controller ? Players.Self : Players.Opponent,
-            cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(targetPlayer, this.dynastyCards, card),
-            onSelect: (player, card) => {
-                this.game.addMessage('{0} places a card', player);
-                let location = card.location;
-                currentCard.targetLocation = location;
-                return true;
-            }
+            cards: this.unplacedDynastyCards,
+            cardHandler: cardHandler,
+            handlers: [],
+            choices: []
         });
     }
 

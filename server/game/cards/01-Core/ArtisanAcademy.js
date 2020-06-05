@@ -15,7 +15,7 @@ class ArtisanAcademy extends DrawCard {
                     duration: Durations.Custom,
                     until: {
                         onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
-                        onPhaseEnded: event => event.phase === Phases.Conflict,
+                        onPhaseEnded: () => true,
                         onDeckShuffled: event => event.player === context.player && event.deck === Decks.ConflictDeck
                     },
                     effect: [

@@ -13,7 +13,7 @@ const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 const Ring = require('./ring.js');
 
-const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, ConflictTypes, Players } = require('./Constants');
+const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
 
 class Player extends GameObject {
@@ -57,10 +57,15 @@ class Player extends GameObject {
         this.actionPhasePriority = false;
         this.honorBidModifier = 0; // most recent bid modifiers
         this.showBid = 0; // amount shown on the dial
-        this.conflictOpportunities = {
+        this.declaredConflictOpportunities = {
+            military: 0,
+            political: 0,
+            passed: 0,
+            forced: 0 // conflicts that were forced into a certain type. See Ivory Kingsdoms Unicorn
+        };
+        this.defaultAllowedConflicts = {
             military: 1,
-            political: 1,
-            total: 2
+            political: 1
         };
         this.imperialFavor = '';
 
@@ -90,6 +95,7 @@ class Player extends GameObject {
         this.timerSettings.windowTimer = user.settings.windowTimer;
         this.optionSettings = user.settings.optionSettings;
         this.resetTimerAtEndOfRound = false;
+        this.honorEvents = [];
 
         this.promptState = new PlayerPromptState(this);
     }
@@ -288,23 +294,6 @@ class Player extends GameObject {
         return this.opponent && this.opponent.showBid > this.showBid;
     }
 
-    getLegalConflictTypes(properties) {
-        let types = properties.type || [ConflictTypes.Military, ConflictTypes.Political];
-        types = Array.isArray(types) ? types : [types];
-        const forcedDeclaredType = properties.forcedDeclaredType || this.game.currentConflict && this.game.currentConflict.forcedDeclaredType;
-        if(forcedDeclaredType) {
-            return [forcedDeclaredType].filter(type =>
-                types.includes(type) &&
-                this.getConflictOpportunities() > 0 &&
-                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
-            );
-        }
-        return types.filter(type =>
-            this.getConflictOpportunities(type) > 0 &&
-            !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
-        );
-    }
-
     hasLegalConflictDeclaration(properties) {
         let conflictType = this.getLegalConflictTypes(properties);
         if(conflictType.length === 0) {
@@ -330,6 +319,69 @@ class Player extends GameObject {
         )));
     }
 
+    getConflictOpportunities() {
+        let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
+        if(maxConflicts) {
+            return this.getConflictsWhenMaxIsSet(maxConflicts);
+        }
+        if(setConflictDeclarationType) {
+            return this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType)
+                - this.declaredConflictOpportunities[ConflictTypes.Passed]
+                - this.declaredConflictOpportunities[ConflictTypes.Forced];
+        }
+
+        return this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military)
+            + this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
+            - this.declaredConflictOpportunities[ConflictTypes.Passed]
+            - this.declaredConflictOpportunities[ConflictTypes.Forced];
+    }
+
+    getRemainingConflictOpportunitiesForType(type) {
+        return this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type];
+    }
+
+    getLegalConflictTypes(properties) {
+        let types = properties.type || [ConflictTypes.Military, ConflictTypes.Political];
+        types = Array.isArray(types) ? types : [types];
+        const forcedDeclaredType = properties.forcedDeclaredType || this.game.currentConflict && this.game.currentConflict.forcedDeclaredType;
+        if(forcedDeclaredType) {
+            return [forcedDeclaredType].filter(type =>
+                types.includes(type) &&
+                this.getConflictOpportunities() > 0 &&
+                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+            );
+        }
+
+        if(this.getConflictOpportunities() === 0) {
+            return [];
+        }
+
+        return types.filter(type =>
+            this.getRemainingConflictOpportunitiesForType(type) > 0 &&
+            !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+        );
+    }
+
+    getConflictsWhenMaxIsSet(maxConflicts) {
+        return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
+    }
+
+    getMaxConflictOpportunitiesForPlayerByType(type) {
+        const setConflictType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
+        const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
+
+        if(setConflictType && type === setConflictType) {
+            return this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political] + additionalConflictsForType;
+        } else if(setConflictType && type !== setConflictType) {
+            return 0;
+        }
+
+        return this.defaultAllowedConflicts[type] + additionalConflictsForType;
+
+    }
+
     /**
      * Returns the province cards (meeting an optional predicate) controlled by this player
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
@@ -353,6 +405,22 @@ class Player extends GameObject {
      * */
     getNumberOfOpponentsFaceupProvinces(predicate = () => true) {
         return this.opponent && this.opponent.getNumberOfFaceupProvinces(predicate) || 0;
+    }
+
+    /**
+     * Returns the total number of faceup province cards controlled by this player
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfFacedownProvinces(predicate = () => true) {
+        return this.getProvinces(card => card.facedown && predicate(card)).length;
+    }
+
+    /**
+     * Returns the total number of faceup province cards controlled by this player's opponent
+     * @param {Function} predicate - format: (card) => return boolean, default: () => true
+     * */
+    getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
+        return this.opponent && this.opponent.getNumberOfFacedownProvinces(predicate) || 0;
     }
 
     /**
@@ -390,8 +458,25 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return true;
+        }
+
         return _.any(this.playableLocations, location =>
             (!playingType || location.playingType === playingType) && location.contains(card));
+    }
+
+    findPlayType(card) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+            return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
+        }
+
+        let location = this.playableLocations.find(location => location.contains(card));
+        if(location) {
+            return location.playingType;
+        }
+
+        return undefined;
     }
 
     /**
@@ -531,36 +616,6 @@ class Player extends GameObject {
         }
         this.game.emitEvent(EventNames.OnDeckShuffled, { player: this, deck: Decks.DynastyDeck });
         this.dynastyDeck = _(this.dynastyDeck.shuffle());
-    }
-
-    addConflictOpportunity(type) {
-        if(type) {
-            this.conflictOpportunities[type]++;
-        }
-        this.conflictOpportunities.total++;
-    }
-
-    /**
-     * Returns the number of conflict opportunities remaining for this player
-     * @param {String} type - one of 'military', 'political', ''
-     * @returns {Number} opportunities remaining
-     */
-
-    getConflictOpportunities(type = 'total') {
-        let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
-        let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
-        if(setConflictDeclarationType && type !== 'total') {
-            if(type !== setConflictDeclarationType) {
-                return 0;
-            } else if(maxConflicts) {
-                return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
-            }
-            return this.conflictOpportunities['total'];
-        }
-        if(maxConflicts) {
-            return Math.max(0, maxConflicts - this.game.getConflicts(this).length);
-        }
-        return this.conflictOpportunities[type];
     }
 
     /**
@@ -802,19 +857,24 @@ class Player extends GameObject {
             this.noTimer = false;
         }
 
+        this.resetConflictOpportunities();
+
         this.cardsInPlay.each(card => {
             card.new = false;
         });
-
         this.passedDynasty = false;
-        this.conflictOpportunities.military = 1;
-        this.conflictOpportunities.political = 1;
-        this.conflictOpportunities.total = 2;
     }
 
     collectFate() {
         this.modifyFate(this.getTotalIncome());
         this.game.raiseEvent(EventNames.OnFateCollected, { player: this });
+    }
+
+    resetConflictOpportunities() {
+        this.declaredConflictOpportunities[ConflictTypes.Military] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Political] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Passed] = 0;
+        this.declaredConflictOpportunities[ConflictTypes.Forced] = 0;
     }
 
     showConflictDeck() {
@@ -1049,12 +1109,30 @@ class Player extends GameObject {
         return this.getEffects(EffectNames.ChangePlayerSkillModifier).reduce((total, value) => total + value, 0);
     }
 
+    honorGained(round = null, phase = null, onlyPositive = false) {
+        return this.honorEvents
+            .filter(event => !round || event.round === round)
+            .filter(event => !phase || event.phase === phase)
+            .filter(event => !onlyPositive || event.amount > 0)
+            .reduce((total, event) => total + event.amount, 0);
+    }
+
     modifyFate(amount) {
         this.fate = Math.max(0, this.fate + amount);
     }
 
     modifyHonor(amount) {
         this.honor = Math.max(0, this.honor + amount);
+        this.honorEvents.push({
+            amount,
+            phase: this.game.currentPhase,
+            round: this.game.roundNumber
+        });
+    }
+
+    resetHonorEvents(round, phase) {
+        // in case a phase is restarded during the same round, reset honor tracking of that phase.
+        this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
     }
 
     /**
@@ -1287,15 +1365,19 @@ class Player extends GameObject {
         this.game.addMessage('{0} reveals a bid of {1}', this, bid);
     }
 
-    isTopConflictCardShown() {
-        return this.anyEffect(EffectNames.ShowTopConflictCard);
+    isTopConflictCardShown(activePlayer = undefined) {
+        if(!activePlayer || activePlayer === this) {
+            return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
+        }
+
+        return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
     }
 
     eventsCannotBeCancelled() {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown() {
+    isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
@@ -1319,8 +1401,8 @@ class Player extends GameObject {
             fate: this.fate,
             honor: this.getTotalHonor(),
             conflictsRemaining: this.getConflictOpportunities(),
-            militaryRemaining: this.getConflictOpportunities('military'),
-            politicalRemaining: this.getConflictOpportunities('political')
+            militaryRemaining: this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military),
+            politicalRemaining: this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
         };
     }
 
@@ -1340,6 +1422,7 @@ class Player extends GameObject {
                 removedFromGame: this.getSummaryForCardList(this.removedFromGame, activePlayer),
                 provinceDeck: this.getSummaryForCardList(this.provinceDeck, activePlayer, true)
             },
+            cardsPlayedThisConflict: this.game.currentConflict ? this.game.currentConflict.getNumberOfCardsPlayed(this) : NaN,
             disconnected: this.disconnected,
             faction: this.faction,
             firstPlayer: this.firstPlayer,
@@ -1385,11 +1468,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown() && this.conflictDeck) {
+        if(this.isTopConflictCardShown(activePlayer)) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown() && this.dynastyDeck) {
+        if(this.isTopDynastyCardShown(activePlayer)) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 
