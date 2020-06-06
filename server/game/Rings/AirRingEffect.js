@@ -5,13 +5,12 @@ const { TargetModes } = require('../Constants');
 
 class AirRingEffect extends BaseAbility {
     constructor(optional = true, skirmishMode = false) {
-        let choices = {
-            'Don\'t resolve': () => optional,
-            'Take 1 Honor from opponent': context => context.player.opponent
-        };
+        let choices = { };
         if(!skirmishMode) {
             choices['Gain 2 Honor'] = () => true;
         }
+        choices['Take 1 Honor from opponent'] = (context) => context.player.opponent;
+        choices['Don\'t resolve'] = () => optional;
         super({
             target: {
                 mode: TargetModes.Select,
