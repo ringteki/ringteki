@@ -15,6 +15,7 @@ describe('Stoic Rival', function() {
                 });
                 this.noMoreActions();
                 this.initiateConflict({
+                    type: 'political',
                     attackers: ['stoic-rival'],
                     defenders: ['shiba-tsukune','otomo-courtier']
                 });
@@ -72,7 +73,8 @@ describe('Stoic Rival', function() {
             });
 
             it('should not be able to use while not participating', function() {
-                this.player2.playCard('outwit');
+                this.player2.clickCard('outwit');
+                this.player2.clickCard('stoic-rival');
                 this.stoicRival = this.player1.clickCard('stoic-rival');
                 expect(this.player1).toHavePrompt('Action Window');
             });
