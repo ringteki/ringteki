@@ -49,7 +49,7 @@ export class PutIntoPlayAction extends CardGameAction {
             return false;
         } else if(!player || card.anotherUniqueInPlay(player)) {
             return false;
-        } else if(card.location === Locations.PlayArea || card.facedown) {
+        } else if(card.location === Locations.PlayArea || card.isFacedown()) {
             return false;
         } else if(!card.checkRestrictions('putIntoPlay', context)) {
             return false;

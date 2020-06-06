@@ -52,9 +52,12 @@ export class MoveCardAction extends CardGameAction {
     }
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
-        const { changePlayer } = this.getProperties(context, additionalProperties) as MoveCardProperties;
-        return (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) && !card.anotherUniqueInPlay(context.player)) &&
-            card.location !== Locations.PlayArea && super.canAffect(card, context);
+        const { changePlayer, destination } = this.getProperties(context, additionalProperties) as MoveCardProperties;
+        return (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) && 
+                !card.anotherUniqueInPlay(context.player)) &&
+                (!destination || context.player.isLegalLocationForCard(card, destination)) &&
+                card.location !== Locations.PlayArea && 
+                super.canAffect(card, context);
     }
 
     eventHandler(event, additionalProperties = {}): void {

@@ -601,6 +601,9 @@ class PlayerInteractionWrapper {
      * @param {!String} card - the province to select
      */
     selectStrongholdProvince(card) {
+        if (this.game.skirmishMode) {
+            return;
+        }
         if(!this.hasPrompt('Select stronghold province')) {
             throw new Error(`${this.name} is not prompted to select a province`);
         }
@@ -640,7 +643,7 @@ class PlayerInteractionWrapper {
         }
         var candidates = this.filterCardsByName(card, 'provinces');
         //Remove any face-down cards
-        candidates = _.reject(candidates, card => card.facedown);
+        candidates = _.reject(candidates, card => card.isFacedown());
         if(candidates.length === 0) {
             throw new Error(`${this.name} cannot play the specified card from the provinces`);
         }
@@ -796,6 +799,12 @@ class PlayerInteractionWrapper {
                 this.moveCard(this.dynastyDeck[i], 'dynasty discard pile');
             }
         }
+    }
+
+    setupSkirmishProvinces() {
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 1'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 2'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 3'));
     }
 }
 

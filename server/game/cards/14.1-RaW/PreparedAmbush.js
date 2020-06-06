@@ -29,7 +29,7 @@ class PreparedAmbush extends DrawCard {
         this.persistentEffect({
             condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
             targetLocation: Locations.Provinces,
-            match: card => card.isDynasty && !card.facedown,
+            match: card => card.isDynasty && card.isFaceup(),
             effect: AbilityDsl.effects.gainPlayAction(PreparedAmbushPlayAction)
         });
     }

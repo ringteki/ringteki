@@ -14,7 +14,7 @@ export class CreateTokenAction extends CardGameAction {
     targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Event];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card.facedown || !card.isInProvince() || card.location === Locations.StrongholdProvince) {
+        if(!card.isFacedown() || !card.isInProvince() || card.location === Locations.StrongholdProvince) {
             return false;
         } else if(!context.game.isDuringConflict('military')) {
             return false;

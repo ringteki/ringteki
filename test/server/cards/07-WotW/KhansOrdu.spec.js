@@ -5,7 +5,8 @@ describe('Khan\'s Ordu', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['akodo-gunso', 'akodo-kage']
+                        inPlay: ['akodo-gunso', 'akodo-kage'],
+                        hand: ['suffer-the-consequences']
                     },
                     player2: {
                         inPlay: ['border-rider', 'moto-horde'],
@@ -14,6 +15,7 @@ describe('Khan\'s Ordu', function() {
                 });
                 this.akodoGunso = this.player1.findCardByName('akodo-gunso');
                 this.akodoKage = this.player1.findCardByName('akodo-kage');
+                this.suffer = this.player1.findCardByName('suffer-the-consequences');
 
                 this.borderRider = this.player2.findCardByName('border-rider');
                 this.motoHorde = this.player2.findCardByName('moto-horde');
@@ -63,6 +65,26 @@ describe('Khan\'s Ordu', function() {
                 expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
                 expect(this.player1.player.getConflictOpportunities()).toBe(1);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(2);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
+                expect(this.player2.player.getConflictOpportunities()).toBe(2);
+            });
+
+            it('should make all added conflicts be military', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.akodoGunso],
+                    type: 'military'
+                });
+                this.player2.clickCard(this.khansOrdu);
+                this.player2.clickPrompt('Done');
+                this.akodoGunso.bowed = true;
+                this.player2.pass();
+                this.player1.clickCard(this.suffer);
+                this.player1.clickCard(this.akodoGunso);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(2);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
+                expect(this.player1.player.getConflictOpportunities()).toBe(2);
                 expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(2);
                 expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
                 expect(this.player2.player.getConflictOpportunities()).toBe(2);

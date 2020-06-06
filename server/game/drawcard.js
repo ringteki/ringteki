@@ -489,7 +489,7 @@ class DrawCard extends BaseCard {
     getProvinceStrengthBonus() {
         let modifiers = this.getProvinceStrengthBonusModifiers();
         let bonus = modifiers.reduce((total, modifier) => total + modifier.amount, 0);
-        if(bonus && !this.facedown) {
+        if(bonus && this.isFaceup()) {
             return bonus;
         }
         return 0;
