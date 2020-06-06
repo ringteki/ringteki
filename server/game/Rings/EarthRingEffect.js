@@ -3,13 +3,14 @@ const { TargetModes } = require('../Constants');
 
 class EarthRingEffect extends BaseAbility {
     constructor(optional = true, skirmishMode = false) {
-        let choices = { 'Don\'t resolve': () => optional };
+        let choices = { };
         if(skirmishMode) {
             choices['Draw a card'] = () => true;
             choices['Opponent discards a card'] = context => context.player.opponent;
         } else {
             choices['Draw a card and opponent discards'] = () => true;
         }
+        choices['Don\'t resolve'] = () => optional;
         super({
             target: {
                 mode: TargetModes.Select,
