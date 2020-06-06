@@ -6,33 +6,49 @@ describe('Stoic Rival', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['stoic-rival'],
-                        hand: ['vine-tattoo','ornate-fan']
+                        hand: ['vine-tattoo','ornate-fan','let-go']
                     },
                     player2: {
-                        inPlay: ['shiba-tsukune', 'otomo-courtier'],
-						hand:['ornate-fan','ornate-fan','ornate-fan']
+                        inPlay: ['shiba-tsukune', 'otomo-courtier','miya-mystic'],
+                        hand:['ornate-fan','ornate-fan','outwit']
                     }
                 });
-				this.initiateConflict({
+                this.noMoreActions();
+                this.initiateConflict({
                     attackers: ['stoic-rival'],
                     defenders: ['shiba-tsukune','otomo-courtier']
                 });
-                this.noMoreActions();
                 this.otomoCourtier = this.player2.findCardByName('otomo-courtier');
                 this.shibaTsukune = this.player2.findCardByName('shiba-tsukune');
+                this.miyaMystic = this.player2.findCardByName('miya-mystic');
                 this.player2.playAttachment('ornate-fan','shiba-tsukune');
-				this.player1.playAttachment('vine-tattoo','stoic-rival');
+                this.player1.playAttachment('vine-tattoo','stoic-rival');
             });
 
 
-            it('should only allow bowing cards with fewer attachment mil skill', function() {
+            it('should allow bowing cards with fewer attachments', function() {
+                this.player2.pass();
                 this.stoicRival = this.player1.clickCard('stoic-rival');
                 expect(this.player1).toHavePrompt('Stoic Rival');
-                expect(this.player1).toBeAbleToSelect(this.seppunGuardsman);
+                expect(this.player1).toBeAbleToSelect(this.otomoCourtier);
+            });
+
+            it('no bowing cards with same number of attachments', function() {
+                this.player2.pass();
+                this.stoicRival = this.player1.clickCard('stoic-rival');
+                expect(this.player1).toHavePrompt('Stoic Rival');
+                expect(this.player1).not.toBeAbleToSelect(this.shibaTsukune);
+            });
+
+            it('no bowing cards with more attachments', function() {
+                this.player2.playAttachment('ornate-fan','shiba-tsukune');
+                this.stoicRival = this.player1.clickCard('stoic-rival');
+                expect(this.player1).toHavePrompt('Stoic Rival');
                 expect(this.player1).not.toBeAbleToSelect(this.shibaTsukune);
             });
 
             it('should allow allow bowing cards with an attachment but still fewer', function() {
+                this.player2.pass();
                 this.player1.playAttachment('ornate-fan', 'stoic-rival');
                 this.player2.pass();
                 this.stoicRival = this.player1.clickCard('stoic-rival');
@@ -41,10 +57,24 @@ describe('Stoic Rival', function() {
             });
 
             it('should dishonor the target', function() {
-                this.stoicRival= this.player1.clickCard('stoic-rival');
-                this.player1.clickCard(this.seppunGuardsman);
-                expect(this.seppunGuardsman.isDishonored).toBe(true);
-                expect(this.seppunGuardsman.inConflict).toBe(true);
+                this.player2.pass();
+                this.stoicRival = this.player1.clickCard('stoic-rival');
+                this.player1.clickCard(this.otomoCourtier);
+                expect(this.otomoCourtier.isDishonored).toBe(true);
+                expect(this.otomoCourtier.inConflict).toBe(true);
+            });
+
+            it('should not be able to target characters not participating', function() {
+                this.player2.pass();
+                this.stoicRival = this.player1.clickCard('stoic-rival');
+                expect(this.player1).toHavePrompt('Stoic Rival');
+                expect(this.player1).not.toBeAbleToSelect(this.miyaMystic);
+            });
+
+            it('should not be able to use while not participating', function() {
+                this.player2.playCard('outwit');
+                this.stoicRival = this.player1.clickCard('stoic-rival');
+                expect(this.player1).toHavePrompt('Action Window');
             });
         });
     });
