@@ -24,7 +24,7 @@ describe('Stoic Rival', function() {
                 this.miyaMystic = this.player2.findCardByName('miya-mystic');
                 this.stoicRival = this.player1.findCardByName('stoic-rival');
                 this.player2.playAttachment('ornate-fan','shiba-tsukune');
-                this.player1.playAttachment('vine-tattoo','stoic-rival');
+                this.player1.playAttachment('adopted-kin','stoic-rival');
             });
 
 
