@@ -78,7 +78,7 @@ describe('Stoic Rival', function() {
                 this.player2.clickCard(this.stoicRival);
                 expect(this.stoicRival.inConflict).toBe(false);
                 this.player1.clickCard(this.stoicRival);
-                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.player1).toHavePrompt('Conflict Action Window');
             });
         });
     });
