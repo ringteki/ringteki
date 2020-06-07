@@ -21,7 +21,7 @@ class DaidojiUji extends DrawCard {
         this.persistentEffect({
             condition: context => context.source.isHonored,
             targetLocation: Locations.Provinces,
-            match: card => card.isDynasty && !card.facedown,
+            match: card => card.isDynasty && card.isFaceup(),
             effect: AbilityDsl.effects.gainPlayAction(DaidojiUjiPlayAction)
         });
     }

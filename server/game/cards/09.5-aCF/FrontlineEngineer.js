@@ -39,7 +39,7 @@ class FrontlineEngineer extends DrawCard {
 
     getHoldingsInPlay() {
         return this.game.allCards.reduce((sum, card) => {
-            if(!card.facedown && (card.isInProvince() && card.type === CardTypes.Holding)) {
+            if(card.isFaceup() && (card.isInProvince() && card.type === CardTypes.Holding)) {
                 return sum + 1;
             }
             return sum;

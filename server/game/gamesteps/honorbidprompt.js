@@ -61,8 +61,13 @@ class HonorBidPrompt extends AllPlayerPrompt {
 
 
     activePrompt(player) {
+        let buttons = ['1', '2', '3', '4', '5'];
+        if(this.game.skirmishMode) {
+            buttons = ['1', '2', '3'];
+        }
+
         let prohibitedBids = this.prohibitedBids[player.uuid] || [];
-        let buttons = ['1', '2', '3', '4', '5'].filter(num => !prohibitedBids.includes(num));
+        buttons = buttons.filter(num => !prohibitedBids.includes(num));
         return {
             promptTitle: 'Honor Bid',
             menuTitle: this.menuTitle,

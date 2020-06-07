@@ -10,7 +10,7 @@ class IkomaUjiaki extends DrawCard {
             cost: ability.costs.discardImperialFavor(),
             condition: context => context.source.isParticipating() && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].some(location => {
                 let cards = context.player.getDynastyCardsInProvince(location);
-                return cards.some(card => card.facedown);
+                return cards.some(card => card.isFacedown());
             }),
             effect: 'to reveal all their facedown dynasty cards',
             handler: context => {
@@ -18,7 +18,7 @@ class IkomaUjiaki extends DrawCard {
                 _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour], location => {
                     let cards = context.player.getDynastyCardsInProvince(location);
                     cards.forEach(card => {
-                        if(card && card.facedown) {
+                        if(card && card.isFacedown()) {
                             revealedCards.push(card);
                             card.facedown = false;
                         }
@@ -34,7 +34,7 @@ class IkomaUjiaki extends DrawCard {
                         controller: Players.Self,
                         context: context,
                         optional: true,
-                        cardCondition: card => !card.facedown && card.allowGameAction('putIntoConflict', context),
+                        cardCondition: card => card.isFaceup() && card.allowGameAction('putIntoConflict', context),
                         onSelect: (player, cards) => {
                             this.game.addMessage('{0} reveals {1} and puts {2} into play', player, revealedCards, cards);
                             this.game.applyGameAction(context, { putIntoConflict: cards });

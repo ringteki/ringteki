@@ -22,7 +22,7 @@ class AgashaTaiko extends DrawCard {
             effect: 'prevent {1}\'s {2} in {3} from being attacked this round',
             effectArgs: context => [
                 context.target.controller,
-                context.target.facedown ? 'hidden province' : context.target,
+                context.target.isFacedown() ? 'hidden province' : context.target,
                 context.target.location
             ]
         });

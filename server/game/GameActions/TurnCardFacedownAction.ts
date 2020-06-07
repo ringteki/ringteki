@@ -14,7 +14,7 @@ export class TurnCardFacedownAction extends CardGameAction {
     targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Province, CardTypes.Event];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        return !card.facedown && super.canAffect(card, context) && card.isInProvince();
+        return card.isFaceup() && super.canAffect(card, context) && card.isInProvince();
     }
 
     eventHandler(event): void {
