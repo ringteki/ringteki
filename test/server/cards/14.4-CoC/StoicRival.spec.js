@@ -6,7 +6,7 @@ describe('Stoic Rival', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['stoic-rival'],
-                        hand: ['vine-tattoo','ornate-fan','let-go']
+                        hand: ['adopted-kin','ornate-fan','let-go']
                     },
                     player2: {
                         inPlay: ['shiba-tsukune', 'otomo-courtier','miya-mystic'],
@@ -35,14 +35,14 @@ describe('Stoic Rival', function() {
                 expect(this.player1).toBeAbleToSelect(this.otomoCourtier);
             });
 
-            it('no bowing cards with same number of attachments', function() {
+            it('should not bow cards with same number of attachments', function() {
                 this.player2.pass();
                 this.stoicRival = this.player1.clickCard(this.stoicRival);
                 expect(this.player1).toHavePrompt('Stoic Rival');
                 expect(this.player1).not.toBeAbleToSelect(this.shibaTsukune);
             });
 
-            it('no bowing cards with more attachments', function() {
+            it('should not bow cards with more attachments', function() {
                 this.player2.playAttachment('ornate-fan','shiba-tsukune');
                 this.stoicRival = this.player1.clickCard(this.stoicRival);
                 expect(this.player1).toHavePrompt('Stoic Rival');
