@@ -384,10 +384,12 @@ class Player extends GameObject {
 
         if(setConflictType && type === setConflictType) {
             let declaredConflictsOfOtherType = 0;
-            if(setConflictType == ConflictTypes.Military)
+            if(setConflictType === ConflictTypes.Military) {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Political];
-            else
+            }
+            else {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Military];
+            }
             return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
         } else if(setConflictType && type !== setConflictType) {
             return 0;
