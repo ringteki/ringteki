@@ -113,6 +113,21 @@ describe('Khan\'s Ordu', function() {
                 expect(this.player2.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
                 expect(this.player2.player.getConflictOpportunities()).toBe(1);
             });
+
+            it('should not give an extra conflict', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.akodoGunso],
+                    type: 'political'
+                });
+                expect(this.game.currentConflict.conflictType).toBe('political');
+                this.player2.clickCard(this.khansOrdu);
+                expect(this.getChatLogs(1)).toContain('player1 has initiated a military conflict with skill 2');
+                expect(this.game.currentConflict.conflictType).toBe('military');
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(0);
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
+            });
         });
     });
 });

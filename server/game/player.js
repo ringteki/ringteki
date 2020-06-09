@@ -342,7 +342,7 @@ class Player extends GameObject {
     }
 
     getRemainingConflictOpportunitiesForType(type) {
-        return this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type];
+        return Math.max(0, this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type]);
     }
 
     getLegalConflictTypes(properties) {
@@ -383,7 +383,13 @@ class Player extends GameObject {
 
 
         if(setConflictType && type === setConflictType) {
-            return baselineAvailableConflicts + additionalConflictEffects.length;
+            let declaredConflictsOfOtherType = 0;
+            if(setConflictType === ConflictTypes.Military) {
+                declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Political];
+            } else {
+                declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Military];
+            }
+            return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
         } else if(setConflictType && type !== setConflictType) {
             return 0;
         }
