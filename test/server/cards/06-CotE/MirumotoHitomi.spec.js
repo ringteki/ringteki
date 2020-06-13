@@ -170,5 +170,99 @@ describe('Mirumoto Hitomi', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
         });
+
+        describe('Mirumoto Hitomi\'s ability - Skirmish', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['mirumoto-hitomi', 'mirumoto-raitsugu'],
+                        hand: ['way-of-the-scorpion']
+                    },
+                    player2: {
+                        inPlay: ['isawa-tadaka-2', 'prodigy-of-the-waves', 'togashi-initiate'],
+                        hand: ['fine-katana']
+                    },
+                    skirmish: true
+                });
+                this.mirumotoHitomi = this.player1.findCardByName('mirumoto-hitomi');
+                this.raitsugu = this.player1.findCardByName('mirumoto-raitsugu');
+                this.wayOfTheScorpion = this.player1.findCardByName('way-of-the-scorpion');
+
+                this.katana = this.player2.findCardByName('fine-katana');
+                this.tadaka = this.player2.findCardByName('isawa-tadaka-2');
+                this.prodigy = this.player2.findCardByName('prodigy-of-the-waves');
+
+                this.tadaka.honor();
+                this.prodigy.honor();
+
+                this.player1.pass();
+                this.player2.playAttachment(this.katana, this.prodigy);
+
+                this.tadaka.fate = 1;
+                this.prodigy.fate = 1;
+                this.mirumotoHitomi.fate = 1;
+                this.raitsugu.fate = 1;
+            });
+
+            it('should prompt the controller of the losers to choose to dishonor or bow (duel target)', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.mirumotoHitomi, this.raitsugu],
+                    defenders: [this.tadaka, this.prodigy],
+                    type: 'military'
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.mirumotoHitomi);
+                this.player1.clickCard(this.tadaka);
+                this.player1.clickCard(this.prodigy);
+                this.player1.clickPrompt('Done');
+                this.player1.clickPrompt('3');
+                this.player2.clickPrompt('1');
+
+                expect(this.player2).toHavePrompt('Select an action:');
+                expect(this.player2).toHavePromptButton('Dishonor this character');
+                expect(this.player2).toHavePromptButton('Bow this character');
+
+                this.player2.clickPrompt('Dishonor this character');
+                expect(this.tadaka.isHonored).toBe(true); //should not be dishonored yet until all choices are made
+
+                expect(this.player2).toHavePrompt('Select an action:');
+                expect(this.player2).toHavePromptButton('Dishonor this character');
+                expect(this.player2).toHavePromptButton('Bow this character');
+
+                this.player2.clickPrompt('Bow this character');
+
+                expect(this.tadaka.isHonored).toBe(false);
+                expect(this.prodigy.bowed).toBe(true);
+
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should prompt the controller of the losers to choose to dishonor or bow (Hitomi)', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.mirumotoHitomi, this.raitsugu],
+                    defenders: [this.tadaka, this.prodigy],
+                    type: 'military'
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.mirumotoHitomi);
+                this.player1.clickCard(this.tadaka);
+                this.player1.clickCard(this.prodigy);
+                this.player1.clickPrompt('Done');
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('2');
+
+                expect(this.player1).toHavePrompt('Select an action:');
+                expect(this.player1).toHavePromptButton('Dishonor this character');
+                expect(this.player1).toHavePromptButton('Bow this character');
+
+                this.player1.clickPrompt('Dishonor this character');
+                expect(this.mirumotoHitomi.isDishonored).toBe(true);
+
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+        });
     });
 });
