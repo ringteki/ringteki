@@ -10,7 +10,8 @@ describe('Return From Shadows', function() {
                 player2: {
                     inPlay: ['doji-representative'],
                     hand: ['perfect-land-ethos'],
-                    provinces: ['night-raid', 'manicured-garden', 'shameful-display', 'pilgrimage']
+                    provinces: ['night-raid', 'manicured-garden', 'shameful-display', 'pilgrimage'],
+                    dynastyDiscard: ['young-rumormonger', 'ardent-omoidasu']
                 }
             });
 
@@ -32,6 +33,9 @@ describe('Return From Shadows', function() {
             this.shameful = this.player2.findCardByName('shameful-display');
             this.pilgrimage = this.player2.findCardByName('pilgrimage');
             this.p2_Stronghold = this.player2.findCardByName('shameful-display', 'stronghold province');
+
+            this.yrm = this.player2.findCardByName('young-rumormonger');
+            this.omoidasu = this.player2.findCardByName('ardent-omoidasu');
 
             this.pilgrimage.facedown = false;
             this.shameful.isBroken = true;
@@ -235,6 +239,40 @@ describe('Return From Shadows', function() {
 
             expect(this.getChatLogs(10)).toContain('player1 plays Return From Shadows to place a dishonor token on Pilgrimage, blanking it');
             expect(this.getChatLogs(10)).not.toContain('player1 reveals Pilgrimage due to Return From Shadows');
+        });
+
+        it('should not trigger Young Rumormonger', function () {
+            this.player2.moveCard(this.yrm, 'play area');
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.brash],
+                defenders: [],
+                province: this.manicured
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.returnFromShadows);
+            this.player1.clickCard(this.returnFromShadows);
+            this.player1.clickCard(this.manicured);
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+        });
+
+        it('should not trigger Ardent Omoidasu', function () {
+            this.player2.moveCard(this.omoidasu, 'play area');
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.brash],
+                defenders: [],
+                province: this.manicured
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.returnFromShadows);
+            this.player1.clickCard(this.returnFromShadows);
+            this.player1.clickCard(this.manicured);
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
         });
     });
 });
