@@ -1,5 +1,5 @@
 const restrictedList = {
-    version: '9',
+    version: '10',
     cards: [
         'city-of-the-open-hand',
         'rebuild',
@@ -16,7 +16,12 @@ const restrictedList = {
         'mark-of-shame',
         'magistrate-station',
         'kakita-toshimoko',
-        'gateway-to-meido'
+        'display-of-power',
+        'keeper-initiate',
+        'tactical-ingenuity',
+        'iron-mine',
+        'kuni-laboratory',
+        'bayushi-shoju-2'
     ]
 };
 

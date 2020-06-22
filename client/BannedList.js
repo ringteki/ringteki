@@ -1,5 +1,5 @@
 const bannedList = {
-    version: '12',
+    version: '13',
     cards: [
         'guest-of-honor',
         'spyglass',
@@ -10,7 +10,10 @@ const bannedList = {
         'kanjo-district',
         'jurojin-s-curse',
         'hidden-moon-dojo',
-        'mirumoto-daisho'
+        'mirumoto-daisho',
+        'policy-debate',
+        'bayushi-liar',
+        'gateway-to-meido'
     ]
 };
 
