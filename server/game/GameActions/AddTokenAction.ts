@@ -21,7 +21,7 @@ export class AddTokenAction extends CardGameAction {
     }
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(card.facedown) {
+        if(!card.isFaceup()) {
             return false;
         }
         if([CardTypes.Holding, CardTypes.Province].includes(card.type)) {

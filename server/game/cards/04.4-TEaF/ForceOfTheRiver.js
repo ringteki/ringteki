@@ -23,7 +23,7 @@ class ForceOfTheRiver extends DrawCard {
             gameAction: ability.actions.createToken(context => ({
                 target: _.flatten([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].map(
                     location => context.player.getDynastyCardsInProvince(location))).filter(
-                    card => card.facedown)
+                    card => card.isFacedown())
             }))
         });
     }

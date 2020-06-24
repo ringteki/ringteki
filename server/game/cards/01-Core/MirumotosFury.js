@@ -8,7 +8,7 @@ class MirumotosFury extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isAttacking() && card.getGlory() <= this.game.provinceCards.filter(card => (
-                    card.facedown && card.controller === context.player
+                    card.isFacedown() && card.controller === context.player
                 )).length,
                 gameAction: ability.actions.bow()
             }

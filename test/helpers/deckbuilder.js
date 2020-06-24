@@ -48,7 +48,7 @@ class DeckBuilder {
     /*
         options: as player1 and player2 are described in setupTest #1514
     */
-    customDeck(player = {}) {
+    customDeck(player = {}, skirmishMode = false) {
         let faction = defaultFaction;
         let role = defaultRole;
         let stronghold = defaultStronghold;
@@ -69,10 +69,10 @@ class DeckBuilder {
             stronghold = player.stronghold;
         }
         //Create the province deck
-        if(player.strongholdProvince) {
+        if(player.strongholdProvince && !skirmishMode) {
             provinceDeck.push(player.strongholdProvince);
         }
-        if(player.provinces) {
+        if(player.provinces && !skirmishMode) {
             if(_.isArray(player.provinces)) {
                 provinceDeck = provinceDeck.concat(player.provinces);
             } else {
@@ -84,8 +84,10 @@ class DeckBuilder {
             }
         }
         //Fill the deck up to minimum number of provinces
-        while(provinceDeck.length < minProvince) {
-            provinceDeck.push(provinceFiller);
+        if (!skirmishMode) {
+            while(provinceDeck.length < minProvince) {
+                provinceDeck.push(provinceFiller);
+            }
         }
         /*
          * Create the dynasty deck - dynasty deck consists of cards in decks,
@@ -151,7 +153,7 @@ class DeckBuilder {
         //Collect all the cards together
         var deck = provinceDeck.concat(conflictDeck)
             .concat(dynastyDeck).concat(inPlayCards)
-            .concat(role).concat(stronghold);
+            .concat(skirmishMode ? [] : role).concat(skirmishMode ? [] : stronghold);
 
         return this.buildDeck(faction, deck);
     }

@@ -2,7 +2,7 @@ const BaseAbility = require('../baseability.js');
 const { CardTypes } = require('../Constants');
 
 class FireRingEffect extends BaseAbility {
-    constructor(optional = true) {
+    constructor(optional = true, skirmishMode = false) { // eslint-disable-line no-unused-vars
         super({
             target: {
                 activePromptTitle: 'Choose character to honor or dishonor',

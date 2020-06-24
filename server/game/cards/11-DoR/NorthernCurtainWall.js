@@ -8,7 +8,7 @@ class NorthernCurtainWall extends DrawCard {
             targetLocation: Locations.Provinces,
             match: (card, context) => {
                 if(card.type === CardTypes.Holding) {
-                    let isWall = card.hasTrait('kaiu-wall') && !card.facedown;
+                    let isWall = card.hasTrait('kaiu-wall') && card.isFaceup();
                     return isWall && context.player.areLocationsAdjacent(context.source.location, card.location);
                 }
                 return false;

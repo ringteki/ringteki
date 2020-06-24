@@ -20,7 +20,7 @@ class ReturnFromShadows extends DrawCard {
                 ])
             },
             effect: 'place a dishonor token on {1}, blanking it',
-            effectArgs: context => [context.target.facedown ? context.target.location : context.target]
+            effectArgs: context => [context.target.isFacedown() ? context.target.location : context.target]
         });
     }
 }
