@@ -29,6 +29,8 @@ class SteedOfTheSteppes extends DrawCard {
                 steedOfTheSteppesCaptureParentCost(),
                 AbilityDsl.costs.sacrificeSelf()
             ],
+            //need to put both as a target, context.source.parent is for the pre-cost checks, context.costs.steedOfTheSteppesCaptureParentCost is for the actual stand
+            //I don't like it, but it isnn't work otherwise
             gameAction: AbilityDsl.actions.ready(context => ({ target: [context.source.parent, context.costs.steedOfTheSteppesCaptureParentCost] }))
         });
     }
