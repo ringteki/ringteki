@@ -63,5 +63,14 @@ describe('Hidden Mountain Pass', function() {
             expect(this.manicured.facedown).toBe(false);
             expect(this.fertile.facedown).toBe(false);
         });
+
+        it('should not affect a broken province', function() {
+            this.shameful.isBroken = true;
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.mountainPass);
+            expect(this.shameful.broken).toBe(true);
+            expect(this.shameful.facedown).toBe(false);
+        });
     });
 });
