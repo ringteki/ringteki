@@ -24,16 +24,13 @@ describe('Hidden Mountain Pass', function() {
 
             this.player1.moveCard(this.mountainPass, this.shameful.location);
             this.noMoreActions();
-            this.passConflict();
 
             this.noMoreActions();
-            this.passConflict();
 
             this.noMoreActions();
-            this.passConflict();
 
             this.noMoreActions();
-            this.passConflict();
+
             //end of phase after next passes
         });
 
@@ -44,11 +41,11 @@ describe('Hidden Mountain Pass', function() {
         });
 
         it('should flip the province facedown', function() {
-            expect(this.shameful.facedown).toBeFalse();
+            expect(this.shameful.facedown).toBe(false);
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.mountainPass);
-            expect(this.shameful.facedown).toBeTrue();
+            expect(this.shameful.facedown).toBe(true);
         });
 
         it('should not trigger if the province is already facedown', function() {
@@ -58,13 +55,13 @@ describe('Hidden Mountain Pass', function() {
         });
 
         it('should only be able to affect the province it is on', function() {
-            expect(this.manicured.facedown).toBeFalse();
-            expect(this.fertile.facedown).toBeFalse();
+            expect(this.manicured.facedown).toBe(false);
+            expect(this.fertile.facedown).toBe(false);
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.mountainPass);
-            expect(this.manicured.facedown).toBeFalse();
-            expect(this.fertile.facedown).toBeFalse();
+            expect(this.manicured.facedown).toBe(false);
+            expect(this.fertile.facedown).toBe(false);
         });
     });
 });
