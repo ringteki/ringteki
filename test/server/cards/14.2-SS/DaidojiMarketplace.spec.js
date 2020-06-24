@@ -34,7 +34,7 @@ describe('Daidoji Marketplace', function() {
         it('should not trigger if the province is already faceup', function() {
             this.shamefulDisplay1.facedown = false;
             this.noMoreActions();
-            expect(this.player1).toHavePrompt('Discard Dynasty Cards');
+            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

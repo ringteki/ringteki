@@ -51,7 +51,7 @@ describe('Hidden Mountain Pass', function() {
         it('should not trigger if the province is already facedown', function() {
             this.shameful.facedown = true;
             this.noMoreActions();
-            expect(this.player1).toHavePrompt('Action Window');
+            expect(this.player1).toHavePrompt('Discard Dynasty Cards');
         });
 
         it('should only be able to affect the province it is on', function() {
