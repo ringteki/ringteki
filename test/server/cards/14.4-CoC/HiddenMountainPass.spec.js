@@ -13,8 +13,6 @@ describe('Hidden Mountain Pass', function() {
             });
 
             this.mountainPass = this.player1.placeCardInProvince('hidden-mountain-pass', 'province 1');
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
 
             this.manicured = this.player1.findCardByName('manicured-garden');
             this.fertile = this.player2.findCardByName('fertile-fields');
