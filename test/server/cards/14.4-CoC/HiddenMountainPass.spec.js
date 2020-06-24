@@ -15,7 +15,7 @@ describe('Hidden Mountain Pass', function() {
             this.mountainPass = this.player1.placeCardInProvince('hidden-mountain-pass', 'province 1');
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('1');
-            
+
             this.manicured = this.player1.findCardByName('manicured-garden');
             this.fertile = this.player2.findCardByName('fertile-fields');
             this.shameful = this.player1.findCardByName('shameful-display');
@@ -25,17 +25,17 @@ describe('Hidden Mountain Pass', function() {
             this.fertile.facedown = false;
 
             this.player1.moveCard(this.mountainPass, this.shameful.location);
-            noMoreActions();
-            passConflict();
+            this.noMoreActions();
+            this.passConflict();
 
-            noMoreActions();
-            passConflict();
+            this.noMoreActions();
+            this.passConflict();
 
-            noMoreActions();
-            passConflict();
+            this.noMoreActions();
+            this.passConflict();
 
-            noMoreActions();
-            passConflict();
+            this.noMoreActions();
+            this.passConflict();
             //end of phase after next passes
         });
 
@@ -46,11 +46,11 @@ describe('Hidden Mountain Pass', function() {
         });
 
         it('should flip the province facedown', function() {
-            expect(!this.shameful.facedown);
+            expect(this.shameful.facedown).toBeFalse();
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.mountainPass);
-            expect(this.shameful.facedown);
+            expect(this.shameful.facedown).toBeTrue();
         });
 
         it('should not trigger if the province is already facedown', function() {
@@ -58,16 +58,15 @@ describe('Hidden Mountain Pass', function() {
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Action Window');
         });
-        
+
         it('should only be able to affect the province it is on', function() {
-            expect(!this.manicured.facedown);
-            expect(!this.fertile.facedown);
+            expect(this.manicured.facedown).toBeFalse();
+            expect(this.fertile.facedown).toBeFalse();
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.mountainPass);
-            expect(!this.manicured.facedown);
-            expect(!this.fertile.facedown);
+            expect(this.manicured.facedown).toBeFalse();
+            expect(this.fertile.facedown).toBeFalse();
         });
-    });
     });
 });
