@@ -69,7 +69,7 @@ describe('Hidden Mountain Pass', function() {
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.mountainPass);
-            expect(this.shameful.broken).toBe(true);
+            expect(this.shameful.isBroken).toBe(true);
             expect(this.shameful.facedown).toBe(false);
         });
     });
