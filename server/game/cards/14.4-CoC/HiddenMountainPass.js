@@ -10,7 +10,7 @@ class HiddenMountainPass extends DrawCard {
                 onPhaseEnded: event => event.phase === Phases.Conflict
             },
             gameAction: AbilityDsl.actions.turnFacedown(context => ({
-                cardCondition: !context.player.getProvinceCardInProvince(context.source.location).isBroken,
+                condition: !context.player.getProvinceCardInProvince(context.source.location).isBroken,
                 target: context.player.getProvinceCardInProvince(context.source.location)
             })),
             effect: 'Turn {1} facedown',
