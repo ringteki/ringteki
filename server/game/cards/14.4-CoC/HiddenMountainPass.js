@@ -4,7 +4,7 @@ const AbilityDsl = require('../../abilitydsl');
 
 class HiddenMountainPass extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
+        this.interrupt({
             title: 'Flip this holding\'s province facedown',
             when: {
                 onPhaseEnded: event => event.phase === Phases.Conflict
