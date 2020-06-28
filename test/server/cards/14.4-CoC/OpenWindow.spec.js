@@ -1,4 +1,4 @@
-describe('Shadow Stalker', function() {
+describe('Open window', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
