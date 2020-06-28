@@ -167,7 +167,7 @@ describe('Asceticism', function() {
                     }
                 });
 
-                this.manicured = this.player1.findCardByName('manicured-garden');    
+                this.manicured = this.player1.findCardByName('manicured-garden');
                 this.shameful = this.player1.findCardByName('shameful-display');
                 this.crimeScene = this.player1.findCardByName('scene-of-the-crime');
 
@@ -185,20 +185,21 @@ describe('Asceticism', function() {
             });
 
             it('should not work when only one of your non SH provinces is faceup ', function() {
-                
                 this.manicured.facedown = false;
                 this.shameful.facedown = false;
                 this.crimeScene.facedown = false;
+
                 this.initiateConflict({
                     type: 'military',
                     attackers: [this.agashaSwordsmith],
                     defenders: []
                 });
-                
+
                 this.player2.clickCard(this.assassination);
                 expect(this.player2).toBeAbleToSelect(this.shrewdInvestigator);
                 expect(this.player2).toBeAbleToSelect(this.togashiInitiate);
                 expect(this.player2).toBeAbleToSelect(this.agashaSwordsmith);
             });
+        });
     });
 });
