@@ -5,7 +5,7 @@ describe('Kyofuki\'s Hammer', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-whisperer'],
-                    hand: ['kyofuki-s-hammer'],
+                    hand: ['kyofuki-s-hammer']
                 },
                 player2: {
                     inPlay: ['togashi-yokuni'],
