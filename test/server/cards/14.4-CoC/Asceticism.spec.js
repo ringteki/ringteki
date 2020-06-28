@@ -150,5 +150,55 @@ describe('Asceticism', function() {
                 expect(this.player1).toBeAbleToSelect(this.vanguardWarrior);
             });
         });
+
+        describe('Asceticism on a friendly character with one non-SH provinces facedown', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['agasha-swordsmith', 'shrewd-investigator', 'togashi-initiate'],
+                        hand: ['asceticism'],
+                        provinces: ['manicured-garden','shameful-display','scene-of-the-crime']
+                    },
+                    player2: {
+                        inPlay:['vanguard-warrior'],
+                        hand: ['court-games', 'assassination'],
+                        provinces: ['fertile-fields']
+                    }
+                });
+
+                this.manicured = this.player1.findCardByName('manicured-garden');    
+                this.shameful = this.player1.findCardByName('shameful-display');
+                this.crimeScene = this.player1.findCardByName('scene-of-the-crime');
+
+                this.fertile = this.player2.findCardByName('fertile-fields');
+
+                this.agashaSwordsmith = this.player1.findCardByName('agasha-swordsmith');
+                this.shrewdInvestigator = this.player1.findCardByName('shrewd-investigator');
+                this.togashiInitiate = this.player1.findCardByName('togashi-initiate');
+                this.asceticism = this.player1.findCardByName('asceticism');
+                this.courtGames = this.player2.findCardByName('court-games');
+                this.assassination = this.player2.findCardByName('assassination');
+                this.vanguardWarrior = this.player2.findCardByName('vanguard-warrior');
+                this.player1.playAttachment(this.asceticism, this.agashaSwordsmith);
+                this.noMoreActions();
+            });
+
+            it('should not work when only one of your non SH provinces is faceup ', function() {
+                
+                this.manicured.facedown = false;
+                this.shameful.facedown = false;
+                this.crimeScene.facedown = false;
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.agashaSwordsmith],
+                    defenders: []
+                });
+                
+                this.player2.clickCard(this.assassination);
+                expect(this.player2).toBeAbleToSelect(this.shrewdInvestigator);
+                expect(this.player2).toBeAbleToSelect(this.togashiInitiate);
+                expect(this.player2).toBeAbleToSelect(this.agashaSwordsmith);
+            });
     });
 });
