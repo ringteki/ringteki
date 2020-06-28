@@ -62,6 +62,32 @@ describe('Isawa Tsuke 2', function() {
                 expect(this.player2).not.toHavePromptButton('5');
             });
 
+            it('Should not work if the fire ring is contested', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.ambusher, this.youth, this.whisperer, this.tadaka],
+                    defenders: [this.liar, this.tsuke],
+                    ring: 'fire'
+                });
+
+                this.player2.clickCard(this.tsuke);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
+            it('Should not work if the fire ring is claimed', function() {
+                this.player1.claimRing('fire');
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.ambusher, this.youth, this.whisperer, this.tadaka],
+                    defenders: [this.liar, this.tsuke]
+                });
+
+                this.player2.clickCard(this.tsuke);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
             it('Should force you to choose target equal to the amount of honor lost', function() {
                 this.noMoreActions();
                 this.initiateConflict({
