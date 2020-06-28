@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class HayakenNoShiro extends StrongholdCard {
     setupCardAbilities() {
         this.action({
-            title: 'Give a character with attachments bonus skill',
+            title: 'Ready a character',
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Character,
