@@ -158,7 +158,7 @@ describe('Asceticism', function() {
                     player1: {
                         inPlay: ['agasha-swordsmith', 'shrewd-investigator', 'togashi-initiate'],
                         hand: ['asceticism'],
-                        provinces: ['manicured-garden','shameful-display','scene-of-the-crime']
+                        provinces: ['manicured-garden','shameful-display','scene-of-the-crime','public-forum']
                     },
                     player2: {
                         inPlay:['vanguard-warrior'],
@@ -188,7 +188,7 @@ describe('Asceticism', function() {
                 this.manicured.facedown = false;
                 this.shameful.facedown = false;
                 this.crimeScene.facedown = false;
-
+                this.game.checkGameState(true);
                 this.initiateConflict({
                     type: 'military',
                     attackers: [this.agashaSwordsmith],
