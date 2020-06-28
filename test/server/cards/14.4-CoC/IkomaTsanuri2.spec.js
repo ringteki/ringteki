@@ -1,4 +1,4 @@
-describe('Countryside Trader', function() {
+describe('Ikoma Tsanuri 2', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
