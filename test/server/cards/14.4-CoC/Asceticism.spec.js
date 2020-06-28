@@ -9,7 +9,7 @@ describe('Asceticism', function() {
                         hand: ['asceticism']
                     },
                     player2: {
-                        inPlay:['Togashi-Yokuni'],
+                        inPlay:['togashi-yokuni'],
                         hand: ['court-games', 'assassination']
                     }
                 });
