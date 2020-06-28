@@ -158,7 +158,7 @@ describe('Asceticism', function() {
                     player1: {
                         inPlay: ['agasha-swordsmith', 'shrewd-investigator', 'togashi-initiate'],
                         hand: ['asceticism'],
-                        provinces: ['manicured-garden','shameful-display','scene-of-the-crime','public-forum']
+                        provinces: ['manicured-garden','scene-of-the-crime','public-forum']
                     },
                     player2: {
                         inPlay:['vanguard-warrior'],
@@ -168,7 +168,7 @@ describe('Asceticism', function() {
                 });
 
                 this.manicured = this.player1.findCardByName('manicured-garden');
-                this.shameful = this.player1.findCardByName('shameful-display');
+                this.forum = this.player1.findCardByName('public-forum');
                 this.crimeScene = this.player1.findCardByName('scene-of-the-crime');
 
                 this.fertile = this.player2.findCardByName('fertile-fields');
@@ -186,7 +186,7 @@ describe('Asceticism', function() {
 
             it('should not work when only one of your non SH provinces is faceup ', function() {
                 this.manicured.facedown = false;
-                this.shameful.facedown = false;
+                this.forum.facedown = false;
                 this.crimeScene.facedown = false;
                 this.game.checkGameState(true);
                 this.initiateConflict({
