@@ -7,10 +7,9 @@ class HiddenMountainPass extends DrawCard {
         this.interrupt({
             title: 'Flip this holding\'s province facedown',
             when: {
-                onPhaseEnded: event => event.phase === Phases.Conflict
+                onPhaseEnded: (event,context) => event.phase === Phases.Conflict && !context.player.getProvinceCardInProvince(context.source.location).isBroken
             },
             gameAction: AbilityDsl.actions.turnFacedown(context => ({
-                condition: !context.player.getProvinceCardInProvince(context.source.location).isBroken,
                 target: context.player.getProvinceCardInProvince(context.source.location)
             })),
             effect: 'Turn {1} facedown',
