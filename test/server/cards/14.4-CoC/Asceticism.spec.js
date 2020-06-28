@@ -9,7 +9,7 @@ describe('Asceticism', function() {
                         hand: ['asceticism']
                     },
                     player2: {
-                        inPlay:['togashi-yokuni'],
+                        inPlay:['vanguard-warrior'],
                         hand: ['court-games', 'assassination']
                     }
                 });
@@ -20,7 +20,7 @@ describe('Asceticism', function() {
                 this.asceticism = this.player1.findCardByName('asceticism');
                 this.courtGames = this.player2.findCardByName('court-games');
                 this.assassination = this.player2.findCardByName('assassination');
-                this.yokuni = this.player2.findCardByName('togashi-yokuni');
+                this.vanguardWarrior = this.player2.findCardByName('vanguard-warrior');
                 this.player1.playAttachment(this.asceticism, this.agashaSwordsmith);
                 this.noMoreActions();
             });
@@ -43,7 +43,7 @@ describe('Asceticism', function() {
                     attackers: [this.agashaSwordsmith],
                     defenders: []
                 });
-                this.player2.clickCard(this.yokuni);
+                this.player2.clickCard(this.vanguardWarrior);
                 expect(this.player2).toBeAbleToSelect(this.shrewdInvestigator);
                 expect(this.player2).toBeAbleToSelect(this.togashiInitiate);
                 expect(this.player2).not.toBeAbleToSelect(this.agashaSwordsmith);
@@ -67,7 +67,7 @@ describe('Asceticism', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['agasha-swordsmith','togashi-yokuni'],
+                        inPlay: ['agasha-swordsmith','agasha-prodigy'],
                         hand: ['asceticism', 'court-games']
                     },
                     player2: {
@@ -76,7 +76,7 @@ describe('Asceticism', function() {
                     }
                 });
 
-                this.yokuni = this.player1.findCardByName('togashi-yokuni');
+                this.agashaProdigy = this.player1.findCardByName('agasha-prodigy');
                 this.agashaSwordsmith = this.player1.findCardByName('agasha-swordsmith');
                 this.asceticism = this.player1.findCardByName('asceticism');
                 this.courtGames = this.player1.findCardByName('court-games');
@@ -145,7 +145,7 @@ describe('Asceticism', function() {
                     attackers: [this.hanteiSotorii, this.vanguardWarrior],
                     defenders: []
                 });
-                this.player1.clickCard(this.yokuni);
+                this.player1.clickCard(this.agashaProdigy);
                 expect(this.player1).toBeAbleToSelect(this.hanteiSotorii);
                 expect(this.player1).toBeAbleToSelect(this.vanguardWarrior);
             });
