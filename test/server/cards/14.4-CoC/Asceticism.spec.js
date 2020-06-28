@@ -1,6 +1,6 @@
 describe('Asceticism', function() {
     integration(function() {
-        describe('Asceticism on a friendly character', function() {
+        describe('Asceticism on a friendly character with all provinces facedown', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',
@@ -62,7 +62,7 @@ describe('Asceticism', function() {
             });
         });
 
-        describe('Asceticism on an opponent\'s character', function() {
+        describe('Asceticism on an opponent\'s character with all provinces facedown', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',
@@ -92,7 +92,7 @@ describe('Asceticism', function() {
 
             it('should not forbid your own events to target attached character', function() {
                 this.initiateConflict({
-                    type: 'mil',
+                    type: 'political',
                     attackers: [this.hanteiSotorii, this.vanguardWarrior],
                     defenders: []
                 });
