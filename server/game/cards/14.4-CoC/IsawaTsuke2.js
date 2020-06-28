@@ -9,7 +9,7 @@ class IsawaTsuke2 extends DrawCard {
             title: 'Lose honor to discard fate',
             effect: 'lose {1} honor to discard a fate from {2}',
             effectArgs: context => [context.costs.variableHonorCost, context.target],
-            condition: context => context.game.isDuringConflict(null) && context.game.rings['fire'].isUnclaimed(),
+            condition: context => context.game.isDuringConflict() && context.game.rings['fire'].isUnclaimed(),
             cost: AbilityDsl.costs.variableHonorCost(context => this.getNumberOfLegalTargets(context)),
             target: {
                 mode: TargetModes.ExactlyVariable,
