@@ -17,7 +17,7 @@ class BreakingIn extends ProvinceCard {
                 cardHandler: cardFromDeck => {
                     if(cardFromDeck.hasTrait('cavalry')) {
                         return this.game.promptForSelect(context.player, {
-                            activePromptTitle: 'Choose a province' + cardFromDeck.name,
+                            activePromptTitle: 'Choose a province',
                             context: context,
                             cardType: [CardTypes.Province],
                             location: Locations.Provinces,

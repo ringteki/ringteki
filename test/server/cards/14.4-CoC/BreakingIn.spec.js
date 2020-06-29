@@ -75,6 +75,7 @@ describe('Breaking In', function() {
             this.player1.clickPrompt('Initiate Conflict');
             this.player2.clickCard(this.breaking);
             this.player2.clickPrompt('Moto Chagatai');
+            expect(this.player2).toHavePrompt('Choose a province');
             this.player2.clickCard(this.shamefulDisplay);
             expect(this.chagatai.location).toBe('province 2');
             expect(this.chagatai.facedown).toBe(false);
