@@ -101,7 +101,7 @@ class CardAbility extends ThenAbility {
 
         if(defaultedLocation.some(location => location === Locations.Provinces)) {
             defaultedLocation = defaultedLocation.filter(location => location !== Locations.Provinces);
-            defaultedLocation = defaultedLocation.concat([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]);
+            defaultedLocation = defaultedLocation.concat(this.game.getProvinceArray());
         }
 
         return defaultedLocation;
@@ -130,6 +130,10 @@ class CardAbility extends ThenAbility {
 
         if(this.isCardPlayed() && this.card.isLimited() && context.player.limitedPlayed >= context.player.maxLimited) {
             return 'limited';
+        }
+
+        if(!ignoredRequirements.includes('phase') && !this.isKeywordAbility() && this.card.isDynasty && this.card.type === CardTypes.Event && context.game.currentPhase !== 'dynasty') {
+            return 'phase';
         }
 
         return super.meetsRequirements(context, ignoredRequirements);
@@ -180,7 +184,7 @@ class CardAbility extends ThenAbility {
         let costMessages = this.cost.map(cost => {
             if(cost.getCostMessage) {
                 let card = context.costs[cost.getActionName(context)];
-                if(card && card.facedown) {
+                if(card && card.isFacedown && card.isFacedown()) {
                     card = 'a facedown card';
                 }
                 let [format, args] = ['ERROR - MISSING COST MESSAGE', [' ',' ']];

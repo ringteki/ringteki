@@ -18,7 +18,7 @@ import DynastyCardAction = require('./dynastycardaction');
 import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
-
+const StatusToken = require('./StatusToken');
 
 const ValidKeywords = [
     'ancestral',
@@ -269,12 +269,11 @@ class BaseCard extends EffectSource {
     }
 
     isInProvince(): boolean {
-        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree,
-            Locations.ProvinceFour, Locations.StrongholdProvince].includes(this.location);
+        return this.game.getProvinceArray().includes(this.location);
     }
-
+    
     isInPlay(): boolean {
-        if(this.facedown) {
+        if(this.isFacedown()) {
             return false;
         }
         if([CardTypes.Holding, CardTypes.Province, CardTypes.Stronghold].includes(this.type)) {
@@ -321,7 +320,7 @@ class BaseCard extends EffectSource {
         const activeLocations = {
             'conflict discard pile': [Locations.ConflictDiscardPile],
             'play area': [Locations.PlayArea],
-            'province': [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]
+            'province': this.game.getProvinceArray()
         };
         if(!activeLocations[Locations.Provinces].includes(from) || !activeLocations[Locations.Provinces].includes(to)) {
             this.removeLastingEffects();
@@ -364,12 +363,13 @@ class BaseCard extends EffectSource {
         }
     }
 
+
     canTriggerAbilities(context: AbilityContext, ignoredRequirements = []): boolean {
-        return !this.facedown && (ignoredRequirements.includes('triggeringRestrictions') || this.checkRestrictions('triggerAbilities', context));
+        return this.isFaceup() && (ignoredRequirements.includes('triggeringRestrictions') || this.checkRestrictions('triggerAbilities', context));
     }
 
     canInitiateKeywords(context: AbilityContext): boolean {
-        return !this.facedown && this.checkRestrictions('initiateKeywords', context);
+        return this.isFaceup() && this.checkRestrictions('initiateKeywords', context);
     }
 
     getModifiedLimitMax(player: Player, ability: CardAbility, max: number): number {
@@ -391,8 +391,8 @@ class BaseCard extends EffectSource {
             return undefined;
         }
 
-        if(this.facedown) {
-            return [{ command: 'reveal', text: 'Reveal' }];
+        if(this.isFacedown()) {
+            return [{ command: 'click', text: 'Select Card' }, { command: 'reveal', text: 'Reveal' }];
         }
 
         menu.push({ command: 'click', text: 'Select Card' });
@@ -702,8 +702,51 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
+    
+    setPersonalHonor(token) {
+        if(this.personalHonor && token !== this.personalHonor) {
+            this.personalHonor.setCard(null);
+        }
+        this.personalHonor = token || null;
+        if(this.personalHonor) {
+            this.personalHonor.setCard(this);
+        }
+    }
+
+    get isHonored() {
+        return !!this.personalHonor && !!this.personalHonor.honored;
+    }
+
+    honor() {
+        if(this.isHonored) {
+            return;
+        } else if(this.isDishonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, true));
+        }
+    }
+
+    get isDishonored() {
+        return !!this.personalHonor && !!this.personalHonor.dishonored;
+    }
+
+    dishonor() {
+        if(this.isDishonored) {
+            return;
+        } if(this.isHonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, false));
+        }
+    }
+
+    makeOrdinary() {
+        this.setPersonalHonor(null);
+    }
+
     getShortSummaryForControls(activePlayer) {
-        if(this.facedown && (activePlayer !== this.controller || this.hideWhenFacedown())) {
+        if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
         }
         return super.getShortSummaryForControls(activePlayer);
@@ -715,12 +758,14 @@ class BaseCard extends EffectSource {
 
         // This is my facedown card, but I'm not allowed to look at it
         // OR This is not my card, and it's either facedown or hidden from me
-        if(isActivePlayer ? this.facedown && this.hideWhenFacedown() : (this.facedown || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
+        if(isActivePlayer ? this.isFacedown() && this.hideWhenFacedown() : (this.isFacedown() || hideWhenFaceup || this.anyEffect(EffectNames.HideWhenFaceUp))) {
             let state = {
                 controller: this.controller.getShortSummary(),
+                menu: isActivePlayer ? this.getMenu() : undefined,
                 facedown: true,
                 inConflict: this.inConflict,
-                location: this.location
+                location: this.location,
+                uuid: isActivePlayer ? this.uuid : undefined
             };
             return Object.assign(state, selectionState);
         }
@@ -729,7 +774,7 @@ class BaseCard extends EffectSource {
             id: this.cardData.id,
             controlled: this.owner !== this.controller,
             inConflict: this.inConflict,
-            facedown: this.facedown,
+            facedown: this.isFacedown(),
             location: this.location,
             menu: this.getMenu(),
             name: this.cardData.name,
@@ -737,6 +782,8 @@ class BaseCard extends EffectSource {
             showPopup: this.showPopup,
             tokens: this.tokens,
             type: this.getType(),
+            isDishonored: this.isDishonored,
+            isHonored: this.isHonored,
             uuid: this.uuid
         };
 

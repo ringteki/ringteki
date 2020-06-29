@@ -80,6 +80,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
             card: context.source,
             context: context,
             originalLocation: context.source.location,
+            originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
             playType: context.playType
         })];
         const replacedCharacter = context.costs.chooseDisguisedCharacter;
@@ -106,7 +107,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
                 const moveEvents = [];
                 context.game.actions.placeFate({ target: context.source, origin: replacedCharacter, amount: replacedCharacter.fate }).addEventsToArray(moveEvents, context);
                 for(const attachment of replacedCharacter.attachments.toArray()) {
-                    context.game.actions.attach({ target: context.source, attachment: attachment }).addEventsToArray(moveEvents, context);
+                    context.game.actions.attach({ target: context.source, attachment: attachment, viaDisguised: true }).addEventsToArray(moveEvents, context);
                 }
                 context.game.actions.moveStatusToken({ target: replacedCharacter.personalHonor, recipient: context.source }).addEventsToArray(moveEvents, context);
                 moveEvents.push(context.game.getEvent(EventNames.Unnamed, {}, () => {
@@ -115,7 +116,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
                 }));
                 context.game.openThenEventWindow(moveEvents);
             }));
-            context.game.openThenEventWindow(events);
+            context.game.openEventWindow(events);
         });
     }
 

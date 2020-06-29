@@ -461,6 +461,24 @@ class PlayerInteractionWrapper {
         this.checkUnserializableGameState();
     }
 
+    clickPromptButtonIndex(index) {
+        var currentPrompt = this.player.currentPrompt();
+
+        if(currentPrompt.buttons.length <= index) {
+            throw new Error(`Couldn't click on Button "${index}" for ${this.player.name}. Current prompt is:\n${this.formatPrompt()}`);
+        }
+
+        var promptButton = currentPrompt.buttons[index];
+
+        if(!promptButton || promptButton.disabled) {
+            throw new Error(`Couldn't click on Button "${index}" for ${this.player.name}. Current prompt is:\n${this.formatPrompt()}`);
+        }
+
+        this.game.menuButton(this.player.name, promptButton.arg, promptButton.uuid, promptButton.method);
+        this.game.continue();
+        this.checkUnserializableGameState();
+    }
+
     chooseCardInPrompt(cardName, controlName) {
 
         var currentPrompt = this.player.currentPrompt();
@@ -583,6 +601,9 @@ class PlayerInteractionWrapper {
      * @param {!String} card - the province to select
      */
     selectStrongholdProvince(card) {
+        if (this.game.skirmishMode) {
+            return;
+        }
         if(!this.hasPrompt('Select stronghold province')) {
             throw new Error(`${this.name} is not prompted to select a province`);
         }
@@ -622,7 +643,7 @@ class PlayerInteractionWrapper {
         }
         var candidates = this.filterCardsByName(card, 'provinces');
         //Remove any face-down cards
-        candidates = _.reject(candidates, card => card.facedown);
+        candidates = _.reject(candidates, card => card.isFacedown());
         if(candidates.length === 0) {
             throw new Error(`${this.name} cannot play the specified card from the provinces`);
         }
@@ -778,6 +799,12 @@ class PlayerInteractionWrapper {
                 this.moveCard(this.dynastyDeck[i], 'dynasty discard pile');
             }
         }
+    }
+
+    setupSkirmishProvinces() {
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 1'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 2'));
+        this.provinceDeck.push(this.player.getProvinceCardInProvince('province 3'));
     }
 }
 

@@ -35,11 +35,11 @@ describe('Hida O-Ushi', function() {
                 this.player1.pass();
 
                 let conflicts = this.player2.player.getConflictOpportunities();
-                let milConflicts = this.player2.player.getConflictOpportunities('military');
+                let milConflicts = this.player2.player.getRemainingConflictOpportunitiesForType('military');
                 expect(this.player2).toBeAbleToSelect(this.oushi);
                 this.player2.clickCard(this.oushi);
                 expect(this.player2.player.getConflictOpportunities()).toBe(conflicts + 1);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts + 1);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts + 1);
             });
 
             it('should not trigger if you win on attack', function () {
@@ -56,11 +56,11 @@ describe('Hida O-Ushi', function() {
                 this.player2.pass();
 
                 let conflicts = this.player2.player.getConflictOpportunities();
-                let milConflicts = this.player2.player.getConflictOpportunities('military');
+                let milConflicts = this.player2.player.getRemainingConflictOpportunitiesForType('military');
                 expect(this.player2).not.toBeAbleToSelect(this.oushi);
                 this.player2.clickCard(this.oushi);
                 expect(this.player2.player.getConflictOpportunities()).toBe(conflicts);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
             });
 
             it('should not trigger if you lose on defense', function () {
@@ -75,11 +75,11 @@ describe('Hida O-Ushi', function() {
                 this.player1.pass();
 
                 let conflicts = this.player2.player.getConflictOpportunities();
-                let milConflicts = this.player2.player.getConflictOpportunities('military');
+                let milConflicts = this.player2.player.getRemainingConflictOpportunitiesForType('military');
                 expect(this.player2).not.toBeAbleToSelect(this.oushi);
                 this.player2.clickCard(this.oushi);
                 expect(this.player2.player.getConflictOpportunities()).toBe(conflicts);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
             });
 
             it('should not be able to trigger more than once', function () {
@@ -94,11 +94,11 @@ describe('Hida O-Ushi', function() {
                 this.player1.pass();
 
                 let conflicts = this.player2.player.getConflictOpportunities();
-                let milConflicts = this.player2.player.getConflictOpportunities('military');
+                let milConflicts = this.player2.player.getRemainingConflictOpportunitiesForType('military');
                 expect(this.player2).toBeAbleToSelect(this.oushi);
                 this.player2.clickCard(this.oushi);
                 expect(this.player2.player.getConflictOpportunities()).toBe(conflicts + 1);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts + 1);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts + 1);
 
                 this.kuwanan.bowed = false;
                 this.kisada.bowed = false;
@@ -119,11 +119,11 @@ describe('Hida O-Ushi', function() {
                 this.player2.pass();
 
                 conflicts = this.player2.player.getConflictOpportunities();
-                milConflicts = this.player2.player.getConflictOpportunities('military');
+                milConflicts = this.player2.player.getRemainingConflictOpportunitiesForType('military');
                 expect(this.player2).not.toBeAbleToSelect(this.oushi);
                 this.player2.clickCard(this.oushi);
                 expect(this.player2.player.getConflictOpportunities()).toBe(conflicts);
-                expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts);
+                expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
             });
         });
     });

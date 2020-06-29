@@ -9,7 +9,7 @@ class UnyieldingSensei extends DrawCard {
                 cardType: CardTypes.Province,
                 controller: Players.Self,
                 location: Locations.Provinces,
-                cardCondition: (card, context) => !card.isBroken && context.player.getDynastyCardsInProvince(card.location).some(c => c.getType() === CardTypes.Holding && c.facedown === false)
+                cardCondition: (card, context) => !card.isBroken && context.player.getDynastyCardsInProvince(card.location).some(c => c.getType() === CardTypes.Holding && c.isFaceup())
             },
             effect: 'look at the top two cards of their dynasty deck',
             handler: context => this.game.promptWithHandlerMenu(context.player, {
@@ -26,7 +26,7 @@ class UnyieldingSensei extends DrawCard {
                     let provinceLocation = context.target.location;
                     context.player.moveCard(cardFromDeck, provinceLocation);
                     cardFromDeck.facedown = false;
-                    this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, context.target.facedown ? 'a facedown province' : context.target.name);
+                    this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, context.target.isFacedown() ? 'a facedown province' : context.target.name);
                 }
             })
         });

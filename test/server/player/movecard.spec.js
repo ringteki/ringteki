@@ -5,8 +5,9 @@ const DrawCard = require('../../../build/server/game/drawcard.js');
 describe('Player', function() {
     describe('moveCard', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['emitEvent', 'on', 'raiseEvent', 'getOtherPlayer', 'playerDecked', 'addMessage', 'isDuringConflict']);
+            this.gameSpy = jasmine.createSpyObj('game', ['emitEvent', 'on', 'raiseEvent', 'getOtherPlayer', 'playerDecked', 'addMessage', 'isDuringConflict', 'getProvinceArray']);
             this.gameSpy.effectEngine = jasmine.createSpyObj('effectEngine', ['removeLastingEffects']);
+            this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
             this.player = new Player('1', {username: 'Player 1', settings: {}}, true, this.gameSpy);
             this.player.initialise();
 

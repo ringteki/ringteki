@@ -71,6 +71,9 @@ class FatePhase extends Phase {
     }
 
     placeFateOnUnclaimedRings() {
+        if(this.game.skirmishMode) {
+            return;
+        }
         this.game.raiseEvent(EventNames.OnPlaceFateOnUnclaimedRings, {}, () => {
             _.each(this.game.rings, ring => {
                 if(!ring.claimed) {
@@ -89,12 +92,12 @@ class FatePhase extends Phase {
     discardFromProvincesForPlayer(player) {
         let cardsToDiscard = [];
         let cardsOnUnbrokenProvinces = [];
-        _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince], location => {
+        _.each(this.game.getProvinceArray(), location => {
             let provinceCard = player.getProvinceCardInProvince(location);
             let province = player.getSourceList(location);
-            let dynastyCards = province.filter(card => card.isDynasty && !card.facedown);
+            let dynastyCards = province.filter(card => card.isDynasty && card.isFaceup());
             if(dynastyCards.length > 0 && provinceCard) {
-                if(provinceCard.isBroken) {
+                if(provinceCard.isBroken && !this.game.skirmishMode) {
                     cardsToDiscard = cardsToDiscard.concat(dynastyCards);
                 } else {
                     cardsOnUnbrokenProvinces = cardsOnUnbrokenProvinces.concat(dynastyCards);

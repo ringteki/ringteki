@@ -134,8 +134,8 @@ describe('Breakthrough', function () {
             });
 
             it('should prevent Breakthrough from triggering', function () {
-                expect(this.player1.player.getConflictOpportunities('total')).toBe(1);
-                expect(this.player2.player.getConflictOpportunities('total')).toBe(1);
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
+                expect(this.player2.player.getConflictOpportunities()).toBe(1);
                 this.initiateConflict({
                     attackers: [this.motoHorde],
                     defenders: []
