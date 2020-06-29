@@ -11,7 +11,8 @@ describe('Under Siege', function() {
                 player2: {
                     inPlay: ['shrine-maiden'],
                     hand: ['ornate-fan'],
-                    conflictDiscard: ['for-shame', 'way-of-the-dragon', 'court-games', 'assassination', 'way-of-the-crane', 'backhanded-compliment']
+                    conflictDiscard: ['for-shame', 'way-of-the-dragon', 'court-games', 'assassination', 'way-of-the-crane', 'backhanded-compliment'],
+                    dynastyDiscard: ['chukan-nobue']
                 }
             });
 
@@ -20,6 +21,7 @@ describe('Under Siege', function() {
             this.maiden = this.player2.findCardByName('shrine-maiden');
 
             this.katana = this.player1.findCardByName('fine-katana');
+            this.nobue = this.player2.findCardByName('chukan-nobue');
 
             this.player2.reduceDeckToNumber('conflict deck', 0);
             this.fan = this.player2.findCardByName('ornate-fan');
@@ -203,6 +205,28 @@ describe('Under Siege', function() {
             expect(this.getChatLogs(20)).toContain('player2 sets their hand aside and draws 5 cards');
             expect(this.getChatLogs(20)).toContain('player2 discards Way of the Crane, Assassination, Court Games, Way of the Dragon and Backhanded Compliment');
             expect(this.getChatLogs(20)).toContain('player2 picks up their original hand');
+        });
+
+        it('Chukan Nobu interaction - should not discard any cards pre conflict, or ones that are drawn during the conflict', function() {
+            this.player2.moveCard(this.nobue, 'play area');
+            this.game.checkGameState(true);
+            this.initiateConflict({
+                attackers: [this.wanderer]
+            });
+            expect(this.fan.location).toBe('hand');
+            this.player1.clickCard(this.siege);
+            this.player2.clickPrompt('Done');
+            expect(this.fan.location).toBe('removed from game');
+
+            this.player2.clickCard(this.bhc);
+            this.player2.clickPrompt('player2');
+            expect(this.shame.location).toBe('hand');
+            this.noMoreActions();
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.player1).toHavePrompt('Action Window');
+
+            expect(this.shame.location).toBe('hand');
+            expect(this.fan.location).toBe('hand');
         });
     });
 });
