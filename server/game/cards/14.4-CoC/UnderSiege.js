@@ -24,7 +24,8 @@ class UnderSiege extends DrawCard {
                             gameAction: AbilityDsl.actions.chosenDiscard(() => ({
                                 amount: 1000, //discard the entire hand
                                 extraMessage: '{0} picks up their original hand'
-                            }))
+                            })),
+                            isTriggeredAbility: true
                         })
                     ]
                 })),

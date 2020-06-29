@@ -41,6 +41,7 @@ class BaseAbility {
             }
         }
         this.nonDependentTargets = this.targets.filter(target => !target.properties.dependsOn);
+        this.defaultTriggeredAbility = false;
     }
 
     buildCost(cost) {
@@ -231,7 +232,7 @@ class BaseAbility {
     }
 
     isTriggeredAbility() {
-        return false;
+        return this.defaultTriggeredAbility;
     }
 
     isKeywordAbility() {

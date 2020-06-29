@@ -207,7 +207,7 @@ describe('Under Siege', function() {
             expect(this.getChatLogs(20)).toContain('player2 picks up their original hand');
         });
 
-        it('Chukan Nobu interaction - should not discard any cards pre conflict, or ones that are drawn during the conflict', function() {
+        it('Chukan Nobu interaction - should not discard any cards post conflict', function() {
             this.player2.moveCard(this.nobue, 'play area');
             this.game.checkGameState(true);
             this.initiateConflict({

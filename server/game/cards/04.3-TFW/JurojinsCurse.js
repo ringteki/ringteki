@@ -21,7 +21,8 @@ class JurojinsCurse extends DrawCard {
                     messageArgs: context => [context.source],
                     gameAction: AbilityDsl.actions.handler({
                         handler: context => context.game.queueStep(new FatePhase(context.game))
-                    })
+                    }),
+                    isTriggeredAbility: true
                 })
             }),
             max: AbilityDsl.limit.perRound(1)
