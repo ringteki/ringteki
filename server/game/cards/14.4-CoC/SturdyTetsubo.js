@@ -8,7 +8,8 @@ class SturdyTetsubo extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Make opponent discard 1 card',
                 when: {
-                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player
+                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller
+                        && context.player.opponent
                 },
                 gameAction: AbilityDsl.actions.chosenDiscard()
             })
