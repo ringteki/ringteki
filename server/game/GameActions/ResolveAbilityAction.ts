@@ -106,7 +106,7 @@ export class ResolveAbilityAction extends CardGameAction {
             return false;
         }
         let newContext = ability.createContext(player, newContextEvent);
-        let ignoredRequirements = properties.ignoredRequirements.concat('player', 'location', 'limit');
+        let ignoredRequirements = properties.ignoredRequirements.concat('player', 'location', 'limit', 'triggeringRestrictions');
         return !ability.meetsRequirements(newContext, ignoredRequirements);
     }
 
