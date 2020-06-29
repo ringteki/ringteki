@@ -10,7 +10,7 @@ class IkomaUjiaki extends DrawCard {
             cost: ability.costs.discardImperialFavor(),
             condition: context => context.source.isParticipating() && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].some(location => {
                 let cards = context.player.getDynastyCardsInProvince(location);
-                return cards.some(card => card.isFacedown());
+                return cards.some(card => card.isFacedown() || card.type === CardTypes.Character);
             }),
             effect: 'to reveal all their facedown dynasty cards',
             handler: context => {
@@ -24,24 +24,26 @@ class IkomaUjiaki extends DrawCard {
                         }
                     });
                 });
-                if(revealedCards.length > 0) {
-                    this.game.promptForSelect(context.player, {
-                        mode: TargetModes.UpTo,
-                        numCards: 2,
-                        activePrompt: 'Choose up to 2 characters',
-                        cardType: CardTypes.Character,
-                        location: Locations.Provinces,
-                        controller: Players.Self,
-                        context: context,
-                        optional: true,
-                        cardCondition: card => card.isFaceup() && card.allowGameAction('putIntoConflict', context),
-                        onSelect: (player, cards) => {
+                this.game.promptForSelect(context.player, {
+                    mode: TargetModes.UpTo,
+                    numCards: 2,
+                    activePrompt: 'Choose up to 2 characters',
+                    cardType: CardTypes.Character,
+                    location: Locations.Provinces,
+                    controller: Players.Self,
+                    context: context,
+                    optional: true,
+                    cardCondition: card => card.isFaceup() && card.allowGameAction('putIntoConflict', context),
+                    onSelect: (player, cards) => {
+                        if(revealedCards.length > 0) {
                             this.game.addMessage('{0} reveals {1} and puts {2} into play', player, revealedCards, cards);
-                            this.game.applyGameAction(context, { putIntoConflict: cards });
-                            return true;
+                        } else {
+                            this.game.addMessage('{0} puts {1} into play', player, cards);
                         }
-                    });
-                }
+                        this.game.applyGameAction(context, { putIntoConflict: cards });
+                        return true;
+                    }
+                });
             }
         });
     }
