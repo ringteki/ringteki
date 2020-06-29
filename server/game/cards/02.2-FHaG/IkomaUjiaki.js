@@ -10,7 +10,7 @@ class IkomaUjiaki extends DrawCard {
             cost: ability.costs.discardImperialFavor(),
             condition: context => context.source.isParticipating() && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].some(location => {
                 let cards = context.player.getDynastyCardsInProvince(location);
-                return cards.some(card => card.isFacedown() || card.type === CardTypes.Character);
+                return cards.some(card => card.isFacedown() || (card.type === CardTypes.Character && card.allowGameAction('putIntoConflict', context)));
             }),
             effect: 'to reveal all their facedown dynasty cards',
             handler: context => {
