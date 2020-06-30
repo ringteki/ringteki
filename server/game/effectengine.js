@@ -54,9 +54,6 @@ class EffectEngine {
                 title: context.source.name + '\'s effect' + (targets.length === 1 ? ' on ' + targets[0].name : ''),
                 handler: () => {
                     properties.gameAction.setDefaultTarget(() => targets);
-                    if(properties.isTriggeredAbility) {
-                        context.ability.defaultTriggeredAbility = true;
-                    }
                     if(properties.message && properties.gameAction.hasLegalTarget(context)) {
                         let messageArgs = properties.messageArgs || [];
                         if(typeof messageArgs === 'function') {

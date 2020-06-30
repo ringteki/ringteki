@@ -38,6 +38,7 @@ class Effect {
         this.location = properties.location || Locations.PlayArea;
         this.canChangeZoneOnce = !!properties.canChangeZoneOnce;
         this.effect = effect;
+        this.ability = properties.ability;
         this.targets = [];
         this.refreshContext();
         this.effect.duration = this.duration;
@@ -47,6 +48,9 @@ class Effect {
     refreshContext() {
         this.context = this.game.getFrameworkContext(this.source.controller);
         this.context.source = this.source;
+        if(this.ability) {
+            this.context.ability = this.ability;
+        }
         this.effect.setContext(this.context);
     }
 
