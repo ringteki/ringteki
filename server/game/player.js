@@ -424,7 +424,7 @@ class Player extends GameObject {
     }
 
     /**
-     * Returns the total number of faceup province cards controlled by this player
+     * Returns the total number of facedown province cards controlled by this player
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFacedownProvinces(predicate = () => true) {
@@ -432,7 +432,7 @@ class Player extends GameObject {
     }
 
     /**
-     * Returns the total number of faceup province cards controlled by this player's opponent
+     * Returns the total number of facedown province cards controlled by this player's opponent
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
