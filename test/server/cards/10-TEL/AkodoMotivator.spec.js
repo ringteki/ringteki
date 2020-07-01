@@ -9,7 +9,7 @@ describe('Akodo Motivator', function() {
                 },
                 player2: {
                     inPlay: ['akodo-toturi', 'akodo-motivator'],
-                    hand: ['sharpen-the-mind', 'policy-debate']
+                    hand: ['sharpen-the-mind', 'policy-debate', 'assassination']
                 }
             });
 
