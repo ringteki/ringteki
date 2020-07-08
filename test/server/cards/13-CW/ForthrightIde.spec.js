@@ -6,7 +6,7 @@ describe('Forthright Ide', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['forthright-ide','yogo-outcast', 'kakita-toshimoko'],
-                        hand: ['let-go']
+                        hand: ['let-go', 'assassination']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']
