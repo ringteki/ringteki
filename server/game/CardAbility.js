@@ -112,7 +112,7 @@ class CardAbility extends ThenAbility {
             return 'blank';
         }
 
-        if(this.isTriggeredAbility() && !this.card.canTriggerAbilities(context) || this.card.type === CardTypes.Event && !this.card.canPlay(context, context.playType)) {
+        if(this.isTriggeredAbility() && !this.card.canTriggerAbilities(context, ignoredRequirements) || this.card.type === CardTypes.Event && !this.card.canPlay(context, context.playType)) {
             return 'cannotTrigger';
         }
 
@@ -231,7 +231,7 @@ class CardAbility extends ThenAbility {
     }
 
     isCardPlayed() {
-        return this.card.getType() === CardTypes.Event;
+        return !this.isKeywordAbility() && this.card.getType() === CardTypes.Event;
     }
 
     isTriggeredAbility() {

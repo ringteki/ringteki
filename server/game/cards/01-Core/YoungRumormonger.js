@@ -7,8 +7,8 @@ class YoungRumormonger extends DrawCard {
         this.wouldInterrupt({
             title: 'Honor/dishonor a different character',
             when: {
-                onCardHonored: () => true,
-                onCardDishonored: () => true
+                onCardHonored: (event) => event.card.type === CardTypes.Character,
+                onCardDishonored: (event) => event.card.type === CardTypes.Character
             },
             target: {
                 cardType: CardTypes.Character,

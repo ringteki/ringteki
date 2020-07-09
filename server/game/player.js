@@ -424,7 +424,7 @@ class Player extends GameObject {
     }
 
     /**
-     * Returns the total number of faceup province cards controlled by this player
+     * Returns the total number of facedown province cards controlled by this player
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFacedownProvinces(predicate = () => true) {
@@ -432,7 +432,7 @@ class Player extends GameObject {
     }
 
     /**
-     * Returns the total number of faceup province cards controlled by this player's opponent
+     * Returns the total number of facedown province cards controlled by this player's opponent
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
@@ -539,7 +539,7 @@ class Player extends GameObject {
      */
     deckRanOutOfCards(deck) {
         let discardPile = this.getSourceList(deck + ' discard pile');
-        this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose 5 honor', this, deck);
+        this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.skirmishMode ? 3 : 5);
         GameActions.loseHonor({ amount: this.game.skirmishMode ? 3 : 5 }).resolve(this, this.game.getFrameworkContext());
         this.game.queueSimpleStep(() => {
             discardPile.each(card => this.moveCard(card, deck + ' deck'));

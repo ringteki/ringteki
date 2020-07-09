@@ -317,3 +317,49 @@ describe('Skirmish Mode Disabled Cards', function() {
         });
     });
 });
+
+describe('Skirmish Reshuffling', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['beloved-advisor'],
+                    conflictDiscard: ['let-go']
+                },
+                player2: {
+                    inPlay: ['isawa-eju'],
+                    dynastyDiscard: ['akodo-toturi', 'imperial-storehouse']
+                },
+                skirmish: true
+            });
+
+            this.player1.reduceDeckToNumber('conflict deck', 0);
+            this.player2.reduceDeckToNumber('dynasty deck', 0);
+            this.eju = this.player2.findCardByName('isawa-eju');
+            this.p1 = this.player2.findCardByName('skirmish-province-0', 'province 1');
+            this.advisor = this.player1.findCardByName('beloved-advisor');
+        });
+
+        it('should lose 3 honor to reshuffle conflict', function() {
+            let honor = this.player1.honor;
+
+            this.player1.clickCard(this.advisor);
+
+            expect(this.player1.honor).toBe(honor - 3);
+            expect(this.getChatLogs(5)).toContain('player1\'s conflict deck has run out of cards, so they lose 3 honor');
+        });
+
+        it('should lose 3 honor to reshuffle dynasty', function() {
+            this.game.rings.air.claimRing(this.player2);
+            let honor = this.player2.honor;
+
+            this.player1.pass();
+            this.player2.clickCard(this.eju);
+            this.player2.clickCard(this.p1);
+
+            expect(this.player2.honor).toBe(honor - 3);
+            expect(this.getChatLogs(5)).toContain('player2\'s dynasty deck has run out of cards, so they lose 3 honor');
+        });
+    });
+});

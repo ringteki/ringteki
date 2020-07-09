@@ -363,8 +363,9 @@ class BaseCard extends EffectSource {
         }
     }
 
-    canTriggerAbilities(context: AbilityContext): boolean {
-        return this.isFaceup() && this.checkRestrictions('triggerAbilities', context);
+
+    canTriggerAbilities(context: AbilityContext, ignoredRequirements = []): boolean {
+        return this.isFaceup() && (ignoredRequirements.includes('triggeringRestrictions') || this.checkRestrictions('triggerAbilities', context));
     }
 
     canInitiateKeywords(context: AbilityContext): boolean {
@@ -431,7 +432,8 @@ class BaseCard extends EffectSource {
     }
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
-        return super.checkRestrictions(actionType, context) && this.controller.checkRestrictions(actionType, context);
+        let player = context.player || this.controller;
+        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context);
     }
 
 
