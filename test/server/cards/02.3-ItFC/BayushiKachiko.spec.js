@@ -7,7 +7,7 @@ describe('Bayushi Kachiko', function() {
                     inPlay: ['bayushi-kachiko']
                 },
                 player2: {
-                    inPlay: ['shrewd-yasuki', 'borderlands-defender', 'kaito-temple-protector'],
+                    inPlay: ['shrewd-yasuki', 'borderlands-defender', 'kaito-temple-protector','stoic-rival'],
                     hand: ['ready-for-battle', 'clarity-of-purpose']
                 }
             });
@@ -23,6 +23,11 @@ describe('Bayushi Kachiko', function() {
                 });
                 this.player2.clickPrompt('Pass');
                 this.player1.clickCard('bayushi-kachiko');
+            });
+
+            it('should not be able to target a character that is not participating', function() {
+                this.stoicRival = this.player2.findCardByName('stoic-rival');
+                expect(this.player1).not.toBeAbleToSelect(this.stoicRival);
             });
 
             it('should not be able to target a character who cannot be sent home or bowed', function() {
