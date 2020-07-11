@@ -19,29 +19,27 @@ class UnderSiege extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     duration: Durations.UntilEndOfRound,
                     targetController: context.game.currentConflict.defendingPlayer === context.player ? Players.Self : Players.Opponent,
-                    effect: [
-                        AbilityDsl.effects.playerDelayedEffect({
-                            when: {
-                                onConflictFinished: () => true
-                            },
-                            gameAction: AbilityDsl.actions.sequential([
-                                AbilityDsl.actions.chosenDiscard(() => ({
-                                    amount: 1000 //discard the entire hand
-                                })),
-                                AbilityDsl.actions.handler({
-                                    handler: context => {
-                                        if(this.targetPlayer && this.setAsideCards && this.setAsideCards.length > 0) {
-                                            context.game.addMessage('{0} picks up their original hand', this.targetPlayer);
+                    effect: AbilityDsl.effects.playerDelayedEffect({
+                        when: {
+                            onConflictFinished: () => true
+                        },
+                        gameAction: AbilityDsl.actions.multiple([
+                            AbilityDsl.actions.chosenDiscard(() => ({
+                                amount: 1000 //discard the entire hand
+                            })),
+                            AbilityDsl.actions.handler({
+                                handler: context => {
+                                    if(this.targetPlayer && this.setAsideCards && this.setAsideCards.length > 0) {
+                                        context.game.addMessage('{0} picks up their original hand', this.targetPlayer);
 
-                                            this.setAsideCards.forEach(card => {
-                                                this.targetPlayer.moveCard(card, Locations.Hand);
-                                            });
-                                        }
+                                        this.setAsideCards.forEach(card => {
+                                            this.targetPlayer.moveCard(card, Locations.Hand);
+                                        });
                                     }
-                                })
-                            ])
-                        })
-                    ]
+                                }
+                            })
+                        ])
+                    })
                 })),
                 AbilityDsl.actions.conditional(({
                     condition: context => context.game.currentConflict.defendingPlayer.hand.size() > 0,
