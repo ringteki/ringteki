@@ -166,6 +166,26 @@ describe('Isawa Tsuke 2', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
+            it('Should only let you target participating characters', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.student, this.youth, this.whisperer, this.tadaka],
+                    defenders: [this.liar, this.tsuke]
+                });
+
+                this.player2.clickCard(this.tsuke);
+                this.player2.clickPrompt('3');
+                expect(this.player2).toHavePrompt('Choose 3 characters');
+                expect(this.player2).not.toBeAbleToSelect(this.ambusher);
+                expect(this.player2).toBeAbleToSelect(this.student);
+                expect(this.player2).not.toBeAbleToSelect(this.youth);
+                expect(this.player2).toBeAbleToSelect(this.whisperer);
+                expect(this.player2).toBeAbleToSelect(this.tadaka);
+                expect(this.player2).not.toBeAbleToSelect(this.liar);
+                expect(this.player2).toBeAbleToSelect(this.tsuke);
+            });
+
             it('Should remove the honor and the fate from the chosen characters', function() {
                 let honor = this.player2.honor;
 
