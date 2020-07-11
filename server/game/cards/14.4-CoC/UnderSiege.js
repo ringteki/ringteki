@@ -4,6 +4,9 @@ const AbilityDsl = require('../../abilitydsl');
 
 class UnderSiege extends DrawCard {
     setupCardAbilities() {
+        this.setAsideCards = [];
+        this.targetPlayer = null;
+
         this.reaction({
             title: 'Place defender under siege',
             when: {
@@ -21,10 +24,22 @@ class UnderSiege extends DrawCard {
                             when: {
                                 onConflictFinished: () => true
                             },
-                            gameAction: AbilityDsl.actions.chosenDiscard(() => ({
-                                amount: 1000, //discard the entire hand
-                                extraMessage: '{0} picks up their original hand'
-                            }))
+                            gameAction: AbilityDsl.actions.sequential([
+                                AbilityDsl.actions.chosenDiscard(() => ({
+                                    amount: 1000 //discard the entire hand
+                                })),
+                                AbilityDsl.actions.handler({
+                                    handler: context => {
+                                        if(this.targetPlayer && this.setAsideCards && this.setAsideCards.length > 0) {
+                                            context.game.addMessage('{0} picks up their original hand', this.targetPlayer);
+
+                                            this.setAsideCards.forEach(card => {
+                                                this.targetPlayer.moveCard(card, Locations.Hand);
+                                            });
+                                        }
+                                    }
+                                })
+                            ])
                         })
                     ]
                 })),
@@ -33,29 +48,20 @@ class UnderSiege extends DrawCard {
                     trueGameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.handler({
                             handler: context => {
-                                let player = context.game.currentConflict.defendingPlayer;
-                                let cards = player.hand.value();
+                                const player = context.game.currentConflict.defendingPlayer;
+                                const setAsideCards = [...player.hand.value()];
+                                this.targetPlayer = player;
+                                this.setAsideCards = setAsideCards;
                                 this.game.addMessage('{0} sets their hand aside and draws 5 cards', player);
-                                if(cards.length > 0) {
-                                    cards.forEach(card => {
+                                if(setAsideCards.length > 0) {
+                                    setAsideCards.forEach(card => {
                                         player.moveCard(card, Locations.RemovedFromGame);
                                         card.lastingEffect(() => ({
                                             until: {
                                                 onCardMoved: event => event.card === card && event.originalLocation === Locations.RemovedFromGame
                                             },
                                             match: card,
-                                            effect: [
-                                                AbilityDsl.effects.hideWhenFaceUp(),
-                                                AbilityDsl.effects.delayedEffect({
-                                                    when: {
-                                                        onConflictFinished: () => true
-                                                    },
-                                                    gameAction: AbilityDsl.actions.moveCard({
-                                                        target: card,
-                                                        destination: Locations.Hand
-                                                    })
-                                                })
-                                            ]
+                                            effect: AbilityDsl.effects.hideWhenFaceUp()
                                         }));
                                     });
                                 }
