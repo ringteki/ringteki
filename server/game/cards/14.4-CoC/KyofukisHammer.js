@@ -10,6 +10,7 @@ class KyofukisHammer extends DrawCard {
                 afterConflict: (event, context) => context.source.parent.isParticipating() &&
                                                     event.conflict.winner === context.source.parent.controller
             },
+            limit: AbilityDsl.limit.unlimitedPerConflict(),
             target: {
                 location: Locations.Provinces,
                 cardType: [CardTypes.Character, CardTypes.Holding, CardTypes.Event],

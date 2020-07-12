@@ -4,6 +4,9 @@ const AbilityDsl = require('../../abilitydsl');
 
 class UnderSiege extends DrawCard {
     setupCardAbilities() {
+        this.setAsideCards = [];
+        this.targetPlayer = null;
+
         this.reaction({
             title: 'Place defender under siege',
             when: {
@@ -16,46 +19,47 @@ class UnderSiege extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     duration: Durations.UntilEndOfRound,
                     targetController: context.game.currentConflict.defendingPlayer === context.player ? Players.Self : Players.Opponent,
-                    effect: [
-                        AbilityDsl.effects.playerDelayedEffect({
-                            when: {
-                                onConflictFinished: () => true
-                            },
-                            gameAction: AbilityDsl.actions.chosenDiscard(() => ({
-                                amount: 1000, //discard the entire hand
-                                extraMessage: '{0} picks up their original hand'
-                            }))
-                        })
-                    ]
+                    effect: AbilityDsl.effects.playerDelayedEffect({
+                        when: {
+                            onConflictFinished: () => true
+                        },
+                        gameAction: AbilityDsl.actions.multiple([
+                            AbilityDsl.actions.chosenDiscard(() => ({
+                                amount: 1000 //discard the entire hand
+                            })),
+                            AbilityDsl.actions.handler({
+                                handler: context => {
+                                    if(this.targetPlayer && this.setAsideCards && this.setAsideCards.length > 0) {
+                                        context.game.addMessage('{0} picks up their original hand', this.targetPlayer);
+
+                                        this.setAsideCards.forEach(card => {
+                                            this.targetPlayer.moveCard(card, Locations.Hand);
+                                        });
+                                    }
+                                }
+                            })
+                        ])
+                    })
                 })),
                 AbilityDsl.actions.conditional(({
                     condition: context => context.game.currentConflict.defendingPlayer.hand.size() > 0,
                     trueGameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.handler({
                             handler: context => {
-                                let player = context.game.currentConflict.defendingPlayer;
-                                let cards = player.hand.value();
+                                const player = context.game.currentConflict.defendingPlayer;
+                                const setAsideCards = [...player.hand.value()];
+                                this.targetPlayer = player;
+                                this.setAsideCards = setAsideCards;
                                 this.game.addMessage('{0} sets their hand aside and draws 5 cards', player);
-                                if(cards.length > 0) {
-                                    cards.forEach(card => {
+                                if(setAsideCards.length > 0) {
+                                    setAsideCards.forEach(card => {
                                         player.moveCard(card, Locations.RemovedFromGame);
                                         card.lastingEffect(() => ({
                                             until: {
                                                 onCardMoved: event => event.card === card && event.originalLocation === Locations.RemovedFromGame
                                             },
                                             match: card,
-                                            effect: [
-                                                AbilityDsl.effects.hideWhenFaceUp(),
-                                                AbilityDsl.effects.delayedEffect({
-                                                    when: {
-                                                        onConflictFinished: () => true
-                                                    },
-                                                    gameAction: AbilityDsl.actions.moveCard({
-                                                        target: card,
-                                                        destination: Locations.Hand
-                                                    })
-                                                })
-                                            ]
+                                            effect: AbilityDsl.effects.hideWhenFaceUp()
                                         }));
                                     });
                                 }

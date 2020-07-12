@@ -21,6 +21,7 @@ class IsawaTsuke2 extends DrawCard {
                     return this.getNumberOfLegalTargets(context);
                 },
                 cardType: CardTypes.Character,
+                cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.removeFate(context => {
                     let targets = [];
                     targets = _.flatten(_.values(context.targets));
