@@ -152,7 +152,7 @@ describe('Captivating Story', function() {
             this.player1.clickPrompt('Yes');
             expect(this.yoshi.fate).toBe(0);
             expect(this.yoshi.isHonored).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they opponent controls (+3political)');
+            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they control (+3political)');
             expect(this.getChatLogs(5)).toContain('player1 chooses to remove a fate from Kakita Yoshi to honor them');
             expect(this.getChatLogs(5)).toContain('player1 resolves Captivating Story to honor Kakita Yoshi');
         });
@@ -178,7 +178,7 @@ describe('Captivating Story', function() {
             this.player1.clickPrompt('No');
             expect(this.yoshi.fate).toBe(1);
             expect(this.yoshi.isHonored).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they opponent controls (+3political)');
+            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they control (+3political)');
             expect(this.getChatLogs(5)).toContain('player1 chooses not to remove a fate from Kakita Yoshi to honor them');
         });
 
@@ -239,7 +239,7 @@ describe('Captivating Story', function() {
             this.player1.clickCard(this.yoshi);
             expect(this.yoshi.fate).toBe(0);
             expect(this.yoshi.isHonored).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they opponent controls (+0political)');
+            expect(this.getChatLogs(5)).toContain('player1 plays Captivating Story to give Kakita Yoshi +1political for each faceup province they control (+0political)');
             expect(this.getChatLogs(5)).toContain('player1 chooses to remove a fate from Kakita Yoshi to honor them');
             expect(this.getChatLogs(5)).toContain('player1 resolves Captivating Story to honor Kakita Yoshi');
         });
