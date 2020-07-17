@@ -3,6 +3,7 @@ import { Durations, Players, EventNames } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import { WhenType } from '../Interfaces';
 import BaseAbility = require('../baseability');
+import Player = require('../player');
 
 export interface LastingEffectGeneralProperties extends GameActionProperties {
     duration?: Durations;
@@ -13,7 +14,7 @@ export interface LastingEffectGeneralProperties extends GameActionProperties {
 }
 
 export interface LastingEffectProperties extends LastingEffectGeneralProperties {
-    targetController?: Players;
+    targetController?: Players | Player;
 }
 
 export class LastingEffectAction extends GameAction {

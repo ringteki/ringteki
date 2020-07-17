@@ -12,6 +12,10 @@ class PlayerEffect extends Effect {
     }
 
     isValidTarget(target) {
+        if(this.targetController !== Players.Any && this.targetController !== Players.Self && this.targetController !== Players.Opponent && this.targetController !== target) {
+            return false;
+        }
+
         if(this.targetController === Players.Self && target === this.source.controller.opponent) {
             return false;
         } else if(this.targetController === Players.Opponent && target === this.source.controller) {
