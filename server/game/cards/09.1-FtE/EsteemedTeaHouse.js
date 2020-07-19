@@ -21,7 +21,9 @@ class EsteemedTeaHouse extends DrawCard {
                     restricts: 'copiesOfX',
                     params: context.target.name
                 })
-            }))
+            })),
+            effect: 'return {0} to {1}\'s hand. {1} cannot play copies of {0} this phase',
+            effectArgs: context => [context.target.owner]
         });
     }
 }
