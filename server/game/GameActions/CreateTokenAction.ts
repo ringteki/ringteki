@@ -11,10 +11,10 @@ export interface CreateTokenProperties extends CardActionProperties {
 export class CreateTokenAction extends CardGameAction {
     name = 'createToken';
     effect = 'create a token';
-    targetType = [CardTypes.Character, CardTypes.Holding];
+    targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Event];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card.facedown || !card.isInProvince() || card.location === Locations.StrongholdProvince) {
+        if(!card.isFacedown() || !card.isInProvince() || card.location === Locations.StrongholdProvince) {
             return false;
         } else if(!context.game.isDuringConflict('military')) {
             return false;

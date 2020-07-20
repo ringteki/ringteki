@@ -154,7 +154,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
 
         let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
-        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.facedown) ? provinceSlot : this.conflict.conflictProvince;
+        let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.isFacedown()) ? provinceSlot : this.conflict.conflictProvince;
         this.game.addMessage('{0} is initiating a {1} conflict at {2}, contesting {3}', this.conflict.attackingPlayer, this.conflict.conflictType, provinceName, this.conflict.ring);
 
         const params = {
@@ -210,12 +210,12 @@ class ConflictFlow extends BaseStepWithPipeline {
         }));
         contexts = contexts.filter(context => context.source.canInitiateKeywords(context));
 
-        if(contexts.length === 0) {
-            return;
-        }
-
         for(let target of targets) {
             target.covert = false;
+        }
+
+        if(contexts.length === 0) {
+            return;
         }
 
         // Need to have:
@@ -411,6 +411,13 @@ class ConflictFlow extends BaseStepWithPipeline {
 
     applyUnopposed() {
         if(this.conflict.conflictPassed || this.game.manualMode || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
+            return;
+        }
+
+        if(this.game.skirmishMode) {
+            if(this.conflict.conflictUnopposed) {
+                this.game.addMessage('{0} has won an unopposed conflict', this.conflict.winner);
+            }
             return;
         }
 

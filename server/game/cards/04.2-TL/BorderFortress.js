@@ -8,7 +8,7 @@ class BorderFortress extends ProvinceCard {
             target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                cardCondition: card => card.facedown,
+                cardCondition: card => card.isFacedown(),
                 gameAction: ability.actions.reveal({ chatMessage: true })
             },
             effect: 'reveal {1}\'s facedown province in their {2}',

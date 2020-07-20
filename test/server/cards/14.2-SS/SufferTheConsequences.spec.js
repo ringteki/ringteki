@@ -57,7 +57,7 @@ describe('Butcher of the Fallen', function() {
             this.player1.clickCard(this.bushi);
 
             expect(this.bushi.location).toBe('dynasty discard pile');
-            expect(this.player1.player.getConflictOpportunities('political')).toBe(2);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(2);
         });
     });
 });

@@ -102,8 +102,9 @@ class GameObject {
             id: this.id,
             label: this.name,
             name: this.name,
-            facedown: this.facedown,
-            type: this.getType()
+            facedown: this.isFacedown(),
+            type: this.getType(),
+            uuid: this.uuid
         };
     }
 
@@ -145,6 +146,14 @@ class GameObject {
         return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
 
+
+    isFacedown() {
+        return this.facedown;
+    }
+
+    isFaceup() {
+        return !this.facedown;
+    }
 }
 
 module.exports = GameObject;

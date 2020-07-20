@@ -77,7 +77,7 @@ describe('Courteous Scheming', function() {
                 this.player1.clickPrompt('5');
                 this.player2.clickPrompt('1');
                 expect(
-                    this.player1.player.getConflictOpportunities('political')
+                    this.player1.player.getRemainingConflictOpportunitiesForType('political')
                 ).toBe(1);
             });
 
@@ -95,7 +95,7 @@ describe('Courteous Scheming', function() {
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('5');
                 expect(
-                    this.player2.player.getConflictOpportunities('political')
+                    this.player2.player.getRemainingConflictOpportunitiesForType('political')
                 ).toBe(2);
             });
 
@@ -113,7 +113,7 @@ describe('Courteous Scheming', function() {
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('3');
                 expect(
-                    this.player1.player.getConflictOpportunities('political')
+                    this.player1.player.getRemainingConflictOpportunitiesForType('political')
                 ).toBe(0);
             });
 

@@ -6,14 +6,14 @@ class AsahinaTakako extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             targetLocation: Locations.Provinces,
-            match: card => card.isDynasty && card.facedown,
+            match: card => card.isDynasty && card.isFacedown(),
             effect: AbilityDsl.effects.canBeSeenWhenFacedown()
         });
 
         this.action({
             title: 'Discard a card or switch with another card',
             target: {
-                cardType: [CardTypes.Character, CardTypes.Holding],
+                cardType: [CardTypes.Character, CardTypes.Holding, CardTypes.Event],
                 location: Locations.Provinces,
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.chooseAction(context => ({
@@ -27,8 +27,8 @@ class AsahinaTakako extends DrawCard {
                             controller: Players.Self,
                             message: '{0} switches {1} in {2} and {3} in {4}',
                             messageArgs: card => [
-                                context.player, context.target.facedown ? 'a facedown card' : context.target,
-                                context.target.location, card.facedown ? 'a facedown card' : card, card.location
+                                context.player, context.target.isFacedown() ? 'a facedown card' : context.target,
+                                context.target.location, card.isFacedown() ? 'a facedown card' : card, card.location
                             ],
                             gameAction: AbilityDsl.actions.moveCard({
                                 destination: context.target.location,
@@ -40,7 +40,7 @@ class AsahinaTakako extends DrawCard {
                 }))
             },
             effect: 'switch or discard {1} in {2}',
-            effectArgs: context => [context.target.facedown ? 'a facedown card' : context.target, context.target.location]
+            effectArgs: context => [context.target.isFacedown() ? 'a facedown card' : context.target, context.target.location]
         });
     }
 }

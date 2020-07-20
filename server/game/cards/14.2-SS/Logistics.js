@@ -49,8 +49,8 @@ class Logistics extends DrawCard {
             },
             effect: 'move {1} to {2}{3}',
             effectArgs: context => [
-                context.targets.cardInProvince.facedown ? 'a facedown card' : context.targets.cardInProvince,
-                context.targets.province.facedown ? context.targets.province.location : context.targets.province,
+                context.targets.cardInProvince.isFacedown() ? 'a facedown card' : context.targets.cardInProvince,
+                context.targets.province.isFacedown() ? context.targets.province.location : context.targets.province,
                 context.game.isTraitInPlay('battlefield') ? ' and draw a card' : ''
             ]
         });

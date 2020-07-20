@@ -18,7 +18,7 @@ class Aranat extends DrawCard {
                 player: Players.Opponent,
                 optional: true,
                 mode: TargetModes.Unlimited,
-                cardCondition: card => card.facedown,
+                cardCondition: card => card.isFacedown(),
                 message: '{0} chooses to reveal {1}',
                 messageArgs: (card, player) => [player, card],
                 gameAction: AbilityDsl.actions.reveal()

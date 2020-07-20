@@ -16,7 +16,7 @@ class BaseCardSelector {
     }
 
     buildLocation(property) {
-        let location = property || Locations.PlayArea;
+        let location = property || Locations.PlayArea || [];
         if(!Array.isArray(location)) {
             location = [location];
         }
