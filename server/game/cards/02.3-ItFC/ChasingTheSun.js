@@ -8,14 +8,11 @@ class ChasingTheSun extends DrawCard {
             title: 'Move the conflict to another eligible province',
             condition: context => context.player.isAttackingPlayer(),
             cannotBeMirrored: true,
-            effect: 'move the conflict to another eligible province',
-            gameAction: AbilityDsl.actions.selectCard({
+            target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                message: '{0} moves the conflict to {1}',
-                messageArgs: (card, player) => [player, card],
                 gameAction: AbilityDsl.actions.moveConflict()
-            })
+            }
         });
     }
 }

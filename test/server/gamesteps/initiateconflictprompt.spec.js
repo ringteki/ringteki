@@ -304,7 +304,6 @@ describe('InitateConflictPrompt: ', function() {
                     this.conflictSpy.attackingPlayer = this.playerSpy;
                     this.playerSpy.checkRestrictions.and.returnValue(true);
                     this.playerSpy.playableLocations = [];
-                    this.playerSpy.findPlayType = () => undefined;
                     this.covertSpy.location = 'play area';
                     this.cardSpy.controller = this.opponent;
                     this.cardSpy.canBeBypassedByCovert.and.returnValue(true);

@@ -19,7 +19,6 @@ import { DiscardFromPlayAction, DiscardFromPlayProperties } from './DiscardFromP
 import { DiscardCardAction, DiscardCardProperties } from './DiscardCardAction';
 import { DiscardStatusAction, DiscardStatusProperties } from './DiscardStatusAction';
 import { DishonorAction, DishonorProperties } from './DishonorAction';
-import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
@@ -37,7 +36,6 @@ import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingE
 import { LookAtAction, LookAtProperties } from './LookAtAction';
 import { LoseFateProperties, LoseFateAction } from './LoseFateAction';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction';
-import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction';
 import { MoveCardAction, MoveCardProperties } from './MoveCardAction';
@@ -96,7 +94,6 @@ const GameActions = {
     discardCard: (propertyFactory: DiscardCardProperties | ((context: TriggeredAbilityContext) => DiscardCardProperties) = {}) => new DiscardCardAction(propertyFactory),
     discardFromPlay: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory),
     dishonor: (propertyFactory: DishonorProperties | ((context: TriggeredAbilityContext) => DishonorProperties) = {}) => new DishonorAction(propertyFactory),
-    dishonorProvince: (propertyFactory: DishonorProvinceProperties | ((context: TriggeredAbilityContext) => DishonorProvinceProperties) = {}) => new DishonorProvinceAction(propertyFactory),
     duel: (propertyFactory: DuelProperties | ((context: TriggeredAbilityContext) => DuelProperties)) => new DuelAction(propertyFactory), // type, challenger, resolutionHandler, costHandler
     flipDynasty: (propertyFactory: FlipDynastyProperties | ((context: TriggeredAbilityContext) => FlipDynastyProperties) = {}) => new FlipDynastyAction(propertyFactory),
     honor: (propertyFactory: HonorProperties | ((context: TriggeredAbilityContext) => HonorProperties) = {}) => new HonorAction(propertyFactory),
@@ -127,7 +124,6 @@ const GameActions = {
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
     discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
-    discardMatching: (propertyFactory: MatchingDiscardProperties | ((context: TriggeredAbilityContext) => MatchingDiscardProperties) = {}) => new MatchingDiscardAction(propertyFactory), // amount = 1
     draw: (propertyFactory: DrawProperties | ((context: TriggeredAbilityContext) => DrawProperties) = {}) => new DrawAction(propertyFactory), // amount = 1
     fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
