@@ -53,13 +53,15 @@ class PrepareForWar extends DrawCard {
                     discardMessage += 'choose to discard any number of attachments';
                     if(hasToken) {
                         discardMessage += ' or the status token from';
+                    } else {
+                        discardMessage += ' from';
                     }
                 } else if(hasToken) {
                     discardMessage += 'choose to discard the status token from';
                 }
                 let honorMessage = '';
                 if(isCommander) {
-                    honorMessage = 'to honor';
+                    honorMessage = 'honor';
                     if(discardMessage.length > 0) {
                         honorMessage += ' and ';
                     }

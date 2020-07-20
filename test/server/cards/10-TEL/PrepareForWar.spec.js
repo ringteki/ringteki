@@ -75,7 +75,7 @@ describe('Prepare for War', function() {
             expect(this.pacifism.location).toBe('conflict discard pile');
             expect(this.fineKatana.location).toBe('play area');
 
-            expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to choose to discard any number of attachments Matsu Berserker');
+            expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to choose to discard any number of attachments from Matsu Berserker');
             expect(this.getChatLogs(1)).toContain('player1 chooses to discard Ornate Fan and Pacifism from Matsu Berserker');
         });
 
@@ -102,7 +102,7 @@ describe('Prepare for War', function() {
             expect(this.player1).toHavePrompt('Do you wish to discard the status token?');
             this.player1.clickPrompt('Yes');
 
-            expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to to honor and choose to discard the status token from Akodo Zentarō');
+            expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
             expect(this.getChatLogs(1)).toContain('player1 chooses to discard the status token from Akodo Zentarō');
             expect(this.akodoZentaro.isHonored).toBe(true);
         });
@@ -123,7 +123,7 @@ describe('Prepare for War', function() {
         it('chat message - neutral commander with no attachments', function() {
             this.player1.clickCard(this.prepareForWar);
             this.player1.clickCard(this.akodoZentaro);
-            expect(this.getChatLogs(3)).toContain('player1 plays Prepare for War to to honor Akodo Zentarō');
+            expect(this.getChatLogs(3)).toContain('player1 plays Prepare for War to honor Akodo Zentarō');
         });
     });
 });
