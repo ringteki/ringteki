@@ -131,7 +131,7 @@ describe('Agasha Hiyori', function() {
                 expect(this.game.rings.air.fate).toBe(airFate + 1);
                 expect(this.player1.fate).toBe(playerFate - 1);
 
-                expect(this.getChatLogs(1)).toContain('player1 uses Agasha Hiyori, placing  fate on Air Ring to treat Court Mask as if its printed text box were blank and as if it had no skill modifiers until the end of the phase');
+                expect(this.getChatLogs(1)).toContain('player1 uses Agasha Hiyori, placing 1 fate on Air Ring to treat Court Mask as if its printed text box were blank and as if it had no skill modifiers until the end of the phase');
             });
 
             it('should remove skill bonuses on attachments', function() {

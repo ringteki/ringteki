@@ -42,6 +42,29 @@ class PrepareForWar extends DrawCard {
                         target: context.target.hasTrait('commander') ? context.target : []
                     }))
                 ])
+            },
+            effect: '{1}{2} {0}',
+            effectArgs: context => {
+                let isCommander = context.target.hasTrait('commander');
+                let hasAttachments = context.target.attachments.size() > 0;
+                let hasToken = context.target.isDishonored || context.target.isHonored;
+                let discardMessage = '';
+                if(hasAttachments) {
+                    discardMessage += 'choose to discard any number of attachments';
+                    if(hasToken) {
+                        discardMessage += ' or the status token from';
+                    }
+                } else if(hasToken) {
+                    discardMessage += 'choose to discard the status token from';
+                }
+                let honorMessage = '';
+                if(isCommander) {
+                    honorMessage = 'to honor';
+                    if(discardMessage.length > 0) {
+                        honorMessage += ' and ';
+                    }
+                }
+                return [honorMessage, discardMessage];
             }
         });
     }
