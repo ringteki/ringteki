@@ -21,7 +21,7 @@ class WalkingTheWay extends DrawCard {
                 cardHandler: cardFromDeck => this.game.promptForSelect(context.player, {
                     activePromptTitle: 'Choose a card to replace with ' + cardFromDeck.name,
                     context: context,
-                    cardType: [CardTypes.Holding, CardTypes.Character, CardTypes.Event],
+                    cardType: [CardTypes.Holding, CardTypes.Character],
                     location: Locations.Provinces,
                     controller: Players.Self,
                     onSelect: (player, card) => {

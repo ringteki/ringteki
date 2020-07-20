@@ -17,14 +17,6 @@ class KitsukiYaruma extends DrawCard {
             }
         });
     }
-
-    allowAttachment(attachment) {
-        if(attachment.hasTrait('poison') && !this.isBlank()) {
-            return false;
-        }
-
-        return super.allowAttachment(attachment);
-    }
 }
 
 KitsukiYaruma.id = 'kitsuki-yaruma';

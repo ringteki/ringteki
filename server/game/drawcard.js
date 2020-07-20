@@ -6,6 +6,7 @@ const CourtesyAbility = require('./KeywordAbilities/CourtesyAbility');
 const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
+const StatusToken = require('./StatusToken');
 const StatModifier = require('./StatModifier');
 
 const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
@@ -614,6 +615,48 @@ class DrawCard extends BaseCard {
         this.fate = Math.max(0, this.fate + amount);
     }
 
+    setPersonalHonor(token) {
+        if(this.personalHonor && token !== this.personalHonor) {
+            this.personalHonor.setCard(null);
+        }
+        this.personalHonor = token || null;
+        if(this.personalHonor) {
+            this.personalHonor.setCard(this);
+        }
+    }
+
+    get isHonored() {
+        return !!this.personalHonor && !!this.personalHonor.honored;
+    }
+
+    honor() {
+        if(this.isHonored) {
+            return;
+        } else if(this.isDishonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, true));
+        }
+    }
+
+    get isDishonored() {
+        return !!this.personalHonor && !!this.personalHonor.dishonored;
+    }
+
+    dishonor() {
+        if(this.isDishonored) {
+            return;
+        } if(this.isHonored) {
+            this.makeOrdinary();
+        } else {
+            this.setPersonalHonor(new StatusToken(this.game, this, false));
+        }
+    }
+
+    makeOrdinary() {
+        this.setPersonalHonor();
+    }
+
     bow() {
         this.bowed = true;
     }
@@ -762,6 +805,8 @@ class DrawCard extends BaseCard {
             inConflict: this.inConflict,
             isConflict: this.isConflict,
             isDynasty: this.isDynasty,
+            isDishonored: this.isDishonored,
+            isHonored: this.isHonored,
             isPlayableByMe: this.isConflict && this.controller.isCardInPlayableLocation(this, PlayTypes.PlayFromHand),
             isPlayableByOpponent: this.isConflict && this.controller.opponent && this.controller.opponent.isCardInPlayableLocation(this, PlayTypes.PlayFromHand),
             bowed: this.bowed,
