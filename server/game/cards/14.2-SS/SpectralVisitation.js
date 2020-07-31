@@ -35,6 +35,7 @@ class SpectralVisitation extends ProvinceCard {
                     location: Locations.DynastyDiscardPile,
                     cardType: CardTypes.Character,
                     controller: Players.Self,
+                    targets: true,
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.putIntoPlay(),
                         AbilityDsl.actions.cardLastingEffect(context => ({
