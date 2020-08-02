@@ -77,7 +77,7 @@ class ProvinceCard extends BaseCard {
     }
 
     canBeAttacked() {
-        let fateCostToAttack = this.sumEffects(EffectNames.FateCostToDeclareConflictAgainst);
+        let fateCostToAttack = this.getFateCostToAttack();
         let attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
         let fateToDeclareAttackers = attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
 
@@ -90,6 +90,10 @@ class ProvinceCard extends BaseCard {
 
     canDeclare(type, ring) { // eslint-disable-line no-unused-vars
         return this.canBeAttacked() && !this.getEffects(EffectNames.CannotHaveConflictsDeclaredOfType).includes(type);
+    }
+
+    getFateCostToAttack() {
+        return this.sumEffects(EffectNames.FateCostToRingToDeclareConflictAgainst);
     }
 
     isBlank() {

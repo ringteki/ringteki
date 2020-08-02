@@ -697,7 +697,7 @@ class DrawCard extends BaseCard {
             attackers = attackers.concat(this);
         }
 
-        let fateCostToAttackProvince = province ? province.sumEffects(EffectNames.FateCostToDeclareConflictAgainst) : 0;
+        let fateCostToAttackProvince = province ? province.getFateCostToAttack() : 0;
         if(attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) + fateCostToAttackProvince > this.controller.fate) {
             return false;
         }

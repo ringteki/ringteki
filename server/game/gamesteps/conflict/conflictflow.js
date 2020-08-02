@@ -156,15 +156,16 @@ class ConflictFlow extends BaseStepWithPipeline {
             let province = this.conflict.defendingPlayer.getProvinceCardInProvince(provinceSlot);
             let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.isFacedown()) ? provinceSlot : this.conflict.conflictProvince;
 
-            const totalFateCost = province.sumEffects(EffectNames.FateCostToDeclareConflictAgainst);
+            const totalFateCost = province.getFateCostToAttack();
             if(!this.conflict.conflictPassed && totalFateCost > 0) {
                 this.game.addMessage('{0} pays {1} fate to declare a conflict at {2}', this.conflict.attackingPlayer, totalFateCost, provinceName);
                 const costEvents = [];
                 let result = true;
-                Costs.payFateToRing(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer), result);
+                let costToRings = province.sumEffects(EffectNames.FateCostToRingToDeclareConflictAgainst);
+                Costs.payFateToRing(costToRings).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer), result);
                 this.game.queueSimpleStep(() => {
                     if(costEvents && costEvents.length > 0) {
-                        this.game.addMessage('{0} places {1} fate on the {2}', this.conflict.attackingPlayer, totalFateCost, costEvents[0].recipient || 'ring');
+                        this.game.addMessage('{0} places {1} fate on the {2}', this.conflict.attackingPlayer, costToRings, costEvents[0].recipient || 'ring');
                     }
                     this.game.openThenEventWindow(costEvents);
                 });
