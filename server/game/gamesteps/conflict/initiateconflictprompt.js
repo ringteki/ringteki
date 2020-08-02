@@ -211,7 +211,7 @@ class InitiateConflictPrompt extends UiPrompt {
                 return this.choosingPlayer.hasLegalConflictDeclaration({
                     type: this.conflict.conflictType,
                     ring: this.conflict.ring,
-                    province: this.conflict.province,
+                    province: this.conflict.conflictProvince,
                     attacker: card
                 });
             }

@@ -64,6 +64,7 @@ export enum EffectNames {
     EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
+    FateCostToDeclareConflictAgainst = 'fateCostToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',

@@ -77,7 +77,12 @@ class ProvinceCard extends BaseCard {
     }
 
     canBeAttacked() {
+        let fateCostToAttack = this.sumEffects(EffectNames.FateCostToDeclareConflictAgainst);
+        let attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
+        let fateToDeclareAttackers = attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
+
         return !this.isBroken && !this.anyEffect(EffectNames.CannotBeAttacked) &&
+            (!this.controller.opponent || this.controller.opponent.fate >= (fateCostToAttack + fateToDeclareAttackers)) &&
             (this.location !== Locations.StrongholdProvince ||
             this.controller.getProvinces(card => card.isBroken).length > 2 ||
             this.controller.anyEffect(EffectNames.StrongholdCanBeAttacked));

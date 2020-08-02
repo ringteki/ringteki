@@ -686,7 +686,12 @@ class DrawCard extends BaseCard {
         if(incomingAttackers) {
             attackers = incomingAttackers;
         }
-        if(attackers.concat(this).reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) > this.controller.fate) {
+        if(!attackers.includes(this)) {
+            attackers = attackers.concat(this);
+        }
+
+        let fateCostToAttackProvince = province ? province.sumEffects(EffectNames.FateCostToDeclareConflictAgainst) : 0;
+        if(attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) + fateCostToAttackProvince > this.controller.fate) {
             return false;
         }
         if(this.anyEffect(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {
