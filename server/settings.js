@@ -13,7 +13,8 @@ const defaultOptionSettings = {
     orderForcedAbilities: false,
     confirmOneClick: false,
     disableCardStats: false,
-    showStatusInSidebar: false
+    showStatusInSidebar: false,
+    sortHandByName: false
 };
 
 const defaultSettings = {

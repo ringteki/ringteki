@@ -38,7 +38,7 @@ describe('Spectral Visitation', function() {
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
         });
 
-        it('should trigger if your deck doesn\'t have enough cards', function() {
+        it('should not trigger if your deck doesn\'t have enough cards', function() {
             this.noMoreActions();
             expect(this.spectralVisitation.facedown).toBe(true);
 
@@ -50,9 +50,9 @@ describe('Spectral Visitation', function() {
                 type: 'military'
             });
 
-            expect(this.player2).not.toHavePrompt('Choose defenders');
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            expect(this.player2).toHavePrompt('Choose defenders');
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).not.toBeAbleToSelect(this.spectralVisitation);
         });
 
         it('should not allow you to target enemy dynasty discard pile', function() {

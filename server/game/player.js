@@ -1345,8 +1345,24 @@ class Player extends GameObject {
         this.promptState.clearSelectableRings();
     }
 
+    getSummaryForHand(list, activePlayer, hideWhenFaceup) {
+        if(this.optionSettings.sortHandByName) {
+            return this.getSortedSummaryForCardList(list, activePlayer, hideWhenFaceup);
+        }
+        return this.getSummaryForCardList(list, activePlayer, hideWhenFaceup);
+    }
+
     getSummaryForCardList(list, activePlayer, hideWhenFaceup) {
         return list.map(card => {
+            return card.getSummary(activePlayer, hideWhenFaceup);
+        });
+    }
+
+    getSortedSummaryForCardList(list, activePlayer, hideWhenFaceup) {
+        let cards = list.map(card => card);
+        cards.sort((a, b) => a.printedName.localeCompare(b.printedName));
+
+        return cards.map(card => {
             return card.getSummary(activePlayer, hideWhenFaceup);
         });
     }
@@ -1439,7 +1455,7 @@ class Player extends GameObject {
                 cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
                 conflictDiscardPile: this.getSummaryForCardList(this.conflictDiscardPile, activePlayer),
                 dynastyDiscardPile: this.getSummaryForCardList(this.dynastyDiscardPile, activePlayer),
-                hand: this.getSummaryForCardList(this.hand, activePlayer, true),
+                hand: this.getSummaryForHand(this.hand, activePlayer, true),
                 removedFromGame: this.getSummaryForCardList(this.removedFromGame, activePlayer),
                 provinceDeck: this.getSummaryForCardList(this.provinceDeck, activePlayer, true)
             },
