@@ -163,10 +163,10 @@ class ConflictFlow extends BaseStepWithPipeline {
                 let result = true;
                 Costs.payFateToRing(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer), result);
                 this.game.queueSimpleStep(() => {
-                    if (costEvents && costEvents.length > 0) {
+                    if(costEvents && costEvents.length > 0) {
                         this.game.addMessage('{0} places {1} fate on the {2}', this.conflict.attackingPlayer, totalFateCost, costEvents[0].recipient || 'ring');
                     }
-                    this.game.openThenEventWindow(costEvents)
+                    this.game.openThenEventWindow(costEvents);
                 });
             }
         }
