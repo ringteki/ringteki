@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Durations, Players } = require('../../Constants');
+const { Locations, Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class UnderSiege extends DrawCard {
@@ -18,7 +18,7 @@ class UnderSiege extends DrawCard {
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     duration: Durations.UntilEndOfRound,
-                    targetController: context.game.currentConflict.defendingPlayer === context.player ? Players.Self : Players.Opponent,
+                    targetController: context.game.currentConflict.defendingPlayer,
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {
                             onConflictFinished: () => true

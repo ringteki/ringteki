@@ -1,12 +1,13 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
 
 class TogashiInitiate extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Honor this character',
             condition: context => context.source.isAttacking(),
-            cost: ability.costs.payFateToRing(1),
-            gameAction: ability.actions.honor()
+            cost: AbilityDsl.costs.payFateToRing(1),
+            gameAction: AbilityDsl.actions.honor()
         });
     }
 }

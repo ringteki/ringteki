@@ -399,3 +399,58 @@ describe('Two Under Sieges', function() {
         });
     });
 });
+
+
+describe('Under Siege + Trading on the Sand Road', function () {
+    integration(function () {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'dynasty',
+                player1: {
+                    inPlay: ['wandering-ronin', 'otomo-courtier'],
+                    hand: ['trading-on-the-sand-road', 'assassination'],
+                    conflictDiscard: ['iuchi-wayfinder', 'forged-edict']
+                },
+                player2: {
+                    inPlay: ['guardian-kami', 'otomo-courtier'],
+                    hand: ['trading-on-the-sand-road', 'mono-no-aware'],
+                    conflictDiscard: ['under-siege', 'fine-katana', 'waning-hostilities', 'feral-ningyo']
+                }
+            });
+
+            this.tradingOnTheSandRoad = this.player1.findCardByName('trading-on-the-sand-road');
+            this.wanderingRonin = this.player1.findCardByName('wandering-ronin');
+            this.wanderingRonin.fate = 2;
+            this.iuchiWayfinder = this.player1.findCardByName('iuchi-wayfinder');
+            this.player1.moveCard(this.iuchiWayfinder, 'conflict deck');
+            this.forgedEdict = this.player1.findCardByName('forged-edict');
+            this.otomoCourtier = this.player1.findCardByName('otomo-courtier');
+
+            this.tradingOnTheSandRoad2 = this.player2.findCardByName('trading-on-the-sand-road');
+            this.guardianKami = this.player2.findCardByName('guardian-kami');
+            this.monoNoAware = this.player2.findCardByName('mono-no-aware');
+            this.fineKatana = this.player2.findCardByName('fine-katana');
+            this.player2.moveCard(this.fineKatana, 'conflict deck');
+            this.waningHostilities = this.player2.findCardByName('waning-hostilities');
+            this.feralNingyo = this.player2.findCardByName('feral-ningyo');
+            this.player2.moveCard(this.feralNingyo, 'conflict deck');
+            this.siege = this.player2.moveCard('under-siege', 'conflict deck');
+        });
+
+        it('should work properly', function () {
+            this.noMoreActions();
+            this.player1.clickCard(this.tradingOnTheSandRoad);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.wanderingRonin]
+            });
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.siege);
+            this.player1.clickCard(this.siege);
+            this.player2.clickPrompt('Done');
+            this.noMoreActions();
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.getChatLogs(10)).toContain('player2 discards Supernatural Storm, Supernatural Storm, Supernatural Storm, Supernatural Storm and Supernatural Storm');
+        });
+    });
+});
