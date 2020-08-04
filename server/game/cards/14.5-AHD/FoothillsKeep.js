@@ -16,6 +16,6 @@ class FoothillsKeep extends ProvinceCard {
     }
 }
 
-FoothillsKeep.id = 'ninkatoshi';
+FoothillsKeep.id = 'foothills-keep';
 
 module.exports = FoothillsKeep;

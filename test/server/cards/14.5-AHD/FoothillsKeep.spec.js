@@ -9,14 +9,14 @@ describe('Foothills Keep', function() {
                         inPlay: ['caravan-guard', 'dazzling-duelist']
                     },
                     player2: {
-                        provinces: ['midnight-revels', 'manicured-garden', 'ninkatoshi', 'meditations-on-the-tao'],
+                        provinces: ['midnight-revels', 'manicured-garden', 'foothills-keep', 'meditations-on-the-tao'],
                         inPlay: ['brash-samurai']
                     }
                 });
 
                 this.revels = this.player2.findCardByName('midnight-revels');
                 this.manicured = this.player2.findCardByName('manicured-garden');
-                this.foothills = this.player2.findCardByName('ninkatoshi');
+                this.foothills = this.player2.findCardByName('foothills-keep');
                 this.meditations = this.player2.findCardByName('meditations-on-the-tao');
 
                 this.fertileFields = this.player1.findCardByName('fertile-fields');
