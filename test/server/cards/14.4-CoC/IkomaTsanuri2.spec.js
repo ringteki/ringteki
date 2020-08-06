@@ -6,11 +6,13 @@ describe('Ikoma Tsanuri 2', function() {
                 player1: {
                     inPlay: ['countryside-trader', 'ikoma-tsanuri-2'],
                     provinces: ['kenson-no-gakka', 'abandoning-honor', 'brother-s-gift-dojo'],
-                    hand: ['cloud-the-mind', 'fine-katana', 'ornate-fan']
+                    hand: ['cloud-the-mind', 'fine-katana', 'ornate-fan', 'forebearer-s-echoes'],
+                    dynastyDiscard: ['iuchi-farseer']
                 },
                 player2: {
                     inPlay: ['countryside-trader', 'cunning-negotiator'],
-                    provinces: ['midnight-revels', 'upholding-authority', 'manicured-garden', 'meditations-on-the-tao']
+                    provinces: ['midnight-revels', 'upholding-authority', 'manicured-garden', 'temple-of-the-dragons'],
+                    dynastyDiscard: ['daidoji-marketplace']
                 }
             });
 
@@ -23,13 +25,19 @@ describe('Ikoma Tsanuri 2', function() {
             this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
             this.abandoning = this.player1.findCardByName('abandoning-honor', 'province 2');
             this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
-            this.meditations = this.player2.findCardByName('meditations-on-the-tao', 'province 4');
+            this.templeOfDragons = this.player2.findCardByName('temple-of-the-dragons', 'province 4');
 
             this.tsanuri = this.player1.findCardByName('ikoma-tsanuri-2');
             this.negotiator = this.player2.findCardByName('cunning-negotiator');
+            this.marketPlace = this.player2.findCardByName('daidoji-marketplace');
+            this.player2.placeCardInProvince(this.marketPlace, 'province 4');
+
+            this.farseer = this.player1.findCardByName('iuchi-farseer');
+            this.echoes = this.player1.findCardByName('forebearer-s-echoes');
 
             this.revels.facedown = false;
             this.manicuredGarden.facedown = false;
+            this.templeOfDragons.facedown = true;
 
             this.trader.fate = 1;
             this.trader2.fate = 1;
@@ -165,6 +173,30 @@ describe('Ikoma Tsanuri 2', function() {
             this.player2.clickPrompt('1');
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.getChatLogs(10)).toContain('The duel has no effect');
+        });
+
+        it('should not prevent triggering reactions on not the attacked province', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                type: 'military',
+                province: this.revels
+            });
+            expect(this.player2).toHavePrompt('Choose Defenders');
+            this.player2.clickPrompt('Done');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+
+            expect(this.templeOfDragons.facedown).toBe(true);
+            this.player2.pass();
+            this.player1.clickCard(this.echoes);
+            this.player1.clickCard(this.farseer);
+            this.player1.clickCard(this.farseer);
+            this.player1.clickCard(this.templeOfDragons);
+
+            expect(this.templeOfDragons.facedown).toBe(false);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.templeOfDragons);
         });
     });
 });

@@ -9,7 +9,7 @@ class IkomaTsanuri2 extends DrawCard {
             targetController: Players.Opponent,
             effect: AbilityDsl.effects.playerCannot({
                 cannot: 'triggerAbilities',
-                restricts: 'provinces'
+                restricts: 'attackedProvince'
             })
         });
     }
