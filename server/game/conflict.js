@@ -140,8 +140,13 @@ class Conflict extends GameObject {
         }
         if(this.attackingPlayer.allowGameAction('takeFateFromRings') && newRing.fate > 0) {
             this.game.addMessage('{0} takes {1} fate from {2}', this.attackingPlayer, newRing.fate, newRing);
+            let fate = newRing.fate;
             this.attackingPlayer.modifyFate(newRing.fate);
             newRing.fate = 0;
+            if(fate > 0) {
+                let context = this.game.getFrameworkContext(this.attackingPlayer);
+                this.game.raiseEvent(EventNames.OnMoveFate, { fate: fate, origin: newRing, context: context, recipient: this.attackingPlayer });
+            }
         }
         if(newRing.conflictType !== this.conflictType) {
             newRing.flipConflictType();
@@ -182,7 +187,7 @@ class Conflict extends GameObject {
     }
 
     isParticipating(card) {
-        return this.isAttacking(card) || this.isDefending(card);
+        return (this.isAttacking(card) || this.isDefending(card)) && this.declarationComplete;
     }
 
     anyParticipants(predicate) {
@@ -284,7 +289,7 @@ class Conflict extends GameObject {
             let additionalAttackers = additionalContributingCards
                 .filter(card => card.getEffects(EffectNames.ContributeToConflict).some(value => value === this.attackingPlayer));
             this.attackerSkill = this.calculateSkillFor(this.attackers.concat(additionalAttackers)) + this.attackingPlayer.skillModifier;
-            if(this.attackingPlayer.imperialFavor === this.conflictType && this.attackers.length > 0) {
+            if((this.attackingPlayer.imperialFavor === this.conflictType || this.attackingPlayer.imperialFavor === 'both') && this.attackers.length > 0) {
                 this.attackerSkill++;
             }
         }
@@ -295,7 +300,7 @@ class Conflict extends GameObject {
             let additionalDefenders = additionalContributingCards
                 .filter(card => card.getEffects(EffectNames.ContributeToConflict).some(value => value === this.defendingPlayer));
             this.defenderSkill = this.calculateSkillFor(this.defenders.concat(additionalDefenders)) + this.defendingPlayer.skillModifier;
-            if(this.defendingPlayer.imperialFavor === this.conflictType && this.defenders.length > 0) {
+            if((this.defendingPlayer.imperialFavor === this.conflictType || this.defendingPlayer.imperialFavor === 'both') && this.defenders.length > 0) {
                 this.defenderSkill++;
             }
         }

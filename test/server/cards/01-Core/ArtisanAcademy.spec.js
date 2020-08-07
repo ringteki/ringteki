@@ -14,14 +14,16 @@ describe('Artisan Academy', function() {
 
         describe('Before activating Artisan Academy', function() {
             it('should have the top card facedown', function() {
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
         });
 
         describe('When activating Artisan Academy', function() {
             it('should turn the top card face up', function() {
                 this.player1.clickCard(this.artisanAcademy);
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
             });
 
             it('should add a playable location', function() {
@@ -62,7 +64,8 @@ describe('Artisan Academy', function() {
 
                 this.dojiWhisperer = this.player1.clickCard('doji-whisperer');
                 expect(this.dojiWhisperer.attachments.toArray()).toContain(this.ornateFan);
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
             it('should stop the top card being visible if the deck is shuffled', function() {
@@ -76,14 +79,17 @@ describe('Artisan Academy', function() {
                 this.player1.clickPrompt('Ornate Fan');
                 expect(this.ornateFan.location).toBe('hand');
                 expect(this.player2).toHavePrompt('Action Window');
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
             it('should stop the top card being visible once the phase ends', function() {
                 this.player1.clickCard(this.artisanAcademy);
-                expect(this.player1.player.isTopConflictCardShown()).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
                 this.flow.finishConflictPhase();
-                expect(this.player1.player.isTopConflictCardShown()).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
         });
     });

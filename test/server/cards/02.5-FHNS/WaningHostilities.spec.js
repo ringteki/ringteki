@@ -27,6 +27,19 @@ describe('Waning Hostilities', function() {
                 expect(this.player1.player.getConflictOpportunities()).toBe(1);
                 expect(this.player2.player.getConflictOpportunities()).toBe(1);
             });
+
+            it('passing conflicts should reduce the available conflict opportunities', function() {
+                this.player1.clickCard('waning-hostilities');
+                this.noMoreActions();
+                expect(this.player1.player.getConflictOpportunities()).toBe(1);
+                this.player1.passConflict();
+                expect(this.player1.player.getConflictOpportunities()).toBe(0);
+                this.noMoreActions();
+                this.player2.passConflict();
+                expect(this.player2.player.getConflictOpportunities()).toBe(0);
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Which side of the Imperial Favor would you like to claim?');
+            });
         });
     });
 });

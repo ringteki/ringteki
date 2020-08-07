@@ -9,7 +9,7 @@ class BayushiKachiko extends DrawCard {
             condition: context => this.game.isDuringConflict('political') && context.source.isParticipating(),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) => card.politicalSkill < context.source.politicalSkill,
+                cardCondition: (card, context) => card.politicalSkill < context.source.politicalSkill && card.isParticipating(),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.sendHome(),
                     AbilityDsl.actions.menuPrompt(context => ({

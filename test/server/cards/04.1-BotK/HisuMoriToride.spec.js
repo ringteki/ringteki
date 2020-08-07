@@ -35,7 +35,7 @@ describe('Hisu Mori Toride', function() {
                 expect(this.player1).toBeAbleToSelect('matsu-seventh-legion');
                 this.matsuBerserker = this.player1.clickCard('matsu-berserker');
                 expect(this.player1.player.getConflictOpportunities()).toBe(2);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 expect(this.matsuBerserker.location).toBe('dynasty discard pile');
                 expect(this.hisuMoriToride.bowed).toBe(true);
             });
@@ -47,7 +47,7 @@ describe('Hisu Mori Toride', function() {
                 this.player1.clickCard('hisu-mori-toride-lion');
                 this.matsuBerserker = this.player1.clickCard('matsu-berserker');
                 expect(this.player1.player.getConflictOpportunities()).toBe(2);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 this.player1.clickPrompt('No');
                 this.player1.clickPrompt('Gain 2 Honor');
                 this.noMoreActions();

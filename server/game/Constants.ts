@@ -64,6 +64,7 @@ export enum EffectNames {
     EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
+    FateCostToRingToDeclareConflictAgainst = 'fateCostToRingToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
@@ -121,6 +122,7 @@ export enum EffectNames {
     AlternateFatePool = 'alternateFatePool',
     CannotDeclareConflictsOfType = 'cannotDeclareConflictsOfType',
     CanPlayFromOwn = 'canPlayFromOwn',
+    CanPlayFromOutOfPlay = 'canPlayFromOutOfPlay',
     CanPlayFromOpponents = 'canPlayFromOpponents',
     CannotResolveRings = "cannotResolveRings",
     ChangePlayerGloryModifier = 'gloryModifier',
@@ -143,7 +145,8 @@ export enum EffectNames {
     RefillProvinceTo = 'refillProvinceTo',
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
-    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict'
+    DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
+    LimitHonorGainPerPhase = "limitHonorGainPerPhase"
 };
 
 export enum Durations {
@@ -320,7 +323,9 @@ export enum Elements {
 
 export enum ConflictTypes {
     Military = 'military',
-    Political = 'political'
+    Political = 'political',
+    Passed = 'passed',
+    Forced = 'forced'
 };
 
 export enum TokenTypes {

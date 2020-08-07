@@ -14,7 +14,7 @@ class IkomaMessageRunner extends DrawCard {
                     numCards: 1,
                     optional: true,
                     controller: Players.Self,
-                    cardCondition: card => card.isDynasty && card.facedown,
+                    cardCondition: card => card.isDynasty && card.isFacedown(),
                     gameAction: AbilityDsl.actions.flipDynasty()
                 },
                 opponentsCard: {
@@ -24,7 +24,7 @@ class IkomaMessageRunner extends DrawCard {
                     mode: TargetModes.UpTo,
                     numCards: 1,
                     optional: true,
-                    cardCondition: card => card.isDynasty && card.facedown,
+                    cardCondition: card => card.isDynasty && card.isFacedown(),
                     gameAction: AbilityDsl.actions.flipDynasty()
                 }
             },

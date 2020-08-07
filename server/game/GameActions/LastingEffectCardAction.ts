@@ -17,7 +17,8 @@ export class LastingEffectCardAction extends CardGameAction {
     defaultProperties: LastingEffectCardProperties = {
         duration: Durations.UntilEndOfConflict,
         canChangeZoneOnce: false,
-        effect: []
+        effect: [],
+        ability: null
     };
     constructor(properties: LastingEffectCardProperties | ((context: AbilityContext) => LastingEffectCardProperties)) {
         super(properties);
@@ -41,7 +42,11 @@ export class LastingEffectCardAction extends CardGameAction {
     }
 
     eventHandler(event, additionalProperties): void {
-        const properties = this.getProperties(event.context, additionalProperties);
+        let properties = this.getProperties(event.context, additionalProperties);
+        if (!properties.ability) {
+            properties.ability = event.context.ability;
+        }
+
         const lastingEffectRestrictions = event.card.getEffects(EffectNames.CannotApplyLastingEffects);
         const effectProperties = Object.assign({ match: event.card, location: Locations.Any }, _.omit(properties, 'effect'));
         let effects = properties.effect.map(factory => factory(event.context.game, event.context.source, effectProperties));

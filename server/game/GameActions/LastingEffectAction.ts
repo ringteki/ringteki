@@ -2,16 +2,19 @@ import { GameAction, GameActionProperties } from './GameAction';
 import { Durations, Players, EventNames } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import { WhenType } from '../Interfaces';
+import BaseAbility = require('../baseability');
+import Player = require('../player');
 
 export interface LastingEffectGeneralProperties extends GameActionProperties {
     duration?: Durations;
     condition?: (context: AbilityContext) => boolean;
     until?: WhenType;
     effect?: any;
+    ability?: BaseAbility;
 }
 
 export interface LastingEffectProperties extends LastingEffectGeneralProperties {
-    targetController?: Players;
+    targetController?: Players | Player;
 }
 
 export class LastingEffectAction extends GameAction {
@@ -20,7 +23,8 @@ export class LastingEffectAction extends GameAction {
     effect = 'apply a lasting effect';
     defaultProperties: LastingEffectProperties = {
         duration: Durations.UntilEndOfConflict,
-        effect: []
+        effect: [],
+        ability: null
     };
 
     getProperties(context: AbilityContext, additionalProperties = {}): LastingEffectProperties {
@@ -45,6 +49,9 @@ export class LastingEffectAction extends GameAction {
 
     eventHandler(event, additionalProperties): void {
         let properties = this.getProperties(event.context, additionalProperties);
+        if (!properties.ability) {
+            properties.ability = event.context.ability;
+        }
         event.context.source[properties.duration](() => properties);
     }
 }

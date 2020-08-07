@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes } = require('../../Constants');
 
 class ArdentOmoidasu extends DrawCard {
     setupCardAbilities() {
@@ -7,11 +8,12 @@ class ArdentOmoidasu extends DrawCard {
             title: 'Steal 2 honor',
             when: {
                 onCardDishonored: (event, context) => {
+                    const isCharacter = event.card.type === CardTypes.Character;
                     const dishonoredByOpponentsEffect = (context.player.opponent === event.context.player);
                     const dishonoredByRingEffect = (event.context.source.type === 'ring');
                     const dishonoredByCardEffect = event.context.ability.isCardAbility();
                     const dishonoredCharacterBelongsToOmoidasuController = event.card.controller === context.player;
-                    return dishonoredCharacterBelongsToOmoidasuController &&
+                    return isCharacter && dishonoredCharacterBelongsToOmoidasuController &&
                         dishonoredByOpponentsEffect &&
                         (dishonoredByRingEffect || dishonoredByCardEffect);
                 }

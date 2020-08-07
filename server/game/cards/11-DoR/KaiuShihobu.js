@@ -6,7 +6,7 @@ class KaiuShihobu extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Look at your dynasty deck',
-            when: { onCharacterEntersPlay: (event, context) => event.card === context.source },
+            when: { onCharacterEntersPlay: (event, context) => event.card === context.source && !context.game.skirmishMode },
             gameAction: AbilityDsl.actions.deckSearch({
                 cardCondition: card => card.type === CardTypes.Holding,
                 targetMode: TargetModes.Unlimited,
@@ -37,6 +37,7 @@ class KaiuShihobu extends DrawCard {
 
         this.action({
             title: 'Put a holding in a province',
+            condition: context => !context.game.skirmishMode,
             targets: {
                 first: {
                     activePromptTitle: 'Choose a holding',

@@ -38,7 +38,7 @@ describe('Spectral Visitation', function() {
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
         });
 
-        it('should trigger if your deck doesn\'t have enough cards', function() {
+        it('should not trigger if your deck doesn\'t have enough cards', function() {
             this.noMoreActions();
             expect(this.spectralVisitation.facedown).toBe(true);
 
@@ -50,9 +50,9 @@ describe('Spectral Visitation', function() {
                 type: 'military'
             });
 
-            expect(this.player2).not.toHavePrompt('Choose defenders');
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            expect(this.player2).toHavePrompt('Choose defenders');
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).not.toBeAbleToSelect(this.spectralVisitation);
         });
 
         it('should not allow you to target enemy dynasty discard pile', function() {
@@ -183,6 +183,91 @@ describe('Spectral Visitation with no character in the discard pile', function (
 
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+        });
+    });
+});
+
+describe('Spectral Visitation in the Dynasty Phase', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'dynasty',
+                player1: {
+                    inPlay: ['matsu-berserker'],
+                    dynastyDiscard: ['bayushi-shoju', 'iuchi-farseer']
+                },
+                player2: {
+                    dynastyDiscard: ['kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai'],
+                    provinces: ['spectral-visitation', 'manicured-garden']
+                }
+            });
+
+            this.farseer = this.player1.moveCard('iuchi-farseer', 'province 1');
+            this.farseer.facedown = false;
+
+            this.berserker = this.player1.findCardByName('matsu-berserker');
+            this.shoju = this.player1.findCardByName('bayushi-shoju');
+
+            this.spectralVisitation = this.player2.findCardByName('spectral-visitation');
+            this.manicured = this.player2.findCardByName('manicured-garden');
+            this.yoshi = this.player2.findCardByName('kakita-yoshi');
+            this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+            this.kageyu = this.player2.findCardByName('daidoji-kageyu');
+            this.chagatai = this.player2.findCardByName('moto-chagatai');
+        });
+
+        it('should trigger when it is revealed', function() {
+            this.player1.clickCard(this.farseer);
+            this.player1.clickPrompt('0');
+            this.player1.clickCard(this.farseer);
+            this.player1.clickCard(this.spectralVisitation);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+        });
+
+        it('should place on the bottom of the deck at the end of the phase', function() {
+            this.player1.clickCard(this.farseer);
+            this.player1.clickPrompt('0');
+            this.player1.clickCard(this.farseer);
+            this.player1.clickCard(this.spectralVisitation);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+            this.player2.clickCard(this.yoshi);
+            expect(this.yoshi.location).toBe('play area');
+
+            this.noMoreActions();
+            expect(this.game.currentPhase).toBe('draw');
+            expect(this.yoshi.location).toBe('dynasty deck');
+        });
+
+        it('due to some wacky shenanigans it could end up back in a province/in play, make sure it doesn\'t get put on the bottom of the deck again', function() {
+            this.player1.player.promptedActionWindows.draw = true;
+            this.player2.player.promptedActionWindows.draw = true;
+            this.player1.clickCard(this.farseer);
+            this.player1.clickPrompt('0');
+            this.player1.clickCard(this.farseer);
+            this.player1.clickCard(this.spectralVisitation);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.spectralVisitation);
+            this.player2.clickCard(this.spectralVisitation);
+            this.player2.clickCard(this.yoshi);
+            expect(this.yoshi.location).toBe('play area');
+
+            this.player2.moveCard(this.yoshi, 'dynasty discard pile'); //could be via something like Noble Sacrifice
+
+            this.noMoreActions();
+            expect(this.game.currentPhase).toBe('draw');
+            expect(this.yoshi.location).toBe('dynasty discard pile');
+
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+
+            expect(this.game.currentPhase).toBe('draw');
+            this.player2.moveCard(this.yoshi, 'play area');
+            this.noMoreActions();
+            expect(this.game.currentPhase).toBe('conflict');
+            expect(this.yoshi.location).toBe('play area');
         });
     });
 });

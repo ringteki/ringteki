@@ -7,7 +7,7 @@ const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
 const GainAbility = require('./Effects/GainAbility');
 const EffectBuilder = require('./Effects/EffectBuilder');
-const { EffectNames, PlayTypes, CardTypes } = require('./Constants');
+const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
 
 /* Types of effect
     1. Static effects - do something for a period
@@ -29,6 +29,7 @@ const Effects = {
     attachmentUniqueRestriction: () => EffectBuilder.card.static(EffectNames.AttachmentUniqueRestriction),
     blank: (blankTraits = false) => EffectBuilder.card.static(EffectNames.Blank, blankTraits),
     calculatePrintedMilitarySkill: (func) => EffectBuilder.card.static(EffectNames.CalculatePrintedMilitarySkill, func),
+    canPlayFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, playType),
     canBeSeenWhenFacedown: () => EffectBuilder.card.static(EffectNames.CanBeSeenWhenFacedown),
     canOnlyBeDeclaredAsAttackerWithElement: (element) => EffectBuilder.card.flexible(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement, element),
     cannotApplyLastingEffects: (condition) => EffectBuilder.card.static(EffectNames.CannotApplyLastingEffects, condition),
@@ -40,6 +41,10 @@ const Effects = {
     cardCannot: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ type: properties.cannot || properties }, properties))),
     changeContributionFunction: (func) => EffectBuilder.card.static(EffectNames.ChangeContributionFunction, func),
     changeType: (type) => EffectBuilder.card.static(EffectNames.ChangeType, type),
+    characterProvidesAdditionalConflict: (type) => EffectBuilder.card.detached(EffectNames.AdditionalConflict, {
+        apply: card => card.controller.addConflictOpportunity(type),
+        unapply: card => card.controller.removeConflictOpportunity(type)
+    }),
     contributeToConflict: (player) => EffectBuilder.card.flexible(EffectNames.ContributeToConflict, player),
     copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
@@ -50,6 +55,7 @@ const Effects = {
     entersPlayWithStatus: (status) => EffectBuilder.card.static(EffectNames.EntersPlayWithStatus, status),
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectNames.EntersPlayForOpponent),
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
+    fateCostToRingToDeclareConflictAgainst: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),
     gainAbility: (abilityType, properties) => EffectBuilder.card.static(EffectNames.GainAbility, new GainAbility(abilityType, properties)),
     gainAllAbilities: (character) => EffectBuilder.card.static(EffectNames.GainAllAbilities, new GainAllAbiliites(character)),
@@ -111,10 +117,7 @@ const Effects = {
     additionalAction: (amount = 1) => EffectBuilder.player.static(EffectNames.AdditionalAction, amount),
     additionalCardPlayed: (amount = 1) => EffectBuilder.player.flexible(EffectNames.AdditionalCardPlayed, amount),
     additionalCharactersInConflict: (amount) => EffectBuilder.player.flexible(EffectNames.AdditionalCharactersInConflict, amount),
-    additionalConflict: (type) => EffectBuilder.player.detached(EffectNames.AdditionalConflict, {
-        apply: player => player.addConflictOpportunity(type),
-        unapply: () => true
-    }),
+    additionalConflict: (type) => EffectBuilder.player.static(EffectNames.AdditionalConflict, type),
     additionalTriggerCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalTriggerCost, func),
     additionalPlayCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalPlayCost, func),
     alternateFatePool: (match) => EffectBuilder.player.static(EffectNames.AlternateFatePool, match),
@@ -144,6 +147,7 @@ const Effects = {
         },
         unapply: (player, context, location) => player.removePlayableLocation(location)
     }),
+    limitHonorGainPerPhase: (amount) => EffectBuilder.player.static(EffectNames.LimitHonorGainPerPhase, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
     changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
@@ -167,7 +171,7 @@ const Effects = {
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
     setMaxConflicts: (amount) => EffectBuilder.player.static(EffectNames.SetMaxConflicts, amount),
     setConflictTotalSkill: (value) => EffectBuilder.player.static(EffectNames.SetConflictTotalSkill, value),
-    showTopConflictCard: () => EffectBuilder.player.static(EffectNames.ShowTopConflictCard),
+    showTopConflictCard: (players = Players.Any) => EffectBuilder.player.static(EffectNames.ShowTopConflictCard, players),
     showTopDynastyCard: () => EffectBuilder.player.static(EffectNames.ShowTopDynastyCard),
     eventsCannotBeCancelled: () => EffectBuilder.player.static(EffectNames.EventsCannotBeCancelled),
     mustDeclareMaximumAttackers: (type = 'both') => EffectBuilder.player.static(EffectNames.MustDeclareMaximumAttackers, type),

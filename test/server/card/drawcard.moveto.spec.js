@@ -3,8 +3,9 @@ const DrawCard = require('../../../build/server/game/drawcard.js');
 describe('DrawCard', function () {
     beforeEach(function () {
         this.testCard = { code: '111', label: 'test 1(some pack)', name: 'test 1' };
-        this.gameSpy = jasmine.createSpyObj('game', ['emitEvent']);
+        this.gameSpy = jasmine.createSpyObj('game', ['emitEvent', 'getProvinceArray']);
         this.card = new DrawCard({ game: this.gameSpy }, this.testCard);
+        this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
         spyOn(this.card, 'removeLastingEffects');
     });
 

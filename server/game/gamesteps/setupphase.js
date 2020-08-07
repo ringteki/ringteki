@@ -14,7 +14,7 @@ class SetupPhase extends Phase {
             new SimpleStep(game, () => this.setupBegin()),
             new SimpleStep(game, () => this.chooseFirstPlayer()),
             new SimpleStep(game, () => this.attachStronghold()),
-            new SetupProvincesPrompt(game),
+            new SimpleStep(game, () => this.setupProvinces()),
             new SimpleStep(game, () => this.fillProvinces()),
             new MulliganDynastyPrompt(game),
             new SimpleStep(game, () => this.drawStartingHands()),
@@ -48,6 +48,9 @@ class SetupPhase extends Phase {
     }
 
     attachStronghold() {
+        if(this.game.skirmishMode) {
+            return;
+        }
         _.each(this.game.getPlayers(), player => {
             player.moveCard(player.stronghold, Locations.StrongholdProvince);
             if(player.role) {
@@ -56,9 +59,26 @@ class SetupPhase extends Phase {
         });
     }
 
+    setupProvinces() {
+        if(this.game.skirmishMode) {
+            for(let player of this.game.getPlayers()) {
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
+                player.moveCard(player.provinceDeck.first(), Locations.ProvinceThree);
+                player.hideProvinceDeck = true;
+            }
+        } else {
+            this.queueStep(new SetupProvincesPrompt(this.game));
+        }
+    }
+
     fillProvinces() {
+        let provinces = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        if(!this.game.skirmishMode) {
+            provinces.push(Locations.ProvinceFour);
+        }
         _.each(this.game.getPlayers(), player => {
-            for(let province of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]) {
+            for(let province of provinces) {
                 let card = player.dynastyDeck.first();
                 if(card) {
                     player.moveCard(card, province);
@@ -72,12 +92,12 @@ class SetupPhase extends Phase {
     }
 
     drawStartingHands() {
-        _.each(this.game.getPlayers(), player => player.drawCardsToHand(4));
+        _.each(this.game.getPlayers(), player => player.drawCardsToHand(this.game.skirmishMode ? 3 : 4));
     }
 
     startGame() {
         _.each(this.game.getPlayers(), player => {
-            player.honor = player.stronghold.cardData.honor;
+            player.honor = this.game.skirmishMode ? 6 : player.stronghold.cardData.honor;
             player.readyToStart = true;
         });
         this.endPhase();
