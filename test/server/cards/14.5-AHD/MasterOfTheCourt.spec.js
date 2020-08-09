@@ -45,7 +45,7 @@ describe('Master of the Court', function() {
                 this.player2.clickCard(this.master);
                 expect(this.whisperer.isHonored).toBe(false);
                 expect(this.master.isHonored).toBe(false);
-                expect(this.getChatLogs(3)).toContain('player2 uses Master of the Court, discarding Honored Token\'s status token to cancel the effects of Way of the Crane');
+                expect(this.getChatLogs(3)).toContain('player2 uses Master of the Court, discarding a status token to cancel the effects of Way of the Crane');
             });
         });
     });
