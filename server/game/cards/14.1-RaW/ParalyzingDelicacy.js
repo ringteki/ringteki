@@ -22,7 +22,7 @@ class ParalyzingDelicacy extends DrawCard {
     getFaceDownProvinceCards(context) {
         return context.target.controller
             .getDynastyCardsInProvince(Locations.Provinces)
-            .filter(card => card.facedown && card.controller === context.target.controller).length;
+            .filter(card => card.isFacedown() && card.controller === context.target.controller).length;
     }
 }
 

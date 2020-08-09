@@ -67,7 +67,7 @@ class HandlerMenuPrompt extends UiPrompt {
         buttons = buttons.concat(_.map(this.properties.choices, (choice, index) => {
             return { text: choice, arg: index };
         }));
-        if(this.game.manualMode && this.properties.choices.every(choice => choice !== 'Cancel')) {
+        if(this.game.manualMode && (!this.properties.choices || this.properties.choices.every(choice => choice !== 'Cancel'))) {
             buttons = buttons.concat({ text: 'Cancel Prompt', arg: 'cancel' });
         }
         return {

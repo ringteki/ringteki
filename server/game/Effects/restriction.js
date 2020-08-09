@@ -28,6 +28,7 @@ const checkRestrictions = {
         context.player === effect.context.player.opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>
         context.player === effect.context.player.opponent && context.ability.isCardAbility(),
+    provinces: context => context.source.type === CardTypes.Province,
     reactions: context => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,
     keywordAbilities: context => context.ability.isKeywordAbility(),

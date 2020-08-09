@@ -33,8 +33,7 @@ class HighHouseOfLight extends StrongholdCard {
                     })
                 ])
             },
-            effect: 'make {0} unable to be targeted by opponent\'s events',
-            effectArgs: context => [Math.min(context.target.attachments.size(), 2), 'military', 'political']
+            effect: 'make {0} unable to be targeted by opponent\'s events'
         });
     }
 }

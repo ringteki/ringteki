@@ -13,7 +13,7 @@ class DynastyCardAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('facedown') && this.card.facedown) {
+        if(!ignoredRequirements.includes('facedown') && this.card.isFacedown()) {
             return 'facedown';
         } else if(!ignoredRequirements.includes('player') && context.player !== this.card.controller) {
             return 'player';

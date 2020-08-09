@@ -80,6 +80,7 @@ describe('The Spear Rushes Forth', function() {
                 this.player1.clickCard(this.kakitaKaezin);
                 expect(this.kakitaYoshi.bowed).toBe(true);
                 expect(this.kakitaKaezin.isHonored).toBe(false);
+                expect(this.getChatLogs(5)).toContain('player1 plays The Spear Rushes Forth, discarding a status token to bow Kakita Yoshi');
             });
 
             it('should work even if young harrier is present in the conflict', function() {

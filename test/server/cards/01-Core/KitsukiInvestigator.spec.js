@@ -43,6 +43,7 @@ describe('Togashi Yokuni', function() {
                 this.player1.clickRing('fire');
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 expect(this.game.rings.fire.fate).toBe(1);
+                expect(this.getChatLogs(5)).toContain('player1 uses Kitsuki Investigator, placing 1 fate on the Fire Ring to reveal player2\'s hand and discard a card from it');
                 expect(this.getChatLogs(3)).toContain('Kitsuki Investigator sees Assassination, Banzai!, Banzai!, Banzai! and Fine Katana');
             });
         });

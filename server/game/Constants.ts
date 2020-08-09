@@ -64,6 +64,7 @@ export enum EffectNames {
     EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
+    FateCostToRingToDeclareConflictAgainst = 'fateCostToRingToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
@@ -322,7 +323,9 @@ export enum Elements {
 
 export enum ConflictTypes {
     Military = 'military',
-    Political = 'political'
+    Political = 'political',
+    Passed = 'passed',
+    Forced = 'forced'
 };
 
 export enum TokenTypes {

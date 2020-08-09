@@ -5,7 +5,7 @@ describe('Shiro Kitsuki', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        hand: ['fine-katana', 'for-shame'],
+                        hand: ['fine-katana', 'for-shame', 'four-temples-advisor'],
                         inPlay: ['solemn-scholar', 'asako-tsuki'],
                         dynastyDiscard: ['keeper-initiate'],
                         role: 'keeper-of-water',
@@ -13,7 +13,7 @@ describe('Shiro Kitsuki', function() {
                     },
                     player2: {
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['against-the-waves', 'fine-katana', 'kami-unleashed', 'court-games', 'ready-for-battle'],
+                        hand: ['against-the-waves', 'fine-katana', 'kami-unleashed', 'court-games', 'ready-for-battle', 'shosuro-miyako-2'],
                         provinces: ['entrenched-position']
                     }
                 });
@@ -26,11 +26,13 @@ describe('Shiro Kitsuki', function() {
                 this.kamiUnleashed = this.player2.findCardByName('kami-unleashed');
                 this.entrenched = this.player2.findCardByName('entrenched-position');
                 this.keeper = this.player1.findCardByName('keeper-initiate');
+                this.miyako = this.player2.findCardByName('shosuro-miyako-2');
 
                 this.shiroKitsuki = this.player1.findCardByName('shiro-kitsuki');
                 this.scholar = this.player1.findCardByName('solemn-scholar');
                 this.forShame = this.player1.findCardByName('for-shame');
                 this.asakoTsuki = this.player1.findCardByName('asako-tsuki');
+                this.advisor = this.player1.findCardByName('four-temples-advisor');
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -114,6 +116,36 @@ describe('Shiro Kitsuki', function() {
                 expect(this.game.rings.earth.conflictType).toBe('political');
                 expect(this.getChatLogs(10)).toContain('player1 uses Shiro Kitsuki, naming Fine Katana to claim a ring whenever player2 plays a card named Fine Katana');
                 expect(this.getChatLogs(10)).toContain('player1 claims the Earth Ring');
+            });
+
+            it('should trigger effects that trigger off gaining fate from a ring', function() {
+                this.player1.clickCard(this.shiroKitsuki);
+                this.game.rings.void.fate = 1;
+                this.player1.chooseCardInPrompt(this.fineKatana.name, 'card-name');
+                this.player2.clickPrompt('Done');
+                this.player2.pass();
+                this.player1.playAttachment(this.advisor, this.asakoTsuki);
+                this.player2.playAttachment(this.fineKatana, this.adept);
+                let fate = this.player1.fate;
+                expect(this.player1).toHavePrompt('Choose a ring to claim');
+                this.player1.clickRing('void');
+                expect(this.player1.fate).toBe(fate + 1);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.advisor);
+                let hand = this.player1.hand.length;
+                this.player1.clickCard(this.advisor);
+                expect(this.player1.hand.length).toBe(hand + 1);
+            });
+
+            it('should only trigger once with Miyako', function() {
+                this.player1.clickCard(this.shiroKitsuki);
+                this.player1.chooseCardInPrompt(this.miyako.name, 'card-name');
+                this.player2.clickPrompt('Done');
+                this.player2.clickCard(this.miyako);
+                this.player2.clickCard(this.adept);
+                expect(this.player1).toHavePrompt('Choose a ring to claim');
+                this.player1.clickRing('void');
+                expect(this.player2).toHavePrompt('Triggered Abilities');
             });
         });
     });

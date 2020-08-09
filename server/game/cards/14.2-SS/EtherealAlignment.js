@@ -13,15 +13,22 @@ class EtherealAlignment extends DrawCard {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
                 cardCondition: (card, context) => {
-                    return card.element.some(element => {
+                    return card.isBroken && card.element.some(element => {
                         if(element === 'all') {
                             return true;
                         }
                         return this.game.rings[element].isConsideredClaimed(context.player);
                     });
                 },
-                gameAction: AbilityDsl.actions.restoreProvince()
-            }
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.restoreProvince(),
+                    AbilityDsl.actions.moveCard(context => ({
+                        target: context.source,
+                        destination: Locations.RemovedFromGame
+                    }))
+                ])
+            },
+            effect: 'restore {0}'
         });
     }
 }

@@ -41,7 +41,7 @@ class CaptivatingStory extends DrawCard {
                     }))
                 ])
             },
-            effect: 'give {0} +1{1} for each faceup province they opponent controls (+{2}{1})',
+            effect: 'give {0} +1{1} for each faceup province they control (+{2}{1})',
             effectArgs: context => ['political', context.player.getNumberOfFaceupProvinces()]
         });
     }

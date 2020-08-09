@@ -6,11 +6,13 @@ describe('Master Whisperer', function() {
                 player1: {
                     inPlay: ['master-whisperer'],
                     hand: ['way-of-the-scorpion', 'way-of-the-crane', 'way-of-the-dragon'],
-                    conflictDeck: ['fine-katana', 'ornate-fan', 'duty', 'assassination']
+                    conflictDeck: ['fine-katana', 'ornate-fan', 'duty', 'assassination'],
+                    conflictDiscard: ['kakita-blade']
                 },
                 player2: {
                     hand: ['way-of-the-scorpion', 'way-of-the-crane', 'way-of-the-dragon'],
                     conflictDeck: ['fine-katana', 'ornate-fan', 'duty', 'assassination'],
+                    conflictDiscard: ['let-go'],
                     dynastyDiscard: ['hantei-xxxviii']
                 }
             });
@@ -23,6 +25,7 @@ describe('Master Whisperer', function() {
             this.fan = this.player1.findCardByName('ornate-fan');
             this.duty = this.player1.findCardByName('duty');
             this.assassination = this.player1.findCardByName('assassination');
+            this.blade = this.player1.findCardByName('kakita-blade');
 
             this.scorpion2 = this.player2.findCardByName('way-of-the-scorpion');
             this.crane2 = this.player2.findCardByName('way-of-the-crane');
@@ -31,6 +34,7 @@ describe('Master Whisperer', function() {
             this.fan2 = this.player2.findCardByName('ornate-fan');
             this.duty2 = this.player2.findCardByName('duty');
             this.assassination2 = this.player2.findCardByName('assassination');
+            this.letGo = this.player2.findCardByName('let-go');
 
             this.hantei = this.player2.findCardByName('hantei-xxxviii');
 
@@ -82,6 +86,8 @@ describe('Master Whisperer', function() {
         });
 
         it('should prompt the chosen player to discard 3 cards then draw 3 cards (self)', function() {
+            this.player1.moveCard(this.blade, 'hand');
+
             let hand = this.player1.hand.length;
 
             expect(this.katana.location).toBe('conflict deck');
@@ -113,6 +119,7 @@ describe('Master Whisperer', function() {
         });
 
         it('should prompt the chosen player to discard 3 cards then draw 3 cards (opponent)', function() {
+            this.player2.moveCard(this.letGo, 'hand');
             let hand = this.player2.hand.length;
 
             expect(this.katana2.location).toBe('conflict deck');
@@ -150,11 +157,6 @@ describe('Master Whisperer', function() {
             expect(this.player1).toHavePromptButton('player1');
             expect(this.player1).toHavePromptButton('player2');
             this.player1.clickPrompt('player1');
-            expect(this.player1).toHavePrompt('Choose 2 cards to discard');
-
-            this.player1.clickCard(this.scorpion);
-            this.player1.clickCard(this.crane);
-            this.player1.clickPrompt('Done');
 
             expect(this.scorpion.location).toBe('conflict discard pile');
             expect(this.crane.location).toBe('conflict discard pile');

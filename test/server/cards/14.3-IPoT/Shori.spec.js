@@ -33,46 +33,46 @@ describe('Shori', function() {
 
         it('should grant you a military conflict while on a champion', function () {
             let conflicts = this.player1.player.getConflictOpportunities();
-            let milConflicts = this.player1.player.getConflictOpportunities('military');
+            let milConflicts = this.player1.player.getRemainingConflictOpportunitiesForType('military');
             this.player1.playAttachment(this.shori, this.toturi);
             expect(this.player1.player.getConflictOpportunities()).toBe(conflicts + 1);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(milConflicts + 1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts + 1);
         });
 
         it('should grant your opponent a military conflict while on their champion', function () {
             let conflicts = this.player1.player.getConflictOpportunities();
-            let milConflicts = this.player1.player.getConflictOpportunities('military');
+            let milConflicts = this.player1.player.getRemainingConflictOpportunitiesForType('military');
             let conflicts2 = this.player2.player.getConflictOpportunities();
-            let milConflicts2 = this.player2.player.getConflictOpportunities('military');
+            let milConflicts2 = this.player2.player.getRemainingConflictOpportunitiesForType('military');
 
             this.player1.playAttachment(this.shori, this.tsuko);
             expect(this.player1.player.getConflictOpportunities()).toBe(conflicts);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(milConflicts);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
             expect(this.player2.player.getConflictOpportunities()).toBe(conflicts2 + 1);
-            expect(this.player2.player.getConflictOpportunities('military')).toBe(milConflicts2 + 1);
+            expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts2 + 1);
         });
 
         it('should not grant you a military conflict while on a non-champion', function () {
             let conflicts = this.player1.player.getConflictOpportunities();
-            let milConflicts = this.player1.player.getConflictOpportunities('military');
+            let milConflicts = this.player1.player.getRemainingConflictOpportunitiesForType('military');
             this.player1.playAttachment(this.shori, this.ikehata);
             expect(this.player1.player.getConflictOpportunities()).toBe(conflicts);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(milConflicts);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
         });
 
         it('should remove the granted conflict when discarded', function () {
             let conflicts = this.player1.player.getConflictOpportunities();
-            let milConflicts = this.player1.player.getConflictOpportunities('military');
+            let milConflicts = this.player1.player.getRemainingConflictOpportunitiesForType('military');
             this.player1.playAttachment(this.shori, this.toturi);
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.shori);
             expect(this.player1.player.getConflictOpportunities()).toBe(conflicts);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(milConflicts);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts);
         });
 
         it('should use the bonus conflict last', function () {
             let conflicts = this.player1.player.getConflictOpportunities();
-            let milConflicts = this.player1.player.getConflictOpportunities('military');
+            let milConflicts = this.player1.player.getRemainingConflictOpportunitiesForType('military');
             this.player1.playAttachment(this.shori, this.toturi);
             this.noMoreActions();
             this.initiateConflict({
@@ -85,7 +85,7 @@ describe('Shori', function() {
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.shori);
             expect(this.player1.player.getConflictOpportunities()).toBe(conflicts - 1);
-            expect(this.player1.player.getConflictOpportunities('military')).toBe(milConflicts - 1);
+            expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts - 1);
         });
     });
 });

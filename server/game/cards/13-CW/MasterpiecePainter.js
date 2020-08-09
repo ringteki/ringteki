@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { TargetModes, Durations, Phases, Locations, Decks, Players } = require('../../Constants');
+const { TargetModes, Durations, Locations, Decks, Players } = require('../../Constants');
 
 class MasterpiecePainter extends DrawCard {
     setupCardAbilities() {
@@ -35,7 +35,7 @@ const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(cont
         duration: Durations.Custom,
         until: {
             onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
-            onPhaseEnded: event => event.phase === Phases.Conflict,
+            onPhaseEnded: () => true,
             onDeckShuffled: event => event.player === chosenPlayer && event.deck === Decks.ConflictDeck
         },
         effect: [

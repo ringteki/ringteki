@@ -101,7 +101,7 @@ class CardAbility extends ThenAbility {
 
         if(defaultedLocation.some(location => location === Locations.Provinces)) {
             defaultedLocation = defaultedLocation.filter(location => location !== Locations.Provinces);
-            defaultedLocation = defaultedLocation.concat([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince]);
+            defaultedLocation = defaultedLocation.concat(this.game.getProvinceArray());
         }
 
         return defaultedLocation;
@@ -112,7 +112,7 @@ class CardAbility extends ThenAbility {
             return 'blank';
         }
 
-        if(this.isTriggeredAbility() && !this.card.canTriggerAbilities(context) || this.card.type === CardTypes.Event && !this.card.canPlay(context, context.playType)) {
+        if(this.isTriggeredAbility() && !this.card.canTriggerAbilities(context, ignoredRequirements) || this.card.type === CardTypes.Event && !this.card.canPlay(context, context.playType)) {
             return 'cannotTrigger';
         }
 
@@ -184,7 +184,7 @@ class CardAbility extends ThenAbility {
         let costMessages = this.cost.map(cost => {
             if(cost.getCostMessage) {
                 let card = context.costs[cost.getActionName(context)];
-                if(card && card.facedown) {
+                if(card && card.isFacedown && card.isFacedown()) {
                     card = 'a facedown card';
                 }
                 let [format, args] = ['ERROR - MISSING COST MESSAGE', [' ',' ']];
@@ -231,7 +231,7 @@ class CardAbility extends ThenAbility {
     }
 
     isCardPlayed() {
-        return this.card.getType() === CardTypes.Event;
+        return !this.isKeywordAbility() && this.card.getType() === CardTypes.Event;
     }
 
     isTriggeredAbility() {
