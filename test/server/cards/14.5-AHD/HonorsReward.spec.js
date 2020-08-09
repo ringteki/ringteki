@@ -1,103 +1,102 @@
-describe('Driven by Courage', function() {
+describe('Honors Reward', function() {
     integration(function() {
-        describe('Driven by Courage\'s ability', function() {
+        describe('Honors Reward\'s ability', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         inPlay: ['tattooed-wanderer', 'solemn-scholar'],
-                        provinces: ['fertile-fields']
+                        provinces: ['meditations-on-the-tao']
                     },
                     player2: {
-                        provinces: ['driven-by-courage', 'toshi-ranbo', 'manicured-garden'],
+                        provinces: ['honor-s-reward', 'toshi-ranbo', 'manicured-garden', 'feast-or-famine'],
                         inPlay: ['shrine-maiden', 'shika-matchmaker']
                     }
                 });
 
-                this.courage = this.player2.findCardByName('driven-by-courage');
+                this.reward = this.player2.findCardByName('honor-s-reward');
                 this.toshiRanbo = this.player2.findCardByName('toshi-ranbo');
                 this.garden = this.player2.findCardByName('manicured-garden');
+                this.feast = this.player2.findCardByName('feast-or-famine');
                 this.maiden = this.player2.findCardByName('shrine-maiden');
                 this.matchmaker = this.player2.findCardByName('shika-matchmaker');
 
-                this.fields = this.player1.findCardByName('fertile-fields');
+                this.meditations = this.player1.findCardByName('meditations-on-the-tao');
                 this.scholar = this.player1.findCardByName('solemn-scholar');
                 this.wanderer = this.player1.findCardByName('tattooed-wanderer');
 
-                this.courage.facedown = false;
+                this.reward.facedown = false;
                 this.noMoreActions();
             });
 
             it('should trigger when it is the attacked province', function() {
                 this.initiateConflict({
-                    province: this.courage,
+                    province: this.reward,
                     ring: 'earth',
                     type: 'military',
                     attackers: [this.wanderer],
                     defenders: [this.maiden]
                 });
-                this.player2.clickCard(this.courage);
-                expect(this.player2).toHavePrompt('Driven By Courage');
+                this.player2.clickCard(this.reward);
+                expect(this.player2).toHavePrompt('Honor\'s Reward');
             });
 
             it('should be able to target characters in the conflict but not at home', function() {
                 this.initiateConflict({
-                    province: this.courage,
+                    province: this.reward,
                     ring: 'earth',
                     type: 'military',
                     attackers: [this.wanderer],
                     defenders: [this.maiden]
                 });
-                this.player2.clickCard(this.courage);
+                this.player2.clickCard(this.reward);
                 expect(this.player2).toBeAbleToSelect(this.wanderer);
                 expect(this.player2).toBeAbleToSelect(this.maiden);
                 expect(this.player2).not.toBeAbleToSelect(this.matchmaker);
                 expect(this.player2).not.toBeAbleToSelect(this.scholar);
             });
 
-            it('should give +2/+2', function() {
+            it('should give +3 glory', function() {
                 this.initiateConflict({
-                    province: this.courage,
+                    province: this.reward,
                     ring: 'earth',
                     type: 'military',
                     attackers: [this.wanderer],
                     defenders: [this.maiden]
                 });
-                let maidenMiltarySkill = this.maiden.getMilitarySkill();
-                let maidenPoliticalSkill = this.maiden.getPoliticalSkill();
-                this.player2.clickCard(this.courage);
+                let maidenGlory = this.maiden.glory;
+                this.player2.clickCard(this.reward);
                 this.player2.clickCard(this.maiden);
-                expect(this.maiden.getMilitarySkill()).toBe(maidenMiltarySkill + 2);
-                expect(this.maiden.getPoliticalSkill()).toBe(maidenPoliticalSkill + 2);
-                expect(this.getChatLogs(3)).toContain('player2 uses Driven By Courage to give Shrine Maiden +1political and +1military');
+                expect(this.maiden.glory).toBe(maidenGlory + 3);
+                expect(this.getChatLogs(3)).toContain('player2 uses Honor\'s Reward to give Shrine Maiden +3 glory');
             });
 
-            it('should work at your other air provinces', function() {
+            it('should work at your other fire provinces', function() {
                 this.initiateConflict({
-                    province: this.toshiRanbo,
+                    province: this.feast,
                     ring: 'earth',
                     type: 'military',
                     attackers: [this.wanderer],
                     defenders: [this.maiden]
                 });
-                this.player2.clickCard(this.courage);
-                expect(this.player2).toHavePrompt('Driven By Courage');
+                this.player2.clickCard(this.reward);
+                expect(this.player2).toHavePrompt('Honor\'s Reward');
             });
 
-            it('should work at your opponents air province', function() {
+            it('should work at your opponents fire province', function() {
                 this.player1.clickPrompt('Pass Conflict');
                 this.player1.clickPrompt('Yes');
                 this.noMoreActions();
                 this.initiateConflict({
-                    province: this.fields,
+                    province: this.meditations,
                     ring: 'earth',
                     type: 'military',
                     attackers: [this.maiden],
                     defenders: [this.wanderer]
                 });
                 this.player1.pass();
-                this.player2.clickCard(this.courage);
-                expect(this.player2).toHavePrompt('Driven By Courage');
+                this.player2.clickCard(this.reward);
+                expect(this.player2).toHavePrompt('Honor\'s Reward');
             });
         });
     });
