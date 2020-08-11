@@ -4,7 +4,15 @@ class SolitaryStrength extends DrawCard {
     setupCardAbilities(ability) {
         this.persistentEffect({
             effect: ability.effects.delayedEffect({
-                condition: context => context.source.parent.isParticipating() && this.game.currentConflict.getNumberOfParticipantsFor(context.player) !== 1,
+                condition: context => {
+                    let participantsForController = this.game.currentConflict.getNumberOfParticipantsFor(context.source.controller);
+                    let parentOwnedByController = context.source.parent.controller === context.source.controller;
+                    if(parentOwnedByController) {
+                        participantsForController = Math.max(0, participantsForController - 1);
+                    }
+
+                    return context.source.parent.isParticipating() && participantsForController > 0;
+                },
                 message: '{0} is discarded from play as {1} is not participating alone in the conflict',
                 messageArgs: context => [context.source, context.source.parent],
                 gameAction: ability.actions.discardFromPlay()
