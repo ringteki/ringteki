@@ -50,7 +50,11 @@ class MasterTactician extends DrawCard {
         });
 
         this.persistentEffect({
-            condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating(),
+            condition: context => {
+                let defending = context.game.currentConflict && context.source.controller.isDefendingPlayer();
+                let preventShowing = defending && !context.game.currentConflict.defendersChosen;
+                return context.game.isTraitInPlay('battlefield') && context.source.isParticipating() && !preventShowing;
+            },
             targetController: Players.Self,
             effect: AbilityDsl.effects.showTopConflictCard(Players.Self)
         });
