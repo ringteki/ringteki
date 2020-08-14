@@ -213,6 +213,7 @@ describe('Storied Defeat', function() {
                 this.player2.clickCard(this.adept);
                 this.player1.pass();
             });
+
             it('should not target the character once it is replayed',function() {
                 this.player2.clickCard(this.adept);
                 this.player2.clickPrompt('0');

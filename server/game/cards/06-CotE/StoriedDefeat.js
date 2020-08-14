@@ -47,7 +47,7 @@ class StoriedDefeat extends DrawCard {
     onConflictFinished() {
         this.duelLosersThisConflict = [];
     }
-    
+
     onCharacterEntersPlay(event) {
         this.duelLosersThisConflict = this.duelLosersThisConflict.filter(card => event.card !== card);
     }
