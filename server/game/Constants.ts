@@ -44,6 +44,7 @@ export enum EffectNames {
     Blank = 'blank',
     CalculatePrintedMilitarySkill = 'calculatePrintedMilitarySkill',
     CanBeSeenWhenFacedown = 'canBeSeenWhenFacedown',
+    CanBeTriggeredByOpponent = 'canBeTriggeredByOpponent',
     CanOnlyBeDeclaredAsAttackerWithElement = 'canOnlyBeDeclaredAsAttackerWithElement',
     CannotApplyLastingEffects = 'cannotApplyLastingEffects',
     CannotBeAttacked = 'cannotBeAttacked',
