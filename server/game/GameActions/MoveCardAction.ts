@@ -33,7 +33,7 @@ export class MoveCardAction extends CardGameAction {
     }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as MoveCardProperties;        
+        let properties = this.getProperties(context) as MoveCardProperties;
         return ['shuffling {0} into their deck', [properties.target]];
     }
 
@@ -53,18 +53,19 @@ export class MoveCardAction extends CardGameAction {
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
         const { changePlayer, destination } = this.getProperties(context, additionalProperties) as MoveCardProperties;
-        return (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) && 
+        const canMove = (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) &&
                 !card.anotherUniqueInPlay(context.player)) &&
                 (!destination || context.player.isLegalLocationForCard(card, destination)) &&
-                card.location !== Locations.PlayArea && 
+                card.location !== Locations.PlayArea &&
                 super.canAffect(card, context);
+        return canMove;
     }
 
     eventHandler(event, additionalProperties = {}): void {
         let context = event.context;
         let card = event.card;
         event.cardStateWhenMoved = card.createSnapshot();
-        let properties = this.getProperties(context, additionalProperties) as MoveCardProperties;        
+        let properties = this.getProperties(context, additionalProperties) as MoveCardProperties;
         if(properties.switch && properties.switchTarget) {
             let otherCard = properties.switchTarget;
             card.owner.moveCard(otherCard, card.location);
