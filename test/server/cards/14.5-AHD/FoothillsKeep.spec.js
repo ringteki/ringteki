@@ -225,5 +225,49 @@ describe('Foothills Keep', function() {
                 expect(this.player1).toHavePromptButton('Initiate Conflict');
             });
         });
+
+        describe('Interactions with Seven Stings Keep', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        stronghold: ['seven-stings-keep'],
+                        provinces: ['fertile-fields', 'pilgrimage'],
+                        inPlay: ['caravan-guard', 'alibi-artist']
+                    },
+                    player2: {
+                        provinces: ['midnight-revels', 'manicured-garden', 'foothills-keep', 'meditations-on-the-tao'],
+                        inPlay: ['brash-samurai'],
+                        dynastyDiscard: ['hito-district']
+                    }
+                });
+
+                this.revels = this.player2.findCardByName('midnight-revels');
+                this.manicured = this.player2.findCardByName('manicured-garden');
+                this.foothills = this.player2.findCardByName('foothills-keep');
+                this.meditations = this.player2.findCardByName('meditations-on-the-tao');
+
+                this.stings = this.player1.findCardByName('seven-stings-keep');
+                this.fertileFields = this.player1.findCardByName('fertile-fields');
+                this.pilgrimage = this.player1.findCardByName('pilgrimage');
+
+                this.guard = this.player1.findCardByName('caravan-guard');
+                this.alibi = this.player1.findCardByName('alibi-artist');
+                this.brash = this.player2.findCardByName('brash-samurai');
+                this.hito = this.player2.moveCard('hito-district', this.foothills.location);
+
+                this.foothills.facedown = false;
+            });
+
+            it('1 fate, should only let you choose 1', function() {
+                this.player1.fate = 1;
+                this.noMoreActions();
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.stings);
+                this.player1.clickCard(this.stings);
+                expect(this.getChatLogs(3)).toContain('player1 will attack with 1 character');
+            });
+        });
     });
 });
