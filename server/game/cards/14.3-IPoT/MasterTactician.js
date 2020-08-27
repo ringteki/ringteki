@@ -44,7 +44,7 @@ class MasterTactician extends DrawCard {
             condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating() && this.cardsPlayedThisRound < MAXIMUM_CARDS_ALLOWED,
             targetLocation: Locations.ConflictDeck,
             match: (card, context) => {
-                return context && card === context.player.conflictDeck.first();
+                return context && context.player.conflictDeck.size() > 0 && card === context.player.conflictDeck.first();
             },
             effect: AbilityDsl.effects.canPlayFromOutOfPlay()
         });

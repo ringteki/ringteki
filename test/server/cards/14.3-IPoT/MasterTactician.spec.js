@@ -304,6 +304,20 @@ describe('Master Tactician', function() {
                 this.player1.clickCard(this.soul);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
+
+            it('should work if your conflict deck is empty', function () {
+                this.player1.reduceDeckToNumber('conflict deck', 0);
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+            });
         });
 
         it('chat messages', function () {
