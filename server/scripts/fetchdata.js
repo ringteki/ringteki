@@ -1,6 +1,6 @@
 /*eslint no-console:0 */
 const request = require('request');
-import monk from 'monk';
+const monk = require('monk');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
