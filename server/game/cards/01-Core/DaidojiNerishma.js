@@ -8,7 +8,7 @@ class DaidojiNerishma extends DrawCard {
             target: {
                 controller: Players.Self,
                 location: Locations.Provinces,
-                cardCondition: card => card.isDynasty && card.facedown,
+                cardCondition: card => card.isDynasty && card.isFacedown(),
                 gameAction: ability.actions.flipDynasty()
             }
         });

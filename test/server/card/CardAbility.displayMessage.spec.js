@@ -8,11 +8,13 @@ describe('CardAbility displayMessage', function() {
         this.gameSpy.gameChat = new GameChat();
         this.player = {
             name: 'Player 1',
-            getShortSummary: () => this.player
+            getShortSummary: () => this.player,
+            isFacedown: () => false
         };
-        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'getShortSummary']);
+        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'getShortSummary', 'isFacedown']);
         this.cardSpy.type = 'event';
         this.cardSpy.getShortSummary.and.returnValue(this.cardSpy);
+        this.cardSpy.isFacedown.and.returnValue(false);
     });
 
     describe('Assassinaton', function() {
@@ -85,8 +87,8 @@ describe('CardAbility displayMessage', function() {
 
     describe('Forged Edict', function() {
         beforeEach(function() {
-            this.courtier = { name: 'courtier', getShortSummary: () => this.courtier };
-            this.eventToCancel = { name: 'eventToCancel', getShortSummary: () => this.eventToCancel };
+            this.courtier = { name: 'courtier', getShortSummary: () => this.courtier, isFacedown: () => false };
+            this.eventToCancel = { name: 'eventToCancel', getShortSummary: () => this.eventToCancel, isFacedown: () => false };
             this.ability = new CardAbility(this.gameSpy, this.cardSpy, {
                 cost: AbilityDsl.costs.dishonor({ cardCondition: card => card.hasTrait('courtier') }),
                 effect: 'cancel {1}',
@@ -159,6 +161,10 @@ describe('CardAbility displayMessage', function() {
 
                 getShortSummary() {
                     return this;
+                }
+
+                isFacedown() {
+                    return false;
                 }
             }
             this.opponent = new Player('Player 2');

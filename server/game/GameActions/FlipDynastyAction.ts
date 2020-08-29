@@ -17,8 +17,7 @@ export class FlipDynastyAction extends CardGameAction {
     }
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        return card.isInProvince() && card.location !== Locations.StrongholdProvince &&
-            card.isDynasty && card.facedown && super.canAffect(card, context);
+        return card.isInProvince() && card.isDynasty && card.isFacedown() && super.canAffect(card, context);
     }
 
     eventHandler(event): void {

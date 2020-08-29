@@ -34,14 +34,16 @@ class RisingStarsKata extends DrawCard {
     }
 
     afterDuel(event) {
-        if(Array.isArray(event.duel.winner)) {
-            this.duel.winner.forEach(duelWinner => {
+        if(event.duel.winner) {
+            let winners = event.duel.winner;
+            if(!Array.isArray(winners)) {
+                winners = [winners];
+            }
+            winners.forEach(duelWinner => {
                 if(this.duelWinnersThisConflict.indexOf(duelWinner) === -1) {
                     this.duelWinnersThisConflict.push(duelWinner);
                 }
             });
-        } else if(event.duel.winner) {
-            this.duelWinnersThisConflict.push(event.duel.winner);
         }
     }
 }

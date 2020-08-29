@@ -7,7 +7,7 @@ class PlayAttachmentAction extends BaseAction {
     constructor(card, ignoreType = false) {
         super(card, [Costs.payTargetDependentFateCost('target', ignoreType)], {
             location: [Locations.PlayArea, Locations.Provinces],
-            gameAction: GameActions.attach(context => ({ attachment: context.source, ignoreType: ignoreType })),
+            gameAction: GameActions.attach(context => ({ attachment: context.source, ignoreType: ignoreType, takeControl: context.source.controller !== context.player })),
             cardCondition: (card, context) => context.source.canPlayOn(card)
         });
         this.title = 'Play this attachment';
@@ -30,7 +30,7 @@ class PlayAttachmentAction extends BaseAction {
     }
 
     displayMessage(context) {
-        if(context.target.type === CardTypes.Province && context.target.facedown) {
+        if(context.target.type === CardTypes.Province && context.target.isFacedown()) {
             context.game.addMessage('{0} plays {1}, attaching it to {2}', context.player, context.source, context.target.location);
         } else {
             context.game.addMessage('{0} plays {1}, attaching it to {2}', context.player, context.source, context.target);

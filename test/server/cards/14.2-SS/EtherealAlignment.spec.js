@@ -156,5 +156,23 @@ describe('Ethereal Alignment', function() {
             this.player1.clickCard(this.toshimoko);
             expect(this.toshimoko.bowed).toBe(false);
         });
+
+        it('should remove itself from the game', function() {
+            this.toshimoko.bowed = true;
+            this.game.checkGameState(true);
+            this.station.isBroken = true;
+            this.player1.claimRing('fire');
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.station);
+            expect(this.player1).toHavePrompt('Action Window');
+
+            this.noMoreActions();
+            this.player2.clickPrompt('military');
+            this.player1.clickCard(this.alignment);
+            expect(this.station.isBroken).toBe(true);
+            this.player1.clickCard(this.station);
+            expect(this.getChatLogs(10)).toContain('player1 plays Ethereal Alignment to restore Magistrate Station');
+            expect(this.alignment.location).toBe('removed from game');
+        });
     });
 });

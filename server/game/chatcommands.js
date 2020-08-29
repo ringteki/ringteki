@@ -223,7 +223,7 @@ class ChatCommands {
             waitingPromptTitle: 'Waiting for opponent to reveal a facedown card',
             location: Locations.Provinces,
             controller: Players.Self,
-            cardCondition: card => card.facedown,
+            cardCondition: card => card.isFacedown(),
             onSelect: (player, card) => {
                 GameActions.reveal({ target: card }).resolve(player, this.game.getFrameworkContext());
                 this.game.addMessage('{0} reveals {1}', player, card);

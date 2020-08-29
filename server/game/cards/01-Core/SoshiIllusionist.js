@@ -1,14 +1,15 @@
 const DrawCard = require('../../drawcard.js');
 const { CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
 
 class SoshiIllusionist extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Discard status from character',
-            cost: ability.costs.payFate(1),
+            cost: AbilityDsl.costs.payFate(1),
             target: {
                 cardType: CardTypes.Character,
-                gameAction: ability.actions.discardStatusToken(context => ({ target: context.target.personalHonor }))
+                gameAction: AbilityDsl.actions.discardStatusToken(context => ({ target: context.target.personalHonor }))
             }
         });
     }

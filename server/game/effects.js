@@ -116,10 +116,7 @@ const Effects = {
     additionalAction: (amount = 1) => EffectBuilder.player.static(EffectNames.AdditionalAction, amount),
     additionalCardPlayed: (amount = 1) => EffectBuilder.player.flexible(EffectNames.AdditionalCardPlayed, amount),
     additionalCharactersInConflict: (amount) => EffectBuilder.player.flexible(EffectNames.AdditionalCharactersInConflict, amount),
-    additionalConflict: (type) => EffectBuilder.player.detached(EffectNames.AdditionalConflict, {
-        apply: player => player.addConflictOpportunity(type),
-        unapply: () => true
-    }),
+    additionalConflict: (type) => EffectBuilder.player.static(EffectNames.AdditionalConflict, type),
     additionalTriggerCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalTriggerCost, func),
     additionalPlayCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalPlayCost, func),
     alternateFatePool: (match) => EffectBuilder.player.static(EffectNames.AlternateFatePool, match),

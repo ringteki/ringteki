@@ -79,7 +79,22 @@ describe('Kuni Wasteland', function() {
                 expect(this.player1).toHavePrompt('Choose covert target for Iuchi Shahai');
             });
 
-            it('should not allow covert (if faceup)', function() {
+            it('should not allow covert (if faceup) - using post-declaration prompt', function() {
+                this.wasteland.facedown = false;
+                this.noMoreActions();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.wasteland);
+                this.player1.clickCard(this.shahai);
+                this.player1.clickCard(this.whisperer);
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1).not.toHavePrompt('Choose covert target for Iuchi Shahai');
+                expect(this.player2).toHavePrompt('Choose defenders');
+                this.player2.clickCard(this.whisperer);
+                this.player2.clickPrompt('Done');
+                expect(this.game.currentConflict.defenders).toContain(this.whisperer);
+            });
+
+            it('should not allow covert (if faceup) - using in-declaration prompt', function() {
                 this.wasteland.facedown = false;
                 this.noMoreActions();
                 this.player1.clickRing('air');

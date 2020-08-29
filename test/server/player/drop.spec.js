@@ -4,21 +4,26 @@ const Player = require('../../../build/server/game/player.js');
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'checkGameState', 'emitEvent', 'getOtherPlayer', 'raiseEvent']);
+            this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'checkGameState', 'emitEvent', 'getOtherPlayer', 'raiseEvent', 'getProvinceArray']);
 
             this.player = new Player('1', { username: 'Player 1', settings: {} }, true, this.gameSpy);
             spyOn(this.player, 'moveCard');
+            this.player.isFacedown = () => false;
+            this.player.isFaceup = () => true;
 
             this.gameSpy.playersAndSpectators = [];
             this.gameSpy.playersAndSpectators[this.player.name] = this.player;
             this.gameSpy.manualMode = true;
+            this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
 
-            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo']);
+            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'isFacedown', 'isFaceup']);
             this.cardSpy.uuid = '1111';
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.type = 'character';
             this.cardSpy.attachments = _([]);
             this.cardSpy.isProvince = false;
+            this.cardSpy.isFacedown.and.returnValue(false);
+            this.cardSpy.isFaceup.and.returnValue(true);
         });
 
         describe('when dragging a card from hand to play area', function() {

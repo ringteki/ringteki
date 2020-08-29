@@ -309,6 +309,15 @@ describe('Master Tactician', function() {
             this.player1.clickCard(this.voice);
             expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
         });
+
+        it('Should not let you see the card until after you commit to the conflict', function() {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.noMoreActions();
+            this.player1.clickCard(this.tactician);
+            expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+            expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+        });
     });
 });
 
@@ -480,6 +489,44 @@ describe('Two Master Tacticians', function() {
             this.player2.pass();
             this.player1.clickCard(this.lion);
             this.player1.clickCard(this.tactician2);
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.dragon);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('with the prompt off - should still let 6 cards be played', function () {
+            this.player1.player.optionSettings.orderForcedAbilities = false;
+            this.player2.pass();
+
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+
+            this.player2.pass();
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.isHonored).toBe(true);
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.tactician);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.voice);
+            this.player1.clickCard(this.voice);
+
+            this.player1.clickCard(this.fan);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.fan);
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.crane);
+            this.player2.pass();
+            this.player1.clickCard(this.lion);
+            this.player1.clickCard(this.tactician2);
+            expect(this.tactician2.attachments.toArray()).toContain(this.lion);
 
             this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');

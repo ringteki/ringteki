@@ -74,7 +74,7 @@ class MenuCommands {
                 card.facedown = false;
                 break;
             case 'refill':
-                game.addMessage('{0} refills {1}', player, card.facedown ? card.location : card);
+                game.addMessage('{0} refills {1}', player, card.isFacedown() ? card.location : card);
                 card.controller.replaceDynastyCard(card.location);
                 break;
         }

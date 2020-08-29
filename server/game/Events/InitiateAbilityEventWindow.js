@@ -55,9 +55,9 @@ class InitiateAbilityEventWindow extends EventWindow {
     }
 
     executeHandler() {
-        this.events = _.sortBy(this.events, 'order');
+        this.eventsToExecute = _.sortBy(this.events, 'order');
 
-        _.each(this.events, event => {
+        _.each(this.eventsToExecute, event => {
             event.checkCondition();
             if(!event.cancelled) {
                 event.executeHandler();
@@ -70,7 +70,8 @@ class InitiateAbilityEventWindow extends EventWindow {
     }
 
     emitEvents() {
-        _.each(this.events, event => this.game.emit(event.name, event));
+        this.eventsToExecute = this.eventsToExecute.filter(event => !event.cancelled);
+        _.each(this.eventsToExecute, event => this.game.emit(event.name, event));
     }
 }
 

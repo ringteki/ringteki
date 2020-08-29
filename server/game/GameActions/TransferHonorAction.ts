@@ -1,8 +1,8 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
-import { EventNames, EffectNames } from '../Constants';
-import HonorLogic from './Shared/HonorLogic';
+import { EventNames } from '../Constants';
+import { CalculateHonorLimit } from './Shared/HonorLogic';
 
 export interface TransferHonorProperties extends PlayerActionProperties {
     amount?: number;
@@ -20,12 +20,14 @@ export class TransferHonorAction extends PlayerAction {
 
     getCostMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferHonorProperties;
-        return ['giving {1} honor to {2}', [properties.amount, context.player.opponent]];
+        var [_, amountToTransfer] = CalculateHonorLimit(context.player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        return ['giving {1} honor to {2}', [amountToTransfer, context.player.opponent]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferHonorProperties;
-        return ['take {1} honor from {0}', [properties.target, properties.amount]];
+        var [_, amountToTransfer] = CalculateHonorLimit(context.player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        return ['take {1} honor from {0}', [context.player.opponent, amountToTransfer]];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
@@ -35,7 +37,7 @@ export class TransferHonorAction extends PlayerAction {
         if(!gainsHonor)
             return false;
 
-        var [hasLimit, amountToTransfer] = HonorLogic.CalculateHonorLimit(player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        var [hasLimit, amountToTransfer] = CalculateHonorLimit(player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
         if(hasLimit && !amountToTransfer)
             return false;
 
@@ -50,7 +52,7 @@ export class TransferHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        var [_, amountToTransfer] = HonorLogic.CalculateHonorLimit(event.player.opponent, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
+        var [_, amountToTransfer] = CalculateHonorLimit(event.player.opponent, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
 
         if(event.player && event.player.opponent) {
             event.player.modifyHonor(-amountToTransfer);

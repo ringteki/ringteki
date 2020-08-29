@@ -3,7 +3,7 @@ const cards = require('../../../build/server/game/cards');
 
 describe('All Cards:', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'addPower', 'addMessage', 'addEffect']);
+        this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'addPower', 'addMessage', 'addEffect', 'getProvinceArray']);
         this.gameSpy.rings = {
             air: {},
             earth: {},
@@ -13,6 +13,7 @@ describe('All Cards:', function() {
         };
         this.playerSpy = jasmine.createSpyObj('player', ['registerAbilityMax']);
         this.playerSpy.game = this.gameSpy;
+        this.gameSpy.getProvinceArray.and.returnValue(['province 1', 'province 2', 'province 3', 'province 4', 'stronghold province']);
     });
 
     _.each(cards, cardClass => {

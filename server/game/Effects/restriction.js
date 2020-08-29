@@ -8,6 +8,8 @@ const checkRestrictions = {
     attachmentsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Attachment &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
+    attackedProvince: (context) =>
+        context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source,
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
@@ -28,6 +30,7 @@ const checkRestrictions = {
         context.player === effect.context.player.opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>
         context.player === effect.context.player.opponent && context.ability.isCardAbility(),
+    provinces: context => context.source.type === CardTypes.Province,
     reactions: context => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,
     keywordAbilities: context => context.ability.isKeywordAbility(),

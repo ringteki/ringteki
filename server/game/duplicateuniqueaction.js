@@ -8,7 +8,7 @@ class DuplicateUniqueAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('facedown') && this.card.facedown) {
+        if(!ignoredRequirements.includes('facedown') && this.card.isFacedown()) {
             return 'facedown';
         }
 

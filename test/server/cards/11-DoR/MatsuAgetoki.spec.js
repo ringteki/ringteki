@@ -51,7 +51,8 @@ describe('Matsu Agetoki', function() {
                 expect(this.sanpukuSeido.inConflict).toBe(true);
                 expect(this.game.currentConflict.conflictProvince).toBe(this.sanpukuSeido);
 
-                expect(this.getChatLogs(10)).toContain('player1 uses Matsu Agetoki to move the conflict to Sanpuku Seidō');
+                expect(this.getChatLogs(10)).toContain('player1 uses Matsu Agetoki to move the conflict to another eligible province');
+                expect(this.getChatLogs(10)).toContain('player1 moves the conflict to Sanpuku Seidō');
             });
 
             it('should apply any constant abilities of the new province', function() {

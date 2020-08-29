@@ -61,7 +61,7 @@ describe('Hisu Mori Toride', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.ideTrader);
                 this.player1.clickCard(this.borderRider);
                 expect(this.player1.player.getConflictOpportunities()).toBe(2);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 expect(this.borderRider.location).toBe('dynasty discard pile');
                 expect(this.hisuMoriToride.bowed).toBe(true);
             });
@@ -79,7 +79,7 @@ describe('Hisu Mori Toride', function() {
                 expect(this.player1).toHavePrompt('Select card to sacrifice');
                 this.player1.clickCard(this.aggressiveMoto);
                 expect(this.player1.player.getConflictOpportunities()).toBe(2);
-                expect(this.player1.player.getConflictOpportunities('military')).toBe(1);
+                expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 this.player1.clickPrompt('No');
                 this.player1.clickPrompt('Gain 2 Honor');
                 this.noMoreActions();

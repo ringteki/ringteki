@@ -5,7 +5,8 @@ describe('Shinjo Kyora', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shinjo-kyora', 'moto-youth']
+                        inPlay: ['shinjo-kyora','moto-youth'],
+                        hand: ['four-temples-advisor']
                     },
                     player2: {
                         inPlay: ['shinjo-kyora']
@@ -13,6 +14,7 @@ describe('Shinjo Kyora', function() {
                 });
                 this.shinjoKyoraP1 = this.player1.findCardByName('shinjo-kyora');
                 this.shinjoKyoraP2 = this.player2.findCardByName('shinjo-kyora');
+                this.advisor = this.player1.findCardByName('four-temples-advisor');
                 this.noMoreActions();
                 this.game.rings.fire.fate = 1;
             });
@@ -58,6 +60,24 @@ describe('Shinjo Kyora', function() {
                 this.player2.clickCard(this.shinjoKyoraP2);
                 this.player2.clickRing('fire');
                 expect(this.player1.fate).toBe(fateP1 + 1);
+            });
+
+            it('should trigger reactions to gaining fate from rings', function() {
+                this.initiateConflict({
+                    attackers: ['moto-youth'],
+                    defenders: [this.shinjoKyoraP2]
+                });
+                this.player2.pass();
+                this.player1.playAttachment(this.advisor, 'moto-youth');
+                let fateP1 = this.player1.fate;
+                this.player2.clickCard(this.shinjoKyoraP2);
+                this.player2.clickRing('fire');
+                expect(this.player1.fate).toBe(fateP1 + 1);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.advisor);
+                let hand = this.player1.hand.length;
+                this.player1.clickCard(this.advisor);
+                expect(this.player1.hand.length).toBe(hand + 1);
             });
         });
     });

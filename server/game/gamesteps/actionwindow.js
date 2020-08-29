@@ -111,7 +111,7 @@ class ActionWindow extends UiPrompt {
                 activePrompt: 'Which ability are you using?',
                 location: Locations.Any,
                 controller: Players.Self,
-                cardCondition: card => !card.facedown,
+                cardCondition: card => card.isFaceup(),
                 onSelect: (player, card) => {
                     this.game.addMessage('{0} uses {1}\'s ability', player, card);
                     this.prevPlayerPassed = false;
