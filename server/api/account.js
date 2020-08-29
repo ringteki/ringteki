@@ -780,4 +780,4 @@ async function checkAuth(req, res) {
     }
 
     return user;
-} 
+}

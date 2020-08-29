@@ -6,7 +6,7 @@ const { wrapAsync } = require('../util.js');
 
 module.exports.init = function(server, options) {
     let newsService = new NewsService(options.db);
-    
+
     server.get('/api/news', function(req, res) {
         newsService.getRecentNewsItems({ limit: req.query.limit })
             .then(news => {

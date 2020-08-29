@@ -15,7 +15,7 @@ class GameRouter extends EventEmitter {
 
         this.workers = {};
         //@ts-ignore TS2349
-        this.gameService = new GameService(monk(configService.getValue('dbPath'))); 
+        this.gameService = new GameService(monk(configService.getValue('dbPath')));
 
         router.bind(`tcp://0.0.0.0:${configService.getValue('mqPort')}`, err => {
             if(err) {

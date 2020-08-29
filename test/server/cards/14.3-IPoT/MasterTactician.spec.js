@@ -497,7 +497,7 @@ describe('Two Master Tacticians', function() {
         });
 
         it('with the prompt off - should still let 6 cards be played', function () {
-            this.player1.player.optionSettings.orderForcedAbilities = false;
+            this.player1.player.keywordSettings.orderForcedAbilities = false;
             this.player2.pass();
 
             this.player1.clickCard(this.tactical);

@@ -208,7 +208,7 @@ describe('Under Siege', function() {
         });
 
         it('simultaneous events - should not have multiple events when only 1 under siege is played', function() {
-            this.player1.player.optionSettings.orderForcedAbilities = true;
+            this.player1.player.keywordSettings.orderForcedAbilities = true;
 
             this.initiateConflict({
                 attackers: [this.wanderer]
@@ -339,7 +339,7 @@ describe('Two Under Sieges', function() {
         });
 
         it('simultaneous events - should let first player order - picking up original hand', function() {
-            this.player1.player.optionSettings.orderForcedAbilities = true;
+            this.player1.player.keywordSettings.orderForcedAbilities = true;
 
             this.initiateConflict({
                 attackers: [this.wanderer]
@@ -369,7 +369,7 @@ describe('Two Under Sieges', function() {
         });
 
         it('simultaneous events - should let first player order - picking up new hand', function() {
-            this.player1.player.optionSettings.orderForcedAbilities = true;
+            this.player1.player.keywordSettings.orderForcedAbilities = true;
 
             this.initiateConflict({
                 attackers: [this.wanderer]

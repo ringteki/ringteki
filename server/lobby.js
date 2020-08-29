@@ -619,7 +619,7 @@ class Lobby {
             .then(results => {
                 let [cards, packs, deck] = results;
                 let factions = [];
-                
+
                 for(const faction of Factions) {
                     factions[faction.value] = faction;
                 }

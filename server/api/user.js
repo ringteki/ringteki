@@ -1,4 +1,4 @@
-  
+
 const passport = require('passport');
 
 const { wrapAsync } = require('../util.js');

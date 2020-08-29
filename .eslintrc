@@ -1,21 +1,22 @@
 {
-  "extends": "eslint:recommended",
-  "parser": "babel-eslint", // This line is required to fix "unexpected token" errors
+  "plugins": [
+    "jasmine"
+  ],
+  "env": {
+    "node": true,
+    "es6": true,
+    "jasmine": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:jasmine/recommended"
+  ],
   "rules": {
-    "arrow-spacing": [
-      "error",
-      {
-        "before": true,
-        "after": true
-      }
-    ],
-    "comma-spacing": [
-      "error",
-      {
-        "before": false,
-        "after": true
-      }
-    ],
+    "jasmine/no-spec-dupes": 0,
+    "jasmine/no-suite-dupes": 0,
+    "jasmine/missing-expect": 1,
+    "jasmine/new-line-before-expect": 0,
+    "jasmine/prefer-toHaveBeenCalledWith": 0,
     "indent": [
       2,
       4,
@@ -95,10 +96,7 @@
       2
     ],
     "no-multiple-empty-lines": [
-      2,
-      {
-        "max": 1
-      }
+      2
     ],
     "eol-last": [
       2
@@ -128,30 +126,9 @@
         }
       }
     ],
-    "padded-blocks": [
-      "error",
-      "never"
-    ],
-    "padding-line-between-statements": [
-      "error",
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "cjs-export"
-      }
+    "no-trailing-spaces": [
+      2
     ]
   },
-  "env": {
-    "browser": false,
-    "node": true,
-    "es6": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 9,
-    "ecmaFeatures": {
-      "impliedStrict": true,
-      "modules": false
-    },
-    "sourceType": "module"
-  }
+  "parser": "babel-eslint"
 }

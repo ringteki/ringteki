@@ -3,7 +3,7 @@ const SelectCardPrompt = require('../../../build/server/game/gamesteps/selectcar
 
 describe('the SelectCardPrompt', function() {
     function createCardSpy(properties = {}) {
-        let card = jasmine.createSpyObj('card', ['allowGameAction', 'getType']); 
+        let card = jasmine.createSpyObj('card', ['allowGameAction', 'getType']);
         card.getType.and.returnValue('character');
         card.allowGameAction.and.returnValue(true);
         _.extend(card, properties);

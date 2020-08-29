@@ -1,7 +1,7 @@
 const patreon = require('patreon');
 const patreonAPI = patreon.patreon;
 const patreonOAuth = patreon.oauth;
-const pledge_schema = require('patreon/dist/schemas/pledge').default; // eslint-disable-line camelcase 
+const pledge_schema = require('patreon/dist/schemas/pledge').default; // eslint-disable-line camelcase
 
 const logger = require('../log.js');
 
@@ -34,8 +34,8 @@ class PatreonService {
 
         if(!pUser || !pUser.pledges || pUser.pledges.length === 0) {
             return 'linked';
-        } 
-        
+        }
+
         return 'pledged';
     }
 
@@ -47,7 +47,7 @@ class PatreonService {
             logger.error('Error refreshing patreon account', err);
             return undefined;
         }
-        
+
         let userDetails = user.getDetails();
         // eslint-disable-next-line require-atomic-updates
         user.patreon = userDetails.patreon = response;
@@ -72,7 +72,7 @@ class PatreonService {
         }
 
         response.date = new Date();
-        
+
         let dbUser = await this.userService.getUserByUsername(username);
         if(!dbUser) {
             logger.error('Error linking patreon account, user not found');

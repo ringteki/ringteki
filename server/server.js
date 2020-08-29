@@ -121,7 +121,7 @@ class Server {
 
 module.exports = Server;
 
-/* 
+/*
 class Server {
     constructor(isDeveloping) {
         let db = monk(config.dbPath);
