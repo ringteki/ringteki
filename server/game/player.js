@@ -1345,7 +1345,7 @@ class Player extends GameObject {
     }
 
     getSummaryForHand(list, activePlayer, hideWhenFaceup) {
-        if(this.optionSettings.sortHandByName) {
+        if(this.keywordSettings.sortHandByName) {
             return this.getSortedSummaryForCardList(list, activePlayer, hideWhenFaceup);
         }
         return this.getSummaryForCardList(list, activePlayer, hideWhenFaceup);
