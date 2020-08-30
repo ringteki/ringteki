@@ -1,92 +1,82 @@
 import { CardGameAction, CardActionProperties} from './CardGameAction';
-import { CardTypes, Locations, EffectNames } from '../Constants';
+import { CardTypes, Locations, EffectNames, EventNames } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
 import DrawCard = require('../drawcard');
 
-export interface MoveCardProperties extends CardActionProperties {
-    destination?: Locations;
+export interface PutInProvinceProperties extends CardActionProperties {
+    destination: Locations;
     switch?: boolean;
     switchTarget?: DrawCard;
-    shuffle?: boolean;
     faceup?: boolean;
-    bottom?: boolean;
     changePlayer?: boolean;
     discardDestinationCards?: boolean;
 }
 
-export class MoveCardAction extends CardGameAction {
-    name = 'move';
-    targetType = [CardTypes.Character, CardTypes.Attachment, CardTypes.Event, CardTypes.Holding];
-    defaultProperties: MoveCardProperties = {
+export class PutInProvinceAction extends CardGameAction {
+    name = 'putInProvince';
+    eventName = EventNames.OnCardLeavesPlay;
+    targetType = [CardTypes.Character, CardTypes.Attachment];
+    defaultProperties: PutInProvinceProperties = {
         destination: null,
         switch: false,
         switchTarget: null,
-        shuffle: false,
-        faceup: false,
-        bottom: false,
+        faceup: true,
         changePlayer: false,
         discardDestinationCards: false
     };
-    constructor(properties: MoveCardProperties | ((context: AbilityContext) => MoveCardProperties)) {
+    constructor(properties: PutInProvinceProperties | ((context: AbilityContext) => PutInProvinceProperties)) {
         super(properties);
     }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as MoveCardProperties;        
-        return ['shuffling {0} into their deck', [properties.target]];
+        let properties = this.getProperties(context) as PutInProvinceProperties;
+        return ['putting {0} into {1}}', [properties.target, properties.destination]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as MoveCardProperties;
+        let properties = this.getProperties(context) as PutInProvinceProperties;
         let destinationController = Array.isArray(properties.target) ?
             (properties.changePlayer ? properties.target[0].controller.opponent : properties.target[0].controller) :
             (properties.changePlayer ? properties.target.controller.opponent : properties.target.controller);
-        if(properties.shuffle) {
-            return ['shuffle {0} into {1}\'s {2}', [properties.target, destinationController, properties.destination]]
-        }
         return [
-            'move {0} to ' + (properties.bottom ? 'the bottom of ' : '') + '{1}\'s {2}',
+            'move {0} to {1}\'s {2}',
             [properties.target, destinationController, properties.destination]
         ];
     }
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
-        const { changePlayer, destination } = this.getProperties(context, additionalProperties) as MoveCardProperties;
-        return (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) && 
-                !card.anotherUniqueInPlay(context.player)) &&
+        const { changePlayer, destination } = this.getProperties(context, additionalProperties) as PutInProvinceProperties;
+        const canMove = (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context)) &&
                 (!destination || context.player.isLegalLocationForCard(card, destination)) &&
-                card.location !== Locations.PlayArea && 
+                card.location === Locations.PlayArea &&
                 super.canAffect(card, context);
+        return canMove;
     }
 
     eventHandler(event, additionalProperties = {}): void {
         let context = event.context;
         let card = event.card;
         event.cardStateWhenMoved = card.createSnapshot();
-        let properties = this.getProperties(context, additionalProperties) as MoveCardProperties;        
+        let properties = this.getProperties(context, additionalProperties) as PutInProvinceProperties;
         if(properties.switch && properties.switchTarget) {
             let otherCard = properties.switchTarget;
             card.owner.moveCard(otherCard, card.location);
-        } else {
-            this.checkForRefillProvince(card, event, additionalProperties);
         }
+
         const player = properties.changePlayer && card.controller.opponent ? card.controller.opponent : card.controller;
+        if(card.isConflict && [...context.game.getProvinceArray()].includes(properties.destination)) {
+            context.game.addMessage('{0} is discarded instead since it can\'t enter a province legally!', card);
+            properties.destination = Locations.ConflictDiscardPile;
+        }
         if(properties.discardDestinationCards && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(properties.destination)) {
             let cardsToDiscard = player.getSourceList(properties.destination).filter(card => card.isDynasty);
             for(const card of cardsToDiscard) {
                 player.moveCard(card, Locations.DynastyDiscardPile);
             }
         }
-        player.moveCard(card, properties.destination, { bottom: !!properties.bottom });
-        let target = properties.target;
-        if(properties.shuffle && (target.length === 0 || card === target[target.length - 1])) {
-            if(properties.destination === Locations.ConflictDeck) {
-                card.owner.shuffleConflictDeck();
-            } else if(properties.destination === Locations.DynastyDeck) {
-                card.owner.shuffleDynastyDeck();
-            }
-        } else if(properties.faceup) {
+        player.moveCard(card, properties.destination);
+        if(properties.faceup) {
             card.facedown = false;
         }
         card.checkForIllegalAttachments();

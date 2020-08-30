@@ -1050,7 +1050,7 @@ class Player extends GameObject {
         }
 
 
-        const conflictCardLocations = [Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
+        const conflictCardLocations = [...this.game.getProvinceArray(), Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
         const dynastyCardLocations = [...this.game.getProvinceArray(), Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
         const legalLocations = {
             stronghold: [Locations.StrongholdProvince],

@@ -19,11 +19,11 @@ class MasterOfManyLifetimes extends DrawCard {
             gameAction: AbilityDsl.actions.cancel(context => ({
                 replacementGameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.returnToHand(context => ({
-                        target: context.event.card.attachments
+                        target: context.event.card.attachments.toArray()
                     })),
-                    AbilityDsl.actions.moveCard({
+                    AbilityDsl.actions.putIntoProvince({
                         target: context.event.card,
-                        destination: context.target
+                        destination: context.target.location
                     })
                 ])
             }))
