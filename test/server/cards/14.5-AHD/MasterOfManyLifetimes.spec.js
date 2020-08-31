@@ -22,6 +22,13 @@ describe('Master Of Many Lifetimes', function() {
             this.ornateFan = this.player1.findCardByName('ornate-fan');
             this.shameful = this.player1.findCardByName('shameful-display', 'province 1');
 
+            this.p1_1 = this.player1.findCardByName('shameful-display', 'province 1');
+            this.p1_2 = this.player1.findCardByName('shameful-display', 'province 2');
+            this.p1_3 = this.player1.findCardByName('shameful-display', 'province 3');
+            this.p1_4 = this.player1.findCardByName('shameful-display', 'province 4');
+            this.p1_4 = this.player1.findCardByName('shameful-display', 'province 4');
+            this.p1_Stronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
+
             this.keeper = this.player2.findCardByName('keeper-initiate');
             this.assassination = this.player2.findCardByName('assassination');
         });
@@ -51,6 +58,35 @@ describe('Master Of Many Lifetimes', function() {
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.keeper);
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
+        });
+
+
+        it('should allow you to choose a facedown province you control', function() {
+            this.p1_1.facedown = false;
+            this.p1_2.facedown = false;
+            this.p1_3.facedown = false;
+            this.p1_4.facedown = true;
+            this.p1_Stronghold.facedown = true;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.berserker],
+                defenders: []
+            });
+
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.berserker);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.moml);
+
+            this.player1.clickCard(this.moml);
+
+            expect(this.player1).not.toBeAbleToSelect(this.p1_1);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_2);
+            expect(this.player1).not.toBeAbleToSelect(this.p1_3);
+            expect(this.player1).toBeAbleToSelect(this.p1_4);
+            expect(this.player1).toBeAbleToSelect(this.p1_Stronghold);
         });
 
         it('should return all attachments to hand and the character to the chosen province', function() {
