@@ -10,7 +10,7 @@ class TheRecedingTide extends DrawCard {
                 cardType: CardTypes.Character,
                 location: Locations.PlayArea,
                 mode: TargetModes.Single,
-                cardCondition: card => !card.hasTrait('mythic') && card.owner === this.owner,
+                cardCondition: card => !card.hasTrait('mythic') && card.owner === this.controller,
                 gameAction: AbilityDsl.actions.selectCard(context => ({
                     targets: false,
                     cardType: CardTypes.Province,
