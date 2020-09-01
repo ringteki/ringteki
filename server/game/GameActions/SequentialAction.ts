@@ -42,7 +42,7 @@ export class SequentialAction extends GameAction {
             context.game.queueSimpleStep(() => {
                 if(gameAction.hasLegalTarget(context, additionalProperties)) {
                     let eventsForThisAction = [];
-                    gameAction.addEventsToArray(eventsForThisAction, context)
+                    gameAction.addEventsToArray(eventsForThisAction, context, additionalProperties)
                     context.game.queueSimpleStep(() => {
                         for(const event of eventsForThisAction) {
                             events.push(event);

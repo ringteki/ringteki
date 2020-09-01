@@ -9,7 +9,7 @@ class AirRingEffect extends BaseAbility {
         if(!skirmishMode) {
             choices['Gain 2 Honor'] = () => true;
         }
-        choices['Take 1 Honor from opponent'] = (context) => context.player.opponent;
+        choices['Take 1 Honor from opponent'] = (context) => context.player.opponent && context.player.opponent.checkRestrictions('takeHonor', context);
         choices['Don\'t resolve'] = () => optional;
         super({
             target: {

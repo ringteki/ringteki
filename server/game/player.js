@@ -539,8 +539,13 @@ class Player extends GameObject {
      */
     deckRanOutOfCards(deck) {
         let discardPile = this.getSourceList(deck + ' discard pile');
-        this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.skirmishMode ? 3 : 5);
-        GameActions.loseHonor({ amount: this.game.skirmishMode ? 3 : 5 }).resolve(this, this.game.getFrameworkContext());
+        let action = GameActions.loseHonor({ amount: this.game.skirmishMode ? 3 : 5 });
+        if(action.canAffect(this, this.game.getFrameworkContext())) {
+            this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.skirmishMode ? 3 : 5);
+        } else {
+            this.game.addMessage('{0}\'s {1} deck has run out of cards', this, deck);
+        }
+        action.resolve(this, this.game.getFrameworkContext());
         this.game.queueSimpleStep(() => {
             discardPile.each(card => this.moveCard(card, deck + ' deck'));
             if(deck === 'dynasty') {
@@ -1050,7 +1055,7 @@ class Player extends GameObject {
         }
 
 
-        const conflictCardLocations = [Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
+        const conflictCardLocations = [...this.game.getProvinceArray(), Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
         const dynastyCardLocations = [...this.game.getProvinceArray(), Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
         const legalLocations = {
             stronghold: [Locations.StrongholdProvince],

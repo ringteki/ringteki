@@ -145,6 +145,7 @@ export type WhenType = {
 interface TriggeredAbilityWhenProps extends AbilityProps {
     when: WhenType;
     collectiveTrigger?: boolean;
+    anyPlayer?: boolean;
     target?: TriggeredAbilityTarget & TriggeredAbilityTarget;
     targets?: TriggeredAbilityTargets;
     handler?: (context: TriggeredAbilityContext) => void;

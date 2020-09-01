@@ -9,6 +9,7 @@ import { CancelAction, CancelActionProperties } from './CancelAction';
 import { CardMenuAction, CardMenuProperties } from './CardMenuAction';
 import { ChooseGameAction, ChooseActionProperties } from './ChooseGameAction';
 import { ChosenDiscardAction, ChosenDiscardProperties } from './ChosenDiscardAction';
+import { ChosenReturnToDeckAction, ChosenReturnToDeckProperties } from './ChosenReturnToDeckAction';
 import { ClaimRingAction, ClaimRingProperties } from './ClaimRingAction';
 import { ConditionalAction, ConditionalActionProperties } from './ConditionalAction';
 import { CreateTokenAction, CreateTokenProperties } from './CreateTokenAction';
@@ -48,6 +49,7 @@ import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
+import { PutInProvinceAction, PutInProvinceProperties } from './PutInProvinceAction';
 import { OpponentPutIntoPlayAction, OpponentPutIntoPlayProperties } from './OpponentPutIntoPlayAction';
 import { RandomDiscardAction, RandomDiscardProperties } from './RandomDiscardAction';
 import { ReadyAction, ReadyProperties } from './ReadyAction';
@@ -108,6 +110,7 @@ const GameActions = {
     performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
     putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary
     putIntoPlay: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
+    putIntoProvince: (propertyFactory: PutInProvinceProperties | ((context: TriggeredAbilityContext) => PutInProvinceProperties)) => new PutInProvinceAction(propertyFactory),
     opponentPutIntoPlay: (propertyFactory: OpponentPutIntoPlayProperties | ((context: TriggeredAbilityContext) => OpponentPutIntoPlayProperties) = {}) => new OpponentPutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
     ready: (propertyFactory: ReadyProperties | ((context: TriggeredAbilityContext) => ReadyProperties) = {}) => new ReadyAction(propertyFactory),
     removeFate: (propertyFactory: RemoveFateProperties | ((context: TriggeredAbilityContext) => RemoveFateProperties) = {}) => new RemoveFateAction(propertyFactory), // amount = 1, recipient
@@ -125,6 +128,7 @@ const GameActions = {
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
+    chosenReturnToDeck: (propertyFactory: ChosenReturnToDeckProperties | ((context: TriggeredAbilityContext) => ChosenReturnToDeckProperties) = {}) => new ChosenReturnToDeckAction(propertyFactory), // amount = 1
     deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
     discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
     discardMatching: (propertyFactory: MatchingDiscardProperties | ((context: TriggeredAbilityContext) => MatchingDiscardProperties) = {}) => new MatchingDiscardAction(propertyFactory), // amount = 1

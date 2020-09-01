@@ -66,6 +66,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 }
             });
             this.game.queueSimpleStep(() => this.payAttackerCosts());
+            this.game.queueSimpleStep(() => this.payProvinceCosts());
             this.game.queueSimpleStep(() => this.initiateConflict());
             this.game.queueSimpleStep(() => {
                 if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
@@ -144,6 +145,30 @@ class ConflictFlow extends BaseStepWithPipeline {
                 const costEvents = [];
                 Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
                 this.game.openEventWindow(costEvents);
+            }
+        }
+    }
+
+    payProvinceCosts() {
+        this.game.updateCurrentConflict(null);
+        if(!this.conflict.conflictPassed) {
+            let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
+            let province = this.conflict.defendingPlayer.getProvinceCardInProvince(provinceSlot);
+            let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.isFacedown()) ? provinceSlot : this.conflict.conflictProvince;
+
+            const totalFateCost = province.getFateCostToAttack();
+            if(!this.conflict.conflictPassed && totalFateCost > 0) {
+                this.game.addMessage('{0} pays {1} fate to declare a conflict at {2}', this.conflict.attackingPlayer, totalFateCost, provinceName);
+                const costEvents = [];
+                let result = true;
+                let costToRings = province.sumEffects(EffectNames.FateCostToRingToDeclareConflictAgainst);
+                Costs.payFateToRing(costToRings).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer), result);
+                this.game.queueSimpleStep(() => {
+                    if(costEvents && costEvents.length > 0) {
+                        this.game.addMessage('{0} places {1} fate on the {2}', this.conflict.attackingPlayer, costToRings, costEvents[0].recipient || 'ring');
+                    }
+                    this.game.openThenEventWindow(costEvents);
+                });
             }
         }
     }

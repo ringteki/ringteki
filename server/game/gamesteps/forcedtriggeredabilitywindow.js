@@ -31,7 +31,7 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
     }
 
     addChoice(context) {
-        if(!context.event.cancelled && !this.resolvedAbilities.some(resolved => resolved.ability === context.ability && (context.ability.collectiveTrigger || resolved.event === context.event))) {
+        if(!context.event.cancelled && !this.hasAbilityBeenTriggered(context)) {
             this.choices.push(context);
         }
     }
@@ -181,6 +181,10 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
 
     postResolutionUpdate(resolver) {
         this.resolvedAbilities.push({ ability: resolver.context.ability, event: resolver.context.event });
+    }
+
+    hasAbilityBeenTriggered(context) {
+        return this.resolvedAbilities.some(resolved => resolved.ability === context.ability && (context.ability.collectiveTrigger || resolved.event === context.event));
     }
 
     emitEvents() {
