@@ -683,7 +683,7 @@ class DrawCard extends BaseCard {
 
     canDeclareAsAttacker(conflictType, ring, province, incomingAttackers = undefined) { // eslint-disable-line no-unused-vars
         if(!province) {
-            let provinces = this.game.currentConflict.defendingPlayer ? this.game.currentConflict.defendingPlayer.getProvinces() : null;
+            let provinces = (this.game.currentConflict && this.game.currentConflict.defendingPlayer) ? this.game.currentConflict.defendingPlayer.getProvinces() : null;
             if(provinces) {
                 return provinces.some(a => a.canDeclare(conflictType, ring) && this.canDeclareAsAttacker(conflictType, ring, a, incomingAttackers));
             }
