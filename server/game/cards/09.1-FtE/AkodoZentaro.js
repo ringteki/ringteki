@@ -11,7 +11,7 @@ class AkodoZentaro extends DrawCard {
                 cardType: CardTypes.Holding,
                 controller: Players.Opponent,
                 location: Locations.Provinces,
-                cardCondition: card => card.location === this.game.currentConflict.conflictProvince.location && !card.isUnique(),
+                cardCondition: card => card.location === this.game.currentConflict.conflictProvince.location && !card.isUnique() && card.isFaceup(),
                 gameAction: AbilityDsl.actions.ifAble(context => ({
                     ifAbleAction: AbilityDsl.actions.selectCard({
                         cardType: CardTypes.Province,

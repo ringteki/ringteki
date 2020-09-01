@@ -55,6 +55,6 @@ export class TriggerAbilityAction extends CardGameAction {
 
     hasTargetsChosenByInitiatingPlayer(context) {
         let properties = this.getProperties(context) as TriggerAbilityProperties;
-        return properties.ability.hasTargetsChosenByInitiatingPlayer(context);
+        return properties.ability && properties.ability.hasTargetsChosenByInitiatingPlayer && properties.ability.hasTargetsChosenByInitiatingPlayer(context);
     }
 }

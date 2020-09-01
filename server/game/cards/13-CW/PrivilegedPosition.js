@@ -12,7 +12,7 @@ class PrivilegedPosition extends DrawCard {
                     context.player.honorBid < context.player.opponent.honorBid
             },
             gameAction: AbilityDsl.actions.playerLastingEffect({
-                duration: Durations.UntilEndOfPhase,
+                duration: Durations.UntilEndOfRound,
                 targetController: Players.Opponent,
                 effect: AbilityDsl.effects.setMaxConflicts(1)
             }),

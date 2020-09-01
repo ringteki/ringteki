@@ -9,24 +9,27 @@ describe('Solitary Strength', function() {
                         hand: ['solitary-strength'],
                         dynastyDeck: ['favorable-ground'],
                         honor: 10
+                    },
+                    player2: {
+                        inPlay: ['eager-scout'],
+                        honor: 10
                     }
                 });
                 this.tsukune = this.player1.findCardByName('shiba-tsukune');
                 this.solitaryStrength = this.player1.findCardByName('solitary-strength');
                 this.warrior = this.player1.findCardByName('serene-warrior');
                 this.favorableGround = this.player1.placeCardInProvince('favorable-ground', 'province 1');
-
-                this.spy = spyOn(this.flow.game, 'addMessage');
+                this.scout = this.player2.findCardByName('eager-scout');
 
                 this.noMoreActions();
+            });
 
+            it('should correctly give 1 honor after winning a conflict', function() {
                 this.initiateConflict({
                     attackers: ['shiba-tsukune'],
                     defenders: []
                 });
-            });
 
-            it('should correctly give 1 honor after winning a conflict', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.solitaryStrength);
                 this.player1.clickCard(this.tsukune);
@@ -39,6 +42,10 @@ describe('Solitary Strength', function() {
             });
 
             it('should be discarded if character is not participating alone', function() {
+                this.initiateConflict({
+                    attackers: ['shiba-tsukune'],
+                    defenders: []
+                });
                 this.player2.pass();
                 this.player1.clickCard(this.solitaryStrength);
                 this.player1.clickCard(this.tsukune);
@@ -49,12 +56,27 @@ describe('Solitary Strength', function() {
             });
 
             it('should be immediately discarded after being played if attached character is not participating alone', function() {
+                this.initiateConflict({
+                    attackers: ['shiba-tsukune'],
+                    defenders: []
+                });
                 this.player2.pass();
                 this.player1.clickCard(this.favorableGround);
                 this.player1.clickCard(this.warrior);
                 this.player2.pass();
                 this.player1.clickCard(this.solitaryStrength);
                 this.player1.clickCard(this.tsukune);
+                expect(this.solitaryStrength.location).toBe('conflict discard pile');
+            });
+
+            it('attach to opponent - should immediately discard if you control a participating character', function() {
+                this.initiateConflict({
+                    attackers: ['shiba-tsukune'],
+                    defenders: ['eager-scout']
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.solitaryStrength);
+                this.player1.clickCard(this.scout);
                 expect(this.solitaryStrength.location).toBe('conflict discard pile');
             });
         });

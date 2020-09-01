@@ -1403,7 +1403,15 @@ class Player extends GameObject {
     }
 
     isTopConflictCardShown(activePlayer = undefined) {
-        if(!activePlayer || activePlayer === this) {
+        if(!activePlayer) {
+            activePlayer = this;
+        }
+
+        if(activePlayer.conflictDeck.size() <= 0) {
+            return false;
+        }
+
+        if(activePlayer === this) {
             return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
         }
 
@@ -1415,6 +1423,9 @@ class Player extends GameObject {
     }
 
     isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
+        if(this.dynastyDeck.size() <= 0) {
+            return false;
+        }
         return this.anyEffect(EffectNames.ShowTopDynastyCard);
     }
 
