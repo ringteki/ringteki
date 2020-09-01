@@ -8,7 +8,7 @@ class MasterOfManyLifetimes extends DrawCard {
             title: 'Return a character and attachments',
             when: {
                 onCardLeavesPlay: (event, context) => {
-                    return event.card.controller === context.player;
+                    return event.card.controller === context.player && event.card.type === CardTypes.Character;
                 }
             },
             target: {
