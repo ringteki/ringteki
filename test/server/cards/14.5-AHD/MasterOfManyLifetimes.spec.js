@@ -9,7 +9,7 @@ describe('Master Of Many Lifetimes', function() {
                 },
                 player2: {
                     inPlay: ['keeper-initiate'],
-                    hand: ['assassination']
+                    hand: ['assassination', 'let-go']
                 }
             });
 
@@ -31,6 +31,7 @@ describe('Master Of Many Lifetimes', function() {
 
             this.keeper = this.player2.findCardByName('keeper-initiate');
             this.assassination = this.player2.findCardByName('assassination');
+            this.letGo = this.player2.findCardByName('let-go');
         });
 
         it('should trigger when a character you control would leave play', function() {
@@ -58,6 +59,17 @@ describe('Master Of Many Lifetimes', function() {
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.keeper);
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
+        });
+
+        it('should not trigger on attachments', function() {
+            this.player1.playAttachment(this.fineKatana, this.berserker);
+
+            this.player2.clickCard(this.letGo);
+            this.player2.clickCard(this.fineKatana);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.moml);
+            expect(this.fineKatana.location).toBe('conflict discard pile');
+            expect(this.player1).toHavePrompt('Action Window');
         });
 
 

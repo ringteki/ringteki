@@ -66,7 +66,7 @@ export class PutInProvinceAction extends CardGameAction {
             card.owner.moveCard(otherCard, card.location);
         }
 
-        const player = properties.changePlayer && card.controller.opponent ? card.controller.opponent : card.controller;
+        const player = card.owner;
         if(card.isConflict && [...context.game.getProvinceArray()].includes(properties.destination)) {
             context.game.addMessage('{0} is discarded instead since it can\'t enter a province legally!', card);
             properties.destination = Locations.ConflictDiscardPile;
