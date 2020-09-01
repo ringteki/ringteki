@@ -1,7 +1,7 @@
 const CardSelector = require('../CardSelector.js');
 const { CardTypes, Stages, Players } = require('../Constants.js');
 
-class AbilityTargetAbility {
+class AbilityTargetToken {
     constructor(name, properties, ability) {
         this.name = name;
         this.properties = properties;
@@ -31,7 +31,7 @@ class AbilityTargetAbility {
             if(context.stage === Stages.PreTarget && this.dependentCost && !this.dependentCost.canPay(contextCopy)) {
                 return false;
             }
-            return (!properties.cardCondition || properties.cardCondition(card, contextCopy)) &&
+            return (!properties.tokenCondition || properties.tokenCondition(token, contextCopy)) &&
                        (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
                        (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
@@ -123,4 +123,4 @@ class AbilityTargetAbility {
     }
 }
 
-module.exports = AbilityTargetAbility;
+module.exports = AbilityTargetToken;
