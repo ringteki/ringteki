@@ -24,6 +24,7 @@ class MasterOfManyLifetimes extends DrawCard {
                     })),
                     AbilityDsl.actions.putIntoProvince({
                         target: context.event.card,
+                        canBeStronghold: true,
                         destination: context.target.location
                     })
                 ])

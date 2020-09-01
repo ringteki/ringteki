@@ -5,11 +5,12 @@ import BaseCard = require('../basecard');
 import DrawCard = require('../drawcard');
 
 export interface PutInProvinceProperties extends CardActionProperties {
-    destination: Locations;
+    destination?: Locations;
     switch?: boolean;
     switchTarget?: DrawCard;
     faceup?: boolean;
     changePlayer?: boolean;
+    canBeStronghold?: boolean;
     discardDestinationCards?: boolean;
 }
 
@@ -22,6 +23,7 @@ export class PutInProvinceAction extends CardGameAction {
         switch: false,
         switchTarget: null,
         faceup: true,
+        canBeStronghold: false,
         changePlayer: false,
         discardDestinationCards: false
     };
