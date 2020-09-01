@@ -1412,7 +1412,7 @@ class Player extends GameObject {
             activePlayer = this;
         }
 
-        if(activePlayer.conflictDeck.size() <= 0) {
+        if(activePlayer.conflictDeck && activePlayer.conflictDeck.size() <= 0) {
             return false;
         }
 
