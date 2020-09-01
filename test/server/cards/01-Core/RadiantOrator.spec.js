@@ -4,10 +4,10 @@ describe('Radiant Orator', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['Bayushi Kachiko']
+                    inPlay: ['bayushi-kachiko']
                 },
                 player2: {
-                    inPlay: ['Radiant Orator', 'Serene Warrior']
+                    inPlay: ['radiant-orator', 'serene-warrior']
                 }
             });
             this.noMoreActions();
@@ -17,10 +17,10 @@ describe('Radiant Orator', function() {
             it('shouldn\'t be able to use its ability', function() {
                 this.initiateConflict({
                     ring: 'air',
-                    attackers: ['Bayushi Kachiko'],
-                    defenders: ['Radiant Orator']
+                    attackers: ['bayushi-kachiko'],
+                    defenders: ['radiant-orator']
                 });
-                this.player2.clickCard('Radiant Orator', 'play area');
+                this.player2.clickCard('radiant-orator', 'play area');
 
                 expect(this.player2).not.toHavePrompt('Choose a character');
             });
@@ -32,13 +32,13 @@ describe('Radiant Orator', function() {
                 this.game.rings['earth'].claimRing(this.player2);
                 this.initiateConflict({
                     ring: 'air',
-                    attackers: ['Bayushi Kachiko'],
-                    defenders: ['Radiant Orator']
+                    attackers: ['bayushi-kachiko'],
+                    defenders: ['radiant-orator']
                 });
             });
 
             it('shouldn\'t be able to use its ability', function() {
-                this.player2.clickCard('Radiant Orator', 'play area');
+                this.player2.clickCard('radiant-orator', 'play area');
 
                 expect(this.player2).not.toHavePrompt('Choose a character');
             });
@@ -48,11 +48,11 @@ describe('Radiant Orator', function() {
             beforeEach(function() {
                 this.initiateConflict({
                     ring: 'air',
-                    attackers: ['Bayushi Kachiko'],
-                    defenders: ['Radiant Orator', 'serene-warrior']
+                    attackers: ['bayushi-kachiko'],
+                    defenders: ['radiant-orator', 'serene-warrior']
                 });
                 this.warrior = this.player2.findCardByName('serene-warrior');
-                this.player2.clickCard('Radiant Orator', 'play area');
+                this.player2.clickCard('radiant-orator', 'play area');
             });
 
             it('should have Serene Warrior in the conflict', function() {
@@ -65,7 +65,7 @@ describe('Radiant Orator', function() {
 
             describe('If Bayushi Kachiko is chosen', function() {
                 it('should be removed from the conflict', function() {
-                    this.player2.clickCard('Bayushi Kachiko', 'play area', 'opponent');
+                    this.player2.clickCard('bayushi-kachiko', 'play area', 'opponent');
 
                     expect(this.game.currentConflict.attackers.length).toBe(0);
                 });

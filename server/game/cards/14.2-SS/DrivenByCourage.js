@@ -14,7 +14,9 @@ class DrivenByCourage extends ProvinceCard {
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     effect: AbilityDsl.effects.modifyBothSkills(2)
                 }))
-            }
+            },
+            effect: 'give {0} +1{1} and +1{2}',
+            effectArgs: () => ['political', 'military']
         });
     }
 }

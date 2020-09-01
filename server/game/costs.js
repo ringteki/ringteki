@@ -103,6 +103,10 @@ const Costs = {
         'Select character to discard honored status token from'
     ),
     /**
+     * Cost that will discard the status token on a card to be selected by the player
+     */
+    discardStatusTokenFromSelf: () => new GameActionCost(GameActions.discardStatusToken()),
+    /**
      * Cost that will break the province that initiated the ability
      */
     breakSelf: () => new GameActionCost(GameActions.break()),

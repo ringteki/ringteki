@@ -182,6 +182,46 @@ describe('Storied Defeat', function() {
                 expect(this.player1).toBeAbleToSelect(this.dojiChallenger);
             });
         });
+
+        describe('Storied Defeat should not target characters that left play', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['mirumoto-raitsugu'],
+                        hand: ['storied-defeat']
+                    },
+                    player2: {
+                        inPlay: ['adept-of-shadows']
+                    }
+                });
+                this.mirumotoRaitsugu = this.player1.findCardByName('mirumoto-raitsugu');
+                this.storiedDefeat = this.player1.findCardByName('storied-defeat');
+                this.adept = this.player2.findCardByName('adept-of-shadows');
+                this.adept.fate = 1;
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.mirumotoRaitsugu],
+                    defenders: [this.adept]
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.mirumotoRaitsugu);
+                this.player1.clickCard(this.adept);
+                this.player1.clickPrompt('5');
+                this.player2.clickPrompt('1');
+                this.player2.clickCard(this.adept);
+                this.player1.pass();
+            });
+
+            it('should not target the character once it is replayed',function() {
+                this.player2.clickCard(this.adept);
+                this.player2.clickPrompt('0');
+                this.player2.clickPrompt('Conflict');
+                this.player1.clickCard(this.storiedDefeat);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
     });
 });
 

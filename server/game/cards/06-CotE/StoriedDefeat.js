@@ -8,7 +8,7 @@ class StoriedDefeat extends DrawCard {
     setupCardAbilities() {
         this.duelLosersThisConflict = [];
         this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onConflictFinished', 'afterDuel']);
+        this.eventRegistrar.register(['onConflictFinished', 'afterDuel', 'onCharacterEntersPlay']);
 
         this.action({
             title: 'Bow a character who lost a duel',
@@ -46,6 +46,10 @@ class StoriedDefeat extends DrawCard {
 
     onConflictFinished() {
         this.duelLosersThisConflict = [];
+    }
+
+    onCharacterEntersPlay(event) {
+        this.duelLosersThisConflict = this.duelLosersThisConflict.filter(card => event.card !== card);
     }
 
     afterDuel(event) {
