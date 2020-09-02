@@ -50,8 +50,8 @@ class HonoredVeterans extends DrawCard {
     }
 
     wasCharacterPlayedThisPhase(card, player) {
-        if(player && Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, player)) {
-            return this.charactersPlayedThisPhase[player].includes(card);
+        if(player && Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, player.id)) {
+            return this.charactersPlayedThisPhase[player.id].includes(card);
         }
         return false;
     }
@@ -61,18 +61,18 @@ class HonoredVeterans extends DrawCard {
     }
 
     hasLegalTarget(player) {
-        if(player && Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, player)) {
-            return this.charactersPlayedThisPhase[player].some(card => card.hasTrait('bushi'));
+        if(player && Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, player.id)) {
+            return this.charactersPlayedThisPhase[player.id].some(card => card.hasTrait('bushi'));
         }
         return false;
     }
 
     onCardPlayed(event) {
         if(event.player && event.card.type === CardTypes.Character) {
-            if(!Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, event.player)) {
-                this.charactersPlayedThisPhase[event.player] = [];
+            if(!Object.prototype.hasOwnProperty.call(this.charactersPlayedThisPhase, event.player.id)) {
+                this.charactersPlayedThisPhase[event.player.id] = [];
             }
-            this.charactersPlayedThisPhase[event.player].push(event.card);
+            this.charactersPlayedThisPhase[event.player.id].push(event.card);
         }
     }
 
