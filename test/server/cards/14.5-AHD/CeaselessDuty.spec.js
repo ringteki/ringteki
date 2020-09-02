@@ -5,11 +5,11 @@ describe('Ceaseless Duty', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-whisperer', 'brash-samurai', 'doji-challenger', 'kakita-toshimoko', 'kakita-yoshi'],
-                    hand: ['ceaseless-duty', 'assassination']
+                    hand: ['ceaseless-duty', 'assassination', 'fine-katana']
                 },
                 player2: {
                     inPlay: ['dazzling-duelist'],
-                    hand: ['i-can-swim']
+                    hand: ['i-can-swim', 'let-go']
                 }
             });
 
@@ -20,6 +20,7 @@ describe('Ceaseless Duty', function() {
             this.f5 = this.player1.findCardByName('kakita-yoshi');
             this.duty = this.player1.findCardByName('ceaseless-duty');
             this.assassination = this.player1.findCardByName('assassination');
+            this.katana = this.player1.findCardByName('fine-katana');
 
             this.f1.dishonor();
             this.f2.dishonor();
@@ -29,6 +30,7 @@ describe('Ceaseless Duty', function() {
 
             this.dazzling = this.player2.findCardByName('dazzling-duelist');
             this.swim = this.player2.findCardByName('i-can-swim');
+            this.letGo = this.player2.findCardByName('let-go');
             this.sd1 = this.player1.findCardByName('shameful-display', 'province 1');
             this.sd2 = this.player1.findCardByName('shameful-display', 'province 2');
             this.sd3 = this.player1.findCardByName('shameful-display', 'province 3');
@@ -40,6 +42,8 @@ describe('Ceaseless Duty', function() {
 
             this.player1.player.showBid = 1;
             this.player2.player.showBid = 5;
+
+            this.player1.playAttachment(this.katana, this.f2);
 
             this.noMoreActions();
 
@@ -102,6 +106,13 @@ describe('Ceaseless Duty', function() {
             this.player1.clickCard(this.dazzling);
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
             expect(this.dazzling.location).toBe('dynasty discard pile');
+        });
+
+        it('should not interrupt when a non-character leaves play', function() {
+            this.player2.clickCard(this.letGo);
+            this.player2.clickCard(this.katana);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.katana.location).toBe('conflict discard pile');
         });
 
         it('chat messages', function() {
