@@ -90,10 +90,10 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
 
     postResolutionUpdate(resolver) {
         super.postResolutionUpdate(resolver);
-        if(!this.resolvedAbilitiesPerPlayer[resolver.context.player]) {
-            this.resolvedAbilitiesPerPlayer[resolver.context.player] = [];
+        if(!this.resolvedAbilitiesPerPlayer[resolver.context.player.id]) {
+            this.resolvedAbilitiesPerPlayer[resolver.context.player.id] = [];
         }
-        this.resolvedAbilitiesPerPlayer[resolver.context.player].push({ ability: resolver.context.ability, event: resolver.context.event });
+        this.resolvedAbilitiesPerPlayer[resolver.context.player.id].push({ ability: resolver.context.ability, event: resolver.context.event });
 
         this.prevPlayerPassed = false;
         this.currentPlayer = this.currentPlayer.opponent || this.currentPlayer;
@@ -112,8 +112,8 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
 
     hasAbilityBeenTriggered(context) {
         let alreadyResolved = false;
-        if(Array.isArray(this.resolvedAbilitiesPerPlayer[context.player])) {
-            alreadyResolved = this.resolvedAbilitiesPerPlayer[context.player].some(resolved => resolved.ability === context.ability && (context.ability.collectiveTrigger || resolved.event === context.event));
+        if(Array.isArray(this.resolvedAbilitiesPerPlayer[context.player.id])) {
+            alreadyResolved = this.resolvedAbilitiesPerPlayer[context.player.id].some(resolved => resolved.ability === context.ability && (context.ability.collectiveTrigger || resolved.event === context.event));
         }
         return alreadyResolved;
     }

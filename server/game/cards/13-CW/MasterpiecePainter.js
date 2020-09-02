@@ -13,11 +13,11 @@ class MasterpiecePainter extends DrawCard {
                 targets: true,
                 activePromptTitle: 'Choose any number of players',
                 choices: {
-                    [this.controller.name]: revealAndMayPlayAbility('me'),
-                    [this.controller.opponent && this.controller.opponent.name || 'NA']: revealAndMayPlayAbility('opponent'),
-                    [this.controller.name + ' and ' + (this.controller.opponent && this.controller.opponent.name || 'NA')]: AbilityDsl.actions.multiple([
-                        revealAndMayPlayAbility('me'),
-                        revealAndMayPlayAbility('opponent')
+                    [this.owner.name]: revealAndMayPlayAbility(this.owner),
+                    [this.owner.opponent && this.owner.opponent.name || 'NA']: revealAndMayPlayAbility(this.owner.opponent),
+                    [this.owner.name + ' and ' + (this.owner.opponent && this.owner.opponent.name || 'NA')]: AbilityDsl.actions.multiple([
+                        revealAndMayPlayAbility(this.owner),
+                        revealAndMayPlayAbility(this.owner.opponent)
                     ])
                 }
             },
@@ -28,10 +28,11 @@ class MasterpiecePainter extends DrawCard {
 }
 
 const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(context => {
-    let chosenPlayer = player === 'me' ? context.player : context.player.opponent;
+    let chosenPlayer = player;
     let topCard = chosenPlayer.conflictDeck.first();
+
     return {
-        targetController: player === 'me' ? Players.Self : Players.Opponent,
+        targetController: player === context.source.controller ? Players.Self : Players.Opponent,
         duration: Durations.Custom,
         until: {
             onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
