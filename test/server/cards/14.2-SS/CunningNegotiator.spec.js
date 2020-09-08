@@ -332,3 +332,48 @@ describe('Cunning Negotiator', function() {
         });
     });
 });
+
+describe('Cunning Negotiator + Emperor', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['cunning-negotiator'],
+                    hand: ['shinjo-ambusher'],
+                    provinces: ['brother-s-gift-dojo']
+                },
+                player2: {
+                    inPlay: ['cunning-negotiator', 'doji-whisperer', 'hantei-xxxviii'],
+                    provinces: ['midnight-revels', 'restoration-of-balance', 'manicured-garden', 'meditations-on-the-tao']
+                }
+            });
+
+            this.cunning = this.player1.findCardByName('cunning-negotiator');
+            this.cunning2 = this.player2.findCardByName('cunning-negotiator');
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.emperor = this.player2.findCardByName('hantei-xxxviii');
+            this.ambusher = this.player1.findCardByName('shinjo-ambusher');
+            this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
+            this.restoration = this.player2.findCardByName('restoration-of-balance', 'province 2');
+            this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
+            this.meditations = this.player2.findCardByName('meditations-on-the-tao', 'province 4');
+            this.brothersGiftDojo = this.player1.findCardByName('brother-s-gift-dojo', 'province 1');
+        });
+
+        it('should work (by not allowing emperor to react to the duel)', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.cunning],
+                defenders: [this.cunning2, this.whisperer],
+                type: 'political',
+                province: this.manicuredGarden
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.cunning);
+            expect(this.player2).not.toBeAbleToSelect(this.emperor);
+        });
+    });
+});

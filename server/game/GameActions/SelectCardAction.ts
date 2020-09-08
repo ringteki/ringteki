@@ -21,6 +21,7 @@ export interface SelectCardProperties extends CardActionProperties {
     gameAction: GameAction;
     selector?: BaseCardSelector;
     mode?: TargetModes;
+    numCards?: number;
     subActionProperties?: (card: BaseCard) => any;
     cancelHandler?: () => void;
 }

@@ -28,6 +28,8 @@ class ShinjoGunso extends DrawCard {
                     }
                 ],
                 subActionProperties: card => ({ target: card }),
+                message: '{0} chooses to put {1} into play',
+                messageArgs: (card, player) => [player, card],
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.putIntoPlay(),
                     AbilityDsl.actions.moveCard((context) => ({

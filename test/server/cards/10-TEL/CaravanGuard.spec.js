@@ -72,7 +72,6 @@ describe('Caravan Guard', function() {
                 this.player1.clickCard(this.caravanGuard1);
                 this.player1.clickCard(this.doomedShugenja);
                 this.player1.clickRing('fire');
-                this.player1.clickCard(this.caravanGuard1);
                 expect(this.caravanGuard1.inConflict).toBe(true);
                 this.player1.clickPrompt('Pass Conflict');
                 this.player1.clickPrompt('Yes');

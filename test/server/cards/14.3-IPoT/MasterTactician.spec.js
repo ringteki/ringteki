@@ -9,6 +9,7 @@ describe('Master Tactician', function() {
                     conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan']
                 },
                 player2: {
+                    inPlay: ['master-tactician'],
                     hand: ['mirumoto-s-fury', 'backhanded-compliment']
                 }
             });
@@ -24,6 +25,8 @@ describe('Master Tactician', function() {
             this.fury = this.player2.findCardByName('mirumoto-s-fury');
             this.province = this.player2.findCardByName('shameful-display', 'province 1');
             this.backhanded = this.player2.findCardByName('backhanded-compliment');
+
+            this.tacticianp2 = this.player2.findCardByName('master-tactician');
 
             this.player1.moveCard(this.fan, 'conflict deck');
             this.player1.moveCard(this.voice, 'conflict deck');
@@ -67,6 +70,26 @@ describe('Master Tactician', function() {
                 });
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+            });
+
+            it('should not let you look at the top card during declaration', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.player1.clickCard(this.tactician);
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.province);
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+                this.player2.clickCard(this.tacticianp2);
+                expect(this.player2.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player2.player.isTopConflictCardShown(this.player2.player)).toBe(false);
+                this.player2.clickPrompt('Done');
+                expect(this.player2.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player2.player.isTopConflictCardShown(this.player2.player)).toBe(true);
             });
         });
 
@@ -280,6 +303,20 @@ describe('Master Tactician', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.soul);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should work if your conflict deck is empty', function () {
+                this.player1.reduceDeckToNumber('conflict deck', 0);
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
+                expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
         });
 

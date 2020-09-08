@@ -682,11 +682,23 @@ class DrawCard extends BaseCard {
     }
 
     canDeclareAsAttacker(conflictType, ring, province, incomingAttackers = undefined) { // eslint-disable-line no-unused-vars
+        if(!province) {
+            let provinces = (this.game.currentConflict && this.game.currentConflict.defendingPlayer) ? this.game.currentConflict.defendingPlayer.getProvinces() : null;
+            if(provinces) {
+                return provinces.some(a => a.canDeclare(conflictType, ring) && this.canDeclareAsAttacker(conflictType, ring, a, incomingAttackers));
+            }
+        }
+
         let attackers = this.game.isDuringConflict() ? this.game.currentConflict.attackers : [];
         if(incomingAttackers) {
             attackers = incomingAttackers;
         }
-        if(attackers.concat(this).reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) > this.controller.fate) {
+        if(!attackers.includes(this)) {
+            attackers = attackers.concat(this);
+        }
+
+        let fateCostToAttackProvince = province ? province.getFateCostToAttack() : 0;
+        if(attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) + fateCostToAttackProvince > this.controller.fate) {
             return false;
         }
         if(this.anyEffect(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {

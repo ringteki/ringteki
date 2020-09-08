@@ -10,6 +10,7 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
         super(game, abilityType, window, eventsToExclude);
         this.complete = false;
         this.prevPlayerPassed = false;
+        this.resolvedAbilitiesPerPlayer = {};
     }
 
     showBluffPrompt(player) {
@@ -89,6 +90,11 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
 
     postResolutionUpdate(resolver) {
         super.postResolutionUpdate(resolver);
+        if(!this.resolvedAbilitiesPerPlayer[resolver.context.player.id]) {
+            this.resolvedAbilitiesPerPlayer[resolver.context.player.id] = [];
+        }
+        this.resolvedAbilitiesPerPlayer[resolver.context.player.id].push({ ability: resolver.context.ability, event: resolver.context.event });
+
         this.prevPlayerPassed = false;
         this.currentPlayer = this.currentPlayer.opponent || this.currentPlayer;
     }
@@ -102,6 +108,14 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
                 return true;
             }
         });
+    }
+
+    hasAbilityBeenTriggered(context) {
+        let alreadyResolved = false;
+        if(Array.isArray(this.resolvedAbilitiesPerPlayer[context.player.id])) {
+            alreadyResolved = this.resolvedAbilitiesPerPlayer[context.player.id].some(resolved => resolved.ability === context.ability && (context.ability.collectiveTrigger || resolved.event === context.event));
+        }
+        return alreadyResolved;
     }
 }
 

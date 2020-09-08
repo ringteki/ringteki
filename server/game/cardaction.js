@@ -1,5 +1,5 @@
 const CardAbility = require('./CardAbility.js');
-const { AbilityTypes, CardTypes, Phases, PlayTypes } = require('./Constants');
+const { AbilityTypes, CardTypes, Phases, PlayTypes, EffectNames } = require('./Constants');
 
 /**
  * Represents an action ability provided by card text.
@@ -58,7 +58,8 @@ class CardAction extends CardAbility {
             return 'phase';
         }
 
-        if(!ignoredRequirements.includes('player') && this.card.type !== CardTypes.Event && context.player !== this.card.controller && !this.anyPlayer) {
+        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent);
+        if(!ignoredRequirements.includes('player') && this.card.type !== CardTypes.Event && !canPlayerTrigger) {
             return 'player';
         }
 
