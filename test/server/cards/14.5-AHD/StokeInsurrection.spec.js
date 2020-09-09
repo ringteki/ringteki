@@ -195,5 +195,15 @@ describe('Stoke Insurrection', function() {
             this.player2.clickCard(this.insurrection);
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
+
+        it('should not work outside of a conflict', function() {
+            this.noMoreActions();
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('Don\'t Resolve');
+            this.player1.pass();
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.clickCard(this.insurrection);
+            expect(this.player2).toHavePrompt('Action Window');
+        });
     });
 });
