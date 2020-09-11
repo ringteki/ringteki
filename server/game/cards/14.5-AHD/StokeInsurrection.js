@@ -18,7 +18,7 @@ class StokeInsurrection extends DrawCard {
 
         this.action({
             title: 'Put characters into play',
-            condition: context => context.player.opponent,
+            condition: context => context.game.isDuringConflict() && context.player.opponent,
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.reveal(context => ({
                     target: context.player.opponent.getDynastyCardsInProvince(Locations.Provinces)

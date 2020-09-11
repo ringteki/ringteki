@@ -20,11 +20,16 @@ describe('Solitary Strength', function() {
                 this.warrior = this.player1.findCardByName('serene-warrior');
                 this.favorableGround = this.player1.placeCardInProvince('favorable-ground', 'province 1');
                 this.scout = this.player2.findCardByName('eager-scout');
+            });
 
-                this.noMoreActions();
+            it('should work if you attach it out of a conflict', function() {
+                this.player1.clickCard(this.solitaryStrength);
+                this.player1.clickCard(this.tsukune);
+                expect(this.player2).toHavePrompt('Action Window');
             });
 
             it('should correctly give 1 honor after winning a conflict', function() {
+                this.noMoreActions();
                 this.initiateConflict({
                     attackers: ['shiba-tsukune'],
                     defenders: []
@@ -42,6 +47,7 @@ describe('Solitary Strength', function() {
             });
 
             it('should be discarded if character is not participating alone', function() {
+                this.noMoreActions();
                 this.initiateConflict({
                     attackers: ['shiba-tsukune'],
                     defenders: []
@@ -56,6 +62,7 @@ describe('Solitary Strength', function() {
             });
 
             it('should be immediately discarded after being played if attached character is not participating alone', function() {
+                this.noMoreActions();
                 this.initiateConflict({
                     attackers: ['shiba-tsukune'],
                     defenders: []
@@ -70,6 +77,7 @@ describe('Solitary Strength', function() {
             });
 
             it('attach to opponent - should immediately discard if you control a participating character', function() {
+                this.noMoreActions();
                 this.initiateConflict({
                     attackers: ['shiba-tsukune'],
                     defenders: ['eager-scout']
