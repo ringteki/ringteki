@@ -40,7 +40,7 @@ class GovernorsSpy extends DrawCard {
         this.dynastyCards.sort((a, b) => a.dynastyCard.name.localeCompare(b.dynastyCard.name));
         //Step 2: Flip them all face down and create a list that we'll end up using for their new location
         this.dynastyCards.forEach(card => {
-            card.dynastyCard.facedown = true;
+            this.game.applyGameAction(context, { turnFacedown: card.dynastyCard });
         });
 
         //Step 3: For each card, choose an eligible province.  This is done via prompt for select, which queues simple steps

@@ -69,7 +69,7 @@ class RetireToTheBrotherhood extends ProvinceCard {
             return def;
         }
         let events = context.events.filter(a => a.name === 'onCardLeavesPlay' && !a.cancelled);
-        let allCards = events.map(a => a.card);
+        let allCards = events.map(a => a.cardStateWhenLeftPlay);
         let cards = allCards.filter(a => a.controller === player);
 
         //Figure out how many cards to reveal and which characters to put into play
