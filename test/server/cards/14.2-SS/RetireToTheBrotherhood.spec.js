@@ -280,7 +280,7 @@ describe('Retire To The Brotherhood with Stoke Insurrection', function() {
             this.noMoreActions();
             this.player2.passConflict();
             this.noMoreActions();
-           
+
             this.initiateConflict({
                 attackers: [this.nerishma],
                 province: this.retire,
