@@ -12,7 +12,8 @@ class CountrysideTrader extends DrawCard {
                 return {
                     target: conflictProvince,
                     ability: conflictProvince.abilities.actions.concat(conflictProvince.abilities.reactions)[0],
-                    ignoredRequirements: ['condition']
+                    ignoredRequirements: ['condition'],
+                    choosingPlayerOverride: context.choosingPlayerOverride
                 };
             }),
             effect: 'resolve the province ability of {1}',

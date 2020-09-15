@@ -47,7 +47,13 @@ class Overhear extends DrawCard {
                     },
                     message: '{0} chooses {3}to give an honor to {4} to resolve {1} again',
                     messageArgs: context => [context.select === 'Done' ? 'not ' : '', context.player.opponent],
-                    then: { gameAction: AbilityDsl.actions.resolveAbility({ ability: context.ability instanceof CardAbility ? context.ability : null, subResolution: true }) }
+                    then: {
+                        gameAction: AbilityDsl.actions.resolveAbility({
+                            ability: context.ability instanceof CardAbility ? context.ability : null,
+                            subResolution: true,
+                            choosingPlayerOverride: context.choosingPlayerOverride
+                        })
+                    }
                 };
             }
         });
