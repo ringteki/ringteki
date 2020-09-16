@@ -69,7 +69,7 @@ describe('Driven by Courage', function() {
                 this.player2.clickCard(this.maiden);
                 expect(this.maiden.getMilitarySkill()).toBe(maidenMiltarySkill + 2);
                 expect(this.maiden.getPoliticalSkill()).toBe(maidenPoliticalSkill + 2);
-                expect(this.getChatLogs(3)).toContain('player2 uses Driven By Courage to give Shrine Maiden +1political and +1military');
+                expect(this.getChatLogs(3)).toContain('player2 uses Driven By Courage to give Shrine Maiden +2political and +2military');
             });
 
             it('should work at your other air provinces', function() {

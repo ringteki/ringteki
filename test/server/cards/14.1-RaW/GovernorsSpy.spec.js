@@ -5,11 +5,13 @@ describe('Governors Spy', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['governor-s-spy'],
-                    dynastyDiscard: ['doji-whisperer', 'doji-challenger', 'doji-kuwanan', 'daidoji-uji', 'kakita-toshimoko', 'kakita-yuri']
+                    dynastyDiscard: ['doji-whisperer', 'doji-challenger', 'doji-kuwanan', 'daidoji-uji', 'kakita-toshimoko', 'kakita-yuri', 'city-of-lies'],
+                    hand: ['desolation']
                 },
                 player2: {
                     inPlay: ['bayushi-liar', 'alibi-artist', 'blackmail-artist', 'bayushi-manipulator', 'bayushi-shoju', 'yogo-asami'],
-                    dynastyDiscard: ['hantei-xxxviii']
+                    dynastyDiscard: ['hantei-xxxviii'],
+                    hand: ['stoke-insurrection']
                 }
             });
 
@@ -22,6 +24,8 @@ describe('Governors Spy', function() {
             this.uji = this.player1.placeCardInProvince('daidoji-uji', 'province 4');
             this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
             this.yuri = this.player1.findCardByName('kakita-yuri');
+            this.lies = this.player1.findCardByName('city-of-lies');
+            this.desolation = this.player1.findCardByName('desolation');
 
             this.liar = this.player2.placeCardInProvince('bayushi-liar', 'province 1');
             this.alibi = this.player2.placeCardInProvince('alibi-artist', 'province 2');
@@ -29,6 +33,7 @@ describe('Governors Spy', function() {
             this.manipulator = this.player2.placeCardInProvince('bayushi-manipulator', 'province 4');
             this.shoju = this.player2.findCardByName('bayushi-shoju');
             this.asami = this.player2.findCardByName('yogo-asami');
+            this.stoke = this.player2.findCardByName('stoke-insurrection');
 
             this.p1_1 = this.player1.findCardByName('shameful-display', 'province 1');
             this.p1_2 = this.player1.findCardByName('shameful-display', 'province 2');
@@ -386,6 +391,47 @@ describe('Governors Spy', function() {
             this.player1.clickPrompt('Daidoji Uji');
 
             expect(this.player1).toHavePrompt('Choose a province for Daidoji Uji');
+        });
+
+        it('should reset ability usage on holdings', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.spy],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player1.placeCardInProvince(this.lies, 'province 1');
+
+            this.player2.pass();
+            this.player1.clickCard(this.lies);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.pass();
+
+            this.player1.clickCard(this.spy);
+            this.player1.clickPrompt('player1');
+            this.player1.clickPrompt('Daidoji Uji');
+            this.player1.clickCard(this.p1_4);
+            this.player1.clickPrompt('Doji Challenger');
+            this.player1.clickCard(this.p1_2);
+            this.player1.clickPrompt('Doji Kuwanan');
+            this.player1.clickCard(this.p1_3);
+            this.player1.clickPrompt('City of Lies');
+            this.player1.clickCard(this.p1_1);
+
+            expect(this.lies.facedown).toBe(true);
+
+            this.player2.clickCard(this.stoke);
+            this.player2.clickPrompt('Done');
+
+            expect(this.lies.facedown).toBe(false);
+            this.player1.clickCard(this.lies);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.pass();
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.desolation);
+            expect(this.player1.fate).toBe(fate);
         });
     });
 });

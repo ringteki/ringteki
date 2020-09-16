@@ -8,12 +8,11 @@ class MercenaryCompany extends DrawCard {
             title: 'Give control of this character',
             when: {
                 afterConflict: (event, context) => context.player.opponent && event.conflict.loser === context.player && context.source.isParticipating()
+                    && AbilityDsl.actions.loseFate().canAffect(context.player.opponent, context)
+                    && AbilityDsl.actions.placeFate().canAffect(context.source, context)
             },
             gameAction: AbilityDsl.actions.handler({
                 handler: context => {
-                    if(!context.player.opponent || context.player.opponent.fate === 0) {
-                        return;
-                    }
                     context.game.promptWithHandlerMenu(context.player.opponent, {
                         activePromptTitle: 'Place a fate on Mercenary Company to take control of it?',
                         source: context.source,

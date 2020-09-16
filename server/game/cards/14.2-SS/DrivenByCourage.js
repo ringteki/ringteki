@@ -15,7 +15,7 @@ class DrivenByCourage extends ProvinceCard {
                     effect: AbilityDsl.effects.modifyBothSkills(2)
                 }))
             },
-            effect: 'give {0} +1{1} and +1{2}',
+            effect: 'give {0} +2{1} and +2{2}',
             effectArgs: () => ['political', 'military']
         });
     }
