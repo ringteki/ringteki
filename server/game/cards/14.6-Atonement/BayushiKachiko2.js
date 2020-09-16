@@ -19,7 +19,7 @@ class BayushiKachiko2 extends DrawCard {
                             return false;
                         }
                         this.mostRecentEvent = event;
-                        return (event.originalLocation === Locations.ConflictDiscardPile && event.owner === context.player.opponent &&
+                        return (event.originalLocation === Locations.ConflictDiscardPile && event.card.owner === context.player.opponent &&
                         event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDiscard &&
                         context.game.isDuringConflict('political') && context.source.isParticipating());
                     }
@@ -35,6 +35,8 @@ class BayushiKachiko2 extends DrawCard {
                         this.mostRecentEvent.sourceOfCardPlayedFromConflictDiscard = this;
                         this.cardsPlayedThisRound++;
                         this.game.addMessage('{0} plays a card from their opponent\'s conflict discard pile due to the ability of {1} ({2} use{3} remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
+                        this.game.addMessage('{0} is removed from the game due to the ability of {1}', this.mostRecentEvent.card, context.source);
+                        context.player.moveCard(this.mostRecentEvent.card, Locations.RemovedFromGame);
                     }
                 })
             })
@@ -42,7 +44,7 @@ class BayushiKachiko2 extends DrawCard {
 
         this.persistentEffect({
             condition: context => {
-                return context.game.isDuringConflict('political') && context.source.isParticipating() && this.cardsPlayedThisRound < MAXIMUM_CARDS_ALLOWED
+                return context.game.isDuringConflict('political') && context.source.isParticipating() && this.cardsPlayedThisRound < MAXIMUM_CARDS_ALLOWED;
             },
             location: Locations.PlayArea,
             targetLocation: Locations.ConflictDiscardPile,
@@ -50,11 +52,12 @@ class BayushiKachiko2 extends DrawCard {
             match: (card, context) => {
                 return card.type === CardTypes.Event && card.location === Locations.ConflictDiscardPile && card.owner === context.player.opponent;
             },
-            effect: AbilityDsl.effects.canPlayFromOutOfPlay((player) => { return player === this.controller }, PlayTypes.PlayFromHand)
-            //     Locations.ConflictDiscardPile,
-            //     this.controller.opponent ? this.controller.opponent.conflictDiscardPile : [],
-            //     PlayTypes.PlayFromHand
-            // )
+            effect: [
+                AbilityDsl.effects.canPlayFromOutOfPlay((player, card) => {
+                    return player !== card.owner;
+                }, PlayTypes.PlayFromHand),
+                AbilityDsl.effects.registerToPlayFromOutOfPlay()
+            ]
         });
     }
 

@@ -474,7 +474,7 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this)).length > 0) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
             return true;
         }
 
@@ -483,8 +483,8 @@ class Player extends GameObject {
     }
 
     findPlayType(card) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this)).length > 0) {
-            let effects = card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this));
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
+            let effects = card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card));
             return effects[effects.length - 1].playType || PlayTypes.PlayFromHand;
         }
 

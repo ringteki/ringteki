@@ -333,17 +333,20 @@ describe('Master Tactician', function() {
 
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.tactician);
+            expect(this.getChatLogs(5)).not.toContain('player1 plays Tactical Ingenuity from their conflict deck');
             expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
 
             this.player2.pass();
 
             this.player1.clickCard(this.soul);
             this.player1.clickCard(this.tactician);
+            expect(this.getChatLogs(5)).toContain('player1 plays Soul Beyond Reproach from their conflict deck');
             expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)');
 
             this.player2.clickCard(this.fury);
             this.player2.clickCard(this.tactician);
             this.player1.clickCard(this.voice);
+            expect(this.getChatLogs(5)).toContain('player1 plays Voice of Honor from their conflict deck');
             expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
         });
 
