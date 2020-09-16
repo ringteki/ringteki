@@ -111,6 +111,21 @@ describe('Master Tactician', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
+            it('should not let your opponent play the top card', function () {
+                this.player1.clickCard(this.ambush);
+                this.player1.clickCard(this.province);
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.tactician],
+                    defenders: []
+                });
+                this.player2.clickCard(this.tactical);
+                this.player2.clickCard(this.tacticianp2);
+                expect(this.tacticianp2.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
             it('should not let you play the top card while a battlefield is not in play and this is participating', function () {
                 this.noMoreActions();
                 this.initiateConflict({
