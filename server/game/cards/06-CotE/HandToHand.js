@@ -21,7 +21,8 @@ class HandToHand extends DrawCard {
                         'Yes': ability.actions.resolveAbility({
                             ability: context.ability,
                             player: context.player.opponent ? context.player.opponent : context.player,
-                            subResolution: true
+                            subResolution: true,
+                            choosingPlayerOverride: context.choosingPlayerOverride
                         }),
                         'No': () => true
                     }
