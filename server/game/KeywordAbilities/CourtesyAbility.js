@@ -3,7 +3,7 @@ const { AbilityTypes } = require('../Constants');
 
 class CourtesyAbility extends TriggeredAbility {
     constructor(game, card) {
-        super(game, card, AbilityTypes.ForcedInterrupt, {
+        super(game, card, AbilityTypes.KeywordInterrupt, {
             when: {
                 onCardLeavesPlay: (event, context) => event.card === context.source &&
                                                       context.source.hasCourtesy()

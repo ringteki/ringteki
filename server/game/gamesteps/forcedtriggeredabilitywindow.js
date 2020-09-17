@@ -31,7 +31,7 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
     }
 
     addChoice(context) {
-        if(!context.event.cancelled && !this.hasAbilityBeenTriggered(context)) {
+        if(!context.event.cancelled && !this.hasAbilityBeenTriggered(context) && context.ability && !context.ability.isKeywordAbility()) {
             this.choices.push(context);
         }
     }
