@@ -1,50 +1,33 @@
-const _ = require('underscore');
 const DrawCard = require('../../drawcard.js');
 const { Locations, Players, TargetModes, CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class IkomaUjiaki extends DrawCard {
-    setupCardAbilities(ability) {
-        // TODO: refactor this
+    setupCardAbilities() {
         this.action({
-            title: 'Put 2 characters into play',
-            cost: ability.costs.discardImperialFavor(),
-            condition: context => context.source.isParticipating() && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].some(location => {
-                let cards = context.player.getDynastyCardsInProvince(location);
-                return cards.some(card => card.isFacedown() || (card.type === CardTypes.Character && card.allowGameAction('putIntoConflict', context)));
-            }),
-            effect: 'to reveal all their facedown dynasty cards',
-            handler: context => {
-                let revealedCards = [];
-                _.each([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour], location => {
-                    let cards = context.player.getDynastyCardsInProvince(location);
-                    cards.forEach(card => {
-                        if(card && card.isFacedown()) {
-                            revealedCards.push(card);
-                            card.facedown = false;
-                        }
-                    });
-                });
-                this.game.promptForSelect(context.player, {
-                    mode: TargetModes.UpTo,
+            title: 'Put characters into play',
+            condition: context => context.source.isParticipating(),
+            cost: AbilityDsl.costs.discardImperialFavor(),
+            gameAction: AbilityDsl.actions.sequential([
+                AbilityDsl.actions.reveal(context => ({
+                    target: context.player.getDynastyCardsInProvince(Locations.Provinces)
+                })),
+                AbilityDsl.actions.selectCard(context => ({
+                    activePromptTitle: 'Choose up to two characters',
                     numCards: 2,
-                    activePrompt: 'Choose up to 2 characters',
-                    cardType: CardTypes.Character,
-                    location: Locations.Provinces,
-                    controller: Players.Self,
-                    context: context,
+                    targets: true,
+                    mode: TargetModes.UpTo,
                     optional: true,
+                    cardType: CardTypes.Character,
+                    location: [Locations.Provinces],
+                    controller: Players.Self,
                     cardCondition: card => card.isFaceup() && card.allowGameAction('putIntoConflict', context),
-                    onSelect: (player, cards) => {
-                        if(revealedCards.length > 0) {
-                            this.game.addMessage('{0} reveals {1} and puts {2} into play', player, revealedCards, cards);
-                        } else {
-                            this.game.addMessage('{0} puts {1} into play', player, cards);
-                        }
-                        this.game.applyGameAction(context, { putIntoConflict: cards });
-                        return true;
-                    }
-                });
-            }
+                    message: '{0} puts {1} into play into the conflict',
+                    messageArgs: cards => [context.player, cards],
+                    gameAction: AbilityDsl.actions.putIntoConflict()
+                }))
+            ]),
+            effect: 'reveal their dynasty cards and put up to two of them into play'
         });
     }
 }
