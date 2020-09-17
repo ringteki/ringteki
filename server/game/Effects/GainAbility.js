@@ -54,9 +54,13 @@ class GainAbility extends EffectValue {
         } else {
             this.value.limit = this.grantedAbilityLimits[target.uuid];
         }
+        this.grantedAbilityLimits[target.uuid].currentUser = target.uuid;
     }
 
     unapply(target) {
+        if(this.grantedAbilityLimits[target.uuid]) {
+            this.grantedAbilityLimits[target.uuid].currentUser = null;
+        }
         if([AbilityTypes.ForcedInterrupt, AbilityTypes.ForcedReaction, AbilityTypes.Interrupt, AbilityTypes.Reaction, AbilityTypes.WouldInterrupt].includes(this.abilityType)) {
             this.value.unregisterEvents();
         } else if(this.abilityType === AbilityTypes.Persistent && this.value.ref) {
