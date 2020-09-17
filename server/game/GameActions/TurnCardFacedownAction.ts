@@ -18,6 +18,10 @@ export class TurnCardFacedownAction extends CardGameAction {
     }
 
     eventHandler(event): void {
+        if(event.card.controller !== event.card.owner) {
+            event.card.owner.moveCard(event.card, event.card.location);
+        }
+
         event.card.leavesPlay();
         if(event.card.isConflictProvince()) {
             event.context.game.addMessage('{0} is immediately revealed again!', event.card);

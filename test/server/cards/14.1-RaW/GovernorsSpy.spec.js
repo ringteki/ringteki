@@ -9,7 +9,7 @@ describe('Governors Spy', function() {
                     hand: ['desolation']
                 },
                 player2: {
-                    inPlay: ['bayushi-liar', 'alibi-artist', 'blackmail-artist', 'bayushi-manipulator', 'bayushi-shoju', 'yogo-asami'],
+                    inPlay: ['bayushi-liar', 'alibi-artist', 'blackmail-artist', 'bayushi-manipulator', 'bayushi-shoju', 'yogo-asami', 'akodo-zentaro'],
                     dynastyDiscard: ['hantei-xxxviii'],
                     hand: ['stoke-insurrection']
                 }
@@ -34,6 +34,7 @@ describe('Governors Spy', function() {
             this.shoju = this.player2.findCardByName('bayushi-shoju');
             this.asami = this.player2.findCardByName('yogo-asami');
             this.stoke = this.player2.findCardByName('stoke-insurrection');
+            this.zentaro = this.player2.findCardByName('akodo-zentaro');
 
             this.p1_1 = this.player1.findCardByName('shameful-display', 'province 1');
             this.p1_2 = this.player1.findCardByName('shameful-display', 'province 2');
@@ -421,6 +422,81 @@ describe('Governors Spy', function() {
             this.player1.clickCard(this.p1_1);
 
             expect(this.lies.facedown).toBe(true);
+
+            this.player2.clickCard(this.stoke);
+            this.player2.clickPrompt('Done');
+
+            expect(this.lies.facedown).toBe(false);
+            this.player1.clickCard(this.lies);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.pass();
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.desolation);
+            expect(this.player1.fate).toBe(fate);
+        });
+
+        it('should return facedown dynasty cards to their owners', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.player1.placeCardInProvince(this.lies, 'province 1');
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.zentaro],
+                defenders: [this.spy],
+                province: this.p1_1,
+                type: 'political'
+            });
+
+            this.player2.reduceDeckToNumber('dynasty deck', 0);
+            this.player2.moveCard(this.asami, 'dynasty deck');
+
+            this.player1.clickCard(this.lies);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.zentaro);
+            this.player2.clickCard(this.lies);
+            this.player2.clickCard(this.p2_3);
+            expect(this.lies.controller).toBe(this.player2.player);
+            this.player1.pass();
+            this.player2.clickCard(this.lies);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.spy);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player2');
+
+            expect(this.lies.location).toBe('province 3');
+            expect(this.lies.controller).toBe(this.player1.player);
+            expect(this.lies.facedown).toBe(true);
+
+            expect(this.player1).toHavePrompt('Select a card to place');
+            expect(this.player1).toHavePromptButton('Alibi Artist');
+            expect(this.player1).toHavePromptButton('Bayushi Liar');
+            expect(this.player1).toHavePromptButton('Bayushi Manipulator');
+            expect(this.player1).not.toHavePromptButton('City of Lies');
+            expect(this.player1).not.toHavePromptButton('Yogo Asami');
+            this.player1.clickPrompt('Alibi Artist');
+
+            expect(this.player1).toHavePrompt('Choose a province for Alibi Artist');
+            expect(this.player1).toBeAbleToSelect(this.p2_1);
+            expect(this.player1).toBeAbleToSelect(this.p2_2);
+            expect(this.player1).toBeAbleToSelect(this.p2_3);
+            expect(this.player1).toBeAbleToSelect(this.p2_4);
+            expect(this.player1).not.toBeAbleToSelect(this.p2_Stronghold);
+
+            this.player1.clickCard(this.p2_4);
+            this.player1.clickPrompt('Bayushi Liar');
+            this.player1.clickCard(this.p2_1);
+            this.player1.clickPrompt('Bayushi Manipulator');
+            this.player1.clickCard(this.p2_3);
+
+            expect(this.getChatLogs(3)).toContain('player1 has finished placing cards');
+
+            expect(this.alibi.location).toBe('province 4');
+            expect(this.liar.location).toBe('province 1');
+            expect(this.manipulator.location).toBe('province 3');
+            expect(this.asami.location).toBe('province 2');
 
             this.player2.clickCard(this.stoke);
             this.player2.clickPrompt('Done');
