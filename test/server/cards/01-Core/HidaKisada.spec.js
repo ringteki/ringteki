@@ -6,14 +6,17 @@ describe('Hida Kisada', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['hida-kisada'],
+                        dynastyDiscard: ['hida-kisada'],
                         conflictDiscard: ['defend-your-honor']
                     },
                     player2: {
                         inPlay: ['akodo-toturi'],
-                        hand: ['banzai', 'iuchi-wayfinder']
+                        hand: ['banzai', 'iuchi-wayfinder', 'stoke-insurrection']
                     }
                 });
-                this.hidaKisada = this.player1.findCardByName('hida-kisada');
+                this.hidaKisada = this.player1.findCardByName('hida-kisada', 'play-area');
+                this.hidaKisada2 = this.player1.findCardByName('hida-kisada', 'dynasty discard pile');
+                this.player1.placeCardInProvince(this.hidaKisada2, 'province 1');
                 this.defendYourHonor = this.player1.findCardByName('defend-your-honor');
 
                 this.akodoToturi = this.player2.findCardByName('akodo-toturi');
