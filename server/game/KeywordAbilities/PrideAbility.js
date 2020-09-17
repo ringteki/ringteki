@@ -4,7 +4,7 @@ const { AbilityTypes } = require('../Constants');
 
 class PrideAbility extends TriggeredAbility {
     constructor(game, card) {
-        super(game, card, AbilityTypes.ForcedReaction, {
+        super(game, card, AbilityTypes.KeywordReaction, {
             when: {
                 afterConflict: (event, context) => context.source.isParticipating() && context.source.hasPride() &&
                                                    ((event.conflict.winner === context.player && context.source.allowGameAction('honor', context)) ||
