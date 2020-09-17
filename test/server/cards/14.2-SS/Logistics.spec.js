@@ -6,7 +6,7 @@ describe('Logistics', function() {
                 player1: {
                     hand: ['total-warfare', 'logistics', 'fine-katana'],
                     inPlay: ['bayushi-shoju'],
-                    dynastyDiscard: ['imperial-storehouse', 'favorable-ground', 'kakita-toshimoko', 'dispatch-to-nowhere', 'kakita-yoshi', 'doji-whisperer'],
+                    dynastyDiscard: ['imperial-storehouse', 'favorable-ground', 'kakita-toshimoko', 'dispatch-to-nowhere', 'kakita-yoshi', 'doji-whisperer', 'city-of-lies'],
                     provinces: ['dishonorable-assault'],
                     stronghold: 'kyuden-kakita'
                 },
@@ -21,6 +21,7 @@ describe('Logistics', function() {
             this.shoju = this.player1.findCardByName('bayushi-shoju');
             this.katana = this.player1.findCardByName('fine-katana');
             this.kyudenKakita = this.player1.findCardByName('kyuden-kakita');
+            this.lies = this.player1.findCardByName('city-of-lies');
 
             this.totalWarfare = this.player1.findCardByName('total-warfare');
             this.heimin = this.player2.findCardByName('educated-heimin');
@@ -307,6 +308,20 @@ describe('Logistics', function() {
                 this.player1.clickCard(this.p2_2);
                 expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move Educated Heimin to Shameful Display and draw a card');
             });
+        });
+
+        it('should not allow using a holding twice', function() {
+            this.player1.placeCardInProvince(this.lies, 'province 1');
+            this.player1.clickCard(this.lies);
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.pass();
+            this.player1.clickCard(this.logistics);
+            this.player1.clickCard(this.lies);
+            this.player1.clickCard(this.p2);
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.pass();
+            this.player1.clickCard(this.lies);
+            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

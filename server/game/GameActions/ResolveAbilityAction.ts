@@ -79,6 +79,7 @@ export interface ResolveAbilityProperties extends CardActionProperties {
     ignoredRequirements?: string[];
     player?: Player;
     event?: Event;
+    choosingPlayerOverride?: Player;
 }
 
 export class ResolveAbilityAction extends CardGameAction {
@@ -86,7 +87,8 @@ export class ResolveAbilityAction extends CardGameAction {
     defaultProperties: ResolveAbilityProperties = {
         ability: null,
         ignoredRequirements: [],
-        subResolution: false
+        subResolution: false,
+        choosingPlayerOverride: null
     };
     constructor(properties: ((context: TriggeredAbilityContext) => ResolveAbilityProperties) | ResolveAbilityProperties) {
         super(properties);
@@ -116,6 +118,9 @@ export class ResolveAbilityAction extends CardGameAction {
         let newContextEvent = properties.event;
         let newContext = (properties.ability as TriggeredAbility).createContext(player, newContextEvent);
         newContext.subResolution = !!properties.subResolution;
+        if(properties.choosingPlayerOverride) {
+            newContext.choosingPlayerOverride = properties.choosingPlayerOverride;
+        }
         event.context.game.queueStep(new ResolveAbilityActionResolver(event.context.game, newContext, properties.ignoredRequirements.includes('cost')));
     }
 

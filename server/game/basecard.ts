@@ -298,9 +298,11 @@ class BaseCard extends EffectSource {
         this.inConflict = false;
     }
 
-    updateAbilityEvents(from: Locations, to: Locations) {
+    updateAbilityEvents(from: Locations, to: Locations, reset: boolean = true) {
         _.each(this.reactions, reaction => {
-            reaction.limit.reset();
+            if(reset) {
+                reaction.limit.reset();
+            }
             if(this.type === CardTypes.Event) {
                 if(to === Locations.ConflictDeck || this.controller.isCardInPlayableLocation(this) || this.controller.opponent && this.controller.opponent.isCardInPlayableLocation(this)) {
                     reaction.registerEvents();
@@ -313,7 +315,9 @@ class BaseCard extends EffectSource {
                 reaction.unregisterEvents();
             }
         });
-        _.each(this.abilities.actions, action => action.limit.reset());
+        if(reset) {
+            _.each(this.abilities.actions, action => action.limit.reset());
+        }
     }
 
     updateEffects(from: Locations, to: Locations) {
@@ -349,6 +353,7 @@ class BaseCard extends EffectSource {
 
     moveTo(targetLocation: Locations) {
         let originalLocation = this.location;
+        let sameLocation = false;
 
         this.location = targetLocation;
 
@@ -356,8 +361,12 @@ class BaseCard extends EffectSource {
             this.facedown = false;
         }
 
+        if(this.game.getProvinceArray().includes(originalLocation) && this.game.getProvinceArray().includes(targetLocation)) {
+            sameLocation = true;
+        }
+
         if(originalLocation !== targetLocation) {
-            this.updateAbilityEvents(originalLocation, targetLocation);
+            this.updateAbilityEvents(originalLocation, targetLocation, !sameLocation);
             this.updateEffects(originalLocation, targetLocation);
             this.game.emitEvent(EventNames.OnCardMoved, { card: this, originalLocation: originalLocation, newLocation: targetLocation });
         }

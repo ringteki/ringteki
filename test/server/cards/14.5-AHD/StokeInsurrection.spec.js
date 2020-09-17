@@ -195,5 +195,76 @@ describe('Stoke Insurrection', function() {
             this.player2.clickCard(this.insurrection);
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
+
+        it('should not work outside of a conflict', function() {
+            this.noMoreActions();
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('Don\'t Resolve');
+            this.player1.pass();
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.clickCard(this.insurrection);
+            expect(this.player2).toHavePrompt('Action Window');
+        });
+    });
+});
+
+
+describe('Stoke Insurrection with Rally', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['isawa-ujina'],
+                    dynastyDiscard: ['a-season-of-war', 'ikoma-tsanuri-2', 'fushicho', 'tainted-hero', 'ikoma-ujiaki', 'kakita-toshimoko']
+                },
+                player2: {
+                    hand: ['stoke-insurrection']
+                }
+            });
+
+            this.ujina = this.player1.findCardByName('isawa-ujina');
+            this.season = this.player1.placeCardInProvince('a-season-of-war', 'province 1');
+            this.tsanuri = this.player1.placeCardInProvince('ikoma-tsanuri-2', 'province 2');
+            this.fushicho = this.player1.placeCardInProvince('fushicho', 'province 3');
+            this.hero = this.player1.placeCardInProvince('tainted-hero', 'province 4');
+
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.ujiaki = this.player1.moveCard('ikoma-ujiaki', 'dynasty deck');
+            this.toshimoko = this.player1.moveCard('kakita-toshimoko', 'dynasty deck');
+
+            this.insurrection = this.player2.findCardByName('stoke-insurrection');
+
+            this.season.facedown = true;
+            this.fushicho.facedown = true;
+            this.tsanuri.facedown = true;
+            this.hero.facedown = true;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.ujina],
+                defenders: []
+            });
+        });
+
+        it('should trigger rally before character selection', function() {
+            expect(this.season.facedown).toBe(true);
+            expect(this.fushicho.facedown).toBe(true);
+            expect(this.tsanuri.facedown).toBe(true);
+            expect(this.hero.facedown).toBe(true);
+            expect(this.toshimoko.location).toBe('dynasty deck');
+            expect(this.ujiaki.location).toBe('dynasty deck');
+
+            this.player2.clickCard(this.insurrection);
+            expect(this.season.facedown).toBe(false);
+            expect(this.fushicho.facedown).toBe(false);
+            expect(this.tsanuri.facedown).toBe(false);
+            expect(this.hero.facedown).toBe(false);
+            expect(this.toshimoko.location).toBe('province 1');
+            expect(this.ujiaki.location).toBe('province 2');
+            expect(this.player2).toHavePrompt('Choose up to two characters');
+        });
     });
 });

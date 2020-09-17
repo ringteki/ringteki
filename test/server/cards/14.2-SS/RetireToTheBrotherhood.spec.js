@@ -205,3 +205,101 @@ describe('Retire To The Brotherhood', function() {
         });
     });
 });
+
+describe('Retire To The Brotherhood with Stoke Insurrection', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['matsu-berserker', 'daidoji-nerishma'],
+                    dynastyDiscard: ['bayushi-shoju', 'shiba-tsukune', 'imperial-storehouse', 'windswept-yurt', 'dispatch-to-nowhere', 'doji-challenger', 'doji-representative']
+                },
+                player2: {
+                    role: ['keeper-of-void'],
+                    inPlay: ['doji-whisperer', 'daidoji-uji'],
+                    dynastyDiscard: ['kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai'],
+                    provinces: ['retire-to-the-brotherhood', 'manicured-garden'],
+                    hand: ['stoke-insurrection']
+                }
+            });
+
+            this.berserker = this.player1.findCardByName('matsu-berserker');
+            this.nerishma = this.player1.findCardByName('daidoji-nerishma');
+            this.nerishma.fate = 10;
+            this.challenger = this.player1.placeCardInProvince('doji-challenger', 'province 1');
+            this.representative = this.player1.placeCardInProvince('doji-representative', 'province 2');
+
+            this.tsukune2 = this.player1.findCardByName('shiba-tsukune', 'dynasty discard pile');
+            this.shoju2 = this.player1.findCardByName('bayushi-shoju', 'dynasty discard pile');
+            this.storehouse = this.player1.findCardByName('imperial-storehouse');
+            this.yurt = this.player1.findCardByName('windswept-yurt');
+            this.dispatch = this.player1.findCardByName('dispatch-to-nowhere');
+
+            this.retire = this.player2.findCardByName('retire-to-the-brotherhood');
+            this.garden = this.player2.findCardByName('manicured-garden');
+
+            this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
+            this.uji = this.player2.findCardByName('daidoji-uji');
+            this.yoshi = this.player2.findCardByName('kakita-yoshi');
+            this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+            this.kageyu = this.player2.findCardByName('daidoji-kageyu');
+            this.chagatai = this.player2.findCardByName('moto-chagatai');
+            this.stoke = this.player2.findCardByName('stoke-insurrection');
+
+            this.player2.reduceDeckToNumber('dynasty deck', 0);
+            this.player2.player.dynastyDiscardPile.each(a => this.player2.moveCard(a, 'dynasty deck'));
+        });
+
+        it('Should consider characters you control as belonging to you', function() {
+            this.noMoreActions();
+            expect(this.retire.facedown).toBe(true);
+
+            this.initiateConflict({
+                attackers: [this.berserker],
+                defenders: [],
+                province: this.garden,
+                type: 'military',
+                ring: 'water'
+            });
+
+            this.player2.clickCard(this.stoke);
+            this.player2.clickCard(this.challenger);
+            this.player2.clickCard(this.representative);
+            this.player2.clickPrompt('Done');
+
+            this.noMoreActions();
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+
+            this.player1.moveCard(this.storehouse, 'dynasty deck');
+            this.player1.moveCard(this.shoju2, 'dynasty deck');
+            this.player1.moveCard(this.tsukune2, 'dynasty deck');
+            this.player1.moveCard(this.yurt, 'dynasty deck');
+            this.player1.moveCard(this.dispatch, 'dynasty deck');
+
+            this.noMoreActions();
+            this.player2.passConflict();
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.nerishma],
+                province: this.retire,
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.retire);
+            expect(this.berserker.location).toBe('dynasty discard pile');
+            expect(this.dojiWhisperer.location).toBe('dynasty discard pile');
+            expect(this.uji.location).toBe('dynasty discard pile');
+            expect(this.challenger.location).toBe('dynasty discard pile');
+            expect(this.representative.location).toBe('dynasty discard pile');
+
+            expect(this.player1.player.cardsInPlay).toContain(this.tsukune2);
+            expect(this.player1.player.cardsInPlay).not.toContain(this.shoju2);
+            expect(this.player2.player.cardsInPlay).toContain(this.yoshi);
+            expect(this.player2.player.cardsInPlay).toContain(this.toshimoko);
+            expect(this.player2.player.cardsInPlay).toContain(this.kageyu);
+            expect(this.player2.player.cardsInPlay).toContain(this.chagatai);
+        });
+    });
+});

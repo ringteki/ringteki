@@ -175,8 +175,8 @@ describe('Expert Interpreter', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.ujiaki);
                 expect(this.kageyu.facedown).toBe(false);
-                expect(this.player1).toHavePrompt('Ikoma Ujiaki');
-                expect(this.player1).toHavePromptButton('Done');
+                expect(this.player1).not.toHavePrompt('Ikoma Ujiaki');
+                expect(this.player1).not.toHavePromptButton('Done');
                 expect(this.player1).not.toBeAbleToSelect(this.kageyu);
             });
 
