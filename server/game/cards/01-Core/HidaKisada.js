@@ -23,20 +23,20 @@ class HidaKisada extends DrawCard {
             this.firstActionEvent = {};
         }
 
-        if(!this.firstActionEvent[event.context.player.id] && this.game.isDuringConflict() && event.context.ability.abilityType === 'action' && !event.context.ability.cannotBeCancelled && event.context.player !== this.controller) {
-            this.firstActionEvent[event.context.player.id] = event;
+        if(!this.firstActionEvent[event.context.player.uuid] && this.game.isDuringConflict() && event.context.ability.abilityType === 'action' && !event.context.ability.cannotBeCancelled && event.context.player !== this.controller) {
+            this.firstActionEvent[event.context.player.uuid] = event;
         }
     }
 
     onInitiateAbilityEffectsOtherEffects(event) {
-        if(event === this.firstActionEvent[event.context.player.id] && !event.cancelled && this.location === Locations.PlayArea && !this.isBlank() && !this.game.conflictRecord.some(conflict => conflict.winner === this.controller.opponent)) {
+        if(event === this.firstActionEvent[event.context.player.uuid] && !event.cancelled && this.location === Locations.PlayArea && !this.isBlank() && !this.game.conflictRecord.some(conflict => conflict.winner === this.controller.opponent)) {
             event.cancel();
             this.game.addMessage('{0} attempts to initiate {1}{2}, but {3} cancels it', event.context.player, event.card, event.card.type === CardTypes.Event ? '' : '\'s ability', this);
         }
     }
 
     onConflictDeclared() {
-        this.firstActionEvent = null;
+        this.firstActionEvent = {};
     }
 }
 
