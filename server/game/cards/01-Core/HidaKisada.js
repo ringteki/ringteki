@@ -4,7 +4,7 @@ const { Locations, CardTypes, EventNames, AbilityTypes } = require('../../Consta
 
 class HidaKisada extends DrawCard {
     setupCardAbilities() {
-        this.firstActionEvent = [];
+        this.firstActionEvent = {};
 
         this.abilityRegistrar = new EventRegistrar(this.game, this);
         this.abilityRegistrar.register([{
@@ -20,7 +20,7 @@ class HidaKisada extends DrawCard {
 
     onInitiateAbilityEffectsWouldInterrupt(event) {
         if(!this.firstActionEvent) {
-            this.firstActionEvent = [];
+            this.firstActionEvent = {};
         }
 
         if(!this.firstActionEvent[event.context.player.id] && this.game.isDuringConflict() && event.context.ability.abilityType === 'action' && !event.context.ability.cannotBeCancelled && event.context.player !== this.controller) {
