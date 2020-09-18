@@ -40,8 +40,10 @@ class GovernorsSpy extends DrawCard {
         this.dynastyCards.sort((a, b) => a.dynastyCard.name.localeCompare(b.dynastyCard.name));
         //Step 2: Flip them all face down and create a list that we'll end up using for their new location
         this.dynastyCards.forEach(card => {
-            card.dynastyCard.facedown = true;
+            this.game.applyGameAction(context, { turnFacedown: card.dynastyCard });
         });
+        //Step 2.5: Return control of any facedown cards to their owner
+        this.dynastyCards = this.dynastyCards.filter(a => a.dynastyCard.owner === targetPlayer);
 
         //Step 3: For each card, choose an eligible province.  This is done via prompt for select, which queues simple steps
         this.unplacedDynastyCards = this.dynastyCards.map(a => a.dynastyCard);
@@ -95,21 +97,16 @@ class GovernorsSpy extends DrawCard {
         this.dynastyCards.forEach(card => {
             targetPlayer.moveCard(card.dynastyCard, card.targetLocation);
         });
+        let emptyLocations = this.getEmptyProvinces(this.dynastyCards);
+        emptyLocations.forEach(location => {
+            context.refillProvince(targetPlayer, location);
+        });
         this.game.addMessage('{0} has finished placing cards', context.player);
     }
 
     isProvinceValidTarget(targetPlayer, cards, province) {
         //Step 1: Identify empty provinces
-        let emptyLocations = [];
-        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if(!this.game.skirmishMode) {
-            baseLocations.push(Locations.ProvinceFour);
-        }
-        baseLocations.forEach(p => {
-            if(!cards.some(card => card.targetLocation === p)) {
-                emptyLocations.push(p);
-            }
-        });
+        let emptyLocations = this.getEmptyProvinces(cards);
 
         //Step 2: Identify how many cards we have left to place
         let location = province.location;
@@ -122,6 +119,21 @@ class GovernorsSpy extends DrawCard {
 
         //Step 2.2 We need to put the card in an empty location
         return emptyLocations.some(loc => loc === location);
+    }
+
+    getEmptyProvinces(cards) {
+        let emptyLocations = [];
+        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        if(!this.game.skirmishMode) {
+            baseLocations.push(Locations.ProvinceFour);
+        }
+        baseLocations.forEach(p => {
+            if(!cards.some(card => card.targetLocation === p)) {
+                emptyLocations.push(p);
+            }
+        });
+
+        return emptyLocations;
     }
 }
 

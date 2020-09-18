@@ -3,7 +3,7 @@ const { AbilityTypes, Locations } = require('../Constants');
 
 class RallyAbility extends TriggeredAbility {
     constructor(game, card) {
-        super(game, card, AbilityTypes.ForcedReaction, {
+        super(game, card, AbilityTypes.KeywordReaction, {
             when: {
                 onCardRevealed: (event, context) => event.card === context.source &&
                     this.game.getProvinceArray().includes(event.card.location) &&

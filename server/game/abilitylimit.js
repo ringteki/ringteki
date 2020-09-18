@@ -5,6 +5,7 @@ class FixedAbilityLimit {
         this.max = max;
         this.ability = null;
         this.useCount = {};
+        this.currentUser = null;
     }
 
     isRepeatable() {
@@ -16,15 +17,24 @@ class FixedAbilityLimit {
     }
 
     isAtMax(player) {
-        return this.useCount[player.name] && this.useCount[player.name] >= this.getModifiedMax(player);
+        const key = this.getKey(player.name);
+        return this.useCount[key] && this.useCount[key] >= this.getModifiedMax(player);
     }
 
     increment(player) {
-        if(this.useCount[player.name]) {
-            this.useCount[player.name] += 1;
+        const key = this.getKey(player.name);
+        if(this.useCount[key]) {
+            this.useCount[key] += 1;
         } else {
-            this.useCount[player.name] = 1;
+            this.useCount[key] = 1;
         }
+    }
+
+    getKey(player) {
+        if(this.currentUser) {
+            return player + this.currentUser;
+        }
+        return player;
     }
 
     reset() {

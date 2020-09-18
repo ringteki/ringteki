@@ -41,7 +41,13 @@ class Banzai extends DrawCard {
                     },
                     message: '{0} chooses {3}to lose an honor to resolve {1} again',
                     messageArgs: context => context.select === 'Done' ? 'not ' : '',
-                    then: { gameAction: AbilityDsl.actions.resolveAbility({ ability: context.ability instanceof CardAbility ? context.ability : null, subResolution: true }) }
+                    then: {
+                        gameAction: AbilityDsl.actions.resolveAbility({
+                            ability: context.ability instanceof CardAbility ? context.ability : null,
+                            subResolution: true,
+                            choosingPlayerOverride: context.choosingPlayerOverride
+                        })
+                    }
                 };
             }
         });
