@@ -171,5 +171,58 @@ describe('Banzai!', function() {
                 expect(this.player1.player.honor).toBe(9);
             });
         });
+
+        describe('With Emperor', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['miya-mystic', 'seppun-guardsman'],
+                        hand: ['banzai']
+                    },
+                    player2: {
+                        inPlay: ['bayushi-manipulator', 'hantei-xxxviii']
+                    }
+                });
+                this.miyaMystic = this.player1.findCardByName('miya-mystic');
+                this.seppunGuardsman = this.player1.findCardByName('seppun-guardsman');
+                this.manipulator = this.player2.findCardByName('bayushi-manipulator');
+                this.banzai = this.player1.findCardByName('banzai');
+                this.hantei = this.player2.findCardByName('hantei-xxxviii');
+                this.noMoreActions();
+            });
+
+            it('should only work on participating characters', function() {
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.miyaMystic, this.seppunGuardsman],
+                    defenders: [this.manipulator]
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.banzai);
+                expect(this.player1).toHavePrompt('Banzai!');
+                this.player1.clickCard(this.miyaMystic);
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.hantei);
+                this.player2.clickCard(this.hantei);
+                expect(this.player2).toHavePrompt('Banzai!');
+                expect(this.player2).toBeAbleToSelect(this.miyaMystic);
+                expect(this.player2).toBeAbleToSelect(this.seppunGuardsman);
+                expect(this.player2).toBeAbleToSelect(this.manipulator);
+                expect(this.miyaMystic.getMilitarySkill()).toBe(1);
+
+                this.player2.clickCard(this.manipulator);
+                expect(this.manipulator.getMilitarySkill()).toBe(3);
+
+                this.player1.clickPrompt('Lose 1 honor to resolve this ability again');
+
+                expect(this.player2).toHavePrompt('Banzai!');
+                expect(this.player2).toBeAbleToSelect(this.miyaMystic);
+                expect(this.player2).toBeAbleToSelect(this.seppunGuardsman);
+                expect(this.player2).toBeAbleToSelect(this.manipulator);
+                this.player2.clickCard(this.manipulator);
+                expect(this.manipulator.getMilitarySkill()).toBe(5);
+            });
+        });
     });
 });

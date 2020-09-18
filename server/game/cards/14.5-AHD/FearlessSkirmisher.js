@@ -13,8 +13,8 @@ class FearlessSkirmisher extends DrawCard {
                 token: {
                     activePromptTitle: 'Choose a dishonored token',
                     mode: TargetModes.Token,
-                    tokenCondition: token => {
-                        return token.dishonored;
+                    cardCondition: card => {
+                        return card.dishonored;
                     }
                 },
                 character: {

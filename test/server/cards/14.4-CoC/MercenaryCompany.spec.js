@@ -7,12 +7,15 @@ describe('Mercenary Company', function() {
                     inPlay: ['mercenary-company', 'doji-kuwanan', 'daidoji-uji']
                 },
                 player2: {
-                    inPlay: ['akodo-toturi-2', 'togashi-yokuni']
+                    inPlay: ['akodo-toturi-2', 'togashi-yokuni'],
+                    provinces: ['manicured-garden', 'blood-of-onnotangu']
                 }
             });
             this.company = this.player1.findCardByName('mercenary-company');
             this.toturi = this.player2.findCardByName('akodo-toturi-2');
             this.yokuni = this.player2.findCardByName('togashi-yokuni');
+            this.garden = this.player2.findCardByName('manicured-garden');
+            this.blood = this.player2.findCardByName('blood-of-onnotangu');
 
             this.noMoreActions();
         });
@@ -21,7 +24,8 @@ describe('Mercenary Company', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.company],
-                defenders: [this.toturi, this.yokuni]
+                defenders: [this.toturi, this.yokuni],
+                province: this.garden
             });
 
             this.noMoreActions();
@@ -35,7 +39,8 @@ describe('Mercenary Company', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.company],
-                defenders: [this.toturi, this.yokuni]
+                defenders: [this.toturi, this.yokuni],
+                province: this.garden
             });
 
             this.noMoreActions();
@@ -46,7 +51,8 @@ describe('Mercenary Company', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.company],
-                defenders: [this.toturi]
+                defenders: [this.toturi],
+                province: this.garden
             });
 
             this.noMoreActions();
@@ -57,7 +63,8 @@ describe('Mercenary Company', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.company],
-                defenders: [this.toturi, this.yokuni]
+                defenders: [this.toturi, this.yokuni],
+                province: this.garden
             });
 
             let cFate = this.company.fate;
@@ -79,7 +86,8 @@ describe('Mercenary Company', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.company],
-                defenders: [this.toturi, this.yokuni]
+                defenders: [this.toturi, this.yokuni],
+                province: this.garden
             });
             this.noMoreActions();
             this.player2.clickPrompt('Yes');
@@ -107,6 +115,18 @@ describe('Mercenary Company', function() {
 
             expect(this.getChatLogs(10)).toContain('player2 uses Mercenary Company to let player1 hire their services');
             expect(this.getChatLogs(10)).toContain('player1 places a fate on and takes control of Mercenary Company');
+        });
+
+        it('should not let you take control if you cannot spend fate', function() {
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.company],
+                defenders: [this.toturi, this.yokuni],
+                province: this.blood
+            });
+
+            this.noMoreActions();
+            expect(this.player2).not.toHavePrompt('Place a fate on Mercenary Company to take control of it?');
         });
     });
 });

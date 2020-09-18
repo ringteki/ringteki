@@ -5,6 +5,7 @@ const ForcedTriggeredAbilityWindow = require('../gamesteps/forcedtriggeredabilit
 const SimpleStep = require('../gamesteps/simplestep.js');
 const TriggeredAbilityWindow = require('../gamesteps/triggeredabilitywindow.js');
 const { AbilityTypes } = require('../Constants');
+const KeywordAbilityWindow = require('../gamesteps/keywordabilitywindow.js');
 
 class EventWindow extends BaseStepWithPipeline {
     constructor(game, events) {
@@ -30,10 +31,12 @@ class EventWindow extends BaseStepWithPipeline {
             new SimpleStep(this.game, () => this.createContingentEvents()),
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.ForcedInterrupt)),
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.Interrupt)),
+            new SimpleStep(this.game, () => this.checkKeywordAbilities(AbilityTypes.KeywordInterrupt)),
             new SimpleStep(this.game, () => this.checkForOtherEffects()),
             new SimpleStep(this.game, () => this.preResolutionEffects()),
             new SimpleStep(this.game, () => this.executeHandler()),
             new SimpleStep(this.game, () => this.checkGameState()),
+            new SimpleStep(this.game, () => this.checkKeywordAbilities(AbilityTypes.KeywordReaction)),
             new SimpleStep(this.game, () => this.checkThenAbilities()),
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.ForcedReaction)),
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.Reaction)),
@@ -115,6 +118,14 @@ class EventWindow extends BaseStepWithPipeline {
     checkGameState() {
         this.eventsToExecute = this.eventsToExecute.filter(event => !event.cancelled);
         this.game.checkGameState(_.any(this.eventsToExecute, event => event.handler), this.eventsToExecute);
+    }
+
+    checkKeywordAbilities(abilityType) {
+        if(_.isEmpty(this.events)) {
+            return;
+        }
+
+        this.queueStep(new KeywordAbilityWindow(this.game, abilityType, this));
     }
 
     checkThenAbilities() {

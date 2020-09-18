@@ -43,7 +43,11 @@ class ALegionOfOne extends DrawCard {
                     messageArgs: context => context.select === 'Done' ? 'not ' : '',
                     then: {
                         thenCondition: event => event.origin === context.target && !event.cancelled && event.name === EventNames.OnMoveFate,
-                        gameAction: ability.actions.resolveAbility({ ability: context.ability, subResolution: true })
+                        gameAction: ability.actions.resolveAbility({
+                            ability: context.ability,
+                            subResolution: true,
+                            choosingPlayerOverride: context.choosingPlayerOverride
+                        })
                     }
                 };
             }
