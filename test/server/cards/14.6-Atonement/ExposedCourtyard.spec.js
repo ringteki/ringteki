@@ -1,4 +1,4 @@
-describe('Bayushi Kachiko 2', function() {
+describe('Exposed Courtyard', function() {
     integration(function() {
         beforeEach(function () {
             this.setupTest({
@@ -116,6 +116,55 @@ describe('Bayushi Kachiko 2', function() {
             expect(this.getChatLogs(4)).toContain('player2 plays Voice of Honor to cancel the effects of Banzai!');
             expect(this.getChatLogs(4)).toContain('Voice of Honor returns to the bottom of the deck due to Exposed Courtyard\'s effect');
             expect(this.voice.location).toBe('conflict deck');
+        });
+
+        it('should let you pick an event you just played', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.warrior],
+                defenders: [this.tsuko]
+            });
+            this.player2.clickCard(this.lion);
+            this.player2.clickCard(this.tsuko);
+            this.player1.pass();
+            this.player2.clickCard(this.courtyard);
+            expect(this.player2).toHavePrompt('Choose an event');
+            this.player2.clickCard(this.lion);
+            expect(this.getChatLogs(3)).toContain('player2 can play Way of the Lion this conflict. It will be put on the bottom of the deck if it\'s played this conflict');
+            this.player1.pass();
+            this.player2.clickCard(this.lion);
+            this.player2.clickCard(this.tsuko);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.lion.location).toBe('conflict deck');
+        });
+
+        it('if you re-draw the event it should work normally', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.warrior],
+                defenders: [this.tsuko]
+            });
+            this.player2.clickCard(this.lion);
+            this.player2.clickCard(this.tsuko);
+            this.player1.pass();
+            this.player2.clickCard(this.courtyard);
+            expect(this.player2).toHavePrompt('Choose an event');
+            this.player2.clickCard(this.lion);
+            expect(this.getChatLogs(3)).toContain('player2 can play Way of the Lion this conflict. It will be put on the bottom of the deck if it\'s played this conflict');
+            this.player1.pass();
+            this.player2.clickCard(this.lion);
+            this.player2.clickCard(this.tsuko);
+            expect(this.lion.location).toBe('conflict deck');
+            this.player2.moveCard(this.lion, 'hand');
+            this.player1.pass();
+            this.player2.clickCard(this.lion);
+            this.player2.clickCard(this.tsuko);
+            expect(this.lion.location).toBe('conflict discard pile');
+            this.player1.pass();
+            this.player2.clickCard(this.lion);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
     });
 });
