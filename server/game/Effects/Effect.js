@@ -37,6 +37,7 @@ class Effect {
         this.condition = properties.condition || (() => true);
         this.location = properties.location || Locations.PlayArea;
         this.canChangeZoneOnce = !!properties.canChangeZoneOnce;
+        this.canChangeZoneNTimes = properties.canChangeZoneNTimes || 0;
         this.effect = effect;
         this.ability = properties.ability;
         this.targets = [];
