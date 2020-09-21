@@ -99,5 +99,35 @@ describe('Compromised Secrets', function() {
             expect(this.player1.honor).toBe(p1Honor + 4);
             expect(this.player2.honor).toBe(p2Honor - 4);
         });
+
+        it('should not be playable if you are equally honorable', function() {
+            this.player1.honor = 10;
+            this.player2.honor = 10;
+            this.player1.clickCard(this.secrets1);
+            this.player1.clickCard(this.rider2);
+
+            expect(this.rider2.attachments.toArray()).not.toContain(this.secrets1);
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should not be playable if you are more honorable', function() {
+            this.player1.honor = 11;
+            this.player2.honor = 10;
+            this.player1.clickCard(this.secrets1);
+            this.player1.clickCard(this.rider2);
+
+            expect(this.rider2.attachments.toArray()).not.toContain(this.secrets1);
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should be playable if you are less honorable', function() {
+            this.player1.honor = 10;
+            this.player2.honor = 11;
+            this.player1.clickCard(this.secrets1);
+            this.player1.clickCard(this.rider2);
+
+            expect(this.rider2.attachments.toArray()).toContain(this.secrets1);
+            expect(this.player2).toHavePrompt('Action Window');
+        });
     });
 });
