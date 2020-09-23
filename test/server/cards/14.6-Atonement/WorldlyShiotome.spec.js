@@ -1,4 +1,4 @@
-describe('Flank the Enemy', function() {
+describe('Worldly Shiotome', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
