@@ -35,7 +35,8 @@ class AbilityTargetToken {
                        (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
                        (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
-        return CardSelector.for(Object.assign({}, properties, { cardType: CardTypes.Character, cardCondition: cardCondition, targets: false }));
+        let cardType = properties.cardType || CardTypes.Character;
+        return CardSelector.for(Object.assign({}, properties, { cardType: cardType, cardCondition: cardCondition, targets: false }));
     }
 
     canResolve(context) {
