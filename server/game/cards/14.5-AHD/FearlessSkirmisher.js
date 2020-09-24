@@ -12,9 +12,8 @@ class FearlessSkirmisher extends DrawCard {
             targets: {
                 token: {
                     activePromptTitle: 'Choose a dishonored token',
-                    location: [Locations.PlayArea, Locations.Provinces],
                     mode: TargetModes.Token,
-                    cardType: [CardTypes.Character, CardTypes.Province],
+                    location: Locations.Any,
                     cardCondition: card => {
                         return card.dishonored;
                     }

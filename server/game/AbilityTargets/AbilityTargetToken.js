@@ -1,10 +1,11 @@
 const CardSelector = require('../CardSelector.js');
-const { CardTypes, Stages, Players } = require('../Constants.js');
+const { CardTypes, Stages, Players, Locations } = require('../Constants.js');
 
 class AbilityTargetToken {
     constructor(name, properties, ability) {
         this.name = name;
         this.properties = properties;
+        this.properties.location = this.properties.location || Locations.PlayArea;
         this.selector = this.getSelector(properties);
         for(let gameAction of this.properties.gameAction) {
             gameAction.setDefaultTarget(context => context.tokens[name]);
@@ -35,7 +36,7 @@ class AbilityTargetToken {
                        (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
                        (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
-        let cardType = properties.cardType || CardTypes.Character;
+        let cardType = properties.cardType || [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding, CardTypes.Province, CardTypes.Role, CardTypes.Stronghold];
         return CardSelector.for(Object.assign({}, properties, { cardType: cardType, cardCondition: cardCondition, targets: false }));
     }
 
