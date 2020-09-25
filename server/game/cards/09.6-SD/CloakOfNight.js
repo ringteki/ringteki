@@ -6,7 +6,7 @@ class CloakOfNight extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Give a participating character +3 glory',
-            condition: context => context.player.cardsInPlay.any(card => card.hasTrait('shugenja')),
+            condition: context => context.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.isParticipating(),
@@ -25,6 +25,14 @@ class CloakOfNight extends DrawCard {
             effect: 'give {0} +3 glory and prevent them from being chosen as the target of {1}\'s triggered abilities until the end of the conflict',
             effectArgs: context => [context.player.opponent]
         });
+    }
+
+    canPlay(context, playType) {
+        if(!context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.hasTrait('shugenja'))) {
+            return false;
+        }
+
+        return super.canPlay(context, playType);
     }
 }
 
