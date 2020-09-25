@@ -18,6 +18,7 @@ describe('Fearless Skirmisher', function() {
             this.skirmisher = this.player2.findCardByName('fearless-skirmisher');
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.jade = this.player1.findCardByName('finger-of-jade');
+            this.sd1 = this.player1.findCardByName('shameful-display', 'province 1');
 
             this.yoshi.honor();
             this.fumiki.dishonor();
@@ -119,6 +120,26 @@ describe('Fearless Skirmisher', function() {
             this.skirmisher.bowed = true;
             this.noMoreActions();
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
+        });
+
+        it('should work with dishonored provinces', function() {
+            this.sd1.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.fumiki],
+                defenders: [this.skirmisher],
+                type: 'military'
+            });
+            expect(this.sd1.isDishonored).toBe(true);
+
+            this.noMoreActions();
+            this.player2.clickCard(this.skirmisher);
+            expect(this.player2).toBeAbleToSelect(this.sd1);
+            this.player2.clickCard(this.sd1);
+            this.player2.clickCard(this.yoshi);
+
+            expect(this.yoshi.isHonored).toBe(false);
+            expect(this.sd1.isDishonored).toBe(false);
         });
     });
 });

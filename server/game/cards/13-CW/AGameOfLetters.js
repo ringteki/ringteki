@@ -10,6 +10,7 @@ class AGameOfLetters extends DrawCard {
             targets: {
                 token: {
                     activePromptTitle: 'Choose a token',
+                    cardType: CardTypes.Character,
                     mode: TargetModes.Token
                 },
                 character: {

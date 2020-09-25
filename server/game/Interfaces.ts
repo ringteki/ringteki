@@ -42,6 +42,8 @@ interface TargetAbility extends BaseTarget {
 
 interface TargetToken extends BaseTarget {
     mode: TargetModes.Token;
+    location?: Locations | Locations[];
+    cardType?: CardTypes | CardTypes[];
     cardCondition?: (card: BaseCard, context?: AbilityContext) => boolean;
 };
 
