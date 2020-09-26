@@ -40,5 +40,68 @@ describe('Iron Mountain Castle', function() {
 
             expect(this.getChatLogs(5)).toContain('player1 uses Iron Mountain Castle, bowing Iron Mountain Castle to reduce the cost of their next attachment by 1');
         });
+
+        it('should not trigger if attachment costs 0', function() {
+            this.player1.clickCard(this.katana);
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.mitsu.attachments.toArray()).toContain(this.katana);
+        });
+
+        it('should not trigger if attachment is played on opponent', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.initiate);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.initiate.attachments.toArray()).toContain(this.blade);
+            expect(this.player1.fate).toBe(fate - 1);
+        });
+
+        it('should not trigger if attachment is played by opponent', function() {
+            this.player1.pass();
+            this.player2.clickCard(this.blade2);
+            this.player2.clickCard(this.mitsu);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade2);
+        });
+
+        it('should reduce the cost to play an attachment on a character you control regardless of faction', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.yoshi);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.iron);
+            this.player1.clickCard(this.iron);
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.yoshi.attachments.toArray()).toContain(this.blade);
+
+            expect(this.getChatLogs(5)).toContain('player1 uses Iron Mountain Castle, bowing Iron Mountain Castle to reduce the cost of their next attachment by 1');
+        });
+
+        it('should let you play an attachment without any fate', function() {
+            this.player1.fate = 0;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.iron);
+            this.player1.clickCard(this.iron);
+
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade);
+
+            expect(this.getChatLogs(5)).toContain('player1 uses Iron Mountain Castle, bowing Iron Mountain Castle to reduce the cost of their next attachment by 1');
+        });
+
+        it('should allow you to pass the activation, keeping your action opportunity', function() {
+            this.player1.fate = 0;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickPrompt('Pass');
+
+            expect(this.mitsu.attachments.toArray()).not.toContain(this.blade);
+            expect(this.blade.location).toBe('hand');
+            expect(this.player1).toHavePrompt('Action Window');
+        });
     });
 });

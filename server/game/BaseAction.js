@@ -32,6 +32,11 @@ class BaseAction extends BaseAbility {
         });
     }
 
+    getReducedCost(context) {
+        let fateCost = this.cost.find(cost => cost.getReducedCost);
+        return fateCost ? fateCost.getReducedCost(context) : 0;
+    }
+
     isAction() {
         return true;
     }

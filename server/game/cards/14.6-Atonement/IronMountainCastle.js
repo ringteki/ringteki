@@ -13,14 +13,15 @@ class IronMountainCastle extends StrongholdCard {
         this.interrupt({
             title: 'Reduce cost of next attachment',
             when: {
-                onCardPlayed: (event, context) =>
-                    event.card.type === CardTypes.Attachment && event.player === context.player
-                    // event.context.ability.getReducedCost(event.context) > 0
+                onAbilityResolverInitiated: (event, context) =>
+                    event.context.source.type === CardTypes.Attachment && event.context.player === context.player &&
+                    event.context.target && event.context.target.controller === context.player &&
+                    event.context.ability.getReducedCost(event.context) > 0
             },
             cost: AbilityDsl.costs.bowSelf(),
             effect: 'reduce the cost of their next attachment by 1',
             gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
-                effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, card => card === context.event.card)
+                effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, card => card === context.event.context.source)
             }))
         });
     }

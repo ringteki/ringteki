@@ -294,7 +294,8 @@ export enum EventNames {
     OnConflictMoved = 'onConflictMoved',
     OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     OnTheCrashingWave = 'onTheCrashingWave',
-    Unnamed = 'unnamedEvent'
+    Unnamed = 'unnamedEvent',
+    OnAbilityResolverInitiated = 'onAbilityResolverInitiated'
 };
 
 export enum AbilityTypes {
