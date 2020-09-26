@@ -9,7 +9,7 @@ describe('Treasured Gift', function() {
                 },
                 player2: {
                     inPlay: ['solemn-scholar'],
-                    hand: ['treasured-gift']
+                    hand: ['treasured-gift', 'blackmail']
                 }
             });
             this.togashiKazue = this.player1.findCardByName('togashi-kazue');
@@ -17,6 +17,7 @@ describe('Treasured Gift', function() {
             this.gift = this.player2.findCardByName('treasured-gift');
             this.favorableGround = this.player1.placeCardInProvince('favorable-ground');
             this.scholar = this.player2.findCardByName('solemn-scholar');
+            this.blackmail = this.player2.findCardByName('blackmail');
             this.player1.pass();
         });
 
@@ -71,6 +72,30 @@ describe('Treasured Gift', function() {
             });
 
             expect(this.game.currentConflict.defenders).toContain(this.togashiKazue);
+        });
+
+        it('should fall off if you take control of the character', function() {
+            this.player2.clickCard(this.gift);
+            this.player2.clickCard(this.guardsman);
+
+            this.player1.honor = 10;
+            this.player2.honor = 5;
+
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                defenders: [this.guardsman],
+                attackers: [this.scholar]
+            });
+
+            expect(this.guardsman.attachments.toArray()).toContain(this.gift);
+            this.player1.pass();
+            this.player2.clickCard(this.blackmail);
+            this.player2.clickCard(this.guardsman);
+            expect(this.guardsman.attachments.toArray()).not.toContain(this.gift);
+            expect(this.getChatLogs(5)).toContain('Treasured Gift is discarded from Seppun Guardsman as it is no longer legally attached');
         });
     });
 });
