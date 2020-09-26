@@ -179,6 +179,7 @@ export type traitLimit = {
 export interface AttachmentConditionProps {
     limit?: number;
     myControl?: boolean;
+    opponentControlOnly?: boolean;
     unique?: boolean;
     faction?: string | string[];
     trait?: string | string[];

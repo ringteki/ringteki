@@ -38,6 +38,7 @@ export enum EffectNames {
     AttachmentFactionRestriction = 'attachmentFactionRestriction',
     AttachmentLimit = 'attachmentLimit',
     AttachmentMyControlOnly = 'attachmentMyControlOnly',
+    AttachmentOpponentControlOnly = 'attachmentOpponentControlOnly',
     AttachmentRestrictTraitAmount = 'attachmentRestrictTraitAmount',
     AttachmentTraitRestriction = 'attachmentTraitRestriction',
     AttachmentUniqueRestriction = 'attachmentUniqueRestriction',
