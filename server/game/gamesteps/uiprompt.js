@@ -15,7 +15,9 @@ class UiPrompt extends BaseStep {
 
     complete() {
         this.completed = true;
-        this.game.resetClocks();
+        if(this.getPlayer()) {
+            this.getPlayer().stopClock();
+        }
     }
 
     setPrompt() {
@@ -25,7 +27,7 @@ class UiPrompt extends BaseStep {
                 player.startClock();
             } else {
                 player.setPrompt(this.waitingPrompt());
-                player.resetClock();
+                player.stopClock();
             }
         });
     }
@@ -83,6 +85,10 @@ class UiPrompt extends BaseStep {
 
     menuCommand(player, arg, method) { // eslint-disable-line no-unused-vars
         return true;
+    }
+    
+    getPlayer() {
+        return undefined;
     }
 }
 

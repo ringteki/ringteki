@@ -94,6 +94,10 @@ class SelectDefendersPrompt extends UiPrompt {
         this.complete();
         return true;
     }
+
+    getPlayer() {
+        return this.player;
+    }
 }
 
 module.exports = SelectDefendersPrompt;

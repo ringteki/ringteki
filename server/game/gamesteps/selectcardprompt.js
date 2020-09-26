@@ -256,6 +256,10 @@ class SelectCardPrompt extends UiPrompt {
         // Restore previous selections.
         this.choosingPlayer.setSelectedCards(this.previouslySelectedCards);
     }
+
+    getPlayer() {
+        return this.choosingPlayer;
+    }
 }
 
 module.exports = SelectCardPrompt;

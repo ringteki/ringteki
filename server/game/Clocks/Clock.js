@@ -1,5 +1,5 @@
 class Clock {
-    constructor(player, time) {
+    constructor(player, time, delayToStartClock = 0) {
         this.player = player;
         this.mainTime = time;
         this.timeLeft = time;
@@ -8,6 +8,7 @@ class Clock {
         this.paused = false;
         this.stateId = 0;
         this.name = 'Clock';
+        this.delayToStartClock = delayToStartClock;
     }
 
     pause() {
@@ -57,6 +58,11 @@ class Clock {
         if(this.timeLeft === 0 || secs < 0) {
             return;
         }
+        if(secs <= this.delayToStartClock) {
+            return;
+        }
+
+        secs = secs - this.delayToStartClock;
         if(this.mode === 'down') {
             this.modify(-secs);
             if(this.timeLeft < 0) {
@@ -74,7 +80,8 @@ class Clock {
             timeLeft: this.timeLeft,
             stateId: this.stateId,
             mainTime: this.mainTime,
-            name: this.name
+            name: this.name,
+            delayToStartClock: this.delayToStartClock
         };
     }
 }

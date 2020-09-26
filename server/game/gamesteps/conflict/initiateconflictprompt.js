@@ -328,6 +328,10 @@ class InitiateConflictPrompt extends UiPrompt {
         }
         return false;
     }
+
+    getPlayer() {
+        return this.choosingPlayer;
+    }
 }
 
 module.exports = InitiateConflictPrompt;

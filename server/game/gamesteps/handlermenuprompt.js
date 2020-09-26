@@ -138,6 +138,10 @@ class HandlerMenuPrompt extends UiPrompt {
 
         return true;
     }
+
+    getPlayer() {
+        return this.player;
+    }
 }
 
 module.exports = HandlerMenuPrompt;

@@ -2,14 +2,16 @@ const Clock = require('./Clock');
 
 class ChessClock extends Clock {
     constructor(player, time) {
-        super(player, time);
+        super(player, time, 5);
         this.mode = 'stop';
         this.name = 'Chess Clock';
     }
 
     start() {
-        this.mode = 'down';
-        super.start();
+        if (this.mode !== 'down') {
+            this.mode = 'down';
+            super.start();
+        }
     }
 
     stop() {
