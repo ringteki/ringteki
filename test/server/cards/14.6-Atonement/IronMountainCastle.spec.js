@@ -5,7 +5,7 @@ describe('Iron Mountain Castle', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['togashi-mitsu', 'kakita-yoshi'],
-                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade'],
+                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade'],
                     stronghold: ['iron-mountain-castle']
                 },
                 player2: {
@@ -19,6 +19,7 @@ describe('Iron Mountain Castle', function() {
             this.katana = this.player1.findCardByName('fine-katana');
             this.fan = this.player1.findCardByName('ornate-fan');
             this.blade = this.player1.findCardByName('kakita-blade');
+            this.honored = this.player1.findCardByName('honored-blade');
             this.iron = this.player1.findCardByName('iron-mountain-castle');
 
             this.initiate = this.player2.findCardByName('togashi-initiate');
@@ -102,6 +103,52 @@ describe('Iron Mountain Castle', function() {
             expect(this.mitsu.attachments.toArray()).not.toContain(this.blade);
             expect(this.blade.location).toBe('hand');
             expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should allow putting 3 restricted attachments on a dragon character you control', function() {
+            let target = this.mitsu;
+            this.player1.playAttachment(this.blade, target);
+            this.player1.clickCard(this.iron);
+            expect(target.attachments.toArray()).toContain(this.blade);
+            this.player2.pass();
+            this.player1.playAttachment(this.katana, target);
+            expect(target.attachments.toArray()).toContain(this.katana);
+            this.player2.pass();
+            this.player1.playAttachment(this.fan, target);
+            expect(target.attachments.toArray()).toContain(this.fan);
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.pass();
+            this.player1.playAttachment(this.honored, target);
+            expect(target.attachments.toArray()).toContain(this.honored);
+            expect(this.player1).toHavePrompt('Too many Restricted attachments');
+        });
+
+        it('should not allow putting 3 restricted attachments on a non-dragon character you control', function() {
+            let target = this.yoshi;
+            this.player1.playAttachment(this.blade, target);
+            this.player1.clickCard(this.iron);
+            expect(target.attachments.toArray()).toContain(this.blade);
+            this.player2.pass();
+            this.player1.playAttachment(this.katana, target);
+            expect(target.attachments.toArray()).toContain(this.katana);
+            this.player2.pass();
+            this.player1.playAttachment(this.fan, target);
+            expect(target.attachments.toArray()).toContain(this.fan);
+            expect(this.player1).toHavePrompt('Too many Restricted attachments');
+        });
+
+        it('should not allow putting 3 restricted attachments on a dragon character you don\'t control', function() {
+            let target = this.initiate;
+            this.player1.playAttachment(this.blade, target);
+            this.player1.clickCard(this.iron);
+            expect(target.attachments.toArray()).toContain(this.blade);
+            this.player2.pass();
+            this.player1.playAttachment(this.katana, target);
+            expect(target.attachments.toArray()).toContain(this.katana);
+            this.player2.pass();
+            this.player1.playAttachment(this.fan, target);
+            expect(target.attachments.toArray()).toContain(this.fan);
+            expect(this.player2).toHavePrompt('Too many Restricted attachments');
         });
     });
 });

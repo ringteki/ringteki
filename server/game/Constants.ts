@@ -91,6 +91,7 @@ export enum EffectNames {
     ModifyProvinceStrengthBonus = 'modifyProvinceStrengthBonus',
     ModifyProvinceStrength = 'modifyProvinceStrength',
     ModifyProvinceStrengthMultiplier = 'modifyProvinceStrengthMultiplier',
+    ModifyRestrictedAttachmentAmount = 'modifyRestrictedAttachmentAmount',
     MustBeChosen = 'mustBeChosen',
     MustBeDeclaredAsAttacker = 'mustBeDeclaredAsAttacker',
     MustBeDeclaredAsDefender = 'mustBeDeclaredAsDefender',

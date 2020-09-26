@@ -4,11 +4,11 @@ const AbilityDsl = require('../../abilitydsl.js');
 
 class IronMountainCastle extends StrongholdCard {
     setupCardAbilities() {
-        // this.persistentEffect({
-        //     match: card => card.isFaction('dragon'),
-        //     targetController: Players.Self,
-        //     effect: AbilityDsl.effects.modifyMilitarySkill(1)
-        // });
+        this.persistentEffect({
+            match: card => card.isFaction('dragon'),
+            targetController: Players.Self,
+            effect: AbilityDsl.effects.modifyRestrictedAttachmentAmount(1)
+        });
 
         this.interrupt({
             title: 'Reduce cost of next attachment',
