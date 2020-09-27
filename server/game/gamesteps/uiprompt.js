@@ -24,7 +24,7 @@ class UiPrompt extends BaseStep {
                 player.startClock();
             } else {
                 player.setPrompt(this.waitingPrompt());
-                player.stopClock();
+                player.resetClock();
             }
         });
     }

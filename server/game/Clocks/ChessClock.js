@@ -5,7 +5,18 @@ class ChessClock extends Clock {
         super(player, time, 5);
         this.mode = 'stop';
         this.name = 'Chess Clock';
-        this.stopTime = -1;
+    }
+
+    pause() {
+        this.stop();
+    }
+
+    restart() {
+        this.start();
+    }
+
+    reset() {
+        this.stop();
     }
 
     start() {
@@ -31,16 +42,26 @@ class ChessClock extends Clock {
         }
     }
 
-    updateDelayLeft(secs) {
-        if(secs < 0) {
+    updateTimeLeft(secs) {
+        if(this.timeLeft === 0 || secs < 0) {
+            return;
+        }
+        if(secs <= this.delayToStartClock) {
             return;
         }
 
-        this.delayToStartClock = this.baselineDelay - secs;
-        if (this.delayToStartClock < 0) {
-            this.delayToStartClock = 0;
+        secs = secs - this.delayToStartClock;
+        if(this.mode === 'down') {
+            this.modify(-secs);
+            if(this.timeLeft < 0) {
+                this.timeLeft = 0;
+                this.timeRanOut();
+            }
+        } else if(this.mode === 'up') {
+            this.modify(secs);
         }
     }
+
 }
 
 module.exports = ChessClock;

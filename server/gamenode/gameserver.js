@@ -353,7 +353,7 @@ class GameServer {
         }
 
         this.runAndCatchErrors(game, () => {
-            // game.stopClocks();
+            game.stopNonChessClocks();
             game[command](socket.user.username, ...args);
 
             game.continue();
