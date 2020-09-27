@@ -4,7 +4,6 @@ const AbilityDsl = require('../../abilitydsl');
 
 class FireAndOil extends DrawCard {
     setupCardAbilities() {
-        this.grantedAbilityLimits = {};
         this.persistentEffect({
             condition: context => !context.player.getProvinceCardInProvince(context.source.location).isBroken,
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
@@ -19,11 +18,6 @@ class FireAndOil extends DrawCard {
                 }
             })
         });
-    }
-
-    leavesPlay() {
-        this.grantedAbilityLimits = {};
-        super.leavesPlay();
     }
 }
 
