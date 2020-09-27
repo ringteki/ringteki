@@ -12,13 +12,7 @@ class ChessClock extends Clock {
         if (this.mode !== 'down') {
             this.mode = 'down';
             super.start();
-        } else {
-            let diff = Math.floor(((Date.now() - this.timerStart) / 1000) + 0.5);
-            this.updateDelayLeft(diff);
-            if (this.delayToStartClock <= 0) {
-                this.updateTimeLeft(diff, true);
-            }
-        }
+        } 
     }
 
     stop() {
