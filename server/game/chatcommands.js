@@ -47,12 +47,12 @@ class ChatCommands {
 
     startClocks(player) {
         this.game.addMessage('{0} restarts the timers', player);
-        _.each(this.game.getPlayers(), player => player.clock.restart());
+        _.each(this.game.getPlayers(), player => player.clock.manuallyResume());
     }
 
     stopClocks(player) {
         this.game.addMessage('{0} stops the timers', player);
-        _.each(this.game.getPlayers(), player => player.clock.pause());
+        _.each(this.game.getPlayers(), player => player.clock.manuallyPause());
     }
 
     modifyClock(player, args) {

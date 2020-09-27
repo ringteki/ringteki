@@ -9,6 +9,19 @@ class Clock {
         this.stateId = 0;
         this.name = 'Clock';
         this.delayToStartClock = delayToStartClock;
+        this.manuallyPaused = false;
+    }
+
+    manuallyPause() {
+        this.stop();
+        this.manuallyPaused = true;
+        this.updateStateId();
+    }
+
+    manuallyResume() {
+        this.timerStart = 0;
+        this.manuallyPaused = false;
+        this.updateStateId();
     }
 
     pause() {
@@ -28,7 +41,7 @@ class Clock {
     }
 
     start() {
-        if(!this.paused) {
+        if(!this.paused && !this.manuallyPaused) {
             this.timerStart = Date.now();
             this.updateStateId();
         }
@@ -83,7 +96,8 @@ class Clock {
             stateId: this.stateId,
             mainTime: this.mainTime,
             name: this.name,
-            delayToStartClock: this.delayToStartClock
+            delayToStartClock: this.delayToStartClock,
+            manuallyPaused: this.manuallyPaused
         };
     }
 }

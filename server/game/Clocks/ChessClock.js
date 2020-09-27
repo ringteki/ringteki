@@ -20,10 +20,12 @@ class ChessClock extends Clock {
     }
 
     start() {
-        if (this.mode !== 'down') {
-            this.mode = 'down';
-            super.start();
-        } 
+        if (!this.manuallyPaused) {
+            if (this.mode !== 'down') {
+                this.mode = 'down';
+                super.start();
+            }     
+        }
     }
 
     stop() {
