@@ -206,6 +206,9 @@ class BaseCard extends EffectSource {
         if(properties.myControl) {
             effects.push(Effects.attachmentMyControlOnly());
         }
+        if(properties.opponentControlOnly) {
+            effects.push(Effects.attachmentOpponentControlOnly());
+        }
         if(properties.unique) {
             effects.push(Effects.attachmentUniqueRestriction());
         }
@@ -655,6 +658,8 @@ class BaseCard extends EffectSource {
             return false;
         }
         if(this.anyEffect(EffectNames.AttachmentMyControlOnly) && attachmentController !== parent.controller) {
+            return false;
+        } else if(this.anyEffect(EffectNames.AttachmentOpponentControlOnly) && attachmentController === parent.controller) {
             return false;
         } else if(this.anyEffect(EffectNames.AttachmentUniqueRestriction) && !parent.isUnique()) {
             return false;
