@@ -159,10 +159,6 @@ class SelectRingPrompt extends UiPrompt {
         this.choosingPlayer.clearSelectableRings();
         return super.complete();
     }
-
-    getPlayer() {
-        return this.choosingPlayer;
-    }
 }
 
 module.exports = SelectRingPrompt;

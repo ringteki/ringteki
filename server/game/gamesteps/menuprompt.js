@@ -52,10 +52,6 @@ class MenuPrompt extends UiPrompt {
     hasMethodButton(method) {
         return _.any(this.properties.activePrompt.buttons, button => button.method === method);
     }
-    
-    getPlayer() {
-        return this.player;
-    }
 }
 
 module.exports = MenuPrompt;

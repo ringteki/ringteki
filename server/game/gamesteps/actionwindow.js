@@ -161,10 +161,6 @@ class ActionWindow extends UiPrompt {
             );
         }
     }
-
-    getPlayer() {
-        return this.currentPlayer;
-    }
 }
 
 module.exports = ActionWindow;

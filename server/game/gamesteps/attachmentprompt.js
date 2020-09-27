@@ -24,10 +24,6 @@ class AttachmentPrompt extends UiPrompt {
         });
         return true;
     }
-    
-    getPlayer() {
-        return this.player;
-    }
 }
 
 module.exports = AttachmentPrompt;
