@@ -5,7 +5,8 @@ describe('Ganzu Warrior', function () {
                 phase: 'conflict',
                 player1: {
                     fate: 5,
-                    inPlay: ['ganzu-warrior', 'shinjo-outrider']
+                    inPlay: ['ganzu-warrior', 'shinjo-outrider'],
+                    dynastyDiscard: ['ganzu-warrior']
                 },
                 player2: {
                     fate: 5,
@@ -15,7 +16,8 @@ describe('Ganzu Warrior', function () {
                 }
             });
 
-            this.ganzu = this.player1.findCardByName('ganzu-warrior');
+            this.ganzu = this.player1.findCardByName('ganzu-warrior', 'play area');
+            this.ganzu2 = this.player1.findCardByName('ganzu-warrior', 'dynasty discard pile');
             this.outrider = this.player1.findCardByName('shinjo-outrider');
 
             this.fortress = this.player2.findCardByName('border-fortress');
@@ -119,6 +121,21 @@ describe('Ganzu Warrior', function () {
             expect(this.player1).toBeAbleToSelectRing('void');
             expect(this.player1).not.toBeAbleToSelectRing('fire');
             expect(this.player1).not.toBeAbleToSelectRing('water');
+        });
+
+        it('should be max 1 per conflict', function () {
+            this.player1.moveCard(this.ganzu2, 'play area');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.ganzu, this.ganzu2],
+                province: this.fortress
+            });
+
+            this.player1.clickCard(this.ganzu);
+            this.player1.clickRing('air');
+            this.player1.clickPrompt('Gain 2 honor');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).toHavePrompt('Choose Defenders');
         });
     });
 });

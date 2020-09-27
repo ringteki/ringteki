@@ -20,7 +20,8 @@ class GanzuWarrior extends DrawCard {
                 messageArgs: ring => [context.player, ring],
                 gameAction: AbilityDsl.actions.resolveRingEffect({ player: context.player })
             })),
-            effect: 'resolve a ring effect'
+            effect: 'resolve a ring effect',
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 }
