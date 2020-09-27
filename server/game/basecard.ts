@@ -578,7 +578,8 @@ class BaseCard extends EffectSource {
             }
         }
         illegalAttachments = _.uniq(illegalAttachments);
-        if(this.attachments.filter(card => card.isRestricted()).length > 2) {
+        let maximumRestricted = 2 + this.sumEffects(EffectNames.ModifyRestrictedAttachmentAmount);
+        if(this.attachments.filter(card => card.isRestricted()).length > maximumRestricted) {
             this.game.promptForSelect(this.controller, {
                 activePromptTitle: 'Choose an attachment to discard',
                 waitingPromptTitle: 'Waiting for opponent to choose an attachment to discard',

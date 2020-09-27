@@ -747,6 +747,8 @@ class Player extends GameObject {
         let fakeWindow = { addChoice: () => triggeredCostReducers++ };
         let fakeEvent = this.game.getEvent(EventNames.OnCardPlayed, { card: card, player: this, context: context });
         this.game.emit(EventNames.OnCardPlayed + ':' + AbilityTypes.Interrupt, fakeEvent, fakeWindow);
+        let fakeResolverEvent = this.game.getEvent(EventNames.OnAbilityResolverInitiated, { card: card, player: this, context: context });
+        this.game.emit(EventNames.OnAbilityResolverInitiated + ':' + AbilityTypes.Interrupt, fakeResolverEvent, fakeWindow);
         return Math.max(reducedCost - triggeredCostReducers - alternateFate, 0);
     }
 
