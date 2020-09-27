@@ -4,13 +4,16 @@ describe('Shiba Pureheart', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger']
+                    inPlay: ['doji-challenger', 'doji-whisperer'],
+                    hand: ['suffer-the-consequences']
                 },
                 player2: {
                     inPlay: ['shiba-pureheart']
                 }
             });
             this.challenger = this.player1.findCardByName('doji-challenger');
+            this.whisperer = this.player1.findCardByName('doji-whisperer');
+            this.suffer = this.player1.findCardByName('suffer-the-consequences');
             this.shiba = this.player2.findCardByName('shiba-pureheart');
         });
 
@@ -132,6 +135,48 @@ describe('Shiba Pureheart', function() {
                 type: 'military'
             });
 
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).toHavePrompt('Choose Defenders');
+        });
+
+        it('should not react when your opponent declares a third conflict', function() {
+            this.whisperer.bowed = true;
+            this.player1.clickCard(this.suffer);
+            this.player1.clickCard(this.whisperer);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [],
+                type: 'military'
+            });
+            this.challenger.bowed = true;
+            this.noMoreActions(); //End the conflict
+            this.challenger.bowed = false;
+            this.noMoreActions();
+            this.player2.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                type: 'political'
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.shiba);
+            this.player2.pass();
+            expect(this.player2).toHavePrompt('Choose Defenders');
+            this.player2.clickPrompt('Done');
+            this.challenger.bowed = true;
+            this.noMoreActions(); //End the conflict
+            this.challenger.bowed = false;
+
+            this.noMoreActions();
+            this.player2.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                type: 'political'
+            });
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).toHavePrompt('Choose Defenders');
         });
