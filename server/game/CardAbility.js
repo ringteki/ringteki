@@ -162,6 +162,10 @@ class CardAbility extends ThenAbility {
     }
 
     displayMessage(context, messageVerb = context.source.type === CardTypes.Event ? 'plays' : 'uses') {
+        if(context.source.type === CardTypes.Event && context.source.isConflict && context.source.location !== Locations.Hand && context.source.location !== Locations.BeingPlayed) {
+            this.game.addMessage('{0} plays {1} from {2} {3}', context.player, context.source, context.source.controller === context.player ? 'their' : 'their opponent\'s', context.source.location);
+        }
+
         if(this.properties.message) {
             let messageArgs = this.properties.messageArgs;
             if(typeof messageArgs === 'function') {

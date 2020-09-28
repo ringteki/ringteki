@@ -85,10 +85,10 @@ describe('Dragon Tattoo', function() {
             expect(this.kuwanan.isDishonored).toBe(true);
             expect(this.challenger.isDishonored).toBe(false);
             expect(this.scorpion.location).toBe('removed from game');
-            expect(this.getChatLogs(6)).toContain('player1 plays Way of the Scorpion to dishonor Togashi Kazue');
-            expect(this.getChatLogs(5)).toContain('player1 uses Dragon Tattoo to play Way of the Scorpion');
-            expect(this.getChatLogs(4)).toContain('player1 plays Way of the Scorpion to dishonor Doji Kuwanan');
-            expect(this.getChatLogs(3)).toContain('Way of the Scorpion is removed from the game by Dragon Tattoo\'s effect');
+            expect(this.getChatLogs(7)).toContain('player1 plays Way of the Scorpion to dishonor Togashi Kazue');
+            expect(this.getChatLogs(6)).toContain('player1 uses Dragon Tattoo to play Way of the Scorpion');
+            expect(this.getChatLogs(5)).toContain('player1 plays Way of the Scorpion to dishonor Doji Kuwanan');
+            expect(this.getChatLogs(4)).toContain('Way of the Scorpion is removed from the game by Dragon Tattoo\'s effect');
         });
 
         it('should not allow chaining with multiple tattoos', function() {
@@ -124,10 +124,10 @@ describe('Dragon Tattoo', function() {
             expect(this.kuwanan.isDishonored).toBe(false);
             expect(this.challenger.isDishonored).toBe(true);
             expect(this.scorpion.location).toBe('removed from game');
-            expect(this.getChatLogs(6)).toContain('player1 plays Way of the Scorpion to dishonor Togashi Kazue');
-            expect(this.getChatLogs(5)).toContain('player1 uses Dragon Tattoo to play Way of the Scorpion');
-            expect(this.getChatLogs(4)).toContain('player1 plays Way of the Scorpion to dishonor Doji Challenger');
-            expect(this.getChatLogs(3)).toContain('Way of the Scorpion is removed from the game by Dragon Tattoo\'s effect');
+            expect(this.getChatLogs(7)).toContain('player1 plays Way of the Scorpion to dishonor Togashi Kazue');
+            expect(this.getChatLogs(6)).toContain('player1 uses Dragon Tattoo to play Way of the Scorpion');
+            expect(this.getChatLogs(5)).toContain('player1 plays Way of the Scorpion to dishonor Doji Challenger');
+            expect(this.getChatLogs(4)).toContain('Way of the Scorpion is removed from the game by Dragon Tattoo\'s effect');
         });
 
         it('should not react after your opponent targets your character with an event', function() {
@@ -173,10 +173,10 @@ describe('Dragon Tattoo', function() {
             expect(this.player1.hand.length).toBe(hand + 1); //+2 from drawing, -1 from playing mantra
 
             expect(this.mantraOfFire.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('player1 plays Mantra of Fire to add a fate to Togashi Kazue and draw a card');
-            expect(this.getChatLogs(4)).toContain('player1 uses Dragon Tattoo to play Mantra of Fire');
-            expect(this.getChatLogs(3)).toContain('player1 plays Mantra of Fire to add a fate to Togashi Kazue and draw a card');
-            expect(this.getChatLogs(2)).toContain('Mantra of Fire is removed from the game by Dragon Tattoo\'s effect');
+            expect(this.getChatLogs(6)).toContain('player1 plays Mantra of Fire to add a fate to Togashi Kazue and draw a card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Dragon Tattoo to play Mantra of Fire');
+            expect(this.getChatLogs(4)).toContain('player1 plays Mantra of Fire to add a fate to Togashi Kazue and draw a card');
+            expect(this.getChatLogs(3)).toContain('Mantra of Fire is removed from the game by Dragon Tattoo\'s effect');
         });
 
         it('should just remove an event from the game if the copy has no legal targets', function() {
@@ -269,8 +269,8 @@ describe('Dragon Tattoo', function() {
             expect(this.dyh.location).toBe('removed from game');
 
             expect(this.getChatLogs(20)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
-            expect(this.getChatLogs(13)).toContain('The duel has no effect');
-            expect(this.getChatLogs(12)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
+            expect(this.getChatLogs(14)).toContain('The duel has no effect');
+            expect(this.getChatLogs(13)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
             expect(this.getChatLogs(11)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
             expect(this.getChatLogs(4)).toContain('The duel has no effect');
             expect(this.getChatLogs(3)).toContain('Defend Your Honor is removed from the game by Dragon Tattoo\'s effect');
@@ -311,8 +311,8 @@ describe('Dragon Tattoo', function() {
             expect(this.dyh.location).toBe('removed from game');
 
             expect(this.getChatLogs(20)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
-            expect(this.getChatLogs(13)).toContain('The duel has no effect');
-            expect(this.getChatLogs(12)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
+            expect(this.getChatLogs(14)).toContain('The duel has no effect');
+            expect(this.getChatLogs(13)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
             expect(this.getChatLogs(11)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
             expect(this.getChatLogs(4)).toContain('Duel Effect: cancel the effects of Way of the Scorpion');
             expect(this.getChatLogs(3)).toContain('Defend Your Honor is removed from the game by Dragon Tattoo\'s effect');
@@ -353,8 +353,8 @@ describe('Dragon Tattoo', function() {
             expect(this.dyh.location).toBe('removed from game');
 
             expect(this.getChatLogs(20)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
-            expect(this.getChatLogs(13)).toContain('Duel Effect: cancel the effects of Way of the Scorpion');
-            expect(this.getChatLogs(12)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
+            expect(this.getChatLogs(14)).toContain('Duel Effect: cancel the effects of Way of the Scorpion');
+            expect(this.getChatLogs(13)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
             expect(this.getChatLogs(11)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
             expect(this.getChatLogs(4)).toContain('The duel has no effect');
             expect(this.getChatLogs(3)).toContain('Defend Your Honor is removed from the game by Dragon Tattoo\'s effect');
@@ -395,8 +395,8 @@ describe('Dragon Tattoo', function() {
             expect(this.dyh.location).toBe('removed from game');
 
             expect(this.getChatLogs(20)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
-            expect(this.getChatLogs(13)).toContain('Duel Effect: cancel the effects of Way of the Scorpion');
-            expect(this.getChatLogs(12)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
+            expect(this.getChatLogs(14)).toContain('Duel Effect: cancel the effects of Way of the Scorpion');
+            expect(this.getChatLogs(13)).toContain('player1 uses Dragon Tattoo to play Defend Your Honor');
             expect(this.getChatLogs(11)).toContain('player1 plays Defend Your Honor to initiate a military duel : Togashi Kazue vs. Doji Kuwanan');
             expect(this.getChatLogs(4)).toContain('The duel has no effect');
             expect(this.getChatLogs(3)).toContain('Defend Your Honor is removed from the game by Dragon Tattoo\'s effect');

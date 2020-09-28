@@ -30,7 +30,15 @@ const Effects = {
     attachmentUniqueRestriction: () => EffectBuilder.card.static(EffectNames.AttachmentUniqueRestriction),
     blank: (blankTraits = false) => EffectBuilder.card.static(EffectNames.Blank, blankTraits),
     calculatePrintedMilitarySkill: (func) => EffectBuilder.card.static(EffectNames.CalculatePrintedMilitarySkill, func),
-    canPlayFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, playType),
+    canPlayFromOutOfPlay: (player, playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, Object.assign({ player: player, playType: playType })),
+    registerToPlayFromOutOfPlay: () => EffectBuilder.card.detached(EffectNames.CanPlayFromOutOfPlay, {
+        apply: (card) => {
+            for(const reaction of card.reactions) {
+                reaction.registerEvents();
+            }
+        },
+        unapply: () => true
+    }),
     canBeSeenWhenFacedown: () => EffectBuilder.card.static(EffectNames.CanBeSeenWhenFacedown),
     canBeTriggeredByOpponent: () => EffectBuilder.card.static(EffectNames.CanBeTriggeredByOpponent),
     canOnlyBeDeclaredAsAttackerWithElement: (element) => EffectBuilder.card.flexible(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement, element),

@@ -149,7 +149,8 @@ export enum EffectNames {
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
-    LimitHonorGainPerPhase = "limitHonorGainPerPhase"
+    LimitHonorGainPerPhase = "limitHonorGainPerPhase",
+    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay"
 };
 
 export enum Durations {
