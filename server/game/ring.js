@@ -13,6 +13,7 @@ class Ring extends EffectSource {
         this.element = element;
         this.fate = 0;
         this.attachments = [];
+        this.removedFromGame = false;
 
         this.menu = _([
             { command: 'flip', text: 'Flip' },
@@ -39,11 +40,23 @@ class Ring extends EffectSource {
     }
 
     canDeclare(player) {
-        return !this.getEffects(EffectNames.CannotDeclareRing).some(match => match(player)) && !this.claimed;
+        return !this.getEffects(EffectNames.CannotDeclareRing).some(match => match(player)) && !this.claimed && !this.removedFromGame;
     }
 
     isUnclaimed() {
-        return !this.contested && !this.claimed;
+        return !this.contested && !this.claimed && !this.removedFromGame;
+    }
+
+    isContested() {
+        return this.contested;
+    }
+
+    isClaimed() {
+        return this.claimed;
+    }
+
+    isRemovedFromGame() {
+        return this.removedFromGame;
     }
 
     flipConflictType() {
@@ -110,6 +123,14 @@ class Ring extends EffectSource {
         this.contested = false;
     }
 
+    removeRingFromPlay() {
+        this.removedFromGame = true;
+    }
+
+    returnRingToPlay() {
+        this.removedFromGame = false;
+    }
+
     getState(activePlayer) {
 
         let selectionState = {};
@@ -127,6 +148,7 @@ class Ring extends EffectSource {
             element: this.element,
             fate: this.fate,
             menu: this.getMenu(),
+            removedFromGame: this.removedFromGame,
             attachments: this.attachments.length
                 ? this.attachments.map(attachment => attachment.getSummary(activePlayer, false))
                 : this.attachments

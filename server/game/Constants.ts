@@ -239,6 +239,8 @@ export enum EventNames {
     OnResolveConflictRing = 'onResolveConflictRing',
     OnResolveRingElement = 'onResolveRingElement',
     OnClaimRing = 'onClaimRing',
+    OnRemoveRingFromPlay = 'onRemoveRingFromPlay',
+    OnReturnRingtoPlay = 'onRemoveRingFromPlay',
     OnReturnHome = 'onReturnHome',
     OnParticipantsReturnHome = 'onParticipantsReturnHome',
     OnConflictFinished = 'onConflictFinished',
