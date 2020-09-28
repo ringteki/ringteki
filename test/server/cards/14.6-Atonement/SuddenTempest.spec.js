@@ -187,6 +187,60 @@ describe('Sudden Tempest', function() {
                 expect(this.game.rings.fire.isRemovedFromGame()).toBe(false);
             });
         });
+
+        describe('effects that interact with unclaimed rings', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        inPlay: ['kitsuki-investigator'],
+                        dynastyDiscard: ['sudden-tempest'],
+                        hand: ['way-of-the-phoenix']
+                    },
+                    player2: {
+                        provinces: ['fuchi-mura', 'pilgrimage'],
+                        hand: ['let-go', 'fine-katana']
+                    }
+                });
+
+                this.investigator = this.player1.findCardByName('kitsuki-investigator');
+                this.wayOfThePhoenix = this.player1.findCardByName('way-of-the-phoenix');
+
+                this.suddenTempest = this.player1.placeCardInProvince('sudden-tempest', 'province 2');
+
+                this.fuchiMura = this.player2.findCardByName('fuchi-mura');
+                this.pilg = this.player2.findCardByName('pilgrimage');
+
+                this.player1.clickCard(this.suddenTempest);
+                this.player1.clickRing('fire');
+
+                this.noMoreActions();
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+            });
+
+            it('should not allow targetting via Investigator', function() {
+                this.noMoreActions();
+
+
+                this.initiateConflict({
+                    province: this.pilg,
+                    attackers: [this.investigator],
+                    defenders: [],
+                    type: 'political',
+                    ring: 'air'
+                });
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.investigator);
+                expect(this.player1).not.toBeAbleToSelectRing('air');
+                expect(this.player1).toBeAbleToSelectRing('earth');
+                expect(this.player1).not.toBeAbleToSelectRing('fire');
+                expect(this.player1).toBeAbleToSelectRing('void');
+                expect(this.player1).toBeAbleToSelectRing('water');
+            });
+        });
     });
 });
 
