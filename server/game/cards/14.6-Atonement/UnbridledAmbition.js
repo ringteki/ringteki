@@ -12,6 +12,10 @@ class UnbridledAmbition extends ProvinceCard {
             })
         });
     }
+
+    cannotBeStrongholdProvince() {
+        return true;
+    }
 }
 
 UnbridledAmbition.id = 'unbridled-ambition';
