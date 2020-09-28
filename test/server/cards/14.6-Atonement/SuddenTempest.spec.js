@@ -53,7 +53,6 @@ describe('Sudden Tempest', function() {
                 this.noMoreActions();
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
-                this.noMoreActions();
             });
 
             it('should allow you to target rings when it doesn\'t specify the state of the ring - Master of Gisei Toshi', function() {
@@ -77,7 +76,7 @@ describe('Sudden Tempest', function() {
                         hand: ['way-of-the-phoenix']
                     },
                     player2: {
-                        provinces: ['fuchi-mura', 'shameful-display']
+                        provinces: ['fuchi-mura', 'pilgrimage']
                     }
                 });
 
@@ -87,7 +86,7 @@ describe('Sudden Tempest', function() {
                 this.suddenTempest = this.player1.placeCardInProvince('sudden-tempest', 'province 2');
 
                 this.fuchiMura = this.player2.findCardByName('fuchi-mura');
-                this.shamefulDisplay = this.player2.findCardByName('shameful-display');
+                this.pilg = this.player2.findCardByName('pilgrimage');
 
                 this.player1.clickCard(this.suddenTempest);
                 this.player1.clickRing('fire');
@@ -95,7 +94,6 @@ describe('Sudden Tempest', function() {
                 this.noMoreActions();
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
-                this.noMoreActions();
             });
 
             it('should not place fate on Sudden Tempest ring with Fuchi Mura - mentions unclaimed', function() {
@@ -106,7 +104,6 @@ describe('Sudden Tempest', function() {
                 this.initiateConflict({
                     province: this.fuchiMura,
                     attackers: [this.masterAlchemist],
-                    defenders: [],
                     type: 'military'
                 });
 
@@ -114,7 +111,7 @@ describe('Sudden Tempest', function() {
                 this.player2.clickCard(this.fuchiMura);
 
                 expect(this.game.rings.fire.fate).toBe(fireRingFate);
-                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.player2).toHavePrompt('Choose Defenders');
             });
 
             it('should allow Master Alchemist to put fate on Sudden Tempest ring - doesn\'t mention state', function() {
@@ -123,7 +120,7 @@ describe('Sudden Tempest', function() {
                 const fireRingFate = this.game.rings.fire.fate;
 
                 this.initiateConflict({
-                    province: this.shamefulDisplay,
+                    province: this.pilg,
                     attackers: [this.masterAlchemist],
                     defenders: [],
                     type: 'military'
@@ -134,11 +131,108 @@ describe('Sudden Tempest', function() {
                 this.player1.clickCard(this.masterAlchemist);
                 expect(this.player1).toBeAbleToSelect(this.masterAlchemist);
                 this.player1.clickCard(this.masterAlchemist);
+                this.player1.clickRing('fire');
                 this.player1.clickPrompt('Honor this character');
 
                 expect(this.masterAlchemist.isHonored).toBe(true);
                 expect(this.game.rings.fire.fate).toBe(fireRingFate + 1);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
+
+            it('should not allow starting a conflict with the ring', function() {
+                this.noMoreActions();
+
+                this.player1.clickRing('air');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Military Air Conflict');
+            });
+
+            it('ring should not get fate during the fate phase', function() {
+                this.masterAlchemist.fate = 5;
+                this.noMoreActions();
+                this.player1.passConflict();
+                this.noMoreActions();
+                this.noMoreActions();
+                this.player1.passConflict();
+                this.noMoreActions();
+                this.noMoreActions();
+
+                let airFate = this.game.rings.air.fate;
+                let fireFate = this.game.rings.fire.fate;
+
+                this.player1.clickPrompt('Military');
+
+                expect(this.game.rings.air.fate).toBe(airFate + 1);
+                expect(this.game.rings.fire.fate).toBe(fireFate);
+            });
+
+            it('should return to the game at the end of the round', function() {
+                this.masterAlchemist.fate = 5;
+                this.noMoreActions();
+                this.player1.passConflict();
+                this.noMoreActions();
+                this.noMoreActions();
+                this.player1.passConflict();
+                this.noMoreActions();
+                this.noMoreActions();
+
+                this.player1.clickPrompt('Military');
+                this.player1.clickPrompt('Done');
+                this.player2.clickPrompt('Done');
+
+                expect(this.game.rings.fire.isRemovedFromGame()).toBe(true);
+                this.player2.clickPrompt('End Round');
+                this.player1.clickPrompt('End Round');
+                expect(this.game.rings.fire.isRemovedFromGame()).toBe(false);
+            });
+        });
+    });
+});
+
+describe('Sudden Tempest and All Out Assault', function() {
+    integration(function() {
+        describe('Element Dependent Characters', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        inPlay: ['bayushi-liar', 'matsu-berserker', 'alibi-artist', 'fire-tensai-acolyte'],
+                        hand: ['all-out-assault'],
+                        dynastyDiscard: ['sudden-tempest']
+                    },
+                    player2: {
+                    }
+                });
+
+                this.liar = this.player1.findCardByName('bayushi-liar');
+                this.alibi = this.player1.findCardByName('alibi-artist');
+                this.acolyte = this.player1.findCardByName('fire-tensai-acolyte');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.assault = this.player1.findCardByName('all-out-assault');
+
+                this.shamefulDisplay1 = this.player1.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay2 = this.player2.findCardByName('shameful-display', 'province 1');
+
+
+                this.suddenTempest = this.player1.placeCardInProvince('sudden-tempest', 'province 2');
+                this.player1.clickCard(this.suddenTempest);
+                this.player1.clickRing('fire');
+                this.noMoreActions();
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                this.player1.clickCard(this.assault);
+            });
+
+            it('should not force you to pick an illegal element', function() {
+                this.noMoreActions();
+                expect(this.player1).toHavePrompt('Political Air Conflict');
+                this.player1.clickRing('earth');
+                expect(this.player1).toHavePrompt('Political Earth Conflict');
+                this.player1.clickRing('fire');
+                expect(this.player1).toHavePrompt('Political Earth Conflict');
+                expect(this.game.currentConflict.attackers).not.toContain(this.acolyte);
             });
         });
     });

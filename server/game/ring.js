@@ -40,11 +40,23 @@ class Ring extends EffectSource {
     }
 
     canDeclare(player) {
-        return !this.getEffects(EffectNames.CannotDeclareRing).some(match => match(player)) && !this.claimed;
+        return !this.getEffects(EffectNames.CannotDeclareRing).some(match => match(player)) && !this.claimed && !this.removedFromGame;
     }
 
     isUnclaimed() {
-        return !this.contested && !this.claimed;
+        return !this.contested && !this.claimed && !this.removedFromGame;
+    }
+
+    isContested() {
+        return this.contested;
+    }
+
+    isClaimed() {
+        return this.claimed;
+    }
+
+    isRemovedFromGame() {
+        return this.removedFromGame;
     }
 
     flipConflictType() {
