@@ -112,7 +112,7 @@ describe('Butcher of the Fallen', function() {
             expect(this.game.currentConflict.defenders).toContain(this.mil6);
         });
 
-        it('unbroken = 2, mil bonuses shouldn\'t matter', function() {
+        it('unbroken = 2, mil bonuses should matter - Imperial Law 2020/10/05', function() {
             this.player1.pass();
             this.player2.playAttachment('fine-katana', this.mil2);
             this.sd2.isBroken = true;
@@ -132,7 +132,7 @@ describe('Butcher of the Fallen', function() {
             this.player2.clickCard(this.mil1);
             expect(this.game.currentConflict.defenders).not.toContain(this.mil1);
             this.player2.clickCard(this.mil2);
-            expect(this.game.currentConflict.defenders).not.toContain(this.mil2);
+            expect(this.game.currentConflict.defenders).toContain(this.mil2);
             this.player2.clickCard(this.mil3);
             expect(this.game.currentConflict.defenders).toContain(this.mil3);
             this.player2.clickCard(this.mil4);
