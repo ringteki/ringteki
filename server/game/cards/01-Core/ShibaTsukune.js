@@ -13,12 +13,12 @@ class ShibaTsukune extends DrawCard {
             handler: context => this.game.promptForRingSelect(context.player, {
                 activePromptTitle: 'Choose a ring to resolve',
                 context: context,
-                ringCondition: ring => !ring.claimed,
+                ringCondition: ring => ring.isUnclaimed(),
                 onSelect: (player, firstRing) => {
-                    if(_.size(_.filter(this.game.rings, ring => !ring.claimed)) > 1) {
+                    if(_.size(_.filter(this.game.rings, ring => ring.isUnclaimed())) > 1) {
                         this.game.promptForRingSelect(player, {
                             activePromptTitle: 'Choose a second ring to resolve, or click Done',
-                            ringCondition: ring => !ring.claimed && ring !== firstRing,
+                            ringCondition: ring => ring.isUnclaimed() && ring !== firstRing,
                             context: context,
                             optional: true,
                             onMenuCommand: player => {

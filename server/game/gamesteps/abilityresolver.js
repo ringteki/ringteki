@@ -41,8 +41,10 @@ class AbilityResolver extends BaseStepWithPipeline {
         if(this.cancelled) {
             return;
         }
-        let eventName = EventNames.Unnamed;
-        let eventProps = {};
+        let eventName = EventNames.OnAbilityResolverInitiated;
+        let eventProps = {
+            context: this.context
+        };
         if(this.context.ability.isCardAbility()) {
             eventName = EventNames.OnCardAbilityInitiated;
             eventProps = {

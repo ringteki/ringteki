@@ -474,7 +474,7 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
             return true;
         }
 
@@ -483,8 +483,9 @@ class Player extends GameObject {
     }
 
     findPlayType(card) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).length > 0) {
-            return card.mostRecentEffect(EffectNames.CanPlayFromOutOfPlay);
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
+            let effects = card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card));
+            return effects[effects.length - 1].playType || PlayTypes.PlayFromHand;
         }
 
         let location = this.playableLocations.find(location => location.contains(card));
@@ -747,6 +748,8 @@ class Player extends GameObject {
         let fakeWindow = { addChoice: () => triggeredCostReducers++ };
         let fakeEvent = this.game.getEvent(EventNames.OnCardPlayed, { card: card, player: this, context: context });
         this.game.emit(EventNames.OnCardPlayed + ':' + AbilityTypes.Interrupt, fakeEvent, fakeWindow);
+        let fakeResolverEvent = this.game.getEvent(EventNames.OnAbilityResolverInitiated, { card: card, player: this, context: context });
+        this.game.emit(EventNames.OnAbilityResolverInitiated + ':' + AbilityTypes.Interrupt, fakeResolverEvent, fakeWindow);
         return Math.max(reducedCost - triggeredCostReducers - alternateFate, 0);
     }
 

@@ -38,6 +38,7 @@ export enum EffectNames {
     AttachmentFactionRestriction = 'attachmentFactionRestriction',
     AttachmentLimit = 'attachmentLimit',
     AttachmentMyControlOnly = 'attachmentMyControlOnly',
+    AttachmentOpponentControlOnly = 'attachmentOpponentControlOnly',
     AttachmentRestrictTraitAmount = 'attachmentRestrictTraitAmount',
     AttachmentTraitRestriction = 'attachmentTraitRestriction',
     AttachmentUniqueRestriction = 'attachmentUniqueRestriction',
@@ -91,6 +92,7 @@ export enum EffectNames {
     ModifyProvinceStrengthBonus = 'modifyProvinceStrengthBonus',
     ModifyProvinceStrength = 'modifyProvinceStrength',
     ModifyProvinceStrengthMultiplier = 'modifyProvinceStrengthMultiplier',
+    ModifyRestrictedAttachmentAmount = 'modifyRestrictedAttachmentAmount',
     MustBeChosen = 'mustBeChosen',
     MustBeDeclaredAsAttacker = 'mustBeDeclaredAsAttacker',
     MustBeDeclaredAsDefender = 'mustBeDeclaredAsDefender',
@@ -147,7 +149,8 @@ export enum EffectNames {
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
-    LimitHonorGainPerPhase = "limitHonorGainPerPhase"
+    LimitHonorGainPerPhase = "limitHonorGainPerPhase",
+    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay"
 };
 
 export enum Durations {
@@ -236,6 +239,8 @@ export enum EventNames {
     OnResolveConflictRing = 'onResolveConflictRing',
     OnResolveRingElement = 'onResolveRingElement',
     OnClaimRing = 'onClaimRing',
+    OnRemoveRingFromPlay = 'onRemoveRingFromPlay',
+    OnReturnRingtoPlay = 'onRemoveRingFromPlay',
     OnReturnHome = 'onReturnHome',
     OnParticipantsReturnHome = 'onParticipantsReturnHome',
     OnConflictFinished = 'onConflictFinished',
@@ -294,7 +299,8 @@ export enum EventNames {
     OnConflictMoved = 'onConflictMoved',
     OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     OnTheCrashingWave = 'onTheCrashingWave',
-    Unnamed = 'unnamedEvent'
+    Unnamed = 'unnamedEvent',
+    OnAbilityResolverInitiated = 'onAbilityResolverInitiated'
 };
 
 export enum AbilityTypes {

@@ -12,9 +12,7 @@ class TogashiYoshi extends DrawCard {
             effect: 'gain 1 fate from the {1}',
             effectArgs: context => context.ring,
             gameAction: AbilityDsl.actions.selectRing(context => ({
-                ringCondition:  ring => ring.fate >= 1 &&
-                    ring.contested === false &&
-                    ring.claimed === false,
+                ringCondition:  ring => ring.fate >= 1 && ring.isUnclaimed(),
                 target: context.ring,
                 gameAction: AbilityDsl.actions.takeFateFromRing()
             }))

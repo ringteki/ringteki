@@ -22,7 +22,7 @@ export class ClaimRingAction extends RingAction {
             return false;
         }
         
-        return ring.claimedBy !== context.player.name && super.canAffect(ring, context);
+        return !ring.isRemovedFromGame() && ring.claimedBy !== context.player.name && super.canAffect(ring, context);
     }
 
     eventHandler(event, additionalProperties): void {

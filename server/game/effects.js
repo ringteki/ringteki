@@ -24,12 +24,21 @@ const Effects = {
     attachmentFactionRestriction: (factions) => EffectBuilder.card.static(EffectNames.AttachmentFactionRestriction, factions),
     attachmentLimit: (amount) => EffectBuilder.card.static(EffectNames.AttachmentLimit, amount),
     attachmentMyControlOnly: () => EffectBuilder.card.static(EffectNames.AttachmentMyControlOnly),
+    attachmentOpponentControlOnly: () => EffectBuilder.card.static(EffectNames.AttachmentOpponentControlOnly),
     attachmentRestrictTraitAmount: (object) => EffectBuilder.card.static(EffectNames.AttachmentRestrictTraitAmount, object),
     attachmentTraitRestriction: (traits) => EffectBuilder.card.static(EffectNames.AttachmentTraitRestriction, traits),
     attachmentUniqueRestriction: () => EffectBuilder.card.static(EffectNames.AttachmentUniqueRestriction),
     blank: (blankTraits = false) => EffectBuilder.card.static(EffectNames.Blank, blankTraits),
     calculatePrintedMilitarySkill: (func) => EffectBuilder.card.static(EffectNames.CalculatePrintedMilitarySkill, func),
-    canPlayFromOutOfPlay: (playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, playType),
+    canPlayFromOutOfPlay: (player, playType = PlayTypes.PlayFromHand) => EffectBuilder.card.flexible(EffectNames.CanPlayFromOutOfPlay, Object.assign({ player: player, playType: playType })),
+    registerToPlayFromOutOfPlay: () => EffectBuilder.card.detached(EffectNames.CanPlayFromOutOfPlay, {
+        apply: (card) => {
+            for(const reaction of card.reactions) {
+                reaction.registerEvents();
+            }
+        },
+        unapply: () => true
+    }),
     canBeSeenWhenFacedown: () => EffectBuilder.card.static(EffectNames.CanBeSeenWhenFacedown),
     canBeTriggeredByOpponent: () => EffectBuilder.card.static(EffectNames.CanBeTriggeredByOpponent),
     canOnlyBeDeclaredAsAttackerWithElement: (element) => EffectBuilder.card.flexible(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement, element),
@@ -90,6 +99,7 @@ const Effects = {
     modifyProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrength, value),
     modifyProvinceStrengthMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrengthMultiplier, value),
     modifyProvinceStrengthBonus: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrengthBonus, value),
+    modifyRestrictedAttachmentAmount: (value) => EffectBuilder.card.flexible(EffectNames.ModifyRestrictedAttachmentAmount, value),
     mustBeChosen: (properties) => EffectBuilder.card.static(EffectNames.MustBeChosen, new Restriction(Object.assign({ type: 'target' }, properties))),
     mustBeDeclaredAsAttacker: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttacker, type),
     mustBeDeclaredAsDefender: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsDefender, type),

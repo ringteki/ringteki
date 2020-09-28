@@ -83,6 +83,8 @@ import { GloryCountAction, GloryCountProperties } from './GloryCountAction';
 import { ClaimFavorAction, ClaimFavorProperties } from './ClaimFavorAction';
 import { RingActionProperties } from './RingAction';
 import { MoveConflictAction, MoveConflictProperties } from './MoveConflictAction';
+import { RemoveRingFromPlayAction, RemoveRingFromPlayProperties } from './RemoveRingFromPlayAction';
+import { ReturnRingToPlayAction, ReturnRingToPlayProperties } from './ReturnRingToPlayAction';
 
 const GameActions = {
     // card
@@ -159,6 +161,8 @@ const GameActions = {
     takeFateFromRing: (propertyFactory: TakeFateRingProperties | ((context: TriggeredAbilityContext) => TakeFateRingProperties) = {}) => new TakeFateRingAction(propertyFactory), // amount = 1
     takeRing: (propertyFactory: TakeRingProperties | ((context: TriggeredAbilityContext) => TakeRingProperties) = {}) => new TakeRingAction(propertyFactory),
     claimRing: (propertyFactory: ClaimRingProperties | ((context: TriggeredAbilityContext) => ClaimRingProperties) = {}) => new ClaimRingAction(propertyFactory),
+    removeRingFromPlay: (propertyFactory: RemoveRingFromPlayProperties | ((context: TriggeredAbilityContext) => RemoveRingFromPlayProperties) = {}) => new RemoveRingFromPlayAction(propertyFactory),
+    returnRingToPlay: (propertyFactory: ReturnRingToPlayProperties | ((context: TriggeredAbilityContext) => ReturnRingToPlayProperties) = {}) => new ReturnRingToPlayAction(propertyFactory),
     // status token actions
     discardStatusToken: (propertyFactory: DiscardStatusProperties | ((context: TriggeredAbilityContext) => DiscardStatusProperties) = {}) => new DiscardStatusAction(propertyFactory),
     moveStatusToken: (propertyFactory: MoveTokenProperties | ((context: TriggeredAbilityContext) => MoveTokenProperties)) => new MoveTokenAction(propertyFactory),
