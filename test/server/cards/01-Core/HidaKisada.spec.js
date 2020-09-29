@@ -6,14 +6,17 @@ describe('Hida Kisada', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['hida-kisada'],
+                        dynastyDiscard: ['hida-kisada'],
                         conflictDiscard: ['defend-your-honor']
                     },
                     player2: {
                         inPlay: ['akodo-toturi'],
-                        hand: ['banzai', 'iuchi-wayfinder']
+                        hand: ['banzai', 'iuchi-wayfinder', 'stoke-insurrection']
                     }
                 });
-                this.hidaKisada = this.player1.findCardByName('hida-kisada');
+                this.hidaKisada = this.player1.findCardByName('hida-kisada', 'play area');
+                this.hidaKisada2 = this.player1.findCardByName('hida-kisada', 'dynasty discard pile');
+                this.player1.placeCardInProvince(this.hidaKisada2, 'province 1');
                 this.defendYourHonor = this.player1.findCardByName('defend-your-honor');
 
                 this.akodoToturi = this.player2.findCardByName('akodo-toturi');
@@ -119,6 +122,51 @@ describe('Hida Kisada', function() {
                 this.player2.clickCard(this.hidaKisada);
                 this.player2.clickPrompt('Done');
                 expect(this.player2).toHavePrompt('Shameful Display');
+            });
+        });
+        describe('Hida Kisada\'s constant effect when switching controller', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player2: {
+                        dynastyDiscard: ['hida-kisada'],
+                        hand: ['assassination']
+                    },
+                    player1: {
+                        inPlay: ['akodo-toturi', 'matsu-berserker'],
+                        hand: ['banzai', 'stoke-insurrection']
+                    }
+                });
+                this.hidaKisada = this.player2.findCardByName('hida-kisada', 'dynasty discard pile');
+                this.player2.placeCardInProvince(this.hidaKisada, 'province 1');
+                this.assassination = this.player2.findCardByName('assassination');
+
+                this.akodoToturi = this.player1.findCardByName('akodo-toturi');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.banzai = this.player1.findCardByName('banzai');
+                this.stoke = this.player1.findCardByName('stoke-insurrection');
+                this.shamefulDisplay = this.player1.findCardByName('shameful-display', 'province 1');
+            });
+
+            it('should properly cancel the first event played by the now new opponent, not count the event played by the original opponent', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.akodoToturi],
+                    defenders: []
+                });
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.stoke);
+                expect(this.player1).toBeAbleToSelect(this.hidaKisada);
+                this.player1.clickCard(this.hidaKisada);
+                this.player1.clickPrompt('Done');
+
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.berserker);
+
+                expect(this.getChatLogs(5)).toContain('player2 attempts to initiate Assassination, but Hida Kisada cancels it');
+                expect(this.berserker.location).toBe('play area');
             });
         });
     });

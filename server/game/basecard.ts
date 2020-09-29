@@ -206,6 +206,9 @@ class BaseCard extends EffectSource {
         if(properties.myControl) {
             effects.push(Effects.attachmentMyControlOnly());
         }
+        if(properties.opponentControlOnly) {
+            effects.push(Effects.attachmentOpponentControlOnly());
+        }
         if(properties.unique) {
             effects.push(Effects.attachmentUniqueRestriction());
         }
@@ -575,7 +578,8 @@ class BaseCard extends EffectSource {
             }
         }
         illegalAttachments = _.uniq(illegalAttachments);
-        if(this.attachments.filter(card => card.isRestricted()).length > 2) {
+        let maximumRestricted = 2 + this.sumEffects(EffectNames.ModifyRestrictedAttachmentAmount);
+        if(this.attachments.filter(card => card.isRestricted()).length > maximumRestricted) {
             this.game.promptForSelect(this.controller, {
                 activePromptTitle: 'Choose an attachment to discard',
                 waitingPromptTitle: 'Waiting for opponent to choose an attachment to discard',
@@ -655,6 +659,8 @@ class BaseCard extends EffectSource {
             return false;
         }
         if(this.anyEffect(EffectNames.AttachmentMyControlOnly) && attachmentController !== parent.controller) {
+            return false;
+        } else if(this.anyEffect(EffectNames.AttachmentOpponentControlOnly) && attachmentController === parent.controller) {
             return false;
         } else if(this.anyEffect(EffectNames.AttachmentUniqueRestriction) && !parent.isUnique()) {
             return false;

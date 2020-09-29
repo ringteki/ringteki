@@ -76,7 +76,7 @@ class FatePhase extends Phase {
         }
         this.game.raiseEvent(EventNames.OnPlaceFateOnUnclaimedRings, {}, () => {
             _.each(this.game.rings, ring => {
-                if(!ring.claimed) {
+                if(ring.isUnclaimed()) {
                     ring.modifyFate(1);
                 }
             });

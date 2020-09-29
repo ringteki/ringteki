@@ -120,6 +120,7 @@ describe('Master Of Many Lifetimes', function() {
             expect(this.berserker.location).toBe(this.shameful.location);
             expect(this.fineKatana.location).toBe('hand');
             expect(this.player1).toHavePrompt('conflict action window');
+            expect(this.getChatLogs(5)).toContain('player1 uses Master of Many Lifetimes to prevent Matsu Berserker from leaving play, putting it into province 1 instead');
         });
 
         it('should still trigger leave play effects', function() {

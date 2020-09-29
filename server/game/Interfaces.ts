@@ -42,6 +42,8 @@ interface TargetAbility extends BaseTarget {
 
 interface TargetToken extends BaseTarget {
     mode: TargetModes.Token;
+    location?: Locations | Locations[];
+    cardType?: CardTypes | CardTypes[];
     cardCondition?: (card: BaseCard, context?: AbilityContext) => boolean;
 };
 
@@ -179,6 +181,7 @@ export type traitLimit = {
 export interface AttachmentConditionProps {
     limit?: number;
     myControl?: boolean;
+    opponentControlOnly?: boolean;
     unique?: boolean;
     faction?: string | string[];
     trait?: string | string[];

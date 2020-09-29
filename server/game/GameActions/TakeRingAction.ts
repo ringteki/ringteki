@@ -17,7 +17,7 @@ export class TakeRingAction extends RingAction {
     }
 
     canAffect(ring: Ring, context: AbilityContext): boolean {
-        return ring.claimedBy !== context.player.name && super.canAffect(ring, context);
+        return !ring.isRemovedFromGame() && ring.claimedBy !== context.player.name && super.canAffect(ring, context);
     }
 
     eventHandler(event, additionalProperties): void {

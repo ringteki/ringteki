@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, Players, EventNames } = require('../../Constants');
+const { Locations, Players, EventNames, PlayTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 const EventRegistrar = require('../../eventregistrar');
 
@@ -43,10 +43,13 @@ class MasterTactician extends DrawCard {
         this.persistentEffect({
             condition: context => context.game.isTraitInPlay('battlefield') && context.source.isParticipating() && this.cardsPlayedThisRound < MAXIMUM_CARDS_ALLOWED,
             targetLocation: Locations.ConflictDeck,
+            targetController: Players.Self,
             match: (card, context) => {
                 return context && context.player.conflictDeck.size() > 0 && card === context.player.conflictDeck.first();
             },
-            effect: AbilityDsl.effects.canPlayFromOutOfPlay()
+            effect: AbilityDsl.effects.canPlayFromOutOfPlay((player, card) => {
+                return player === card.owner;
+            }, PlayTypes.PlayFromHand)
         });
 
         this.persistentEffect({

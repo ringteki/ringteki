@@ -8,6 +8,7 @@ import { LastingEffectGeneralProperties } from './LastingEffectAction';
 export interface LastingEffectCardProperties extends LastingEffectGeneralProperties {
     targetLocation?: Locations | Locations[];
     canChangeZoneOnce?: boolean;
+    canChangeZoneNTimes?: number;
 }
 
 export class LastingEffectCardAction extends CardGameAction {
@@ -17,6 +18,7 @@ export class LastingEffectCardAction extends CardGameAction {
     defaultProperties: LastingEffectCardProperties = {
         duration: Durations.UntilEndOfConflict,
         canChangeZoneOnce: false,
+        canChangeZoneNTimes: 0,
         effect: [],
         ability: null
     };
