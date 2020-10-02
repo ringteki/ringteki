@@ -33,6 +33,7 @@ describe('Loyal Challenger', function() {
                 let honor = this.player1.player.honor;
                 this.noMoreActions();
                 expect(this.player1.player.honor).toBe(honor + 1);
+                expect(this.getChatLogs(5)).toContain('player1 gains 1 honor due to Loyal Challenger winning a conflict');
             });
 
             it('should lose 1 honor after losing a conflict', function() {
@@ -45,6 +46,7 @@ describe('Loyal Challenger', function() {
                 let honor = this.player1.player.honor;
                 this.noMoreActions();
                 expect(this.player1.player.honor).toBe(honor - 1);
+                expect(this.getChatLogs(5)).toContain('player1 loses 1 honor due to Loyal Challenger losing a conflict');
             });
 
             it('should gain the opponent 1 honor if they win after take control with actress', function() {
