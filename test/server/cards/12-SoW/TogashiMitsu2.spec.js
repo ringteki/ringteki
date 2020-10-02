@@ -129,6 +129,7 @@ describe('Togashi Mitsu', function() {
                 this.player2.clickPrompt('Honor Togashi Mitsu');
 
                 expect(this.mitsu.isHonored).toBe(true);
+                expect(this.getChatLogs(5)).toContain('player2 uses Togashi Mitsu to resolve the Fire Ring\'s effect');
             });
 
             it('should allow ring replacement effects', function() {
