@@ -28,7 +28,7 @@ describe('Acclaimed Geisha House', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should only let you select to dishonor a participating character you control', function() {
+        it('should let you select a ring', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.manipulator, this.youth],
@@ -37,25 +37,24 @@ describe('Acclaimed Geisha House', function() {
             });
             this.player2.pass();
             this.player1.clickCard(this.house);
+            expect(this.player1).toHavePrompt('Choose an unclaimed ring');
+        });
+
+        it('should make you select to dishonor a participating character you control', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.manipulator, this.youth],
+                defenders: [this.nergui],
+                ring: 'air'
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.house);
+            this.player1.clickRing('fire');
             expect(this.player1).toHavePrompt('Select character to dishonor');
             expect(this.player1).toBeAbleToSelect(this.manipulator);
             expect(this.player1).toBeAbleToSelect(this.youth);
             expect(this.player1).not.toBeAbleToSelect(this.yoshi);
             expect(this.player1).not.toBeAbleToSelect(this.nergui);
-        });
-
-
-        it('should let you select a ring after you dishonor a character', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.manipulator, this.youth],
-                defenders: [this.nergui],
-                ring: 'air'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.house);
-            this.player1.clickCard(this.youth);
-            expect(this.player1).toHavePrompt('Choose a ring');
         });
 
         it('should not work if there is not a participating character that can be dishonored', function() {
@@ -83,17 +82,16 @@ describe('Acclaimed Geisha House', function() {
             expect(this.game.currentConflict.ring.element).toBe('air');
             this.player2.pass();
             this.player1.clickCard(this.house);
-            this.player1.clickCard(this.youth);
             expect(this.player1).not.toBeAbleToSelectRing('air');
             expect(this.player1).not.toBeAbleToSelectRing('earth');
             expect(this.player1).not.toBeAbleToSelectRing('void');
             expect(this.player1).toBeAbleToSelectRing('fire');
             expect(this.player1).toBeAbleToSelectRing('water');
             this.player1.clickRing('water');
-            expect(this.game.currentConflict.ring.element).toBe('water');
+            this.player1.clickCard(this.youth);
             expect(this.youth.isDishonored).toBe(true);
-            expect(this.getChatLogs(4)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with an unclaimed one');
-            expect(this.getChatLogs(3)).toContain('player1 switches the contested ring with Water Ring');
+            expect(this.game.currentConflict.ring.element).toBe('water');
+            expect(this.getChatLogs(4)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with the Water Ring');
         });
 
         it('should give the fate from the chosen ring to the attacking player (user attacking)', function() {
@@ -107,13 +105,12 @@ describe('Acclaimed Geisha House', function() {
             expect(this.game.currentConflict.ring.element).toBe('air');
             this.player2.pass();
             this.player1.clickCard(this.house);
-            this.player1.clickCard(this.youth);
             this.player1.clickRing('fire');
+            this.player1.clickCard(this.youth);
             expect(this.game.currentConflict.ring.element).toBe('fire');
             expect(this.youth.isDishonored).toBe(true);
             expect(this.player1.fate).toBe(fate + 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with an unclaimed one');
-            expect(this.getChatLogs(4)).toContain('player1 switches the contested ring with Fire Ring');
+            expect(this.getChatLogs(5)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with the Fire Ring');
             expect(this.getChatLogs(4)).toContain('player1 takes 1 fate from Fire Ring');
         });
 
@@ -130,14 +127,13 @@ describe('Acclaimed Geisha House', function() {
             });
             expect(this.game.currentConflict.ring.element).toBe('air');
             this.player1.clickCard(this.house);
-            this.player1.clickCard(this.youth);
             this.player1.clickRing('fire');
+            this.player1.clickCard(this.youth);
             expect(this.game.currentConflict.ring.element).toBe('fire');
             expect(this.youth.isDishonored).toBe(true);
             expect(this.player1.fate).toBe(fate);
             expect(this.player2.fate).toBe(p2fate + 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with an unclaimed one');
-            expect(this.getChatLogs(4)).toContain('player1 switches the contested ring with Fire Ring');
+            expect(this.getChatLogs(5)).toContain('player1 uses Acclaimed Geisha House, dishonoring Moto Youth to switch the contested ring with the Fire Ring');
             expect(this.getChatLogs(4)).toContain('player2 takes 1 fate from Fire Ring');
         });
     });
