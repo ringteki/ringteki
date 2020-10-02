@@ -36,7 +36,7 @@ class BayushiKachiko2 extends DrawCard {
                         this.cardsPlayedThisRound++;
                         this.game.addMessage('{0} plays a card from their opponent\'s conflict discard pile due to the ability of {1} ({2} use{3} remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
                         this.game.addMessage('{0} is removed from the game due to the ability of {1}', this.mostRecentEvent.card, context.source);
-                        context.player.moveCard(this.mostRecentEvent.card, Locations.RemovedFromGame);
+                        this.mostRecentEvent.card.owner.moveCard(this.mostRecentEvent.card, Locations.RemovedFromGame);
                     }
                 })
             })

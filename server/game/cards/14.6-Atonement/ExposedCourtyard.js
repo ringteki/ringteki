@@ -30,6 +30,7 @@ class ExposedCourtyard extends DrawCard {
             title: 'Make an event in your conflict discard playable',
             effect: 'pick an event to make playable this conflict',
             cannotTargetFirst: true,
+            condition: context => context.game.isDuringConflict('military'),
             cost: [exposedCourtyardCost()],
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.handler({
