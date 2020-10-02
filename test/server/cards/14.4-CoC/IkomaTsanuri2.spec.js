@@ -200,3 +200,36 @@ describe('Ikoma Tsanuri 2', function() {
         });
     });
 });
+
+describe('Ikoma Tsanuri 2 with Forced Abilities', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['ikoma-tsanuri-2']
+                },
+                player2: {
+                    provinces: ['temple-of-daikoku']
+                }
+            });
+
+            this.tsanuri = this.player1.findCardByName('ikoma-tsanuri-2');
+            this.temple = this.player2.findCardByName('temple-of-daikoku');
+        });
+
+        it('should not prevent triggering forced reactions', function() {
+            this.noMoreActions();
+            let fate = this.game.rings.water.fate;
+
+            this.initiateConflict({
+                attackers: [this.tsanuri],
+                type: 'military',
+                province: this.daikoku
+            });
+
+            expect(this.game.rings.water.fate).toBe(fate + 1);
+            expect(this.getChatLogs(5)).toContain('player2 uses Temple of Daikoku to place 1 fate on Water Ring');
+        });
+    });
+});

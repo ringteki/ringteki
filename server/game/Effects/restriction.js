@@ -10,6 +10,8 @@ const checkRestrictions = {
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
     attackedProvince: (context) =>
         context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source,
+    attackedProvinceNonForced: (context) =>
+        context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
