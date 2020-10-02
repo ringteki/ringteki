@@ -75,7 +75,7 @@ class Clock {
             return;
         }
 
-        if (this.delayToStartClock) {
+        if(this.delayToStartClock) {
             secs = secs - this.delayToStartClock;
         }
         if(this.mode === 'down') {

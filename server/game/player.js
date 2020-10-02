@@ -110,7 +110,7 @@ class Player extends GameObject {
     }
 
     stopNonChessClocks() {
-        if (this.clock.name !== 'Chess Clock') {
+        if(this.clock.name !== 'Chess Clock') {
             this.stopClock();
         }
     }
