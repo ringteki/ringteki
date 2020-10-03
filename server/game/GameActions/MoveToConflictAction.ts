@@ -1,10 +1,11 @@
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import BaseCard = require('../basecard');
 import AbilityContext = require('../AbilityContext');
-import { Locations, CardTypes, EventNames, Players } from '../Constants';
+import { Locations, CardTypes, EventNames } from '../Constants';
+import Player = require('../player');
 
 export interface MoveToConflictProperties extends CardActionProperties {
-    side?: Players
+    side?: Player
 }
 
 export class MoveToConflictAction extends CardGameAction {
@@ -12,7 +13,7 @@ export class MoveToConflictAction extends CardGameAction {
     eventName = EventNames.OnMoveToConflict;
     effect = 'move {0} into the conflict';
     targetType = [CardTypes.Character];
-    defaultProperties: MoveToConflictProperties = { side: Players.Self };
+    defaultProperties: MoveToConflictProperties = { side: null };
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
         let properties = this.getProperties(context) as MoveToConflictProperties;
@@ -23,23 +24,14 @@ export class MoveToConflictAction extends CardGameAction {
             return false;
         }
 
-        if (properties.side !== Players.Opponent) {
-            if(card.controller.isAttackingPlayer()) {
-                if(!card.canParticipateAsAttacker()) {
-                    return false;
-                }
-            } else if(!card.canParticipateAsDefender()) {
+        const player = properties.side || card.controller;
+
+        if(player.isAttackingPlayer()) {
+            if(!card.canParticipateAsAttacker()) {
                 return false;
             }
-        }
-        else {
-            if(card.controller.isAttackingPlayer()) {
-                if(!card.canParticipateAsDefender()) {
-                    return false;
-                }
-            } else if(!card.canParticipateAsAttacker()) {
-                return false;
-            }
+        } else if(!card.canParticipateAsDefender()) {
+            return false;
         }
 
         return card.location === Locations.PlayArea;
@@ -48,24 +40,16 @@ export class MoveToConflictAction extends CardGameAction {
     addPropertiesToEvent(event, card: BaseCard, context: AbilityContext, additionalProperties): void {
         let properties = this.getProperties(context) as MoveToConflictProperties;
         super.addPropertiesToEvent(event, card, context, additionalProperties);
-        event.side = properties.side;
+        event.side = properties.side || card.controller;
     }
 
     eventHandler(event): void {
-        if (event.side !== Players.Opponent) {
-            if(event.card.controller.isAttackingPlayer()) {
-                event.context.game.currentConflict.addAttacker(event.card);
-            } else {
-                event.context.game.currentConflict.addDefender(event.card);
-            }        
-        }
-        else {
-            if(event.card.controller.isAttackingPlayer()) {
-                event.context.game.currentConflict.addDefender(event.card);
-            } else {
-                event.context.game.currentConflict.addAttacker(event.card);
-            }        
-        }
+        const player = event.side;
 
+        if(player.isAttackingPlayer()) {
+            event.context.game.currentConflict.addAttacker(event.card);
+        } else {
+            event.context.game.currentConflict.addDefender(event.card);
+        }        
     }
 }
