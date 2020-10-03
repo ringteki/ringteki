@@ -11,12 +11,13 @@ class Truthseeker extends DrawCard {
             },
             target: {
                 mode: TargetModes.Select,
+                targets: true,
                 activePromptTitle: 'Choose which deck to look at:',
                 choices: {
-                    'Opponent\'s Dynasty Deck': context => context.player.opponent && context.player.opponent.dynastyDeck.size() > 0,
-                    'Opponent\'s Conflict Deck': context => context.player.opponent && context.player.opponent.conflictDeck.size() > 0,
-                    'Your Dynasty Deck': context => context.player && context.player.dynastyDeck.size() > 0,
-                    'Your Conflict Deck': context => context.player && context.player.conflictDeck.size() > 0
+                    [this.getChoiceName('OppDynasty')]: context => context.player.opponent && context.player.opponent.dynastyDeck.size() > 0,
+                    [this.getChoiceName('OppConflict')]: context => context.player.opponent && context.player.opponent.conflictDeck.size() > 0,
+                    [this.getChoiceName('MyDynasty')]: context => context.player && context.player.dynastyDeck.size() > 0,
+                    [this.getChoiceName('MyConflict')]: context => context.player && context.player.conflictDeck.size() > 0
                 }
             },
             effect: 'look at the top 3 cards of {1}\'s {2}',
@@ -28,42 +29,61 @@ class Truthseeker extends DrawCard {
         });
     }
 
-    mapChoiceToEffectArgs = context => {
+    getChoiceName(key) {
+        if(key === 'MyDynasty') {
+            return `${this.owner.name}'s Dynasty`;
+        }
+        if(key === 'MyConflict') {
+            return `${this.owner.name}'s Conflict`;
+        }
+        if(this.owner.opponent) {
+            if(key === 'OppDynasty') {
+                return `${this.owner.opponent.name}'s Dynasty`;
+            }
+            if(key === 'OppConflict') {
+                return `${this.owner.opponent.name}'s Conflict`;
+            }
+        }
+
+        return 'N/A';
+    }
+
+    mapChoiceToEffectArgs(context) {
         switch(context.select) {
-            case 'Opponent\'s Dynasty Deck':
-                return [context.player.opponent, 'dynasty deck'];
-            case 'Opponent\'s Conflict Deck':
-                return [context.player.opponent, 'conflict deck'];
-            case 'Your Dynasty Deck':
-                return [context.player, 'dynasty deck'];
-            case 'Your Conflict Deck':
-                return [context.player, 'conflict deck'];
+            case this.getChoiceName('OppDynasty'):
+                return [this.owner.opponent, 'dynasty deck'];
+            case this.getChoiceName('OppConflict'):
+                return [this.owner.opponent, 'conflict deck'];
+            case this.getChoiceName('MyDynasty'):
+                return [this.owner, 'dynasty deck'];
+            case this.getChoiceName('MyConflict'):
+                return [this.owner, 'conflict deck'];
         }
     }
 
-    mapChoiceToCards = context => {
+    mapChoiceToCards(context) {
         switch(context.select) {
-            case 'Opponent\'s Dynasty Deck':
-                return context.player.opponent.dynastyDeck.first(3);
-            case 'Opponent\'s Conflict Deck':
-                return context.player.opponent.conflictDeck.first(3);
-            case 'Your Dynasty Deck':
-                return context.player.dynastyDeck.first(3);
-            case 'Your Conflict Deck':
-                return context.player.conflictDeck.first(3);
+            case this.getChoiceName('OppDynasty'):
+                return this.owner.opponent.dynastyDeck.first(3);
+            case this.getChoiceName('OppConflict'):
+                return this.owner.opponent.conflictDeck.first(3);
+            case this.getChoiceName('MyDynasty'):
+                return this.owner.dynastyDeck.first(3);
+            case this.getChoiceName('MyConflict'):
+                return this.owner.conflictDeck.first(3);
         }
     }
 
-    mapChoiceToDeck = context => {
+    mapChoiceToDeck(context) {
         switch(context.select) {
-            case 'Opponent\'s Dynasty Deck':
-                return context.player.opponent.dynastyDeck;
-            case 'Opponent\'s Conflict Deck':
-                return context.player.opponent.conflictDeck;
-            case 'Your Dynasty Deck':
-                return context.player.dynastyDeck;
-            case 'Your Conflict Deck':
-                return context.player.conflictDeck;
+            case this.getChoiceName('OppDynasty'):
+                return this.owner.opponent.dynastyDeck;
+            case this.getChoiceName('OppConflict'):
+                return this.owner.opponent.conflictDeck;
+            case this.getChoiceName('MyDynasty'):
+                return this.owner.dynastyDeck;
+            case this.getChoiceName('MyConflict'):
+                return this.owner.conflictDeck;
         }
     }
 
