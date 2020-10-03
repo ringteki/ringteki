@@ -10,8 +10,12 @@ export class OpponentPutIntoPlayAction extends PutIntoPlayAction {
         fate: 0,
         status: 'ordinary',
         controller: Players.Opponent,
-        side: Players.Opponent
+        side: null
     };
+
+    getDefaultSide(context) {
+        return context.player.opponent;
+    }
 
     constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
         super(properties, intoConflict);
