@@ -7,7 +7,7 @@ export function CalculateHonorLimit(player, round, phase, plannedHonorAmount): [
     const honorGainLimitPerPhase = Math.min(player.getEffects(EffectNames.LimitHonorGainPerPhase));
     const honorGainedThisPhase = player.honorGained(round, phase, true);
 
-    const maxAmountToChange = honorGainLimitPerPhase - honorGainedThisPhase;
+    const maxAmountToChange = Math.max(honorGainLimitPerPhase - honorGainedThisPhase, 0);
     const amountToChange = Math.min(plannedHonorAmount, maxAmountToChange);
     if(!honorGainLimitPerPhase)
         return [false, plannedHonorAmount];
