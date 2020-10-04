@@ -168,7 +168,7 @@ describe('Silent Ones Monastery', function() {
                     phase: 'conflict',
                     player1: {
                         fate: 30,
-                        inPlay: ['daidoji-uji','ikoma-prodigy'],
+                        inPlay: ['daidoji-uji','ikoma-prodigy', 'pious-guardian'],
                         provinces: ['manicured-garden', 'shameful-display', 'fertile-fields']
                     },
                     player2: {
@@ -179,6 +179,7 @@ describe('Silent Ones Monastery', function() {
 
                 this.manicured = this.player1.findCardByName('manicured-garden', 'province 1');
                 this.prodigy1 = this.player1.findCardByName('ikoma-prodigy');
+                this.piousguardian = this.player1.findCardByName('pious-guardian');
                 this.uji = this.player1.findCardByName('daidoji-uji');
 
                 this.silentOnesMonastery = this.player2.findCardByName('silent-ones-monastery', 'province 1');
@@ -208,6 +209,35 @@ describe('Silent Ones Monastery', function() {
                 this.player1.clickPrompt('Gain 2 honor');
                 expect(this.getChatLogs(10)).toContain('player1 resolves the air ring, gaining 1 honor');
                 expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
+            });
+
+            it('should not let Pious Guardian trigger.', function() {
+                this.prodigy1.honor();
+                this.startingHonor = this.player1.honor;
+
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.prodigy1, this.uji],
+                    defenders: [],
+                    ring: 'air'
+                });
+
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.prodigy1);
+                expect(this.player1.honor).toBe(this.startingHonor + 1);
+
+                this.player1.pass();
+                this.player2.pass();
+
+                this.player1.clickPrompt('Gain 2 honor');
+                expect(this.getChatLogs(10)).toContain('player1 resolves the air ring, gaining 1 honor');
+                expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
+
+                this.flow.finishConflictPhase();
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.game.currentPhase).toBe('fate');
             });
         });
         describe('When more than 2 honored characters would leave play during the same phase,', function() {
