@@ -652,11 +652,20 @@ class DrawCard extends BaseCard {
         }
 
         if(this.isDishonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
-            this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
-            this.game.openThenEventWindow(this.game.actions.loseHonor().getEvent(this.controller, this.game.getFrameworkContext()));
+            const frameworkContext = this.game.getFrameworkContext();
+            const honorLossAction = this.game.actions.loseHonor();
+
+            if(honorLossAction.canAffect(this.controller, frameworkContext)) {
+                this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
+            }
+            this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
         } else if(this.isHonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
-            this.game.addMessage('{0} gains 1 honor due to {1}\'s personal honor', this.controller, this);
-            this.game.openThenEventWindow(this.game.actions.gainHonor().getEvent(this.controller, this.game.getFrameworkContext()));
+            const frameworkContext = this.game.getFrameworkContext();
+            const honorGainAction = this.game.actions.gainHonor();
+            if(honorGainAction.canAffect(this.controller, frameworkContext)) {
+                this.game.addMessage('{0} gains 1 honor due to {1}\'s personal honor', this.controller, this);
+            }
+            this.game.openThenEventWindow(honorGainAction.getEvent(this.controller, frameworkContext));
         }
 
         this.makeOrdinary();

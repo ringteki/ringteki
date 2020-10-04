@@ -210,5 +210,40 @@ describe('Silent Ones Monastery', function() {
                 expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
             });
         });
+        describe('When more than 2 honored characters would leave play during the same phase,', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        honor: 11,
+                        inPlay: ['ikoma-prodigy', 'matsu-berserker', 'ikoma-orator']
+                    },
+                    player2: {
+                        provinces: ['silent-ones-monastery']
+                    }
+                });
+                this.prodigy = this.player1.findCardByName('ikoma-prodigy');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.orator = this.player1.findCardByName('ikoma-orator');
+
+                this.orator.honor();
+                this.prodigy.honor();
+                this.berserker.honor();
+            });
+
+            it('should reward up to 2 honor.', function() {
+                this.startingHonor = this.player1.honor;
+
+                this.flow.finishConflictPhase();
+                this.player1.clickCard(this.orator);
+                this.player1.clickCard(this.prodigy);
+                this.player1.clickCard(this.berserker);
+
+                expect(this.getChatLogs(5)).toContain('player1 gains 1 honor due to Ikoma Prodigy\'s personal honor');
+                expect(this.getChatLogs(5)).toContain('player1 gains 1 honor due to Ikoma Orator\'s personal honor');
+                expect(this.getChatLogs(5)).not.toContain('player1 gains 1 honor due to Matsu Berserker\'s personal honor');
+                expect(this.player1.honor).toBe(this.startingHonor + 2); // Should only gain 2.
+            });
+        });
     });
 });
