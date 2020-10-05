@@ -12,7 +12,7 @@ describe('Revered Ikoma', function() {
             this.reveredIkoma.fate = 1;
         });
 
-        it('should not trigger if you haven\'t gained 2 fate this phase yet', function() {
+        it('should not trigger if you haven\'t gained 2 honor this phase yet', function() {
             const playerFate = this.player1.fate;
 
             this.player1.clickCard(this.reveredIkoma);
@@ -20,7 +20,25 @@ describe('Revered Ikoma', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should trigger if you have gained 2 fate this phase', function() {
+        it('should not trigger if you have gained only 1 honor this phase', function() {
+            const playerFate = this.player1.fate;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.reveredIkoma],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            this.player1.pass();
+            this.player1.clickPrompt('Take 1 Honor from opponent');
+
+            this.player1.clickCard(this.reveredIkoma);
+            expect(this.player1.fate).toBe(playerFate);
+        });
+
+        it('should trigger if you have gained 2 honor this phase', function() {
             const playerFate = this.player1.fate;
 
             this.noMoreActions();

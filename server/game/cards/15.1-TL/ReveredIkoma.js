@@ -10,7 +10,7 @@ class ReveredIkoma extends DrawCard {
 
         this.action({
             title: 'Gain 1 fate',
-            condition: context => context.player.honorGained(context.game.roundNumber, this.game.currentPhase, true),
+            condition: context => context.player.honorGained(context.game.roundNumber, this.game.currentPhase, true) >= 2,
             gameAction: AbilityDsl.actions.gainFate()
         });
     }
