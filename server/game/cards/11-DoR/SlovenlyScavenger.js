@@ -12,59 +12,80 @@ class SlovenlyScavenger extends DrawCard {
             cost: AbilityDsl.costs.sacrificeSelf(),
             target: {
                 mode: TargetModes.Select,
+                targets: true,
                 activePromptTitle: 'Choose which discard pile to shuffle:',
                 choices: {
-                    'My Dynasty': context => context.player.dynastyDiscardPile.size() > 0,
-                    'My Conflict': context => context.player.conflictDiscardPile.size() > 0,
-                    'Opponent\'s Dynasty': context => context.player.opponent && context.player.opponent.dynastyDiscardPile.size() > 0,
-                    'Opponent\'s Conflict': context => context.player.opponent && context.player.opponent.conflictDiscardPile.size() > 0
+                    [this.getChoiceName('MyDynasty')]: context => context.player.dynastyDiscardPile.size() > 0,
+                    [this.getChoiceName('MyConflict')]: context => context.player.conflictDiscardPile.size() > 0,
+                    [this.getChoiceName('OppDynasty')]: context => context.player.opponent && context.player.opponent.dynastyDiscardPile.size() > 0,
+                    [this.getChoiceName('OppConflict')]: context => context.player.opponent && context.player.opponent.conflictDiscardPile.size() > 0
                 }
             },
             effect: 'shuffle {1} into their deck',
-            effectArgs: context => this.getEffectArg(context, context.select),
+            effectArgs: context => this.getEffectArg(context.select),
             handler: context => {
-                if(context.select === 'My Dynasty') {
-                    context.player.dynastyDiscardPile.forEach(card => {
-                        context.player.moveCard(card, Locations.DynastyDeck);
+                if(context.select === this.getChoiceName('MyDynasty')) {
+                    this.owner.dynastyDiscardPile.forEach(card => {
+                        this.owner.moveCard(card, Locations.DynastyDeck);
                     });
-                    context.player.shuffleDynastyDeck();
+                    this.owner.shuffleDynastyDeck();
                 }
-                if(context.select === 'My Conflict') {
-                    context.player.conflictDiscardPile.forEach(card => {
-                        context.player.moveCard(card, Locations.ConflictDeck);
+                if(context.select === this.getChoiceName('MyConflict')) {
+                    this.owner.conflictDiscardPile.forEach(card => {
+                        this.owner.moveCard(card, Locations.ConflictDeck);
                     });
-                    context.player.shuffleConflictDeck();
+                    this.owner.shuffleConflictDeck();
                 }
-                if(context.select === 'Opponent\'s Dynasty') {
-                    context.player.opponent.dynastyDiscardPile.forEach(card => {
-                        context.player.opponent.moveCard(card, Locations.DynastyDeck);
+                if(this.owner.opponent && context.select === this.getChoiceName('OppDynasty')) {
+                    this.owner.opponent.dynastyDiscardPile.forEach(card => {
+                        this.owner.opponent.moveCard(card, Locations.DynastyDeck);
                     });
-                    context.player.opponent.shuffleDynastyDeck();
+                    this.owner.opponent.shuffleDynastyDeck();
                 }
-                if(context.select === 'Opponent\'s Conflict') {
-                    context.player.opponent.conflictDiscardPile.forEach(card => {
-                        context.player.opponent.moveCard(card, Locations.ConflictDeck);
+                if(this.owner.opponent && context.select === this.getChoiceName('OppConflict')) {
+                    this.owner.opponent.conflictDiscardPile.forEach(card => {
+                        this.owner.opponent.moveCard(card, Locations.ConflictDeck);
                     });
-                    context.player.opponent.shuffleConflictDeck();
+                    this.owner.opponent.shuffleConflictDeck();
                 }
             }
         });
     }
 
-    getEffectArg(context, selection) {
-        if(selection === 'My Dynasty') {
-            return context.player.name + '\'s dynasty discard pile';
+    getEffectArg(selection) {
+        if(selection === this.getChoiceName('MyDynasty')) {
+            return this.owner.name + '\'s dynasty discard pile';
         }
-        if(selection === 'My Conflict') {
-            return context.player.name + '\'s conflict discard pile';
+        if(selection === this.getChoiceName('MyConflict')) {
+            return this.owner.name + '\'s conflict discard pile';
         }
-        if(selection === 'Opponent\'s Dynasty') {
-            return context.player.opponent.name + '\'s dynasty discard pile';
+        if(this.owner.opponent && selection === this.getChoiceName('OppDynasty')) {
+            return this.owner.opponent.name + '\'s dynasty discard pile';
         }
-        if(selection === 'Opponent\'s Conflict') {
-            return context.player.opponent.name + '\'s conflict discard pile';
+        if(this.owner.opponent && selection === this.getChoiceName('OppConflict')) {
+            return this.owner.opponent.name + '\'s conflict discard pile';
         }
         return 'Unknown target';
+    }
+
+
+    getChoiceName(key) {
+        if(key === 'MyDynasty') {
+            return `${this.owner.name}'s Dynasty`;
+        }
+        if(key === 'MyConflict') {
+            return `${this.owner.name}'s Conflict`;
+        }
+        if(this.owner.opponent) {
+            if(key === 'OppDynasty') {
+                return `${this.owner.opponent.name}'s Dynasty`;
+            }
+            if(key === 'OppConflict') {
+                return `${this.owner.opponent.name}'s Conflict`;
+            }
+        }
+
+        return 'N/A';
     }
 }
 

@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { TargetModes, Players } = require('../../Constants');
+const { TargetModes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class EndlessPlainsSkirmisher extends DrawCard {
@@ -8,10 +8,11 @@ class EndlessPlainsSkirmisher extends DrawCard {
             title: 'Move this character to the confict',
             target: {
                 mode: TargetModes.Select,
+                targets: true,
                 activePromptTitle: 'Which side should this character be on?',
                 choices: {
-                    'Mine': AbilityDsl.actions.moveToConflict({ side: Players.Self }),
-                    'My Opponent\'s': AbilityDsl.actions.moveToConflict({ side: Players.Opponent })
+                    [this.owner.name]: AbilityDsl.actions.moveToConflict({ side: this.owner }),
+                    [this.owner.opponent && this.owner.opponent.name || 'NA']: AbilityDsl.actions.moveToConflict({ side: this.owner.opponent })
                 }
             },
             effect: 'join the conflict for {1}!',
@@ -20,10 +21,10 @@ class EndlessPlainsSkirmisher extends DrawCard {
     }
 
     getEffectArg(context, selection) {
-        if(selection === 'Mine') {
-            return context.player.name;
+        if(selection === context.player.name) {
+            return context.player;
         }
-        return context.player.opponent.name;
+        return context.player.opponent;
     }
 }
 

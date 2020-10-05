@@ -52,6 +52,17 @@ describe('Exposed Courtyard', function() {
             expect(this.fan.location).toBe('conflict deck');
         });
 
+        it('should not work in a pol conflict', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.warrior],
+                defenders: [this.tsuko]
+            });
+            this.player2.clickCard(this.courtyard);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
+
         it('should let you pick an event in your discard pile', function () {
             this.noMoreActions();
             this.initiateConflict({

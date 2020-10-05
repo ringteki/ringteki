@@ -17,10 +17,11 @@ class JoinTheFray extends DrawCard {
                 select: {
                     dependsOn: 'character',
                     mode: TargetModes.Select,
+                    targets: true,
                     activePromptTitle: 'Which side should this character be on?',
                     choices: {
-                        'Mine': AbilityDsl.actions.putIntoConflict(context => ({ side: Players.Self, target: context.targets.character })),
-                        'My Opponent\'s': AbilityDsl.actions.putIntoConflict(context => ({ side: Players.Opponent, target: context.targets.character }))
+                        [this.owner.name]: AbilityDsl.actions.putIntoConflict(context => ({ side: this.owner, target: context.targets.character })),
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: AbilityDsl.actions.putIntoConflict(context => ({ side: this.owner.opponent, target: context.targets.character }))
                     }
                 }
             },
@@ -30,7 +31,7 @@ class JoinTheFray extends DrawCard {
     }
 
     getEffectArg(context, selection) {
-        if(selection === 'Mine') {
+        if(selection === context.player.name) {
             return context.player;
         }
         return context.player.opponent;
