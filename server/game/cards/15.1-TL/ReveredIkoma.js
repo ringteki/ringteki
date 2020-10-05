@@ -6,7 +6,7 @@ class ReveredIkoma extends DrawCard {
         this.persistentEffect({
             match: card => card === this,
             effect: AbilityDsl.effects.cardCannot('receiveDishonorToken')
-        })
+        });
 
         this.action({
             title: 'Gain 1 fate',
