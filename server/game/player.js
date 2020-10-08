@@ -732,7 +732,7 @@ class Player extends GameObject {
         }
         cards.forEach(card => {
             if(!card.allowGameAction('removeFate')) {
-                alternateFatePools.splice(card, 1);
+                alternateFatePools = alternateFatePools.filter(a => a != card);
             }
         });
 
