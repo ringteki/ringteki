@@ -7,6 +7,7 @@ const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
+const AbilityDsl = require('./abilitydsl');
 
 const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
 
@@ -51,10 +52,22 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new PrideAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
+            this.initializeTemptationMahoAbility();
         }
         if(this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this.game, this));
         }
+    }
+
+    initializeTemptationMahoAbility() {
+        this.persistentEffect({
+            effect: AbilityDsl.effects.alternateFatePool(card => {
+                if(card.isTemptationsMaho()) {
+                    return this;
+                }
+                return false;
+            })
+        });
     }
 
     getPrintedSkill(type) {

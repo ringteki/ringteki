@@ -13,6 +13,11 @@ class ReduceableFateCost {
             return false;
         }
         let minCost = context.player.getMinimumCost(context.playType, context, null, this.ignoreType);
+
+        if(context.source.isTemptationsMaho() && minCost > 0) {
+            return false;
+        }
+
         return context.player.fate >= minCost &&
             (minCost === 0 || context.player.checkRestrictions('spendFate', context));
     }
@@ -21,6 +26,9 @@ class ReduceableFateCost {
         let alternatePools = context.player.getAlternateFatePools(context.playType, context.source, context);
         let alternatePoolTotal = alternatePools.reduce((total, pool) => total + pool.fate, 0);
         let maxPlayerFate = context.player.checkRestrictions('spendFate', context) ? context.player.fate : 0;
+        if (context.source.isTemptationsMaho()) {
+            maxPlayerFate = 0;
+        }
         if(this.getReducedCost(context) > maxPlayerFate + alternatePoolTotal) {
             result.cancelled = true;
         } else if(!result.cancelled && alternatePools.length > 0) {
@@ -30,6 +38,9 @@ class ReduceableFateCost {
             };
             context.costs.alternateFate = new Map();
             let maxPlayerFate = context.player.checkRestrictions('spendFate', context) ? context.player.fate : 0;
+            if (context.source.isTemptationsMaho()) {
+                maxPlayerFate = 0;
+            }
             for(const alternatePool of alternatePools) {
                 context.game.queueSimpleStep(() => {
                     properties.remainingPoolTotal -= alternatePool.fate;

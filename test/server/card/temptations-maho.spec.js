@@ -1,0 +1,87 @@
+describe('Temptation Maho', function() {
+    integration(function() {
+        describe('functionality from an opponent standpoint', function () {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        fate: 20,
+                        inPlay: ['daidoji-uji', 'doji-challenger', 'doji-whisperer', 'kakita-yoshi'],
+                        hand: ['a-fate-worse-than-death'],
+                    },
+                    player2: {
+                        inPlay: ['kakita-toshimoko'],
+                        hand: ['embrace-the-void']
+                    }
+                });
+
+                this.maho = this.player1.findCardByName('a-fate-worse-than-death');
+                this.maho.isTemptationsMaho = () => {
+                    return true;
+                }
+
+                this.player1.player.imperialFavor = 'military';
+
+                this.uji = this.player1.findCardByName('daidoji-uji');
+                this.challenger = this.player1.findCardByName('doji-challenger');
+                this.whisperer = this.player1.findCardByName('doji-whisperer');
+                this.yoshi = this.player1.findCardByName('kakita-yoshi');
+                this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.uji, this.yoshi],
+                    defenders: [this.toshimoko]
+                });
+            });
+            
+            it('should require fate to be paid from characters', function() {
+                let fate = this.player1.fate;
+                this.uji.fate = 3;
+                this.yoshi.fate = 2;
+                this.player2.pass();
+                this.player1.clickCard(this.maho);
+                this.player1.clickCard(this.toshimoko);
+
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Daidoji Uji');
+                expect(this.player1.currentButtons.length).toBe(3);
+                expect(this.player1.currentButtons).not.toContain('0');
+                expect(this.player1.currentButtons).not.toContain('1');
+                expect(this.player1.currentButtons).toContain('2');
+                expect(this.player1.currentButtons).toContain('3');
+                expect(this.player1.currentButtons).toContain('Cancel');
+
+                this.player1.clickPrompt('2');
+
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Kakita Yoshi');
+                expect(this.player1.currentButtons.length).toBe(2);
+                expect(this.player1.currentButtons).not.toContain('0');
+                expect(this.player1.currentButtons).not.toContain('1');
+                expect(this.player1.currentButtons).toContain('2');
+                expect(this.player1.currentButtons).toContain('Cancel');
+
+                this.player1.clickPrompt('2');
+
+                expect(this.toshimoko.bowed).toBe(true);
+                expect(this.toshimoko.isDishonored).toBe(true);
+
+                expect(this.uji.fate).toBe(1);
+                expect(this.yoshi.fate).toBe(0);
+                expect(this.player1.fate).toBe(fate);
+
+                expect(this.getChatLogs(10)).toContain('player1 takes 2 fate from Daidoji Uji to pay the cost of A Fate Worse Than Death');
+                expect(this.getChatLogs(10)).toContain('player1 takes 2 fate from Kakita Yoshi to pay the cost of A Fate Worse Than Death');
+            });
+
+            it('should no be able to initiate without enough fate on characters', function() {
+                this.uji.fate = 0;
+                this.yoshi.fate = 0;
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.maho);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+        });
+    });
+});
