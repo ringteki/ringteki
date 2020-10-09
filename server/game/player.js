@@ -11,7 +11,6 @@ const PlayableLocation = require('./playablelocation.js');
 const PlayerPromptState = require('./playerpromptstate.js');
 const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
-const Ring = require('./ring.js');
 
 const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
@@ -723,8 +722,8 @@ class Player extends GameObject {
     getAlternateFatePools(playingType, card, context) {
         let effects = this.getEffects(EffectNames.AlternateFatePool);
         let alternateFatePools = effects.filter(match => match(card) && match(card).fate > 0).map(match => match(card));
-        let rings = alternateFatePools.filter(a => a instanceof Ring);
-        let cards = alternateFatePools.filter(a => !(a instanceof Ring));
+        let rings = alternateFatePools.filter(a => a.printedType === 'ring');
+        let cards = alternateFatePools.filter(a => a.printedType !== 'ring');
         if(!this.checkRestrictions('takeFateFromRings', context)) {
             rings.forEach(ring => {
                 alternateFatePools = alternateFatePools.filter(a => a !== ring);

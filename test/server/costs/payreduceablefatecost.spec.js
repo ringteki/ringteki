@@ -5,7 +5,7 @@ describe('Costs.payReduceableFateCost', function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage']);
         this.playerSpy = jasmine.createSpyObj('player', ['getDuplicateInPlay', 'getMinimumCost', 'getReducedCost', 'markUsedReducers', 'checkRestrictions']);
         this.playerSpy.checkRestrictions.and.returnValue(true);
-        this.cardSpy = { card: 1, allowGameAction: () => true };
+        this.cardSpy = { card: 1, allowGameAction: () => true, isTemptationsMaho: () => false };
         this.context = {
             costs: {},
             game: this.gameSpy,

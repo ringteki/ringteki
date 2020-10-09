@@ -1,7 +1,6 @@
 const Event = require('../Events/Event');
 const { EventNames, Players, Locations } = require('../Constants');
 const GameActions = require('../GameActions/GameActions');
-const Ring = require('../ring.js');
 
 class ReduceableFateCost {
     constructor(ignoreType) {
@@ -73,8 +72,8 @@ class ReduceableFateCost {
                 });
             };
 
-            const ringPools = alternatePools.filter(a => a instanceof Ring);
-            const cardPools = alternatePools.filter(a => !(a instanceof Ring));
+            const ringPools = alternatePools.filter(a => a.printedType === 'ring');
+            const cardPools = alternatePools.filter(a => a.printedType !== 'ring');
             for(const alternatePool of ringPools) {
                 context.game.queueSimpleStep(() => {
                     properties.remainingPoolTotal -= alternatePool.fate;

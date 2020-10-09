@@ -529,7 +529,7 @@ describe('Monastery Protector', function() {
 
             this.player2.clickCard(this.hurricanePunch);
             this.player2.clickPrompt('Pay costs first');
-            expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Air Ring');
+            expect(this.player2).toHavePrompt('Choose amount of fate to spend from Air Ring');
             expect(this.player2.currentButtons).toContain('0');
             expect(this.player2.currentButtons).toContain('1');
             expect(this.player2.currentButtons).toContain('Cancel');
@@ -554,7 +554,7 @@ describe('Monastery Protector', function() {
             this.player2.clickCard(this.hurricanePunch);
             expect(this.player2).toBeAbleToSelect(this.protector);
             this.player2.clickCard(this.protector);
-            expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Air Ring');
+            expect(this.player2).toHavePrompt('Choose amount of fate to spend from Air Ring');
             expect(this.player2.currentButtons).toContain('0');
             expect(this.player2.currentButtons).toContain('1');
             expect(this.player2.currentButtons).toContain('Cancel');
@@ -579,7 +579,7 @@ describe('Monastery Protector', function() {
             this.player2.clickCard(this.hurricanePunch);
             expect(this.player2).toBeAbleToSelect(this.protector);
             this.player2.clickCard(this.protector);
-            expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Air Ring');
+            expect(this.player2).toHavePrompt('Choose amount of fate to spend from Air Ring');
             expect(this.player2.currentButtons).toContain('0');
             expect(this.player2.currentButtons).toContain('1');
             expect(this.player2.currentButtons).toContain('Cancel');
