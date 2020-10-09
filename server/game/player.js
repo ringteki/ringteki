@@ -727,12 +727,12 @@ class Player extends GameObject {
         let cards = alternateFatePools.filter(a => !(a instanceof Ring));
         if(!this.checkRestrictions('takeFateFromRings', context)) {
             rings.forEach(ring => {
-                alternateFatePools.splice(ring, 1);
+                alternateFatePools = alternateFatePools.filter(a => a !== ring);
             });
         }
         cards.forEach(card => {
             if(!card.allowGameAction('removeFate')) {
-                alternateFatePools = alternateFatePools.filter(a => a != card);
+                alternateFatePools = alternateFatePools.filter(a => a !== card);
             }
         });
 

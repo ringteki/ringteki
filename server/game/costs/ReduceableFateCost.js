@@ -1,6 +1,7 @@
 const Event = require('../Events/Event');
 const { EventNames, Players, Locations } = require('../Constants');
 const GameActions = require('../GameActions/GameActions');
+const Ring = require('../ring.js');
 
 class ReduceableFateCost {
     constructor(ignoreType) {
@@ -26,7 +27,7 @@ class ReduceableFateCost {
         let alternatePools = context.player.getAlternateFatePools(context.playType, context.source, context);
         let alternatePoolTotal = alternatePools.reduce((total, pool) => total + pool.fate, 0);
         let maxPlayerFate = context.player.checkRestrictions('spendFate', context) ? context.player.fate : 0;
-        if (context.source.isTemptationsMaho()) {
+        if(context.source.isTemptationsMaho()) {
             maxPlayerFate = 0;
         }
         if(this.getReducedCost(context) > maxPlayerFate + alternatePoolTotal) {
@@ -38,13 +39,19 @@ class ReduceableFateCost {
             };
             context.costs.alternateFate = new Map();
             let maxPlayerFate = context.player.checkRestrictions('spendFate', context) ? context.player.fate : 0;
-            if (context.source.isTemptationsMaho()) {
+            if(context.source.isTemptationsMaho()) {
                 maxPlayerFate = 0;
+            }
+            if(properties.reducedCost === 0) {
+                return;
             }
 
             let handler = (alternatePool) => {
-                if (alternatePool === 'cancelled') {
+                if(alternatePool === 'cancelled') {
                     result.cancelled = true;
+                    return;
+                }
+                if(alternatePool === 'stop-asking-for-fate') {
                     return;
                 }
                 context.game.queueSimpleStep(() => {
@@ -56,38 +63,46 @@ class ReduceableFateCost {
                     if(result.cancelled || properties.numberOfChoices === 0) {
                         return;
                     }
-                    let choiceHandler = (choice) => {
-                        alternatePools = alternatePools.filter(a => a != alternatePool);
-                        if (alternatePools.length > 0 && properties.reducedCost > 0) {
-                            this.promptForAlternateFateCardSelect(context, alternatePools, handler);
-                        }    
-                    }
+                    let choiceHandler = () => {
+                        alternatePools = alternatePools.filter(a => a !== alternatePool);
+                        if(alternatePools.length > 0 && properties.reducedCost > 0) {
+                            this.promptForAlternateFateCardSelect(context, properties.reducedCost - maxPlayerFate, alternatePools, handler);
+                        }
+                    };
                     this.promptForAlternateFate(context, result, properties, choiceHandler);
+                });
+            };
+
+            const ringPools = alternatePools.filter(a => a instanceof Ring);
+            const cardPools = alternatePools.filter(a => !(a instanceof Ring));
+            for(const alternatePool of ringPools) {
+                context.game.queueSimpleStep(() => {
+                    properties.remainingPoolTotal -= alternatePool.fate;
+                    properties.minFate = Math.max(properties.reducedCost - maxPlayerFate - properties.remainingPoolTotal, 0);
+                    properties.maxFate = Math.min(alternatePool.fate, properties.reducedCost);
+                    properties.pool = alternatePool;
+                    properties.numberOfChoices = properties.maxFate - properties.minFate + 1;
+                    if(result.cancelled || properties.numberOfChoices === 0) {
+                        return;
+                    }
+                    this.promptForAlternateFate(context, result, properties);
                 });
             }
 
-            this.promptForAlternateFateCardSelect(context, alternatePools, handler);
-            // for(const alternatePool of alternatePools) {
-            //     context.game.queueSimpleStep(() => {
-            //         properties.remainingPoolTotal -= alternatePool.fate;
-            //         properties.minFate = Math.max(properties.reducedCost - maxPlayerFate - properties.remainingPoolTotal, 0);
-            //         properties.maxFate = Math.min(alternatePool.fate, properties.reducedCost);
-            //         properties.pool = alternatePool;
-            //         properties.numberOfChoices = properties.maxFate - properties.minFate + 1;
-            //         if(result.cancelled || properties.numberOfChoices === 0) {
-            //             return;
-            //         }
-            //         this.promptForAlternateFate(context, result, properties);
-            //     });
-            // }
+            if(cardPools.length > 0) {
+                this.promptForAlternateFateCardSelect(context, properties.reducedCost - maxPlayerFate, cardPools, handler);
+            }
         }
     }
-    
-    promptForAlternateFateCardSelect(context, cards, handler) {
+
+    promptForAlternateFateCardSelect(context, minFate, cards, handler) {
         let currentCard = context.source;
         let buttons = [];
         let waitingPromptTitle = '';
         buttons.push({ text: 'Cancel', arg: 'cancel' });
+        if(minFate <= 0) {
+            buttons.push({ text: 'Done', arg: 'stop-asking-for-fate' });
+        }
         if(context.ability.abilityType === 'action') {
             waitingPromptTitle = 'Waiting for opponent to take an action or pass';
         } else {
@@ -96,6 +111,7 @@ class ReduceableFateCost {
 
         context.game.promptForSelect(context.player, {
             activePromptTitle: 'Choose a card to help pay the fate cost of ' + currentCard.name,
+            waitingPromptTitle: waitingPromptTitle,
             context: context,
             location: Locations.PlayArea,
             controller: Players.Self,
@@ -107,6 +123,10 @@ class ReduceableFateCost {
             },
             onCancel: () => {
                 handler('cancelled');
+                return true;
+            },
+            onMenuCommand: (player, arg) => {
+                handler(arg);
                 return true;
             }
         });
@@ -165,7 +185,7 @@ class ReduceableFateCost {
             if(amount) {
                 context.game.addMessage('{0} takes {1} fate from {2} to pay the cost of {3}', context.player, amount, alternatePool, context.source);
                 GameActions.removeFate({ amount: context.costs.alternateFate.get(alternatePool)}).resolve(alternatePool, context);
-                totalAlternateFate += context.costs.alternateFate.get(alternatePool);    
+                totalAlternateFate += context.costs.alternateFate.get(alternatePool);
             }
         }
         return Math.max(reducedCost - totalAlternateFate, 0);
