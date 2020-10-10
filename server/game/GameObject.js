@@ -97,6 +97,10 @@ class GameObject {
         return false;
     }
 
+    isTemptationsMaho() {
+        return false;
+    }
+
     getShortSummary(activePlayer) { // eslint-disable-line no-unused-vars
         return {
             id: this.id,

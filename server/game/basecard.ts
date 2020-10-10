@@ -760,10 +760,6 @@ class BaseCard extends EffectSource {
         this.setPersonalHonor(null);
     }
 
-    isTemptationsMaho() {
-        return false;
-    }
-
     getShortSummaryForControls(activePlayer) {
         if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
