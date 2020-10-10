@@ -9,7 +9,7 @@ const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
 const AbilityDsl = require('./abilitydsl');
 
-const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes, Durations } = require('./Constants');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -60,14 +60,16 @@ class DrawCard extends BaseCard {
     }
 
     initializeTemptationMahoAbility() {
-        this.persistentEffect({
+        let effect = {
             effect: AbilityDsl.effects.alternateFatePool(card => {
                 if(card.isTemptationsMaho()) {
                     return this;
                 }
                 return false;
             })
-        });
+        };
+        effect = _.extend({ duration: Durations.Persistent, location: Locations.Any }, effect);
+        this.abilities.persistentEffects.push(effect);
     }
 
     getPrintedSkill(type) {

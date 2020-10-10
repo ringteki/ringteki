@@ -72,7 +72,7 @@ class ReduceableFateCost {
                 });
             };
 
-            const ringPools = alternatePools.filter(a => a.printedType === 'ring');
+            let ringPools = alternatePools.filter(a => a.printedType === 'ring');
             const cardPools = alternatePools.filter(a => a.printedType !== 'ring');
             for(const alternatePool of ringPools) {
                 context.game.queueSimpleStep(() => {

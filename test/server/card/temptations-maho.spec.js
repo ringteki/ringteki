@@ -7,7 +7,8 @@ describe('Temptation Maho', function() {
                     player1: {
                         fate: 20,
                         inPlay: ['daidoji-uji', 'doji-challenger', 'doji-whisperer', 'kakita-yoshi', 'student-of-war'],
-                        hand: ['a-fate-worse-than-death', 'desolation']
+                        hand: ['a-fate-worse-than-death', 'desolation'],
+                        dynastyDiscard: ['awakened-tsukumogami']
                     },
                     player2: {
                         inPlay: ['kakita-toshimoko'],
@@ -32,6 +33,10 @@ describe('Temptation Maho', function() {
                 this.yoshi = this.player1.findCardByName('kakita-yoshi');
                 this.student = this.player1.findCardByName('student-of-war');
                 this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
+                this.awakened = this.player1.findCardByName('awakened-tsukumogami');
+
+                this.game.rings.earth.fate = 2;
+
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -245,6 +250,16 @@ describe('Temptation Maho', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
 
                 expect(this.getChatLogs(10)).toContain('player1 plays Desolation, losing 2 honor to blank player2\'s provinces until the end of the phase');
+            });
+
+            it('should not let you use fate off rings via Awakened Tsukumogami', function() {
+                this.uji.fate = 0;
+                this.yoshi.fate = 0;
+                this.challenger.fate = 0;
+                this.player1.moveCard(this.awakened, 'play area');
+                this.player2.pass();
+                this.player1.clickCard(this.maho2);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
             });
         });
     });
