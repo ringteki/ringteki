@@ -95,6 +95,10 @@ class DrawCard extends BaseCard {
         return this.hasKeyword('courtesy');
     }
 
+    isDire() {
+        return this.getFate() === 0;
+    }
+
     hasRally() {
         //Facedown cards are out of play and their keywords don't update until after the reveal reaction window is done, so we need to check for the printed keyword
         return this.hasKeyword('rally') || (!this.isBlank() && this.hasPrintedKeyword('rally'));
