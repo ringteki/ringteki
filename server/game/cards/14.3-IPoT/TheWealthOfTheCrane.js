@@ -3,7 +3,6 @@ const AbilityDsl = require('../../abilitydsl');
 const { Players, Locations, CardTypes } = require('../../Constants');
 
 class TheWealthOfTheCrane extends DrawCard {
-    numberOfCards = 0;
     cards = [];
     chosenProvinces = [];
 
@@ -26,16 +25,15 @@ class TheWealthOfTheCrane extends DrawCard {
             max: AbilityDsl.limit.perPhase(1),
             handler: context => {
                 this.cards = context.player.dynastyDeck.first(10);
-                this.numberOfCards = 0;
                 this.chosenProvinces = [];
-        
+
                 this.wealthSelectPrompt(context);
             }
         });
     }
 
     wealthSelectPrompt(context) {
-        if(!this.cards || this.cards.length <= 0 || this.numberOfCards >= 4) {
+        if(!this.cards || this.cards.length <= 0 || !this.hasRemainingTarget()) {
             context.player.shuffleDynastyDeck();
             return;
         }
@@ -53,9 +51,8 @@ class TheWealthOfTheCrane extends DrawCard {
                     context.player.moveCard(currentCard, card.location);
                     currentCard.facedown = false;
                     this.cards = this.cards.filter(a => a !== currentCard);
-                    this.numberOfCards++;
 
-                    if(this.cards && this.cards.length > 0 && this.numberOfCards < 4) {
+                    if(this.cards && this.cards.length > 0 && this.hasRemainingTarget()) {
                         this.game.promptWithHandlerMenu(context.player, {
                             activePromptTitle: 'Select a card to place in a province',
                             context: context,
@@ -85,6 +82,15 @@ class TheWealthOfTheCrane extends DrawCard {
 
     isProvinceValidTarget(province) {
         return province.location !== Locations.StrongholdProvince && !this.chosenProvinces.some(a => a === province);
+    }
+
+    hasRemainingTarget() {
+        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        if(!this.game.skirmishMode) {
+            baseLocations.push(Locations.ProvinceFour);
+        }
+
+        return this.chosenProvinces.length < baseLocations.length;
     }
 }
 
