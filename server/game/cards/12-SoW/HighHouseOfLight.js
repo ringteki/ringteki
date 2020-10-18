@@ -13,10 +13,11 @@ class HighHouseOfLight extends StrongholdCard {
                 controller: Players.Self,
                 cardCondition: card => card.isParticipating() && card.hasTrait('monk'),
                 gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.cardLastingEffect(() => ({
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'target',
-                            restricts: 'opponentsEvents'
+                            restricts: 'opponentsEvents',
+                            applyingPlayer: context.player
                         })
                     })),
                     AbilityDsl.actions.conditional({

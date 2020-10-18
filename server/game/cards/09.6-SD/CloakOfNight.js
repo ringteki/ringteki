@@ -14,12 +14,13 @@ class CloakOfNight extends DrawCard {
                     AbilityDsl.actions.cardLastingEffect(() => ({
                         effect: AbilityDsl.effects.modifyGlory(3)
                     })),
-                    AbilityDsl.actions.cardLastingEffect({
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'target',
-                            restricts: 'opponentsCardAbilities'
+                            restricts: 'opponentsCardAbilities',
+                            applyingPlayer: context.player
                         })
-                    })
+                    }))
                 ])
             },
             effect: 'give {0} +3 glory and prevent them from being chosen as the target of {1}\'s triggered abilities until the end of the conflict',
