@@ -10,12 +10,13 @@ class KakitaYoshi extends DrawCard {
             effect: 'draw 3 cards, and reduce the cost of events this conflict',
             gameAction: [
                 ability.actions.draw({ amount: 3 }),
-                ability.actions.playerLastingEffect({
+                ability.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
                     effect: ability.effects.reduceCost({
                         amount: 2,
                         match: card => card.type === CardTypes.Event
                     })
-                })
+                }))
             ]
         });
     }

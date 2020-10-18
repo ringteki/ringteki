@@ -11,12 +11,13 @@ class MantraOfEarth extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.hasTrait('monk') || card.attachments.any(card => card.hasTrait('monk')),
-                gameAction: ability.actions.cardLastingEffect({
+                gameAction: ability.actions.cardLastingEffect(context => ({
                     effect: ability.effects.cardCannot({
                         cannot: 'target',
-                        restricts: 'opponentsCardEffects'
+                        restricts: 'opponentsCardEffects',
+                        applyingPlayer: context.player
                     })
-                })
+                }))
             },
             effect: 'make {0} untargetable by opponents\' card effects and draw a card',
             gameAction: ability.actions.draw()

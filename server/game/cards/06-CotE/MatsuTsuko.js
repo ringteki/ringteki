@@ -6,9 +6,10 @@ class MatsuTsuko extends DrawCard {
         this.action({
             title: 'Reduce the cost of the next card',
             condition: context => context.source.isAttacking() && context.player.opponent && context.player.opponent.honor < context.player.honor,
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 effect: AbilityDsl.effects.reduceNextPlayedCardCost(2)
-            })
+            }))
         });
     }
 }

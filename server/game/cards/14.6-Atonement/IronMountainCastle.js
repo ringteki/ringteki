@@ -25,6 +25,7 @@ class IronMountainCastle extends StrongholdCard {
             cost: AbilityDsl.costs.bowSelf(),
             effect: 'reduce the cost of their next attachment by 1',
             gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, card => card === context.event.context.source)
             }))
         });

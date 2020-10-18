@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Players, PlayTypes } = require('../../Constants');
+const { PlayTypes } = require('../../Constants');
 
 class Gossip extends DrawCard {
     setupCardAbilities() {
@@ -20,7 +20,7 @@ class Gossip extends DrawCard {
     selectCardName(player, cardName, context) {
         this.game.addMessage('{0} names {1} - {2} cannot play copies of this card this phase', player, cardName, player.opponent);
         context.source.untilEndOfPhase(ability => ({
-            targetController: Players.Opponent,
+            targetController: context.player.opponent,
             effect: ability.effects.playerCannot({
                 cannot: PlayTypes.PlayFromHand,
                 restricts: 'copiesOfX',

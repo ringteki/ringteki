@@ -11,15 +11,16 @@ class SpreadingTheDarkness extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
                 cardCondition: card => card.isParticipating(),
-                gameAction: ability.actions.cardLastingEffect({
+                gameAction: ability.actions.cardLastingEffect(context => ({
                     effect: [
                         ability.effects.modifyMilitarySkill(4),
                         ability.effects.cardCannot({
                             cannot: 'target',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
                     ]
-                })
+                }))
             },
             effect: 'give {0} +4{1} and prevent them from being targeted by opponent\'s abilities',
             effectArgs: () => 'military'

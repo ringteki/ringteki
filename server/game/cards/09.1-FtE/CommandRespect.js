@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes, Players } = require('../../Constants');
+const { CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class CommandRespect extends DrawCard {
@@ -11,8 +11,8 @@ class CommandRespect extends DrawCard {
             max: AbilityDsl.limit.perConflict(1),
             effect: 'force {1} to give them an honor as an additional cost to play an event until the end of the conflict',
             effectArgs: context => context.player.opponent,
-            gameAction: AbilityDsl.actions.playerLastingEffect(() => ({
-                targetController: Players.Opponent,
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player.opponent,
                 effect: AbilityDsl.effects.additionalPlayCost(context =>
                     context.source.type === CardTypes.Event ? [AbilityDsl.costs.giveHonorToOpponent(1)] : []
                 )

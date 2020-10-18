@@ -17,18 +17,20 @@ class IronFoundationsStance extends DrawCard {
                 controller: Players.Self,
                 cardCondition: card => card.isParticipating() && card.hasTrait('monk'),
                 gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.cardLastingEffect({
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'sendHome',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
-                    }),
-                    AbilityDsl.actions.cardLastingEffect({
+                    })),
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'bow',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
-                    }),
+                    })),
                     AbilityDsl.actions.conditional({
                         condition: (context) => this.isKihoPlayed(context),
                         trueGameAction: AbilityDsl.actions.draw(context => ({ target: context.player })),

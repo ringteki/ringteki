@@ -13,6 +13,7 @@ class MantisTenkinja extends DrawCard {
             cost: ability.costs.payHonor(1),
             effect: 'reduce the cost of their next event by 1',
             gameAction: ability.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 effect: ability.effects.reduceNextPlayedCardCost(1, card => card === context.event.card)
             }))
         });

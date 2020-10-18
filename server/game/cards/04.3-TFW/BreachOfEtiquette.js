@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players, CardTypes } = require('../../Constants');
+const { CardTypes } = require('../../Constants');
 
 class BreachOfEtiquette extends DrawCard {
     setupCardAbilities() {
@@ -10,6 +10,7 @@ class BreachOfEtiquette extends DrawCard {
             effect: 'force honor loss on players when their non-courtier characters use abilities during this conflict',
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {
                             onCardAbilityTriggered: event =>
@@ -22,7 +23,7 @@ class BreachOfEtiquette extends DrawCard {
                     })
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: Players.Opponent,
+                    targetController: context.player.opponent,
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {
                             onCardAbilityTriggered: event =>

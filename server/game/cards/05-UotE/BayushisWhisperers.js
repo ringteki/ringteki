@@ -1,6 +1,5 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players } = require('../../Constants');
 
 class BayushisWhisperers extends DrawCard {
     setupCardAbilities() {
@@ -29,7 +28,7 @@ class BayushisWhisperers extends DrawCard {
     selectCardName(player, cardName, context) {
         this.game.addMessage('{0} names {1} - {2} cannot play copies of this card this phase', player, cardName, player.opponent);
         context.source.untilEndOfPhase(ability => ({
-            targetController: Players.Opponent,
+            targetController: context.player.opponent,
             effect: ability.effects.playerCannot({
                 cannot: 'play',
                 restricts: 'copiesOfX',

@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Locations, Durations, Phases, Players } = require('../../Constants');
+const { Locations, Durations, Phases } = require('../../Constants');
 
 class TradingOnTheSandRoad extends DrawCard {
     setupCardAbilities() {
@@ -23,7 +23,7 @@ class TradingOnTheSandRoad extends DrawCard {
                     messageArgs: cards => [context.player.opponent, cards.length, cards]
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: Players.Self,
+                    targetController: context.player,
                     duration: Durations.UntilEndOfRound,
                     effect: [
                         AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, context.player.conflictDeck.first(4)),
@@ -34,7 +34,7 @@ class TradingOnTheSandRoad extends DrawCard {
 
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: Players.Opponent,
+                    targetController: context.player.opponent,
                     duration: Durations.UntilEndOfRound,
                     effect: [
                         AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame,
