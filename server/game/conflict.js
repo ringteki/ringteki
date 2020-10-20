@@ -316,6 +316,9 @@ class Conflict extends GameObject {
             if(!cannotContribute) {
                 cannotContribute = cannotContributeFunctions.some(func => func(card));
             }
+            if (!cannotContribute) {
+                cannotContribute = !card.checkRestrictions('contributeSkillToConflictResolution', this.game.getFrameworkContext())
+            }
             if(cannotContribute) {
                 return sum;
             }
