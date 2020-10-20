@@ -26,7 +26,7 @@ describe('Awakened Tsukumogami', function() {
                 this.player2.clickCard('against-the-waves');
                 expect(this.player2).toHavePrompt('Against the Waves');
                 this.player2.clickCard(this.azunami);
-                expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Water ring');
+                expect(this.player2).toHavePrompt('Choose amount of fate to spend from Water ring');
                 expect(this.player2.currentButtons.length).toBe(3);
                 expect(this.player2.currentButtons).toContain('0');
                 expect(this.player2.currentButtons).toContain('1');
@@ -56,7 +56,7 @@ describe('Awakened Tsukumogami', function() {
             it('should correctly offer options when the player doesn\'t have enough fate in their pool', function() {
                 this.player2.fate = 3;
                 this.player2.clickCard('consumed-by-five-fires');
-                expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Fire ring');
+                expect(this.player2).toHavePrompt('Choose amount of fate to spend from Fire ring');
                 expect(this.player2.currentButtons.length).toBe(5);
                 expect(this.player2.currentButtons).toContain('2');
                 expect(this.player2.currentButtons).toContain('3');
@@ -77,7 +77,7 @@ describe('Awakened Tsukumogami', function() {
                 this.mirrorsGaze = this.player2.clickCard('the-mirror-s-gaze');
                 expect(this.player2).toHavePrompt('The Mirror\'s Gaze');
                 this.player2.clickCard('asako-azunami');
-                expect(this.player2).toHavePrompt('Choose amount of fate to spend from the Air ring');
+                expect(this.player2).toHavePrompt('Choose amount of fate to spend from Air ring');
                 expect(this.player2.currentButtons.length).toBe(3);
                 expect(this.player2.currentButtons).toContain('0');
                 expect(this.player2.currentButtons).toContain('1');
@@ -119,7 +119,7 @@ describe('Awakened Tsukumogami', function() {
                 this.player2.clickCard('against-the-waves');
                 expect(this.player2).toHavePrompt('Against the Waves');
                 this.player2.clickCard(this.azunami);
-                expect(this.player2).not.toHavePrompt('Choose amount of fate to spend from the Water ring');
+                expect(this.player2).not.toHavePrompt('Choose amount of fate to spend from Water ring');
                 expect(this.player2.fate).toBe(playerFate - 1);
                 expect(this.game.rings.water.fate).toBe(waterFate);
                 expect(this.azunami.bowed).toBe(true);
