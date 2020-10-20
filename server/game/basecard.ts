@@ -239,6 +239,21 @@ class BaseCard extends EffectSource {
         this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure() }, properties));
     }
 
+    dire(properties): void {
+        if(properties && properties.condition) {
+            let currentCondition = properties.condition;
+            properties.condition = context => context.source.isDire() && currentCondition(context);
+        } else {
+            properties = Object.assign({ condition: context => context.source.isDire() }, properties);
+        }
+
+        this.persistentEffect(properties);
+    }
+
+    isDire() : boolean {
+        return false;
+    }
+
     hasKeyword(keyword) {
         let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
         let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
