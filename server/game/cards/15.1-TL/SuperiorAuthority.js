@@ -1,17 +1,19 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { Durations } = require('../../Constants');
 
 class SuperiorAuthority extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Stop characters with 0 fate from counting skill',
+            title: 'Stop characters with 0 fate from contributing skill',
             condition: () => this.game.isDuringConflict(),
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
-                target: context.game.currentConflict.getParticipants().filter(character => character.getFate() === 0),
-                effect: AbilityDsl.effects.cardCannot('contributeSkillToConflictResolution')
+            gameAction: AbilityDsl.actions.playerLastingEffect(() => ({
+                duration: Durations.UntilEndOfConflict,
+                effect: AbilityDsl.effects.cannotContribute(() => {
+                    return card => card.fate === 0;
+                })
             })),
-            effect: 'make all participating characters with 0 fate not contribute skill to conflict resolution. This affects: {1}',
-            effectArgs: context => [context.game.currentConflict.getParticipants().filter(character => character.getFate() === 0)]
+            effect: 'make it so that participating characters with 0 fate cannot contribute skill to conflict resolution'
         });
     }
 }
