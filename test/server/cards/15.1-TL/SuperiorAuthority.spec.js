@@ -4,12 +4,12 @@ describe('Superior Authority', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['brash-samurai', 'doji-challenger', 'daidoji-uji'],
+                    inPlay: ['brash-samurai', 'doji-challenger', 'daidoji-uji', 'hiruma-yoshino'],
                     hand: ['superior-authority'],
                     dynastyDiscard: ['favorable-ground']
                 },
                 player2: {
-                    inPlay: ['moto-youth', 'cunning-negotiator', 'doji-hotaru', 'isawa-tsuke-2'],
+                    inPlay: ['moto-youth', 'cunning-negotiator', 'doji-hotaru', 'isawa-tsuke-2', 'reclusive-zokujin'],
                     hand: ['charge', 'called-to-war'],
                     dynastyDiscard: ['moto-chagatai']
                 }
@@ -22,12 +22,16 @@ describe('Superior Authority', function() {
             this.negotiator = this.player2.findCardByName('cunning-negotiator');
             this.hotaru = this.player2.findCardByName('doji-hotaru');
             this.tsuke = this.player2.findCardByName('isawa-tsuke-2');
+            this.yoshino = this.player1.findCardByName('hiruma-yoshino');
+
+            this.sd1 = this.player2.findCardByName('shameful-display', 'province 1');
 
             this.ground = this.player1.placeCardInProvince('favorable-ground', 'province 1');
             this.authority = this.player1.findCardByName('superior-authority');
             this.charge = this.player2.findCardByName('charge');
             this.calledToWar = this.player2.findCardByName('called-to-war');
             this.chagatai = this.player2.placeCardInProvince('moto-chagatai', 'province 1');
+            this.zokujin = this.player2.findCardByName('reclusive-zokujin');
         });
 
         it('should not trigger outside of a conflict', function() {
@@ -180,6 +184,47 @@ describe('Superior Authority', function() {
             this.player2.clickPrompt('Done');
             expect(this.game.currentConflict.attackerSkill).toBe(0);
             expect(this.game.currentConflict.defenderSkill).toBe(5);
+        });
+
+        it('Zokujin should be immune during earth conflicts', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.zokujin],
+                ring: 'earth',
+                type: 'military'
+            });
+
+            expect(this.game.currentConflict.attackerSkill).toBe(3);
+            expect(this.game.currentConflict.defenderSkill).toBe(3);
+            this.player2.pass();
+            this.player1.clickCard(this.authority);
+            expect(this.game.currentConflict.attackerSkill).toBe(0);
+            expect(this.game.currentConflict.defenderSkill).toBe(3);
+        });
+
+        it('Yoshino character shouldn\'t count', function() {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.yoshino],
+                defenders: [this.negotiator],
+                province: this.sd1,
+                type: 'military'
+            });
+
+            expect(this.game.currentConflict.attackerSkill).toBe(3);
+            expect(this.game.currentConflict.defenderSkill).toBe(1);
+            this.player2.pass();
+            this.player1.clickCard(this.yoshino);
+            this.player1.clickCard(this.chagatai);
+            expect(this.game.currentConflict.attackerSkill).toBe(9);
+            expect(this.game.currentConflict.defenderSkill).toBe(1);
+            this.player2.pass();
+            this.player1.clickCard(this.authority);
+            expect(this.game.currentConflict.attackerSkill).toBe(0);
+            expect(this.game.currentConflict.defenderSkill).toBe(0);
         });
 
         it('chat message', function() {
