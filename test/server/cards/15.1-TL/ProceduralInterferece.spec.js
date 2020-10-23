@@ -15,7 +15,7 @@ describe('Procedural Interference', function() {
             });
             this.interference = this.player1.findCardByName('procedural-interference');
             this.interference2 = this.player1.findCardByName('procedural-interference');
-            this.aranat = this.player1.findCardByName('aranat');
+            this.arnat = this.player1.findCardByName('aranat');
             this.uji = this.player1.findCardByName('daidoji-uji');
         
 
