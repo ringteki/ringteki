@@ -5,7 +5,7 @@ describe('Procedural Interference', function() {
                 phase: 'dynasty',
                 player1: {
                     dynastyDiscard: ['aranat', 'daidoji-uji', 'procedural-interference', 'procedural-interference'],
-                    honor: 10 
+                    honor: 10
                 },
                 player2: {
                     dynastyDiscard: ['aranat', 'daidoji-uji', 'imperial-storehouse', 'heavy-ballista'],
@@ -17,7 +17,6 @@ describe('Procedural Interference', function() {
             this.interference2 = this.player1.findCardByName('procedural-interference');
             this.arnat = this.player1.findCardByName('aranat');
             this.uji = this.player1.findCardByName('daidoji-uji');
-        
 
             this.aranat2 = this.player2.findCardByName('aranat');
             this.uji2 = this.player2.findCardByName('daidoji-uji');
@@ -26,15 +25,15 @@ describe('Procedural Interference', function() {
 
             this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
             this.shameful2 = this.player1.findCardByName('shameful-display', 'province 1');
-            this.silent = this.player2.findCardByName('silent-ones-monastery', 'province 2')
-          
+            this.silent = this.player2.findCardByName('silent-ones-monastery', 'province 2');
+
             this.player2.reduceDeckToNumber('dynasty deck', 0);
             this.player2.moveCard(this.aranat2, 'province 1');
             this.player2.moveCard(this.ballista2, 'dynasty deck');
 
             this.player1.reduceDeckToNumber('dynasty deck', 0);
             this.player1.moveCard(this.interference, 'province 1');
-            this.player1.moveCard(this.interference2, 'province 1')
+            this.player1.moveCard(this.interference2, 'province 1');
             this.player1.moveCard(this.uji, 'dynasty deck');
         });
 
@@ -71,18 +70,18 @@ describe('Procedural Interference', function() {
             expect(this.player2.player.honor).toBe(10);
         });
 
-        it('should not let you gain 4 honor when Silent Ones is present', function(){
+        it('should not let you gain 4 honor when Silent Ones is present', function() {
             this.player1.clickCard(this.interference);
             this.player1.clickCard(this.shamefulDisplay);
             this.player2.clickPrompt('let opponent gain 2 honor');
             this.player1.clickCard(this.interference2);
             expect(this.player2).not.toHavePromptButton('let opponent gain 2 honor');
-        })
+        });
 
-        it('should not let you choose your own province', function(){
+        it('should not let you choose your own province', function() {
             this.player1.clickCard(this.interference);
-            expect(this.player1).not.toBeAbleToSelect(this.shameful2)
-        })
+            expect(this.player1).not.toBeAbleToSelect(this.shameful2);
+        });
 
     });
 });
