@@ -50,7 +50,6 @@ export class PlaceFateAction extends CardGameAction {
                 return true;
             }
             return origin.allowGameAction('removeFate', context);
-            
         }
         return true;
     }
