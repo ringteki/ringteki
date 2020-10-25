@@ -133,7 +133,7 @@ describe('Moto Chagatai', function() {
 
                 this.player2.clickCard(this.jtf);
                 this.player2.clickCard(this.chagatai);
-                this.player2.clickPrompt('My Opponent\'s');
+                this.player2.clickPrompt('player1');
 
                 this.noMoreActions();
                 this.player1.clickPrompt('no');
