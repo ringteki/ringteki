@@ -14,12 +14,13 @@ class ClarityOfPurpose extends DrawCard {
                         condition: () => this.game.isDuringConflict('political'),
                         effect: ability.effects.doesNotBow()
                     }),
-                    ability.actions.cardLastingEffect({
+                    ability.actions.cardLastingEffect(context => ({
                         effect: ability.effects.cardCannot({
                             cannot: 'bow',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
-                    })
+                    }))
                 ]
             },
             effect: 'prevent opponents\' actions from bowing {0} and stop it bowing at the end of a political conflict'

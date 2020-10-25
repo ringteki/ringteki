@@ -323,6 +323,10 @@ class Game extends EventEmitter {
         }
     }
 
+    stopNonChessClocks() {
+        _.each(this.getPlayers(), player => player.stopNonChessClocks());
+    }
+
     stopClocks() {
         _.each(this.getPlayers(), player => player.stopClock());
     }

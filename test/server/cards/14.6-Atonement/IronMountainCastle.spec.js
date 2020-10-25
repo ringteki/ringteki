@@ -5,7 +5,7 @@ describe('Iron Mountain Castle', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['togashi-mitsu', 'kakita-yoshi'],
-                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade'],
+                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade', 'tattooed-wanderer'],
                     stronghold: ['iron-mountain-castle']
                 },
                 player2: {
@@ -20,6 +20,7 @@ describe('Iron Mountain Castle', function() {
             this.fan = this.player1.findCardByName('ornate-fan');
             this.blade = this.player1.findCardByName('kakita-blade');
             this.honored = this.player1.findCardByName('honored-blade');
+            this.wanderer = this.player1.findCardByName('tattooed-wanderer');
             this.iron = this.player1.findCardByName('iron-mountain-castle');
 
             this.initiate = this.player2.findCardByName('togashi-initiate');
@@ -40,6 +41,29 @@ describe('Iron Mountain Castle', function() {
             expect(this.mitsu.attachments.toArray()).toContain(this.blade);
 
             expect(this.getChatLogs(5)).toContain('player1 uses Iron Mountain Castle, bowing Iron Mountain Castle to reduce the cost of their next attachment by 1');
+        });
+
+        it('should work with monks played as an attachment', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.wanderer);
+            this.player1.clickPrompt('Play Tattooed Wanderer as an attachment');
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.iron);
+            this.player1.clickCard(this.iron);
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.mitsu.attachments.toArray()).toContain(this.wanderer);
+        });
+
+        it('should not work with monks played as a character', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.wanderer);
+            this.player1.clickPrompt('Play this character');
+            this.player1.clickPrompt('0');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1.fate).toBe(fate - 1);
+            expect(this.player2).toHavePrompt('Action Window');
         });
 
         it('should not trigger if attachment costs 0', function() {

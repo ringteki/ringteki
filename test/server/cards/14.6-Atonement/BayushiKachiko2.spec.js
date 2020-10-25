@@ -9,7 +9,7 @@ describe('Bayushi Kachiko 2', function() {
                 player2: {
                     inPlay: ['kakita-yoshi'],
                     hand: ['mirumoto-s-fury', 'backhanded-compliment', 'way-of-the-crane'],
-                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'ornate-fan', 'court-games']
+                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'ornate-fan', 'court-games', 'spreading-the-darkness', 'scouted-terrain', 'chasing-the-sun']
                 }
             });
 
@@ -23,6 +23,15 @@ describe('Bayushi Kachiko 2', function() {
             this.courtGames = this.player2.findCardByName('court-games');
             this.fury = this.player2.findCardByName('mirumoto-s-fury');
             this.backhanded = this.player2.findCardByName('backhanded-compliment');
+            this.spreading = this.player2.findCardByName('spreading-the-darkness');
+            this.scouted = this.player2.findCardByName('scouted-terrain');
+            this.chasing = this.player2.findCardByName('chasing-the-sun');
+
+            this.p2_1 = this.player2.findCardByName('shameful-display', 'province 1');
+            this.p2_2 = this.player2.findCardByName('shameful-display', 'province 2');
+            this.p2_3 = this.player2.findCardByName('shameful-display', 'province 3');
+            this.p2_4 = this.player2.findCardByName('shameful-display', 'province 4');
+            this.p2_Stronghold = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
         describe('Playing from opponent\'s conflict deck', function() {
@@ -262,6 +271,46 @@ describe('Bayushi Kachiko 2', function() {
             expect(this.getChatLogs(15)).toContain('player1 plays Mirumoto\'s Fury from their opponent\'s conflict discard pile');
             expect(this.getChatLogs(5)).toContain('player1 plays a card from their opponent\'s conflict discard pile due to the ability of Bayushi Kachiko (0 uses remaining)');
             expect(this.getChatLogs(5)).toContain('Mirumoto\'s Fury is removed from the game due to the ability of Bayushi Kachiko');
+        });
+
+        describe('Reported Bugs', function() {
+            it('Spreading the Darkness', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.kachiko, this.warrior],
+                    defenders: []
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.spreading);
+                this.player1.clickCard(this.kachiko);
+                expect(this.spreading.location).toBe('removed from game');
+                this.player2.clickCard(this.fury);
+                expect(this.player2).toBeAbleToSelect(this.warrior);
+                expect(this.player2).not.toBeAbleToSelect(this.kachiko);
+            });
+
+            it('Scouted Terrain', function () {
+                this.p2_1.facedown = false;
+                this.p2_2.facedown = false;
+                this.p2_3.facedown = false;
+                this.p2_4.facedown = false;
+                this.p2_Stronghold.facedown = false;
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.kachiko, this.warrior],
+                    defenders: []
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.scouted);
+                expect(this.scouted.location).toBe('removed from game');
+                this.player2.pass();
+                this.player1.clickCard(this.chasing);
+                expect(this.player1).toBeAbleToSelect(this.p2_4);
+                expect(this.player1).toBeAbleToSelect(this.p2_Stronghold);
+            });
         });
     });
 });

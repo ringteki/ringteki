@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { DuelTypes, Durations, Players, ConflictTypes } = require('../../Constants');
+const { DuelTypes, Durations, ConflictTypes } = require('../../Constants');
 
 class KakitaYuri extends DrawCard {
     setupCardAbilities() {
@@ -9,10 +9,10 @@ class KakitaYuri extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Political,
                 opponentChoosesDuelTarget: true,
-                gameAction: duel => AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: duel.winner && duel.winner.controller === context.player ? Players.Opponent : Players.Self,
+                gameAction: duel => AbilityDsl.actions.playerLastingEffect(() => ({
+                    targetController: duel.loser && duel.loser.controller,
                     duration: Durations.UntilEndOfPhase,
-                    effect: duel.winner ? AbilityDsl.effects.cannotDeclareConflictsOfType(ConflictTypes.Military) : []
+                    effect: duel.loser ? AbilityDsl.effects.cannotDeclareConflictsOfType(ConflictTypes.Military) : []
                 }))
             }
         });

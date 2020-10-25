@@ -35,17 +35,17 @@ describe('Truthseeker', function() {
 
                 this.player1.clickCard(this.truthseeker);
                 expect(this.player1).toHavePrompt('Choose which deck to look at:');
-                expect(this.player1).toHavePromptButton('Opponent\'s Dynasty Deck');
-                expect(this.player1).toHavePromptButton('Opponent\'s Conflict Deck');
-                expect(this.player1).toHavePromptButton('Your Dynasty Deck');
-                expect(this.player1).toHavePromptButton('Your Conflict Deck');
+                expect(this.player1).toHavePromptButton('player1\'s Dynasty');
+                expect(this.player1).toHavePromptButton('player1\'s Conflict');
+                expect(this.player1).toHavePromptButton('player2\'s Dynasty');
+                expect(this.player1).toHavePromptButton('player2\'s Conflict');
             });
 
             it('should let you order the top 3 cards', function () {
                 this.player1.clickCard(this.truthseeker);
                 this.player1.clickPrompt('1');
                 this.player1.clickCard(this.truthseeker);
-                this.player1.clickPrompt('Your Conflict Deck');
+                this.player1.clickPrompt('player1\'s Conflict');
                 expect(this.player1).toHavePrompt('Select the card you would like to place on top of the deck.');
                 expect(this.player1).toHavePromptButton('Assassination');
                 expect(this.player1).toHavePromptButton('Ornate Fan');

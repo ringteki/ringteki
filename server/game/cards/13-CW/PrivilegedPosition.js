@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
-const { Durations, Players } = require('../../Constants');
+const { Durations } = require('../../Constants');
 
 class PrivilegedPosition extends DrawCard {
     setupCardAbilities() {
@@ -11,11 +11,11 @@ class PrivilegedPosition extends DrawCard {
                     context.player.opponent &&
                     context.player.honorBid < context.player.opponent.honorBid
             },
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 duration: Durations.UntilEndOfRound,
-                targetController: Players.Opponent,
+                targetController: context.player.opponent,
                 effect: AbilityDsl.effects.setMaxConflicts(1)
-            }),
+            })),
             effect: 'limit {1} to a single conflict this turn',
             effectArgs: context => context.player.opponent
         });

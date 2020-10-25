@@ -2,12 +2,13 @@ import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import { Locations, CardTypes, EventNames, Players }  from '../Constants';
+import Player = require('../player');
 
 export interface PutIntoPlayProperties extends CardActionProperties {
     fate?: number,
     status?: string,
     controller?: Players,
-    side?: Players
+    side?: Player
 }
 
 export class PutIntoPlayAction extends CardGameAction {
@@ -20,11 +21,15 @@ export class PutIntoPlayAction extends CardGameAction {
         fate: 0,
         status: 'ordinary',
         controller: Players.Self,
-        side: Players.Self
+        side: null
     };
     constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
         super(properties);
         this.intoConflict = intoConflict;
+    }
+
+    getDefaultSide(context) {
+        return context.player;
     }
 
     getPutIntoPlayPlayer(context) {
@@ -40,10 +45,7 @@ export class PutIntoPlayAction extends CardGameAction {
         let properties = this.getProperties(context) as PutIntoPlayProperties;
         let contextCopy = context.copy( { source: card });
         let player = this.getPutIntoPlayPlayer(contextCopy);
-        let targetSide = contextCopy.player;
-        if(properties.side === Players.Opponent) {
-            targetSide = targetSide.opponent;
-        }
+        let targetSide = properties.side || this.getDefaultSide(contextCopy);
 
         if(!context || !super.canAffect(card, context)) {
             return false;
@@ -85,7 +87,7 @@ export class PutIntoPlayAction extends CardGameAction {
         event.controller = controller;
         event.intoConflict = this.intoConflict;
         event.originalLocation = card.location;
-        event.side = side;   
+        event.side = side || this.getDefaultSide(context);
     }
 
     eventHandler(event, additionalProperties = {}): void {
@@ -101,10 +103,7 @@ export class PutIntoPlayAction extends CardGameAction {
             finalController = finalController.opponent;
         }
 
-        let targetSide = event.context.player;
-        if(event.side === Players.Opponent) {
-            targetSide = targetSide.opponent;
-        }
+        let targetSide = event.side;
 
         if(event.status === 'honored') {
             event.card.honor();

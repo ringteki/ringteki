@@ -14,10 +14,11 @@ class SufferTheConsequences extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.traits.some(trait => validSacrificeTraits.includes(trait)) && card.bowed
             }),
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilEndOfPhase,
                 effect: AbilityDsl.effects.additionalConflict(ConflictTypes.Political)
-            })
+            }))
         });
     }
 }

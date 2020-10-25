@@ -11,7 +11,7 @@ describe('Slovenly Scavenger', function() {
                     },
                     player2: {
                         inPlay: ['slovenly-scavenger'],
-                        dynastyDiscard: ['imperial-storehouse', 'hida-kisada'],
+                        dynastyDiscard: ['imperial-storehouse', 'hida-kisada', 'hantei-xxxviii'],
                         conflictDiscard: ['let-go', 'assassination'],
                         hand: ['a-new-name']
                     }
@@ -30,6 +30,8 @@ describe('Slovenly Scavenger', function() {
                 this.assassinationP2 = this.player2.findCardByName('assassination');
                 this.newName = this.player2.findCardByName('a-new-name');
 
+                this.emperor = this.player2.findCardByName('hantei-xxxviii');
+
                 this.player1.pass();
                 this.player2.playAttachment(this.newName, this.scavengerP2);
                 this.noMoreActions();
@@ -45,10 +47,10 @@ describe('Slovenly Scavenger', function() {
                 this.player1.pass();
                 expect(this.player1).toBeAbleToSelect(this.scavengerP1);
                 this.player1.clickCard(this.scavengerP1);
-                expect(this.player1).toHavePromptButton('My Dynasty');
-                expect(this.player1).toHavePromptButton('My Conflict');
-                expect(this.player1).toHavePromptButton('Opponent\'s Dynasty');
-                expect(this.player1).toHavePromptButton('Opponent\'s Conflict');
+                expect(this.player1).toHavePromptButton('player1\'s Dynasty');
+                expect(this.player1).toHavePromptButton('player1\'s Conflict');
+                expect(this.player1).toHavePromptButton('player2\'s Dynasty');
+                expect(this.player1).toHavePromptButton('player2\'s Conflict');
             });
 
             it('should shuffle my dynasty discard pile into my dynasty deck', function() {
@@ -62,7 +64,7 @@ describe('Slovenly Scavenger', function() {
                 expect(this.player1).toBeAbleToSelect(this.scavengerP1);
                 this.player1.clickCard(this.scavengerP1);
                 let size = this.player1.dynastyDeck.length;
-                this.player1.clickPrompt('My Dynasty');
+                this.player1.clickPrompt('player1\'s Dynasty');
                 expect(this.storehouseP1.location).toBe('dynasty deck');
                 expect(this.kisadaP1.location).toBe('dynasty deck');
                 expect(this.player1.player.dynastyDiscardPile.size()).toBe(0);
@@ -82,7 +84,7 @@ describe('Slovenly Scavenger', function() {
                 expect(this.player1).toBeAbleToSelect(this.scavengerP1);
                 this.player1.clickCard(this.scavengerP1);
                 let size = this.player1.conflictDeck.length;
-                this.player1.clickPrompt('My Conflict');
+                this.player1.clickPrompt('player1\'s Conflict');
                 expect(this.storehouseP1.location).toBe('dynasty discard pile');
                 expect(this.letGoP1.location).toBe('conflict deck');
                 expect(this.assassinationP1.location).toBe('conflict deck');
@@ -105,11 +107,12 @@ describe('Slovenly Scavenger', function() {
                 expect(this.player1).toBeAbleToSelect(this.scavengerP1);
                 this.player1.clickCard(this.scavengerP1);
                 let size = this.player2.dynastyDeck.length;
-                this.player1.clickPrompt('Opponent\'s Dynasty');
+                this.player1.clickPrompt('player2\'s Dynasty');
                 expect(this.storehouseP2.location).toBe('dynasty deck');
                 expect(this.kisadaP2.location).toBe('dynasty deck');
+                expect(this.emperor.location).toBe('dynasty deck');
                 expect(this.player2.player.dynastyDiscardPile.size()).toBe(0);
-                expect(this.player2.dynastyDeck.length).toBe(size + 2);
+                expect(this.player2.dynastyDeck.length).toBe(size + 3);
 
                 expect(this.getChatLogs(3)).toContain('player1 uses Slovenly Scavenger, sacrificing Slovenly Scavenger to shuffle player2\'s dynasty discard pile into their deck');
                 expect(this.getChatLogs(2)).toContain('player2 is shuffling their dynasty deck');
@@ -127,7 +130,7 @@ describe('Slovenly Scavenger', function() {
                 this.player1.clickCard(this.scavengerP1);
                 let size = this.player2.conflictDeck.length;
 
-                this.player1.clickPrompt('Opponent\'s Conflict');
+                this.player1.clickPrompt('player2\'s Conflict');
                 expect(this.storehouseP2.location).toBe('dynasty discard pile');
                 expect(this.letGoP2.location).toBe('conflict deck');
                 expect(this.assassinationP2.location).toBe('conflict deck');
@@ -151,7 +154,7 @@ describe('Slovenly Scavenger', function() {
                 this.player2.clickCard(this.scavengerP2);
                 let size = this.player2.conflictDeck.length;
 
-                this.player2.clickPrompt('My Conflict');
+                this.player2.clickPrompt('player2\'s Conflict');
                 expect(this.letGoP2.location).toBe('conflict deck');
                 expect(this.assassinationP2.location).toBe('conflict deck');
                 expect(this.scavengerP2.location).toBe('conflict deck');
@@ -175,10 +178,45 @@ describe('Slovenly Scavenger', function() {
                 this.player1.pass();
                 expect(this.player1).toBeAbleToSelect(this.scavengerP1);
                 this.player1.clickCard(this.scavengerP1);
-                expect(this.player1).not.toHavePromptButton('My Dynasty');
-                expect(this.player1).toHavePromptButton('My Conflict');
-                expect(this.player1).toHavePromptButton('Opponent\'s Dynasty');
-                expect(this.player1).not.toHavePromptButton('Opponent\'s Conflict');
+                expect(this.player1).not.toHavePromptButton('player1\'s Dynasty');
+                expect(this.player1).toHavePromptButton('player1\'s Conflict');
+                expect(this.player1).toHavePromptButton('player2\'s Dynasty');
+                expect(this.player1).not.toHavePromptButton('player2\'s Conflict');
+            });
+
+            it('testing with Emperor', function() {
+                this.player2.moveCard(this.emperor, 'play area');
+
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.scavengerP1],
+                    defenders: []
+                });
+                this.player2.pass();
+                this.player1.pass();
+                expect(this.player1).toBeAbleToSelect(this.scavengerP1);
+                this.player1.clickCard(this.scavengerP1);
+                let size = this.player2.conflictDeck.length;
+
+                this.player1.clickPrompt('player1\'s Conflict');
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.emperor);
+                this.player2.clickCard(this.emperor);
+                expect(this.player2).toHavePromptButton('player1\'s Dynasty');
+                expect(this.player2).toHavePromptButton('player1\'s Conflict');
+                expect(this.player2).toHavePromptButton('player2\'s Dynasty');
+                expect(this.player2).toHavePromptButton('player2\'s Conflict');
+                this.player2.clickPrompt('player2\'s Conflict');
+
+                expect(this.storehouseP2.location).toBe('dynasty discard pile');
+                expect(this.letGoP2.location).toBe('conflict deck');
+                expect(this.assassinationP2.location).toBe('conflict deck');
+                expect(this.player2.player.conflictDiscardPile.size()).toBe(0);
+                expect(this.player2.conflictDeck.length).toBe(size + 2);
+
+                expect(this.getChatLogs(3)).toContain('player1 uses Slovenly Scavenger, sacrificing Slovenly Scavenger to shuffle player2\'s conflict discard pile into their deck');
+                expect(this.getChatLogs(2)).toContain('player2 is shuffling their conflict deck');
             });
         });
     });

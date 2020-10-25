@@ -12,10 +12,11 @@ class IssueAChallenge extends DrawCard {
             },
             effect: 'prevent {1} from declaring more than 1 defender.',
             effectArgs: context => context.player.opponent,
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 effect: AbilityDsl.effects.restrictNumberOfDefenders(1),
                 duration: Durations.UntilEndOfConflict
-            })
+            }))
         });
     }
 }

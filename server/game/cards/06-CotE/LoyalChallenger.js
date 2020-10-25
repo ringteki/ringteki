@@ -21,7 +21,7 @@ class LoyalChallenger extends DrawCard {
                         afterConflict: (event, context) => event.conflict.loser === context.source.controller &&
                             context.source.isParticipating()
                     },
-                    message: '{2} loses 1 honor due to {0} losing a conflict',
+                    message: '{0} loses 1 honor due to {1} losing a conflict',
                     messageArgs: context => [context.source.controller, context.source],
                     gameAction: AbilityDsl.actions.loseHonor(context => ({ target: context.source.controller }))
                 })

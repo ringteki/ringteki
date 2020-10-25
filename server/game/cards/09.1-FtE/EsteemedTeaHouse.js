@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Players, Durations } = require('../../Constants');
+const { CardTypes, Durations } = require('../../Constants');
 
 class EsteemedTeaHouse extends DrawCard {
     setupCardAbilities() {
@@ -15,7 +15,7 @@ class EsteemedTeaHouse extends DrawCard {
             },
             gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 duration: Durations.UntilEndOfPhase,
-                targetController: context.target.owner === context.player ? Players.Self : Players.Opponent,
+                targetController: context.target.owner,
                 effect: AbilityDsl.effects.playerCannot({
                     cannot: 'play',
                     restricts: 'copiesOfX',

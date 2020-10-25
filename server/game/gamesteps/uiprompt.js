@@ -15,7 +15,6 @@ class UiPrompt extends BaseStep {
 
     complete() {
         this.completed = true;
-        this.game.resetClocks();
     }
 
     setPrompt() {

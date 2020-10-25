@@ -201,8 +201,9 @@ class GameServer {
     onGameSync(callback) {
         var gameSummaries = _.map(this.games, game => {
             var retGame = game.getSummary();
-            retGame.password = game.password;
-
+            if(retGame) {
+                retGame.password = game.password;
+            }
             return retGame;
         });
 
@@ -353,7 +354,7 @@ class GameServer {
         }
 
         this.runAndCatchErrors(game, () => {
-            game.stopClocks();
+            game.stopNonChessClocks();
             game[command](socket.user.username, ...args);
 
             game.continue();

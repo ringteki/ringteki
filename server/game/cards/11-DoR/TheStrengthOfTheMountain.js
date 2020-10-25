@@ -16,11 +16,13 @@ class TheStrengthOfTheMountain extends DrawCard {
                     effect: [
                         AbilityDsl.effects.cardCannot({
                             cannot: 'sendHome',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         }),
                         AbilityDsl.effects.cardCannot({
                             cannot: 'bow',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
                     ]
                 }))

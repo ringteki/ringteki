@@ -13,6 +13,7 @@ class DaimyosFavor extends DrawCard {
             effect: 'reduce the cost of the next attachment they play on {1} by 1',
             effectArgs: context => context.source.parent,
             gameAction: ability.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilEndOfPhase,
                 effect: ability.effects.reduceCost({
                     amount: 1,

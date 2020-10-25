@@ -7,14 +7,15 @@ class ThoseWhoServe extends DrawCard {
             title: 'Reduce the cost of your characters by 1 this phase',
             phase: Phases.Dynasty,
             effect: 'reduce the cost of their characters by 1 this phase',
-            gameAction: ability.actions.playerLastingEffect({
+            gameAction: ability.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilEndOfPhase,
                 effect: ability.effects.reduceCost({
                     match: card => card.type === CardTypes.Character,
                     amount: 1,
                     costFloor: 1
                 })
-            })
+            }))
         });
     }
 }

@@ -13,6 +13,7 @@ class MantraOfVoid extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.hasTrait('monk') || card.attachments.any(card => card.hasTrait('monk')),
                 gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
                     duration: Durations.UntilEndOfConflict,
                     effect: AbilityDsl.effects.reduceCost({
                         amount: 1,

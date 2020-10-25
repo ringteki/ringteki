@@ -1,5 +1,4 @@
 const DrawCard = require('../../drawcard.js');
-const { Players } = require('../../Constants');
 
 class DisguisedProtector extends DrawCard {
     setupCardAbilities(ability) { // eslint-disable-line no-unused-vars
@@ -9,11 +8,12 @@ class DisguisedProtector extends DrawCard {
             effect: 'add the bid on each players dial to their skill total',
             gameAction: [
                 ability.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
                     effect: ability.effects.changePlayerSkillModifier(context.player.showBid)
                 })),
                 ability.actions.playerLastingEffect(context => ({
                     condition: context => context.player.opponent,
-                    targetController: Players.Opponent,
+                    targetController: context.player.opponent,
                     effect: ability.effects.changePlayerSkillModifier(context.player.opponent ? context.player.opponent.showBid : 0)
                 }))
             ]

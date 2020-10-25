@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Players } = require('../../Constants');
+const { Players, TargetModes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 const RingEffects = require('../../RingEffects.js');
 
@@ -15,16 +15,14 @@ class TogashiMitsu2 extends DrawCard {
         this.action({
             title: 'Resolve a ring effect',
             condition: context => context.source.isParticipating() && this.game.currentConflict.getNumberOfCardsPlayed(context.player) >= 5,
-            gameAction: AbilityDsl.actions.selectRing(context => ({
+            target: {
+                mode: TargetModes.Ring,
                 activePromptTitle: 'Choose a ring effect to resolve',
                 player: Players.Self,
-                targets: true,
-                message: '{0} chooses to resolve {1}\'s effect',
-                ringCondition: ring => RingEffects.contextFor(context.player, ring.element, false).ability.hasLegalTargets(context),
-                messageArgs: ring => [context.player, ring],
-                gameAction: AbilityDsl.actions.resolveRingEffect({ player: context.player })
-            })),
-            effect: 'resolve a ring effect'
+                ringCondition: (ring, context) => RingEffects.contextFor(context.player, ring.element, false).ability.hasLegalTargets(context),
+                gameAction: AbilityDsl.actions.resolveRingEffect(context => ({ player: context.player }))
+            },
+            effect: 'resolve the {0}\'s effect'
         });
     }
 }

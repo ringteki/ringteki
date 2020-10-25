@@ -168,7 +168,7 @@ describe('Silent Ones Monastery', function() {
                     phase: 'conflict',
                     player1: {
                         fate: 30,
-                        inPlay: ['daidoji-uji','ikoma-prodigy'],
+                        inPlay: ['daidoji-uji','ikoma-prodigy', 'pious-guardian'],
                         provinces: ['manicured-garden', 'shameful-display', 'fertile-fields']
                     },
                     player2: {
@@ -179,6 +179,7 @@ describe('Silent Ones Monastery', function() {
 
                 this.manicured = this.player1.findCardByName('manicured-garden', 'province 1');
                 this.prodigy1 = this.player1.findCardByName('ikoma-prodigy');
+                this.piousguardian = this.player1.findCardByName('pious-guardian');
                 this.uji = this.player1.findCardByName('daidoji-uji');
 
                 this.silentOnesMonastery = this.player2.findCardByName('silent-ones-monastery', 'province 1');
@@ -208,6 +209,70 @@ describe('Silent Ones Monastery', function() {
                 this.player1.clickPrompt('Gain 2 honor');
                 expect(this.getChatLogs(10)).toContain('player1 resolves the air ring, gaining 1 honor');
                 expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
+            });
+
+            it('should not let Pious Guardian trigger.', function() {
+                this.prodigy1.honor();
+                this.startingHonor = this.player1.honor;
+
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    type: 'political',
+                    attackers: [this.prodigy1, this.uji],
+                    defenders: [],
+                    ring: 'air'
+                });
+
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.prodigy1);
+                expect(this.player1.honor).toBe(this.startingHonor + 1);
+
+                this.player1.pass();
+                this.player2.pass();
+
+                this.player1.clickPrompt('Gain 2 honor');
+                expect(this.getChatLogs(10)).toContain('player1 resolves the air ring, gaining 1 honor');
+                expect(this.player1.honor).toBe(this.startingHonor + 2); // didn't gain the 2 full honor, but got up to the cap of the phase: 2.
+
+                this.flow.finishConflictPhase();
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.game.currentPhase).toBe('fate');
+            });
+        });
+        describe('When more than 2 honored characters would leave play during the same phase,', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        honor: 11,
+                        inPlay: ['ikoma-prodigy', 'matsu-berserker', 'ikoma-orator']
+                    },
+                    player2: {
+                        provinces: ['silent-ones-monastery']
+                    }
+                });
+                this.prodigy = this.player1.findCardByName('ikoma-prodigy');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
+                this.orator = this.player1.findCardByName('ikoma-orator');
+
+                this.orator.honor();
+                this.prodigy.honor();
+                this.berserker.honor();
+            });
+
+            it('should reward up to 2 honor.', function() {
+                this.startingHonor = this.player1.honor;
+
+                this.flow.finishConflictPhase();
+                this.player1.clickCard(this.orator);
+                this.player1.clickCard(this.prodigy);
+                this.player1.clickCard(this.berserker);
+
+                expect(this.getChatLogs(5)).toContain('player1 gains 1 honor due to Ikoma Prodigy\'s personal honor');
+                expect(this.getChatLogs(5)).toContain('player1 gains 1 honor due to Ikoma Orator\'s personal honor');
+                expect(this.getChatLogs(5)).not.toContain('player1 gains 1 honor due to Matsu Berserker\'s personal honor');
+                expect(this.player1.honor).toBe(this.startingHonor + 2); // Should only gain 2.
             });
         });
     });

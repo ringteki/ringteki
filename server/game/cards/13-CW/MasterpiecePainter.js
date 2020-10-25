@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { TargetModes, Durations, Locations, Decks, Players } = require('../../Constants');
+const { TargetModes, Durations, Locations, Decks } = require('../../Constants');
 
 class MasterpiecePainter extends DrawCard {
     setupCardAbilities() {
@@ -27,12 +27,12 @@ class MasterpiecePainter extends DrawCard {
     }
 }
 
-const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(context => {
+const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(() => {
     let chosenPlayer = player;
     let topCard = chosenPlayer.conflictDeck.first();
 
     return {
-        targetController: player === context.source.controller ? Players.Self : Players.Opponent,
+        targetController: player,
         duration: Durations.Custom,
         until: {
             onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,

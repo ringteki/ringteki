@@ -14,10 +14,11 @@ class HisuMoriToride extends StrongholdCard {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.hasTrait('cavalry')
             })],
-            gameAction: ability.actions.playerLastingEffect({
+            gameAction: ability.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilEndOfPhase,
                 effect: ability.effects.additionalConflict('military')
-            })
+            }))
         });
     }
 }
