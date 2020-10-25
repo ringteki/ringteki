@@ -102,5 +102,46 @@ describe('Moto Chagatai', function() {
                 expect(this.publicForum.isBroken).toBe(false);
             });
         });
+        describe('Moto Chagatai\'s ability and Join the Fray\'ed to the attacking opponent', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['steward-of-law']
+                    },
+                    player2: {
+                        inPlay: ['shrine-maiden'],
+                        hand: ['join-the-fray'],
+                        dynastyDiscard: ['moto-chagatai']
+                    }
+                });
+
+                this.steward = this.player1.findCardByName('steward-of-law');
+                this.chagatai = this.player2.placeCardInProvince('moto-chagatai', 'province 1');
+                this.shrineMaiden = this.player2.findCardByName('shrine-maiden');
+                this.jtf = this.player2.findCardByName('join-the-fray');
+
+                this.noMoreActions();
+            });
+
+            it('should not keep Chagatai standing as he is controlled by the Unicorn player still', function () {
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.steward],
+                    defenders: []
+                });
+
+                this.player2.clickCard(this.jtf);
+                this.player2.clickCard(this.chagatai);
+                this.player2.clickPrompt('My Opponent\'s');
+
+                this.noMoreActions();
+                this.player1.clickPrompt('no');
+                this.player1.clickPrompt('don\'t resolve');
+                expect(this.getChatLogs(5)).toContain('player1 has broken Shameful Display!');
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.chagatai.bowed).toBe(true);
+            });
+        });
     });
 });
