@@ -12,6 +12,7 @@ class ShiroKitsuki extends StrongholdCard {
             cost: AbilityDsl.costs.nameCard(),
             limit: AbilityDsl.limit.unlimitedPerConflict(),
             gameAction: AbilityDsl.actions.playerLastingEffect(playerLastingEffectContext => ({
+                targetController: playerLastingEffectContext.player,
                 duration: Durations.UntilEndOfConflict,
                 effect: AbilityDsl.effects.delayedEffect({
                     when: {

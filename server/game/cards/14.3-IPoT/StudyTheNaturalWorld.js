@@ -16,6 +16,7 @@ class StudyTheNaturalWorld extends DrawCard {
                     effect: AbilityDsl.effects.addElement(context.game.currentConflict.conflictProvince.element)
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
                     effect: AbilityDsl.effects.delayedEffect({
                         when: {
                             afterConflict: event =>

@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Durations, DuelTypes, Players } = require('../../Constants');
+const { Durations, DuelTypes } = require('../../Constants');
 
 class CourteousScheming extends DrawCard {
     setupCardAbilities(ability) {
@@ -8,16 +8,13 @@ class CourteousScheming extends DrawCard {
             condition: () =>
                 this.game.currentConflict &&
                 this.game.currentConflict.conflictType === 'political',
-            initiateDuel: context => ({
+            initiateDuel: () => ({
                 type: DuelTypes.Political,
                 opponentChoosesDuelTarget: true,
                 gameAction: duel =>
                     duel.winner &&
                     ability.actions.playerLastingEffect({
-                        targetController:
-                            duel.winner.controller === context.player
-                                ? Players.Self
-                                : Players.Opponent,
+                        targetController: duel.winner.controller,
                         duration: Durations.UntilEndOfPhase,
                         effect: ability.effects.additionalConflict('political')
                     })

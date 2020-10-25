@@ -8,12 +8,13 @@ class KitsukiYuikimi extends DrawCard {
             when: {
                 onMoveFate: (event, context) => context.source.isParticipating() && event.origin && event.origin.type === 'ring' && context.player.opponent
             },
-            gameAction: AbilityDsl.actions.cardLastingEffect({
+            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 effect: AbilityDsl.effects.cardCannot({
                     cannot: 'target',
-                    restricts: 'opponentsTriggeredAbilities'
+                    restricts: 'opponentsTriggeredAbilities',
+                    applyingPlayer: context.player
                 })
-            }),
+            })),
             effect: 'prevent {0} from being chosen as the target of {1}\'s triggered abilities until the end of the conflict',
             effectArgs: context => [context.player.opponent]
         });

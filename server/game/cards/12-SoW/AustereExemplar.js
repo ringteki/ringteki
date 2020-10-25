@@ -9,10 +9,11 @@ class AustereExemplar extends DrawCard {
             cost: AbilityDsl.costs.payFateToRing(),
             condition: (context) => context.source.isAttacking(),
             effect: 'take three actions',
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilPassPriority,
                 effect: AbilityDsl.effects.additionalAction(3)
-            })
+            }))
         });
     }
 }

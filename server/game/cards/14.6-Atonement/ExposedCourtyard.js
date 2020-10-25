@@ -49,6 +49,7 @@ class ExposedCourtyard extends DrawCard {
                     gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.playerLastingEffect(context => {
                             return {
+                                targetController: context.player,
                                 duration: Durations.Custom,
                                 until: {
                                     onCardMoved: event => {

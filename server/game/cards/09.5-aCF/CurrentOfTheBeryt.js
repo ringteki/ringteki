@@ -12,10 +12,11 @@ class CurrentOfTheBeryt extends DrawCard {
             title: 'Take two actions',
             condition: () => this.game.isDuringConflict(),
             effect: 'take two actions',
-            gameAction: ability.actions.playerLastingEffect({
+            gameAction: ability.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilPassPriority,
                 effect: ability.effects.additionalAction(2)
-            })
+            }))
         });
     }
 }

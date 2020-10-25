@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Players, Durations } = require('../../Constants');
+const { Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class DivineAncestry extends DrawCard {
@@ -9,9 +9,9 @@ class DivineAncestry extends DrawCard {
             when: {
                 onPhaseStarted: event => event.phase !== 'setup'
             },
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 duration: Durations.UntilEndOfPhase,
-                targetController: Players.Self,
+                targetController: context.player,
                 effect: [
                     AbilityDsl.effects.playerCannot({
                         cannot: 'loseHonor'
@@ -20,7 +20,7 @@ class DivineAncestry extends DrawCard {
                         cannot: 'takeHonor'
                     })
                 ]
-            }),
+            })),
             effect: 'prevent {1} from losing honor this phase',
             effectArgs: context => [context.player]
         });
