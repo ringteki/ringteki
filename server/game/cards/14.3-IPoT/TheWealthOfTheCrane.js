@@ -1,8 +1,11 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players, Locations } = require('../../Constants');
+const { Players, Locations, CardTypes } = require('../../Constants');
 
 class TheWealthOfTheCrane extends DrawCard {
+    cards = [];
+    chosenProvinces = [];
+
     setupCardAbilities() {
         this.persistentEffect({
             location: Locations.Any,
@@ -21,73 +24,73 @@ class TheWealthOfTheCrane extends DrawCard {
             condition: context => context.player.dynastyDeck.size() > 0,
             max: AbilityDsl.limit.perPhase(1),
             handler: context => {
-                let cards = context.player.dynastyDeck.first(10);
-                this.resolveWealth(context, cards, Locations.ProvinceOne);
+                this.cards = context.player.dynastyDeck.first(10);
+                this.chosenProvinces = [];
+
+                this.wealthSelectPrompt(context);
             }
         });
     }
 
-    resolveWealth(context, cards, targetLocation) {
-        if(!cards || cards.length <= 0 || !targetLocation) {
+    wealthSelectPrompt(context) {
+        if(!this.cards || this.cards.length <= 0 || !this.hasRemainingTarget()) {
             context.player.shuffleDynastyDeck();
             return;
         }
-        this.game.promptWithHandlerMenu(context.player, {
-            activePromptTitle: 'Choose a card to put into ' + context.player.getProvinceCardInProvince(targetLocation).name,
-            context: context,
-            cards: cards,
-            choices: cards.length < this.getRemainingLocations(targetLocation) ? ['Put nothing in this province'] : [],
-            handlers: [() => {
-                this.resolveWealth(context, cards, this.getNextLocation(targetLocation));
-                return true;
-            }],
-            cardHandler: cardFromDeck => {
-                let province = context.player.getProvinceCardInProvince(targetLocation);
-                context.player.moveCard(cardFromDeck, targetLocation);
-                cardFromDeck.facedown = false;
-                this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, province.isFacedown() ? 'a facedown province' : province.name);
 
-                cards = cards.filter(a => a !== cardFromDeck);
-                this.resolveWealth(context, cards, this.getNextLocation(targetLocation));
-            }
+        let cardHandler = currentCard => {
+            this.game.promptForSelect(context.player, {
+                activePromptTitle: 'Choose a province for ' + currentCard.name,
+                context: context,
+                location: Locations.Provinces,
+                controller: Players.Self,
+                cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(card),
+                onSelect: (player, card) => {
+                    this.game.addMessage('{0} puts {1} into {2}', context.player, currentCard, card.isFacedown() ? 'a facedown province' : card.name);
+                    this.chosenProvinces.push(card);
+                    context.player.moveCard(currentCard, card.location);
+                    currentCard.facedown = false;
+                    this.cards = this.cards.filter(a => a !== currentCard);
+
+                    if(this.cards && this.cards.length > 0 && this.hasRemainingTarget()) {
+                        this.game.promptWithHandlerMenu(context.player, {
+                            activePromptTitle: 'Select a card to place in a province',
+                            context: context,
+                            cards: this.cards,
+                            cardHandler: cardHandler,
+                            handlers: [],
+                            choices: []
+                        });
+                    } else {
+                        context.player.shuffleDynastyDeck();
+                    }
+
+                    return true;
+                }
+            });
+        };
+
+        this.game.promptWithHandlerMenu(context.player, {
+            activePromptTitle: 'Select a card to place in a province',
+            context: context,
+            cards: this.cards,
+            cardHandler: cardHandler,
+            handlers: [],
+            choices: []
         });
     }
 
-    getRemainingLocations(targetLocation) {
-        let offset = 0;
-        if(this.game.skirmishMode) {
-            offset = 2;
-        }
-
-        let returnValue = 0;
-
-        if(targetLocation === Locations.ProvinceOne) {
-            returnValue = 4;
-        }
-        if(targetLocation === Locations.ProvinceTwo) {
-            returnValue = 3;
-        }
-        if(targetLocation === Locations.ProvinceThree) {
-            returnValue = 2;
-        }
-        if(targetLocation === Locations.ProvinceFour) {
-            returnValue = 1;
-        }
-
-        return Math.max(0, returnValue - offset);
+    isProvinceValidTarget(province) {
+        return province.location !== Locations.StrongholdProvince && !this.chosenProvinces.some(a => a === province);
     }
 
-    getNextLocation(targetLocation) {
-        if(targetLocation === Locations.ProvinceOne) {
-            return Locations.ProvinceTwo;
+    hasRemainingTarget() {
+        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
+        if(!this.game.skirmishMode) {
+            baseLocations.push(Locations.ProvinceFour);
         }
-        if(targetLocation === Locations.ProvinceTwo) {
-            return Locations.ProvinceThree;
-        }
-        if(!this.game.skirmishMode && targetLocation === Locations.ProvinceThree) {
-            return Locations.ProvinceFour;
-        }
-        return null;
+
+        return this.chosenProvinces.length < baseLocations.length;
     }
 }
 

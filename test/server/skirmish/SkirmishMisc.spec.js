@@ -213,16 +213,34 @@ describe('Skirmish Mode Disabled Cards', function() {
                 this.season = this.player1.moveCard('a-season-of-war', 'dynasty deck');
                 this.dispatch = this.player1.moveCard('dispatch-to-nowhere', 'dynasty deck');
                 this.aranat = this.player1.moveCard('aranat', 'dynasty deck');
+
+                this.p1_1 = this.player1.findCardByName('skirmish-province-0', 'province 1');
+                this.p1_2 = this.player1.findCardByName('skirmish-province-1', 'province 2');
+                this.p1_3 = this.player1.findCardByName('skirmish-province-2', 'province 3');
             });
 
-            it('should only prompt you for 3 cards and then stop prompting you', function() {
+            it('should only prompt you for 3 provinces', function() {
                 this.player1.clickCard(this.wealth);
                 expect(this.player1).toHavePrompt('The Wealth of the Crane');
-                expect(this.player1).toHavePrompt('Choose a card to put into Skirmish Province');
                 expect(this.player1).not.toHavePromptButton('Doji Whisperer');
                 this.player1.clickPrompt('Kakita Yoshi');
+                expect(this.player1).toBeAbleToSelect(this.p1_1);
+                expect(this.player1).toBeAbleToSelect(this.p1_2);
+                expect(this.player1).toBeAbleToSelect(this.p1_3);
+                this.player1.clickCard(this.p1_3);
+
                 this.player1.clickPrompt('Daidoji Kageyu');
+                expect(this.player1).toBeAbleToSelect(this.p1_1);
+                expect(this.player1).toBeAbleToSelect(this.p1_2);
+                expect(this.player1).not.toBeAbleToSelect(this.p1_3);
+                this.player1.clickCard(this.p1_1);
+
                 this.player1.clickPrompt('Iron Mine');
+                expect(this.player1).not.toBeAbleToSelect(this.p1_1);
+                expect(this.player1).toBeAbleToSelect(this.p1_2);
+                expect(this.player1).not.toBeAbleToSelect(this.p1_3);
+                this.player1.clickCard(this.p1_2);
+
                 expect(this.player2).toHavePrompt('Action Window');
             });
         });
