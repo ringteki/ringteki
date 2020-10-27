@@ -13,8 +13,8 @@ describe('Procedural Interference', function() {
                     provinces:['shameful-display', 'silent-ones-monastery']
                 }
             });
-            this.interference = this.player1.findCardByName('procedural-interference');
-            this.interference2 = this.player1.findCardByName('procedural-interference');
+            this.interference = this.player1.filterCardsByName('procedural-interference')[0];
+            this.interference2 = this.player1.filterCardsByName('procedural-interference')[1];
             this.arnat = this.player1.findCardByName('aranat');
             this.uji = this.player1.findCardByName('daidoji-uji');
 

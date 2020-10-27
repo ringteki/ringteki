@@ -31,7 +31,7 @@ class ProceduralInterference extends DrawCard {
             effect:'{1}{2}',
             effectArgs: context => {
                 if(context.selects.select.choice === 'let opponent gain 2 honor') {
-                    return ['gain 2 honor from ', context.player.opponent];
+                    return ['gain 2 honor ', ''];
                 }
                 return ['discard ', context.targets.province.controller.getDynastyCardsInProvince(context.targets.province.location)];
             }
