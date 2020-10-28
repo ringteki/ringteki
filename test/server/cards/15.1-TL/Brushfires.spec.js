@@ -37,6 +37,7 @@ describe('Brushfires', function() {
             this.player2.clickCard(this.brush);
             this.player2.clickCard(this.challenger);
             expect(this.challenger.fate).toBe(challengerFate - 2);
+            expect(this.getChatLogs(5)).toContain('player2 uses Brushfires to remove 2 fate from Doji Challenger');
         });
 
 
