@@ -75,7 +75,9 @@ describe('Procedural Interference', function() {
             this.player1.clickCard(this.interference);
             this.player1.clickCard(this.shamefulDisplay);
             this.player2.clickPrompt('Let opponent gain 2 honor');
+            this.player2.pass();
             this.player1.clickCard(this.interference2);
+            this.player1.clickCard(this.shamefulDisplay);
             expect(this.player2).not.toHavePromptButton('Let opponent gain 2 honor');
         });
 
