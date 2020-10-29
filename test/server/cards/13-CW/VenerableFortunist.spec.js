@@ -48,7 +48,7 @@ describe('Venerable Fortunist', function() {
             let fate = this.player1.fate;
             this.player1.clickRing('air');
             expect(this.player1.fate).toBe(fate + 2);
-            expect(this.getChatLogs(1)).toContain('player1 uses Venerable Fortunist to return the Air Ring and gain 2 fate');
+            expect(this.getChatLogs(1)).toContain('player1 uses Venerable Fortunist, returning the Air Ring to gain 2 fate');
         });
     });
 });
