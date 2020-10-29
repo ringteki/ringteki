@@ -45,6 +45,7 @@ import { MoveCardAction, MoveCardProperties } from './MoveCardAction';
 import { MoveToConflictAction, MoveToConflictProperties } from './MoveToConflictAction';
 import { MoveTokenAction, MoveTokenProperties } from './MoveTokenAction';
 import { MultipleGameAction } from './MultipleGameAction';
+import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
@@ -178,6 +179,7 @@ const GameActions = {
     ifAble: (propertyFactory: IfAbleActionProperties | ((context: TriggeredAbilityContext) => IfAbleActionProperties)) => new IfAbleAction(propertyFactory),
     joint: (gameActions: GameAction[]) => new JointGameAction(gameActions), // takes an array of gameActions, not a propertyFactory
     multiple: (gameActions: GameAction[]) => new MultipleGameAction(gameActions), // takes an array of gameActions, not a propertyFactory
+    multipleContext: (propertyFactory: MultipleContextActionProperties | ((context: TriggeredAbilityContext) => MultipleContextActionProperties)) => new MultipleContextGameAction(propertyFactory),
     menuPrompt: (propertyFactory: MenuPromptProperties | ((context: TriggeredAbilityContext) => MenuPromptProperties)) => new MenuPromptAction(propertyFactory),
     selectCard: (propertyFactory: SelectCardProperties | ((context: TriggeredAbilityContext) => SelectCardProperties)) => new SelectCardAction(propertyFactory),
     sequential: (gameActions: GameAction[]) => new SequentialAction(gameActions) // takes an array of gameActions, not a propertyFactory
