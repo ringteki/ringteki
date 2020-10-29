@@ -12,7 +12,7 @@ class MakeYourCase extends DrawCard {
                 message: '{0}{1}',
                 messageArgs: duel => [
                     duel.winner,
-                    duel.winner ? ' has argued well they gain a fate' : ''
+                    duel.winner ? ' gains a fate' : ''
                 ],
                 gameAction: duel => AbilityDsl.actions.placeFate({
                     target: duel.winner,

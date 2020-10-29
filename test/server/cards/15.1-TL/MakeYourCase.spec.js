@@ -44,7 +44,7 @@ describe('Make Your Case', function() {
             this.player1.clickPrompt('1');
 
             expect(this.getChatLogs(4)).toContain('Kakita Yoshi: 8 vs 5: Border Rider');
-            expect(this.getChatLogs(3)).toContain('Duel Effect: Kakita Yoshi has argued well they gain a fate');
+            expect(this.getChatLogs(3)).toContain('Duel Effect: Kakita Yoshi gains a fate');
         });
 
         it('nothing should happen on a tie', function() {
