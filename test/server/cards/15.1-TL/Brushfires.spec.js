@@ -81,7 +81,7 @@ describe('Brushfires', function() {
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.brush);
             this.player2.clickCard(this.brush);
-            expect(this.player2).not.toBeAbleToSelect(this.whisperer);
+            expect(this.player2).not.toBeAbleToSelect(this.brash);
         });
     });
 });
