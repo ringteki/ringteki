@@ -31,6 +31,12 @@ class CardAbility extends ThenAbility {
                 properties.targets = {
                     challenger: {
                         cardType: CardTypes.Character,
+                        player: context => {
+                            if(typeof properties.initiateDuel === 'function') {
+                                return properties.initiateDuel(context).opponentChoosesChallenger ? Players.Opponent : Players.Self;
+                            }
+                            return properties.initiateDuel.opponentChoosesChallenger ? Players.Opponent : Players.Self;
+                        },
                         controller: Players.Self,
                         cardCondition: card => card.isParticipating()
                     },
