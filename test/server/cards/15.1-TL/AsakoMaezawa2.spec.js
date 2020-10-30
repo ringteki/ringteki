@@ -32,6 +32,7 @@ describe('Asako Maezawa 2', function () {
             expect(this.player1).toBeAbleToSelect(this.manip2);
             this.player1.clickCard(this.manip2);
             expect(this.getChatLogs(10)).toContain('player1 uses Asako Maezawa to bow Bayushi Manipulator');
+            expect(this.manip2.bowed).toBe(true);
         });
 
         it('should allow you to dishonor a phoenix character', function () {
@@ -47,6 +48,7 @@ describe('Asako Maezawa 2', function () {
             expect(this.player1).toBeAbleToSelect(this.adept);
             this.player1.clickCard(this.adept);
             expect(this.adept.isDishonored).toBe(true);
+            expect(this.adept.bowed).toBe(true);
         });
 
         it('should not be allowed to bow a character with fate on it', function () {
