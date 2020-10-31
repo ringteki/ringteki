@@ -1,21 +1,22 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Players } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class YasukiOguri2 extends DrawCard {
-    setupCardAbilities(ability) {
-        this.reaction({
-            title: 'Gain +1/+1',
-            limit: ability.limit.unlimitedPerConflict(),
-            when: {
-                onCardPlayed: (event, context) => event.player === context.player.opponent && event.card.type === CardTypes.Event && context.source.isDefending()
+    setupCardAbilities() {
+        this.action({
+            title: 'Move a character in',
+            condition: context => context.source.isDefending(),
+            target: {
+                cardType: CardTypes.Character,
+                gameAction: AbilityDsl.actions.moveToConflict(),
+                cardCondition: card => card.fate > 0
             },
-            effect: 'give him +1{1}/+1{2}',
-            effectArgs: () => ['military', 'political'],
-            gameAction: ability.actions.cardLastingEffect({ effect: ability.effects.modifyBothSkills(1) })
+            cost: AbilityDsl.costs.payFate(1)
         });
     }
 }
 
-YasukiOguri2.id = 'yasuki-oguri-2'; // This is a guess at what the id might be - please check it!!!
+YasukiOguri2.id = 'yasuki-oguri-2';
 
 module.exports = YasukiOguri2;
