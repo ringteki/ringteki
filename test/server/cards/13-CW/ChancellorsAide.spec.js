@@ -156,5 +156,49 @@ describe('Chancellor\'s Aide', function() {
                 expect(this.jade2.location).toBe('conflict discard pile');
             });
         });
+
+        // describe('Discarding a card as card of the cost of the card', function() {
+        //     beforeEach(function() {
+        //         this.setupTest({
+        //             phase: 'conflict',
+        //             player1: {
+        //                 inPlay: ['chancellor-s-aide'],
+        //                 hand: ['noble-sacrifice', 'fine-katana']
+        //             },
+        //             player2: {
+        //                 inPlay: ['doji-challenger'],
+        //                 hand: ['finger-of-jade', 'ornate-fan']
+        //             }
+        //         });
+        //         this.aide = this.player1.findCardByName('chancellor-s-aide');
+        //         this.sac = this.player1.findCardByName('noble-sacrifice');
+        //         this.katana = this.player1.findCardByName('fine-katana');
+
+        //         this.challenger = this.player2.findCardByName('doji-challenger');
+        //         this.jade = this.player2.findCardByName('finger-of-jade');
+        //         this.fan = this.player2.findCardByName('ornate-fan');
+
+        //         this.aide.honor();
+        //         this.challenger.dishonor();
+        //     });
+
+        //     it('if you discard a card while paying costs then initiation should fail', function() {
+        //         this.player1.clickCard(this.sac);
+        //         this.player1.clickCard(this.challenger);
+        //         this.player1.clickCard(this.aide);
+
+        //         expect(this.player1).toHavePrompt('Triggered Abilities');
+        //         this.player1.clickCard(this.aide);
+        //         this.player2.clickPrompt('Yes');
+        //         this.player1.clickPrompt('player2');
+        //         this.player2.clickPrompt('player1');
+        //         this.player2.clickCard(this.jade);
+        //         expect(this.player1).toBeAbleToSelect(this.sac);
+        //         expect(this.player1).toBeAbleToSelect(this.katana);
+        //         this.player1.clickCard(this.sac);
+        //         expect(this.challenger.location).toBe('play area');
+        //         expect(this.getChatLogs(10)).toContain('player1 attempted to use Noble Sacrifice, but it is no longer in a legal location');
+        //     });
+        // });
     });
 });
