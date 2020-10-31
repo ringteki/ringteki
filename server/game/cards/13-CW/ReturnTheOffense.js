@@ -23,7 +23,10 @@ class ReturnTheOffense extends DrawCard {
                     })),
                     AbilityDsl.actions.cardLastingEffect({
                         target: duel.loser,
-                        effect: AbilityDsl.effects.cardCannot('ready')
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'ready',
+                            restricts: 'cardEffects'
+                        })
                     })
                 ])
             }
