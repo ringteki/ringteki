@@ -4,7 +4,7 @@ const AbilityDsl = require('../../abilitydsl');
 class SinisterPeacekeeper extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'lose an honor',
+            title: 'Make opponent lose an honor',
             when: {
                 onModifyHonor: (event, context) =>
                     event.amount > 0 && context.player.opponent &&

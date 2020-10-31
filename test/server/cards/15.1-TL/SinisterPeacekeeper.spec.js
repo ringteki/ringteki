@@ -43,6 +43,7 @@ describe('Sinister Peacekeeper', function() {
             this.player2.pass();
             this.player1.clickCard(this.chronicler);
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
             this.player2.clickCard(this.sinister);
             expect(this.getChatLogs(10)).toContain('player2 uses Sinister Peacekeeper to make player1 lose 1 honor');
         });
@@ -60,6 +61,7 @@ describe('Sinister Peacekeeper', function() {
             expect(this.player1).toHavePrompt('Air Ring');
             this.player1.clickPrompt('Gain 2 Honor');
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
         });
 
         it('should be able to be used when an honored character leaves play', function () {
@@ -73,6 +75,7 @@ describe('Sinister Peacekeeper', function() {
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.chronicler);
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
         });
 
         it('should trigger off of the air ring being won by opponent', function() {
@@ -88,6 +91,7 @@ describe('Sinister Peacekeeper', function() {
             expect(this.player1).toHavePrompt('Air Ring');
             this.player1.clickPrompt('Take 1 Honor from opponent');
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
         });
 
         it('should trigger when an opponent steals an honor via card effect', function() {
@@ -106,6 +110,7 @@ describe('Sinister Peacekeeper', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.chronicler);
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
         });
 
         it('should trigger when you transfer honor via bids', function() {
@@ -124,6 +129,7 @@ describe('Sinister Peacekeeper', function() {
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('5');
             expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.sinister);
         });
     });
 });
