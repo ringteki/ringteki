@@ -37,7 +37,6 @@ describe('Yasuki Oguri 2', function() {
             expect(this.whisperer.isParticipating()).toBe(true);
             expect(this.player2.fate).toBe(p2Fate - 1);
             expect(this.getChatLogs(5)).toContain('player2 uses Yasuki Oguri, spending 1 fate to move Doji Whisperer into the conflict');
-
         });
 
         it('should not be allowed to pull in a character with no fate', function() {
@@ -47,7 +46,6 @@ describe('Yasuki Oguri 2', function() {
                 defenders: [this.yasuki],
                 province: this.fields
             });
-            let p2Fate = this.player2.fate;
             this.player2.clickCard(this.yasuki);
             expect(this.player2).not.toBeAbleToSelect(this.doomed);
         });
@@ -70,7 +68,7 @@ describe('Yasuki Oguri 2', function() {
             this.player1.pass();
             this.player2.pass();
             this.initiateConflict({
-                attackers:[this.yasuki],
+                attackers:[this.yasuki]
             });
             this.player2.clickPrompt('No Target');
             this.player1.clickPrompt('Done');

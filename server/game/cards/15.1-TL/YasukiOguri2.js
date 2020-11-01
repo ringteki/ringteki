@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes, Players } = require('../../Constants');
+const { CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class YasukiOguri2 extends DrawCard {
