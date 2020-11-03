@@ -25,7 +25,7 @@ class RenownedSinger extends DrawCard {
                     controller: Players.Self,
                     cardCondition: (card, context) => {
                         let cards = context.targets.discardCards;
-                        if (!Array.isArray(cards)) {
+                        if(!Array.isArray(cards)) {
                             cards = [cards];
                         }
                         return cards.includes(card);
