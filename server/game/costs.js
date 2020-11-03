@@ -268,6 +268,10 @@ const Costs = {
             canPay: function (context) {
                 return Object.values(context.game.rings).some(ring => ringCondition(ring, context) && ring.claimedBy === context.player.name);
             },
+            getActionName(context) { // eslint-disable-line no-unused-vars
+                return 'returnRing';
+            },
+            getCostMessage: (context) => ['returning the {1}', [context.costs.returnRing]],
             resolve: function (context, result) {
                 let chosenRings = [];
                 let promptPlayer = () => {
