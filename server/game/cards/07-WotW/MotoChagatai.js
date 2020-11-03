@@ -13,6 +13,7 @@ class MotoChagatai extends DrawCard {
         this.persistentEffect({
             condition: context => (
                 context.source.isAttacking() &&
+                context.game.currentConflict.conflictProvince.controller !== context.source.controller &&
                 this.provinceBroken
             ),
             effect: AbilityDsl.effects.doesNotBow()

@@ -19,12 +19,13 @@ class KakitasFinalStance extends DrawCard {
                         condition: () => this.duelParticipantsThisConflict.includes(context.target),
                         effect: AbilityDsl.effects.doesNotBow()
                     })),
-                    AbilityDsl.actions.cardLastingEffect({
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'bow',
-                            restricts: 'opponentsCardEffects'
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
                         })
-                    })
+                    }))
                 ]
             },
             effect: 'prevent opponents\' actions from bowing {0} and stop it bowing at the end of the conflict if it is involved in a duel'

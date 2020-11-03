@@ -18,6 +18,7 @@ import DynastyCardAction = require('./dynastycardaction');
 import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
+import ConflictTracker = require('./conflicttracker');
 const StatusToken = require('./StatusToken');
 
 const ValidKeywords = [
@@ -239,6 +240,21 @@ class BaseCard extends EffectSource {
         this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure() }, properties));
     }
 
+    dire(properties): void {
+        if(properties && properties.condition) {
+            let currentCondition = properties.condition;
+            properties.condition = context => context.source.isDire() && currentCondition(context);
+        } else {
+            properties = Object.assign({ condition: context => context.source.isDire() }, properties);
+        }
+
+        this.persistentEffect(properties);
+    }
+
+    isDire() : boolean {
+        return false;
+    }
+
     hasKeyword(keyword) {
         let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
         let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(effectValue => effectValue === keyword.toLowerCase());
@@ -444,8 +460,9 @@ class BaseCard extends EffectSource {
     }
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
-        let player = context.player || this.controller;
-        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context);
+        let player = (context && context.player) || this.controller;
+        let conflict = context && context.game && context.game.currentConflict;
+        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context) && (!conflict || conflict.checkRestrictions(actionType, context));
     }
 
 

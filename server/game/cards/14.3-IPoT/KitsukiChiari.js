@@ -10,18 +10,23 @@ class KitsukiChiari extends DrawCard {
                     context.source.controller.opponent && context.source.controller.opponent.hand.size() > 0
             },
             cost: AbilityDsl.costs.nameCard(),
-            gameAction: AbilityDsl.actions.ifAble(() => ({
-                ifAbleAction: AbilityDsl.actions.discardMatching(context => ({
-                    target: context.player.opponent,
-                    cards: context.player.opponent.hand.shuffle().slice(0, 4).sort((a, b) => a.name.localeCompare(b.name)),
-                    amount: -1, //all
-                    reveal: true,
-                    match: (context, card) => card.name === context.costs.nameCardCost
-                })),
-                otherwiseAction: AbilityDsl.actions.lookAt(context => ({
-                    target: context.player.opponent.hand.shuffle().slice(0, 4)
-                }))
-            })),
+            gameAction: AbilityDsl.actions.multipleContext(context => {
+                let cards = context.player.opponent.hand.shuffle().slice(0, 4).sort((a, b) => a.name.localeCompare(b.name));
+                return ({
+                    gameActions: [
+                        AbilityDsl.actions.lookAt(() => ({
+                            target: cards.sort(card => card.name)
+                        })),
+                        AbilityDsl.actions.discardMatching(context => ({
+                            target: context.player.opponent,
+                            cards: context.player.opponent.hand.shuffle().slice(0, 4).sort((a, b) => a.name.localeCompare(b.name)),
+                            amount: -1, //all
+                            reveal: false,
+                            match: (context, card) => card.name === context.costs.nameCardCost
+                        }))
+                    ]
+                });
+            }),
             effect: 'look at 4 random cards in {1}\'s hand and discard all cards named {2}',
             effectArgs: context => [context.player.opponent, context.costs.nameCardCost]
         });

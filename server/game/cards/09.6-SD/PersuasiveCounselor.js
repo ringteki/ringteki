@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Durations, Players } = require('../../Constants');
+const { Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class PersuasiveCounselor extends DrawCard {
@@ -8,11 +8,11 @@ class PersuasiveCounselor extends DrawCard {
             title: 'Prevent your events from being cancelled',
             condition: context => context.source.isParticipating(),
             effect: 'prevent their events from being cancelled this conflict',
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 duration: Durations.UntilEndOfConflict,
-                targetController: Players.Self,
+                targetController: context.player,
                 effect: AbilityDsl.effects.eventsCannotBeCancelled()
-            })
+            }))
         });
     }
 }

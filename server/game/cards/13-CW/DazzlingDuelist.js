@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { DuelTypes, Durations, Players } = require('../../Constants');
+const { DuelTypes, Durations } = require('../../Constants');
 
 class DazzlingDuelist extends DrawCard {
     setupCardAbilities() {
@@ -9,8 +9,8 @@ class DazzlingDuelist extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Military,
                 opponentChoosesDuelTarget: true,
-                gameAction: duel => AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: duel.loser && duel.loser.controller === context.player ? Players.Self : Players.Opponent,
+                gameAction: duel => AbilityDsl.actions.playerLastingEffect(() => ({
+                    targetController: duel.loser && duel.loser.controller,
                     duration: Durations.UntilEndOfConflict,
                     effect: duel.loser ? AbilityDsl.effects.playerCannot('claimRings') : []
                 }))

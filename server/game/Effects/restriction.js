@@ -4,7 +4,7 @@ const { AbilityTypes, CardTypes } = require('../Constants');
 
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
-        context.player === effect.context.player.opponent && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
+        context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
     attachmentsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Attachment &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
@@ -12,6 +12,9 @@ const checkRestrictions = {
         context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source,
     attackedProvinceNonForced: (context) =>
         context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
+    cardEffects: (context) =>
+        (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
+        [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
@@ -22,16 +25,16 @@ const checkRestrictions = {
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
     nonSpellEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('spell'),
     opponentsCardEffects: (context, effect) =>
-        context.player === effect.context.player.opponent && (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
+        context.player === getApplyingPlayer(effect).opponent && (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
     opponentsEvents: (context, effect) =>
-        context.player && context.player === effect.context.player.opponent && context.source.type === CardTypes.Event,
+        context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Event,
     opponentsRingEffects: (context, effect) =>
-        context.player && context.player === effect.context.player.opponent && context.source.type === 'ring',
+        context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === 'ring',
     opponentsTriggeredAbilities: (context, effect) =>
-        context.player === effect.context.player.opponent && context.ability.isTriggeredAbility(),
+        context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>
-        context.player === effect.context.player.opponent && context.ability.isCardAbility(),
+        context.player === getApplyingPlayer(effect).opponent && context.ability.isCardAbility(),
     provinces: context => context.source.type === CardTypes.Province,
     reactions: context => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,
@@ -41,6 +44,10 @@ const checkRestrictions = {
     equalOrMoreExpensiveCharacterTriggeredAbilities: (context, effect, card) => context.source.type === CardTypes.Character && !context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
     equalOrMoreExpensiveCharacterKeywords: (context, effect, card) => context.source.type === CardTypes.Character && context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
     eventPlayedByHigherBidPlayer: (context, effect, card) => context.source.type === CardTypes.Event && context.player.showBid > card.controller.showBid
+};
+
+const getApplyingPlayer = (effect) => {
+    return effect.applyingPlayer || effect.context.player;
 };
 
 const leavePlayTypes = [
@@ -59,6 +66,7 @@ class Restriction extends EffectValue {
         } else {
             this.type = properties.type;
             this.restriction = properties.restricts;
+            this.applyingPlayer = properties.applyingPlayer;
             this.params = properties.params;
         }
     }

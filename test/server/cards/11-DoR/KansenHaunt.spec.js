@@ -170,6 +170,62 @@ describe('Kansen Haunt', function() {
                 expect(this.player2.honor).toBe(honor);
             });
         });
+
+        describe('Kansen Haunt\'s Reaction with Shiro Kitsuki', function() {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['doji-kuwanan'],
+                        hand: ['way-of-the-crane'],
+                        honor: 20
+                    },
+                    player2: {
+                        inPlay: ['kakita-yoshi'],
+                        dynastyDiscard: ['kansen-haunt'],
+                        honor: 10,
+                        stronghold: 'shiro-kitsuki'
+                    },
+                });
+
+                this.crane = this.player1.findCardByName('way-of-the-crane');
+                this.kuwanan = this.player1.findCardByName('doji-kuwanan');
+
+                this.yoshi = this.player2.findCardByName('kakita-yoshi');
+                this.haunt = this.player2.findCardByName('kansen-haunt');
+                this.kitsuki = this.player2.findCardByName('shiro-kitsuki');
+
+                this.player2.placeCardInProvince(this.haunt, 'province 2');
+            });
+
+            it('should trigger the ring if you claim it', function () {
+                this.kuwanan.fate = 1;
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    ring: 'earth',
+                    attackers: [this.kuwanan]
+                });
+
+                this.player2.clickCard(this.kitsuki);
+                this.player2.chooseCardInPrompt(this.crane.name, 'card-name');
+
+                this.player2.clickPrompt('Done');
+
+                this.player2.pass();
+                this.player1.clickCard(this.crane);
+                this.player1.clickCard(this.kuwanan);
+                expect(this.player2).toHavePrompt('Choose a ring to claim');
+                this.player2.clickRing('air');
+                let honor = this.player2.honor;
+                expect(this.player2).toBeAbleToSelect(this.haunt);
+                this.player2.clickCard(this.haunt);
+                expect(this.player2.honor).toBe(honor - 2);
+                expect(this.player2).toHavePrompt('Air Ring');
+                this.player2.clickPrompt('Gain 2 honor');
+                expect(this.player2.honor).toBe(honor);
+            });
+        });
     });
 });
 

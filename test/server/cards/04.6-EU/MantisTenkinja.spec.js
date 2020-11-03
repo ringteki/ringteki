@@ -148,7 +148,7 @@ describe('Mantis Tenkinja', function() {
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.mantisTenkinja);
                 this.player1.clickCard(this.mantisTenkinja);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Fire ring');
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Fire ring');
                 expect(this.player1.currentButtons.length).toBe(2);
                 expect(this.player1.currentButtons).toContain('1');
                 expect(this.player1.currentButtons).toContain('2');

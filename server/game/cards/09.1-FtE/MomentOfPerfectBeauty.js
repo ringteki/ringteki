@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players, Durations } = require('../../Constants');
+const { Durations } = require('../../Constants');
 
 class MomentOfPerfectBeauty extends DrawCard {
     setupCardAbilities() {
@@ -9,11 +9,11 @@ class MomentOfPerfectBeauty extends DrawCard {
             condition: context => this.game.isDuringConflict() &&
                     this.game.currentConflict.getNumberOfParticipantsFor(context.player, card => card.isHonored) >
                     this.game.currentConflict.getNumberOfParticipantsFor(context.player.opponent, card => card.isHonored),
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 duration: Durations.UntilEndOfConflict,
-                targetController: Players.Opponent,
+                targetController: context.player.opponent,
                 effect: AbilityDsl.effects.resolveConflictEarly()
-            }),
+            })),
             effect: 'resolve the conflict after {1}\'s next action',
             effectArgs: context => [context.player.opponent]
         });

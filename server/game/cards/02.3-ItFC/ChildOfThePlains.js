@@ -10,9 +10,10 @@ class ChildOfThePlains extends DrawCard {
                     context.source.isAttacking() && this.game.currentConflict.conflictProvince === event.card && event.onDeclaration
             },
             effect: 'get the first action in this conflict',
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 effect: AbilityDsl.effects.gainActionPhasePriority()
-            })
+            }))
         });
     }
 }

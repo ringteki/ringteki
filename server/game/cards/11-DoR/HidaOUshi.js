@@ -7,10 +7,11 @@ class HidaOUshi extends DrawCard {
         this.reaction({
             title: 'Gain additional military conflict',
             when: { afterConflict: (event, context) => context.player.isDefendingPlayer() && event.conflict.winner === context.player },
-            gameAction: AbilityDsl.actions.playerLastingEffect({
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
                 duration: Durations.UntilEndOfPhase,
                 effect: AbilityDsl.effects.additionalConflict('military')
-            }),
+            })),
             max: AbilityDsl.limit.perPhase(1)
         });
     }

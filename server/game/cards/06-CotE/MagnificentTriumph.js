@@ -14,15 +14,16 @@ class MagnificentTriumph extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
                 cardCondition: card => this.duelWinnersThisConflict.includes(card),
-                gameAction: ability.actions.cardLastingEffect({
+                gameAction: ability.actions.cardLastingEffect(context => ({
                     effect: [
                         ability.effects.modifyBothSkills(2),
                         ability.effects.cardCannot({
                             cannot: 'target',
-                            restricts: 'opponentsEvents'
+                            restricts: 'opponentsEvents',
+                            applyingPlayer: context.player
                         })
                     ]
-                })
+                }))
             },
             effect: 'give {0} +2{1}, +2{2}, and prevent them from being targeted by opponent\'s events',
             effectArgs: () => ['military', 'political']
