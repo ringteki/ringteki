@@ -5,8 +5,8 @@ describe('Return The Offense', function() {
                 phase: 'conflict',
                 player1: {
                     honor:10,
-                    inPlay: ['border-rider', 'hida-yakamo'],
-                    hand: ['fan-of-command', 'ornate-fan']
+                    inPlay: ['border-rider', 'hida-yakamo', 'togashi-mitsu-2'],
+                    hand: ['a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'fan-of-command', 'ornate-fan']
                 },
                 player2: {
                     honor:14,
@@ -15,6 +15,7 @@ describe('Return The Offense', function() {
                 }
             });
 
+            this.mitsu = this.player1.findCardByName('togashi-mitsu-2');
             this.borderRider = this.player1.findCardByName('border-rider');
             this.yakamo = this.player1.findCardByName('hida-yakamo');
             this.fanp1 = this.player1.findCardByName('fan-of-command');
@@ -157,6 +158,43 @@ describe('Return The Offense', function() {
 
             expect(this.getChatLogs(4)).toContain('The duel ends in a draw');
             expect(this.getChatLogs(3)).toContain('The duel has no effect');
+        });
+
+        it('reported bug - should be able to stand the loser using the water ring', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.borderRider, this.mitsu],
+                defenders: [this.yoshi],
+                type: 'military',
+                ring: 'water'
+            });
+
+            this.player2.clickCard(this.fury);
+            this.player2.clickCard(this.borderRider);
+            expect(this.borderRider.bowed).toBe(true);
+            this.player1.pass();
+
+            this.player2.clickCard(this.returnTheOffense);
+            this.player2.clickCard(this.yoshi);
+            this.player2.clickCard(this.borderRider);
+            this.player2.clickPrompt('1');
+            this.player1.clickPrompt('1');
+
+            let i = 0;
+
+            for(i = 0; i < 5; i++) {
+                this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[i], this.mitsu);
+                this.player2.pass();
+            }
+
+            expect(this.borderRider.bowed).toBe(true);
+            this.player1.clickCard(this.mitsu);
+            this.player1.clickRing('water');
+            expect(this.player1).toHavePrompt('Water Ring');
+            expect(this.player1).toBeAbleToSelect(this.borderRider);
+            this.player1.clickCard(this.borderRider);
+            expect(this.getChatLogs(10)).toContain('player1 resolves the water ring, readying Border Rider');
+            expect(this.borderRider.bowed).toBe(false);
         });
     });
 });

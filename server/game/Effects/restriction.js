@@ -12,6 +12,9 @@ const checkRestrictions = {
         context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source,
     attackedProvinceNonForced: (context) =>
         context.game.currentConflict && context.game.currentConflict.conflictProvince === context.source && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
+    cardEffects: (context) =>
+        (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
+        [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),

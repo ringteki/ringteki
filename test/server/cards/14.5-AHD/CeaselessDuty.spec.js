@@ -4,14 +4,19 @@ describe('Ceaseless Duty', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-whisperer', 'brash-samurai', 'doji-challenger', 'kakita-toshimoko', 'kakita-yoshi'],
-                    hand: ['ceaseless-duty', 'assassination', 'fine-katana']
+                    inPlay: ['doji-whisperer', 'brash-samurai', 'doji-challenger', 'kakita-toshimoko', 'kakita-yoshi', 'isawa-tadaka-2'],
+                    hand: ['ceaseless-duty', 'assassination', 'fine-katana'],
+                    dynastyDiscard: ['doji-diplomat', 'eager-scout']
                 },
                 player2: {
                     inPlay: ['dazzling-duelist'],
                     hand: ['i-can-swim', 'let-go']
                 }
             });
+
+            this.diplomat = this.player1.findCardByName('doji-diplomat');
+            this.scout = this.player1.findCardByName('eager-scout');
+            this.tadaka = this.player1.findCardByName('isawa-tadaka-2');
 
             this.f1 = this.player1.findCardByName('doji-whisperer');
             this.f2 = this.player1.findCardByName('brash-samurai');
@@ -120,6 +125,16 @@ describe('Ceaseless Duty', function() {
             this.player2.clickCard(this.f3);
             this.player1.clickCard(this.duty);
             expect(this.getChatLogs(5)).toContain('player1 plays Ceaseless Duty to prevent Doji Challenger from leaving play');
+        });
+
+        it('reported bug - Tadaka2 remove from game', function() {
+            this.player2.pass();
+            this.player1.clickCard(this.tadaka);
+            this.player1.clickCard(this.diplomat);
+            this.player1.clickCard(this.scout);
+            this.player1.clickPrompt('Done');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Isawa Tadaka');
         });
     });
 });
