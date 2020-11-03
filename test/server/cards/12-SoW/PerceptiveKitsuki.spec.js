@@ -36,7 +36,7 @@ describe('Perceptive Kitsuki', function() {
             expect(this.player1).toBeAbleToSelectRing('earth');
             expect(this.player1).toBeAbleToSelectRing('fire');
             this.player1.clickRing('earth');
-            expect(this.getChatLogs(4)).toContain('player1 uses Perceptive Kitsuki to look at player2\'s hand');
+            expect(this.getChatLogs(4)).toContain('player1 uses Perceptive Kitsuki, returning the Earth Ring to look at player2\'s hand');
             expect(this.getChatLogs(3)).toContain('Perceptive Kitsuki sees Fine Katana, Mark of Shame, Way of the Crane and Way of the Scorpion');
         });
 

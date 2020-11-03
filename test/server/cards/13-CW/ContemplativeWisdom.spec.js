@@ -90,7 +90,7 @@ describe('Contemplative Wisdom', function() {
             this.player1.clickCard(this.alchemist);
             expect(this.player1).toHavePrompt('Choose a ring to return');
             this.player1.clickRing('water');
-            expect(this.getChatLogs(3)).toContain('player1 uses Hantei Sotorii\'s gained ability from Contemplative Wisdom to give Master Alchemist all the printed abilities of Hantei Sotorii');
+            expect(this.getChatLogs(3)).toContain('player1 uses Hantei Sotorii\'s gained ability from Contemplative Wisdom, returning the Water Ring to give Master Alchemist all the printed abilities of Hantei Sotorii');
         });
 
         it('should give action abilities', function() {

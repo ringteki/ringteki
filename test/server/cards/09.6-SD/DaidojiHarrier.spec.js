@@ -92,7 +92,8 @@ describe('Daidoji Harrier', function() {
 
                 this.player1.clickPrompt('Ornate Fan');
                 expect(this.fan.location).toBe('conflict discard pile');
-                expect(this.getChatLogs(3)).toContain('player1 chooses Ornate Fan to be discarded from Ornate Fan and Banzai!');
+                expect(this.getChatLogs(3)).toContain('player1 chooses Ornate Fan to be discarded');
+                expect(this.getChatLogs(3)).toContain('Daidoji Harrier sees Ornate Fan and Banzai!');
             });
         });
     });

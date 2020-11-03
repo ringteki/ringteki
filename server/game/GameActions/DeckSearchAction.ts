@@ -13,7 +13,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     faceup?: boolean;
     destination?: Locations;
     deck?: Decks;
-    shuffle?: Boolean;
+    shuffle?: Boolean | ((context: AbilityContext) => Boolean);
     title?: String;
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
@@ -40,6 +40,13 @@ export class DeckSearchAction extends PlayerAction {
             return amount(context);
         }
         return amount;
+    }
+
+    getShuffle(shuffle, context) : Boolean {
+        if (typeof shuffle === 'function') {
+            return shuffle(context);
+        }
+        return shuffle;
     }
 
     getProperties(context: AbilityContext, additionalProperties = {}): DeckSearchProperties {
@@ -108,14 +115,17 @@ export class DeckSearchAction extends PlayerAction {
         if (properties.targetMode === TargetModes.Unlimited)
             selectAmount = -1;
         
-        let title = 'Select a card' + (properties.reveal ? ' to reveal' : '');
-        if (properties.destination === Locations.Hand) {
-            title = 'Select a card to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
-        }
-        if (selectAmount < 0 || selectAmount > 1) {
-            title = 'Select all cards' + (properties.reveal ? ' to reveal' : '');
+        let title = properties.activePromptTitle;
+        if (!properties.activePromptTitle) {
+            title = 'Select a card' + (properties.reveal ? ' to reveal' : '');
             if (properties.destination === Locations.Hand) {
-                title = 'Select all cards to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
+                title = 'Select a card to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
+            }
+            if (selectAmount < 0 || selectAmount > 1) {
+                title = 'Select all cards' + (properties.reveal ? ' to reveal' : '');
+                if (properties.destination === Locations.Hand) {
+                    title = 'Select all cards to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
+                }
             }
         }
 
@@ -151,7 +161,7 @@ export class DeckSearchAction extends PlayerAction {
             properties.selectedCardsHandler(context, event, selectedCards);
         }
 
-        if (properties.shuffle) {
+        if (this.getShuffle(properties.shuffle, context)) {
             if (properties.deck === Decks.ConflictDeck) {
                 event.player.shuffleConflictDeck();
             } else if (properties.deck === Decks.DynastyDeck) {
@@ -175,6 +185,9 @@ export class DeckSearchAction extends PlayerAction {
                     case Locations.Hand:
                         context.game.addMessage('{0} takes {1} and adds {2} to their hand', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it');
                         break;
+                    case Locations.PlayArea:
+                        context.game.addMessage('{0} puts {1} into play', event.player, selectedCards);
+                        break;
                     default:
                         context.game.addMessage('{0} selects {1} and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);
                         break;
@@ -184,6 +197,9 @@ export class DeckSearchAction extends PlayerAction {
                 switch(properties.destination) {
                     case Locations.Hand:
                         context.game.addMessage('{0} takes {1} into their hand', event.player, selectedCards.length > 1 ? 'cards' : 'a card');
+                        break;
+                    case Locations.PlayArea:
+                        context.game.addMessage('{0} puts {1} into play', event.player, selectedCards.length > 1 ? 'cards' : 'a card');
                         break;
                     default:
                         context.game.addMessage('{0} makes a selection and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);

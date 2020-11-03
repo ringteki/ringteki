@@ -6,6 +6,7 @@ class DaimyosGunbai extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Initiate a military duel and attach this to the winner',
+            cost: AbilityDsl.costs.reveal(context => context.source),
             condition: context => context.game.isDuringConflict(),
             location: Locations.Hand,
             initiateDuel: {

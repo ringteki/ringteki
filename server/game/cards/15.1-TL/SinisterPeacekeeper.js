@@ -11,7 +11,9 @@ class SinisterPeacekeeper extends DrawCard {
                     event.player === context.player.opponent,
                 onTransferHonor: (event, context) => event.player === context.player && event.amount > 0
             },
-            gameAction: AbilityDsl.actions.loseHonor({ target: this.owner.opponent})
+            gameAction: AbilityDsl.actions.loseHonor(context => ({
+                target: context.source.controller.opponent
+            }))
         });
     }
 }
