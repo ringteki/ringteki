@@ -19,7 +19,7 @@ class DaughterOfWar extends DrawCard {
                 choices: ['Don\'t choose a character'],
                 handlers: [
                     function() {
-                        context.game.addMessage('{0} chooses not to put a character into play', context.player);
+                        context.game.addMessage('{0} chooses not to put any character into play', context.player);
                         context.player.shuffleDynastyDeck();
                     }
                 ],

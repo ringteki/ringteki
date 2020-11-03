@@ -5,7 +5,7 @@ describe('Daughter of War', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        dynastyDiscard: ['eager-scout', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general'],
+                        dynastyDiscard: ['eager-scout', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general', 'hida-kisada'],
                         inPlay: ['doji-hotaru', 'hida-guardian'],
                         dynastyDeckSize: 4,
                         hand: ['daughter-of-war']
