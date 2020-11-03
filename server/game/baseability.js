@@ -121,10 +121,15 @@ class BaseAbility {
     }
 
     getCosts(context, playCosts = true, triggerCosts = true) { // eslint-disable-line no-unused-vars
-        if(!playCosts) {
-            return this.cost.filter(cost => !cost.isPlayCost);
+        let costs = this.cost.map(a => a);
+        if(context.ignoreFateCost) {
+            costs = costs.filter(cost => !cost.isPrintedFateCost);
         }
-        return this.cost;
+
+        if(!playCosts) {
+            costs = costs.filter(cost => !cost.isPlayCost);
+        }
+        return costs;
     }
 
     resolveCosts(context, results) {

@@ -42,6 +42,8 @@ export class LookAtAction extends CardGameAction {
             cards = [cards];
         }
         event.cards = cards;
+        let obj = { a: cards, b: context};
+        event.stateBeforeResolution = cards.map(a => { return { card: a, location: a.location } });
         event.context = context;
     }
 

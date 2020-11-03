@@ -18,6 +18,7 @@ import DynastyCardAction = require('./dynastycardaction');
 import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
+import ConflictTracker = require('./conflicttracker');
 const StatusToken = require('./StatusToken');
 
 const ValidKeywords = [
@@ -460,7 +461,8 @@ class BaseCard extends EffectSource {
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
         let player = (context && context.player) || this.controller;
-        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context);
+        let conflict = context && context.game && context.game.currentConflict;
+        return super.checkRestrictions(actionType, context) && player.checkRestrictions(actionType, context) && (!conflict || conflict.checkRestrictions(actionType, context));
     }
 
 

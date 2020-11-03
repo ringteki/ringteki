@@ -97,6 +97,7 @@ interface ActionTargets {
 
 interface InitiateDuel extends DuelProperties {
     opponentChoosesDuelTarget?: boolean;
+    opponentChoosesChallenger?: boolean;
 };
 
 interface AbilityProps {

@@ -201,6 +201,9 @@ const Costs = {
     variableFateCost: function (properties = {}) {
         return {
             canPay: function (context) {
+                if(context.ignoreFateCost) {
+                    return true;
+                }
                 let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 return costModifiers < 0 || (context.player.fate >= minAmount + costModifiers && context.game.actions.loseFate().canAffect(context.player, context));
@@ -209,6 +212,11 @@ const Costs = {
                 let maxAmount = properties.maxAmount ? (_.isFunction(properties.maxAmount) ? properties.maxAmount(context) : properties.maxAmount) : -1;
                 let minAmount = properties.minAmount ? (_.isFunction(properties.minAmont) ? properties.minAmont(context) : properties.minAmount) : 1;
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
+
+                if(context.ignoreFateCost) {
+                    costModifiers = -1000;
+                }
+
                 let max = context.player.fate - costModifiers;
                 let min = minAmount;
                 if(maxAmount >= 0) {
@@ -236,6 +244,11 @@ const Costs = {
                 });
             },
             payEvent: function (context) {
+                if(context.ignoreFateCost) {
+                    let action = context.game.actions.handler(); //this is a do-nothing event to allow you to pay 0 fate if it's a legal amount
+                    return action.getEvent(context.player, context);
+                }
+
                 let costModifiers = context.player.getTotalCostModifiers(PlayTypes.PlayFromHand, context.source);
                 let cost = context.costs.variableFateCost + Math.min(0, costModifiers); //+ve cost modifiers are applied by the engine
                 if(cost > 0) {
@@ -255,6 +268,10 @@ const Costs = {
             canPay: function (context) {
                 return Object.values(context.game.rings).some(ring => ringCondition(ring, context) && ring.claimedBy === context.player.name);
             },
+            getActionName(context) { // eslint-disable-line no-unused-vars
+                return 'returnRing';
+            },
+            getCostMessage: (context) => ['returning the {1}', [context.costs.returnRing]],
             resolve: function (context, result) {
                 let chosenRings = [];
                 let promptPlayer = () => {
