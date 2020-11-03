@@ -171,6 +171,8 @@ const GameActions = {
     cancel: (propertyFactory: CancelActionProperties | ((context: TriggeredAbilityContext) => CancelActionProperties) = {}) => new CancelAction(propertyFactory),
     handler: (propertyFactory: HandlerProperties | ((context: TriggeredAbilityContext) => HandlerProperties)) => new HandlerAction(propertyFactory),
     noAction: () => new HandlerAction(),
+    // conflict actions
+    conflictLastingEffect: (propertyFactory: LastingEffectProperties | ((context: TriggeredAbilityContext) => LastingEffectProperties) ) => new LastingEffectAction(propertyFactory), // duration = 'untilEndOfConflict', effect, targetController, condition, until
 
     // meta actions
     cardMenu: (propertyFactory: CardMenuProperties | ((context: TriggeredAbilityContext) => CardMenuProperties)) => new CardMenuAction(propertyFactory),
