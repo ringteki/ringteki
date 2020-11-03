@@ -46,7 +46,7 @@ describe('Deduction', function () {
                 expect(this.player2).toBeAbleToSelectRing('earth');
                 expect(this.player2).toBeAbleToSelectRing('void');
                 this.player2.clickRing('air');
-                expect(this.getChatLogs(3)).toContain('player2 plays Deduction to bow Young Harrier');
+                expect(this.getChatLogs(3)).toContain('player2 plays Deduction, returning the Air Ring to bow Young Harrier');
                 expect(this.game.rings.air.claimed).toBe(false);
                 expect(this.player2).not.toBeAbleToSelectRing('air');
                 expect(this.player2).not.toBeAbleToSelectRing('earth');

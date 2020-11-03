@@ -17,6 +17,7 @@ class PlayCardResolver extends AbilityResolver {
         this.gameActionContext = gameActionContext;
         this.gameActionProperties = gameActionProperties;
         this.cancelPressed = false;
+        context.ignoreFateCost = this.gameActionProperties.ignoreFateCost;
     }
 
     resolveEarlyTargets() {
@@ -88,6 +89,7 @@ export interface PlayCardProperties extends CardActionProperties {
     destination?: Locations;
     destinationOptions?: object;
     payCosts?: boolean;
+    ignoreFateCost?: boolean;
     allowReactions?: boolean;
 }
 
@@ -99,6 +101,7 @@ export class PlayCardAction extends CardGameAction {
         postHandler: () => true,
         destinationOptions: {},
         payCosts: true,
+        ignoreFateCost: false,
         allowReactions: false
     };
     constructor(properties: ((context: AbilityContext) => PlayCardProperties) | PlayCardProperties) {
@@ -130,6 +133,7 @@ export class PlayCardAction extends CardGameAction {
             }
             let newContext = ability.createContext(context.player);
             newContext.gameActionsResolutionChain = context.gameActionsResolutionChain.concat(this);
+            newContext.ignoreFateCost = properties.ignoreFateCost;
             this.setPlayType(newContext, properties.playType, card.location);
             return !ability.meetsRequirements(newContext, ignoredRequirements);
         });

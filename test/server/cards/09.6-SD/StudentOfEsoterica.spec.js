@@ -30,24 +30,43 @@ describe('Student of Esoterica', function() {
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
                 this.player1.clickCard(this.student1);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                expect(this.player1).toHavePrompt('Choose a card to help pay the fate cost of Against the Waves');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
                 expect(this.player1.currentButtons).toContain('Cancel');
             });
 
+            it('should allow the player to not choose a character', function() {
+                let fate = this.player1.fate;
+                this.player1.clickCard('against-the-waves');
+                expect(this.player1).toHavePrompt('Against the Waves');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose a card to help pay the fate cost of Against the Waves');
+                expect(this.player1).toBeAbleToSelect(this.student1);
+                expect(this.player1).toBeAbleToSelect(this.student2);
+                expect(this.player1.currentButtons).toContain('Done');
+                this.player1.clickPrompt('Done');
+                expect(this.student1.bowed).toBe(true);
+                expect(this.player1.fate).toBe(fate - 1);
+                expect(this.player2).toHavePrompt('Action Window');
+            });
+
             it('should allow the player to choose to take fate from the second student if able', function() {
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
                 this.player1.clickCard(this.student1);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
                 expect(this.player1.currentButtons).toContain('Cancel');
                 this.player1.clickPrompt('0');
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student2);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
@@ -58,13 +77,14 @@ describe('Student of Esoterica', function() {
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
                 this.player1.clickCard(this.student1);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
                 expect(this.player1.currentButtons).toContain('Cancel');
                 this.player1.clickPrompt('1');
-                expect(this.player1).not.toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                expect(this.player1).not.toHavePrompt('Choose a card to help pay the fate cost of Against the Waves');
                 expect(this.student1.bowed).toBe(true);
             });
 
@@ -73,6 +93,7 @@ describe('Student of Esoterica', function() {
                 let bodyFate = this.student1.fate;
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
+                this.player1.clickCard(this.student1);
                 this.player1.clickCard(this.student1);
                 this.player1.clickPrompt('1');
                 expect(this.player1.fate).toBe(playerFate);
@@ -88,7 +109,9 @@ describe('Student of Esoterica', function() {
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
                 this.player1.clickCard(this.student1);
+                this.player1.clickCard(this.student1);
                 this.player1.clickPrompt('0');
+                this.player1.clickCard(this.student2);
                 this.player1.clickPrompt('0');
                 expect(this.player1.fate).toBe(playerFate - 1);
                 expect(this.student1.fate).toBe(bodyFate);
@@ -105,13 +128,15 @@ describe('Student of Esoterica', function() {
                 this.player1.clickCard('against-the-waves');
                 expect(this.player1).toHavePrompt('Against the Waves');
                 this.player1.clickCard(this.student1);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
                 expect(this.player1.currentButtons).toContain('Cancel');
                 this.player1.clickPrompt('0');
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student2);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
@@ -135,7 +160,13 @@ describe('Student of Esoterica', function() {
                 let bodyFate2 = this.student2.fate;
 
                 this.player1.clickCard('consumed-by-five-fires');
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                expect(this.player1).toHavePrompt('Choose a card to help pay the fate cost of Consumed By Five Fires');
+                expect(this.player1).toBeAbleToSelect(this.student1);
+                expect(this.player1).toBeAbleToSelect(this.student2);
+                expect(this.player1.currentButtons).not.toContain('Done');
+
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(6);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
@@ -145,7 +176,8 @@ describe('Student of Esoterica', function() {
                 expect(this.player1.currentButtons).toContain('Cancel');
                 this.player1.clickPrompt('3');
 
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student2);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(4);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
@@ -173,7 +205,8 @@ describe('Student of Esoterica', function() {
                 this.mirrorsGaze = this.player1.clickCard('the-mirror-s-gaze');
                 expect(this.player1).toHavePrompt('The Mirror\'s Gaze');
                 this.player1.clickCard(this.student1);
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                this.player1.clickCard(this.student1);
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('0');
                 expect(this.player1.currentButtons).toContain('1');
@@ -194,7 +227,7 @@ describe('Student of Esoterica', function() {
                 let challengerFate = this.challenger.fate;
 
                 this.player1.clickCard(this.monoNoAware);
-                expect(this.player1).not.toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                expect(this.player1).not.toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 this.player1.pass();
                 expect(this.player1.fate).toBe(playerFate - 3);
@@ -236,8 +269,9 @@ describe('Student of Esoterica', function() {
                 let bodyFate2 = this.student2.fate;
 
                 this.player1.clickCard('consumed-by-five-fires');
+                this.player1.clickCard(this.student2);
 
-                expect(this.player1).toHavePrompt('Choose amount of fate to spend from the Student of Esoterica');
+                expect(this.player1).toHavePrompt('Choose amount of fate to spend from Student of Esoterica');
                 expect(this.player1.currentButtons.length).toBe(3);
                 expect(this.player1.currentButtons).toContain('2');
                 expect(this.player1.currentButtons).toContain('3');

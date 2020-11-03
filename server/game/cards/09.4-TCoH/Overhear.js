@@ -9,16 +9,22 @@ class Overhear extends DrawCard {
             title: 'Place random card on top of deck',
             effect: 'reveal a random card from {1}\'s hand and place it on top of {1}\'s deck',
             effectArgs: context=> [context.player.opponent],
-            gameAction:AbilityDsl.actions.sequential([AbilityDsl.actions.moveCard(context => ({
-                target: context.player.opponent && context.player.opponent.hand.shuffle().slice(0, 1),
-                destination: Locations.ConflictDeck
-            })),
-            AbilityDsl.actions.lookAt(context => ({
-                target: context.player.opponent.conflictDeck.first(1),
-                message: '{0} sees {1}',
-                messageArgs : cards => ([context.player, cards[0]])
-            }))
-            ]),
+            gameAction: AbilityDsl.actions.multipleContext(context => {
+                let card = context.player.opponent && context.player.opponent.hand.shuffle().slice(0, 1);
+                return ({
+                    gameActions: [
+                        AbilityDsl.actions.lookAt(() => ({
+                            target: card,
+                            message: '{0} sees {1}',
+                            messageArgs : cards => ([context.player, cards])
+                        })),
+                        AbilityDsl.actions.moveCard(() => ({
+                            target: card,
+                            destination: Locations.ConflictDeck
+                        }))
+                    ]
+                });
+            }),
             condition: context => context.game.isDuringConflict('political') && context.player.opponent,
             then: context => {
                 if(context.game.currentConflict.getCharacters(context.player).filter(card => card.hasTrait('courtier')).length < 1) {

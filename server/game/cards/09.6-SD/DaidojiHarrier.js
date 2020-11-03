@@ -18,12 +18,17 @@ class DaidojiHarrier extends DrawCard {
                 mode: TargetModes.Exactly,
                 location: Locations.Hand
             },
-            gameAction: AbilityDsl.actions.cardMenu(context => ({
-                cards: context.target,
-                gameAction: AbilityDsl.actions.discardCard(),
-                message: '{0} chooses {1} to be discarded from {2}',
-                messageArgs: (card, player, cards) => [player, card, cards]
-            }))
+            gameAction: AbilityDsl.actions.multiple([
+                AbilityDsl.actions.lookAt(context => ({
+                    target: context.target
+                })),
+                AbilityDsl.actions.cardMenu(context => ({
+                    cards: context.target,
+                    gameAction: AbilityDsl.actions.discardCard(),
+                    message: '{0} chooses {1} to be discarded',
+                    messageArgs: (card, player) => [player, card]
+                }))
+            ])
         });
     }
 }
