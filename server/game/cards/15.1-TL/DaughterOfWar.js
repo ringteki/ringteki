@@ -19,7 +19,9 @@ class DaughterOfWar extends DrawCard {
                 reveal: true,
                 faceup: true,
                 destination: Locations.PlayArea
-            }))
+            })),
+            effect: 'to search their deck for a character with cost less than {1} to put into play',
+            effectArgs: context => [context.source.parent.getCost()]
         });
     }
 }
