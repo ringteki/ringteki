@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class AgashaSwordsmith extends DrawCard {
@@ -10,7 +10,10 @@ class AgashaSwordsmith extends DrawCard {
             effect: 'look at the top five cards of their deck',
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                cardCondition: card => card.type === CardTypes.Attachment
+                cardCondition: card => card.type === CardTypes.Attachment,
+                gameAction: AbilityDsl.actions.moveCard({ 
+                    destination: Locations.Hand
+                })
             })
         });
     }

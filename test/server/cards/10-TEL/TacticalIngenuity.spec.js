@@ -48,7 +48,7 @@ describe('Tactical Ingenuity', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.zentaro);
-            expect(this.player1).toHavePrompt('Select a card to reveal and put in your hand');
+            expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Way of the Lion');
             expect(this.player1).toHaveDisabledPromptButton('Fine Katana');
             expect(this.player1).toHavePromptButton('Strength in Numbers');
@@ -69,7 +69,7 @@ describe('Tactical Ingenuity', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.zentaro);
-            expect(this.player1).toHavePrompt('Select a card to reveal and put in your hand');
+            expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Way of the Lion');
             expect(this.player1).toHaveDisabledPromptButton('Fine Katana');
             expect(this.player1).toHavePromptButton('Strength in Numbers');

@@ -12,12 +12,12 @@ class KaiuShihobu extends DrawCard {
                 targetMode: TargetModes.Unlimited,
                 reveal: true,
                 deck: Decks.DynastyDeck,
-                destination: Locations.UnderneathStronghold,
                 selectedCardsHandler: (context, event, cards) => {
                     if(cards.length > 0) {
                         this.game.addMessage('{0} selects {1}', event.player, cards);
                         cards.forEach(card => {
                             event.player.stronghold.addChildCard(card, Locations.UnderneathStronghold);
+                            event.player.moveCard(card, Locations.UnderneathStronghold);
                             card.lastingEffect(() => ({
                                 until: {
                                     onCardMoved: event => event.card === card && event.originalLocation === Locations.UnderneathStronghold

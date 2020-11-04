@@ -28,7 +28,7 @@ describe('Yasuki Hatsu', function() {
 
             it('should prompt tp choose from the top 5 cards for an attachment', function() {
                 this.player1.clickCard(this.hatsu);
-                expect(this.player1).toHavePrompt('Select a card to reveal and put in your hand');
+                expect(this.player1).toHavePrompt('Select a card to reveal');
                 expect(this.player1).toHaveDisabledPromptButton('Hurricane Punch');
                 expect(this.player1).toHavePromptButton('Centipede Tattoo');
                 expect(this.player1).toHaveDisabledPromptButton('Mantra of Fire');
@@ -39,7 +39,7 @@ describe('Yasuki Hatsu', function() {
             it('should reveal the chosen attachment', function() {
                 this.player1.clickCard(this.hatsu);
                 this.player1.clickPrompt('Ornate Fan');
-                expect(this.getChatLogs(4)).toContain('player1 takes Ornate Fan and adds it to their hand');
+                expect(this.getChatLogs(4)).toContain('player1 takes Ornate Fan');
             });
 
             it('should add the chosen card to your hand', function() {

@@ -5,8 +5,8 @@ describe('Daughter of War', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        dynastyDiscard: ['eager-scout', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general', 'hida-kisada'],
-                        inPlay: ['doji-hotaru', 'hida-guardian'],
+                        dynastyDiscard: ['eager-scout', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general', 'hida-kisada', 'kakita-toshimoko'],
+                        inPlay: ['doji-hotaru', 'hida-guardian', 'kakita-toshimoko'],
                         dynastyDeckSize: 4,
                         hand: ['daughter-of-war']
                     },
@@ -23,6 +23,7 @@ describe('Daughter of War', function() {
                 this.honoredGeneral = this.player1.findCardByName('honored-general');
                 this.dojiHotaru = this.player1.findCardByName('doji-hotaru');
                 this.daughter = this.player1.findCardByName('daughter-of-war');
+                this.toshimoko = this.player1.findCardByName('kakita-toshimoko', 'dynasty discard pile');
                 this.dojiHotaru.dishonor();
 
                 this.player1.moveCard(this.eagerScout, 'dynasty deck');
@@ -30,6 +31,7 @@ describe('Daughter of War', function() {
                 this.player1.moveCard(this.brashSamurai, 'dynasty deck');
                 this.player1.moveCard(this.dojiChallenger, 'dynasty deck');
                 this.player1.moveCard(this.honoredGeneral, 'dynasty deck');
+                this.player1.moveCard(this.toshimoko, 'dynasty deck');
 
                 this.vanguard = this.player2.findCardByName('vanguard-warrior');
                 this.assassination = this.player2.findCardByName('assassination');
@@ -70,6 +72,13 @@ describe('Daughter of War', function() {
                 expect(this.player1).toHavePromptButton('Honored General');
                 expect(this.player1).toHavePromptButton('Brash Samurai');
                 expect(this.player1).toHavePromptButton('Doji Challenger');
+                expect(this.player1).toHaveDisabledPromptButton('Kakita Toshimoko');
+                this.player1.clickPrompt('Honored General');
+                expect(this.honoredGeneral.location).toBe('play area');
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.honoredGeneral);
+                this.player1.clickCard(this.honoredGeneral);
+                expect(this.honoredGeneral.isHonored).toBe(true);
             });
 
             it('should only allow you to bring in a character that is less than the one leaving ', function() {
@@ -86,9 +95,11 @@ describe('Daughter of War', function() {
                 expect(this.player1).not.toHavePromptButton('Honored General');
                 expect(this.player1).not.toHavePromptButton('Brash Samurai');
                 expect(this.player1).not.toHavePromptButton('Doji Challenger');
+                expect(this.eagerScout.location).toBe('dynasty deck');
                 this.player1.clickPrompt('Eager Scout');
                 expect(this.getChatLogs(5)).toContain('player1 uses Daughter of War to to search their deck for a character with cost less than 1 to put into play');
-                expect(this.getChatLogs(5)).toContain('player1 puts Eager Scout into play');
+                expect(this.getChatLogs(5)).toContain('player1 takes Eager Scout');
+                expect(this.eagerScout.location).toBe('play area');
             });
         });
     });

@@ -1,4 +1,5 @@
 const DrawCard = require('../../drawcard.js');
+const { Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class ShibaSophist extends DrawCard {
@@ -9,7 +10,10 @@ class ShibaSophist extends DrawCard {
             effect: 'look at the top five cards of their deck',
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                cardCondition: card => this.game.currentConflict.elements.some(element => card.hasTrait(element))
+                cardCondition: card => this.game.currentConflict.elements.some(element => card.hasTrait(element)),
+                gameAction: AbilityDsl.actions.moveCard({ 
+                    destination: Locations.Hand
+                })
             })
         });
     }

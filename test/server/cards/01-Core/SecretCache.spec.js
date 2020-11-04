@@ -34,7 +34,7 @@ describe('Secret Cache', function() {
                 this.player2.clickPrompt('Supernatural Storm (5)');
                 expect(this.player2.player.hand.size()).toBe(handsize + 1);
                 expect(this.getChatLogs(4)).toContain('player2 uses Secret Cache to look at the top 5 cards of their conflict deck');
-                expect(this.getChatLogs(3)).toContain('player2 takes a card into their hand');
+                expect(this.getChatLogs(3)).toContain('player2 takes 1 card');
                 expect(this.getChatLogs(2)).toContain('player2 is shuffling their conflict deck');
             });
         });

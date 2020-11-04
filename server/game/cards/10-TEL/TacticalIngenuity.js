@@ -1,5 +1,4 @@
-import { CardTypes, AbilityTypes } from '../../Constants.js';
-
+import { CardTypes, AbilityTypes, Locations } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 
@@ -16,7 +15,10 @@ class TacticalIngenuity extends DrawCard {
                 gameAction: AbilityDsl.actions.deckSearch({
                     amount: 4,
                     cardCondition: card => card.type === CardTypes.Event,
-                    reveal: true
+                    reveal: true,
+                    gameAction: AbilityDsl.actions.moveCard({ 
+                        destination: Locations.Hand
+                    })
                 })
             })
         });

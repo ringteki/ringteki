@@ -21,8 +21,10 @@ class OurFoeDoesNotWait extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch(context => ({
                 amount: 8,
                 deck: Decks.DynastyDeck,
-                faceup: true,
-                destination: context.target.location
+                gameAction: AbilityDsl.actions.moveCard({
+                    faceup: true,
+                    destination: context.target.location
+                }),
             }))
         });
     }
