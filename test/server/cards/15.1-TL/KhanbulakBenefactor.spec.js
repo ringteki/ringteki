@@ -12,9 +12,23 @@ describe('Khanbulak Benefactor', function() {
                 this.khanbulak = this.player1.placeCardInProvince('khanbulak-benefactor', 'province 1');
             });
 
-            it('should draw 2 cards when played from a province', function() {
+            it('should draw 2 cards when played from a province - fate', function() {
                 this.player1.clickCard(this.khanbulak);
                 this.player1.clickPrompt('1');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.khanbulak);
+
+                let hand = this.player1.hand.length;
+                this.player1.clickCard(this.khanbulak);
+                expect(this.player1.hand.length).toBe(hand + 2);
+
+                expect(this.getChatLogs(3)).toContain('player1 uses Khanbulak Benefactor to draw 2 cards');
+            });
+
+            it('should draw 2 cards when played from a province - no fate', function() {
+                this.player1.clickCard(this.khanbulak);
+                this.player1.clickPrompt('0');
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.khanbulak);
