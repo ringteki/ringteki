@@ -35,7 +35,7 @@ describe('Shiba Sophist', function() {
             it('should work if participating in the conflict', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.shibaSophistP1);
-                expect(this.player1).toHavePrompt('Select a card to reveal and put in your hand');
+                expect(this.player1).toHavePrompt('Select a card to reveal');
             });
 
             it('should prompt to choose from the top 5 cards for a card sharing a trait of the contested ring', function () {
@@ -66,7 +66,7 @@ describe('Shiba Sophist', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.shibaSophistP1);
                 this.player1.clickPrompt('Katana of Fire');
-                expect(this.getChatLogs(4)).toContain('player1 takes Katana of Fire and adds it to their hand');
+                expect(this.getChatLogs(4)).toContain('player1 takes Katana of Fire');
             });
 
             it('should add the chosen card to your hand', function() {

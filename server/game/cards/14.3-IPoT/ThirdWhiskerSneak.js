@@ -1,4 +1,5 @@
 const DrawCard = require('../../drawcard.js');
+const { Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class ThirdWhiskerSneak extends DrawCard {
@@ -22,7 +23,10 @@ class ThirdWhiskerSneak extends DrawCard {
             effectArgs: context => [context.source.controller.getProvinces(a => !a.isBroken).length],
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: (context) => context.source.controller.getProvinces(a => !a.isBroken).length,
-                reveal: false
+                reveal: false,
+                gameAction: AbilityDsl.actions.moveCard({
+                    destination: Locations.Hand
+                })
             })
         });
     }

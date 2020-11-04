@@ -57,13 +57,13 @@ describe('Favorable Dealbroker', function() {
                 expect(this.player1).not.toHavePromptButton('Honored General');
                 expect(this.player1).not.toHavePromptButton('Hida Kisada');
                 expect(this.player1).not.toHavePromptButton('Forgotten Library');
-                expect(this.player1).toHavePromptButton('Don\'t choose a character');
+                expect(this.player1).toHavePromptButton('Take nothing');
 
                 this.player1.clickPrompt('Hida Guardian');
                 expect(this.hidaGuardian.location).toBe('play area');
 
-                expect(this.getChatLogs(2)).toContain('player1 uses Favorable Dealbroker to search their dynasty deck for a character that costs 1 and put it into play');
-                expect(this.getChatLogs(1)).toContain('player1 is shuffling their dynasty deck');
+                expect(this.getChatLogs(5)).toContain('player1 uses Favorable Dealbroker to search their dynasty deck for a character that costs 1 and put it into play');
+                expect(this.getChatLogs(5)).toContain('player1 is shuffling their dynasty deck');
             });
 
             it('should trigger when put into play', function() {

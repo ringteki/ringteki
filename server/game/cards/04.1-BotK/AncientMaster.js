@@ -1,6 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const PlayAttachmentAction = require('../../playattachmentaction.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class PlayAncientMasterAsAttachment extends PlayAttachmentAction {
     constructor(card) {
@@ -28,7 +29,7 @@ class PlayAncientMasterAsAttachment extends PlayAttachmentAction {
 }
 
 class AncientMaster extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.abilities.playActions.push(new PlayAncientMasterAsAttachment(this));
         this.reaction({
             title: 'Search top 5 card for kiho or tattoo',
@@ -38,9 +39,12 @@ class AncientMaster extends DrawCard {
             },
             printedAbility: false,
             effect: 'look at the top five cards of their deck',
-            gameAction: ability.actions.deckSearch({
+            gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                cardCondition: card => card.hasTrait('kiho') || card.hasTrait('tattoo')
+                cardCondition: card => card.hasTrait('kiho') || card.hasTrait('tattoo'),
+                gameAction: AbilityDsl.actions.moveCard({
+                    destination: Locations.Hand
+                })
             })
         });
     }

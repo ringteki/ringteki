@@ -159,7 +159,7 @@ describe('Third Whisker Sneak', function() {
             this.player1.clickPrompt('Watch Commander');
 
             expect(this.getChatLogs(10)).toContain('player1 uses Third Whisker Sneak to look at the top 5 cards of their conflict deck');
-            expect(this.getChatLogs(10)).toContain('player1 takes a card into their hand');
+            expect(this.getChatLogs(10)).toContain('player1 takes 1 card');
             expect(this.getChatLogs(10)).toContain('player1 is shuffling their conflict deck');
         });
     });

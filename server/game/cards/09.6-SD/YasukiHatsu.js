@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class YasukiHatsu extends DrawCard {
@@ -10,7 +10,10 @@ class YasukiHatsu extends DrawCard {
             condition: context => context.source.isParticipating() && context.player.opponent && context.player.honor < context.player.opponent.honor,
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                cardCondition: card => card.type === CardTypes.Attachment
+                cardCondition: card => card.type === CardTypes.Attachment,
+                gameAction: AbilityDsl.actions.moveCard({
+                    destination: Locations.Hand
+                })
             })
         });
     }
