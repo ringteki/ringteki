@@ -15,6 +15,8 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     shuffle?: Boolean | ((context: AbilityContext) => Boolean);
     title?: String;
     gameAction?: GameAction;
+    message?: string;
+    messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
 }
@@ -79,7 +81,7 @@ export class DeckSearchAction extends PlayerAction {
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
         let { amount } = this.getProperties(context, additionalProperties) as DeckSearchProperties;        
-        let fAmount = this.getAmount(amount, context); 
+        let fAmount = this.getAmount(amount, context);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = fAmount;
     }
@@ -147,6 +149,7 @@ export class DeckSearchAction extends PlayerAction {
     }
 
     handleDone(properties : DeckSearchProperties, context, event, selectedCards) {
+        event.selectedCards = selectedCards;
         if (properties.selectedCardsHandler == null) {
             this.defaultHandleDone(properties, context, event, selectedCards);
         }
@@ -173,7 +176,14 @@ export class DeckSearchAction extends PlayerAction {
 
     defaultHandleDone(properties : DeckSearchProperties, context, event, selectedCards) {
         if (selectedCards.length > 0) {
-            if (properties.reveal) {
+            if (properties.message) {
+                let args = [];
+                if (properties.messageArgs) {
+                    args = properties.messageArgs(context, selectedCards);
+                }
+                context.game.addMessage(properties.message, ...args);
+            }
+            else if (properties.reveal) {
                 context.game.addMessage('{0} takes {1}', event.player, selectedCards);
             }
             else {

@@ -15,7 +15,6 @@ class TacticalIngenuity extends DrawCard {
                 gameAction: AbilityDsl.actions.deckSearch({
                     amount: 4,
                     cardCondition: card => card.type === CardTypes.Event,
-                    reveal: true,
                     gameAction: AbilityDsl.actions.moveCard({ 
                         destination: Locations.Hand
                     })

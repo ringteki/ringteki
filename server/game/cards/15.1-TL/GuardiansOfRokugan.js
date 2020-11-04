@@ -14,7 +14,6 @@ class GuardiansOfRokugan extends DrawCard {
                 amount: context => context.game.currentConflict.skillDifference,
                 deck: Decks.DynastyDeck,
                 cardCondition: (card, context) => card.type === CardTypes.Character && AbilityDsl.actions.putIntoPlay().canAffect(card, context) && card.costLessThan(context.game.currentConflict.skillDifference + 1),
-                reveal: true,
                 gameAction: AbilityDsl.actions.putIntoPlay(),
                 shuffle: context => context.game.currentConflict.skillDifference >= context.player.dynastyDeck.size(),
             })),

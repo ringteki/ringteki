@@ -10,7 +10,6 @@ class KaiuShihobu extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 cardCondition: card => card.type === CardTypes.Holding,
                 targetMode: TargetModes.Unlimited,
-                reveal: true,
                 deck: Decks.DynastyDeck,
                 selectedCardsHandler: (context, event, cards) => {
                     if(cards.length > 0) {

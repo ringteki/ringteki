@@ -10,7 +10,6 @@ class ShosuroHametsu extends DrawCard {
             effect: 'search conflict deck to reveal a poison card and add it to their hand',
             gameAction: AbilityDsl.actions.deckSearch({
                 cardCondition: card => card.hasTrait('poison'),
-                reveal: true,
                 gameAction: AbilityDsl.actions.moveCard({ 
                     destination: Locations.Hand
                 })
