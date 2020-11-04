@@ -10,12 +10,12 @@ class SecretCache extends ProvinceCard {
                 onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
             effect: 'look at the top 5 cards of their conflict deck',
-            gameAction: AbilityDsl.actions.deckSearch({ 
-                amount: 5, 
+            gameAction: AbilityDsl.actions.deckSearch({
+                amount: 5,
                 reveal: false,
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
-                }) 
+                })
             })
         });
     }

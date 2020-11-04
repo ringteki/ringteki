@@ -24,7 +24,7 @@ class OurFoeDoesNotWait extends DrawCard {
                 gameAction: AbilityDsl.actions.moveCard({
                     faceup: true,
                     destination: context.target.location
-                }),
+                })
             }))
         });
     }

@@ -11,7 +11,7 @@ class ShibaSophist extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
                 cardCondition: card => this.game.currentConflict.elements.some(element => card.hasTrait(element)),
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
             })

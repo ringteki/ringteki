@@ -11,7 +11,7 @@ class YasukiHatsu extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
                 cardCondition: card => card.type === CardTypes.Attachment,
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
             })

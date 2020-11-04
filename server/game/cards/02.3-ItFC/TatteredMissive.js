@@ -16,7 +16,7 @@ class TatteredMissive extends DrawCard {
             effect: 'look at the top 5 cards of their conflict deck',
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
             })

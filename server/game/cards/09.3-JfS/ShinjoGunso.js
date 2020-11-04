@@ -27,14 +27,14 @@ class ShinjoGunso extends DrawCard {
                         AbilityDsl.actions.putIntoPlay(),
                         AbilityDsl.actions.moveCard(context => ({
                             target: topFive.filter(a => {
-                                return !context.events[0].selectedCards.includes(a)
+                                return !context.events[0].selectedCards.includes(a);
                             }),
                             faceup: true,
-                            destination: Locations.DynastyDiscardPile,
+                            destination: Locations.DynastyDiscardPile
                         }))
                     ])
-                })
-            }),
+                });
+            })
             // gameAction: AbilityDsl.actions.cardMenu(context => ({
             //     activePromptTitle: 'Choose a character that costs 2 or less',
             //     cards: context.player.dynastyDeck.first(5),

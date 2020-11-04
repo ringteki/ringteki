@@ -24,7 +24,7 @@ class ThirdWhiskerSneak extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: (context) => context.source.controller.getProvinces(a => !a.isBroken).length,
                 reveal: false,
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
             })

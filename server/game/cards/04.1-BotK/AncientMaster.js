@@ -42,7 +42,7 @@ class AncientMaster extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
                 cardCondition: card => card.hasTrait('kiho') || card.hasTrait('tattoo'),
-                gameAction: AbilityDsl.actions.moveCard({ 
+                gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
             })
