@@ -169,7 +169,7 @@ describe('Know the Terrain', function() {
                 this.player2.clickCard(this.cache);
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 this.player2.clickCard(this.cache);
-                expect(this.player2).toHavePrompt('Select a card to put in your hand');
+                expect(this.player2).toHavePrompt('Select a card');
             });
         });
 

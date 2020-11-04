@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Locations, Decks} = require('../../Constants');
+const { CardTypes, Decks} = require('../../Constants');
 
 class DaughterOfWar extends DrawCard {
     setupCardAbilities() {
@@ -16,9 +16,7 @@ class DaughterOfWar extends DrawCard {
                 activePromptTitle: 'Choose a character to put into play ',
                 deck: Decks.DynastyDeck,
                 cardCondition: card => card.type === CardTypes.Character && card.costLessThan(context.source.parent.getCost()),
-                reveal: true,
-                faceup: true,
-                destination: Locations.PlayArea
+                gameAction: AbilityDsl.actions.putIntoPlay()
             })),
             effect: 'to search their deck for a character with cost less than {1} to put into play',
             effectArgs: context => [context.source.parent.getCost()]

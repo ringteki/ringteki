@@ -25,7 +25,7 @@ describe('Shosuro Hametsu', function() {
 
             it('should prompt for only poison cards', function() {
                 this.player1.clickCard(this.shosuroHametsu);
-                expect(this.player1).toHavePrompt('Select a card to reveal and put in your hand');
+                expect(this.player1).toHavePrompt('Select a card to reveal');
                 expect(this.player1).toHavePromptButton('Fiery Madness');
                 expect(this.player1).not.toHavePromptButton('Backhanded Compliment');
             });
@@ -42,7 +42,7 @@ describe('Shosuro Hametsu', function() {
                 this.player1.clickCard(this.shosuroHametsu);
                 this.player1.clickPrompt('Fiery Madness');
                 expect(this.getChatLogs(3)).toContain('player1 uses Shosuro Hametsu, losing 1 honor to search conflict deck to reveal a poison card and add it to their hand');
-                expect(this.getChatLogs(2)).toContain('player1 takes Fiery Madness and adds it to their hand');
+                expect(this.getChatLogs(2)).toContain('player1 takes Fiery Madness');
                 expect(this.getChatLogs(1)).toContain('player1 is shuffling their conflict deck');
             });
         });

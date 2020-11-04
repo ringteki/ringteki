@@ -198,7 +198,7 @@ describe('The Crashing Wave', function() {
                 this.player2.clickCard(this.endless);
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 this.player2.clickCard(this.cache);
-                expect(this.player2).toHavePrompt('Select a card to put in your hand');
+                expect(this.player2).toHavePrompt('Select a card');
             });
         });
 

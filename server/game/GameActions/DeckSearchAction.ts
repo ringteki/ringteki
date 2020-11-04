@@ -1,4 +1,5 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
+import { GameAction } from './GameAction';
 import { Locations, EventNames, TargetModes, Decks } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
@@ -10,11 +11,12 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     amount?: number | ((context: AbilityContext) => number);
     numCards?: number;
     reveal?: boolean;
-    faceup?: boolean;
-    destination?: Locations;
     deck?: Decks;
     shuffle?: Boolean | ((context: AbilityContext) => Boolean);
     title?: String;
+    gameAction?: GameAction;
+    message?: string;
+    messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
 }
@@ -27,12 +29,11 @@ export class DeckSearchAction extends PlayerAction {
         amount: -1,
         numCards: 1,
         targetMode: TargetModes.Single,
-        destination: Locations.Hand,
         deck: Decks.ConflictDeck,
         selectedCardsHandler: null,
         shuffle: true,
-        faceup: false,
-        reveal: true
+        reveal: true,
+        cardCondition: () => true
     };
 
     getAmount(amount, context) : number {
@@ -80,7 +81,7 @@ export class DeckSearchAction extends PlayerAction {
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
         let { amount } = this.getProperties(context, additionalProperties) as DeckSearchProperties;        
-        let fAmount = this.getAmount(amount, context); 
+        let fAmount = this.getAmount(amount, context);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = fAmount;
     }
@@ -118,14 +119,8 @@ export class DeckSearchAction extends PlayerAction {
         let title = properties.activePromptTitle;
         if (!properties.activePromptTitle) {
             title = 'Select a card' + (properties.reveal ? ' to reveal' : '');
-            if (properties.destination === Locations.Hand) {
-                title = 'Select a card to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
-            }
             if (selectAmount < 0 || selectAmount > 1) {
                 title = 'Select all cards' + (properties.reveal ? ' to reveal' : '');
-                if (properties.destination === Locations.Hand) {
-                    title = 'Select all cards to ' + (properties.reveal ? 'reveal and ' : '') + 'put in your hand';
-                }
             }
         }
 
@@ -133,7 +128,7 @@ export class DeckSearchAction extends PlayerAction {
             activePromptTitle: title,
             context: context,
             cards: cards,
-            cardCondition: properties.cardCondition,
+            cardCondition: (card, context) => properties.cardCondition(card, context) && (!properties.gameAction || properties.gameAction.canAffect(card, context, additionalProperties)),
             choices: canCancel ? (selectedCards.length > 0 ? ['Done'] : ['Take nothing']) : ([]),
             handlers: [() => {
                 this.handleDone(properties, context, event, selectedCards);
@@ -154,6 +149,7 @@ export class DeckSearchAction extends PlayerAction {
     }
 
     handleDone(properties : DeckSearchProperties, context, event, selectedCards) {
+        event.selectedCards = selectedCards;
         if (properties.selectedCardsHandler == null) {
             this.defaultHandleDone(properties, context, event, selectedCards);
         }
@@ -180,39 +176,29 @@ export class DeckSearchAction extends PlayerAction {
 
     defaultHandleDone(properties : DeckSearchProperties, context, event, selectedCards) {
         if (selectedCards.length > 0) {
-            if (properties.reveal) {
-                switch(properties.destination) {
-                    case Locations.Hand:
-                        context.game.addMessage('{0} takes {1} and adds {2} to their hand', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it');
-                        break;
-                    case Locations.PlayArea:
-                        context.game.addMessage('{0} puts {1} into play', event.player, selectedCards);
-                        break;
-                    default:
-                        context.game.addMessage('{0} selects {1} and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);
-                        break;
+            if (properties.message) {
+                let args = [];
+                if (properties.messageArgs) {
+                    args = properties.messageArgs(context, selectedCards);
                 }
+                context.game.addMessage(properties.message, ...args);
+            }
+            else if (properties.reveal) {
+                context.game.addMessage('{0} takes {1}', event.player, selectedCards);
             }
             else {
-                switch(properties.destination) {
-                    case Locations.Hand:
-                        context.game.addMessage('{0} takes {1} into their hand', event.player, selectedCards.length > 1 ? 'cards' : 'a card');
-                        break;
-                    case Locations.PlayArea:
-                        context.game.addMessage('{0} puts {1} into play', event.player, selectedCards.length > 1 ? 'cards' : 'a card');
-                        break;
-                    default:
-                        context.game.addMessage('{0} makes a selection and moves {2} to {3}', event.player, selectedCards, selectedCards.length > 1 ? 'them' : 'it', properties.destination);
-                        break;
-                }
+                context.game.addMessage('{0} takes {1} {2}', event.player, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
             }
 
-            selectedCards.forEach(card  => {
-                event.player.moveCard(card, properties.destination);
-                if(properties.faceup) {
-                    card.facedown = false;
-                }
-            });            
+            let { gameAction } = this.getProperties(event.context);
+            if(gameAction) {
+                gameAction.setDefaultTarget(() => selectedCards);
+                context.game.queueSimpleStep(() => {
+                    if(gameAction.hasLegalTarget(context)) {
+                        gameAction.resolve(null, context);
+                    }
+                });
+            }
         }
         else
             context.game.addMessage('{0} takes nothing', event.player);

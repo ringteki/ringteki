@@ -185,7 +185,7 @@ describe('Kansen Haunt', function() {
                         dynastyDiscard: ['kansen-haunt'],
                         honor: 10,
                         stronghold: 'shiro-kitsuki'
-                    },
+                    }
                 });
 
                 this.crane = this.player1.findCardByName('way-of-the-crane');

@@ -1,4 +1,5 @@
 import { GameAction, GameActionProperties } from './GameAction';
+import DrawCard = require('../drawcard');
 import AbilityContext = require('../AbilityContext');
 
 export interface HandlerProperties extends GameActionProperties {
@@ -13,6 +14,10 @@ export class HandlerAction extends GameAction {
     };
     
     hasLegalTarget(): boolean {
+        return true;
+    }
+
+    canAffect(card: DrawCard, context: AbilityContext): boolean {
         return true;
     }
 

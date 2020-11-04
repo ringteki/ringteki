@@ -83,7 +83,7 @@ describe('Guardians of Rokugan', function() {
             this.player2.clickCard(this.guardians);
             this.player2.clickPrompt('Brash Samurai');
             expect(this.getChatLogs(7)).toContain('player2 plays Guardians of Rokugan to look at the top 3 cards of their deck for a character costing 3 or less to put into play');
-            expect(this.getChatLogs(7)).toContain('player2 puts Brash Samurai into play');
+            expect(this.getChatLogs(7)).toContain('player2 takes Brash Samurai');
         });
 
         it('should not shuffle if you don\'t look at your whole deck', function() {
