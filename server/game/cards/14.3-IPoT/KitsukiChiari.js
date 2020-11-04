@@ -19,7 +19,7 @@ class KitsukiChiari extends DrawCard {
                         })),
                         AbilityDsl.actions.discardMatching(context => ({
                             target: context.player.opponent,
-                            cards: context.player.opponent.hand.shuffle().slice(0, 4).sort((a, b) => a.name.localeCompare(b.name)),
+                            cards: cards.sort((a, b) => a.name.localeCompare(b.name)),
                             amount: -1, //all
                             reveal: false,
                             match: (context, card) => card.name === context.costs.nameCardCost
