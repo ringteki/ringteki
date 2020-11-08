@@ -175,15 +175,16 @@ export class DeckSearchAction extends PlayerAction {
     }
 
     defaultHandleDone(properties : DeckSearchProperties, context, event, selectedCards) {
-        if (selectedCards.length > 0) {
-            if (properties.message) {
-                let args = [];
-                if (properties.messageArgs) {
-                    args = properties.messageArgs(context, selectedCards);
-                }
-                context.game.addMessage(properties.message, ...args);
+        if (properties.message) {
+            let args = [];
+            if (properties.messageArgs) {
+                args = properties.messageArgs(context, selectedCards);
             }
-            else if (properties.reveal) {
+            context.game.addMessage(properties.message, ...args);
+        }
+        
+        if (selectedCards.length > 0) {
+            if (properties.reveal) {
                 context.game.addMessage('{0} takes {1}', event.player, selectedCards);
             }
             else {

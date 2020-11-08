@@ -25,23 +25,6 @@ class UnyieldingSensei extends DrawCard {
                     destination: context.target.location
                 }))
             })
-            // handler: context => this.game.promptWithHandlerMenu(context.player, {
-            //     activePromptTitle: 'Choose a character',
-            //     context: context,
-            //     cardCondition: card => card.getType() === CardTypes.Character,
-            //     cards: context.player.dynastyDeck.first(2),
-            //     choices: ['Take nothing'],
-            //     handlers: [() => {
-            //         this.game.addMessage('{0} takes nothing', context.player);
-            //         return true;
-            //     }],
-            //     cardHandler: cardFromDeck => {
-            //         let provinceLocation = context.target.location;
-            //         context.player.moveCard(cardFromDeck, provinceLocation);
-            //         cardFromDeck.facedown = false;
-            //         this.game.addMessage('{0} puts {1} into {2}', context.player, cardFromDeck.name, context.target.isFacedown() ? 'a facedown province' : context.target.name);
-            //     }
-            // })
         });
     }
 }
