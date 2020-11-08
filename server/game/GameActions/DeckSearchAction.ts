@@ -92,8 +92,8 @@ export class DeckSearchAction extends PlayerAction {
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
-        let event = this.getEvent(context.player, context) as any;
         let player = context.player;
+        let event = this.getEvent(player, context) as any;
         let amount = event.amount > -1 ? event.amount : this.getDeck(player, properties).size();
         let cards = this.getDeck(player, properties).first(amount);
         if(event.amount === -1) {
@@ -102,11 +102,6 @@ export class DeckSearchAction extends PlayerAction {
         events.push(event);
         let selectedCards = [];
         this.selectCard(event, additionalProperties, cards, selectedCards);
-    }
-
-    eventHandler(event, additionalProperties): void {
-        // let selectedCards = [];
-        // this.selectCard(event, additionalProperties, cards, selectedCards);
     }
 
     selectCard(event, additionalProperties, cards, selectedCards) {
