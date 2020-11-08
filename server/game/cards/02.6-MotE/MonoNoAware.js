@@ -8,7 +8,7 @@ class MonoNoAware extends DrawCard {
             gameAction: [
                 ability.actions.draw(),
                 ability.actions.removeFate(() => ({
-                    target: this.game.findAnyCardsInPlay(card => card.fate > 0)
+                    target: this.game.findAnyCardsInPlay(card => card.getFate() > 0)
                 }))
             ],
             max: ability.limit.perRound(1)

@@ -25,7 +25,7 @@ class ReduceableFateCost {
 
     resolve(context, result) {
         let alternatePools = context.player.getAlternateFatePools(context.playType, context.source, context);
-        let alternatePoolTotal = alternatePools.reduce((total, pool) => total + pool.fate, 0);
+        let alternatePoolTotal = alternatePools.reduce((total, pool) => total + pool.getFate(), 0);
         let maxPlayerFate = context.player.checkRestrictions('spendFate', context) ? context.player.fate : 0;
         if(context.source.isTemptationsMaho()) {
             maxPlayerFate = 0;
@@ -55,9 +55,9 @@ class ReduceableFateCost {
                     return;
                 }
                 context.game.queueSimpleStep(() => {
-                    properties.remainingPoolTotal -= alternatePool.fate;
+                    properties.remainingPoolTotal -= alternatePool.getFate();
                     properties.minFate = Math.max(properties.reducedCost - maxPlayerFate - properties.remainingPoolTotal, 0);
-                    properties.maxFate = Math.min(alternatePool.fate, properties.reducedCost);
+                    properties.maxFate = Math.min(alternatePool.getFate(), properties.reducedCost);
                     properties.pool = alternatePool;
                     properties.numberOfChoices = properties.maxFate - properties.minFate + 1;
                     if(result.cancelled || properties.numberOfChoices === 0) {
@@ -77,9 +77,9 @@ class ReduceableFateCost {
             const cardPools = alternatePools.filter(a => a.printedType !== 'ring');
             for(const alternatePool of ringPools) {
                 context.game.queueSimpleStep(() => {
-                    properties.remainingPoolTotal -= alternatePool.fate;
+                    properties.remainingPoolTotal -= alternatePool.getFate();
                     properties.minFate = Math.max(properties.reducedCost - maxPlayerFate - properties.remainingPoolTotal, 0);
-                    properties.maxFate = Math.min(alternatePool.fate, properties.reducedCost);
+                    properties.maxFate = Math.min(alternatePool.getFate(), properties.reducedCost);
                     properties.pool = alternatePool;
                     properties.numberOfChoices = properties.maxFate - properties.minFate + 1;
                     if(result.cancelled || properties.numberOfChoices === 0) {

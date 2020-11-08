@@ -14,7 +14,7 @@ class WatchtowerOfSunsShadow extends DrawCard {
             },
             targetController: Players.Opponent,
             match: (card) => card.isAttacking(),
-            effect: AbilityDsl.effects.modifyBothSkills(card => -card.fate)
+            effect: AbilityDsl.effects.modifyBothSkills(card => -card.getFate())
         });
 
         this.forcedInterrupt({

@@ -28,7 +28,7 @@ class Chikara extends DrawCard {
                     cardCondition: card => card.isParticipating(),
                     gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.removeFate(context => ({
-                            amount: context.target.fate,
+                            amount: context.target.getFate(),
                             recipient: context.target.owner
                         })),
                         AbilityDsl.actions.sacrifice(context => ({
