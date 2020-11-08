@@ -21,8 +21,12 @@ class ShinjoGunso extends DrawCard {
                     amount: 5,
                     deck: Decks.DynastyDeck,
                     cardCondition: card => card.type === CardTypes.Character && card.printedCost <= 2,
-                    message: '{0} puts {1} into play and discards {2}',
-                    messageArgs: (context, cards) => [context.player, cards, topFive.filter(a => !cards.includes(a))],
+                    message: '{0} puts {1} into play{2}{3}',
+                    messageArgs: (context, cards) => {
+                        let discards = topFive.filter(a => !cards.includes(a));
+                        let card = cards.length > 0 ? cards : 'nothing';
+                        return [context.player, card, discards.length > 0 ? ' and discards ' : '', discards];
+                    },
                     gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.putIntoPlay(),
                         AbilityDsl.actions.moveCard(context => ({
@@ -35,31 +39,6 @@ class ShinjoGunso extends DrawCard {
                     ])
                 });
             })
-            // gameAction: AbilityDsl.actions.cardMenu(context => ({
-            //     activePromptTitle: 'Choose a character that costs 2 or less',
-            //     cards: context.player.dynastyDeck.first(5),
-            //     cardCondition: card => card.type === CardTypes.Character && card.printedCost <= 2,
-            //     choices: ['Don\'t choose a character'],
-            //     handlers: [
-            //         function() {
-            //             context.player.dynastyDeck.first(5).forEach(card => {
-            //                 context.player.moveCard(card, Locations.DynastyDiscardPile);
-            //             });
-            //             context.game.addMessage('{0} chooses not to put a character into play', context.player);
-            //         }
-            //     ],
-            //     subActionProperties: card => ({ target: card }),
-            //     message: '{0} chooses to put {1} into play',
-            //     messageArgs: (card, player) => [player, card],
-            //     gameAction: AbilityDsl.actions.sequential([
-            //         AbilityDsl.actions.putIntoPlay(),
-            //         AbilityDsl.actions.moveCard((context) => ({
-            //             target: context.player.dynastyDeck.first(4),
-            //             faceup: true,
-            //             destination: Locations.DynastyDiscardPile
-            //         }))
-            //     ])
-            // }))
         });
     }
 }

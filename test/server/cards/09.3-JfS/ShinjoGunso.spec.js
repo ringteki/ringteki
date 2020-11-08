@@ -44,6 +44,70 @@ describe('Shinjo Gunso', function() {
                 expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
                 expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
             });
+
+            it('should allow you to put a character into play from the top 5 cards', function() {
+                this.player1.clickCard(this.gunso);
+                this.player1.clickPrompt('0');
+                this.player1.clickCard(this.gunso);
+                expect(this.player1).toHaveDisabledPromptButton('Imperial Storehouse');
+                expect(this.player1).toHaveDisabledPromptButton('Favorable Ground');
+                expect(this.player1).toHaveDisabledPromptButton('Hida Kisada');
+                expect(this.player1).toHaveDisabledPromptButton('Borderlands Defender');
+                expect(this.player1).toHavePromptButton('Hida Guardian');
+
+                this.player1.clickPrompt('Hida Guardian');
+
+                expect(this.hidaGuardian.location).toBe('play area');
+                expect(this.storehouse.location).toBe('dynasty discard pile');
+                expect(this.favorableGround.location).toBe('dynasty discard pile');
+                expect(this.borderlands.location).toBe('dynasty discard pile');
+                expect(this.kisada.location).toBe('dynasty discard pile');
+                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
+                expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+            });
+
+            it('should work with less than 5 cards', function() {
+                this.player1.moveCard(this.storehouse, 'dynasty discard pile');
+                this.player1.moveCard(this.favorableGround, 'dynasty discard pile');
+                this.player1.moveCard(this.kisada, 'dynasty discard pile');
+                this.player1.moveCard(this.dealbroker, 'dynasty discard pile');
+
+                this.player1.clickCard(this.gunso);
+                this.player1.clickPrompt('0');
+                this.player1.clickCard(this.gunso);
+                expect(this.player1).toHavePromptButton('Hida Guardian');
+
+                this.player1.clickPrompt('Hida Guardian');
+
+                expect(this.hidaGuardian.location).toBe('play area');
+                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
+                expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Borderlands Defender');
+            });
+
+            it('should work with 0 cards', function() {
+                this.player1.moveCard(this.storehouse, 'dynasty discard pile');
+                this.player1.moveCard(this.favorableGround, 'dynasty discard pile');
+                this.player1.moveCard(this.kisada, 'dynasty discard pile');
+                this.player1.moveCard(this.dealbroker, 'dynasty discard pile');
+                this.player1.moveCard(this.borderlands, 'dynasty discard pile');
+                this.player1.moveCard(this.hidaGuardian, 'dynasty discard pile');
+
+                this.player1.clickCard(this.gunso);
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            });
+
+            it('should work if no cards can be put into play', function() {
+                this.player1.moveCard(this.hidaGuardian, 'dynasty discard pile');
+                this.player1.moveCard(this.dealbroker, 'dynasty deck');
+
+                this.player1.clickCard(this.gunso);
+                this.player1.clickPrompt('0');
+                this.player1.clickCard(this.gunso);
+                expect(this.player1).toHavePromptButton('Take nothing');
+                this.player1.clickPrompt('Take nothing');
+
+                expect(this.getChatLogs(5)).toContain('player1 puts nothing into play and discards Favorable Dealbroker, Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+            });
         });
     });
 });
