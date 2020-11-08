@@ -96,7 +96,7 @@ export class DeckSearchAction extends PlayerAction {
         let player = context.player;
         let amount = event.amount > -1 ? event.amount : this.getDeck(player, properties).size();
         let cards = this.getDeck(player, properties).first(amount);
-        if(properties.amount === -1) {
+        if(event.amount === -1) {
             cards = cards.filter(card => properties.cardCondition(card, context));
         }
         events.push(event);
