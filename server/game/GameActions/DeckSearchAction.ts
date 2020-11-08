@@ -182,15 +182,15 @@ export class DeckSearchAction extends PlayerAction {
             }
             context.game.addMessage(properties.message, ...args);
         }
-        
         if (selectedCards.length > 0) {
-            if (properties.reveal) {
-                context.game.addMessage('{0} takes {1}', event.player, selectedCards);
+            if (!properties.message) {
+                if (properties.reveal) {
+                    context.game.addMessage('{0} takes {1}', event.player, selectedCards);
+                }
+                else {
+                    context.game.addMessage('{0} takes {1} {2}', event.player, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
+                }
             }
-            else {
-                context.game.addMessage('{0} takes {1} {2}', event.player, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
-            }
-
             let { gameAction } = this.getProperties(event.context);
             if(gameAction) {
                 gameAction.setDefaultTarget(() => selectedCards);
@@ -201,7 +201,10 @@ export class DeckSearchAction extends PlayerAction {
                 });
             }
         }
-        else
-            context.game.addMessage('{0} takes nothing', event.player);
+        else {
+            if (!properties.message) {
+                context.game.addMessage('{0} takes nothing', event.player);
+            }            
+        }
     }
 }

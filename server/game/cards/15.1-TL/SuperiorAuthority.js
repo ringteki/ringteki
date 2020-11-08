@@ -7,7 +7,7 @@ class SuperiorAuthority extends DrawCard {
         this.action({
             title: 'Stop characters with 0 fate from contributing skill',
             condition: () => this.game.isDuringConflict(),
-            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+            gameAction: AbilityDsl.actions.conflictLastingEffect(context => ({
                 duration: Durations.UntilEndOfConflict,
                 effect: AbilityDsl.effects.cannotContribute(() => {
                     return card => card.getFate() === 0 && card.checkRestrictions('', context);
