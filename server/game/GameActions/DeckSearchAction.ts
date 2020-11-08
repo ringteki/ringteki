@@ -50,6 +50,10 @@ export class DeckSearchAction extends PlayerAction {
         return shuffle;
     }
 
+    hasLegalTarget(): boolean {
+        return true;
+    }
+
     getProperties(context: AbilityContext, additionalProperties = {}): DeckSearchProperties {
         let properties = super.getProperties(context, additionalProperties) as DeckSearchProperties;
         if(properties.reveal === undefined) {
@@ -86,18 +90,23 @@ export class DeckSearchAction extends PlayerAction {
         event.amount = fAmount;
     }
 
-    eventHandler(event, additionalProperties): void {
-        let context = event.context;
-        let player = event.player;
+    addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
+        let event = this.getEvent(context.player, context) as any;
+        let player = context.player;
         let amount = event.amount > -1 ? event.amount : this.getDeck(player, properties).size();
         let cards = this.getDeck(player, properties).first(amount);
-        if(event.amount === -1) {
+        if(properties.amount === -1) {
             cards = cards.filter(card => properties.cardCondition(card, context));
         }
-
+        events.push(event);
         let selectedCards = [];
         this.selectCard(event, additionalProperties, cards, selectedCards);
+    }
+
+    eventHandler(event, additionalProperties): void {
+        // let selectedCards = [];
+        // this.selectCard(event, additionalProperties, cards, selectedCards);
     }
 
     selectCard(event, additionalProperties, cards, selectedCards) {
@@ -181,30 +190,26 @@ export class DeckSearchAction extends PlayerAction {
                 args = properties.messageArgs(context, selectedCards);
             }
             context.game.addMessage(properties.message, ...args);
-        }
-        if (selectedCards.length > 0) {
-            if (!properties.message) {
+        } else {
+            if (selectedCards.length > 0) {
                 if (properties.reveal) {
                     context.game.addMessage('{0} takes {1}', event.player, selectedCards);
                 }
                 else {
                     context.game.addMessage('{0} takes {1} {2}', event.player, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
-                }
-            }
-            let { gameAction } = this.getProperties(event.context);
-            if(gameAction) {
-                gameAction.setDefaultTarget(() => selectedCards);
-                context.game.queueSimpleStep(() => {
-                    if(gameAction.hasLegalTarget(context)) {
-                        gameAction.resolve(null, context);
-                    }
-                });
+                }    
+            } else {
+                context.game.addMessage('{0} takes nothing', event.player);
             }
         }
-        else {
-            if (!properties.message) {
-                context.game.addMessage('{0} takes nothing', event.player);
-            }            
+        let { gameAction } = this.getProperties(event.context);
+        if(gameAction) {
+            gameAction.setDefaultTarget(() => selectedCards);
+            context.game.queueSimpleStep(() => {
+                if(gameAction.hasLegalTarget(context)) {
+                    gameAction.resolve(null, context);
+                }
+            });
         }
     }
 }
