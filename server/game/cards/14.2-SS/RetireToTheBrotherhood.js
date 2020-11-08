@@ -11,7 +11,7 @@ class RetireToTheBrotherhood extends ProvinceCard {
             },
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.discardFromPlay(context => ({
-                    target: context.player.cardsInPlay.filter(a => a.fate === 0).concat(context.player.opponent ? context.player.opponent.cardsInPlay.filter(a => a.fate === 0) : [])
+                    target: context.player.cardsInPlay.filter(a => a.getFate() === 0).concat(context.player.opponent ? context.player.opponent.cardsInPlay.filter(a => a.getFate() === 0) : [])
                 })),
                 AbilityDsl.actions.multiple([
                     AbilityDsl.actions.lookAt(context => ({

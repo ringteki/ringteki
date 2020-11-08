@@ -14,7 +14,7 @@ class UnfulfilledDuty extends DrawCard {
                 maxStat: () => 6,
                 numCards: 0,
                 cardType: CardTypes.Character,
-                cardCondition: card => card.fate === 0,
+                cardCondition: card => card.getFate() === 0,
                 gameAction: AbilityDsl.actions.ready()
             }
         });

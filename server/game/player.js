@@ -727,7 +727,7 @@ class Player extends GameObject {
 
     getAlternateFatePools(playingType, card, context) {
         let effects = this.getEffects(EffectNames.AlternateFatePool);
-        let alternateFatePools = effects.filter(match => match(card) && match(card).fate > 0).map(match => match(card));
+        let alternateFatePools = effects.filter(match => match(card) && match(card).getFate() > 0).map(match => match(card));
         let rings = alternateFatePools.filter(a => a.printedType === 'ring');
         let cards = alternateFatePools.filter(a => a.printedType !== 'ring');
         if((!this.checkRestrictions('takeFateFromRings', context)) || (context && context.source && context.source.isTemptationsMaho())) {
@@ -1329,6 +1329,10 @@ class Player extends GameObject {
      */
     getTotalHonor() {
         return this.honor;
+    }
+
+    getFate() {
+        return this.fate;
     }
 
     /**

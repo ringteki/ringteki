@@ -5,8 +5,7 @@ const { Locations } = require('../../Constants');
 class KeenWarrior extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Draw 3 cards and discard 1',
-            max: AbilityDsl.limit.perConflict(1),
+            title: 'Draw 2 cards and return 1',
             when: {
                 onCardRevealed: (event, context) => {
                     let cards = event.card;

@@ -141,7 +141,7 @@ export class GameAction {
 
     moveFateEventCondition(event): boolean {
         if(event.origin) {
-            if(event.origin.fate === 0) {
+            if(event.origin.getFate() === 0) {
                 return false;
             } else if(event.origin.type === CardTypes.Character && !event.origin.allowGameAction('removeFate', event.context)) {
                 return false;
@@ -157,7 +157,7 @@ export class GameAction {
 
     moveFateEventHandler(event): void {
         if(event.origin) {
-            event.fate = Math.min(event.fate, event.origin.fate);
+            event.fate = Math.min(event.fate, event.origin.getFate());
             event.origin.modifyFate(-event.fate);
         }
         if(event.recipient) {

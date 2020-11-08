@@ -6,7 +6,8 @@ const { EventNames } = require('../../Constants');
 
 class MotoChagatai extends DrawCard {
     setupCardAbilities() {
-        this.provinceBroken = false;
+        this.provinceBroken = {};
+
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnBreakProvince, EventNames.OnConflictFinished]);
 
@@ -16,18 +17,18 @@ class MotoChagatai extends DrawCard {
                 context.game.currentConflict &&
                 context.game.currentConflict.conflictProvince &&
                 context.game.currentConflict.conflictProvince.controller !== context.source.controller &&
-                this.provinceBroken
+                this.provinceBroken[context.source.controller.opponent.uuid]
             ),
             effect: AbilityDsl.effects.doesNotBow()
         });
     }
 
-    onBreakProvince() {
-        this.provinceBroken = true;
+    onBreakProvince(event) {
+        this.provinceBroken[event.card.controller.uuid] = true;
     }
 
     onConflictFinished() {
-        this.provinceBroken = false;
+        this.provinceBroken = {};
     }
 }
 

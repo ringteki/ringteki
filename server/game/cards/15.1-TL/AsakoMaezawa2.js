@@ -11,7 +11,7 @@ class AsakoMaezawa2 extends DrawCard {
             },
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: card => card.fate === 0,
+                cardCondition: card => card.getFate() === 0,
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.bow(),
                     AbilityDsl.actions.conditional({

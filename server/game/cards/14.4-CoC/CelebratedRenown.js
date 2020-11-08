@@ -11,7 +11,7 @@ class CelebratedRenown extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => {
                     let charactersInPlay = context.game.findAnyCardsInPlay(c => c.type === CardTypes.Character);
-                    return card.fate === Math.max(...charactersInPlay.map(c => c.fate));
+                    return card.getFate() === Math.max(...charactersInPlay.map(c => c.getFate()));
                 },
                 gameAction: AbilityDsl.actions.honor()
             }

@@ -13,12 +13,12 @@ class KarmicTwist extends DrawCard {
                 gameAction: AbilityDsl.actions.selectCard(context => ({
                     cardType: CardTypes.Character,
                     activePromptTitle: 'Choose a recipient character',
-                    cardCondition: (card, context) => !card.isUnique() && card.fate === 0 && card.controller === context.target.controller,
+                    cardCondition: (card, context) => !card.isUnique() && card.getFate() === 0 && card.controller === context.target.controller,
                     message: '{0} moves {1} fate from {2} to {3}',
-                    messageArgs: card => [context.player, context.target.fate, context.target, card],
+                    messageArgs: card => [context.player, context.target.getFate(), context.target, card],
                     gameAction: AbilityDsl.actions.placeFate({
                         origin: context.target,
-                        amount: context.target.fate
+                        amount: context.target.getFate()
                     })
                 }))
             },

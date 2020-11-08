@@ -10,7 +10,7 @@ class YasukiOguri2 extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 gameAction: AbilityDsl.actions.moveToConflict(),
-                cardCondition: card => card.fate > 0
+                cardCondition: card => card.getFate() > 0
             },
             cost: AbilityDsl.costs.payFate(1)
         });
