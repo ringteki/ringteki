@@ -3,9 +3,9 @@ const { Locations, CardTypes } = require('../Constants');
 
 class WaterRingEffect extends BaseAbility {
     constructor(optional = true, skirmishMode = false) {
-        let cardCondition = (card, context) => card.location === Locations.PlayArea && ((card.fate === 0 && card.allowGameAction('bow', context)) || card.bowed);
+        let cardCondition = (card, context) => card.location === Locations.PlayArea && ((card.getFate() === 0 && card.allowGameAction('bow', context)) || card.bowed);
         if(skirmishMode) {
-            cardCondition = (card, context) => card.location === Locations.PlayArea && card.fate <= 1 && !card.isParticipating() &&
+            cardCondition = (card, context) => card.location === Locations.PlayArea && card.getFate() <= 1 && !card.isParticipating() &&
                 (card.ready && card.allowGameAction('bow', context) || card.bowed && card.allowGameAction('ready', context));
         }
         super({

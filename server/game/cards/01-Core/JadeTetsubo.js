@@ -15,7 +15,7 @@ class JadeTetsubo extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.militarySkill < context.source.parent.militarySkill,
                 gameAction: ability.actions.removeFate(context => ({
-                    amount: context.target.fate,
+                    amount: context.target.getFate(),
                     recipient: context.target.owner
                 }))
             },
