@@ -24,6 +24,7 @@ class ShinjoGunso extends DrawCard {
                             deck: Decks.DynastyDeck,
                             cardCondition: card => card.type === CardTypes.Character && card.printedCost <= 2,
                             message: '{0} puts {1} into play{2}{3}',
+                            shuffle: false,
                             messageArgs: (context, cards) => {
                                 let discards = topFive.filter(a => !cards.includes(a));
                                 let card = cards.length > 0 ? cards : 'nothing';
