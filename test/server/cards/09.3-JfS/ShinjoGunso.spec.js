@@ -115,6 +115,12 @@ describe('Shinjo Gunso', function() {
                 expect(this.player1).toHavePromptButton('Take nothing');
                 this.player1.clickPrompt('Take nothing');
 
+                expect(this.dealbroker.location).toBe('dynasty discard pile');
+                expect(this.storehouse.location).toBe('dynasty discard pile');
+                expect(this.favorableGround.location).toBe('dynasty discard pile');
+                expect(this.borderlands.location).toBe('dynasty discard pile');
+                expect(this.kisada.location).toBe('dynasty discard pile');
+
                 expect(this.getChatLogs(5)).toContain('player1 puts nothing into play and discards Favorable Dealbroker, Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
             });
 
@@ -147,6 +153,15 @@ describe('Shinjo Gunso', function() {
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.gunso);
                 expect(this.player1).toHaveDisabledPromptButton('Shinjo Yasamura');
+            });
+
+            it('should not shuffle', function() {
+                this.player1.clickCard(this.gunso);
+                this.player1.clickPrompt('0');
+                this.player1.clickCard(this.gunso);
+                this.player1.clickPrompt('Hida Guardian');
+                expect(this.hidaGuardian.location).toBe('play area');
+                expect(this.getChatLogs(5)).not.toContain('player1 is shuffling their dynasty deck');
             });
         });
     });
