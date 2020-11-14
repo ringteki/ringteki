@@ -151,7 +151,7 @@ export enum EffectNames {
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
     LimitHonorGainPerPhase = "limitHonorGainPerPhase",
     RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
-    CostToDeclare = 'costToDeclare'
+    CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants'
 };
 
 export enum Durations {

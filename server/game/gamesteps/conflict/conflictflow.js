@@ -148,7 +148,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 this.game.openEventWindow(costEvents);
             }
             this.conflict.attackerDeclarationFailed = false;
-            const additionalCosts = this.conflict.attackingPlayer.getEffects(EffectNames.CostToDeclare).filter(properties => properties.type === 'attackers');
+            const additionalCosts = this.conflict.attackingPlayer.getEffects(EffectNames.CostToDeclareAnyParticipants).filter(properties => properties.type === 'attackers');
             if(additionalCosts.length > 0) {
                 for(const properties of additionalCosts) {
                     this.game.queueSimpleStep(() => {
@@ -351,7 +351,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     payDefendersCost() {
         if(this.conflict.defenders.length > 0) {
             this.conflict.defenderDeclarationFailed = false;
-            const additionalCosts = this.conflict.defendingPlayer.getEffects(EffectNames.CostToDeclare).filter(properties => properties.type === 'defenders');
+            const additionalCosts = this.conflict.defendingPlayer.getEffects(EffectNames.CostToDeclareAnyParticipants).filter(properties => properties.type === 'defenders');
             if(additionalCosts.length > 0) {
                 for(const properties of additionalCosts) {
                     this.game.queueSimpleStep(() => {

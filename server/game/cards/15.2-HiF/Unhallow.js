@@ -18,7 +18,7 @@ class Unhallow extends DrawCard {
             condition: (context) => context.source.parent && context.source.parent.isConflictProvince(),
             targetLocation: Locations.Provinces,
             targetController: Players.Self,
-            effect: AbilityDsl.effects.costToDeclare({
+            effect: AbilityDsl.effects.costToDeclareAnyParticipants({
                 type: 'defenders',
                 message: 'loses 1 honor',
                 cost: (player) => AbilityDsl.actions.loseHonor({
