@@ -59,6 +59,10 @@ class EffectEngine {
                         if(typeof messageArgs === 'function') {
                             messageArgs = messageArgs(context);
                         }
+                        let targetPlaceholder = messageArgs.indexOf('populate-target');
+                        if(targetPlaceholder >= 0) {
+                            messageArgs[targetPlaceholder] = targets;
+                        }
                         this.game.addMessage(properties.message, ...messageArgs);
                     }
                     const actionEvents = [];

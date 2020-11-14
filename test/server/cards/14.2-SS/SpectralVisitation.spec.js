@@ -146,6 +146,8 @@ describe('Spectral Visitation', function() {
             this.player2.clickPrompt('Military');
             expect(this.game.currentPhase).toBe('fate');
             expect(this.yoshi.location).toBe('dynasty deck');
+
+            expect(this.getChatLogs(5)).toContain('Kakita Yoshi returns to the bottom of the deck due to Spectral Visitation\'s effect');
         });
     });
 });
