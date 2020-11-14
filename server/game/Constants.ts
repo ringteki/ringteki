@@ -150,7 +150,8 @@ export enum EffectNames {
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
     LimitHonorGainPerPhase = "limitHonorGainPerPhase",
-    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay"
+    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
+    CostToDeclare = 'costToDeclare'
 };
 
 export enum Durations {
