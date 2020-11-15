@@ -8,7 +8,7 @@ class RightHandOfTheEmperor extends DrawCard {
         this.persistentEffect({
             condition: context => context.player.opponent && context.player.honor > context.player.opponent.honor,
             location: Locations.ConflictDiscardPile,
-            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], PlayTypes.Other)
+            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
         });
         this.action({
             title: 'Ready characters',

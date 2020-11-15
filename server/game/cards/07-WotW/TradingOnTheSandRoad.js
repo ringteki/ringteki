@@ -26,10 +26,10 @@ class TradingOnTheSandRoad extends DrawCard {
                     targetController: context.player,
                     duration: Durations.UntilEndOfRound,
                     effect: [
-                        AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, context.player.conflictDeck.first(4)),
+                        AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, context.player.conflictDeck.first(4), this),
                         AbilityDsl.effects.canPlayFromOpponents(
                             Locations.RemovedFromGame,
-                            context.player.opponent ? context.player.opponent.conflictDeck.first(4) : [])
+                            context.player.opponent ? context.player.opponent.conflictDeck.first(4) : [], this)
                     ]
 
                 })),
@@ -38,10 +38,11 @@ class TradingOnTheSandRoad extends DrawCard {
                     duration: Durations.UntilEndOfRound,
                     effect: [
                         AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame,
-                            context.player.opponent ? context.player.opponent.conflictDeck.first(4) : []),
+                            context.player.opponent ? context.player.opponent.conflictDeck.first(4) : [], this),
                         AbilityDsl.effects.canPlayFromOpponents(
                             Locations.RemovedFromGame,
-                            context.player.opponent ? context.player.conflictDeck.first(4) : []
+                            context.player.opponent ? context.player.conflictDeck.first(4) : [],
+                            this
                         )
                     ]
                 })),

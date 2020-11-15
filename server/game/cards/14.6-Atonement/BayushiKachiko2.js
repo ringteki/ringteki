@@ -20,7 +20,7 @@ class BayushiKachiko2 extends DrawCard {
                         }
                         this.mostRecentEvent = event;
                         return (event.originalLocation === Locations.ConflictDiscardPile && event.card.owner === context.player.opponent &&
-                        event.card.type === CardTypes.Event && !event.onPlayCardSource &&
+                        event.card.type === CardTypes.Event && !event.onPlayCardSource && !event.card.fromOutOfPlaySource &&
                         event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDiscard &&
                         context.game.isDuringConflict('political') && context.source.isParticipating());
                     }

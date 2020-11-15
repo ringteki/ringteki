@@ -13,6 +13,7 @@ class InvokeTheDivine extends DrawCard {
             gameAction: AbilityDsl.actions.playCard(invokeContext => ({
                 resetOnCancel: true,
                 payCosts: false,
+                source: this,
                 postHandler: context => {
                     if(spellsCast < 2) {
                         getSelectCardAction(fate - context.source.getCost(), spellsCast + 1).resolve(null, invokeContext);

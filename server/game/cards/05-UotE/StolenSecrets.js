@@ -33,7 +33,7 @@ class StolenSecrets extends DrawCard {
             match: card,
             effect: [
                 ability.effects.hideWhenFaceUp(),
-                ability.effects.canPlayFromOwn(Locations.RemovedFromGame, [card])
+                ability.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)
             ]
         }));
         this.game.checkGameState();
