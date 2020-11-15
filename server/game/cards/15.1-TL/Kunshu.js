@@ -23,7 +23,8 @@ class Kunshu extends DrawCard {
                     controller: Players.Opponent,
                     gameAction: AbilityDsl.actions.playCard(() => ({
                         playType: PlayTypes.Other,
-                        ignoreFateCost: true
+                        ignoreFateCost: true,
+                        source: 'kunshu'
                     }))
                 },
                 effect: 'play {0}'

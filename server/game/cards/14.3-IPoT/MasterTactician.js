@@ -19,7 +19,7 @@ class MasterTactician extends DrawCard {
                             return false;
                         }
                         this.mostRecentEvent = event;
-                        return (event.originalLocation === Locations.ConflictDeck &&
+                        return (event.originalLocation === Locations.ConflictDeck && !event.onPlayCardSource &&
                         event.originallyOnTopOfConflictDeck && event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDeck &&
                         context.source.isParticipating()) && context.game.isTraitInPlay('battlefield');
                     }

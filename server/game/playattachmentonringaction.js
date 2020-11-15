@@ -44,6 +44,7 @@ class PlayAttachmentToRingAction extends BaseAction {
             context: context,
             originalLocation: context.source.location,
             originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
+            onPlayCardSource: context.onPlayCardSource,
             playType: PlayTypes.PlayFromHand
         });
         context.game.openEventWindow([context.game.actions.attachToRing({attachment: context.source}).getEvent(context.ring, context), cardPlayedEvent]);
