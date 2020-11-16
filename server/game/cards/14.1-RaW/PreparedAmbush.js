@@ -1,7 +1,7 @@
 const BattlefieldAttachment = require('../BattlefieldAttachment');
 const AbilityDsl = require('../../abilitydsl');
 const PlayCharacterAction = require('../../playcharacteraction');
-const { Locations, PlayTypes, CardTypes } = require('../../Constants');
+const { Locations, PlayTypes } = require('../../Constants');
 
 class PreparedAmbushPlayAction extends PlayCharacterAction {
     constructor(card) {
