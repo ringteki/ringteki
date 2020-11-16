@@ -40,8 +40,6 @@ describe('Steward of Cryptic Lore', function() {
                 defenders: []
             });
             this.player2.clickCard(this.steward);
-            expect(this.player2).toBeAbleToSelect(this.fields);
-            this.player2.clickCard(this.fields);
             expect(this.player2).toHavePromptButton('Province gets +3 strength');
             expect(this.player2).toHavePromptButton('Province gets -3 strength');
             this.player2.clickPrompt('Province gets +3 strength');
@@ -58,7 +56,9 @@ describe('Steward of Cryptic Lore', function() {
                 attackers: [this.chronicler],
                 defenders: []
             });
-            expect(this.player2).not.toBeAbleToSelect(this.steward);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.steward);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
         it('dire effect - should have +3 political strength', function() {
@@ -87,8 +87,6 @@ describe('Steward of Cryptic Lore', function() {
             });
             this.player1.pass();
             this.player2.clickCard(this.steward);
-            expect(this.player2).toBeAbleToSelect(this.assault);
-            this.player2.clickCard(this.assault);
             expect(this.player2).toHavePromptButton('Province gets +3 strength');
             expect(this.player2).toHavePromptButton('Province gets -3 strength');
             this.player2.clickPrompt('Province gets -3 strength');
