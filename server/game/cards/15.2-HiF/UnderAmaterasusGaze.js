@@ -1,12 +1,10 @@
 const AbilityDsl = require('../../abilitydsl');
-const DrawCard = require('../../drawcard.js');
-const { CardTypes, Players, PlayTypes } = require('../../Constants');
+const BattlefieldAttachment = require('../BattlefieldAttachment');
+const { Players, PlayTypes } = require('../../Constants');
 
-class UnderAmaterasusGaze extends DrawCard {
+class UnderAmaterasusGaze extends BattlefieldAttachment {
     setupCardAbilities() {
-        this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 }
-        });
+        super.setupCardAbilities();
 
         this.persistentEffect({
             condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince() &&
@@ -27,18 +25,6 @@ class UnderAmaterasusGaze extends DrawCard {
                 playingTypes: PlayTypes.PlayFromHand
             })
         });
-    }
-
-    canPlayOn(source) {
-        return source && source.getType() === 'province' && !source.isBroken && this.getType() === CardTypes.Attachment;
-    }
-
-    canAttach(parent) {
-        if(parent.type === CardTypes.Province && parent.isBroken) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }
 

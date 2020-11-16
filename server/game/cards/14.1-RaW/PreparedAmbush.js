@@ -1,4 +1,4 @@
-const DrawCard = require('../../drawcard.js');
+const BattlefieldAttachment = require('../BattlefieldAttachment');
 const AbilityDsl = require('../../abilitydsl');
 const PlayCharacterAction = require('../../playcharacteraction');
 const { Locations, PlayTypes, CardTypes } = require('../../Constants');
@@ -20,11 +20,9 @@ class PreparedAmbushPlayAction extends PlayCharacterAction {
     }
 }
 
-class PreparedAmbush extends DrawCard {
+class PreparedAmbush extends BattlefieldAttachment {
     setupCardAbilities() {
-        this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 }
-        });
+        super.setupCardAbilities();
 
         this.persistentEffect({
             condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
@@ -32,18 +30,6 @@ class PreparedAmbush extends DrawCard {
             match: card => card.isDynasty && card.isFaceup(),
             effect: AbilityDsl.effects.gainPlayAction(PreparedAmbushPlayAction)
         });
-    }
-
-    canPlayOn(source) {
-        return source && source.getType() === 'province' && !source.isBroken && this.getType() === CardTypes.Attachment;
-    }
-
-    canAttach(parent) {
-        if(parent.type === CardTypes.Province && parent.isBroken) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }
 
