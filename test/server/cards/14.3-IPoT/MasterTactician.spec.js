@@ -705,29 +705,29 @@ describe('Master Tactician - Pillow Book', function() {
             expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
         });
 
-        // it('Pillow Book should not use up a Master Tactician use - currently fails', function () {
-        //     this.player1.clickCard(this.ambush);
-        //     this.player1.clickCard(this.province);
-        //     this.player2.pass();
-        //     this.player1.playAttachment(this.book, this.tactician);
-        //     this.noMoreActions();
-        //     this.initiateConflict({
-        //         type: 'military',
-        //         attackers: [this.tactician],
-        //         defenders: []
-        //     });
-        //     this.player2.pass();
+        it('Pillow Book should not use up a Master Tactician use', function () {
+            this.player1.clickCard(this.ambush);
+            this.player1.clickCard(this.province);
+            this.player2.pass();
+            this.player1.playAttachment(this.book, this.tactician);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.tactician],
+                defenders: []
+            });
+            this.player2.pass();
 
-        //     this.player1.clickCard(this.book);
+            this.player1.clickCard(this.book);
 
-        //     this.player2.pass();
+            this.player2.pass();
 
-        //     this.player1.clickCard(this.tactical);
-        //     this.player1.clickCard(this.tactician);
-        //     expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            this.player1.clickCard(this.tactical);
+            this.player1.clickCard(this.tactician);
+            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
 
-        //     expect(this.getChatLogs(3)).not.toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
-        // });
+            expect(this.getChatLogs(3)).not.toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
+        });
     });
 });
 

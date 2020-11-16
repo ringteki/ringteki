@@ -52,6 +52,7 @@ class VoiceOfTheAncestors extends DrawCard {
                         ]
                     }),
                     AbilityDsl.actions.playCard(context => ({
+                        source: this,
                         playCardTarget: attachContext => {
                             attachContext.target = context.target;
                             attachContext.targets.target = context.targets.target;

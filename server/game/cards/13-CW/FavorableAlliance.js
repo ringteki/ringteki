@@ -34,7 +34,7 @@ class FavorableAlliance extends DrawCard {
                                 },
                                 match: card,
                                 effect: [
-                                    AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card])
+                                    AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)
                                 ]
                             }));
                         });

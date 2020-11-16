@@ -13,14 +13,14 @@ class WayfarersCamp extends DrawCard {
                     cardType: CardTypes.Character,
                     location: Locations.Provinces,
                     controller: Players.Self,
-                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true })
+                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true, source: this })
                 }),
                 AbilityDsl.actions.selectCard({
                     activePromptTitle: 'Choose a character to play',
                     cardType: CardTypes.Character,
                     location: Locations.Provinces,
                     controller: Players.Self,
-                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true })
+                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true, source: this })
                 }),
                 AbilityDsl.actions.selectCard({
                     activePromptTitle: 'Choose a card to turn faceup',

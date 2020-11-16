@@ -40,6 +40,7 @@ class PlayCharacterAction extends BaseAction {
             context: context,
             originalLocation: context.source.location,
             originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
+            onPlayCardSource: context.onPlayCardSource,
             playType: PlayTypes.PlayFromHand
         });
         let putIntoPlayHandler = () => {

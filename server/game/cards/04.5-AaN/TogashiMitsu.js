@@ -11,6 +11,7 @@ class TogashiMitsu extends DrawCard {
                 controller: Players.Self,
                 cardCondition: card => card.hasTrait('monk') || card.hasTrait('kiho') || card.hasTrait('tattoo'),
                 gameAction: ability.actions.playCard({
+                    source: this,
                     playType: PlayTypes.PlayFromHand,
                     destination: Locations.ConflictDeck,
                     destinationOptions: { bottom: true }

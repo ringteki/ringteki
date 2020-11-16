@@ -4,8 +4,6 @@ const { TargetModes, Durations, Locations, Decks } = require('../../Constants');
 
 class MasterpiecePainter extends DrawCard {
     setupCardAbilities() {
-        const revealAndMayPlayAbility = revealAndMayPlay.bind(this);
-
         this.action({
             title: 'Reveal and may play top conflict card',
             target: {
@@ -13,11 +11,11 @@ class MasterpiecePainter extends DrawCard {
                 targets: true,
                 activePromptTitle: 'Choose any number of players',
                 choices: {
-                    [this.owner.name]: revealAndMayPlayAbility(this.owner),
-                    [this.owner.opponent && this.owner.opponent.name || 'NA']: revealAndMayPlayAbility(this.owner.opponent),
+                    [this.owner.name]: this.revealAndMayPlayAbility(this.owner),
+                    [this.owner.opponent && this.owner.opponent.name || 'NA']: this.revealAndMayPlayAbility(this.owner.opponent),
                     [this.owner.name + ' and ' + (this.owner.opponent && this.owner.opponent.name || 'NA')]: AbilityDsl.actions.multiple([
-                        revealAndMayPlayAbility(this.owner),
-                        revealAndMayPlayAbility(this.owner.opponent)
+                        this.revealAndMayPlayAbility(this.owner),
+                        this.revealAndMayPlayAbility(this.owner.opponent)
                     ])
                 }
             },
@@ -25,26 +23,28 @@ class MasterpiecePainter extends DrawCard {
             effectArgs: context => context.select
         });
     }
+
+    revealAndMayPlayAbility(player) {
+        return AbilityDsl.actions.playerLastingEffect(() => {
+            let chosenPlayer = player;
+            let topCard = chosenPlayer.conflictDeck.first();
+
+            return {
+                targetController: player,
+                duration: Durations.Custom,
+                until: {
+                    onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
+                    onPhaseEnded: () => true,
+                    onDeckShuffled: event => event.player === chosenPlayer && event.deck === Decks.ConflictDeck
+                },
+                effect: [
+                    AbilityDsl.effects.showTopConflictCard(),
+                    AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard], this)
+                ]
+            };
+        });
+    }
 }
-
-const revealAndMayPlay = (player) => AbilityDsl.actions.playerLastingEffect(() => {
-    let chosenPlayer = player;
-    let topCard = chosenPlayer.conflictDeck.first();
-
-    return {
-        targetController: player,
-        duration: Durations.Custom,
-        until: {
-            onCardMoved: event => event.card === topCard && event.originalLocation === Locations.ConflictDeck,
-            onPhaseEnded: () => true,
-            onDeckShuffled: event => event.player === chosenPlayer && event.deck === Decks.ConflictDeck
-        },
-        effect: [
-            AbilityDsl.effects.showTopConflictCard(),
-            AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard])
-        ]
-    };
-});
 
 MasterpiecePainter.id = 'masterpiece-painter';
 

@@ -12,6 +12,7 @@ class WarmWelcome extends DrawCard {
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.playCard(context => ({
+                        source: this,
                         target: context.target,
                         playType: PlayTypes.PlayFromHand
                     })),
