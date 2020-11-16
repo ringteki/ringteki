@@ -111,7 +111,7 @@ const Costs = {
      */
     breakSelf: () => new GameActionCost(GameActions.break()),
     /**
-     * Cost that requires dishonoring a card to be selected by the player
+     * Cost that requires breaking a province selected by the player
      */
     breakProvince: properties => getSelectCost(GameActions.break(), properties, 'Select a province to break'),
     /**
