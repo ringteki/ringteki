@@ -112,16 +112,20 @@ class ProvinceCard extends BaseCard {
                 dynastyCards.forEach(dynastyCard => {
                     if(dynastyCard) {
                         let promptTitle = 'Do you wish to discard ' + (dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name) + '?';
-                        this.game.promptWithHandlerMenu(this.controller.opponent, {
+                        let choosingPlayer = this.controller.opponent;
+                        if(this.game.isDuringConflict() && this.game.currentConflict && this.game.currentConflict.attackingPlayer) {
+                            choosingPlayer = this.game.currentConflict.attackingPlayer;
+                        }
+                        this.game.promptWithHandlerMenu(choosingPlayer, {
                             activePromptTitle: promptTitle,
                             source: 'Break ' + this.name,
                             choices: ['Yes', 'No'],
                             handlers: [
                                 () => {
-                                    this.game.addMessage('{0} chooses to discard {1}', this.controller.opponent, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard);
+                                    this.game.addMessage('{0} chooses to discard {1}', choosingPlayer, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard);
                                     this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
                                 },
-                                () => this.game.addMessage('{0} chooses not to discard {1}', this.controller.opponent, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard)
+                                () => this.game.addMessage('{0} chooses not to discard {1}', choosingPlayer, dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard)
                             ]
                         });
                     }
