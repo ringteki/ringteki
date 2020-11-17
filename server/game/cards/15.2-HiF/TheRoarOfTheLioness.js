@@ -1,9 +1,10 @@
 const ProvinceCard = require('../../provincecard.js');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class TheRoarOfTheLioness extends ProvinceCard {
-    setupCardAbilities(ability) { // eslint-disable-line no-unused-vars
+    setupCardAbilities() { // eslint-disable-line no-unused-vars
         this.persistentEffect({
-            effect: ability.effects.modifyBaseProvinceStrength(card => Math.round(card.controller.honor / 2))
+            effect: AbilityDsl.effects.modifyBaseProvinceStrength(card => Math.round(card.controller.honor / 2))
         });
     }
 }
