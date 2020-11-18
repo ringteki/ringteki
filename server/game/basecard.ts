@@ -290,7 +290,7 @@ class BaseCard extends EffectSource {
     isInProvince(): boolean {
         return this.game.getProvinceArray().includes(this.location);
     }
-    
+
     isInPlay(): boolean {
         if(this.isFacedown()) {
             return false;
@@ -734,7 +734,7 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
-    
+
     setPersonalHonor(token) {
         if(this.personalHonor && token !== this.personalHonor) {
             this.personalHonor.setCard(null);
@@ -761,6 +761,10 @@ class BaseCard extends EffectSource {
 
     get isDishonored() {
         return !!this.personalHonor && !!this.personalHonor.dishonored;
+    }
+
+    isOrdinary() {
+        return !this.isDishonored && !this.isHonored;
     }
 
     dishonor() {
