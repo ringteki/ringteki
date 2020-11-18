@@ -1,4 +1,4 @@
-describe('Steward of Cryptic Lore', function() {
+describe('Perfect Land Believer', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
