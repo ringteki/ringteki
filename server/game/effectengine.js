@@ -57,11 +57,7 @@ class EffectEngine {
                     if(properties.message && properties.gameAction.hasLegalTarget(context)) {
                         let messageArgs = properties.messageArgs || [];
                         if(typeof messageArgs === 'function') {
-                            messageArgs = messageArgs(context);
-                        }
-                        let targetPlaceholder = messageArgs.indexOf('populate-target');
-                        if(targetPlaceholder >= 0) {
-                            messageArgs[targetPlaceholder] = targets;
+                            messageArgs = messageArgs(context, targets);
                         }
                         this.game.addMessage(properties.message, ...messageArgs);
                     }

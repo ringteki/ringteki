@@ -3,7 +3,13 @@ const AbilityDsl = require('../../abilitydsl');
 const { CardTypes, Locations, Players, Durations } = require('../../Constants');
 
 const spectralVisitationCost = () => ({
-    action: { name: 'spectralVisitationCost', getCostMessage: () => ['discard the top 4 dynasty cards', []] },
+    action: { name: 'spectralVisitationCost' },
+    getActionName(context) { // eslint-disable-line no-unused-vars
+        return 'spectralVisitationCost';
+    },
+    getCostMessage: function (context) { // eslint-disable-line no-unused-vars
+        return ['discarding {0}'];
+    },
     canPay: function (context) {
         return context.player.dynastyDeck.size() >= 4;
     },
@@ -45,7 +51,7 @@ class SpectralVisitation extends ProvinceCard {
                                     onPhaseEnded: () => true
                                 },
                                 message: '{0} returns to the bottom of the deck due to {1}\'s effect',
-                                messageArgs: ['populate-target', context.source],
+                                messageArgs: (effectContext, effectTargets) => [effectTargets, context.source],
                                 gameAction: AbilityDsl.actions.returnToDeck({ bottom: true })
                             })
                         }))
@@ -53,7 +59,8 @@ class SpectralVisitation extends ProvinceCard {
                     message: '{0} puts {1} into play. {1} will be put on the bottom of the deck if it\'s still in play by the end of the phase',
                     messageArgs: card => [context.player, card, context.source]
                 }))
-            ])
+            ]),
+            effect: 'put a dynasty character into play'
         });
     }
 }
