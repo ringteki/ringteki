@@ -11,6 +11,8 @@ class CourteousScheming extends DrawCard {
             initiateDuel: () => ({
                 type: DuelTypes.Political,
                 opponentChoosesDuelTarget: true,
+                message: 'allow {0} to declare an additional political conflict this phase',
+                messageArgs: duel => [duel.winner ? duel.winner.controller : ''],
                 gameAction: duel =>
                     duel.winner &&
                     ability.actions.playerLastingEffect({

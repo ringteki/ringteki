@@ -66,6 +66,7 @@ describe('Hisu Mori Toride', function() {
                 expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
                 expect(this.borderRider.location).toBe('dynasty discard pile');
                 expect(this.hisuMoriToride.bowed).toBe(true);
+                expect(this.getChatLogs(10)).toContain('player1 uses Hisu Mori Toride, bowing Hisu Mori Toride and sacrificing Border Rider to allow player1 to declare an additional military conflict this phase');
             });
 
             it('should give the triggering player an additional military conflict', function() {

@@ -44,6 +44,8 @@ describe('Kakita Yuri', function() {
                 this.player2.clickCard(this.iuchiFarseer);
                 this.player1.clickPrompt('5');
                 this.player2.clickPrompt('1');
+                expect(this.getChatLogs(10)).toContain('Duel Effect: prevent player2 from declaring military conflicts this phase');
+
                 this.noMoreActions();
                 this.noMoreActions();
                 expect(this.player2).toHavePrompt('Initiate Conflict');

@@ -5,6 +5,8 @@ class HisuMoriToride extends StrongholdCard {
     setupCardAbilities(ability) {
         this.reaction({
             title: 'Gain additional military conflict',
+            effect: 'allow {1} to declare an additional military conflict this phase',
+            effectArgs: context => [context.player],
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictType === 'military' &&
                                                    event.conflict.skillDifference >= 5

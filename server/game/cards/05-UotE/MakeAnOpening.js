@@ -21,7 +21,9 @@ class MakeAnOpening extends DrawCard {
                 gameAction: ability.actions.cardLastingEffect(context => ({
                     effect: ability.effects.modifyBothSkills(-(this.getHonorDialDifference(context)))
                 }))
-            }
+            },
+            effect: 'give {0} -{1}{2}/-{1}{3}',
+            effectArgs: context => [this.getHonorDialDifference(context), 'military', 'political']
         });
     }
 
