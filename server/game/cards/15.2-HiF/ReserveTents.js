@@ -14,7 +14,7 @@ class ReserveTents extends DrawCard {
                 player: Players.Self,
                 gameAction: AbilityDsl.actions.moveToConflict()
             }
-        })
+        });
     }
 }
 
