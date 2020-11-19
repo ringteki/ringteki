@@ -763,10 +763,6 @@ class BaseCard extends EffectSource {
         return !!this.personalHonor && !!this.personalHonor.dishonored;
     }
 
-    isOrdinary() {
-        return !this.isDishonored && !this.isHonored;
-    }
-
     dishonor() {
         if(this.isDishonored) {
             return;
