@@ -763,10 +763,6 @@ class BaseCard extends EffectSource {
         return !!this.personalHonor && !!this.personalHonor.dishonored;
     }
 
-    isOrdinary() {
-        return !this.isDishonored && !this.isHonored;
-    }
-
     dishonor() {
         if(this.isDishonored) {
             return;
@@ -779,6 +775,10 @@ class BaseCard extends EffectSource {
 
     makeOrdinary() {
         this.setPersonalHonor(null);
+    }
+
+    isOrdinary() {
+        return !this.isHonored && !this.isDishonored;
     }
 
     getShortSummaryForControls(activePlayer) {
