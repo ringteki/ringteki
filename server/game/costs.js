@@ -119,6 +119,10 @@ const Costs = {
      */
     putSelfIntoPlay: () => new GameActionCost(GameActions.putIntoPlay()),
     /**
+     * Cost that will prompt for a card
+     */
+    selectedReveal: properties => getSelectCost(GameActions.reveal(), properties, `Select a ${properties.cardType || 'card'} to reveal`),
+    /**
      * Cost that will reveal specific cards
      */
     reveal: (cardFunc) => new GameActionCost(GameActions.reveal(context => ({ target: cardFunc(context) }))),

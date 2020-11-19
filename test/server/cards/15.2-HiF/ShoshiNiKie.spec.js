@@ -33,6 +33,7 @@ describe('Shoshi Ni Kie', function() {
             this.chronicler.bow();
             this.levy.bow();
             this.steward.bow();
+            this.mystic.bow();
 
             this.player1.clickCard(this.snk);
 
@@ -41,7 +42,7 @@ describe('Shoshi Ni Kie', function() {
             expect(this.player1).not.toBeAbleToSelect(this.chronicler); //honored
             expect(this.player1).toBeAbleToSelect(this.levy); //ordinary
             expect(this.player1).not.toBeAbleToSelect(this.steward); //dishonored
-            expect(this.player1).not.toBeAbleToSelect(this.mystic); //standing
+            expect(this.player1).toBeAbleToSelect(this.mystic); //ordinary
             expect(this.player1).not.toBeAbleToSelect(this.matsu); //dishonored
         });
 
@@ -79,6 +80,26 @@ describe('Shoshi Ni Kie', function() {
 
             expect(this.magistrateStation.facedown).toBe(false);
             expect(this.levy.bowed).toBe(false);
+
+            expect(this.getChatLogs(2)).toContain('player1 plays Shoshi ni Kie, revealing Magistrate Station to ready Ashigaru Levy');
+        });
+
+        it('should not be able to target faceup provinces', function () {
+            this.chronicler.bow();
+            this.levy.bow();
+            this.steward.bow();
+
+            this.magistrateStation.facedown = false;
+            this.player1.clickCard(this.snk);
+
+            expect(this.player1).toHavePrompt('Choose a character');
+
+            this.player1.clickCard(this.levy); //ordinary
+            expect(this.levy.bowed).toBe(true);
+
+            expect(this.player1).toHavePrompt('Select a province to reveal');
+            this.player1.clickCard(this.magistrateStation);
+            expect(this.player1).not.toBeAbleToSelect(this.magistrateStation);
         });
     });
 });
