@@ -31,6 +31,7 @@ describe('Hawk Tattoo', function() {
                 this.player1.clickCard(this.hawkTattoo);
                 expect(this.tattooedWanderer.inConflict).toBe(true);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(10)).toContain('player1 uses Hawk Tattoo to move Tattooed Wanderer into the conflict and take an additional action');
             });
 
             it('should not be playable on an opposing character', function() {
@@ -45,6 +46,7 @@ describe('Hawk Tattoo', function() {
                 expect(this.player1).toBeAbleToSelect(this.hawkTattoo);
                 this.player1.clickCard(this.hawkTattoo);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(10)).toContain('player1 uses Hawk Tattoo to move Ancient Master into the conflict and take an additional action');
             });
 
             it('should not trigger if played on a character in the conflict who is not a monk', function() {

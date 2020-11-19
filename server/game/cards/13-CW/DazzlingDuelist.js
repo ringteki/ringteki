@@ -9,6 +9,8 @@ class DazzlingDuelist extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Military,
                 opponentChoosesDuelTarget: true,
+                message: 'prevent {0} from claiming rings this conflict',
+                messageArgs: duel => [duel.loser ? duel.loser.controller : ''],
                 gameAction: duel => AbilityDsl.actions.playerLastingEffect(() => ({
                     targetController: duel.loser && duel.loser.controller,
                     duration: Durations.UntilEndOfConflict,

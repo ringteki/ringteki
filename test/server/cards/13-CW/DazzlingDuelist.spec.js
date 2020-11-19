@@ -45,7 +45,7 @@ describe('Dazzling Duelist', function() {
             this.player2.clickPrompt('1');
             expect(this.getChatLogs(9)).toContain('player2 uses Dazzling Duelist to initiate a military duel : Dazzling Duelist vs. Agasha Swordsmith');
             expect(this.getChatLogs(4)).toContain('Dazzling Duelist: 3 vs 2: Agasha Swordsmith');
-            expect(this.getChatLogs(3)).toContain('Duel Effect: apply a lasting effect');
+            expect(this.getChatLogs(3)).toContain('Duel Effect: prevent player1 from claiming rings this conflict');
         });
 
         it('should prevent the loser from claiming rings from conflict resolution - attacker wins ring', function() {

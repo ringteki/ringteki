@@ -96,7 +96,7 @@ describe('Governors Spy', function() {
             expect(this.blackmail.facedown).toBe(true);
             expect(this.manipulator.facedown).toBe(true);
 
-            expect(this.getChatLogs(3)).toContain('player1 uses Governor\'s Spy to to turn facedown and rearrange all of player2\'s dynasty cards');
+            expect(this.getChatLogs(3)).toContain('player1 uses Governor\'s Spy to turn facedown and rearrange all of player2\'s dynasty cards');
         });
 
         it('should prompt you to put each card into a province, forcing you to give each province at least one card and then move the cards', function() {

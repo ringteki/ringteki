@@ -54,6 +54,7 @@ describe('Silent Skirmisher', function() {
             this.player1.clickCard(this.scout);
 
             expect(this.silentSkirmisher.militarySkill).toBe(skirmisherMilitarySkill + 2);
+            expect(this.getChatLogs(5)).toContain('player1 uses Silent Skirmisher, sacrificing Eager Scout to give itself +2military');
         });
     });
 });

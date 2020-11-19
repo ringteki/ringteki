@@ -18,6 +18,7 @@ class InfernoGuardInvoker extends DrawCard {
                 controller: Players.Self,
                 cardCondition: card => card.isParticipating()
             },
+            effect: 'honor {0}. It will be discarded if a province is broken this conflict',
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.honor(context => ({ target: context.target})),
                 AbilityDsl.actions.cardLastingEffect(context => ({

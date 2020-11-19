@@ -13,6 +13,7 @@ class TaintedHero extends DrawCard {
         this.action({
             title: 'Make text box blank',
             cost: ability.costs.sacrifice({ cardType: CardTypes.Character }),
+            effect: 'blank himself',
             gameAction: ability.actions.cardLastingEffect({
                 match: this,
                 duration: Durations.UntilEndOfPhase,

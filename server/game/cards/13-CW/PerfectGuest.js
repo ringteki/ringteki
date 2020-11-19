@@ -11,6 +11,8 @@ class PerfectGuest extends DrawCard {
 
         this.action({
             title: 'Give control of this character',
+            effect: 'give control of itself to {1}',
+            effectArgs: context => [context.player.opponent],
             condition: context => context.player.opponent && !this.triggeredThisRound,
             gameAction: AbilityDsl.actions.cardLastingEffect(context => {
                 this.triggeredThisRound = true;

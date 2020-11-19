@@ -68,7 +68,7 @@ describe('Seven Stings Keep', function() {
                 this.noMoreActions();
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 this.player1.clickCard(this.keep);
-                expect(this.getChatLogs(1)).toContain('player1 uses Seven Stings Keep, bowing Seven Stings Keep to to force player2 to declare defenders before attackers are chosen this conflict');
+                expect(this.getChatLogs(1)).toContain('player1 uses Seven Stings Keep, bowing Seven Stings Keep to force player2 to declare defenders before attackers are chosen this conflict');
                 expect(this.player1).toHavePrompt('Choose how many characters will be attacking');
                 expect(this.player1).not.toHavePromptButton('0');
                 expect(this.player1).toHavePromptButton('1');

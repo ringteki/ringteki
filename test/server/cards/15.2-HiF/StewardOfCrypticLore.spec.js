@@ -40,11 +40,12 @@ describe('Steward of Cryptic Lore', function() {
                 defenders: []
             });
             this.player2.clickCard(this.steward);
-            expect(this.player2).toHavePromptButton('Province gets +3 strength');
-            expect(this.player2).toHavePromptButton('Province gets -3 strength');
-            this.player2.clickPrompt('Province gets +3 strength');
+            expect(this.player2).toHavePromptButton('Raise attacked province\'s strength by 3');
+            expect(this.player2).toHavePromptButton('Lower attacked province\'s strength by 3');
+            this.player2.clickPrompt('Raise attacked province\'s strength by 3');
             expect(this.fields.getStrength()).toBe(7);
-            expect(this.getChatLogs(10)).toContain('player2 uses Steward of Cryptic Lore to apply a lasting effect to Fertile Fields');
+            expect(this.getChatLogs(10)).toContain('player2 uses Steward of Cryptic Lore to change the province strength of Fertile Fields');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to increase Fertile Fields\'s strength by 3');
         });
 
         it('should only be useable when opponent attacks earth', function () {
@@ -87,10 +88,12 @@ describe('Steward of Cryptic Lore', function() {
             });
             this.player1.pass();
             this.player2.clickCard(this.steward);
-            expect(this.player2).toHavePromptButton('Province gets +3 strength');
-            expect(this.player2).toHavePromptButton('Province gets -3 strength');
-            this.player2.clickPrompt('Province gets -3 strength');
+            expect(this.player2).toHavePromptButton('Raise attacked province\'s strength by 3');
+            expect(this.player2).toHavePromptButton('Lower attacked province\'s strength by 3');
+            this.player2.clickPrompt('Lower attacked province\'s strength by 3');
             expect(this.assault.getStrength()).toBe(1);
+            expect(this.getChatLogs(10)).toContain('player2 uses Steward of Cryptic Lore to change the province strength of Dishonorable Assault');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to reduce Dishonorable Assault\'s strength by 3');
         });
     });
 });

@@ -11,6 +11,8 @@ class SilentSkirmisher extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card !== context.source
             }),
+            effect: 'give itself +2{1}',
+            effectArgs: () => ['military'],
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 duration: Durations.UntilEndOfConflict,
                 target: context.source,
