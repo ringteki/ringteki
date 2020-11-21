@@ -5,6 +5,8 @@ const { AbilityTypes, CardTypes } = require('../Constants');
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
+    adjacentCharacters: (context, effect) =>
+        context.source.type === CardTypes.Character && context.player.areLocationsAdjacent(context.source.location, effect.context.source.location),
     attachmentsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Attachment &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
