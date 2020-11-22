@@ -104,10 +104,13 @@ describe('Daidoji Uji 2', function() {
                     },
                     player2: {
                         inPlay: ['solemn-scholar'],
-                        hand: ['mirumoto-s-fury', 'cloud-the-mind']
+                        hand: ['mirumoto-s-fury', 'cloud-the-mind', 'mark-of-shame', 'i-can-swim']
                     }
 
                 });
+
+                this.player1.player.showBid = 1;
+                this.player2.player.showBid = 5;
 
                 this.uji = this.player1.placeCardInProvince('daidoji-uji-2', 'province 1');
 
@@ -129,6 +132,9 @@ describe('Daidoji Uji 2', function() {
                 this.scholar = this.player2.findCardByName('solemn-scholar');
                 this.cloud = this.player2.findCardByName('cloud-the-mind');
                 this.fury = this.player2.findCardByName('mirumoto-s-fury');
+
+                this.swim = this.player2.findCardByName('i-can-swim');
+                this.mos = this.player2.findCardByName('mark-of-shame');
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -258,6 +264,47 @@ describe('Daidoji Uji 2', function() {
                 expect(this.uji.bowed).toBe(true);
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
                 expect(this.player1).not.toBeAbleToSelect(this.voice);
+            });
+
+            it('should remove cards under Uji from the game if he leaves play', function() {
+                this.player2.pass();
+                this.player1.clickCard(this.charge);
+                this.player1.clickCard(this.uji);
+                this.player1.clickCard(this.uji);
+
+                this.player1.clickPrompt('Fine Katana (2)');
+                this.player1.clickPrompt('Fine Katana');
+                this.player1.clickPrompt('Voice of Honor');
+                this.player1.clickPrompt('Ready for Battle');
+
+                this.player2.pass();
+                this.player1.clickCard(this.way);
+                this.player1.clickCard(this.uji);
+                this.player2.pass();
+
+                this.player1.clickCard(this.katana);
+                this.player1.clickCard(this.brash);
+
+                this.player2.clickCard(this.mos);
+                this.player2.clickCard(this.uji);
+                this.player2.clickCard(this.mos);
+
+                this.player1.pass();
+
+                this.player2.clickCard(this.swim);
+                this.player2.clickCard(this.uji);
+
+                expect(this.katana.location).toBe('play area');
+                expect(this.katana2.location).toBe('removed from game');
+                expect(this.voice.location).toBe('removed from game');
+                expect(this.readyForBattle.location).toBe('removed from game');
+
+                expect(this.katana.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.katana2.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
+                expect(this.readyForBattle.anyEffect('hideWhenFaceUp')).toBe(false);
+
+                expect(this.getChatLogs(10)).toContain('Fine Katana, Voice of Honor and Ready for Battle are removed from the game due to Daidoji Uji leaving play');
             });
         });
     });
