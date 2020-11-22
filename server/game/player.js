@@ -957,7 +957,10 @@ class Player extends GameObject {
             case Locations.UnderneathStronghold:
                 return this.underneathStronghold;
             default:
-                if(this.additionalPiles[source]) {
+                if(source) {
+                    if(!this.additionalPiles[source]) {
+                        this.createAdditionalPile(source);
+                    }
                     return this.additionalPiles[source].cards;
                 }
         }
@@ -1063,6 +1066,10 @@ class Player extends GameObject {
             return false;
         }
 
+        //if we're trying to go into an additional pile, we're probably supposed to be there
+        if(this.additionalPiles[location]) {
+            return true;
+        }
 
         const conflictCardLocations = [...this.game.getProvinceArray(), Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
         const dynastyCardLocations = [...this.game.getProvinceArray(), Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
@@ -1515,6 +1522,12 @@ class Player extends GameObject {
             strongholdProvince: this.getSummaryForCardList(this.strongholdProvince, activePlayer),
             user: _.omit(this.user, ['password', 'email'])
         };
+
+        if(this.additionalPiles && Object.keys(this.additionalPiles)) {
+            Object.keys(this.additionalPiles).forEach(key => {
+                state.cardPiles[key] = this.getSummaryForCardList(this.additionalPiles[key].cards, activePlayer);
+            });
+        }
 
         if(this.showConflict) {
             state.showConflictDeck = true;
