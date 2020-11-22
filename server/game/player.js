@@ -1525,7 +1525,9 @@ class Player extends GameObject {
 
         if(this.additionalPiles && Object.keys(this.additionalPiles)) {
             Object.keys(this.additionalPiles).forEach(key => {
-                state.cardPiles[key] = this.getSummaryForCardList(this.additionalPiles[key].cards, activePlayer);
+                if (this.additionalPiles[key].cards.size() > 0) {
+                    state.cardPiles[key] = this.getSummaryForCardList(this.additionalPiles[key].cards, activePlayer);
+                }
             });
         }
 
