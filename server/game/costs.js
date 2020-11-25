@@ -372,6 +372,7 @@ const Costs = {
                         }));
                         context.game.promptWithHandlerMenu(context.player, {
                             activePromptTitle: 'Choose additional fate',
+                            waitingPromptTitle: 'Waiting for opponent to take an action or pass',
                             source: context.source,
                             choices: _.map(choices, choice => _.isString(choice) ? choice : choice.toString()),
                             handlers: handlers
@@ -387,6 +388,7 @@ const Costs = {
 
                 context.game.promptWithHandlerMenu(context.player, {
                     activePromptTitle: 'Choose additional fate',
+                    waitingPromptTitle: 'Waiting for opponent to take an action or pass',
                     source: context.source,
                     choices: _.map(choices, choice => _.isString(choice) ? choice : choice.toString()),
                     handlers: handlers
