@@ -6,7 +6,7 @@ describe('Togashi Hoshi', function() {
                 player1: {
                     fate: 100,
                     inPlay: ['togashi-hoshi', 'mirumoto-raitsugu'],
-                    hand: ['fiery-madness', 'banzai', 'talisman-of-the-sun', 'ancestral-daisho', 'greater-understanding', 'jade-tetsubo', 'ornate-fan'],
+                    hand: ['fiery-madness', 'banzai', 'talisman-of-the-sun', 'ancestral-daisho', 'greater-understanding', 'jade-tetsubo', 'ornate-fan', 'togashi-kazue'],
                     dynastyDiscard: ['ancestral-armory']
                 },
                 player2: {
@@ -25,6 +25,7 @@ describe('Togashi Hoshi', function() {
             this.jadeTetsubo = this.player1.findCardByName('jade-tetsubo');
             this.fan = this.player1.findCardByName('ornate-fan');
             this.armory = this.player1.placeCardInProvince('ancestral-armory', 'province 1');
+            this.kazue = this.player1.findCardByName('togashi-kazue');
 
             this.agashaSwordsmith = this.player2.findCardByName('agasha-swordsmith');
             this.assassination = this.player2.findCardByName('assassination');
@@ -47,7 +48,11 @@ describe('Togashi Hoshi', function() {
             this.player1.clickCard(this.greater);
             this.player1.clickRing('fire');
             this.player2.pass();
-        });
+            this.player1.clickCard(this.kazue);
+            this.player1.clickPrompt('Play Togashi Kazue as an attachment');
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player2.pass();
+    });
 
         it('should only allow you to target attachments on characters you control', function() {
             this.player1.clickCard(this.hoshi);
@@ -247,6 +252,15 @@ describe('Togashi Hoshi', function() {
             expect(this.player2).toBeAbleToSelect(this.ancestralDaisho);
             this.player2.clickCard(this.ancestralDaisho);
             expect(this.ancestralDaisho.location).toBe('conflict discard pile');
+        });
+
+        it('should turn backpack monks back into characters', function() {
+            this.player1.clickCard(this.hoshi);
+            this.player1.clickCard(this.kazue);
+            expect(this.player2).toHavePrompt('Action Window');
+
+            expect(this.kazue.getMilitarySkill()).toBe(this.kazue.printedMilitarySkill);
+            expect(this.kazue.getPoliticalSkill()).toBe(this.kazue.printedPoliticalSkill);
         });
     });
 });
