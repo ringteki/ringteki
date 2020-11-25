@@ -1,12 +1,11 @@
-const DrawCard = require('../../drawcard.js');
+const BattlefieldAttachment = require('../BattlefieldAttachment');
 const AbilityDsl = require('../../abilitydsl');
 const { CardTypes, Locations, Players, Phases } = require('../../Constants');
 
-class FieldOfRuin extends DrawCard {
+class FieldOfRuin extends BattlefieldAttachment {
     setupCardAbilities() {
-        this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 }
-        });
+        super.setupCardAbilities();
+
         this.persistentEffect({
             location: Locations.Any,
             targetController: Players.Any,
@@ -16,6 +15,7 @@ class FieldOfRuin extends DrawCard {
                 match: (card, source) => card === source
             })
         });
+
         this.reaction({
             title: 'discard each card in attached province',
             when: {
@@ -28,12 +28,8 @@ class FieldOfRuin extends DrawCard {
         });
     }
 
-    canPlayOn(source) {
-        return source && source.getType() === 'province' && this.getType() === CardTypes.Attachment;
-    }
-
-    canAttach(parent) {
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
+    unbrokenOnly() {
+        return false;
     }
 }
 

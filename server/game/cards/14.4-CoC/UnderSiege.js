@@ -23,7 +23,7 @@ class UnderSiege extends DrawCard {
                         when: {
                             onConflictFinished: () => true
                         },
-                        gameAction: AbilityDsl.actions.multiple([
+                        gameAction: AbilityDsl.actions.sequential([
                             AbilityDsl.actions.chosenDiscard(() => ({
                                 amount: 1000 //discard the entire hand
                             })),

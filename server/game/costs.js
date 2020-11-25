@@ -111,9 +111,17 @@ const Costs = {
      */
     breakSelf: () => new GameActionCost(GameActions.break()),
     /**
+     * Cost that requires breaking a province selected by the player
+     */
+    breakProvince: properties => getSelectCost(GameActions.break(), properties, 'Select a province to break'),
+    /**
      * Cost that will put into play the card that initiated the ability
      */
     putSelfIntoPlay: () => new GameActionCost(GameActions.putIntoPlay()),
+    /**
+     * Cost that will prompt for a card
+     */
+    selectedReveal: properties => getSelectCost(GameActions.reveal(), properties, `Select a ${properties.cardType || 'card'} to reveal`),
     /**
      * Cost that will reveal specific cards
      */
@@ -364,6 +372,7 @@ const Costs = {
                         }));
                         context.game.promptWithHandlerMenu(context.player, {
                             activePromptTitle: 'Choose additional fate',
+                            waitingPromptTitle: 'Waiting for opponent to take an action or pass',
                             source: context.source,
                             choices: _.map(choices, choice => _.isString(choice) ? choice : choice.toString()),
                             handlers: handlers
@@ -379,6 +388,7 @@ const Costs = {
 
                 context.game.promptWithHandlerMenu(context.player, {
                     activePromptTitle: 'Choose additional fate',
+                    waitingPromptTitle: 'Waiting for opponent to take an action or pass',
                     source: context.source,
                     choices: _.map(choices, choice => _.isString(choice) ? choice : choice.toString()),
                     handlers: handlers

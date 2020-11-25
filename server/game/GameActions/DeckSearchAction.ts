@@ -124,7 +124,7 @@ export class DeckSearchAction extends PlayerAction {
         if (!properties.activePromptTitle) {
             title = 'Select a card' + (properties.reveal ? ' to reveal' : '');
             if (selectAmount < 0 || selectAmount > 1) {
-                title = 'Select all cards' + (properties.reveal ? ' to reveal' : '');
+                title = `Select ${selectAmount < 0 ? 'all' : ('up to '+ selectAmount)} cards` + (properties.reveal ? ' to reveal' : '');
             }
         }
 

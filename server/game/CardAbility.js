@@ -167,9 +167,21 @@ class CardAbility extends ThenAbility {
         return this.card.type === CardTypes.Event ? context.player.isCardInPlayableLocation(context.source, context.playType) : this.location.includes(this.card.location);
     }
 
+    getLocationMessage(location, context) {
+        if(location.match(/^\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b$/i)) {
+            //it's a uuid
+            let source = context.game.findAnyCardInPlayByUuid(location);
+            if(source) {
+                return `cards set aside by ${source.name}`;
+            }
+            return 'out of play area';
+        }
+        return location;
+    }
+
     displayMessage(context, messageVerb = context.source.type === CardTypes.Event ? 'plays' : 'uses') {
         if(context.source.type === CardTypes.Event && context.source.isConflict && context.source.location !== Locations.Hand && context.source.location !== Locations.BeingPlayed) {
-            this.game.addMessage('{0} plays {1} from {2} {3}', context.player, context.source, context.source.controller === context.player ? 'their' : 'their opponent\'s', context.source.location);
+            this.game.addMessage('{0} plays {1} from {2} {3}', context.player, context.source, context.source.controller === context.player ? 'their' : 'their opponent\'s', this.getLocationMessage(context.source.location, context));
         }
 
         if(this.properties.message) {

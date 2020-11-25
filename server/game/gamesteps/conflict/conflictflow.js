@@ -37,6 +37,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             new SimpleStep(this.game, () => this.declareConflict()),
             new SimpleStep(this.game, () => this.announceAttackerSkill()),
             new SimpleStep(this.game, () => this.promptForDefenders()),
+            new SimpleStep(this.game, () => this.payDefendersCost()),
             new SimpleStep(this.game, () => this.announceDefenderSkill()),
             new SimpleStep(this.game, () => this.openConflictActionWindow()),
             new SimpleStep(this.game, () => this.determineWinner()),
@@ -146,6 +147,28 @@ class ConflictFlow extends BaseStepWithPipeline {
                 Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
                 this.game.openEventWindow(costEvents);
             }
+            this.conflict.attackerDeclarationFailed = false;
+            const additionalCosts = this.conflict.attackingPlayer.getEffects(EffectNames.CostToDeclareAnyParticipants).filter(properties => properties.type === 'attackers');
+            if(additionalCosts.length > 0) {
+                for(const properties of additionalCosts) {
+                    this.game.queueSimpleStep(() => {
+                        const player = this.conflict.attackingPlaying;
+                        const context = this.game.getFrameworkContext(player);
+                        let cost = properties.cost;
+                        if(typeof cost === 'function') {
+                            cost = cost(player);
+                        }
+                        if(cost.hasLegalTarget(context)) {
+                            cost.resolve(player, context);
+                            this.game.addMessage('{0} {1} in order to declare attacking characters', player, cost.getEffectMessage(context));
+                        } else {
+                            this.conflict.attackerDeclarationFailed = true;
+                            this.conflict.conflictFailedToInitiate = true;
+                            this.game.addMessage('{0} cannot pay the additional cost required to declare attacking characters', player);
+                        }
+                    });
+                }
+            }
         }
     }
 
@@ -174,7 +197,7 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     initiateConflict() {
-        if(this.conflict.conflictPassed) {
+        if(this.conflict.conflictPassed || this.conflict.attackerDeclarationFailed) {
             return;
         }
 
@@ -325,9 +348,39 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.game.queueStep(new SelectDefendersPrompt(this.game, this.conflict.defendingPlayer, this.conflict));
     }
 
+    payDefendersCost() {
+        if(this.conflict.defenders.length > 0) {
+            this.conflict.defenderDeclarationFailed = false;
+            const additionalCosts = this.conflict.defendingPlayer.getEffects(EffectNames.CostToDeclareAnyParticipants).filter(properties => properties.type === 'defenders');
+            if(additionalCosts.length > 0) {
+                for(const properties of additionalCosts) {
+                    this.game.queueSimpleStep(() => {
+                        const player = this.conflict.defendingPlayer;
+                        const context = this.game.getFrameworkContext(player);
+                        let cost = properties.cost;
+                        if(typeof cost === 'function') {
+                            cost = cost(player);
+                        }
+                        if(cost.hasLegalTarget(context)) {
+                            cost.resolve(player, context);
+                            this.game.addMessage('{0} {1} in order to declare defending characters', player, properties.message || cost.getEffectMessage(context));
+                        } else {
+                            this.conflict.defenderDeclarationFailed = true;
+                            this.game.addMessage('{0} cannot pay the additional cost required to declare defending characters', player);
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     announceDefenderSkill() {
         if(this.conflict.conflictPassed || this.conflict.isSinglePlayer || this.conflict.conflictFailedToInitiate) {
             return;
+        }
+
+        if(this.conflict.defenderDeclarationFailed) {
+            this.conflict.defenders = [];
         }
 
         _.each(this.conflict.defenders, card => card.inConflict = true);

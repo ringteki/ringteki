@@ -454,3 +454,115 @@ describe('Under Siege + Trading on the Sand Road', function () {
         });
     });
 });
+
+describe('Under Siege - Bug Report', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['tattooed-wanderer']
+                },
+                player2: {
+                    inPlay: ['doji-whisperer'],
+                    hand: ['ornate-fan', 'let-go', 'under-siege', 'way-of-the-scorpion', 'banzai', 'banzai', 'noble-sacrifice', 'mark-of-shame'],
+                    dynastyDiscard: ['favorable-ground'],
+                    conflictDiscard: ['logistics', 'logistics', 'logistics', 'for-shame', 'way-of-the-dragon', 'court-games', 'assassination', 'way-of-the-crane', 'backhanded-compliment']
+                }
+            });
+
+            this.wanderer = this.player1.findCardByName('tattooed-wanderer');
+            this.siege = this.player2.findCardByName('under-siege');
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
+
+            this.fan = this.player2.findCardByName('ornate-fan');
+            this.letGo = this.player2.findCardByName('ornate-fan');
+            this.scorpion = this.player2.findCardByName('ornate-fan');
+            this.banzai = this.player2.filterCardsByName('banzai')[0];
+            this.banzai2 = this.player2.filterCardsByName('banzai')[1];
+            this.sac = this.player2.findCardByName('noble-sacrifice');
+            this.mos = this.player2.findCardByName('mark-of-shame');
+
+
+            this.player2.reduceDeckToNumber('conflict deck', 0);
+            this.shame = this.player2.moveCard('for-shame', 'conflict deck');
+            this.bhc = this.player2.moveCard('backhanded-compliment', 'conflict deck');
+            this.dragon = this.player2.moveCard('way-of-the-dragon', 'conflict deck');
+            this.courtGames = this.player2.moveCard('court-games', 'conflict deck');
+            this.assassination = this.player2.moveCard('assassination', 'conflict deck');
+            this.crane = this.player2.moveCard('way-of-the-crane', 'conflict deck');
+
+            this.logistics = this.player2.filterCardsByName('logistics')[0];
+            this.logistics2 = this.player2.filterCardsByName('logistics')[1];
+            this.logistics3 = this.player2.filterCardsByName('logistics')[2];
+
+            this.player2.moveCard(this.logistics, 'conflict deck');
+            this.player2.moveCard(this.logistics2, 'conflict deck');
+            this.player2.moveCard(this.logistics3, 'conflict deck');
+
+            this.fg = this.player2.placeCardInProvince('favorable-ground', 'province 1');
+            this.sd1 = this.player2.findCardByName('shameful-display', 'province 1');
+            this.sd2 = this.player2.findCardByName('shameful-display', 'province 2');
+
+            this.noMoreActions();
+        });
+
+        it('at the end of the conflict should discard the hand and put the removed from game cards back', function() {
+            this.initiateConflict({
+                attackers: [this.wanderer],
+                type: 'political'
+            });
+            this.player2.clickCard(this.siege);
+            this.player2.clickCard(this.whisperer);
+            this.player2.clickPrompt('Done');
+
+            expect(this.logistics.location).toBe('hand');
+            expect(this.logistics2.location).toBe('hand');
+            expect(this.logistics3.location).toBe('hand');
+            expect(this.crane.location).toBe('hand');
+            expect(this.assassination.location).toBe('hand');
+            expect(this.courtGames.location).toBe('conflict deck');
+            expect(this.dragon.location).toBe('conflict deck');
+            expect(this.bhc.location).toBe('conflict deck');
+
+            this.player2.clickCard(this.logistics);
+            this.player2.clickCard(this.fg);
+            this.player2.clickCard(this.sd2);
+            expect(this.courtGames.location).toBe('hand');
+
+            this.player1.pass();
+            this.player2.clickCard(this.logistics2);
+            this.player2.clickCard(this.fg);
+            this.player2.clickCard(this.sd1);
+            expect(this.dragon.location).toBe('hand');
+
+            this.player1.pass();
+            this.player2.clickCard(this.logistics3);
+            this.player2.clickCard(this.fg);
+            this.player2.clickCard(this.sd2);
+            expect(this.bhc.location).toBe('hand');
+
+            this.player1.pass();
+            this.player2.clickCard(this.dragon);
+            this.player2.clickCard(this.whisperer);
+            this.player1.pass();
+            this.player2.clickCard(this.bhc);
+            this.player2.clickPrompt('player1');
+            this.player1.pass();
+            this.player2.clickCard(this.courtGames);
+            this.player2.clickPrompt('Honor a friendly character');
+            this.player2.clickCard(this.whisperer);
+
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Action Window');
+
+            expect(this.bhc.location).toBe('conflict discard pile');
+            expect(this.dragon.location).toBe('play area');
+            expect(this.courtGames.location).toBe('conflict discard pile');
+            expect(this.assassination.location).toBe('conflict discard pile');
+            expect(this.crane.location).toBe('conflict discard pile');
+            expect(this.shame.location).toBe('conflict deck');
+            expect(this.player2.hand.length).toBe(7);
+        });
+    });
+});

@@ -97,7 +97,7 @@ describe('Daughter of War', function() {
                 expect(this.player1).not.toHavePromptButton('Doji Challenger');
                 expect(this.eagerScout.location).toBe('dynasty deck');
                 this.player1.clickPrompt('Eager Scout');
-                expect(this.getChatLogs(5)).toContain('player1 uses Daughter of War to to search their deck for a character with cost less than 1 to put into play');
+                expect(this.getChatLogs(5)).toContain('player1 uses Daughter of War to search their deck for a character with cost less than 1 to put into play');
                 expect(this.getChatLogs(5)).toContain('player1 takes Eager Scout');
                 expect(this.eagerScout.location).toBe('play area');
             });
