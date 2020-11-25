@@ -1,6 +1,5 @@
-import { AbilityTypes, CardTypes, Locations, Players, Durations } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
+const { AbilityTypes, CardTypes, Locations, Players, Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class VoiceOfTheAncestors extends DrawCard {
@@ -39,7 +38,7 @@ class VoiceOfTheAncestors extends DrawCard {
                         duration: Durations.Custom,
                         effect: [
                             AbilityDsl.effects.blank(true),
-                            AbilityDsl.effects.changeType('attachment'),
+                            AbilityDsl.effects.changeType(CardTypes.Attachment),
                             AbilityDsl.effects.addTrait('spirit'),
                             AbilityDsl.effects.attachmentRestrictTraitAmount({ spirit: 1 }),
                             AbilityDsl.effects.gainAbility(AbilityTypes.Persistent, {
