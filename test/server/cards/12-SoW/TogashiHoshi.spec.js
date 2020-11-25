@@ -52,7 +52,7 @@ describe('Togashi Hoshi', function() {
             this.player1.clickPrompt('Play Togashi Kazue as an attachment');
             this.player1.clickCard(this.mirumotoRaitsugu);
             this.player2.pass();
-    });
+        });
 
         it('should only allow you to target attachments on characters you control', function() {
             this.player1.clickCard(this.hoshi);

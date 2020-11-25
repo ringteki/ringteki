@@ -25,9 +25,9 @@ class WeightOfDuty extends ProvinceCard {
             }
         });
     }
-    
+
     hasValidTarget(card, context) {
-        if (card.isUnique()) { //uniques will always have a valid target based on the targeting check
+        if(card.isUnique()) { //uniques will always have a valid target based on the targeting check
             return true;
         }
 

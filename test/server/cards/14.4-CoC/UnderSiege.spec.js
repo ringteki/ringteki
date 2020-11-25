@@ -467,7 +467,7 @@ describe('Under Siege - Bug Report', function() {
                     inPlay: ['doji-whisperer'],
                     hand: ['ornate-fan', 'let-go', 'under-siege', 'way-of-the-scorpion', 'banzai', 'banzai', 'noble-sacrifice', 'mark-of-shame'],
                     dynastyDiscard: ['favorable-ground'],
-                    conflictDiscard: ['logistics', 'logistics', 'logistics', 'for-shame', 'way-of-the-dragon', 'court-games', 'assassination', 'way-of-the-crane', 'backhanded-compliment'],
+                    conflictDiscard: ['logistics', 'logistics', 'logistics', 'for-shame', 'way-of-the-dragon', 'court-games', 'assassination', 'way-of-the-crane', 'backhanded-compliment']
                 }
             });
 
