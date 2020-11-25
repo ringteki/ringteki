@@ -11,7 +11,7 @@ class WeightOfDuty extends ProvinceCard {
             cannotTargetFirst: true,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isParticipating()
+                cardCondition: (card, context) => card.isParticipating() && this.hasValidTarget(card, context)
             }),
             target: {
                 controller: Players.Opponent,
@@ -23,6 +23,16 @@ class WeightOfDuty extends ProvinceCard {
                     AbilityDsl.actions.dishonor()
                 ])
             }
+        });
+    }
+    
+    hasValidTarget(card, context) {
+        if (card.isUnique()) { //uniques will always have a valid target based on the targeting check
+            return true;
+        }
+
+        return context.player.opponent.cardsInPlay.any(a => {
+            return !a.isUnique() && (a.allowGameAction('bow', context) || a.allowGameAction('dishonor', context));
         });
     }
 }
