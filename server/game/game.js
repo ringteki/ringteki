@@ -263,11 +263,15 @@ class Game extends EventEmitter {
         return this.getPlayers().some(player => player.isTraitInPlay(trait));
     }
 
-    getProvinceArray() {
+    getProvinceArray(includeStronghold = true) {
         if(this.skirmishMode) {
             return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
         }
-        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince];
+        let array = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
+        if(includeStronghold) {
+            array.push(Locations.StrongholdProvince);
+        }
+        return array;
     }
 
     createToken(card) {

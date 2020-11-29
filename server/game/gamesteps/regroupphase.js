@@ -91,7 +91,7 @@ class RegroupPhase extends Phase {
         }
 
         this.game.queueSimpleStep(() => {
-            for(let location of [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]) {
+            for(let location of this.game.getProvinceArray(false)) {
                 this.game.queueSimpleStep(() => {
                     player.replaceDynastyCard(location);
                     return true;
