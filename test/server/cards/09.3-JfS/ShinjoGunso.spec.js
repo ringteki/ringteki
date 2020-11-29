@@ -164,5 +164,39 @@ describe('Shinjo Gunso', function() {
                 expect(this.getChatLogs(5)).not.toContain('player1 is shuffling their dynasty deck');
             });
         });
+
+        describe('Playing from Province via card', function() {
+            integration(function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['shinjo-gunso', 'daidoji-uji'],
+                            hand: ['prepared-ambush', 'way-of-the-crane'],
+                            dynastyDiscard: ['hidden-moon-dojo']
+                        },
+                        player2: {
+                        }
+                    });
+
+                    this.gunso = this.player1.placeCardInProvince('shinjo-gunso', 'province 1');
+                    this.uji = this.player1.findCardByName('daidoji-uji');
+                    this.hmd = this.player1.findCardByName('hidden-moon-dojo');
+                    this.ambush = this.player1.findCardByName('prepared-ambush');
+                    this.crane = this.player1.findCardByName('way-of-the-crane');
+                });
+
+                it('should not react when played as if from hand', function() {
+                    this.player1.clickCard(this.crane);
+                    this.player1.clickCard(this.uji);
+                    this.player2.pass();
+
+                    this.player1.clickCard(this.gunso);
+                    this.player1.clickPrompt('0');
+                    expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                    expect(this.player2).toHavePrompt('Action Window');
+                });
+            });
+        });
     });
 });

@@ -415,7 +415,7 @@ class BaseCard extends EffectSource {
         var menu = [];
 
         if(this.menu.isEmpty() || !this.game.manualMode ||
-                ![Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince, Locations.PlayArea].includes(this.location)) {
+                ![...this.game.getProvinceArray(), Locations.PlayArea].includes(this.location)) {
             return undefined;
         }
 

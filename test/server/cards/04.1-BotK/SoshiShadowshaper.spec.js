@@ -6,7 +6,7 @@ describe('Soshi Shadowshaper', function() {
                     phase: 'draw',
                     player1: {
                         inPlay: ['soshi-shadowshaper'],
-                        dynastyDeck: ['hidden-moon-dojo'],
+                        dynastyDiscard: ['hidden-moon-dojo', 'brash-samurai'],
                         hand: ['adept-of-shadows']
                     },
                     player2: {
@@ -16,8 +16,11 @@ describe('Soshi Shadowshaper', function() {
                     }
                 });
                 this.soshiShadowshaper = this.player1.findCardByName('soshi-shadowshaper');
-                this.hiddenMoonDojo = this.player1.placeCardInProvince('hidden-moon-dojo');
-                this.yokuni = this.player2.placeCardInProvince('togashi-yokuni');
+                this.hiddenMoonDojo = this.player1.placeCardInProvince('hidden-moon-dojo', 'province 1');
+                this.hiddenMoonDojo.facedown = false;
+                this.yokuni = this.player2.placeCardInProvince('togashi-yokuni', 'province 1');
+                this.brash = this.player1.placeCardInProvince('brash-samurai', 'province 2');
+                this.brash.facedown = false;
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
             });
@@ -41,6 +44,19 @@ describe('Soshi Shadowshaper', function() {
                 expect(this.player1).toBeAbleToSelect(this.adeptOfShadows);
                 expect(this.player1).not.toBeAbleToSelect(this.tattooedWanderer);
                 expect(this.player1).not.toBeAbleToSelect(this.togashiKazue);
+            });
+
+            it('should be able to target characters which were played as if from hand', function() {
+                this.noMoreActions();
+                expect(this.game.currentPhase).toBe('conflict');
+                this.player1.clickCard(this.brash);
+                this.player1.clickPrompt('0');
+                this.player2.pass();
+                this.soshiShadowshaper = this.player1.clickCard('soshi-shadowshaper');
+                expect(this.player1).toHavePrompt('Soshi Shadowshaper');
+                expect(this.player1).toBeAbleToSelect(this.brash);
+                this.player1.clickCard(this.brash);
+                expect(this.brash.location).toBe('dynasty discard pile');
             });
 
             it('should target characters played from hand by either player', function() {
