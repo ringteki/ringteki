@@ -57,7 +57,7 @@ class ExposedCourtyard extends DrawCard {
                                     },
                                     onConflictFinished: () => true
                                 },
-                                effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [context.target])
+                                effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [context.target], this)
                             };
                         }),
                         AbilityDsl.actions.cardLastingEffect(context => ({
@@ -67,7 +67,7 @@ class ExposedCourtyard extends DrawCard {
                             effect: AbilityDsl.effects.delayedEffect({
                                 when: {
                                     onCardPlayed: (event) => {
-                                        return event.card === context.target;
+                                        return event.card === context.target && event.player === context.target.controller;
                                     }
                                 },
                                 multipleTrigger: true,

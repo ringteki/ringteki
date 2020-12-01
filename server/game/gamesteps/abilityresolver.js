@@ -59,6 +59,7 @@ class AbilityResolver extends BaseStepWithPipeline {
                     context: this.context,
                     originalLocation: this.context.source.location,
                     originallyOnTopOfConflictDeck: this.context.player && this.context.player.conflictDeck && this.context.player.conflictDeck.first() === this.context.source,
+                    onPlayCardSource: this.context.onPlayCardSource,
                     playType: this.context.playType,
                     resolver: this
                 }));

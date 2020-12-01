@@ -1,5 +1,4 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class AkodoGunso extends DrawCard {
@@ -9,7 +8,7 @@ class AkodoGunso extends DrawCard {
             when: {
                 onCharacterEntersPlay: (event, context) =>
                     event.card === context.source &&
-                    [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(event.originalLocation)
+                    context.game.getProvinceArray().includes(event.originalLocation)
             },
             gameAction: AbilityDsl.actions.refillFaceup(context => ({ location: context.event.originalLocation }))
         });

@@ -138,5 +138,40 @@ describe('Weight of Duty', function() {
             expect(this.yokuni.bowed).toBe(true);
             expect(this.yokuni.isDishonored).toBe(true);
         });
+
+        it('should not be able to sac a non-unique if the only valid targets are uniques', function() {
+            this.initiateConflict({
+                province: this.pilgrimage,
+                ring: 'earth',
+                type: 'military',
+                attackers: [this.wanderer],
+                defenders: [this.tsukune, this.maiden]
+            });
+
+            this.player2.clickCard(this.weightOfDuty);
+            expect(this.player2).toHavePrompt('Select card to sacrifice');
+            expect(this.player2).toBeAbleToSelect(this.tsukune);
+            expect(this.player2).toBeAbleToSelect(this.maiden);
+            this.player2.clickPrompt('Cancel');
+
+            this.wanderer.bowed = true;
+            this.wanderer.dishonor();
+            this.game.checkGameState(true);
+
+            this.player2.clickCard(this.weightOfDuty);
+            expect(this.player2).toHavePrompt('Select card to sacrifice');
+            expect(this.player2).toBeAbleToSelect(this.tsukune);
+            expect(this.player2).not.toBeAbleToSelect(this.maiden);
+            this.player2.clickCard(this.tsukune);
+
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).not.toBeAbleToSelect(this.maiden);
+            expect(this.player2).not.toBeAbleToSelect(this.wanderer);
+            expect(this.player2).toBeAbleToSelect(this.yokuni);
+
+            this.player2.clickCard(this.yokuni);
+            expect(this.yokuni.bowed).toBe(true);
+            expect(this.yokuni.isDishonored).toBe(true);
+        });
     });
 });

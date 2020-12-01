@@ -71,7 +71,7 @@ export class PutInProvinceAction extends CardGameAction {
             context.game.addMessage('{0} is discarded instead since it can\'t enter a province legally!', card);
             properties.destination = Locations.ConflictDiscardPile;
         }
-        if(properties.discardDestinationCards && [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(properties.destination)) {
+        if(properties.discardDestinationCards && context.game.getProvinceArray(false).includes(properties.destination)) {
             let cardsToDiscard = player.getSourceList(properties.destination).filter(card => card.isDynasty);
             for(const card of cardsToDiscard) {
                 player.moveCard(card, Locations.DynastyDiscardPile);

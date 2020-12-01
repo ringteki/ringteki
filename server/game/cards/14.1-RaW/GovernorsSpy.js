@@ -29,7 +29,7 @@ class GovernorsSpy extends DrawCard {
                     })
                 }
             },
-            effect: 'to turn facedown and rearrange all of {1}\'s dynasty cards',
+            effect: 'turn facedown and rearrange all of {1}\'s dynasty cards',
             effectArgs: context => context.select === this.owner.name ? this.owner : this.owner.opponent
         });
     }

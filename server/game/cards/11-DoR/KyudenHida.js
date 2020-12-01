@@ -31,6 +31,7 @@ class KyudenHida extends StrongholdCard {
                     }],
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.playCard({
+                            source: this,
                             resetOnCancel: false,
                             playType: PlayTypes.PlayFromProvince,
                             postHandler: hidaContext => {

@@ -20,7 +20,7 @@ class BackhandedCompliment extends DrawCard {
                     ])
                 }
             },
-            effect: 'to make {1} lose an honor and draw a card',
+            effect: 'make {1} lose an honor and draw a card',
             effectArgs: context => context.select === this.owner.name ? this.owner : this.owner.opponent
         });
     }

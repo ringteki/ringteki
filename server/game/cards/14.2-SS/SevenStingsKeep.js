@@ -10,7 +10,7 @@ class SevenStingsKeep extends StrongholdCard {
                 onConflictOpportunityAvailable: (event, context) => event.player === context.player
             },
             cost: [AbilityDsl.costs.bowSelf()],
-            effect: 'to force {1} to declare defenders before attackers are chosen this conflict',
+            effect: 'force {1} to declare defenders before attackers are chosen this conflict',
             effectArgs: context => [context.player.opponent],
             gameAction: AbilityDsl.actions.menuPrompt(context => ({
                 activePromptTitle: 'Choose how many characters will be attacking',

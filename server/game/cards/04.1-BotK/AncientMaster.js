@@ -1,30 +1,21 @@
 const DrawCard = require('../../drawcard.js');
 const PlayAttachmentAction = require('../../playattachmentaction.js');
-const { CardTypes, Locations } = require('../../Constants');
+const { CardTypes, Locations, Durations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class PlayAncientMasterAsAttachment extends PlayAttachmentAction {
     constructor(card) {
-        super(card);
+        super(card, true);
         this.title = 'Play Ancient Master as an attachment';
     }
 
-    canResolveTargets(context) {
-        context.source.printedType = CardTypes.Attachment;
-        let result = super.canResolveTargets(context);
-        context.source.printedType = CardTypes.Character;
-        return result;
-    }
-
-    resolveTargets(context) {
-        context.source.printedType = CardTypes.Attachment;
-        const targetResults = super.resolveTargets(context);
-        context.game.queueSimpleStep(() => {
-            if(targetResults.cancelled) {
-                context.source.printedType = CardTypes.Character;
-            }
-        });
-        return targetResults;
+    executeHandler(context) {
+        AbilityDsl.actions.cardLastingEffect({
+            duration: Durations.Custom,
+            canChangeZoneOnce: true,
+            effect: AbilityDsl.effects.changeType(CardTypes.Attachment)
+        }).resolve(this.card, context);
+        super.executeHandler(context);
     }
 }
 

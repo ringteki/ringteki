@@ -1,6 +1,5 @@
 const _ = require('underscore');
 const AllPlayerPrompt = require('../allplayerprompt.js');
-const { Locations } = require('../../Constants');
 
 class MulliganDynastyPrompt extends AllPlayerPrompt {
     constructor(game) {
@@ -25,7 +24,7 @@ class MulliganDynastyPrompt extends AllPlayerPrompt {
     highlightSelectableCards() {
         _.each(this.game.getPlayers(), player => {
             if(!this.selectableCards[player.name]) {
-                this.selectableCards[player.name] = _.flatten([Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].map(location => player.getDynastyCardsInProvince(location)));
+                this.selectableCards[player.name] = _.flatten(this.game.getProvinceArray(false).map(location => player.getDynastyCardsInProvince(location)));
             }
             player.setSelectableCards(this.selectableCards[player.name]);
         });

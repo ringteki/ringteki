@@ -36,6 +36,7 @@ class DragonTattoo extends DrawCard {
                 ifAbleAction: AbilityDsl.actions.playCard(() => {
                     this.cardPlayed = true;
                     return ({
+                        source: this,
                         target: context.event.card,
                         resetOnCancel: true,
                         playType: PlayTypes.Other,

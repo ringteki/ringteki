@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Locations, Players, TargetModes } = require('../../Constants');
+const { CardTypes, Players, TargetModes } = require('../../Constants');
 
 class Aranat extends DrawCard {
     setupCardAbilities() {
@@ -13,7 +13,7 @@ class Aranat extends DrawCard {
             effectArgs: context => context.player.opponent,
             gameAction: AbilityDsl.actions.selectCard({
                 cardType: CardTypes.Province,
-                location: [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
+                location: this.game.getProvinceArray(false),
                 controller: Players.Opponent,
                 player: Players.Opponent,
                 optional: true,

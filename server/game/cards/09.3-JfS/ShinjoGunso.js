@@ -1,4 +1,4 @@
-import { CardTypes } from '../../Constants.js';
+import { CardTypes, PlayTypes } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const { Locations, Decks } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
@@ -10,8 +10,9 @@ class ShinjoGunso extends DrawCard {
             title: 'Put a character into play',
             when: {
                 onCardPlayed: (event, context) =>
+                    event.playType === PlayTypes.PlayFromProvince &&
                     event.card === context.source &&
-                    [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour].includes(event.originalLocation)
+                    context.game.getProvinceArray().includes(event.originalLocation)
             },
             effect: 'search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play',
             gameAction: AbilityDsl.actions.sequentialContext(context => {
