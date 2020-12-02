@@ -99,7 +99,7 @@ describe('Daidoji Uji 2', function() {
                     player1: {
                         inPlay: ['brash-samurai'],
                         dynastyDiscard: ['daidoji-uji-2'],
-                        conflictDiscard: ['assassination', 'let-go', 'a-new-name', 'voice-of-honor', 'ornate-fan', 'fine-katana', 'seal-of-the-crane', 'fine-katana', 'ready-for-battle'],
+                        conflictDiscard: ['assassination', 'let-go', 'a-new-name', 'voice-of-honor', 'ornate-fan', 'fine-katana', 'seal-of-the-crane', 'fine-katana', 'ready-for-battle', 'defend-your-honor'],
                         hand: ['way-of-the-crane', 'charge']
                     },
                     player2: {
@@ -126,6 +126,7 @@ describe('Daidoji Uji 2', function() {
                 this.seal = this.player1.moveCard('seal-of-the-crane', 'conflict deck');
                 this.readyForBattle = this.player1.moveCard('ready-for-battle', 'conflict deck');
                 this.way = this.player1.findCardByName('way-of-the-crane');
+                this.dyh = this.player1.moveCard('defend-your-honor', 'conflict deck');
 
                 this.charge = this.player1.findCardByName('charge');
                 this.brash = this.player1.findCardByName('brash-samurai');
@@ -305,6 +306,26 @@ describe('Daidoji Uji 2', function() {
                 expect(this.readyForBattle.anyEffect('hideWhenFaceUp')).toBe(false);
 
                 expect(this.getChatLogs(10)).toContain('Fine Katana, Voice of Honor and Ready for Battle are removed from the game due to Daidoji Uji leaving play');
+            });
+
+            it('should not allow opponent to play cards', function() {
+                this.player2.pass();
+                this.player1.clickCard(this.charge);
+                this.player1.clickCard(this.uji);
+                this.player1.clickCard(this.uji);
+
+                this.player1.clickPrompt('Fine Katana (2)');
+                this.player1.clickPrompt('Fine Katana');
+                this.player1.clickPrompt('Defend Your Honor');
+                this.player1.clickPrompt('Voice of Honor');
+
+                this.player2.pass();
+                this.player1.clickCard(this.way);
+                this.player1.clickCard(this.uji);
+                expect(this.player1.player.additionalPiles[this.uji.uuid].cards).toContain(this.katana);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                this.player2.clickCard(this.katana);
+                expect(this.player2).not.toHavePrompt('Fine Katana');
             });
         });
     });

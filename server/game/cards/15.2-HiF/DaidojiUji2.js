@@ -48,8 +48,8 @@ class DaidojiUji2 extends DrawCard {
                 return card.location === this.uuid;
             },
             effect: [
-                AbilityDsl.effects.canPlayFromOutOfPlay(() => {
-                    return true;
+                AbilityDsl.effects.canPlayFromOutOfPlay(player => {
+                    return player === this.controller;
                 }, PlayTypes.PlayFromHand),
                 AbilityDsl.effects.registerToPlayFromOutOfPlay()
             ]
