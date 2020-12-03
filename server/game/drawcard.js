@@ -7,9 +7,8 @@ const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
-const AbilityDsl = require('./abilitydsl');
 
-const { Locations, EffectNames, CardTypes, PlayTypes, Durations } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
