@@ -129,7 +129,7 @@ export class DeckSearchAction extends PlayerAction {
         }
 
         if (properties.shuffle) {
-            cards = cards.sort(card => card.name)
+            cards.sort(card => card.name)
         }
 
         context.game.promptWithHandlerMenu(player, {
