@@ -17,9 +17,8 @@ class IronMountainCastle extends StrongholdCard {
                 onAbilityResolverInitiated: (event, context) => {
                     //might be able to remove the source.type check at some point
                     const isAttachment = (event.context.source.type === CardTypes.Attachment || event.context.ability instanceof PlayAttachmentAction);
-                    const targetIsCharacter = (event.context.target.type === CardTypes.Character);
-                    return isAttachment && targetIsCharacter && event.context.player === context.player &&
-                    event.context.target && event.context.target.controller === context.player &&
+                    return isAttachment && event.context.player === context.player &&
+                    event.context.target && event.context.target.controller === context.player && event.context.target.type === CardTypes.Character &&
                     event.context.ability.getReducedCost(event.context) > 0;
                 }
             },
