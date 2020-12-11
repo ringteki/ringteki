@@ -13,7 +13,10 @@ class HuntingFalcon extends DrawCard {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
                 cardCondition: card => card.isFacedown(),
-                gameAction: AbilityDsl.actions.lookAt()
+                gameAction: AbilityDsl.actions.lookAt(context => ({
+                    message: '{0} sees {1} in {2}',
+                    messageArgs: (cards) => [context.source, cards[0], cards[0].location]
+                }))
             }
         });
     }

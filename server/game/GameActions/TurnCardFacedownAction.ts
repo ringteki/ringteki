@@ -26,8 +26,8 @@ export class TurnCardFacedownAction extends CardGameAction {
         if(event.card.isConflictProvince()) {
             event.context.game.addMessage('{0} is immediately revealed again!', event.card);
             event.card.inConflict = true;
-            const revealEvent = event.context.game.actions.reveal().getEvent(event.card, event.context.game.getFrameworkContext());
-            event.context.game.openThenEventWindow(revealEvent);
+
+            event.context.game.raiseEvent(EventNames.OnCardRevealed, { card: event.card, context: event.context.game.getFrameworkContext() });
         } else {
             event.card.facedown = true;
         }
