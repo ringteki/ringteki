@@ -77,7 +77,7 @@ describe('Hunting Falcon', function() {
 
             this.player1.clickCard(this.p2_1);
             expect(this.getChatLogs(10)).toContain('player1 uses Hunting Falcon to look at a facedown card');
-            expect(this.getChatLogs(10)).toContain('Hunting Falcon sees Midnight Revels');
+            expect(this.getChatLogs(10)).toContain('Hunting Falcon sees Midnight Revels in province 1');
         });
 
         it('should work on opponent\'s characters', function() {
