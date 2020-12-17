@@ -36,7 +36,7 @@ describe('Yogo Paramour', function() {
             expect(this.player1).toHavePrompt('Play cards from provinces');
         });
 
-        it('should work on friendly characters', function() {
+        it('should work on a friendly character', function() {
             expect(this.player1).toHavePrompt('Play cards from provinces');
             this.player1.clickCard(this.paramour);
             expect(this.player1).toHavePrompt('Choose a character');

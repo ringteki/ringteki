@@ -6,7 +6,7 @@ class YogoParamour extends DrawCard {
     setupCardAbilities() {
         this.dire({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
-                title: 'Dishonor a character',
+                title: 'Dishonor any character',
                 cost: AbilityDsl.costs.bowSelf(),
                 target: {
                     cardType: CardTypes.Character,
