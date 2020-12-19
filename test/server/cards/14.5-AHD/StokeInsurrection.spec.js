@@ -6,7 +6,7 @@ describe('Stoke Insurrection', function() {
                 player1: {
                     inPlay: ['expert-interpreter', 'seeker-of-knowledge', 'fushicho', 'tainted-hero', 'ikoma-ujiaki'],
                     hand: ['charge', 'forebearer-s-echoes', 'young-harrier', 'shosuro-miyako-2'],
-                    dynastyDiscard: ['isawa-ujina', 'akodo-toturi', 'daidoji-kageyu', 'imperial-storehouse', 'iron-mine', 'favorable-ground', 'city-of-lies']
+                    dynastyDiscard: ['isawa-ujina', 'akodo-toturi', 'daidoji-kageyu', 'imperial-storehouse', 'iron-mine', 'favorable-ground', 'city-of-lies', 'moto-youth', 'eager-scout']
                 },
                 player2: {
                     honor: 11,
@@ -29,6 +29,8 @@ describe('Stoke Insurrection', function() {
             this.storehouse = this.player1.placeCardInProvince('imperial-storehouse', 'province 2');
             this.ujina = this.player1.placeCardInProvince('isawa-ujina', 'province 3');
             this.fushicho = this.player1.placeCardInProvince('fushicho', 'province 4');
+            this.youth = this.player1.findCardByName('moto-youth');
+            this.scout = this.player1.findCardByName('eager-scout');
 
 
             this.insurrection = this.player2.findCardByName('stoke-insurrection');
@@ -101,31 +103,50 @@ describe('Stoke Insurrection', function() {
             expect(this.player2).not.toBeAbleToSelect(this.whisperer);
         });
 
-        it('should let you choose up to 2 characters in your opponent\'s provinces', function() {
+        it('should let you choose up to 2 characters in your opponent\'s provinces (to a max cost of 6)', function() {
+            this.player1.moveCard(this.youth, 'province 4');
+            this.player1.moveCard(this.scout, 'province 4');
+
             this.player2.clickCard(this.insurrection);
             expect(this.player2).toHavePrompt('Choose up to two characters');
             expect(this.player2).toHavePromptButton('Done');
 
             this.player2.clickCard(this.ujina);
+            expect(this.player2).toBeAbleToSelect(this.youth);
+            expect(this.player2).toBeAbleToSelect(this.scout);
+            expect(this.player2).not.toBeAbleToSelect(this.fushicho);
+            expect(this.player2).not.toBeAbleToSelect(this.toturi);
+            this.player2.clickCard(this.fushicho);
+            expect(this.player2.player.promptState.selectedCards).toContain(this.ujina);
+            expect(this.player2.player.promptState.selectedCards).not.toContain(this.fushicho);
+            this.player2.clickCard(this.youth);
+            this.player2.clickCard(this.scout);
+            expect(this.player2.player.promptState.selectedCards).toContain(this.youth);
+            expect(this.player2.player.promptState.selectedCards).not.toContain(this.scout);
+
+            this.player2.clickCard(this.ujina);
+            this.player2.clickCard(this.youth);
+            expect(this.player2.player.promptState.selectedCards).not.toContain(this.ujina);
             this.player2.clickCard(this.fushicho);
             this.player2.clickCard(this.toturi);
 
-            expect(this.player2.player.promptState.selectedCards).toContain(this.ujina);
+            expect(this.player2.player.promptState.selectedCards).not.toContain(this.ujina);
             expect(this.player2.player.promptState.selectedCards).toContain(this.fushicho);
             expect(this.player2.player.promptState.selectedCards).not.toContain(this.toturi);
         });
 
         it('should put the characters into play', function() {
+            this.player1.moveCard(this.youth, 'province 4');
             this.player2.clickCard(this.insurrection);
             this.player2.clickCard(this.ujina);
-            this.player2.clickCard(this.fushicho);
+            this.player2.clickCard(this.youth);
             this.player2.clickPrompt('Done');
 
             expect(this.game.currentConflict.defenders).toContain(this.ujina);
-            expect(this.game.currentConflict.defenders).toContain(this.fushicho);
+            expect(this.game.currentConflict.defenders).toContain(this.youth);
 
             expect(this.getChatLogs(5)).toContain('player2 plays Stoke Insurrection to reveal player1\'s dynasty cards and put up to two of them into play');
-            expect(this.getChatLogs(5)).toContain('player2 puts Isawa Ujina and Fushichō into play into the conflict');
+            expect(this.getChatLogs(5)).toContain('player2 puts Isawa Ujina and Moto Youth into play into the conflict');
         });
 
         it('you should control the characters', function() {
@@ -144,13 +165,12 @@ describe('Stoke Insurrection', function() {
         it('you should still control the characters after the conflict', function() {
             this.player2.clickCard(this.insurrection);
             this.player2.clickCard(this.ujina);
-            this.player2.clickCard(this.fushicho);
             this.player2.clickPrompt('Done');
 
             this.noMoreActions();
+            this.player1.clickPrompt('Don\'t Resolve');
             this.player1.pass();
             expect(this.ujina.controller).toBe(this.player2.player);
-            expect(this.fushicho.controller).toBe(this.player2.player);
 
             this.player2.clickCard(this.jade);
             expect(this.player2).toBeAbleToSelect(this.ujina);
