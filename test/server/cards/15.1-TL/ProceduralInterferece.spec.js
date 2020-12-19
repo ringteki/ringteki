@@ -86,12 +86,9 @@ describe('Procedural Interference', function() {
             expect(this.player1).not.toBeAbleToSelect(this.shameful2);
         });
 
-        it('should let you choose a stronghold province to gain 2 honor', function() {
-            let honor = this.player1.honor;
+        it('should not let you choose a stronghold province', function() {
             this.player1.clickCard(this.interference);
-            this.player1.clickCard(this.pStronghold);
-            expect(this.getChatLogs(5)).toContain('player1 plays Procedural Interference to gain 2 honor');
-            expect(this.player1.honor).toBe(honor + 2);
+            expect(this.player1).not.toBeAbleToSelect(this.pStronghold);
         });
 
     });

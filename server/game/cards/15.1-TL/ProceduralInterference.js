@@ -10,7 +10,8 @@ class ProceduralInterference extends DrawCard {
                 province:{
                     location: Locations.Provinces,
                     controller: Players.Opponent,
-                    cardType: CardTypes.Province
+                    cardType: CardTypes.Province,
+                    cardCondition: card => card.controller.getDynastyCardsInProvince(card.location).length > 0
                 },
                 select: {
                     mode: TargetModes.Select,
@@ -29,11 +30,10 @@ class ProceduralInterference extends DrawCard {
             },
             effect:'{1}{2}',
             effectArgs: context => {
-                let cards = context.targets.province.controller.getDynastyCardsInProvince(context.targets.province.location);
-                if(context.selects.select.choice === 'let opponent gain 2 honor' || cards.length === 0) {
+                if(context.selects.select.choice === 'let opponent gain 2 honor') {
                     return ['gain 2 honor', ''];
                 }
-                return ['discard ', cards];
+                return ['discard ', context.targets.province.controller.getDynastyCardsInProvince(context.targets.province.location)];
             }
         });
     }
