@@ -7,12 +7,12 @@ describe('Resourceful Maho Tsukai', function() {
                     player1: {
                         fate: 1,
                         honor: 9,
-                        inPlay: ['resourceful-maho-tsukai', 'kudaka'],
-                        hand: ['force-of-the-river', 'darkness-rising', 'shadow-steed']
+                        inPlay: ['resourceful-maho-tsukai', 'hida-kisada'],
+                        hand: ['force-of-the-river', 'darkness-rising', 'shadow-steed', 'fine-katana']
                     },
                     player2: {
                         honor:10,
-                        inPlay: []
+                        inPlay: ['kudaka']
                     }
                 });
 
@@ -20,8 +20,11 @@ describe('Resourceful Maho Tsukai', function() {
                 this.maho.dishonor();
                 this.maho.fate = 1;
                 this.river = this.player1.findCardByName('force-of-the-river');
+                this.kisada = this.player1.findCardByName('hida-kisada');
                 this.rising = this.player1.findCardByName('darkness-rising');
                 this.steed = this.player1.findCardByName('shadow-steed');
+                this.katana = this.player1.findCardByName('fine-katana');
+                this.kudaka = this.player2.findCardByName('kudaka');
             });
 
             it('should reduce the cost of playing maho cards', function() {
@@ -47,11 +50,13 @@ describe('Resourceful Maho Tsukai', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: [this.maho],
-                    defenders: []
+                    attackers: [this.maho, this.kisada],
+                    defenders: [this.kudaka]
                 });
                 this.player2.pass();
                 this.player1.clickCard(this.rising);
+                expect(this.player1).toHavePrompt('Select character to dishonor');
+                this.player1.clickCard(this.kisada);
                 this.player1.clickCard(this.maho);
                 this.player1.clickPrompt('1');
                 expect(this.maho.fate).toBe(0);
