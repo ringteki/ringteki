@@ -11,4 +11,5 @@ class DamnedHida extends DrawCard {
 
 DamnedHida.id = 'damned-hida';
 
+
 module.exports = DamnedHida;

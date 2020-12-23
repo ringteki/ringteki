@@ -18,7 +18,7 @@ describe('Damned Hida', function() {
         });
 
 
-        it('should get +3 military skill when dire', function() {
+        it('Gets a +3 military skill when dire', function() {
             expect(this.hida.getMilitarySkill()).toBe(this.hida.printedMilitarySkill + 3);
         });
 
