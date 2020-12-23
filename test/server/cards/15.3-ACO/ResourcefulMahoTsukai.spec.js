@@ -64,6 +64,12 @@ describe('Resourceful Maho Tsukai', function() {
                 expect(this.kudaka.bowed).toBe(true);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
+
+            it('can only have attachments that are spell or shadowlands', function() {
+                this.player1.clickCard(this.katana);
+                this.player1.clickCard(this.maho);
+                expect(this.player1).toHavePrompt('Choose a card');
+            });
         });
     });
 });
