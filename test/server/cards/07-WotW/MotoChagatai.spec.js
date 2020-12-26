@@ -86,7 +86,6 @@ describe('Moto Chagatai', function() {
                 this.player2.clickCard(this.endlessPlains);
                 this.player1.clickPrompt('Yes');
                 this.player1.clickCard(this.shrineMaiden);
-                this.player2.clickPrompt('Pass');
                 this.player2.clickCard(this.steward);
                 this.player2.clickPrompt('Done');
                 this.player2.playAttachment('talisman-of-the-sun', this.steward);

@@ -7,7 +7,7 @@ const {matchCardByNameAndPack} = require('./cardutil.js');
 const PathToSubModulePacks = path.join(__dirname, '../../fiveringsdb-data/json/Card');
 
 const defaultFaction = 'phoenix';
-const defaultRole = 'seeker-of-water';
+const defaultRole = 'support-of-the-scorpion';
 const defaultStronghold = 'city-of-the-open-hand';
 const minProvince = 5;
 const provinceFiller = 'shameful-display';

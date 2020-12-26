@@ -26,7 +26,6 @@ describe('Seeking The Truth', function() {
                     attackers: ['matsu-berserker'],
                     type: 'military'
                 });
-                this.player2.clickCard('seeker-of-water');
                 this.player2.clickCard(this.scout);
                 this.player2.clickPrompt('Done');
                 this.player2.pass();
@@ -44,7 +43,6 @@ describe('Seeking The Truth', function() {
                     attackers: ['matsu-berserker'],
                     type: 'military'
                 });
-                this.player2.clickCard('seeker-of-water');
                 this.player2.clickCard(this.scout);
                 this.player2.clickPrompt('Done');
                 this.player2.pass();
@@ -61,7 +59,6 @@ describe('Seeking The Truth', function() {
                     attackers: ['matsu-berserker'],
                     type: 'military'
                 });
-                this.player2.clickCard('seeker-of-water');
                 this.player2.clickCard(this.scout);
                 this.player2.clickPrompt('Done');
                 this.player2.pass();
