@@ -11,7 +11,7 @@ class CaptivatingStory extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.isParticipating() && (context.player.getNumberOfFaceupProvinces() > 0 || card.getFate() > 0),
+                cardCondition: (card, context) => card.isParticipating() && (context.player.getNumberOfFaceupProvinces() > 0 || card.allowGameAction('removeFate', context)),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: AbilityDsl.effects.modifyPoliticalSkill(context.player.getNumberOfFaceupProvinces())

@@ -9,7 +9,7 @@ class ConsumedByFiveFires extends DrawCard {
         this.action({
             title: 'Remove up to 5 fate from characters',
             condition: context => context.player.cardsInPlay.any(card => card.hasTrait('shugenja')) && context.player.opponent &&
-                                  context.player.opponent.cardsInPlay.any(card => card.getFate() > 0),
+                                  context.player.opponent.cardsInPlay.any(card => card.allowGameAction('removeFate', context)),
             effect: 'remove fate from {1}\'s characters',
             effectArgs: context => context.player.opponent,
             handler: context => this.chooseCard(context, {}, [])
@@ -18,7 +18,7 @@ class ConsumedByFiveFires extends DrawCard {
 
     chooseCard(context, targets, messages) {
         let fateRemaining = 5 - _.reduce(targets, (totalFate, fateToRemove) => totalFate + fateToRemove, 0);
-        if(fateRemaining === 0 || !context.player.opponent.cardsInPlay.any(card => card.getFate() > 0 && !_.keys(targets).includes(card.uuid))) {
+        if(fateRemaining === 0 || !context.player.opponent.cardsInPlay.any(card => card.allowGameAction('removeFate', context) && !_.keys(targets).includes(card.uuid))) {
             this.game.addMessage('{0} chooses to: {1}', context.player, messages);
             let keys = _.keys(targets);
             let events = keys.map(key => {
@@ -33,7 +33,7 @@ class ConsumedByFiveFires extends DrawCard {
         this.game.promptForSelect(context.player, {
             context: context,
             cardType: CardTypes.Character,
-            cardCondition: card => card.location === Locations.PlayArea && card.getFate() > 0 && card.controller !== context.player && !_.keys(targets).includes(card.uuid),
+            cardCondition: card => card.location === Locations.PlayArea && card.allowGameAction('removeFate', context) && card.controller !== context.player && !_.keys(targets).includes(card.uuid),
             onSelect: (player, card) => {
                 let choices = _.range(1, Math.min(fateRemaining, card.getFate()) + 1);
                 let handlers = _.map(choices, choice => {
