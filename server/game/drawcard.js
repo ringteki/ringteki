@@ -110,7 +110,9 @@ class DrawCard extends BaseCard {
     }
 
     getFate() {
-        return this.fate;
+        let rawEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.SetApparentFate);
+        let apparentFate = this.mostRecentEffect(EffectNames.SetApparentFate);
+        return rawEffects.length > 0 ? apparentFate : this.fate;
     }
 
     costLessThan(num) {
