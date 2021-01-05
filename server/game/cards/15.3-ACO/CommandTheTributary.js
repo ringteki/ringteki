@@ -1,4 +1,4 @@
-import { CardTypes } from '../../Constants.js';
+import { CardTypes, AbilityTypes } from '../../Constants.js';
 
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
@@ -6,8 +6,8 @@ const AbilityDsl = require('../../abilitydsl');
 class CommandTheTributary extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            effect: AbilityDsl.effects.gainAbility('action', {
-                title: 'Move 1 fate from an opposing character',
+            effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
+                title: 'Move 1 fate to a character',
                 target: {
                     cardType: CardTypes.Character,
                     gameAction: AbilityDsl.actions.placeFate(context => ({
