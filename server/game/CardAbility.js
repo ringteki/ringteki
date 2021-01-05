@@ -19,7 +19,12 @@ class CardAbility extends ThenAbility {
                         return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                     },
                     controller: Players.Opponent,
-                    cardCondition: card => card.isParticipating(),
+                    cardCondition: (card, context) => {
+                        if(typeof properties.initiateDuel === 'function') {
+                            return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                        }
+                        return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating()
+                    },
                     gameAction: AbilityDsl.actions.duel(context => {
                         if(typeof properties.initiateDuel === 'function') {
                             return Object.assign({ challenger: context.source }, properties.initiateDuel(context));
@@ -50,7 +55,12 @@ class CardAbility extends ThenAbility {
                             return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                         },
                         controller: Players.Opponent,
-                        cardCondition: card => card.isParticipating(),
+                        cardCondition: (card, context) => {
+                            if(typeof properties.initiateDuel === 'function') {
+                                return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                            }
+                            return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating()
+                        },
                         gameAction: AbilityDsl.actions.duel(context => {
                             if(typeof properties.initiateDuel === 'function') {
                                 return Object.assign({ challenger: context.targets.challenger }, properties.initiateDuel(context));
