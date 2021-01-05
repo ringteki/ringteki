@@ -12,3 +12,4 @@ class DesperateNegotiator extends DrawCard {
 DesperateNegotiator.id = 'desperate-negotiator';
 
 module.exports = DesperateNegotiator;
+
