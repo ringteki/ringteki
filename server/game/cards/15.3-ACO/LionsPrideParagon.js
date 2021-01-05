@@ -1,6 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
 
+
 class LionsPrideParagon extends DrawCard {
     setupCardAbilities() {
         this.dire({

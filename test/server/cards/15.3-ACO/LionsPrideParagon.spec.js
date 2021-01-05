@@ -1,4 +1,4 @@
-describe('Lions Pride Paragon', function() {
+describe('Lion\'s Pride Paragon', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -46,6 +46,5 @@ describe('Lions Pride Paragon', function() {
             expect(this.paragon2.fate).toBe(1);
             expect(this.paragon2.bowed).toBe(true);
         });
-
     });
 });
