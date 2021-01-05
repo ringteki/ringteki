@@ -35,6 +35,7 @@ const checkRestrictions = {
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Event,
     opponentsRingEffects: (context, effect) =>
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === 'ring',
+    opponentsCardAndRingEffects: (context, effect) => checkRestrictions.opponentsCardEffects(context, effect) || checkRestrictions.opponentsRingEffects(context, effect),
     opponentsTriggeredAbilities: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>
