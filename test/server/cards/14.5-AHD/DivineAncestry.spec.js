@@ -75,6 +75,8 @@ describe('Divine Ancestry', function() {
                 this.player2.player.promptedActionWindows.draw = true;
 
                 this.city = this.player2.findCardByName('city-of-the-open-hand');
+                this.city.loadOriginalAction();
+
                 this.shrineMaiden = this.player2.findCardByName('shrine-maiden');
                 this.sac = this.player2.findCardByName('noble-sacrifice');
                 this.watchCommander = this.player2.findCardByName('watch-commander');

@@ -79,10 +79,9 @@ describe('Revered Ikoma', function() {
             this.player1.clickCard(this.skirmisher);
             this.player1.clickPrompt('Done');
             expect(this.player2).toHavePrompt('Choose a card to add to your opponent\'s hand');
-            expect(this.player2).not.toBeAbleToSelect(this.letGo);
-            expect(this.player2).toBeAbleToSelect(this.assassination);
-            expect(this.player2).not.toBeAbleToSelect(this.katana);
-            expect(this.player2).toBeAbleToSelect(this.skirmisher);
+            expect(this.player2).toHavePromptButton('Assassination');
+            expect(this.player2).toHavePromptButton('Hiruma Skirmisher');
+            expect(this.player2).not.toHavePromptButton('Done');
         });
 
         it('should put the picked card in your hand and the other on the bottom of your deck', function() {
@@ -105,14 +104,15 @@ describe('Revered Ikoma', function() {
             this.player1.clickCard(this.assassination);
             this.player1.clickCard(this.skirmisher);
             this.player1.clickPrompt('Done');
-            this.player2.clickCard(this.assassination);
+            this.player2.clickPrompt('Assassination');
             expect(this.assassination.location).toBe('hand');
             expect(this.skirmisher.location).toBe('conflict deck');
             expect(this.player1.player.conflictDeck.last()).toBe(this.skirmisher);
             expect(this.player1.hand.length).toBe(hand + 1);
             expect(this.player1.conflictDeck.length).toBe(deck + 1);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Renowned Singer to put Assassination into their hand and return Hiruma Skirmisher to the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player1 uses Renowned Singer to have player2 return one of Assassination and Hiruma Skirmisher to player1\'s hand');
+            expect(this.getChatLogs(5)).toContain('player2 chooses Assassination to be put into player1\'s hand. Hiruma Skirmisher is put on the bottom of player1\'s conflict deck');
         });
 
         it('should take into account a new phase', function() {

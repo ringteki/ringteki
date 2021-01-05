@@ -31,6 +31,7 @@ describe('Silent Ones Monastery', function() {
                 this.silentOnesMonastery = this.player2.findCardByName('silent-ones-monastery', 'province 1');
                 this.dispatch = this.player2.placeCardInProvince('dispatch-to-nowhere', 'province 4');
                 this.city = this.player2.findCardByName('city-of-the-open-hand');
+                this.city.loadOriginalAction();
             });
 
             it('should limit the phate gained by the opponent in one phase to 2', function() {
