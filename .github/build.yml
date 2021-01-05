@@ -1,0 +1,23 @@
+name: Ringteki CI
+
+on: 
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.18.3'
+      - run: npm install
+      - run: npm install -g typescript@3.4.5
+      - name: Test
+        run: npm test
+      - name: Lint
+        run: npm run lint
+      - name: Coverage
+        run: npm run coverage
