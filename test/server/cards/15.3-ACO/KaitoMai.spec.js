@@ -72,7 +72,7 @@ describe('Kaito Mai', function() {
             expect(this.manipulator.fate).toBe(fate - 1);
         });
 
-        it('should react to leaving play with fate', function() {
+        it('should not react to leaving play with fate', function() {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
