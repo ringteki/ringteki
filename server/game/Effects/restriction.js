@@ -17,6 +17,8 @@ const checkRestrictions = {
     cardEffects: (context) =>
         (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
+    ringEffects: (context) => context.source.type === 'ring',
+    cardAndRingEffects: (context) => checkRestrictions.cardEffects(context) || checkRestrictions.ringEffects(context),
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
