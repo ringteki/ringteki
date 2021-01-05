@@ -54,7 +54,7 @@ describe('Feeding an Army', function() {
 
             });
 
-            it('should give you the option to discard cards in the province you broke', function() {
+            it('should give your opponent the option to discard cards in the province you broke', function() {
                 this.noMoreActions();
                 this.player1.clickCard(this.feeding);
                 this.player1.clickCard(this.garden);
