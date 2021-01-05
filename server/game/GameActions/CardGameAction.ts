@@ -130,7 +130,7 @@ export class CardGameAction extends GameAction {
                 });
             }
             // Add an imminent triggering condition for removing fate
-            if(event.card.getFate() > 0) {
+            if(event.card.allowGameAction('removeFate', context.game.getFrameworkContext())) {
                 let fateEvent = context.game.actions.removeFate({ amount: event.card.getFate() }).getEvent(event.card, context.game.getFrameworkContext());
                 fateEvent.order = event.order - 1;
                 fateEvent.isContingent = true;
