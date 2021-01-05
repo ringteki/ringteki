@@ -10,7 +10,7 @@ describe('Togashi Kazue 2', function() {
                 },
                 player2: {
                     inPlay: ['kudaka', 'ancient-master', 'border-rider'],
-                    hand: ['against-the-waves', 'supernatural-storm']
+                    hand: ['against-the-waves', 'supernatural-storm', 'assassination', 'cloud-the-mind']
                 }
             });
 
@@ -29,6 +29,8 @@ describe('Togashi Kazue 2', function() {
             this.kudaka = this.player2.findCardByName('kudaka');
             this.atw = this.player2.findCardByName('against-the-waves');
             this.storm = this.player2.findCardByName('supernatural-storm');
+            this.assassination = this.player2.findCardByName('assassination');
+            this.cloud = this.player2.findCardByName('cloud-the-mind');
             this.ancientMaster = this.player2.findCardByName('ancient-master');
             this.borderRider = this.player2.findCardByName('border-rider');
         });
@@ -284,6 +286,20 @@ describe('Togashi Kazue 2', function() {
             this.player1.clickCard(this.talisman);
             this.player1.clickCard(this.garden);
             expect(this.game.currentConflict.conflictProvince).toBe(this.sd2);
+        });
+
+        it('should not crash when Kazue leaves play', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.challenger],
+                defenders: [this.kudaka]
+            });
+
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.kazue);
+
+            expect(this.kazue.location).toBe('dynasty discard pile');
         });
     });
 });
