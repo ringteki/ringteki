@@ -35,7 +35,7 @@ export class PlaceFateAction extends CardGameAction {
             return false;
         }
 
-        return super.canAffect(card, context) && this.checkOrigin(origin, context);
+        return super.canAffect(card, context) && this.checkOrigin(origin, context) && card !== origin;
     }
 
     isRing(x: any): x is Ring {

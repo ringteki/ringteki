@@ -37,12 +37,14 @@ describe('Iuchi Shahai 2', function() {
 
         it('should react to playing a meishodo card', function() {
             let fate = this.shahai.fate;
+            let honor = this.player1.honor;
             this.player1.playAttachment(this.talisman, this.challenger);
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.shahai);
             this.player1.clickCard(this.shahai);
             expect(this.shahai.fate).toBe(fate + 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Iuchi Shahai to place 1 fate on Iuchi Shahai');
+            expect(this.player1.honor).toBe(honor - 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses Iuchi Shahai, losing 1 honor to place 1 fate on Iuchi Shahai');
             expect(this.player2).toHavePrompt('Action Window');
         });
 
@@ -55,7 +57,7 @@ describe('Iuchi Shahai 2', function() {
             expect(this.player1).toBeAbleToSelect(this.shahai);
             this.player1.clickCard(this.shahai);
             expect(this.shahai.fate).toBe(fate + 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Iuchi Shahai to place 1 fate on Iuchi Shahai');
+            expect(this.getChatLogs(5)).toContain('player1 uses Iuchi Shahai, losing 1 honor to place 1 fate on Iuchi Shahai');
             expect(this.player2).toHavePrompt('Action Window');
         });
 
