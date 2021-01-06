@@ -25,9 +25,12 @@ describe('Command the Tributary', function() {
         });
 
 
-        it('should let you transfer fate from your character to a friendly character', function() {
+        it('should let you transfer fate from your character to another character', function() {
             this.player1.clickCard(this.challenger);
             expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.hida);
+            expect(this.player1).toBeAbleToSelect(this.hida2);
+            expect(this.player1).not.toBeAbleToSelect(this.challenger);
             this.player1.clickCard(this.hida);
             expect(this.hida.fate).toBe(1);
             expect(this.challenger.fate).toBe(0);

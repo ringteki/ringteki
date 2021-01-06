@@ -10,6 +10,7 @@ class IuchiShahai2 extends DrawCard {
 
         this.reaction({
             title: 'Place 1 fate on this character',
+            cost: AbilityDsl.costs.payHonor(1),
             when: {
                 onCardPlayed: (event, context) => (event.card.hasTrait('meishodo') || event.card.hasTrait('maho')) && event.player === context.player
             },
