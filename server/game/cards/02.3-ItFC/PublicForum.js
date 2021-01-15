@@ -9,10 +9,10 @@ class PublicForum extends ProvinceCard {
                 onBreakProvince: (event, context) => event.card === context.source && !event.card.hasToken('honor')
             },
             effect: 'add an honor token to {0} instead of breaking it',
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.cancel(),
-                AbilityDsl.actions.addToken(context => ({ target: context.source }))
-            ])
+            gameAction: AbilityDsl.actions.cancel(context => ({
+                target: context.event,
+                replacementGameAction: AbilityDsl.actions.addToken(({ target: context.source }))
+            }))
         });
     }
 
