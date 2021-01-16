@@ -18,12 +18,14 @@ class CycleOfRebirth extends DrawCard {
                     AbilityDsl.actions.moveCard(context => ({
                         destination: Locations.DynastyDeck,
                         target: context.target,
-                        shuffle: true
+                        shuffle: true,
+                        bottom: true
                     })),
                     AbilityDsl.actions.moveCard(context => ({
                         destination: Locations.DynastyDeck,
                         target: context.source,
-                        shuffle: true
+                        shuffle: true,
+                        bottom: true
                     }))
                 ]),
                 AbilityDsl.actions.refillFaceup(context => ({
