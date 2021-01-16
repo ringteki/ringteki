@@ -9,8 +9,8 @@ describe('Shadowed Village', function() {
                     dynastyDiscard: ['shadowed-village', 'daidoji-kageyu']
                 },
                 player2: {
-                    inPlay: ['alibi-artist'],
-                    hand: ['assassination']
+                    inPlay: ['alibi-artist', 'miya-mystic'],
+                    hand: ['assassination', 'consumed-by-five-fires']
                 }
             });
             this.miyaMystic = this.player1.findCardByName('miya-mystic');
@@ -19,10 +19,13 @@ describe('Shadowed Village', function() {
             this.steed = this.player1.findCardByName('shadow-steed');
             this.alibi = this.player2.findCardByName('alibi-artist');
             this.assassination = this.player2.findCardByName('assassination');
+            this.fires = this.player2.findCardByName('consumed-by-five-fires');
+            this.mystic2 = this.player2.findCardByName('miya-mystic');
 
             this.miyaMystic.fate = 0;
             this.manipulator.fate = 2;
             this.alibi.fate = 1;
+            this.mystic2.fate = 1;
 
             this.kageyu = this.player1.placeCardInProvince('daidoji-kageyu', 'province 1');
             this.village = this.player1.placeCardInProvince('shadowed-village', 'province 2');
@@ -49,7 +52,7 @@ describe('Shadowed Village', function() {
             this.player1.clickCard(this.miyaMystic);
             this.player1.clickCard(this.village);
             expect(this.player1.hand.length).toBe(hand); //-1 from karmic, +1 from draw
-            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw a card');
         });
 
         it('should draw two cards if the character is dishonored', function() {
@@ -71,7 +74,7 @@ describe('Shadowed Village', function() {
             this.player1.clickCard(this.miyaMystic);
             this.player1.clickCard(this.village);
             expect(this.player1.hand.length).toBe(hand); //-1 from karmic, +1 from draw
-            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw a card');
         });
 
         it('should react to moving fate via disguised', function() {
@@ -89,7 +92,7 @@ describe('Shadowed Village', function() {
             this.player1.clickCard(this.manipulator);
             this.player1.clickCard(this.village);
             expect(this.player1.hand.length).toBe(hand + 1); //+1 from draw
-            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw a card');
         });
 
         it('should react to leaving play with fate', function() {
@@ -118,7 +121,7 @@ describe('Shadowed Village', function() {
             this.player2.clickCard(this.manipulator);
             this.player1.clickCard(this.village);
             expect(this.player1.hand.length).toBe(hand + 1); //+1 from draw
-            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw a card');
         });
 
         it('should not react to opponent\'s characters losing fate', function() {
@@ -172,6 +175,57 @@ describe('Shadowed Village', function() {
             this.player1.clickPrompt('1');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).toHavePrompt('Action Window');
+        });
+
+        it('should prompt to choose between which event to react to if  multiple characters have fate removed in one go', function() {
+            this.manipulator.dishonor();
+            this.manipulator.fate = 4;
+            this.miyaMystic.fate = 4;
+            this.player1.pass();
+            this.player2.clickCard(this.fires);
+            this.player2.clickCard(this.manipulator);
+            this.player2.clickPrompt('3');
+            this.player2.clickCard(this.miyaMystic);
+            this.player2.clickPrompt('2');
+            expect(this.player1).toBeAbleToSelect(this.village);
+            this.player1.clickCard(this.village);
+            expect(this.player1).toHavePrompt('Choose an event to respond to');
+            expect(this.player1).toHavePromptButton('Fate being moved from Bayushi Manipulator');
+            expect(this.player1).toHavePromptButton('Fate being moved from Miya Mystic');
+        });
+
+        it('should draw 2 if you pick a dishonored character to react to', function() {
+            let hand = this.player1.hand.length;
+            this.manipulator.dishonor();
+            this.manipulator.fate = 4;
+            this.miyaMystic.fate = 4;
+            this.player1.pass();
+            this.player2.clickCard(this.fires);
+            this.player2.clickCard(this.manipulator);
+            this.player2.clickPrompt('3');
+            this.player2.clickCard(this.miyaMystic);
+            this.player2.clickPrompt('2');
+            this.player1.clickCard(this.village);
+            this.player1.clickPrompt('Fate being moved from Bayushi Manipulator');
+            expect(this.player1.hand.length).toBe(hand + 2);
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw 2 cards');
+        });
+
+        it('should draw 1 if you pick a non-dishonored character to react to', function() {
+            let hand = this.player1.hand.length;
+            this.manipulator.dishonor();
+            this.manipulator.fate = 4;
+            this.miyaMystic.fate = 4;
+            this.player1.pass();
+            this.player2.clickCard(this.fires);
+            this.player2.clickCard(this.manipulator);
+            this.player2.clickPrompt('3');
+            this.player2.clickCard(this.miyaMystic);
+            this.player2.clickPrompt('2');
+            this.player1.clickCard(this.village);
+            this.player1.clickPrompt('Fate being moved from Miya Mystic');
+            expect(this.player1.hand.length).toBe(hand + 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses Shadowed Village to draw a card');
         });
     });
 });

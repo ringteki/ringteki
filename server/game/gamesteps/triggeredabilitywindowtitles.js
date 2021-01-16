@@ -15,7 +15,8 @@ const EventToTitleFunc = {
     onPhaseStarted: event => event.phase + ' phase starting',
     onReturnRing: event => 'returning the ' + event.ring.element + ' ring',
     onSacrificed: event => event.card.name + ' being sacrificed',
-    onRemovedFromChallenge: event => event.card.name + ' being removed from the challenge'
+    onRemovedFromChallenge: event => event.card.name + ' being removed from the challenge',
+    onMoveFate: event => 'Fate being moved from ' + event.origin.name
 };
 
 const AbilityTypeToWord = {
