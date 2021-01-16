@@ -20,6 +20,7 @@ const checkRestrictions = {
     ringEffects: (context) => context.source.type === 'ring',
     cardAndRingEffects: (context) => checkRestrictions.cardEffects(context) || checkRestrictions.ringEffects(context),
     characters: context => context.source.type === CardTypes.Character,
+    charactersWithNoFate: context => context.source.type === CardTypes.Character && context.source.getFate() === 0,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
     copiesOfX: (context, effect) => context.source.name === effect.params,
