@@ -21,7 +21,7 @@ class DuplicateUniqueAction extends BaseAction {
                 return 'location';
             }
         }
-        if(!this.card.anotherUniqueInPlay(context.player)) {
+        if(!this.card.anotherUniqueInPlayControlledBy(context.player)) {
             return 'unique';
         }
         return super.meetsRequirements(context);

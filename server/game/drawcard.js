@@ -129,6 +129,15 @@ class DrawCard extends BaseCard {
         ));
     }
 
+    anotherUniqueInPlayControlledBy(player) {
+        return this.isUnique() && this.game.allCards.any(card => (
+            card.isInPlay() &&
+            card.printedName === this.printedName &&
+            card !== this &&
+            card.controller === player
+        ));
+    }
+
     createSnapshot() {
         let clone = new DrawCard(this.owner, this.cardData);
 
