@@ -721,15 +721,21 @@ class DrawCard extends BaseCard {
             attackers = attackers.concat(this);
         }
 
+        // Check if I add an element that I can\'t attack with
+        const elementsAdded = this.attachments.reduce(
+            (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
+            this.getEffects(EffectNames.AddElementAsAttacker)
+        );
+
+        if(elementsAdded.some(element => this.game.rings[element].getEffects(EffectNames.CannotDeclareRing).some(match => match(this.controller)))) {
+            return false;
+        }
+
         let fateCostToAttackProvince = province ? province.getFateCostToAttack() : 0;
         if(attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) + fateCostToAttackProvince > this.controller.fate) {
             return false;
         }
         if(this.anyEffect(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {
-            const elementsAdded = this.attachments.reduce(
-                (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
-                this.getEffects(EffectNames.AddElementAsAttacker)
-            );
             for(let element of this.getEffects(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {
                 if(!ring.hasElement(element) && !elementsAdded.includes(element)) {
                     return false;
