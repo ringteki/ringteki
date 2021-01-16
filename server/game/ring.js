@@ -70,7 +70,7 @@ class Ring extends EffectSource {
     getElements() {
         let elements = this.getEffects(EffectNames.AddElement).concat([this.element]);
         if(this.game.isDuringConflict()) {
-            if (this.isContested()) {
+            if(this.isContested()) {
                 elements = elements.concat(...this.game.currentConflict.attackers.map(card =>
                     card.attachments.reduce(
                         (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
