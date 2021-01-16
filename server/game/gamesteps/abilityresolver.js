@@ -134,16 +134,11 @@ class AbilityResolver extends BaseStepWithPipeline {
         }
     }
 
-    hasReplacementEvent(event) {
-        const hasReplacementEvent = event && event.replacementEvent;
-        return hasReplacementEvent;
-    }
-
     checkCostsWerePaid() {
         if(this.cancelled) {
             return;
         }
-        this.cancelled = _.any(this.costResults.events, event => event.getResolutionEvent().cancelled && !(this.hasReplacementEvent(event) && !event.isSacrifice));
+        this.cancelled = _.any(this.costResults.events, event => event.getResolutionEvent().cancelled);
         if(this.cancelled) {
             this.game.addMessage('{0} attempted to use {1}, but did not successfully pay the required costs', this.context.player, this.context.source);
         }
