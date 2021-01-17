@@ -413,7 +413,7 @@ describe('The Skin of Fu Leng', function() {
             });
 
             /*
-                Ujina - Should trigger.  I should get to choose the target.
+                Ujina - Should trigger.  I should not get to choose the target.
             */
             describe('Forced Abilities', function() {
                 beforeEach(function() {
@@ -605,16 +605,112 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1.honor).toBe(honor + 1);
                 });
             });
+
+            /*
+                Gained abilities.
+            */
+            describe('Gained Abilities', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng'],
+                        },
+                        player2: {
+                            inPlay: ['matsu-agetoki'],
+                            hand: ['tactical-ingenuity']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.agetoki = this.player2.findCardByName('matsu-agetoki');
+                    this.ti = this.player2.findCardByName('tactical-ingenuity');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                    this.player2.playAttachment(this.ti, this.agetoki);
+                });
+
+                it('should let you trigger gained abilities', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.agetoki],
+                    });
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.clickCard(this.agetoki);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.pass();
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.agetoki);
+                    expect(this.player1).toHavePrompt('Select a card to reveal');
+                    this.player1.clickPrompt('Supernatural Storm (4)');
+                    expect(this.getChatLogs(5)).toContain('player1 uses Matsu Agetoki\'s gained ability from Tactical Ingenuity to look at the top four cards of their deck');
+                });
+            });
+
+            /*
+                Duels.
+            */
+            describe('Duels', function() {
+                describe('Raitsugu', function() {
+                        beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng'],
+                            },
+                            player2: {
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('basic duel targeting', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).not.toBeAbleToSelect(this.raitsugu);
+                        expect(this.player1).toBeAbleToSelect(this.master);
+                        expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
+                    });
+
+                    it('duel resolution - adding bids', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.master);
+
+                        this.player1.clickPrompt('4');
+                        this.player2.clickPrompt('2');
+                        expect(this.getChatLogs(10)).toContain('Mirumoto Raitsugu: 7 vs 3: Ancient Master');
+                    });
+                });
+            });
         });
     });
 });
 
 
 /*
-    Gained Abilities
-    ================
-    Should trigger
-
     Duels
     =====
     Kaezin targeting - My opponent should choose a character they control that is not Kaezin.

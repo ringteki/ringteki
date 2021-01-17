@@ -2,7 +2,7 @@ const _ = require('underscore');
 const { Locations, DuelTypes } = require('./Constants');
 
 class Duel {
-    constructor(game, challenger, target, type, statistic) {
+    constructor(game, challenger, target, type, statistic, challengingPlayer = challenger.controller) {
         this.game = game;
         this.type = type;
         this.source = game.getFrameworkContext().source;
@@ -13,6 +13,7 @@ class Duel {
         this.loser = null;
         this.statistic = statistic;
         this.previousDuel = null;
+        this.challengingPlayer = challengingPlayer;
     }
 
     getSkillStatistic(card) {
@@ -56,11 +57,11 @@ class Duel {
             }
         }
         if(this.bidFinished) {
-            challengerTotal += this.challenger.controller.honorBid;
+            challengerTotal += this.challengingPlayer.honorBid;
             if(Array.isArray(this.target) && this.target.length) {
-                targetTotal += this.target[0].controller.honorBid;
+                targetTotal += this.challengingPlayer.opponent.honorBid;
             } else {
-                targetTotal += this.target.controller.honorBid;
+                targetTotal += this.challengingPlayer.opponent.honorBid;
             }
         }
         return [challengerTotal, targetTotal];
