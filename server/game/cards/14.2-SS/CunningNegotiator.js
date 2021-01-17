@@ -13,8 +13,8 @@ class CunningNegotiator extends DrawCard {
                 message: 'resolve the action ability of the attacked province',
                 gameAction: duel => AbilityDsl.actions.menuPrompt(context => ({
                     activePromptTitle: 'Do you want to trigger ' + context.game.currentConflict.conflictProvince.name + '?',
-                    choices: duel.winner ? ['Yes', 'No'] : [],
-                    player: (duel.winner && duel.winner.controller === context.player) ? Players.Self : Players.Opponent,
+                    choices: duel.winningPlayer ? ['Yes', 'No'] : [],
+                    player: (duel.winningPlayer && duel.winningPlayer === context.player) ? Players.Self : Players.Opponent,
                     choiceHandler: (choice, displayMessage) => {
                         if(displayMessage) {
                             if(choice === 'Yes') {
@@ -28,8 +28,8 @@ class CunningNegotiator extends DrawCard {
                     gameAction: AbilityDsl.actions.triggerAbility(context => {
                         const conflictProvince = context.game.currentConflict.conflictProvince;
                         return {
-                            player: duel.winner ? duel.winner.controller : context.player,
-                            ability: duel.winner ? conflictProvince.abilities.actions[0] : [],
+                            player: duel.winningPlayer,
+                            ability: duel.winningPlayer ? conflictProvince.abilities.actions[0] : [],
                             ignoredRequirements: ['limit']
                         };
                     })

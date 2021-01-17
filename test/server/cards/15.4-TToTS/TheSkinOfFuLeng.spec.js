@@ -29,7 +29,7 @@ describe('The Skin of Fu Leng', function() {
 
         describe('Gaining Abilities', function() {
             /*
-                Brash Samurai (I have no participating characters, my opponent just has Brash) - Should trigger
+                Brash Samurai (I have no participating characters, my opponent just has Brash) - Should not trigger
                 Brash Samurai (I have a character, my opponent just has Brash) - Should not trigger
                 Brash Samurai (I have no participating characters, my opponent has Brash + something) - Should not trigger
             */
@@ -54,21 +54,21 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                // it('should not allow you to trigger if you control a character', function() {
-                //     this.noMoreActions();
-                //     this.initiateConflict({
-                //         type: 'military',
-                //         attackers: [this.toshimoko],
-                //         defenders: [this.brash]
-                //     });
-                //     this.player2.pass();
-                //     expect(this.player1).toHavePrompt('Conflict Action Window');
-                //     this.player1.clickCard(this.brash);
-                //     expect(this.player1).toHavePrompt('Conflict Action Window');
-                //     expect(this.brash.isHonored).toBe(false);
-                // });
+                it('should not allow you to trigger if you control a character', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.brash]
+                    });
+                    this.player2.pass();
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.brash);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    expect(this.brash.isHonored).toBe(false);
+                });
 
-                it('should allow you to trigger if it is participating alone', function() {
+                it('should not allow you to trigger if it is participating alone', function() {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -79,24 +79,24 @@ describe('The Skin of Fu Leng', function() {
                     });
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                     this.player1.clickCard(this.brash);
-                    expect(this.player2).toHavePrompt('Conflict Action Window');
-                    expect(this.brash.isHonored).toBe(true);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    expect(this.brash.isHonored).toBe(false);
                 });
 
-                // it('should allow you to trigger if it is not participating alone if you have no characters', function() {
-                //     this.noMoreActions();
-                //     this.player1.passConflict();
-                //     this.noMoreActions();
-                //     this.initiateConflict({
-                //         type: 'military',
-                //         attackers: [this.brash, this.challenger],
-                //         defenders: []
-                //     });
-                //     expect(this.player1).toHavePrompt('Conflict Action Window');
-                //     this.player1.clickCard(this.brash);
-                //     expect(this.player2).toHavePrompt('Conflict Action Window');
-                //     expect(this.brash.isHonored).toBe(true);
-                // });
+                it('should not allow you to trigger if it is not participating alone if you have no characters', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brash, this.challenger],
+                        defenders: []
+                    });
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.brash);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    expect(this.brash.isHonored).toBe(false);
+                });
             });
 
             /*
@@ -823,7 +823,7 @@ describe('The Skin of Fu Leng', function() {
                 /*
                     Yakamo with Duelist Training - Should use opponent's honor to determine the "cannot lose a duel"
                 */
-                describe('Kyuden Kakita', function() {
+                describe('Hida Yakamo', function() {
                     beforeEach(function() {
                         this.setupTest({
                             phase: 'conflict',
@@ -888,19 +888,174 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.yakamo.bowed).toBe(true);
                     });
                 });
+
+                /*
+                    Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist
+                */
+                describe('Distinguished Dojo', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng']
+                            },
+                            player2: {
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master'],
+                                dynastyDiscard: ['distinguished-dojo']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.dojo = this.player2.placeCardInProvince('distinguished-dojo', 'province 1');
+                        this.dojo.facedown = false;
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('should not react if "my character" wins the duel', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.master);
+
+                        this.player1.clickPrompt('4');
+                        this.player2.clickPrompt('2');
+                        expect(this.getChatLogs(10)).toContain('Mirumoto Raitsugu: 7 vs 3: Ancient Master');
+                        expect(this.player2).toHavePrompt('Conflict Action Window');
+                    });
+
+                    it('should not react if "my character" loses the duel', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.master);
+
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('5');
+                        expect(this.getChatLogs(10)).toContain('Mirumoto Raitsugu: 4 vs 6: Ancient Master');
+                        expect(this.player2).toHavePrompt('Triggered Abilities');
+                        expect(this.player2).toBeAbleToSelect(this.dojo);
+                        this.player2.clickCard(this.dojo);
+                        expect(this.player2).toHavePrompt('Sacrifice Distinguished Dōjō?');
+                    });
+                });
+
+                /*
+                    Cunning Negotiator (code is weird) - Should work properly based on who wins the duel
+                */
+                describe('Cunning Negotiator', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng']
+                            },
+                            player2: {
+                                inPlay: ['cunning-negotiator', 'kakita-yoshi']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.negotiator = this.player2.findCardByName('cunning-negotiator');
+                        this.yoshi = this.player2.findCardByName('kakita-yoshi');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('should allow the "winning player" to trigger the province', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.negotiator, this.yoshi]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.negotiator);
+                        this.player2.clickCard(this.yoshi);
+
+                        this.player1.clickPrompt('5');
+                        this.player2.clickPrompt('1');
+                        expect(this.player1).toHavePrompt('Do you want to trigger Shameful Display?');
+                    });
+
+                    it('should allow the "winning player" to trigger the province', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.negotiator, this.yoshi]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.negotiator);
+                        this.player2.clickCard(this.yoshi);
+
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('5');
+                        expect(this.player2).toHavePrompt('Do you want to trigger Shameful Display?');
+                    });
+                });
+            });
+
+            
+            /*
+                Weird Interactions
+                ==================
+                Compromised Secrets - Should not allow you to trigger abilities (because you can't pay yourself)
+                Uji2 - Should put your cards under their Uji and let them play them
+                Kazue2 - Should be able to use twice
+                Way of the Dragon - Should be able to use twice
+            */
+            describe('Weird Interactions', function() {
+                describe('Distinguished Dojo', function() {
+                        beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng']
+                            },
+                            player2: {
+                                inPlay: ['isawa-ujina']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.ujina = this.player2.findCardByName('isawa-ujina');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.ujina],
+                            ring: 'void'
+                        });
+                        this.noMoreActions();
+                        expect(this.player2).toHavePrompt('Isawa Ujina');
+                        expect(this.player2).toBeAbleToSelect(this.ujina);
+                        expect(this.player2).toBeAbleToSelect(this.toshimoko);
+                        this.player2.clickCard(this.ujina);
+                        expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
+                    });
+                });
             });
         });
     });
 });
-
-
-/*
-    Weird Interactions
-    ==================
-    Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist
-    Cunning Negotiator (code is weird) - Should work properly based on who wins the duel
-    Compromised Secrets - Should not allow you to trigger abilities (because you can't pay yourself)
-    Uji2 - Should put your cards under their Uji and let them play them
-    Kazue2 - Should be able to use twice
-    Way of the Dragon - Should be able to use twice
-*/

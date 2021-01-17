@@ -9,10 +9,7 @@ class ProvingGround extends DrawCard {
                     if(!event.winner) {
                         return false;
                     }
-                    if(Array.isArray(event.winner)) {
-                        return event.winner.some(card => card.controller === context.player);
-                    }
-                    return event.winner.controller === context.player;
+                    return event.winningPlayer === context.player;
                 }
             },
             gameAction: ability.actions.draw(),
