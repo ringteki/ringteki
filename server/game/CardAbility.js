@@ -19,11 +19,14 @@ class CardAbility extends ThenAbility {
                         return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                     },
                     controller: Players.Opponent,
-                    cardCondition: (card, context) => {
-                        if(typeof properties.initiateDuel === 'function') {
-                            return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                    cardCondition: (card2, context) => {
+                        if(card === card2) {
+                            return false;
                         }
-                        return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                        if(typeof properties.initiateDuel === 'function') {
+                            return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
+                        }
+                        return properties.initiateDuel.duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                     },
                     gameAction: AbilityDsl.actions.duel(context => {
                         if(typeof properties.initiateDuel === 'function') {
@@ -55,11 +58,14 @@ class CardAbility extends ThenAbility {
                             return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                         },
                         controller: Players.Opponent,
-                        cardCondition: (card, context) => {
+                        cardCondition: (card2, context) => {
+                            if(card === card2) {
+                                return false;
+                            }    
                             if(typeof properties.initiateDuel === 'function') {
-                                return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                                return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                             }
-                            return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                            return properties.initiateDuel.duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                         },
                         gameAction: AbilityDsl.actions.duel(context => {
                             if(typeof properties.initiateDuel === 'function') {
