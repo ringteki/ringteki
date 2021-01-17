@@ -13,7 +13,7 @@ class TheSkinOfFuLeng extends DrawCard {
             targetController: Players.Opponent,
             effect: AbilityDsl.effects.playerCannot({
                 cannot: 'triggerAbilities',
-                restricts: 'charactersWithNoFate'
+                restricts: ['charactersWithNoFate', 'nonForcedAbilities']
             })
         });
 

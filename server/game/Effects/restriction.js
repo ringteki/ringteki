@@ -90,14 +90,25 @@ class Restriction extends EffectValue {
     }
 
     checkCondition(context, card) {
-        if(!this.restriction) {
+        if(Array.isArray(this.restriction)) {
+            const vals = this.restriction.map(a => this.checkRestriction(a, context, card));
+            return (vals.every(a => a));
+        }
+
+        return this.checkRestriction(this.restriction, context, card);
+    }
+
+    checkRestriction(restriction, context, card) {
+        if(!restriction) {
             return true;
         } else if(!context) {
             throw new Error('checkCondition called without a context');
-        } else if(!checkRestrictions[this.restriction]) {
-            return context.source.hasTrait(this.restriction);
+        } else if((typeof restriction === 'function')) {
+            return restriction(context, this, card);
+        } else if(!checkRestrictions[restriction]) {
+            return context.source.hasTrait(restriction);
         }
-        return checkRestrictions[this.restriction](context, this, card);
+        return checkRestrictions[restriction](context, this, card);
     }
 }
 

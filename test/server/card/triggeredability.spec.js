@@ -3,13 +3,14 @@ const TriggeredAbility = require('../../../build/server/game/triggeredability.js
 describe('TriggeredAbility', function () {
     beforeEach(function () {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'registerAbility', 'getPlayers']);
-        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'isBlank', 'canTriggerAbilities']);
+        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'isBlank', 'canTriggerAbilities', 'anyEffect']);
         //this.cardSpy.location = 'play area';
         //this.cardSpy.canTriggerAbilities.and.returnValue(true);
         //this.cardSpy.abilities = { reactions: [] };
         this.player = { name: 'player1', playableLocations: [], findPlayType: () => undefined };
         this.cardSpy.controller = this.player;
         this.gameSpy.getPlayers.and.returnValue([this.player]);
+        this.cardSpy.anyEffect.and.returnValue([]);
         //this.limitSpy = jasmine.createSpyObj('limit', ['increment', 'isAtMax', 'registerEvents', 'unregisterEvents']);
 
         this.properties = {

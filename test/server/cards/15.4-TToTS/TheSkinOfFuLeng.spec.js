@@ -434,7 +434,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should let you pick targets for forced abilities', function() {
+                it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -443,11 +443,55 @@ describe('The Skin of Fu Leng', function() {
                         ring: 'void'
                     });
                     this.noMoreActions();
-                    expect(this.player1).toHavePrompt('Isawa Ujina');
-                    expect(this.player1).toBeAbleToSelect(this.ujina);
-                    expect(this.player1).toBeAbleToSelect(this.toshimoko);
-                    this.player1.clickCard(this.ujina);
-                    expect(this.getChatLogs(5)).toContain('player1 uses Isawa Ujina to remove Isawa Ujina from the game');
+                    expect(this.player2).toHavePrompt('Isawa Ujina');
+                    expect(this.player2).toBeAbleToSelect(this.ujina);
+                    expect(this.player2).toBeAbleToSelect(this.toshimoko);
+                    this.player2.clickCard(this.ujina);
+                    expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
+                });
+            });
+
+            /*
+                Cards that refer to their controller's game state
+                =============
+                Pious Guardian - should check my provinces, not my opponents
+                Mitsu2 - should check the number of cards I've played, not my opponent
+                Kageyu - should check the number of cards my opponent has played, not myself
+                Agetoki - should check your honor total
+            */
+            describe('Forced Abilities', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng'],
+                        },
+                        player2: {
+                            inPlay: ['isawa-ujina']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.ujina = this.player2.findCardByName('isawa-ujina');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ujina],
+                        ring: 'void'
+                    });
+                    this.noMoreActions();
+                    expect(this.player2).toHavePrompt('Isawa Ujina');
+                    expect(this.player2).toBeAbleToSelect(this.ujina);
+                    expect(this.player2).toBeAbleToSelect(this.toshimoko);
+                    this.player2.clickCard(this.ujina);
+                    expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
                 });
             });
         });
@@ -456,12 +500,6 @@ describe('The Skin of Fu Leng', function() {
 
 
 /*
-    Cards that refer to their controller's game state
-    =============
-    Pious Guardian - should check my provinces, not my opponents
-    Mitsu2 - should check the number of cards I've played, not my opponent
-    Kageyu - should check the number of cards my opponent has played, not myself
-
     Gained Abilities
     ================
     Should trigger

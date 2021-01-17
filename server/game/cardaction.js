@@ -58,7 +58,8 @@ class CardAction extends CardAbility {
             return 'phase';
         }
 
-        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent);
+        let canOpponentTrigger = this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent) && this.abilityType !== AbilityTypes.ForcedInterrupt && this.abilityType !== AbilityTypes.ForcedReaction;
+        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || canOpponentTrigger;
         if(!ignoredRequirements.includes('player') && this.card.type !== CardTypes.Event && !canPlayerTrigger) {
             return 'player';
         }
