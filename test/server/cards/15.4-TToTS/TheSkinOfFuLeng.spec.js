@@ -654,6 +654,9 @@ describe('The Skin of Fu Leng', function() {
                 Duels.
             */
             describe('Duels', function() {
+                /*
+                    Normal targeting - I should be able to choose a character my opponent controls that is not Raitsugu
+                */
                 describe('Raitsugu', function() {
                     beforeEach(function() {
                         this.setupTest({
@@ -705,6 +708,11 @@ describe('The Skin of Fu Leng', function() {
                     });
                 });
 
+                /*
+                    Kaezin targeting - My opponent should choose a character they control that is not Kaezin.
+                    Duel - my bid should apply to Kaezin, my opponent's should apply to their character
+                    Duel resolution - if I win should move everyone except the two characters.  If they win should move Kaezin home.
+                */
                 describe('Kaezin', function() {
                     beforeEach(function() {
                         this.setupTest({
@@ -757,6 +765,129 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.getChatLogs(5)).toContain('Duel Effect: send Kakita Toshimoko home');
                     });
                 });
+
+                /*
+                    Kyuden Kakita - opponent\'s should trigger and let them choose either character.  Mine should not
+                */
+                describe('Kyuden Kakita', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng'],
+                                stronghold: ['kyuden-kakita']
+                            },
+                            player2: {
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master'],
+                                stronghold: ['kyuden-kakita']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.kk = this.player1.findCardByName('kyuden-kakita');
+                        this.kk2 = this.player2.findCardByName('kyuden-kakita');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('duel resolution - Kyuden Kakita', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.master);
+
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('3');
+                        expect(this.getChatLogs(10)).toContain('Mirumoto Raitsugu: 4 vs 4: Ancient Master');
+                        expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                        expect(this.player2).toHavePrompt('Triggered Abilities');
+                        expect(this.player2).toBeAbleToSelect(this.kk2);
+                        this.player2.clickCard(this.kk2);
+                        expect(this.player2).toBeAbleToSelect(this.raitsugu);
+                        expect(this.player2).toBeAbleToSelect(this.master);
+
+                        this.player2.clickCard(this.raitsugu);
+                        expect(this.raitsugu.isHonored).toBe(true);
+                        expect(this.player2).toHavePrompt('Conflict Action Window');
+                    });
+                });
+
+                /*
+                    Yakamo with Duelist Training - Should use opponent's honor to determine the "cannot lose a duel"
+                */
+                describe('Kyuden Kakita', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng']
+                            },
+                            player2: {
+                                inPlay: ['hida-yakamo', 'daidoji-uji'],
+                                hand: ['duelist-training']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.yakamo = this.player2.findCardByName('hida-yakamo');
+                        this.uji = this.player2.findCardByName('daidoji-uji');
+                        this.duelist = this.player2.findCardByName('duelist-training');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                        this.player2.playAttachment(this.duelist, this.yakamo);
+                    });
+
+                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.yakamo, this.uji]
+                        });
+                        this.player1.honor = 20;
+                        this.player2.honor = 10;
+
+                        this.player2.pass();
+                        this.player1.clickCard(this.yakamo);
+                        this.player1.clickCard(this.uji);
+
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('1');
+                        expect(this.getChatLogs(10)).toContain('Hida Yakamo: 5 vs 7: Daidoji Uji');
+                        expect(this.getChatLogs(10)).toContain('The duel has no effect');
+                        expect(this.yakamo.bowed).toBe(false);
+                    });
+
+                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.yakamo, this.uji]
+                        });
+                        this.player1.honor = 10;
+                        this.player2.honor = 20;
+
+                        this.player2.pass();
+                        this.player1.clickCard(this.yakamo);
+                        this.player1.clickCard(this.uji);
+
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('1');
+                        expect(this.getChatLogs(10)).toContain('Hida Yakamo: 5 vs 7: Daidoji Uji');
+                        expect(this.getChatLogs(10)).toContain('Duel effect: bow Hida Yakamo');
+                        expect(this.yakamo.bowed).toBe(true);
+                    });
+                });
             });
         });
     });
@@ -764,17 +895,6 @@ describe('The Skin of Fu Leng', function() {
 
 
 /*
-    Duels
-    =====
-    Kaezin targeting - My opponent should choose a character they control that is not Kaezin.
-    Duel - my bid should apply to Kaezin, my opponent's should apply to their character
-    Duel resolution - if I win should move everyone except the two characters.  If they win should move Kaezin home.
-    Kyuden Kakita - should trigger and let you choose Kaezin or the other character
-
-    Raitsugu targeting - I should be able to choose a character my opponent controls that is not Raitsugu
-
-    Yakamo with Duelist Training - Should not use my honor to determine the "cannot lose a duel"
-
     Weird Interactions
     ==================
     Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist
