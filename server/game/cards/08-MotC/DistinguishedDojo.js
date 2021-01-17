@@ -8,13 +8,13 @@ class DistinguishedDojo extends DrawCard {
             title: 'Place an honor token',
             when: {
                 afterDuel: (event, context) => {
-                    if(!event.winner) {
+                    if(!event.winningPlayer) {
                         return false;
                     }
-                    if(Array.isArray(event.winner)) {
-                        return event.winner.some(card => card.controller === context.source.controller);
+                    if(Array.isArray(event.winningPlayer)) {
+                        return event.winningPlayer.some(player => player === context.player);
                     }
-                    return event.winner.controller === context.source.controller;
+                    return event.winningPlayer === context.player;
                 }
             },
             limit: AbilityDsl.limit.perRound(3),

@@ -1,6 +1,11 @@
 const _ = require('underscore');
 const { Locations, DuelTypes } = require('./Constants');
 
+const DuelParticipants = Object.freeze({
+    Challenger: 'challenger',
+    Target: 'target'
+})
+
 class Duel {
     constructor(game, challenger, target, type, statistic, challengingPlayer = challenger.controller) {
         this.game = game;
@@ -11,6 +16,8 @@ class Duel {
         this.bidFinished = false;
         this.winnner = null;
         this.loser = null;
+        this.winningPlayer = null;
+        this.losingPlayer = null;
         this.statistic = statistic;
         this.previousDuel = null;
         this.challengingPlayer = challengingPlayer;
@@ -89,48 +96,71 @@ class Duel {
         this.bidFinished = true;
     }
 
+    setWinner(winner) {
+        if (winner === DuelParticipants.Challenger) {
+            this.winner = this.challenger;
+            this.winningPlayer = this.challengingPlayer;
+        } else {
+            this.winner = this.target;
+            this.winningPlayer = this.challengingPlayer.opponent;
+        }
+    }
+
+    setLoser(loser) {
+        if (loser === DuelParticipants.Challenger) {
+            this.loser = this.challenger;
+            this.losingPlayer = this.challengingPlayer;
+        } else {
+            this.loser = this.target;
+            this.losingPlayer = this.challengingPlayer.opponent;
+        }
+    }
+
     determineResult() {
         let challengerTotal = this.getChallengerStatisticTotal();
         let targetTotal = this.getTargetStatisticTotal();
         if(challengerTotal === '-') {
             if(targetTotal !== '-' && targetTotal > 0) {
                 // Challenger dead, target alive
-                this.winner = this.target;
+                this.setWinner(DuelParticipants.Target);
             }
             // Both dead
         } else if(targetTotal === '-') {
             // Challenger alive, target dead
             if(challengerTotal > 0) {
-                this.winner = this.challenger;
+                this.setWinner(DuelParticipants.Challenger);
             }
         } else {
             [challengerTotal, targetTotal] = this.getTotals(challengerTotal, targetTotal);
 
             if(challengerTotal > targetTotal) {
                 // Both alive, challenger wins
-                this.winner = this.challenger;
-                this.loser = this.target;
+                this.setWinner(DuelParticipants.Challenger);
+                this.setLoser(DuelParticipants.Target);
             } else if(challengerTotal < targetTotal) {
                 // Both alive, target wins
-                this.winner = this.target;
-                this.loser = this.challenger;
+                this.setWinner(DuelParticipants.Target);
+                this.setLoser(DuelParticipants.Challenger);
             }
         }
         if(Array.isArray(this.loser)) {
             this.loser = _.reject(this.loser, (card) => !card.checkRestrictions('loseDuels', card.game.getFrameworkContext()));
             if(this.loser.length === 0) {
                 this.loser = null;
+                this.losingPlayer = null;
             } else if(this.loser.length === 1) {
                 this.loser = this.loser[0];
             }
         } else {
             if(this.loser && !this.loser.checkRestrictions('loseDuels', this.loser.game.getFrameworkContext())) {
                 this.loser = null;
+                this.losingPlayer = null;
             }
         }
         if(Array.isArray(this.winner)) {
             if(this.winner.length === 0) {
                 this.winner = null;
+                this.winningPlayer = null;
             } else if(this.winner.length === 1) {
                 this.winner = this.winner[0];
             }
