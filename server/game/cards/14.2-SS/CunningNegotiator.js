@@ -28,7 +28,7 @@ class CunningNegotiator extends DrawCard {
                     gameAction: AbilityDsl.actions.triggerAbility(context => {
                         const conflictProvince = context.game.currentConflict.conflictProvince;
                         return {
-                            player: duel.winner ? duel.winner.controller : context.source.controller,
+                            player: duel.winner ? duel.winner.controller : context.player,
                             ability: duel.winner ? conflictProvince.abilities.actions[0] : [],
                             ignoredRequirements: ['limit']
                         };

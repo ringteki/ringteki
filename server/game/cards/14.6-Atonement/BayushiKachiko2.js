@@ -21,7 +21,7 @@ class BayushiKachiko2 extends DrawCard {
                         this.mostRecentEvent = event;
                         return (event.originalLocation === Locations.ConflictDiscardPile && event.card.owner === context.player.opponent &&
                         event.card.type === CardTypes.Event && !event.onPlayCardSource && !event.card.fromOutOfPlaySource &&
-                        event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDiscard &&
+                        event.player === context.player && !event.sourceOfCardPlayedFromConflictDiscard &&
                         context.game.isDuringConflict('political') && context.source.isParticipating());
                     }
                 },
@@ -35,7 +35,7 @@ class BayushiKachiko2 extends DrawCard {
                         }
                         this.mostRecentEvent.sourceOfCardPlayedFromConflictDiscard = this;
                         this.cardsPlayedThisRound++;
-                        this.game.addMessage('{0} plays a card from their opponent\'s conflict discard pile due to the ability of {1} ({2} use{3} remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
+                        this.game.addMessage('{0} plays a card from their opponent\'s conflict discard pile due to the ability of {1} ({2} use{3} remaining)', context.player, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
                         this.game.addMessage('{0} is removed from the game due to the ability of {1}', this.mostRecentEvent.card, context.source);
                         this.mostRecentEvent.card.owner.moveCard(this.mostRecentEvent.card, Locations.RemovedFromGame);
                     }
