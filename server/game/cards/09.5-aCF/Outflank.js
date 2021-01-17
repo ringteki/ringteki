@@ -8,7 +8,7 @@ class Outflank extends DrawCard {
             title: 'Prevent a character from declaring as a defender',
             max: AbilityDsl.limit.perConflict(1),
             when: {
-                onCardRevealed: (event, context) => event.card.isProvince && event.card.controller === context.source.controller.opponent && this.game.isDuringConflict()
+                onCardRevealed: (event, context) => event.card.isProvince && event.card.controller === context.player.opponent && this.game.isDuringConflict()
             },
             target: {
                 controller: Players.Any,

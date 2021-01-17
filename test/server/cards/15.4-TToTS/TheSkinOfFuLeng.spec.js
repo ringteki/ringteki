@@ -452,12 +452,12 @@ describe('The Skin of Fu Leng', function() {
             });
 
             /*
-                Cards that refer to their controller's game state
+                Cards that refer to "your" game state as a triggering condition should use your game state, not their controllers 
                 =============
-                Pious Guardian - should check my provinces, not my opponents
                 Mitsu2 - should check the number of cards I've played, not my opponent
-                Kageyu - should check the number of cards my opponent has played, not myself
                 Agetoki - should check your honor total
+                Kageyu - should check the number of cards my opponent has played, not myself
+                Pious Guardian - should check my provinces, not my opponents
             */
             describe('Forced Abilities', function() {
                 beforeEach(function() {
@@ -465,33 +465,144 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name'],
                         },
                         player2: {
-                            inPlay: ['isawa-ujina']
+                            inPlay: ['pious-guardian', 'togashi-mitsu-2', 'daidoji-kageyu', 'matsu-agetoki'],
+                            hand: ['a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'way-of-the-scorpion']
                         }
                     });
 
                     this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
                     this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
-                    this.ujina = this.player2.findCardByName('isawa-ujina');
+                    this.mitsu = this.player2.findCardByName('togashi-mitsu-2');
+                    this.guardian = this.player2.findCardByName('pious-guardian');
+                    this.kageyu = this.player2.findCardByName('daidoji-kageyu');
+                    this.agetoki = this.player2.findCardByName('matsu-agetoki');
+                    this.scorpion = this.player2.findCardByName('way-of-the-scorpion');
+
+                    this.sd1 = this.player1.findCardByName('shameful-display', 'province 1');
+                    this.sd2 = this.player1.findCardByName('shameful-display', 'province 2');
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
+                it('Mitsu2 - should care how many cards you have played', function() {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
                         attackers: [this.toshimoko],
-                        defenders: [this.ujina],
+                        defenders: [this.mitsu],
                         ring: 'void'
                     });
+ 
+                    for(i = 0; i < 5; i++) {
+                        this.player2.playAttachment(this.player2.filterCardsByName('a-new-name')[i], this.mitsu);
+                        this.player1.pass();
+                    }    
+
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.clickCard(this.mitsu);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.clickCard(this.scorpion);
+                    this.player2.clickCard(this.toshimoko);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.mitsu);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+
+                    for(i = 0; i < 5; i++) {
+                        this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[i], this.toshimoko);
+                        this.player2.pass();
+                    }
+
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.mitsu);
+                    expect(this.player1).toHavePrompt('Choose a ring effect to resolve');
+                });
+
+                it('Agetoki - should care how your honor', function() {
+                    this.player1.honor = 15;
+                    this.player2.honor = 10;
+
                     this.noMoreActions();
-                    expect(this.player2).toHavePrompt('Isawa Ujina');
-                    expect(this.player2).toBeAbleToSelect(this.ujina);
-                    expect(this.player2).toBeAbleToSelect(this.toshimoko);
-                    this.player2.clickCard(this.ujina);
-                    expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.agetoki],
+                        defenders: [this.toshimoko],
+                        ring: 'void'
+                    });
+ 
+                    this.player1.clickCard(this.agetoki);
+                    expect(this.player1).toHavePrompt('Choose a province');
+                    expect(this.player1).toBeAbleToSelect(this.sd2);
+                    this.player1.clickCard(this.sd2);
+                    expect(this.sd2.inConflict).toBe(true);
+                });
+
+                it('Kageyu - should care how many cards my opponent has plays', function() {
+
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'political',
+                        attackers: [this.toshimoko],
+                        defenders: [this.kageyu],
+                        ring: 'void'
+                    });
+ 
+                    for(i = 0; i < 5; i++) {
+                        this.player2.playAttachment(this.player2.filterCardsByName('a-new-name')[i], this.kageyu);
+                        if (i === 0) {
+                            this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[1], this.toshimoko);
+                        } else if (i !== 4) {
+                            this.player1.pass();
+                        }
+                    }
+
+                    let hand = this.player1.hand.length;
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.kageyu);
+                    expect(this.player1.hand.length).toBe(hand + 5);
+                    expect(this.getChatLogs(5)).toContain('player1 uses Daidoji Kageyu to draw 5 cards');
+                });
+
+                it('Pious Guardian - should care how many of my provinces are broken (testing no trigger)', function() {
+                    this.sd1.isBroken = true;
+                    this.sd2.isBroken = true;
+
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.player2.passConflict();
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.player2.passConflict();
+                    this.noMoreActions();
+ 
+                    this.player2.clickPrompt('Political');
+                    expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                    expect(this.player2).not.toHavePrompt('Triggered Abilities');
+                });
+
+                it('Pious Guardian - should care how many of my provinces are broken (testing trigger)', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.player2.passConflict();
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.player2.passConflict();
+                    this.noMoreActions();
+ 
+                    let honor = this.player1.honor;
+
+                    this.player2.clickPrompt('Political');
+                    expect(this.player1).toHavePrompt('Triggered Abilities');
+                    expect(this.player1).toBeAbleToSelect(this.guardian);
+                    this.player1.clickCard(this.guardian);
+                    expect(this.player1.honor).toBe(honor + 1);
                 });
             });
         });
@@ -513,5 +624,14 @@ describe('The Skin of Fu Leng', function() {
 
     Raitsugu targeting - I should be able to choose a character my opponent controls that is not Raitsugu
 
-    Yakamo with Duelist Training - Should use my honor to determine the "cannot lose a duel"
+    Yakamo with Duelist Training - Should not use my honor to determine the "cannot lose a duel"
+
+    Weird Interactions
+    ==================
+    Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist 
+    Cunning Negotiator (code is weird) - Should work properly based on who wins the duel
+    Compromised Secrets - Should not allow you to trigger abilities (because you can't pay yourself)
+    Uji2 - Should put your cards under their Uji and let them play them
+    Kazue2 - Should be able to use twice
+    Way of the Dragon - Should be able to use twice
 */

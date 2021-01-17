@@ -10,7 +10,7 @@ class SturdyTetsubo extends DrawCard {
                 limit: AbilityDsl.limit.perRound(2),
                 printedAbility: false,
                 when: {
-                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller
+                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player
                         && context.player.opponent
                 },
                 gameAction: AbilityDsl.actions.chosenDiscard()

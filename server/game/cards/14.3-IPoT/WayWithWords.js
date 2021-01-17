@@ -9,7 +9,7 @@ class WayWithWords extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Take 1 honor',
                 when: {
-                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller &&
+                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player &&
                                                        context.player.opponent && event.conflict.conflictType === 'political'
                 },
                 gameAction: AbilityDsl.actions.takeHonor()
