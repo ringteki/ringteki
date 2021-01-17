@@ -411,16 +411,51 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
             });
+
+            /*
+                Ujina - Should trigger.  I should get to choose the target.
+            */
+            describe('Forced Abilities', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng'],
+                        },
+                        player2: {
+                            inPlay: ['isawa-ujina']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.ujina = this.player2.findCardByName('isawa-ujina');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('should let you pick targets for forced abilities', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ujina],
+                        ring: 'void'
+                    });
+                    this.noMoreActions();
+                    expect(this.player1).toHavePrompt('Isawa Ujina');
+                    expect(this.player1).toBeAbleToSelect(this.ujina);
+                    expect(this.player1).toBeAbleToSelect(this.toshimoko);
+                    this.player1.clickCard(this.ujina);
+                    expect(this.getChatLogs(5)).toContain('player1 uses Isawa Ujina to remove Isawa Ujina from the game');
+                });
+            });
         });
     });
 });
 
 
 /*
-    Forced
-    ======
-    Ujina - Should trigger.  I should get to choose the target.
-
     Cards that refer to their controller's game state
     =============
     Pious Guardian - should check my provinces, not my opponents
