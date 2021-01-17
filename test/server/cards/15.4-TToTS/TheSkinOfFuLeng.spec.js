@@ -884,7 +884,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.clickPrompt('1');
                         this.player2.clickPrompt('1');
                         expect(this.getChatLogs(10)).toContain('Hida Yakamo: 5 vs 7: Daidoji Uji');
-                        expect(this.getChatLogs(10)).toContain('Duel effect: bow Hida Yakamo');
+                        expect(this.getChatLogs(10)).toContain('Duel Effect: bow Hida Yakamo');
                         expect(this.yakamo.bowed).toBe(true);
                     });
                 });
