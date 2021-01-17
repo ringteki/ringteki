@@ -16,6 +16,7 @@ describe('Kyofuki\'s Hammer', function() {
             this.togashiYokuni = this.player2.findCardByName('togashi-yokuni');
             this.hammer = this.player1.findCardByName('kyofuki-s-hammer');
 
+            this.p1 = this.player2.findCardByName('shameful-display', 'province 1');
             this.ground = this.player2.placeCardInProvince('favorable-ground', 'province 1');
             this.storehouse = this.player2.placeCardInProvince('imperial-storehouse', 'province 2');
             this.season = this.player2.placeCardInProvince('a-season-of-war', 'province 3');
@@ -72,6 +73,23 @@ describe('Kyofuki\'s Hammer', function() {
             this.player1.clickCard(this.hammer);
             this.player1.clickCard(this.raitsugu);
             expect(this.raitsugu.location).toBe('dynasty discard pile');
+        });
+
+        it('discarding the card shouldn\'t influence breaking', function() {
+            this.initiateConflict({
+                attackers: [this.whisperer],
+                defenders: [],
+                type: 'political',
+                province: this.p1
+            });
+            this.noMoreActions();
+            expect(this.ground.location).toBe('province 1');
+            this.player1.clickCard(this.hammer);
+            this.player1.clickCard(this.ground);
+            expect(this.ground.location).toBe('dynasty discard pile');
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.player1).toHavePrompt('Action Window');
+            expect(this.p1.isBroken).toBe(false);
         });
     });
 });

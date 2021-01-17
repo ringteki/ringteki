@@ -29,6 +29,22 @@ describe('Unveiled Destiny', function() {
                 this.shrineMaiden.modifyFate(1);
             });
 
+            it('should add the element to the contested ring', function() {
+                expect(this.game.rings.fire.getElements()).toContain('fire');
+                expect(this.game.rings.fire.getElements()).toContain('void');
+                expect(this.game.rings.fire.getElements()).not.toContain('air');
+                expect(this.game.rings.fire.getElements()).not.toContain('earth');
+                expect(this.game.rings.fire.getElements()).not.toContain('water');
+            });
+
+            it('should not add the element to the non-contested ring', function() {
+                expect(this.game.rings.earth.getElements()).not.toContain('fire');
+                expect(this.game.rings.earth.getElements()).not.toContain('void');
+                expect(this.game.rings.earth.getElements()).not.toContain('air');
+                expect(this.game.rings.earth.getElements()).toContain('earth');
+                expect(this.game.rings.earth.getElements()).not.toContain('water');
+            });
+
             it('should allow the attaking player to resolve the chosen ring if they wins', function() {
                 this.noMoreActions();
                 expect(this.player1).toHavePrompt('Resolve Ring Effect');
