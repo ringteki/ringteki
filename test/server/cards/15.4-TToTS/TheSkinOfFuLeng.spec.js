@@ -6,7 +6,7 @@ describe('The Skin of Fu Leng', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['kakita-toshimoko', 'doji-challenger', 'bayushi-kachiko-2'],
-                        hand: ['the-skin-of-fu-leng'],
+                        hand: ['the-skin-of-fu-leng']
                     },
                     player2: {
                         inPlay: ['bayushi-kachiko']
@@ -39,7 +39,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['brash-samurai', 'doji-challenger']
@@ -109,7 +109,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['brash-samurai', 'doji-challenger']
@@ -170,7 +170,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['guardian-kami']
@@ -216,7 +216,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
             });
-            
+
             /*
                 Hida O-Ushi (defending, opponent wins conflict) - no trigger
                 Hida O-Ushi (defending, I win conflict) - no trigger
@@ -229,7 +229,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko', 'doji-whisperer'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['hida-o-ushi', 'togashi-acolyte']
@@ -421,7 +421,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['isawa-ujina']
@@ -452,20 +452,20 @@ describe('The Skin of Fu Leng', function() {
             });
 
             /*
-                Cards that refer to "your" game state as a triggering condition should use your game state, not their controllers 
+                Cards that refer to "your" game state as a triggering condition should use your game state, not their controllers
                 =============
                 Mitsu2 - should check the number of cards I've played, not my opponent
                 Agetoki - should check your honor total
                 Kageyu - should check the number of cards my opponent has played, not myself
                 Pious Guardian - should check my provinces, not my opponents
             */
-            describe('Forced Abilities', function() {
+            describe('Game State Interactions', function() {
                 beforeEach(function() {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name'],
+                            hand: ['the-skin-of-fu-leng', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name']
                         },
                         player2: {
                             inPlay: ['pious-guardian', 'togashi-mitsu-2', 'daidoji-kageyu', 'matsu-agetoki'],
@@ -494,11 +494,11 @@ describe('The Skin of Fu Leng', function() {
                         defenders: [this.mitsu],
                         ring: 'void'
                     });
- 
-                    for(i = 0; i < 5; i++) {
+
+                    for(let i = 0; i < 5; i++) {
                         this.player2.playAttachment(this.player2.filterCardsByName('a-new-name')[i], this.mitsu);
                         this.player1.pass();
-                    }    
+                    }
 
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                     this.player2.clickCard(this.mitsu);
@@ -509,7 +509,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.clickCard(this.mitsu);
                     expect(this.player1).toHavePrompt('Conflict Action Window');
 
-                    for(i = 0; i < 5; i++) {
+                    for(let i = 0; i < 5; i++) {
                         this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[i], this.toshimoko);
                         this.player2.pass();
                     }
@@ -532,7 +532,7 @@ describe('The Skin of Fu Leng', function() {
                         defenders: [this.toshimoko],
                         ring: 'void'
                     });
- 
+
                     this.player1.clickCard(this.agetoki);
                     expect(this.player1).toHavePrompt('Choose a province');
                     expect(this.player1).toBeAbleToSelect(this.sd2);
@@ -549,12 +549,12 @@ describe('The Skin of Fu Leng', function() {
                         defenders: [this.kageyu],
                         ring: 'void'
                     });
- 
-                    for(i = 0; i < 5; i++) {
+
+                    for(let i = 0; i < 5; i++) {
                         this.player2.playAttachment(this.player2.filterCardsByName('a-new-name')[i], this.kageyu);
-                        if (i === 0) {
+                        if(i === 0) {
                             this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[1], this.toshimoko);
-                        } else if (i !== 4) {
+                        } else if(i !== 4) {
                             this.player1.pass();
                         }
                     }
@@ -579,7 +579,7 @@ describe('The Skin of Fu Leng', function() {
                     this.noMoreActions();
                     this.player2.passConflict();
                     this.noMoreActions();
- 
+
                     this.player2.clickPrompt('Political');
                     expect(this.player1).not.toHavePrompt('Triggered Abilities');
                     expect(this.player2).not.toHavePrompt('Triggered Abilities');
@@ -595,7 +595,7 @@ describe('The Skin of Fu Leng', function() {
                     this.noMoreActions();
                     this.player2.passConflict();
                     this.noMoreActions();
- 
+
                     let honor = this.player1.honor;
 
                     this.player2.clickPrompt('Political');
@@ -615,7 +615,7 @@ describe('The Skin of Fu Leng', function() {
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng'],
+                            hand: ['the-skin-of-fu-leng']
                         },
                         player2: {
                             inPlay: ['matsu-agetoki'],
@@ -636,7 +636,7 @@ describe('The Skin of Fu Leng', function() {
                     this.initiateConflict({
                         type: 'military',
                         attackers: [this.toshimoko],
-                        defenders: [this.agetoki],
+                        defenders: [this.agetoki]
                     });
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                     this.player2.clickCard(this.agetoki);
@@ -655,12 +655,12 @@ describe('The Skin of Fu Leng', function() {
             */
             describe('Duels', function() {
                 describe('Raitsugu', function() {
-                        beforeEach(function() {
+                    beforeEach(function() {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
                                 inPlay: ['kakita-toshimoko'],
-                                hand: ['the-skin-of-fu-leng'],
+                                hand: ['the-skin-of-fu-leng']
                             },
                             player2: {
                                 inPlay: ['mirumoto-raitsugu', 'ancient-master']
@@ -679,7 +679,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.raitsugu, this.master],
+                            defenders: [this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         this.player1.clickCard(this.raitsugu);
@@ -693,7 +693,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.raitsugu, this.master],
+                            defenders: [this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         this.player1.clickCard(this.raitsugu);
@@ -702,6 +702,59 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.clickPrompt('4');
                         this.player2.clickPrompt('2');
                         expect(this.getChatLogs(10)).toContain('Mirumoto Raitsugu: 7 vs 3: Ancient Master');
+                    });
+                });
+
+                describe('Kaezin', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng']
+                            },
+                            player2: {
+                                inPlay: ['kakita-kaezin', 'ancient-master']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.kaezin = this.player2.findCardByName('kakita-kaezin');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('opponent chooses duel targeting', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.kaezin, this.master]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.kaezin);
+                        expect(this.player2).not.toBeAbleToSelect(this.kaezin);
+                        expect(this.player2).toBeAbleToSelect(this.master);
+                        expect(this.player2).not.toBeAbleToSelect(this.toshimoko);
+                    });
+
+                    it('duel resolution - adding bids', function() {
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.kaezin, this.master]
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.kaezin);
+                        this.player2.clickCard(this.master);
+
+                        this.player1.clickPrompt('4');
+                        this.player2.clickPrompt('2');
+                        expect(this.getChatLogs(10)).toContain('Kakita Kaezin: 7 vs 3: Ancient Master');
+                        expect(this.game.currentConflict.attackers).not.toContain(this.toshimoko);
+                        expect(this.getChatLogs(5)).toContain('Duel Effect: send Kakita Toshimoko home');
                     });
                 });
             });
@@ -724,7 +777,7 @@ describe('The Skin of Fu Leng', function() {
 
     Weird Interactions
     ==================
-    Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist 
+    Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist
     Cunning Negotiator (code is weird) - Should work properly based on who wins the duel
     Compromised Secrets - Should not allow you to trigger abilities (because you can't pay yourself)
     Uji2 - Should put your cards under their Uji and let them play them
