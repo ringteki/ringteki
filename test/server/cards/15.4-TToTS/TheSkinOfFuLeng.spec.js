@@ -27,7 +27,341 @@ describe('The Skin of Fu Leng', function() {
             });
         });
 
-        describe('Gaining Abilities', function() {
+        describe('Opponent cannot trigger characters', function() {
+            describe('Actions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['lion-s-pride-brawler', 'honored-general']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.brawler = this.player2.findCardByName('lion-s-pride-brawler');
+                    this.general = this.player2.findCardByName('honored-general');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with fate', function() {
+                    this.brawler.fate = 1;
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    this.player1.pass();
+                    this.player2.clickCard(this.brawler);
+                    expect(this.player2).toBeAbleToSelect(this.brawler);
+                    expect(this.player2).toBeAbleToSelect(this.toshimoko);
+                    this.player2.clickCard(this.toshimoko);
+                    expect(this.toshimoko.bowed).toBe(true);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    this.player1.pass();
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.clickCard(this.brawler);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                });
+            });
+
+            describe('Reactions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng', 'way-of-the-scorpion']
+                        },
+                        player2: {
+                            inPlay: ['ardent-omoidasu'],
+                            hand: ['way-of-the-scorpion']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.ardent = this.player2.findCardByName('ardent-omoidasu');
+                    this.scorp1 = this.player1.findCardByName('way-of-the-scorpion');
+                    this.scorp2 = this.player2.findCardByName('way-of-the-scorpion');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with fate', function() {
+                    this.ardent.fate = 1;
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ardent]
+                    });
+                    let p1 = this.player1.honor;
+                    let p2 = this.player2.honor;
+                    this.player2.pass();
+                    this.player1.clickCard(this.scorp1);
+                    this.player1.clickCard(this.ardent);
+                    expect(this.player2).toHavePrompt('Triggered Abilities');
+                    expect(this.player2).toBeAbleToSelect(this.ardent);
+                    this.player2.clickCard(this.ardent);
+                    expect(this.player1.honor).toBe(p1 - 2);
+                    expect(this.player2.honor).toBe(p2 + 2);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ardent]
+                    });
+                    this.player2.pass();
+                    this.player1.clickCard(this.scorp1);
+                    this.player1.clickCard(this.ardent);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    expect(this.ardent.isDishonored).toBe(true);
+                });
+            });
+
+            describe('Interrupts', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['callow-delegate', 'doji-whisperer'],
+                            hand: ['assassination']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.callow = this.player2.findCardByName('callow-delegate');
+                    this.whisperer = this.player2.findCardByName('doji-whisperer');
+                    this.assassination = this.player2.findCardByName('assassination');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with fate', function() {
+                    this.callow.fate = 1;
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.callow]
+                    });
+                    this.player2.clickCard(this.assassination);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player2).toHavePrompt('Triggered Abilities');
+                    expect(this.player2).toBeAbleToSelect(this.callow);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player2).not.toBeAbleToSelect(this.toshimoko);
+                    expect(this.player2).toBeAbleToSelect(this.callow);
+                    expect(this.player2).toBeAbleToSelect(this.whisperer);
+                    this.player2.clickCard(this.whisperer);
+                    expect(this.whisperer.isHonored).toBe(true);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.callow]
+                    });
+                    this.player2.clickCard(this.assassination);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player1).toHavePrompt('Triggered Abilities');
+                    this.player1.pass();
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                });
+            });
+        });
+
+        describe('Can Trigger opponent\'s characters', function() {
+            describe('Actions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['lion-s-pride-brawler', 'honored-general']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.brawler = this.player2.findCardByName('lion-s-pride-brawler');
+                    this.general = this.player2.findCardByName('honored-general');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    this.player1.clickCard(this.brawler);
+                    expect(this.player1).toBeAbleToSelect(this.brawler);
+                    expect(this.player1).toBeAbleToSelect(this.toshimoko);
+                    this.player1.clickCard(this.toshimoko);
+                    expect(this.toshimoko.bowed).toBe(true);
+                });
+
+                it('Should not be able to trigger characters with fate', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.brawler.fate = 1;
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.brawler);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                });
+            });
+
+            describe('Reactions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng', 'way-of-the-scorpion']
+                        },
+                        player2: {
+                            inPlay: ['ardent-omoidasu'],
+                            hand: ['way-of-the-scorpion']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.ardent = this.player2.findCardByName('ardent-omoidasu');
+                    this.scorp1 = this.player1.findCardByName('way-of-the-scorpion');
+                    this.scorp2 = this.player2.findCardByName('way-of-the-scorpion');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ardent]
+                    });
+                    let p1 = this.player1.honor;
+                    let p2 = this.player2.honor;
+                    this.player2.clickCard(this.scorp2);
+                    this.player2.clickCard(this.toshimoko);
+                    expect(this.player1).toHavePrompt('Triggered Abilities');
+                    expect(this.player1).toBeAbleToSelect(this.ardent);
+                    this.player1.clickCard(this.ardent);
+                    expect(this.player1.honor).toBe(p1 + 2);
+                    expect(this.player2.honor).toBe(p2 - 2);
+                });
+
+                it('Should not be able to trigger characters with fate', function() {
+                    this.ardent.fate = 1;
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ardent]
+                    });
+                    this.player2.clickCard(this.scorp2);
+                    this.player2.clickCard(this.toshimoko);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    expect(this.toshimoko.isDishonored).toBe(true);
+                });
+            });
+
+            describe('Interrupts', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['callow-delegate', 'doji-whisperer'],
+                            hand: ['assassination']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.callow = this.player2.findCardByName('callow-delegate');
+                    this.whisperer = this.player2.findCardByName('doji-whisperer');
+                    this.assassination = this.player2.findCardByName('assassination');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Should be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.callow]
+                    });
+                    this.player2.clickCard(this.assassination);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player1).toHavePrompt('Triggered Abilities');
+                    expect(this.player1).toBeAbleToSelect(this.callow);
+                    this.player1.clickCard(this.callow);
+                    expect(this.player1).toBeAbleToSelect(this.toshimoko);
+                    expect(this.player1).not.toBeAbleToSelect(this.callow);
+                    expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+                    this.player1.clickCard(this.toshimoko);
+                    expect(this.toshimoko.isHonored).toBe(true);
+                });
+
+                it('Should not be able to trigger characters with fate', function() {
+                    this.callow.fate = 1;
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.callow]
+                    });
+                    this.player2.clickCard(this.assassination);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player2).toHavePrompt('Triggered Abilities');
+                });
+            });
+        });
+
+        describe('Testing Specific ability interactions', function() {
             /*
                 Brash Samurai (I have no participating characters, my opponent just has Brash) - Should not trigger
                 Brash Samurai (I have a character, my opponent just has Brash) - Should not trigger
@@ -450,6 +784,43 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
                 });
             });
+
+            describe('Auras', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['lion-s-pride-brawler', 'honored-general']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.brawler = this.player2.findCardByName('lion-s-pride-brawler');
+                    this.general = this.player2.findCardByName('honored-general');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                });
+
+                it('Auras should not fall off because control never actually switches', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    this.player1.clickCard(this.brawler);
+                    expect(this.player1).toBeAbleToSelect(this.brawler);
+                    expect(this.player1).toBeAbleToSelect(this.toshimoko);
+                    this.player1.clickCard(this.toshimoko);
+                    expect(this.toshimoko.bowed).toBe(true);
+                });
+            });            
 
             /*
                 Cards that refer to "your" game state as a triggering condition should use your game state, not their controllers
@@ -1303,6 +1674,132 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.clickCard(this.raitsugu);
                         expect(this.player1).toHavePrompt('Conflict Action Window');
                     });
+                });
+            });
+        });
+
+        describe('Double Skin - no one should be able to trigger at 0 fate', function() {
+            describe('Actions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['lion-s-pride-brawler', 'honored-general', 'akodo-toturi'],
+                            hand: ['the-skin-of-fu-leng']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.toturi = this.player2.findCardByName('akodo-toturi');
+                    this.skin2 = this.player2.findCardByName('the-skin-of-fu-leng');
+                    this.brawler = this.player2.findCardByName('lion-s-pride-brawler');
+                    this.general = this.player2.findCardByName('honored-general');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                    this.player2.playAttachment(this.skin2, this.toturi);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.player1.passConflict();
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.brawler, this.general],
+                        defenders: [this.toshimoko]
+                    });
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.brawler);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.pass();
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    this.player2.clickCard(this.brawler);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                });
+            });
+
+            describe('Reactions', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng', 'way-of-the-scorpion']
+                        },
+                        player2: {
+                            inPlay: ['ardent-omoidasu', 'akodo-toturi'],
+                            hand: ['way-of-the-scorpion', 'the-skin-of-fu-leng']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.toturi = this.player2.findCardByName('akodo-toturi');
+                    this.skin2 = this.player2.findCardByName('the-skin-of-fu-leng');
+                    this.ardent = this.player2.findCardByName('ardent-omoidasu');
+                    this.scorp1 = this.player1.findCardByName('way-of-the-scorpion');
+                    this.scorp2 = this.player2.findCardByName('way-of-the-scorpion');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                    this.player2.playAttachment(this.skin2, this.toturi);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.ardent]
+                    });
+                    this.player2.clickCard(this.scorp2);
+                    this.player2.clickCard(this.toshimoko);
+                    expect(this.toshimoko.isDishonored).toBe(true);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
+                    this.player1.clickCard(this.scorp1);
+                    this.player1.clickCard(this.ardent);
+                    expect(this.player2).toHavePrompt('Conflict Action Window');
+                    expect(this.ardent.isDishonored).toBe(true);
+                });
+            });
+
+            describe('Interrupts', function() {
+                beforeEach(function() {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['kakita-toshimoko'],
+                            hand: ['the-skin-of-fu-leng']
+                        },
+                        player2: {
+                            inPlay: ['callow-delegate', 'doji-whisperer', 'akodo-toturi'],
+                            hand: ['assassination', 'the-skin-of-fu-leng']
+                        }
+                    });
+
+                    this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                    this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                    this.toturi = this.player2.findCardByName('akodo-toturi');
+                    this.skin2 = this.player2.findCardByName('the-skin-of-fu-leng');
+                    this.callow = this.player2.findCardByName('callow-delegate');
+                    this.whisperer = this.player2.findCardByName('doji-whisperer');
+                    this.assassination = this.player2.findCardByName('assassination');
+                    this.player1.playAttachment(this.skin, this.toshimoko);
+                    this.player2.playAttachment(this.skin2, this.toturi);
+                });
+
+                it('Should not be able to trigger characters with no fate', function() {
+                    this.noMoreActions();
+                    this.initiateConflict({
+                        type: 'military',
+                        attackers: [this.toshimoko],
+                        defenders: [this.callow]
+                    });
+                    this.player2.clickCard(this.assassination);
+                    this.player2.clickCard(this.callow);
+                    expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
             });
         });
