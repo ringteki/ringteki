@@ -1325,7 +1325,7 @@ describe('The Skin of Fu Leng', function() {
                 });
 
                 /*
-                    Cunning Negotiator (code is weird) - Should work properly based on who wins the duel
+                    Cunning Negotiator - Should always let opponent resolve the province (they always control the winner of the duel)
                 */
                 describe('Cunning Negotiator', function() {
                     beforeEach(function() {
@@ -1347,7 +1347,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('should allow the "winning player" to trigger the province', function() {
+                    it('should allow the "controller of the winning character" to trigger the province', function() {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1360,10 +1360,10 @@ describe('The Skin of Fu Leng', function() {
 
                         this.player1.clickPrompt('5');
                         this.player2.clickPrompt('1');
-                        expect(this.player1).toHavePrompt('Do you want to trigger Shameful Display?');
+                        expect(this.player2).toHavePrompt('Do you want to trigger Shameful Display?');
                     });
 
-                    it('should allow the "winning player" to trigger the province', function() {
+                    it('should allow the "controller of the winning character" to trigger the province', function() {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
