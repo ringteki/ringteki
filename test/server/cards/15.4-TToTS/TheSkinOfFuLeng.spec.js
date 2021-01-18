@@ -820,7 +820,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.clickCard(this.toshimoko);
                     expect(this.toshimoko.bowed).toBe(true);
                 });
-            });            
+            });
 
             /*
                 Cards that refer to "your" game state as a triggering condition should use your game state, not their controllers
@@ -1381,7 +1381,7 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            
+
             /*
                 Weird Interactions
                 ==================
@@ -1392,7 +1392,7 @@ describe('The Skin of Fu Leng', function() {
             */
             describe('Weird Interactions', function() {
                 describe('Kazue 2', function() {
-                        beforeEach(function() {
+                    beforeEach(function() {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1422,7 +1422,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.ujina, this.raitsugu, this.master],
+                            defenders: [this.ujina, this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         this.player1.clickCard(this.raitsugu);
@@ -1442,7 +1442,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.ujina, this.raitsugu, this.master],
+                            defenders: [this.ujina, this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         this.player1.clickCard(this.raitsugu);
@@ -1486,7 +1486,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.ujina, this.raitsugu, this.master],
+                            defenders: [this.ujina, this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         this.player1.clickCard(this.raitsugu);
@@ -1521,7 +1521,7 @@ describe('The Skin of Fu Leng', function() {
                         this.uji = this.player2.placeCardInProvince('daidoji-uji-2', 'province 1');
                         this.charge = this.player2.findCardByName('charge');
                         this.crane = this.player2.findCardByName('way-of-the-crane');
-                        
+
                         this.ann = this.player1.findCardByName('a-new-name');
                         this.katana = this.player1.findCardByName('fine-katana');
                         this.fan = this.player1.findCardByName('ornate-fan');
@@ -1538,7 +1538,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [],
+                            defenders: []
                         });
                         this.player2.clickCard(this.charge);
                         this.player2.clickCard(this.uji);
@@ -1562,19 +1562,19 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.ann.location).toBe(this.uji.uuid);
                         expect(this.fan.location).toBe(this.uji.uuid);
                         expect(this.seal.location).toBe(this.uji.uuid);
-        
+
                         expect(this.getChatLogs(5)).toContain('player1 uses Daidoji Uji to search their deck');
                         expect(this.getChatLogs(5)).toContain('player1 selects 4 cards');
                         expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
                     });
-        
+
                     it('cards should be hidden to player1 and not player2', function() {
                         this.player1.clickCard(this.uji);
                         this.player1.clickPrompt('Fine Katana');
                         this.player1.clickPrompt('A New Name');
                         this.player1.clickPrompt('Ornate Fan');
                         this.player1.clickPrompt('Seal of the Crane');
-        
+
                         expect(this.katana.anyEffect('hideWhenFaceUp')).toBe(true);
                         expect(this.ann.anyEffect('hideWhenFaceUp')).toBe(true);
                         expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
@@ -1636,8 +1636,8 @@ describe('The Skin of Fu Leng', function() {
                         this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
                         this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
                         this.master = this.player2.findCardByName('ancient-master');
-                        this.secrets = this.player1.findCardByName('compromised-secrets')
-                        this.secrets2 = this.player2.findCardByName('compromised-secrets')
+                        this.secrets = this.player1.findCardByName('compromised-secrets');
+                        this.secrets2 = this.player2.findCardByName('compromised-secrets');
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
@@ -1648,7 +1648,7 @@ describe('The Skin of Fu Leng', function() {
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.raitsugu, this.master],
+                            defenders: [this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -1661,13 +1661,11 @@ describe('The Skin of Fu Leng', function() {
                         this.player2.honor = 10;
                         this.game.checkGameState(true);
                         this.player2.playAttachment(this.secrets2, this.raitsugu);
-                        let p1 = this.player1.honor;
-                        let p2 = this.player2.honor;
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.raitsugu, this.master],
+                            defenders: [this.raitsugu, this.master]
                         });
                         this.player2.pass();
                         expect(this.player1).toHavePrompt('Conflict Action Window');

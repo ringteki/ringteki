@@ -61,7 +61,7 @@ class CardAbility extends ThenAbility {
                         cardCondition: (card2, context) => {
                             if(card === card2) {
                                 return false;
-                            }    
+                            }
                             if(typeof properties.initiateDuel === 'function') {
                                 return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                             }

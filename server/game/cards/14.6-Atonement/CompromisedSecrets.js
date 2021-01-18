@@ -1,6 +1,5 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
-const { Players } = require('../../Constants');
 
 const compromisedSecretsCost = function (secretsController) {
     return {
@@ -8,7 +7,7 @@ const compromisedSecretsCost = function (secretsController) {
             const canLoseHonor = context.game.actions.loseHonor().canAffect(context.player, context);
             const canGainHonor = context.game.actions.gainHonor().canAffect(secretsController, context);
             //The controller of the character must give the controller of Compromised Secrets 1 honor
-            //You cannot force the controller to pay if you are not the controller, and the controller cannot pay themselves 
+            //You cannot force the controller to pay if you are not the controller, and the controller cannot pay themselves
             return canLoseHonor && canGainHonor && context.player === context.source.controller && context.player !== secretsController;
         },
         resolve: function () {
@@ -29,7 +28,7 @@ const compromisedSecretsCost = function (secretsController) {
 class CompromisedSecrets extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            effect: AbilityDsl.effects.additionalTriggerCostForCard(context => [compromisedSecretsCost(this.controller)])
+            effect: AbilityDsl.effects.additionalTriggerCostForCard(() => [compromisedSecretsCost(this.controller)])
         });
     }
 

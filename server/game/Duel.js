@@ -4,7 +4,7 @@ const { Locations, DuelTypes } = require('./Constants');
 const DuelParticipants = Object.freeze({
     Challenger: 'challenger',
     Target: 'target'
-})
+});
 
 class Duel {
     constructor(game, challenger, target, type, statistic, challengingPlayer = challenger.controller) {
@@ -97,7 +97,7 @@ class Duel {
     }
 
     setWinner(winner) {
-        if (winner === DuelParticipants.Challenger) {
+        if(winner === DuelParticipants.Challenger) {
             this.winner = this.challenger;
             this.winningPlayer = this.challengingPlayer;
         } else {
@@ -107,7 +107,7 @@ class Duel {
     }
 
     setLoser(loser) {
-        if (loser === DuelParticipants.Challenger) {
+        if(loser === DuelParticipants.Challenger) {
             this.loser = this.challenger;
             this.losingPlayer = this.challengingPlayer;
         } else {
