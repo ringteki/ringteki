@@ -447,6 +447,18 @@ class BaseCard extends EffectSource {
         return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
 
+    isParticipatingFor(player: Player): boolean {
+        if (this.isAttacking() && player.isAttackingPlayer()) {
+            return true;
+        }
+
+        if (this.isDefending() && player.isDefendingPlayer()) {
+            return true;
+        }
+
+        return false;
+    }
+
     isUnique(): boolean{
         return this.cardData.unicity;
     }

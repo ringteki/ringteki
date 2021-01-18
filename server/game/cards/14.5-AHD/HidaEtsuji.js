@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class HidaEtsuji extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            match: (card, context) => card.type === CardTypes.Province && card.controller === context.source.controller,
+            match: (card, context) => card.type === CardTypes.Province && card.controller === context.player,
             targetLocation: Locations.Provinces,
             targetController: Players.Self,
             effect: AbilityDsl.effects.increaseLimitOnAbilities()

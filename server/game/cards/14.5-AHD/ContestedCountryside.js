@@ -7,7 +7,7 @@ class ContestedCountryside extends DrawCard {
         this.persistentEffect({
             match: card => card === this.game.currentConflict.conflictProvince,
             targetLocation: Locations.Provinces,
-            condition: context => context.source.controller.isAttackingPlayer(),
+            condition: context => context.player.isAttackingPlayer(),
             targetController: Players.Opponent,
             effect: AbilityDsl.effects.canBeTriggeredByOpponent()
         });

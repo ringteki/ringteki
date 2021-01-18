@@ -2,7 +2,7 @@ const _ = require('underscore');
 
 const CardAbility = require('./CardAbility.js');
 const TriggeredAbilityContext = require('./TriggeredAbilityContext.js');
-const { Stages, CardTypes, EffectNames } = require('./Constants.js');
+const { Stages, CardTypes, EffectNames, AbilityTypes } = require('./Constants.js');
 
 /**
  * Represents a reaction/interrupt ability provided by card text.
@@ -44,7 +44,8 @@ class TriggeredAbility extends CardAbility {
     }
 
     meetsRequirements(context, ignoredRequirements = []) {
-        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent);
+        let canOpponentTrigger = this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent) && this.abilityType !== AbilityTypes.ForcedInterrupt && this.abilityType !== AbilityTypes.ForcedReaction;
+        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || canOpponentTrigger;
 
         if(!ignoredRequirements.includes('player') && !canPlayerTrigger) {
             if(this.card.type !== CardTypes.Event || !context.player.isCardInPlayableLocation(this.card, context.playType)) {

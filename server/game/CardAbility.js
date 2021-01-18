@@ -19,11 +19,14 @@ class CardAbility extends ThenAbility {
                         return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                     },
                     controller: Players.Opponent,
-                    cardCondition: (card, context) => {
-                        if(typeof properties.initiateDuel === 'function') {
-                            return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                    cardCondition: (card2, context) => {
+                        if(card === card2) {
+                            return false;
                         }
-                        return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                        if(typeof properties.initiateDuel === 'function') {
+                            return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
+                        }
+                        return properties.initiateDuel.duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                     },
                     gameAction: AbilityDsl.actions.duel(context => {
                         if(typeof properties.initiateDuel === 'function') {
@@ -55,11 +58,14 @@ class CardAbility extends ThenAbility {
                             return properties.initiateDuel.opponentChoosesDuelTarget ? Players.Opponent : Players.Self;
                         },
                         controller: Players.Opponent,
-                        cardCondition: (card, context) => {
-                            if(typeof properties.initiateDuel === 'function') {
-                                return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                        cardCondition: (card2, context) => {
+                            if(card === card2) {
+                                return false;
                             }
-                            return properties.initiateDuel.duelTargetMustBeAtHome ? !card.isParticipating() : card.isParticipating();
+                            if(typeof properties.initiateDuel === 'function') {
+                                return properties.initiateDuel(context).duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
+                            }
+                            return properties.initiateDuel.duelTargetMustBeAtHome ? !card2.isParticipating() : card2.isParticipating();
                         },
                         gameAction: AbilityDsl.actions.duel(context => {
                             if(typeof properties.initiateDuel === 'function') {
@@ -159,6 +165,10 @@ class CardAbility extends ThenAbility {
         let costs = super.getCosts(context, playCosts);
         if(!context.subResolution && triggerCosts && context.player.anyEffect(EffectNames.AdditionalTriggerCost)) {
             const additionalTriggerCosts = context.player.getEffects(EffectNames.AdditionalTriggerCost).map(effect => effect(context));
+            costs = costs.concat(...additionalTriggerCosts);
+        }
+        if(!context.subResolution && triggerCosts && context.source.anyEffect(EffectNames.AdditionalTriggerCost)) {
+            const additionalTriggerCosts = context.source.getEffects(EffectNames.AdditionalTriggerCost).map(effect => effect(context));
             costs = costs.concat(...additionalTriggerCosts);
         }
         if(!context.subResolution && playCosts && context.player.anyEffect(EffectNames.AdditionalPlayCost)) {
