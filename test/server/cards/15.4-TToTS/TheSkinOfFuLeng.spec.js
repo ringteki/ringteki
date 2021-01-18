@@ -1014,14 +1014,80 @@ describe('The Skin of Fu Leng', function() {
             /*
                 Weird Interactions
                 ==================
-                Compromised Secrets - Should not allow you to trigger abilities (because you can't pay yourself)
+                Kazue2 - Should not be able to use twice (refers to "you may...." not "this character may")
+                Way of the Dragon - Should not be able to use twice (refers to "you may...." not "this character may")
                 Uji2 - Should put your cards under their Uji and let them play them
-                Kazue2 - Should be able to use twice
-                Way of the Dragon - Should be able to use twice
+                Compromised Secrets - Should not allow you to trigger abilities (because you can't give yourself honor)
             */
             describe('Weird Interactions', function() {
-                describe('Distinguished Dojo', function() {
+                describe('Kazue 2', function() {
                         beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng'],
+                                dynastyDiscard: ['togashi-kazue-2']
+                            },
+                            player2: {
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master', 'isawa-ujina'],
+                                dynastyDiscard: ['togashi-kazue-2']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.kazueP1 = this.player1.findCardByName('togashi-kazue-2');
+                        this.kazueP2 = this.player2.findCardByName('togashi-kazue-2');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.ujina = this.player2.findCardByName('isawa-ujina');
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('should not let you trigger characters twice if your opponent has kazue', function() {
+                        this.player2.moveCard(this.kazueP2, 'play area');
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.ujina, this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.ujina);
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('1');
+                        expect(this.ujina.location).toBe('dynasty discard pile');
+                        this.player2.pass();
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                    });
+
+                    it('should not let you trigger characters twice if you have kazue', function() {
+                        this.player1.moveCard(this.kazueP1, 'play area');
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.ujina, this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.ujina);
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('1');
+                        expect(this.ujina.location).toBe('dynasty discard pile');
+                        this.player2.pass();
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                    });
+                });
+
+                describe('Way of the Dragon', function() {
+                    beforeEach(function() {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1029,30 +1095,153 @@ describe('The Skin of Fu Leng', function() {
                                 hand: ['the-skin-of-fu-leng']
                             },
                             player2: {
-                                inPlay: ['isawa-ujina']
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master', 'isawa-ujina'],
+                                hand: ['way-of-the-dragon']
                             }
                         });
 
                         this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
                         this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.master = this.player2.findCardByName('ancient-master');
                         this.ujina = this.player2.findCardByName('isawa-ujina');
+                        this.dragon = this.player2.findCardByName('way-of-the-dragon');
                         this.player1.playAttachment(this.skin, this.toshimoko);
+                        this.player2.playAttachment(this.dragon, this.raitsugu);
                     });
 
-                    it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
+                    it('should not let you trigger characters twice if your opponent has way of the dragon', function() {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
                             attackers: [this.toshimoko],
-                            defenders: [this.ujina],
-                            ring: 'void'
+                            defenders: [this.ujina, this.raitsugu, this.master],
                         });
+                        this.player2.pass();
+                        this.player1.clickCard(this.raitsugu);
+                        this.player1.clickCard(this.ujina);
+                        this.player1.clickPrompt('1');
+                        this.player2.clickPrompt('1');
+                        expect(this.ujina.location).toBe('dynasty discard pile');
+                        this.player2.pass();
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                    });
+                });
+
+                describe('Uji2', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng'],
+                                conflictDiscard: ['a-new-name', 'fine-katana', 'ornate-fan', 'seal-of-the-crane']
+                            },
+                            player2: {
+                                hand: ['charge', 'way-of-the-crane'],
+                                dynastyDiscard: ['daidoji-uji-2']
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.uji = this.player2.placeCardInProvince('daidoji-uji-2', 'province 1');
+                        this.charge = this.player2.findCardByName('charge');
+                        this.crane = this.player2.findCardByName('way-of-the-crane');
+                        
+                        this.ann = this.player1.findCardByName('a-new-name');
+                        this.katana = this.player1.findCardByName('fine-katana');
+                        this.fan = this.player1.findCardByName('ornate-fan');
+                        this.seal = this.player1.findCardByName('seal-of-the-crane');
+
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+
+                        this.player1.moveCard(this.ann, 'conflict deck');
+                        this.player1.moveCard(this.katana, 'conflict deck');
+                        this.player1.moveCard(this.fan, 'conflict deck');
+                        this.player1.moveCard(this.seal, 'conflict deck');
+
                         this.noMoreActions();
-                        expect(this.player2).toHavePrompt('Isawa Ujina');
-                        expect(this.player2).toBeAbleToSelect(this.ujina);
-                        expect(this.player2).toBeAbleToSelect(this.toshimoko);
-                        this.player2.clickCard(this.ujina);
-                        expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [],
+                        });
+                        this.player2.clickCard(this.charge);
+                        this.player2.clickCard(this.uji);
+                    });
+
+                    it('should let you pick cards from your deck', function() {
+                        expect(this.player1).toHavePrompt('Triggered Abilities');
+                        expect(this.player1).toBeAbleToSelect(this.uji);
+                        this.player1.clickCard(this.uji);
+                        expect(this.player1).toHavePromptButton('Fine Katana');
+                    });
+
+                    it('should put the cards under Uji', function() {
+                        this.player1.clickCard(this.uji);
+                        this.player1.clickPrompt('Fine Katana');
+                        this.player1.clickPrompt('A New Name');
+                        this.player1.clickPrompt('Ornate Fan');
+                        this.player1.clickPrompt('Seal of the Crane');
+
+                        expect(this.katana.location).toBe(this.uji.uuid);
+                        expect(this.ann.location).toBe(this.uji.uuid);
+                        expect(this.fan.location).toBe(this.uji.uuid);
+                        expect(this.seal.location).toBe(this.uji.uuid);
+        
+                        expect(this.getChatLogs(5)).toContain('player1 uses Daidoji Uji to search their deck');
+                        expect(this.getChatLogs(5)).toContain('player1 selects 4 cards');
+                        expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
+                    });
+        
+                    it('cards should be hidden to player1 and not player2', function() {
+                        this.player1.clickCard(this.uji);
+                        this.player1.clickPrompt('Fine Katana');
+                        this.player1.clickPrompt('A New Name');
+                        this.player1.clickPrompt('Ornate Fan');
+                        this.player1.clickPrompt('Seal of the Crane');
+        
+                        expect(this.katana.anyEffect('hideWhenFaceUp')).toBe(true);
+                        expect(this.ann.anyEffect('hideWhenFaceUp')).toBe(true);
+                        expect(this.fan.anyEffect('hideWhenFaceUp')).toBe(true);
+                        expect(this.seal.anyEffect('hideWhenFaceUp')).toBe(true);
+                    });
+
+                    it('cards should be playable by player2', function() {
+                        this.player1.clickCard(this.uji);
+                        this.player1.clickPrompt('Fine Katana');
+                        this.player1.clickPrompt('A New Name');
+                        this.player1.clickPrompt('Ornate Fan');
+                        this.player1.clickPrompt('Seal of the Crane');
+
+                        this.player1.pass();
+                        this.player2.clickCard(this.crane);
+                        this.player2.clickCard(this.uji);
+                        this.player1.pass();
+
+                        this.player2.clickCard(this.katana);
+                        this.player2.clickCard(this.uji);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        expect(this.uji.attachments.toArray()).toContain(this.katana);
+                    });
+
+                    it('cards should not be playable by player1', function() {
+                        this.player1.clickCard(this.uji);
+                        this.player1.clickPrompt('Fine Katana');
+                        this.player1.clickPrompt('A New Name');
+                        this.player1.clickPrompt('Ornate Fan');
+                        this.player1.clickPrompt('Seal of the Crane');
+
+                        this.player1.pass();
+                        this.player2.clickCard(this.crane);
+                        this.player2.clickCard(this.uji);
+                        this.player1.clickCard(this.katana);
+                        this.player1.clickCard(this.uji);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        expect(this.uji.attachments.toArray()).not.toContain(this.katana);
                     });
                 });
             });
