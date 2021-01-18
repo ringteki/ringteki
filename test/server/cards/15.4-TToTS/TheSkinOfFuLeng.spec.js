@@ -1244,6 +1244,66 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.uji.attachments.toArray()).not.toContain(this.katana);
                     });
                 });
+
+                describe('Compromised Secrets', function() {
+                    beforeEach(function() {
+                        this.setupTest({
+                            phase: 'conflict',
+                            player1: {
+                                inPlay: ['kakita-toshimoko'],
+                                hand: ['the-skin-of-fu-leng', 'compromised-secrets'],
+                                honor: 10
+                            },
+                            player2: {
+                                inPlay: ['mirumoto-raitsugu', 'ancient-master'],
+                                hand: ['compromised-secrets'],
+                                honor: 15
+                            }
+                        });
+
+                        this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
+                        this.skin = this.player1.findCardByName('the-skin-of-fu-leng');
+                        this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
+                        this.master = this.player2.findCardByName('ancient-master');
+                        this.secrets = this.player1.findCardByName('compromised-secrets')
+                        this.secrets2 = this.player2.findCardByName('compromised-secrets')
+                        this.player1.playAttachment(this.skin, this.toshimoko);
+                    });
+
+                    it('should not let you trigger characters when you control Compromised Secrets because you can\'t force your opponent to give you an honor', function() {
+                        this.player2.pass();
+                        this.player1.playAttachment(this.secrets, this.raitsugu);
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                    });
+
+                    it('should not let you trigger characters when your opponent controls Compromised Secrets', function() {
+                        this.player1.honor = 15;
+                        this.player2.honor = 10;
+                        this.game.checkGameState(true);
+                        this.player2.playAttachment(this.secrets2, this.raitsugu);
+                        let p1 = this.player1.honor;
+                        let p2 = this.player2.honor;
+                        this.noMoreActions();
+                        this.initiateConflict({
+                            type: 'military',
+                            attackers: [this.toshimoko],
+                            defenders: [this.raitsugu, this.master],
+                        });
+                        this.player2.pass();
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                        this.player1.clickCard(this.raitsugu);
+                        expect(this.player1).toHavePrompt('Conflict Action Window');
+                    });
+                });
             });
         });
     });

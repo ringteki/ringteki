@@ -167,6 +167,10 @@ class CardAbility extends ThenAbility {
             const additionalTriggerCosts = context.player.getEffects(EffectNames.AdditionalTriggerCost).map(effect => effect(context));
             costs = costs.concat(...additionalTriggerCosts);
         }
+        if(!context.subResolution && triggerCosts && context.source.anyEffect(EffectNames.AdditionalTriggerCost)) {
+            const additionalTriggerCosts = context.source.getEffects(EffectNames.AdditionalTriggerCost).map(effect => effect(context));
+            costs = costs.concat(...additionalTriggerCosts);
+        }
         if(!context.subResolution && playCosts && context.player.anyEffect(EffectNames.AdditionalPlayCost)) {
             const additionalPlayCosts = context.player.getEffects(EffectNames.AdditionalPlayCost).map(effect => effect(context));
             return costs.concat(...additionalPlayCosts);
