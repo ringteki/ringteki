@@ -11,10 +11,10 @@ class TaoistAdept extends DrawCard {
                 message: 'choose whether to place a fate on a ring',
                 gameAction: duel => AbilityDsl.actions.selectRing(context => ({
                     activePromptTitle: 'Choose a ring to receive a fate',
-                    player: (duel.winningPlayer && duel.winningPlayer === context.player) ? Players.Self : Players.Opponent,
+                    player: (duel.winner && duel.winner.controller === context.player) ? Players.Self : Players.Opponent,
                     message: '{0} places a fate on the {1}',
                     messageArgs: (ring, player) => [player, ring],
-                    ringCondition: ring => duel.winningPlayer && ring.isUnclaimed(),
+                    ringCondition: ring => duel.winner && ring.isUnclaimed(),
                     gameAction: AbilityDsl.actions.placeFateOnRing(),
                     optional: true,
                     onMenuCommand: (player, arg) => {
