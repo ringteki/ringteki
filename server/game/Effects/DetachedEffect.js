@@ -14,6 +14,9 @@ class DetachedEffect extends StaticEffect {
 
     unapply(target) {
         this.state[target.uuid] = this.unapplyFunc(target, this.context, this.state[target.uuid]);
+        if (this.state[target.uuid] === undefined) {
+            delete this.state[target.uuid];
+        }
     }
 
     setContext(context) {
