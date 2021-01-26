@@ -217,7 +217,7 @@ describe('Seize The Mind', function() {
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.khanbulak],
-                defenders: [],
+                defenders: []
             });
 
             this.player1.clickCard(this.seize);
