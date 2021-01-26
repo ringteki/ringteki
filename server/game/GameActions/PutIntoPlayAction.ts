@@ -8,7 +8,8 @@ export interface PutIntoPlayProperties extends CardActionProperties {
     fate?: number,
     status?: string,
     controller?: Players,
-    side?: Player
+    side?: Player,
+    overrideLocation?: Locations
 }
 
 export class PutIntoPlayAction extends CardGameAction {
@@ -21,7 +22,8 @@ export class PutIntoPlayAction extends CardGameAction {
         fate: 0,
         status: 'ordinary',
         controller: Players.Self,
-        side: null
+        side: null,
+        overrideLocation: null
     };
     constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
         super(properties);
@@ -80,13 +82,13 @@ export class PutIntoPlayAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { fate, status, controller, side } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
+        let { fate, status, controller, side, overrideLocation } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.fate = fate;
         event.status = status;
         event.controller = controller;
         event.intoConflict = this.intoConflict;
-        event.originalLocation = card.location;
+        event.originalLocation = overrideLocation || card.location;
         event.side = side || this.getDefaultSide(context);
     }
 

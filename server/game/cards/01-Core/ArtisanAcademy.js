@@ -21,7 +21,7 @@ class ArtisanAcademy extends DrawCard {
                     },
                     effect: [
                         AbilityDsl.effects.showTopConflictCard(),
-                        AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard])
+                        AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard], this)
                     ]
                 };
             })

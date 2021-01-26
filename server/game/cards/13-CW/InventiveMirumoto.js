@@ -13,6 +13,7 @@ class InventiveMirumoto extends DrawCard {
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.playCard(context => ({
                     payCosts: true,
+                    source: this,
                     playCardTarget: attachContext => {
                         attachContext.target = context.source;
                         attachContext.targets.target = context.source;

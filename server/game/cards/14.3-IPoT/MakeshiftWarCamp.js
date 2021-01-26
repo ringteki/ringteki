@@ -1,12 +1,10 @@
 import { CardTypes, Players } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
-const DrawCard = require('../../drawcard.js');
+const BattlefieldAttachment = require('../BattlefieldAttachment');
 
-class MakeshiftWarCamp extends DrawCard {
+class MakeshiftWarCamp extends BattlefieldAttachment {
     setupCardAbilities() {
-        this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 }
-        });
+        super.setupCardAbilities();
 
         this.persistentEffect({
             condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
@@ -14,18 +12,6 @@ class MakeshiftWarCamp extends DrawCard {
             match: card => card.isParticipating() && card.type === CardTypes.Character,
             effect: AbilityDsl.effects.modifyMilitarySkill(2)
         });
-    }
-
-    canPlayOn(source) {
-        return source && source.getType() === 'province' && !source.isBroken && this.getType() === CardTypes.Attachment;
-    }
-
-    canAttach(parent) {
-        if(parent.type === CardTypes.Province && parent.isBroken) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }
 

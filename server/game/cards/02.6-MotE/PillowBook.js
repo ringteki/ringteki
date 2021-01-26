@@ -19,7 +19,7 @@ class PillowBook extends DrawCard {
                     },
                     effect: [
                         ability.effects.showTopConflictCard(),
-                        ability.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard])
+                        ability.effects.canPlayFromOwn(Locations.ConflictDeck, [topCard], this)
                     ]
                 };
             })

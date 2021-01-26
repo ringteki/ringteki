@@ -290,7 +290,7 @@ class BaseCard extends EffectSource {
     isInProvince(): boolean {
         return this.game.getProvinceArray().includes(this.location);
     }
-    
+
     isInPlay(): boolean {
         if(this.isFacedown()) {
             return false;
@@ -415,7 +415,7 @@ class BaseCard extends EffectSource {
         var menu = [];
 
         if(this.menu.isEmpty() || !this.game.manualMode ||
-                ![Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince, Locations.PlayArea].includes(this.location)) {
+                ![...this.game.getProvinceArray(), Locations.PlayArea].includes(this.location)) {
             return undefined;
         }
 
@@ -734,7 +734,7 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
-    
+
     setPersonalHonor(token) {
         if(this.personalHonor && token !== this.personalHonor) {
             this.personalHonor.setCard(null);
@@ -775,6 +775,10 @@ class BaseCard extends EffectSource {
 
     makeOrdinary() {
         this.setPersonalHonor(null);
+    }
+
+    isOrdinary() {
+        return !this.isHonored && !this.isDishonored;
     }
 
     getShortSummaryForControls(activePlayer) {

@@ -20,6 +20,7 @@ class KyudenIsawa extends StrongholdCard {
                 cardCondition: card => card.hasTrait('spell'),
                 gameAction: AbilityDsl.actions.playCard({
                     resetOnCancel: true,
+                    source: this,
                     playType: PlayTypes.PlayFromHand,
                     postHandler: spellContext => {
                         let card = spellContext.source;

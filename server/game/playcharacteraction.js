@@ -1,7 +1,7 @@
 const BaseAction = require('./BaseAction');
 const Costs = require('./costs.js');
 const GameActions = require('./GameActions/GameActions');
-const { EffectNames, Phases, PlayTypes, EventNames, Players } = require('./Constants');
+const { EffectNames, Phases, PlayTypes, EventNames, Players, Locations } = require('./Constants');
 
 class PlayCharacterAction extends BaseAction {
     constructor(card, intoConflictOnly = false) {
@@ -40,13 +40,14 @@ class PlayCharacterAction extends BaseAction {
             context: context,
             originalLocation: context.source.location,
             originallyOnTopOfConflictDeck: context.player && context.player.conflictDeck && context.player.conflictDeck.first() === context.source,
+            onPlayCardSource: context.onPlayCardSource,
             playType: PlayTypes.PlayFromHand
         });
         let putIntoPlayHandler = () => {
             context.game.addMessage('{0} plays {1} at home with {2} additional fate', context.player, context.source, context.chooseFate);
             let effect = context.source.getEffects(EffectNames.EntersPlayForOpponent);
             let player = effect.length > 0 ? Players.Opponent : Players.Self;
-            context.game.openEventWindow([GameActions.putIntoPlay({ fate: context.chooseFate + extraFate, controller: player }).getEvent(context.source, context), cardPlayedEvent]);
+            context.game.openEventWindow([GameActions.putIntoPlay({ fate: context.chooseFate + extraFate, controller: player, overrideLocation: Locations.Hand }).getEvent(context.source, context), cardPlayedEvent]);
         };
         let putIntoConflictHandler = () => {
             context.game.addMessage('{0} plays {1} into the conflict with {2} additional fate', context.player, context.source, context.chooseFate);

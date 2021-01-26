@@ -8,7 +8,8 @@ describe('Aranat', function() {
                         dynastyDiscard: ['aranat']
                     },
                     player2: {
-                        provinces: ['rally-to-the-cause', 'fertile-fields', 'entrenched-position', 'pilgrimage']
+                        provinces: ['rally-to-the-cause', 'fertile-fields', 'entrenched-position', 'pilgrimage'],
+                        role: ['seeker-of-water']
                     }
                 });
 

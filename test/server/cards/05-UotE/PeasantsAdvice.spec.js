@@ -32,7 +32,7 @@ describe('Peasant\'s Advice', function() {
                 expect(this.player1).not.toHavePrompt('Choose a faceup card to return to its owner\'s deck');
                 expect(this.player1).not.toHavePromptButton('Done');
                 expect(this.player2).toHavePrompt('Action Window');
-                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display');
+                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display in province 1');
             });
 
             it('should offer the option to shuffle a faceup card in a faceup province', function() {
@@ -45,7 +45,7 @@ describe('Peasant\'s Advice', function() {
                 expect(this.player1).toBeAbleToSelect(this.shibaTsukune);
                 this.player1.clickPrompt('Done');
                 expect(this.player2).toHavePrompt('Action Window');
-                expect(this.getChatLogs(5)).not.toContain('Peasant\'s Advice sees Shameful Display');
+                expect(this.getChatLogs(5)).not.toContain('Peasant\'s Advice sees Shameful Display in province 1');
                 expect(this.shibaTsukune.location).toBe('province 1');
             });
 
@@ -58,7 +58,7 @@ describe('Peasant\'s Advice', function() {
                 expect(this.player1).toBeAbleToSelect(this.shibaTsukune);
                 this.player1.clickCard(this.shibaTsukune);
                 expect(this.player2).toHavePrompt('Action Window');
-                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display');
+                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display in province 1');
                 expect(this.getChatLogs(5)).toContain('player1 chooses to shuffle Shiba Tsukune into its owner\'s deck');
                 expect(this.getChatLogs(5)).toContain('player2 is shuffling their dynasty deck');
                 expect(this.shibaTsukune.location === 'dynasty deck' ||
@@ -72,7 +72,7 @@ describe('Peasant\'s Advice', function() {
                 this.player1.clickCard(this.strongholdProvince);
                 this.seppunGuardsman = this.player1.clickCard('seppun-guardsman');
                 expect(this.player2).toHavePrompt('Action Window');
-                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display');
+                expect(this.getChatLogs(5)).toContain('Peasant\'s Advice sees Shameful Display in stronghold province');
             });
 
             it('should not be allowed to target a faceup province with a facedown card in it', function() {

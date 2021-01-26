@@ -7,9 +7,8 @@ const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
-const AbilityDsl = require('./abilitydsl');
 
-const { Locations, EffectNames, CardTypes, PlayTypes, Durations } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -52,24 +51,10 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new PrideAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
-            this.initializeTemptationMahoAbility();
         }
         if(this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this.game, this));
         }
-    }
-
-    initializeTemptationMahoAbility() {
-        let effect = {
-            effect: AbilityDsl.effects.alternateFatePool(card => {
-                if(card.isTemptationsMaho()) {
-                    return this;
-                }
-                return false;
-            })
-        };
-        effect = _.extend({ duration: Durations.Persistent, location: Locations.Any }, effect);
-        this.abilities.persistentEffects.push(effect);
     }
 
     getPrintedSkill(type) {
@@ -125,7 +110,9 @@ class DrawCard extends BaseCard {
     }
 
     getFate() {
-        return this.fate;
+        let rawEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.SetApparentFate);
+        let apparentFate = this.mostRecentEffect(EffectNames.SetApparentFate);
+        return rawEffects.length > 0 ? apparentFate : this.fate;
     }
 
     costLessThan(num) {
@@ -139,6 +126,15 @@ class DrawCard extends BaseCard {
             card.printedName === this.printedName &&
             card !== this &&
             (card.owner === player || card.controller === player || card.owner === this.owner)
+        ));
+    }
+
+    anotherUniqueInPlayControlledBy(player) {
+        return this.isUnique() && this.game.allCards.any(card => (
+            card.isInPlay() &&
+            card.printedName === this.printedName &&
+            card !== this &&
+            card.controller === player
         ));
     }
 
@@ -725,15 +721,21 @@ class DrawCard extends BaseCard {
             attackers = attackers.concat(this);
         }
 
+        // Check if I add an element that I can\'t attack with
+        const elementsAdded = this.attachments.reduce(
+            (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
+            this.getEffects(EffectNames.AddElementAsAttacker)
+        );
+
+        if(elementsAdded.some(element => this.game.rings[element].getEffects(EffectNames.CannotDeclareRing).some(match => match(this.controller)))) {
+            return false;
+        }
+
         let fateCostToAttackProvince = province ? province.getFateCostToAttack() : 0;
         if(attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0) + fateCostToAttackProvince > this.controller.fate) {
             return false;
         }
         if(this.anyEffect(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {
-            const elementsAdded = this.attachments.reduce(
-                (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
-                this.getEffects(EffectNames.AddElementAsAttacker)
-            );
             for(let element of this.getEffects(EffectNames.CanOnlyBeDeclaredAsAttackerWithElement)) {
                 if(!ring.hasElement(element) && !elementsAdded.includes(element)) {
                     return false;

@@ -96,6 +96,7 @@ export enum EffectNames {
     MustBeChosen = 'mustBeChosen',
     MustBeDeclaredAsAttacker = 'mustBeDeclaredAsAttacker',
     MustBeDeclaredAsDefender = 'mustBeDeclaredAsDefender',
+    SetApparentFate = 'setApparentFate',
     SetBaseDash = 'setBaseDash',
     SetBaseMilitarySkill = 'setBaseMilitarySkill',
     SetBasePoliticalSkill = 'setBasePoliticalSkill',
@@ -137,6 +138,7 @@ export enum EffectNames {
     ShowTopConflictCard = 'showTopConflictCard',
     ShowTopDynastyCard = 'showTopDynastyCard',
     ContributeToConflict = 'contribute',
+    CanContributeWhileBowed = 'canContributeWhileBowed',
     ChangeConflictSkillFunction = 'skillFunction',
     ModifyConflictElementsToResolve = 'modifyConflictElementsToResolve',
     RestrictNumberOfDefenders = 'restrictNumberOfDefenders',
@@ -150,7 +152,8 @@ export enum EffectNames {
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
     LimitHonorGainPerPhase = "limitHonorGainPerPhase",
-    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay"
+    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
+    CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants'
 };
 
 export enum Durations {

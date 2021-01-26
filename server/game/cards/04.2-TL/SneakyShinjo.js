@@ -10,7 +10,7 @@ class SneakyShinjo extends DrawCard {
                 onPassDuringDynasty: (event, context) => event.player === context.player
             },
             effect: 'play {0}',
-            gameAction: ability.actions.playCard({ location: Locations.ProvinceOne })
+            gameAction: ability.actions.playCard({ location: Locations.ProvinceOne, source: this })
         });
     }
 }

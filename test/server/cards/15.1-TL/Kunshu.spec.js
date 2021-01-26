@@ -4,7 +4,7 @@ describe('Kunshu', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['kakita-toshimoko', 'doji-challenger'],
+                    inPlay: ['kakita-toshimoko', 'doji-challenger', 'bayushi-kachiko-2'],
                     hand: ['kunshu', 'daimyo-s-gunbai'],
                     conflictDeck: ['a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name'],
                     conflictDiscard: ['way-of-the-crane']
@@ -20,6 +20,7 @@ describe('Kunshu', function() {
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.kunshu = this.player1.findCardByName('kunshu');
             this.kachiko = this.player2.findCardByName('bayushi-kachiko');
+            this.kachiko2 = this.player1.findCardByName('bayushi-kachiko-2');
             this.alliance = this.player2.findCardByName('favorable-alliance');
 
             this.crane = this.player1.findCardByName('way-of-the-crane');
@@ -263,6 +264,25 @@ describe('Kunshu', function() {
             this.player1.clickPrompt(deckSize.toString());
             expect(this.player1.fate).toBe(fate);
             expect(this.player1.conflictDeck.length).toBe(0);
+        });
+
+        it('Kachiko 2 - should not use up a Kachiko usage', function() {
+            this.player1.player.imperialFavor = 'political';
+            this.player1.clickCard(this.kunshu);
+            this.player1.clickCard(this.kachiko2);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kachiko2],
+                defenders: [this.kachiko],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.kachiko2);
+            this.player1.clickCard(this.afwtd);
+            this.player1.clickCard(this.kachiko);
+
+            expect(this.getChatLogs(5)).not.toContain('player1 plays a card from their opponent\'s conflict discard pile due to the ability of Bayushi Kachiko (2 uses remaining)');
         });
     });
 });

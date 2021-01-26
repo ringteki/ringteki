@@ -18,17 +18,19 @@ class CycleOfRebirth extends DrawCard {
                     AbilityDsl.actions.moveCard(context => ({
                         destination: Locations.DynastyDeck,
                         target: context.target,
-                        shuffle: true
+                        shuffle: true,
+                        bottom: true
                     })),
                     AbilityDsl.actions.moveCard(context => ({
                         destination: Locations.DynastyDeck,
                         target: context.source,
-                        shuffle: true
+                        shuffle: true,
+                        bottom: true
                     }))
                 ]),
                 AbilityDsl.actions.refillFaceup(context => ({
                     target: [context.target.controller, context.source.controller],
-                    location: [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour]
+                    location: context.game.getProvinceArray()
                 }))
             ]),
             effect: 'shuffle {1}{3}{4} into {2}\'s dynasty deck{5}{6}{7}{8}{9}',

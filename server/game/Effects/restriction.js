@@ -5,6 +5,8 @@ const { AbilityTypes, CardTypes } = require('../Constants');
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
+    adjacentCharacters: (context, effect) =>
+        context.source.type === CardTypes.Character && context.player.areLocationsAdjacent(context.source.location, effect.context.source.location),
     attachmentsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Attachment &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
@@ -15,6 +17,8 @@ const checkRestrictions = {
     cardEffects: (context) =>
         (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
+    ringEffects: (context) => context.source.type === 'ring',
+    cardAndRingEffects: (context) => checkRestrictions.cardEffects(context) || checkRestrictions.ringEffects(context),
     characters: context => context.source.type === CardTypes.Character,
     copiesOfDiscardEvents: context =>
         context.source.type === CardTypes.Event && context.player.conflictDiscardPile.any(card => card.name === context.source.name),
@@ -31,6 +35,7 @@ const checkRestrictions = {
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Event,
     opponentsRingEffects: (context, effect) =>
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === 'ring',
+    opponentsCardAndRingEffects: (context, effect) => checkRestrictions.opponentsCardEffects(context, effect) || checkRestrictions.opponentsRingEffects(context, effect),
     opponentsTriggeredAbilities: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>

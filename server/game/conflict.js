@@ -312,7 +312,8 @@ class Conflict extends GameObject {
         let skillFunction = this.mostRecentEffect(EffectNames.ChangeConflictSkillFunction) || (card => card.getContributionToConflict(this.conflictType));
         let cannotContributeFunctions = this.getEffects(EffectNames.CannotContribute);
         return cards.reduce((sum, card) => {
-            let cannotContribute = card.bowed;
+            let canContributeWhileBowed = card.anyEffect(EffectNames.CanContributeWhileBowed);
+            let cannotContribute = card.bowed && !canContributeWhileBowed;
             if(!cannotContribute) {
                 cannotContribute = cannotContributeFunctions.some(func => func(card));
             }
@@ -329,6 +330,7 @@ class Conflict extends GameObject {
     determineWinner() {
         this.calculateSkill();
         this.winnerDetermined = true;
+        this.provinceStrengthAtResolution = this.conflictProvince.getStrength();
 
         if(this.attackerSkill === 0 && this.defenderSkill === 0) {
             this.loser = undefined;

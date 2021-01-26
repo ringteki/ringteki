@@ -6,49 +6,44 @@ class RenownedSinger extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Pick two cards in your discard pile',
-            condition: context => context.player.honorGained(context.game.roundNumber, this.game.currentPhase, true) >= 2,
-            targets: {
-                discardCards: {
-                    mode: TargetModes.Exactly,
-                    activePromptTitle: 'Choose two conflict cards',
-                    numCards: 2,
-                    location: Locations.ConflictDiscardPile,
-                    cardType: [CardTypes.Character, CardTypes.Attachment, CardTypes.Event],
-                    controller: Players.Self
-                },
-                selectedCard: {
-                    dependsOn: 'discardCards',
-                    activePromptTitle: 'Choose a card to add to your opponent\'s hand',
-                    player: Players.Opponent,
-                    location: Locations.ConflictDiscardPile,
-                    cardType: [CardTypes.Character, CardTypes.Attachment, CardTypes.Event],
-                    controller: Players.Self,
-                    cardCondition: (card, context) => {
-                        let cards = context.targets.discardCards;
-                        if(!Array.isArray(cards)) {
-                            cards = [cards];
+            condition: context => context.player.honorGained(context.game.roundNumber, this.game.currentPhase, true) >= 2 && context.player.opponent,
+            target: {
+                mode: TargetModes.Exactly,
+                activePromptTitle: 'Choose two conflict cards',
+                numCards: 2,
+                location: Locations.ConflictDiscardPile,
+                cardType: [CardTypes.Character, CardTypes.Attachment, CardTypes.Event],
+                controller: Players.Self,
+                gameAction: AbilityDsl.actions.handler({
+                    handler: context => this.game.promptWithHandlerMenu(context.player.opponent, {
+                        activePromptTitle: 'Choose a card to add to your opponent\'s hand',
+                        context: context,
+                        cards: context.target,
+                        cardHandler: handCard => {
+                            let bottomCard = context.target.filter(a => a !== handCard);
+                            context.game.addMessage('{0} chooses {1} to be put into {2}\'s hand. {3} is put on the bottom of {2}\'s conflict deck',
+                                context.player.opponent, handCard, context.player, bottomCard);
+
+                            let gameAction = AbilityDsl.actions.multiple([
+                                AbilityDsl.actions.moveCard({
+                                    target: handCard,
+                                    destination: Locations.Hand
+                                }),
+                                AbilityDsl.actions.returnToDeck({
+                                    target: bottomCard,
+                                    location: Locations.ConflictDiscardPile,
+                                    bottom: true,
+                                    shuffle: false
+                                })
+                            ]);
+
+                            gameAction.resolve(undefined, context);
                         }
-                        return cards.includes(card);
-                    },
-                    gameAction: AbilityDsl.actions.multiple([
-                        AbilityDsl.actions.moveCard(context => ({
-                            target: context.targets.selectedCard,
-                            destination: Locations.Hand
-                        })),
-                        AbilityDsl.actions.returnToDeck(context => ({
-                            target: context.targets.discardCards.filter(a => a !== context.targets.selectedCard),
-                            location: Locations.ConflictDiscardPile,
-                            bottom: true,
-                            shuffle: false
-                        }))
-                    ])
-                }
+                    })
+                })
             },
-            effect: 'put {1} into their hand and return {2} to the bottom of their conflict deck',
-            effectArgs: context => [
-                context.targets.selectedCard,
-                context.targets.discardCards.filter(a => a !== context.targets.selectedCard)
-            ]
+            effect: 'have {1} return one of {2} to {3}\'s hand',
+            effectArgs: context => [context.player.opponent, context.target, context.player]
         });
     }
 }

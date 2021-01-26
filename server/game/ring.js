@@ -70,12 +70,14 @@ class Ring extends EffectSource {
     getElements() {
         let elements = this.getEffects(EffectNames.AddElement).concat([this.element]);
         if(this.game.isDuringConflict()) {
-            elements = elements.concat(...this.game.currentConflict.attackers.map(card =>
-                card.attachments.reduce(
-                    (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
-                    card.getEffects(EffectNames.AddElementAsAttacker)
-                )
-            ));
+            if(this.isContested()) {
+                elements = elements.concat(...this.game.currentConflict.attackers.map(card =>
+                    card.attachments.reduce(
+                        (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
+                        card.getEffects(EffectNames.AddElementAsAttacker)
+                    )
+                ));
+            }
         }
         return _.uniq(_.flatten(elements));
     }

@@ -16,6 +16,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     title?: String;
     gameAction?: GameAction;
     message?: string;
+    uniqueNames?: boolean;
     messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
@@ -33,6 +34,7 @@ export class DeckSearchAction extends PlayerAction {
         selectedCardsHandler: null,
         shuffle: true,
         reveal: true,
+        uniqueNames: false,
         cardCondition: () => true
     };
 
@@ -124,15 +126,23 @@ export class DeckSearchAction extends PlayerAction {
         if (!properties.activePromptTitle) {
             title = 'Select a card' + (properties.reveal ? ' to reveal' : '');
             if (selectAmount < 0 || selectAmount > 1) {
-                title = 'Select all cards' + (properties.reveal ? ' to reveal' : '');
+                title = `Select ${selectAmount < 0 ? 'all' : ('up to '+ selectAmount)} cards` + (properties.reveal ? ' to reveal' : '');
             }
+        }
+
+        if (properties.shuffle) {
+            cards.sort(card => card.name)
         }
 
         context.game.promptWithHandlerMenu(player, {
             activePromptTitle: title,
             context: context,
             cards: cards,
-            cardCondition: (card, context) => properties.cardCondition(card, context) && (!properties.gameAction || properties.gameAction.canAffect(card, context, additionalProperties)),
+            cardCondition: (card, context) => {
+                return properties.cardCondition(card, context) &&
+                    (!properties.uniqueNames || !selectedCards.some(sel => sel.name === card.name)) &&
+                    (!properties.gameAction || properties.gameAction.canAffect(card, context, additionalProperties))
+            },
             choices: canCancel ? (selectedCards.length > 0 ? ['Done'] : ['Take nothing']) : ([]),
             handlers: [() => {
                 this.handleDone(properties, context, event, selectedCards);

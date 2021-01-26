@@ -56,6 +56,7 @@ const Effects = {
         unapply: card => card.controller.removeConflictOpportunity(type)
     }),
     contributeToConflict: (player) => EffectBuilder.card.flexible(EffectNames.ContributeToConflict, player),
+    canContributeWhileBowed: (properties) => EffectBuilder.card.static(EffectNames.CanContributeWhileBowed, properties),
     copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
     customRefillProvince: (refillFunc) => EffectBuilder.card.static(EffectNames.CustomProvinceRefillEffect, refillFunc), //refillFunc: (Player, ProvinceCard) => { }
@@ -104,6 +105,7 @@ const Effects = {
     mustBeDeclaredAsAttacker: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttacker, type),
     mustBeDeclaredAsDefender: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsDefender, type),
     refillProvinceTo: (refillAmount) => EffectBuilder.card.flexible(EffectNames.RefillProvinceTo, refillAmount),
+    setApparentFate: (value) => EffectBuilder.card.static(EffectNames.SetApparentFate, value),
     setBaseDash: (type) => EffectBuilder.card.static(EffectNames.SetBaseDash, type),
     setBaseMilitarySkill: (value) => EffectBuilder.card.static(EffectNames.SetBaseMilitarySkill, value),
     setBasePoliticalSkill: (value) => EffectBuilder.card.static(EffectNames.SetBasePoliticalSkill, value),
@@ -133,18 +135,34 @@ const Effects = {
     additionalPlayCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalPlayCost, func),
     alternateFatePool: (match) => EffectBuilder.player.static(EffectNames.AlternateFatePool, match),
     cannotDeclareConflictsOfType: type => EffectBuilder.player.static(EffectNames.CannotDeclareConflictsOfType, type),
-    canPlayFromOwn: (location, cards, playType = PlayTypes.PlayFromHand) => EffectBuilder.player.detached(EffectNames.CanPlayFromOwn, {
+    canPlayFromOwn: (location, cards, sourceOfEffect, playType = PlayTypes.PlayFromHand) => EffectBuilder.player.detached(EffectNames.CanPlayFromOwn, {
         apply: (player) => {
             for(const card of cards.filter(card => card.type === CardTypes.Event && card.location === location)) {
                 for(const reaction of card.reactions) {
                     reaction.registerEvents();
                 }
             }
+            for(const card of cards) {
+                if(!card.fromOutOfPlaySource) {
+                    card.fromOutOfPlaySource = [];
+                }
+                card.fromOutOfPlaySource.push(sourceOfEffect);
+            }
             return player.addPlayableLocation(playType, player, location, cards);
         },
-        unapply: (player, context, location) => player.removePlayableLocation(location)
+        unapply: (player, context, location) => {
+            player.removePlayableLocation(location);
+            for(const card of location.cards) {
+                if(Array.isArray(card.fromOutOfPlaySource)) {
+                    card.fromOutOfPlaySource.filter(a => a !== context.source);
+                    if(card.fromOutOfPlaySource.length === 0) {
+                        delete card.fromOutOfPlaySource;
+                    }
+                }
+            }
+        }
     }),
-    canPlayFromOpponents: (location, cards, playType = PlayTypes.PlayFromHand) => EffectBuilder.player.detached(EffectNames.CanPlayFromOpponents, {
+    canPlayFromOpponents: (location, cards, sourceOfEffect, playType = PlayTypes.PlayFromHand) => EffectBuilder.player.detached(EffectNames.CanPlayFromOpponents, {
         apply: (player) => {
             if(!player.opponent) {
                 return;
@@ -154,9 +172,25 @@ const Effects = {
                     reaction.registerEvents();
                 }
             }
+            for(const card of cards) {
+                if(!card.fromOutOfPlaySource) {
+                    card.fromOutOfPlaySource = [];
+                }
+                card.fromOutOfPlaySource.push(sourceOfEffect);
+            }
             return player.addPlayableLocation(playType, player.opponent, location, cards);
         },
-        unapply: (player, context, location) => player.removePlayableLocation(location)
+        unapply: (player, context, location) => {
+            player.removePlayableLocation(location);
+            for(const card of location.cards) {
+                if(Array.isArray(card.fromOutOfPlaySource)) {
+                    card.fromOutOfPlaySource.filter(a => a !== context.source);
+                    if(card.fromOutOfPlaySource.length === 0) {
+                        delete card.fromOutOfPlaySource;
+                    }
+                }
+            }
+        }
     }),
     limitHonorGainPerPhase: (amount) => EffectBuilder.player.static(EffectNames.LimitHonorGainPerPhase, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
@@ -189,6 +223,7 @@ const Effects = {
     restartDynastyPhase: (source) => EffectBuilder.player.static(EffectNames.RestartDynastyPhase, source),
     strongholdCanBeAttacked: () => EffectBuilder.player.static(EffectNames.StrongholdCanBeAttacked),
     defendersChosenFirstDuringConflict: (amountOfAttackers) => EffectBuilder.player.static(EffectNames.DefendersChosenFirstDuringConflict, amountOfAttackers),
+    costToDeclareAnyParticipants: (properties) => EffectBuilder.player.static(EffectNames.CostToDeclareAnyParticipants, properties),
     // Conflict effects
     charactersCannot: (properties) => EffectBuilder.conflict.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ restricts: 'characters', type: properties.cannot || properties }, properties))),
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),

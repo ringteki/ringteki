@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes, Locations, Players } = require('../../Constants');
+const { CardTypes, Locations, Players, PlayTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class WayfarersCamp extends DrawCard {
@@ -13,14 +13,14 @@ class WayfarersCamp extends DrawCard {
                     cardType: CardTypes.Character,
                     location: Locations.Provinces,
                     controller: Players.Self,
-                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true })
+                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true, source: this, playType: PlayTypes.PlayFromProvince })
                 }),
                 AbilityDsl.actions.selectCard({
                     activePromptTitle: 'Choose a character to play',
                     cardType: CardTypes.Character,
                     location: Locations.Provinces,
                     controller: Players.Self,
-                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true })
+                    gameAction: AbilityDsl.actions.playCard({ resetOnCancel: true, source: this, playType: PlayTypes.PlayFromProvince })
                 }),
                 AbilityDsl.actions.selectCard({
                     activePromptTitle: 'Choose a card to turn faceup',

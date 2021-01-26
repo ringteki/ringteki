@@ -1,0 +1,27 @@
+name: Ringteki CI
+
+on: 
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    env:
+      CXX: g++-4.9
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.18.3'
+      - run: npm install
+      - run: npm install -g typescript@3.4.5
+      - name: Submodule Init
+        run: git submodule init
+      - name: Submodule Update
+        run: git submodule update
+      - name: Test
+        run: npm test
+      - name: Lint
+        run: npm run lint

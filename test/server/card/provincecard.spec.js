@@ -6,7 +6,8 @@ describe('Province Card - Turning Provinces Facedown with Tokens Tests', functio
                 player1: {
                     inPlay: ['traveling-philosopher'],
                     dynastyDiscard: ['togashi-ichi'],
-                    provinces: ['manicured-garden', 'public-forum']
+                    provinces: ['manicured-garden', 'public-forum', 'rally-to-the-cause'],
+                    role: ['keeper-of-water']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan'],
@@ -23,6 +24,7 @@ describe('Province Card - Turning Provinces Facedown with Tokens Tests', functio
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
             this.shadows = this.player2.findCardByName('return-from-shadows');
             this.fertile = this.player2.findCardByName('fertile-fields');
+            this.rally = this.player1.findCardByName('rally-to-the-cause');
         });
 
         it('provinces turned facedown should lose tokens', function() {
@@ -49,6 +51,37 @@ describe('Province Card - Turning Provinces Facedown with Tokens Tests', functio
 
             expect(this.forum.hasToken('honor')).toBe(false);
             expect(this.forum.getTokenCount('honor')).toBe(0);
+        });
+
+        it('provinces turned facedown with reactions to being revealed should react immediately - conflict at province', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kuwanan],
+                province: this.rally,
+                type: 'military',
+                ring: 'air'
+            });
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.rally);
+            expect(this.game.currentConflict.conflictType).toBe('military');
+            this.player1.clickCard(this.rally);
+            expect(this.game.currentConflict.conflictType).toBe('political');
+
+            this.player1.clickPrompt('Done');
+
+            this.player1.clickCard(this.ichi);
+            this.player1.clickCard(this.travelingPhilosopher);
+            this.player1.clickCard(this.travelingPhilosopher);
+            this.player1.clickCard(this.rally);
+
+            expect(this.getChatLogs(5)).toContain('Rally to the Cause is immediately revealed again!');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.rally);
+            expect(this.game.currentConflict.conflictType).toBe('political');
+            this.player1.clickCard(this.rally);
+            expect(this.game.currentConflict.conflictType).toBe('military');
         });
 
         it('provinces turned facedown should lose tokens - conflict at province', function() {

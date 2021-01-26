@@ -76,7 +76,7 @@ describe('EsteemedTeaHouse', function() {
                 this.player1.clickCard(this.esteemedteahouse);
                 this.player1.clickCard(this.ornatefan);
                 this.player2.clickCard(this.ornatefan);
-                expect(this.getChatLogs(3)).toContain('player1 uses Esteemed Tea House to return Ornate Fan to player2\'s hand. player2 cannot play copies of Ornate Fan this phase');
+                expect(this.getChatLogs(3)).toContain('player1 uses Esteemed Tea House to return Ornate Fan to player2\'s hand and prevent them from playing copies this phase');
                 // ornate fan should stay in hand and not play
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 expect(this.ornatefan.location).toBe('hand');

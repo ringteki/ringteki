@@ -26,7 +26,7 @@ export class TransferHonorAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferHonorProperties;
-        var [_, amountToTransfer] = CalculateHonorLimit(context.player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        var [_, amountToTransfer] = CalculateHonorLimit(context.player, context.game.roundNumber, context.game.currentPhase, properties.amount);
         return ['take {1} honor from {0}', [context.player.opponent, amountToTransfer]];
     }
 

@@ -13,7 +13,8 @@ describe('Silent Ones Monastery', function() {
                     player2: {
                         provinces: ['silent-ones-monastery'],
                         hand: ['assassination'],
-                        dynastyDiscard: ['dispatch-to-nowhere']
+                        dynastyDiscard: ['dispatch-to-nowhere'],
+                        stronghold: ['city-of-the-open-hand']
                     }
                 });
 
@@ -29,6 +30,8 @@ describe('Silent Ones Monastery', function() {
 
                 this.silentOnesMonastery = this.player2.findCardByName('silent-ones-monastery', 'province 1');
                 this.dispatch = this.player2.placeCardInProvince('dispatch-to-nowhere', 'province 4');
+                this.city = this.player2.findCardByName('city-of-the-open-hand');
+                this.city.loadOriginalAction();
             });
 
             it('should limit the phate gained by the opponent in one phase to 2', function() {
@@ -160,6 +163,30 @@ describe('Silent Ones Monastery', function() {
                 expect(this.player1.honor).toBe(this.preProdigiesHonor + 1);
                 /* even though player1 only has gained 1 honor ontop of his starting total, he did gain 2 honor in total.
                    and thus should not be able to gain honor anymore */
+            });
+
+            it('bug report - city message', function() {
+                this.player1.player.promptedActionWindows.draw = true;
+                this.player2.player.promptedActionWindows.draw = true;
+                this.player1.pass();
+                this.player2.pass(); // move on to draw phase
+
+                this.preDrawBidHonor = this.player1.honor;
+                this.preDrawBidHonorSOMPlayer = this.player2.honor;
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('5');
+                expect(this.player1.honor).toBe(this.preDrawBidHonor + 2);
+                expect(this.player2.honor).toBe(this.preDrawBidHonorSOMPlayer - 2); // 1 to 5 bid, player 2 should technically pay 4, but SOM prevents all but 2
+                expect(this.getChatLogs(10)).toContain('player2 gives player1 2 honor');
+
+                let p1Honor = this.player1.honor;
+                let p2Honor = this.player2.honor;
+
+                this.player1.pass();
+                this.player2.clickCard(this.city);
+                expect(this.player1.honor).toBe(p1Honor - 1);
+                expect(this.player2.honor).toBe(p2Honor + 1);
+                expect(this.getChatLogs(5)).toContain('player2 uses City of the Open Hand, bowing City of the Open Hand to take 1 honor from player1');
             });
         });
         describe('functionality when the honor gain would surpass the limit', function () {

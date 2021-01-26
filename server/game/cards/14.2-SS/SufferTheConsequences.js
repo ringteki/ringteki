@@ -8,6 +8,8 @@ class SufferTheConsequences extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Gain another political conflict',
+            effect: 'allow {1} to declare an additional political conflict this phase',
+            effectArgs: context => [context.player],
             max: AbilityDsl.limit.perPhase(1),
             condition: context => context.game.currentPhase === Phases.Conflict,
             cost: AbilityDsl.costs.sacrifice({

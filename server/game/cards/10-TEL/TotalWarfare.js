@@ -1,12 +1,11 @@
 import { CardTypes, Players } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
-const DrawCard = require('../../drawcard.js');
+const BattlefieldAttachment = require('../BattlefieldAttachment');
 
-class TotalWarfare extends DrawCard {
+class TotalWarfare extends BattlefieldAttachment {
     setupCardAbilities() {
-        this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 }
-        });
+        super.setupCardAbilities();
+
         this.forcedReaction({
             title: 'Loser sacrifices a character',
             when: {
@@ -19,18 +18,6 @@ class TotalWarfare extends DrawCard {
                 gameAction: AbilityDsl.actions.sacrifice()
             }
         });
-    }
-
-    canPlayOn(source) {
-        return source && source.getType() === 'province' && !source.isBroken && this.getType() === CardTypes.Attachment;
-    }
-
-    canAttach(parent) {
-        if(parent.type === CardTypes.Province && parent.isBroken) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
     }
 }
 

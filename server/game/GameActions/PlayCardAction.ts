@@ -18,6 +18,7 @@ class PlayCardResolver extends AbilityResolver {
         this.gameActionProperties = gameActionProperties;
         this.cancelPressed = false;
         context.ignoreFateCost = this.gameActionProperties.ignoreFateCost;
+        context.onPlayCardSource = this.gameActionProperties.source;
     }
 
     resolveEarlyTargets() {
@@ -90,6 +91,7 @@ export interface PlayCardProperties extends CardActionProperties {
     destinationOptions?: object;
     payCosts?: boolean;
     ignoreFateCost?: boolean;
+    source?: any;
     allowReactions?: boolean;
 }
 
@@ -102,7 +104,8 @@ export class PlayCardAction extends CardGameAction {
         destinationOptions: {},
         payCosts: true,
         ignoreFateCost: false,
-        allowReactions: false
+        allowReactions: false,
+        source: null
     };
     constructor(properties: ((context: AbilityContext) => PlayCardProperties) | PlayCardProperties) {
         super(properties);
@@ -178,6 +181,10 @@ export class PlayCardAction extends CardGameAction {
             choices: abilities.map(action => action.title).concat(properties.resetOnCancel ? 'Cancel' : []),
             handlers: abilities.map(action => () => events.push(this.getPlayCardEvent(card, context, action.createContext(context.player), additionalProperties))).concat(() => this.cancelAction(context, properties))
         });
+    }
+
+    addPropertiesToEvent(event, card, context: AbilityContext): void {
+        event.onPlayCardSource = context.source;
     }
 
     getPlayCardEvent(card: DrawCard, context: AbilityContext, actionContext: AbilityContext, additionalProperties): Event {

@@ -12,7 +12,7 @@ class Infiltrator extends DrawCard {
                 return {
                     activePromptTitle: topCard && 'Choose an action for ' + topCard.name,
                     choices: {
-                        'Play this card': ability.actions.playCard({ target: topCard, playType: PlayTypes.PlayFromHand }),
+                        'Play this card': ability.actions.playCard({ target: topCard, playType: PlayTypes.PlayFromHand, source: this }),
                         'Discard this card': ability.actions.discardCard({ target: topCard })
                     },
                     messages: { 'Discard this card': '{0} chooses to discard {1}' }

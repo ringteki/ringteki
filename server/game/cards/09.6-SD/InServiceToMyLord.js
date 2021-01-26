@@ -6,7 +6,7 @@ class InServiceToMyLord extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             location: Locations.ConflictDiscardPile,
-            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], PlayTypes.Other)
+            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
         });
         this.action({
             title: 'Ready a character',

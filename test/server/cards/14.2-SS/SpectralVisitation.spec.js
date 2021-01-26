@@ -92,6 +92,8 @@ describe('Spectral Visitation', function() {
 
             expect(this.toshimoko.location).toBe('dynasty discard pile');
             expect(this.yoshi.location).toBe('play area');
+            expect(this.getChatLogs(10)).toContain('player2 uses Spectral Visitation, discarding Kakita Toshimoko, Adept of the Waves, Adept of the Waves and Adept of the Waves to put a dynasty character into play');
+            expect(this.getChatLogs(10)).toContain('player2 puts Kakita Yoshi into play. Kakita Yoshi will be put on the bottom of the deck if it\'s still in play by the end of the phase');
         });
 
         it('the cards discarded should be viable as targets for the ability', function() {
@@ -146,6 +148,8 @@ describe('Spectral Visitation', function() {
             this.player2.clickPrompt('Military');
             expect(this.game.currentPhase).toBe('fate');
             expect(this.yoshi.location).toBe('dynasty deck');
+
+            expect(this.getChatLogs(5)).toContain('Kakita Yoshi returns to the bottom of the deck due to Spectral Visitation\'s effect');
         });
     });
 });

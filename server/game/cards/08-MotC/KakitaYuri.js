@@ -9,6 +9,8 @@ class KakitaYuri extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Political,
                 opponentChoosesDuelTarget: true,
+                message: 'prevent {0} from declaring military conflicts this phase',
+                messageArgs: duel => [duel.loser ? duel.loser.controller : 'no one'],
                 gameAction: duel => AbilityDsl.actions.playerLastingEffect(() => ({
                     targetController: duel.loser && duel.loser.controller,
                     duration: Durations.UntilEndOfPhase,

@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations, CardTypes } = require('../../Constants');
+const { CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class SubterraneanGuile extends DrawCard {
@@ -11,7 +11,7 @@ class SubterraneanGuile extends DrawCard {
     }
 
     isHoldingOnUnbrokenProvince(context) {
-        return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince].some(location => {
+        return context.game.getProvinceArray().some(location => {
             if(!context.player.getProvinceCardInProvince(location).isBroken) {
                 let cards = context.player.getDynastyCardsInProvince(location);
                 if(cards.some(card => card.isFaceup() && card.type === CardTypes.Holding)) {
