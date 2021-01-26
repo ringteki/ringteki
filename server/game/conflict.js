@@ -151,7 +151,9 @@ class Conflict extends GameObject {
         if(newRing.conflictType !== this.conflictType) {
             newRing.flipConflictType();
         }
-        this.ring.resetRing();
+        if(this.ring) {
+            this.ring.resetRing();
+        }
         newRing.contested = true;
         this.ring = newRing;
     }
