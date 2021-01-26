@@ -301,5 +301,49 @@ describe('Togashi Kazue 2', function() {
 
             expect(this.kazue.location).toBe('dynasty discard pile');
         });
+
+        it('should properly remove the second trigger if Kazue leaves play', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.challenger],
+                defenders: [this.kudaka]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.ancientMaster);
+            expect(this.ancientMaster.inConflict).toBe(true);
+
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.kazue);
+
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.borderRider);
+            expect(this.borderRider.inConflict).toBe(false);
+        });
+
+        it('should properly work even if other characters have fate', function() {
+            this.uona.fate = 1;
+            this.master.fate = 1;
+            this.kazue.fate = 1;
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.challenger],
+                defenders: [this.kudaka]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.ancientMaster);
+            expect(this.ancientMaster.inConflict).toBe(true);
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.borderRider);
+            expect(this.borderRider.inConflict).toBe(true);
+        });
     });
 });

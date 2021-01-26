@@ -176,10 +176,10 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.game.updateCurrentConflict(null);
         if(!this.conflict.conflictPassed) {
             let provinceSlot = this.conflict.conflictProvince ? this.conflict.conflictProvince.location : Locations.ProvinceOne;
-            let province = this.conflict.defendingPlayer.getProvinceCardInProvince(provinceSlot);
+            let province = this.conflict.conflictProvince || this.conflict.defendingPlayer.getProvinceCardInProvince(provinceSlot);
             let provinceName = (this.conflict.conflictProvince && this.conflict.conflictProvince.isFacedown()) ? provinceSlot : this.conflict.conflictProvince;
 
-            const totalFateCost = province.getFateCostToAttack();
+            const totalFateCost = province ? province.getFateCostToAttack() : 0;
             if(!this.conflict.conflictPassed && totalFateCost > 0) {
                 this.game.addMessage('{0} pays {1} fate to declare a conflict at {2}', this.conflict.attackingPlayer, totalFateCost, provinceName);
                 const costEvents = [];

@@ -10,7 +10,7 @@ describe('Seize The Mind', function() {
                     dynastyDiscard: ['daidoji-kageyu']
                 },
                 player2: {
-                    inPlay: ['alibi-artist', 'miya-mystic', 'kakita-toshimoko', 'honored-general'],
+                    inPlay: ['alibi-artist', 'miya-mystic', 'kakita-toshimoko', 'honored-general', 'khanbulak-benefactor'],
                     hand: ['finger-of-jade', 'tactical-ingenuity']
                 }
             });
@@ -24,6 +24,7 @@ describe('Seize The Mind', function() {
             this.jade = this.player2.findCardByName('finger-of-jade');
             this.tactical = this.player2.findCardByName('tactical-ingenuity');
             this.mystic2 = this.player2.findCardByName('miya-mystic');
+            this.khanbulak = this.player2.findCardByName('khanbulak-benefactor');
 
             this.miyaMystic.fate = 0;
             this.manipulator.fate = 4;
@@ -207,6 +208,32 @@ describe('Seize The Mind', function() {
             this.player1.clickCard(this.alibi);
             this.player1.clickPrompt('1');
             expect(this.steed.location).toBe('play area');
+        });
+
+        it('bug report - khanbulak', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.khanbulak],
+                defenders: []
+            });
+
+            this.player1.clickCard(this.seize);
+            this.player1.clickCard(this.khanbulak);
+            this.player1.clickCard(this.manipulator);
+            this.player1.clickPrompt('3');
+
+            expect(this.game.currentConflict.attackers).not.toContain(this.khanbulak);
+            expect(this.game.currentConflict.defenders).toContain(this.khanbulak);
+            expect(this.khanbulak.controller).toBe(this.player1.player);
+            this.player2.pass();
+            this.player1.clickCard(this.steed);
+            this.player1.clickCard(this.manipulator);
+            expect(this.steed.location).toBe('play area');
+            this.noMoreActions();
+            expect(this.khanbulak.controller).toBe(this.player2.player);
         });
     });
 });
