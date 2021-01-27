@@ -151,7 +151,9 @@ class Conflict extends GameObject {
         if(newRing.conflictType !== this.conflictType) {
             newRing.flipConflictType();
         }
-        this.ring.resetRing();
+        if(this.ring) {
+            this.ring.resetRing();
+        }
         newRing.contested = true;
         this.ring = newRing;
     }
@@ -330,6 +332,7 @@ class Conflict extends GameObject {
     determineWinner() {
         this.calculateSkill();
         this.winnerDetermined = true;
+        this.provinceStrengthAtResolution = this.conflictProvince.getStrength();
 
         if(this.attackerSkill === 0 && this.defenderSkill === 0) {
             this.loser = undefined;

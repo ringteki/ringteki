@@ -1,6 +1,7 @@
 const _ = require('underscore');
 const EffectValue = require('./EffectValue');
-const { CardTypes, EffectNames, Durations } = require('../Constants');
+const { CardTypes, EffectNames, Durations, AbilityTypes } = require('../Constants');
+const GainAbility = require('./GainAbility');
 
 const binaryCardEffects = [
     EffectNames.Blank,
@@ -74,16 +75,25 @@ class StaticEffect {
         this.value.reset();
         this.context = null;
         this.duration = null;
+        this.copies = [];
     }
 
     apply(target) {
         target.addEffect(this);
-        this.value.apply(target);
+        if(this.value instanceof GainAbility && this.value.abilityType === AbilityTypes.Persistent) {
+            const copy = this.value.getCopy();
+            copy.apply(target);
+            this.copies.push(copy);
+        } else {
+            this.value.apply(target);
+        }
     }
 
     unapply(target) {
         target.removeEffect(this);
         this.value.unapply(target);
+        this.copies.forEach(a => a.unapply(target));
+        this.copies = [];
     }
 
     getValue() {

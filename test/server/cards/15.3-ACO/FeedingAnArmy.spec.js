@@ -9,7 +9,7 @@ describe('Feeding an Army', function() {
                         fate: 5,
                         inPlay: ['ethereal-dreamer', 'doji-challenger', 'togashi-mitsu'],
                         hand: ['feeding-an-army'],
-                        provinces: ['before-the-throne', 'manicured-garden', 'magistrate-station']
+                        provinces: ['before-the-throne', 'manicured-garden', 'magistrate-station', 'public-forum']
                     },
                     player2: {
                         honor: 11,
@@ -24,12 +24,11 @@ describe('Feeding an Army', function() {
                 this.throne = this.player1.findCardByName('before-the-throne');
                 this.garden = this.player1.findCardByName('manicured-garden');
                 this.station = this.player1.findCardByName('magistrate-station');
-                this.sd4 = this.player1.findCardByName('shameful-display', 'province 4');
+                this.publicForum = this.player1.findCardByName('public-forum');
 
                 this.throne.facedown = false;
-                this.sd4.facedown = false;
+                this.publicForum.facedown = false;
                 this.garden.facedown = false;
-                this.sd4.isBroken = true;
 
                 this.shahai = this.player2.findCardByName('iuchi-shahai-2');
                 this.ikehata = this.player2.findCardByName('ikoma-ikehata');
@@ -50,7 +49,7 @@ describe('Feeding an Army', function() {
                 expect(this.player1).toBeAbleToSelect(this.garden);
                 expect(this.player1).toBeAbleToSelect(this.throne);
                 expect(this.player1).not.toBeAbleToSelect(this.station);
-                expect(this.player1).not.toBeAbleToSelect(this.sd4);
+                expect(this.player1).toBeAbleToSelect(this.publicForum);
 
             });
 
@@ -90,6 +89,24 @@ describe('Feeding an Army', function() {
                 expect(this.mitsu.fate).toBe(0);
                 expect(this.shahai.fate).toBe(0);
                 expect(this.getChatLogs(10)).toContain('player1 plays Feeding an Army, breaking Manicured Garden to place 1 fate on Ethereal Dreamer and Doji Challenger');
+
+            });
+
+            it('should allow Public Forum to replace the cost', function() {
+                this.noMoreActions();
+                this.player1.clickCard(this.feeding);
+                this.player1.clickCard(this.publicForum);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.publicForum);
+
+                this.player1.clickCard(this.publicForum);
+                expect(this.getChatLogs(10)).toContain('player1 uses Public Forum to add an honor token to Public Forum instead of breaking it');
+
+                expect(this.dreamer.fate).toBe(1);
+                expect(this.challenger.fate).toBe(1);
+                expect(this.mitsu.fate).toBe(0);
+                expect(this.shahai.fate).toBe(0);
+                expect(this.getChatLogs(10)).toContain('player1 plays Feeding an Army, breaking Public Forum to place 1 fate on Ethereal Dreamer and Doji Challenger');
 
             });
         });
