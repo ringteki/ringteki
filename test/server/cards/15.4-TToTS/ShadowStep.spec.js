@@ -4,7 +4,7 @@ describe('Shadow Step', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['kudaka', 'shosuro-sadako', 'beloved-advisor', 'callow-delegate', 'khanbulak-benefactor'],
+                    inPlay: ['kudaka', 'shosuro-sadako', 'beloved-advisor', 'callow-delegate', 'khanbulak-benefactor', 'fushicho'],
                     hand: ['shadow-step', 'honored-blade']
                 },
                 player2: {
@@ -15,6 +15,7 @@ describe('Shadow Step', function() {
             this.sadako = this.player1.findCardByName('shosuro-sadako');
             this.blade = this.player1.findCardByName('honored-blade');
             this.shadowStep = this.player1.findCardByName('shadow-step');
+            this.fushicho = this.player1.findCardByName('fushicho');
             this.togashiYokuni = this.player2.findCardByName('togashi-yokuni');
             this.togashiInitiate = this.player2.findCardByName('togashi-initiate');
 
@@ -23,11 +24,12 @@ describe('Shadow Step', function() {
             this.khanbulak = this.player1.findCardByName('khanbulak-benefactor');
         });
 
-        it('should work only on a character you control', function() {
+        it('should work only on a non-mythic character you control', function() {
             this.player1.clickCard(this.shadowStep);
             expect(this.player1).not.toBeAbleToSelect(this.togashiYokuni);
             expect(this.player1).toBeAbleToSelect(this.kudaka);
             expect(this.player1).toBeAbleToSelect(this.sadako);
+            expect(this.player1).not.toBeAbleToSelect(this.fushicho);
             expect(this.player1).not.toBeAbleToSelect(this.togashiInitiate);
         });
 
