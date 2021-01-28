@@ -57,6 +57,23 @@ describe('Kuni Wasteland', function() {
                 expect(this.player1.fate).toBe(fate);
             });
 
+            it('should not stop honor token gain/loss', function() {
+                this.envoy.honor();
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.envoy],
+                    defenders: [],
+                    province: this.wasteland
+                });
+                let honor = this.player1.honor;
+
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.envoy);
+                expect(this.envoy.location).toBe('dynasty discard pile');
+                expect(this.player1.honor).toBe(honor + 1);
+            });
+
             it('should stop pride', function() {
                 this.noMoreActions();
                 this.initiateConflict({
