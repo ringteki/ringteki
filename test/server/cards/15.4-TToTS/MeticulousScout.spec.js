@@ -10,7 +10,7 @@ describe('Meticulous Scout', function() {
                 player2: {
                     inPlay: ['young-rumormonger', 'ardent-omoidasu'],
                     hand: ['perfect-land-ethos'],
-                    provinces: ['night-raid', 'manicured-garden', 'shameful-display', 'pilgrimage'],
+                    provinces: ['night-raid', 'manicured-garden', 'shameful-display', 'pilgrimage']
                 }
             });
 
