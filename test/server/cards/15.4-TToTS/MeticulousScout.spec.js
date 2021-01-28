@@ -10,7 +10,7 @@ describe('Meticulous Scout', function() {
                 player2: {
                     inPlay: ['young-rumormonger', 'ardent-omoidasu'],
                     hand: ['perfect-land-ethos'],
-                    provinces: ['night-raid', 'manicured-garden', 'shameful-display', 'pilgrimage']
+                    provinces: ['khan-s-ordu', 'manicured-garden', 'shameful-display', 'pilgrimage']
                 }
             });
 
@@ -22,7 +22,7 @@ describe('Meticulous Scout', function() {
             this.p1_4 = this.player1.findCardByName('shameful-display', 'province 4');
             this.p1_Stronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
 
-            this.nightRaid = this.player2.findCardByName('night-raid');
+            this.khan = this.player2.findCardByName('khan-s-ordu');
             this.manicured = this.player2.findCardByName('manicured-garden');
             this.shameful = this.player2.findCardByName('shameful-display');
             this.pilgrimage = this.player2.findCardByName('pilgrimage');
@@ -47,7 +47,8 @@ describe('Meticulous Scout', function() {
             this.initiateConflict({
                 attackers: [this.scout],
                 defenders: [],
-                type: 'military'
+                type: 'military',
+                province: this.manicured
             });
 
             this.player2.pass();
@@ -64,7 +65,8 @@ describe('Meticulous Scout', function() {
             this.initiateConflict({
                 attackers: [this.scout],
                 defenders: [],
-                type: 'military'
+                type: 'military',
+                province: this.manicured
             });
 
             this.player2.pass();
@@ -90,7 +92,7 @@ describe('Meticulous Scout', function() {
             this.player1.clickPrompt('Gain 2 Honor');
 
             this.player1.clickCard(this.scout);
-            expect(this.player1).toBeAbleToSelect(this.nightRaid);
+            expect(this.player1).toBeAbleToSelect(this.khan);
             expect(this.player1).toBeAbleToSelect(this.manicured);
             expect(this.player1).toBeAbleToSelect(this.shameful);
             expect(this.player1).toBeAbleToSelect(this.pilgrimage);
@@ -116,9 +118,9 @@ describe('Meticulous Scout', function() {
             this.player1.clickPrompt('Gain 2 Honor');
 
             this.player1.clickCard(this.scout);
-            this.player1.clickCard(this.nightRaid);
-            expect(this.nightRaid.isDishonored).toBe(true);
-            expect(this.nightRaid.facedown).toBe(false);
+            this.player1.clickCard(this.khan);
+            expect(this.khan.isDishonored).toBe(true);
+            expect(this.khan.facedown).toBe(false);
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
         });
 
@@ -208,10 +210,10 @@ describe('Meticulous Scout', function() {
             this.noMoreActions();
             this.player1.clickPrompt('Gain 2 Honor');
             this.player1.clickCard(this.scout);
-            this.player1.clickCard(this.nightRaid);
+            this.player1.clickCard(this.khan);
 
             expect(this.getChatLogs(10)).toContain('player1 uses Meticulous Scout to place a dishonor token on province 1, blanking it');
-            expect(this.getChatLogs(10)).toContain('player1 reveals Night Raid due to Meticulous Scout');
+            expect(this.getChatLogs(10)).toContain('player1 reveals Khan\'s Ordu due to Meticulous Scout');
         });
 
         it('Chat Messages - revealed province', function () {
