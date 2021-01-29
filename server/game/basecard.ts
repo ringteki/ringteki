@@ -98,7 +98,13 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
         }
-        return actions.concat(effectActions);
+
+        const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
+        let allAbilities = actions.concat(effectActions);
+        if(lostAllNonKeywordsAbilities) {
+            allAbilities = allAbilities.filter(a => a.isKeywordAbility());
+        }
+        return allAbilities;
     }
 
     get reactions(): TriggeredAbility[] {
@@ -113,7 +119,13 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
         }
-        return reactions.concat(effectReactions);
+
+        const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
+        let allAbilities = reactions.concat(effectReactions);
+        if(lostAllNonKeywordsAbilities) {
+            allAbilities = allAbilities.filter(a => a.isKeywordAbility());
+        }
+        return allAbilities;
     }
 
     get persistentEffects(): any[] {
@@ -125,6 +137,13 @@ class BaseCard extends EffectSource {
         if(this.anyEffect(EffectNames.GainAllAbilities)) {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
+        }
+
+        const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
+        if(lostAllNonKeywordsAbilities) {
+            let allAbilities = this.abilities.persistentEffects.concat(gainedPersistentEffects);
+            allAbilities = allAbilities.filter(a => a.isKeywordEffect || a.type === EffectNames.AddKeyword);
+            return allAbilities;
         }
         return this.isBlank() ? gainedPersistentEffects : this.abilities.persistentEffects.concat(gainedPersistentEffects);
     }
@@ -237,7 +256,7 @@ class BaseCard extends EffectSource {
     }
 
     composure(properties): void {
-        this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure() }, properties));
+        this.persistentEffect(Object.assign({ condition: context => context.player.hasComposure(), isKeywordEffect: true }, properties));
     }
 
     dire(properties): void {
@@ -247,6 +266,7 @@ class BaseCard extends EffectSource {
         } else {
             properties = Object.assign({ condition: context => context.source.isDire() }, properties);
         }
+        properties = Object.assign({ isKeywordEffect: true }, properties);
 
         this.persistentEffect(properties);
     }
