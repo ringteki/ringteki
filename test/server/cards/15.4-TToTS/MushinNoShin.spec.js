@@ -112,7 +112,7 @@ describe('Mushin No Shin', function() {
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 this.player2.clickCard(this.mushin);
                 expect(this.getChatLogs(10)).toContain('player2 plays Mushin no Shin to cancel the effects of Young Rumormonger');
-
+                expect(this.player2).toHavePrompt('Conflict Action Window');
             });
         });
     });
