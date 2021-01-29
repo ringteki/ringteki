@@ -56,8 +56,8 @@ describe('Dark Resurrection', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.dark);
-            this.player1.clickCard(this.borderRider);
-            this.player1.clickPrompt('3');
+            // this.player1.clickCard(this.borderRider);
+            // this.player1.clickPrompt('3');
             expect(this.player1).toBeAbleToSelect(this.vice);
             expect(this.player1).toBeAbleToSelect(this.tsanuri);
             expect(this.player1).toBeAbleToSelect(this.motso);
@@ -76,13 +76,13 @@ describe('Dark Resurrection', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.dark);
-            this.player1.clickCard(this.borderRider);
-            this.player1.clickPrompt('3');
             expect(this.player1).toHavePrompt('Choose up to three characters');
             this.player1.clickCard(this.tsanuri);
             this.player1.clickCard(this.motso);
             this.player1.clickCard(this.vice);
             this.player1.clickPrompt('Done');
+            this.player1.clickCard(this.borderRider);
+            this.player1.clickPrompt('3');
 
             expect(this.tsanuri.location).toBe('play area');
             expect(this.motso.location).toBe('play area');
@@ -104,15 +104,15 @@ describe('Dark Resurrection', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.dark);
-            this.player1.clickCard(this.borderRider);
-            this.player1.clickPrompt('3');
             expect(this.player1).toHavePrompt('Choose up to three characters');
             this.player1.clickCard(this.tsanuri);
             this.player1.clickCard(this.motso);
             this.player1.clickCard(this.vice);
             this.player1.clickPrompt('Done');
+            this.player1.clickCard(this.borderRider);
+            this.player1.clickPrompt('3');
 
-            expect(this.getChatLogs(6)).toContain('player1 puts Ikoma Tsanuri, Kitsu Motso and Vice Proprietor into play into the conflict');
+            expect(this.getChatLogs(6)).toContain('player1 plays Dark Resurrection to put Ikoma Tsanuri, Kitsu Motso and Vice Proprietor into play in the conflict');
         });
 
     });
