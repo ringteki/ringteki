@@ -54,7 +54,7 @@ describe('Mushin No Shin', function() {
                 expect(this.player2).not.toBeAbleToSelect(this.mushin);
             });
 
-            it('should prompt the player when targeted with their own abilities', function() {
+            it('should not prompt the player when targeted with their own abilities', function() {
                 this.noMoreActions();
                 this.initiateConflict({
                     ring: 'fire',
@@ -68,7 +68,7 @@ describe('Mushin No Shin', function() {
 
             });
 
-            it('should not prompt the player when targeted with their own abilities', function() {
+            it('should prompt the player when targeted with their own abilities when option is selected', function() {
                 this.player2.player.optionSettings.cancelOwnAbilities = true;
                 this.noMoreActions();
                 this.initiateConflict({
