@@ -332,7 +332,7 @@ class Conflict extends GameObject {
     determineWinner() {
         this.calculateSkill();
         this.winnerDetermined = true;
-        this.provinceStrengthAtResolution = this.conflictProvince && this.conflictProvince.getStrength();
+        this.provinceStrengthAtResolution = this.conflictProvince !== null ? this.conflictProvince.getStrength() : 0;
 
         if(this.attackerSkill === 0 && this.defenderSkill === 0) {
             this.loser = undefined;
