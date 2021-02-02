@@ -35,7 +35,7 @@ describe('Solitary Hero', function() {
             });
         });
 
-        describe('Hida Etsuji\'s province ability', function() {
+        describe('Solitary Hero\'s province ability', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',
