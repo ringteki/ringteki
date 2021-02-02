@@ -28,7 +28,7 @@ describe('Yogo Junzo', function() {
             it('dire action', function() {
                 this.player1.clickCard(this.junzo);
                 expect(this.player1).toHavePrompt('Choose an ability:');
-                this.player1.clickPrompt('Return all fate from a character');
+                this.player1.clickPrompt('Remove all fate from a character');
                 expect(this.player1).toBeAbleToSelect(this.dojiChallenger);
                 expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
                 this.player1.clickCard(this.dojiChallenger);
