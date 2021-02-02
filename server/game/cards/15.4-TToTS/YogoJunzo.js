@@ -6,14 +6,14 @@ class YogoJunzo extends DrawCard {
     setupCardAbilities() {
         this.dire({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
-                title: 'Return all fate from a character',
+                title: 'Remove all fate from a character',
                 target: {
                     cardType: CardTypes.Character,
                     gameAction: AbilityDsl.actions.removeFate(context => ({
                         amount: context.target.getFate()
                     }))
                 },
-                effect: 'return all fate from {0} to its owner'
+                effect: 'remove all fate from {0}'
             })
         });
 
