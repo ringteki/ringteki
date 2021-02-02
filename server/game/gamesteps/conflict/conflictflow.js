@@ -141,10 +141,17 @@ class ConflictFlow extends BaseStepWithPipeline {
         this.game.updateCurrentConflict(null);
         if(!this.conflict.conflictPassed) {
             const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
+            const totalHonorCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.HonorCostToDeclare), 0);
+            const costEvents = [];
             if(!this.conflict.conflictPassed && totalFateCost > 0) {
-                this.game.addMessage('{0} pays {1} fate to declare his attackers', this.conflict.attackingPlayer, totalFateCost);
-                const costEvents = [];
+                this.game.addMessage('{0} pays {1} fate to declare their attackers', this.conflict.attackingPlayer, totalFateCost);
                 Costs.payFate(totalFateCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+            }
+            if(!this.conflict.conflictPassed && totalHonorCost > 0) {
+                this.game.addMessage('{0} pays {1} honor to declare their attackers', this.conflict.attackingPlayer, totalHonorCost);
+                Costs.payHonor(totalHonorCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+            }
+            if(costEvents.length > 0) {
                 this.game.openEventWindow(costEvents);
             }
             this.conflict.attackerDeclarationFailed = false;
@@ -370,6 +377,14 @@ class ConflictFlow extends BaseStepWithPipeline {
                         }
                     });
                 }
+            }
+
+            const totalHonorCost = this.conflict.defenders.reduce((total, card) => total + card.sumEffects(EffectNames.HonorCostToDeclare), 0);
+            if(!this.conflict.conflictPassed && totalHonorCost > 0) {
+                const costEvents = [];
+                this.game.addMessage('{0} pays {1} honor to declare their defenders', this.conflict.defendingPlayer, totalHonorCost);
+                Costs.payHonor(totalHonorCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.defendingPlayer));
+                this.game.openEventWindow(costEvents);
             }
         }
     }
