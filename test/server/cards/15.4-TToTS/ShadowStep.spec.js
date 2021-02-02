@@ -42,7 +42,7 @@ describe('Shadow Step', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Shadow Step to remove Kudaka from the game, then put it back into play');
         });
 
-        it('should remove the character from the game and put it back into play (non-shadow, so ordinary)', function() {
+        it('should remove the character from the game and put it back into play (shadow, so ordinary)', function() {
             this.player1.clickCard(this.shadowStep);
             this.player1.clickCard(this.sadako);
             expect(this.sadako.location).toBe('play area');
