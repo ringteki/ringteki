@@ -158,7 +158,7 @@ describe('Shadow Step - Netsu', function() {
             this.shadowStep = this.player1.findCardByName('shadow-step');
         });
 
-        it('should not allow playing with Netsu in play', function() {
+        it('should not allow playing with 2 Netsu in play', function() {
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.shadowStep);
             expect(this.player1).toHavePrompt('Action Window');
