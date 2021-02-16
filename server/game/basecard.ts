@@ -467,6 +467,14 @@ class BaseCard extends EffectSource {
         return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
     }
 
+    isInConflict(): boolean {
+        return this.inConflict;
+    }
+
+    isAtHome(): boolean {
+        return !this.inConflict;
+    }
+
     isParticipatingFor(player: Player): boolean {
         if (this.isAttacking() && player.isAttackingPlayer()) {
             return true;

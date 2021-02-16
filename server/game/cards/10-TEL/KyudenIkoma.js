@@ -10,7 +10,7 @@ class KyudenIkoma extends StrongholdCard {
             when: {
                 afterConflict: (event, context) => event.conflict.loser === context.player
                     && event.conflict.defendingPlayer !== context.player
-                    && event.conflict.attackers && event.conflict.attackers.length !== 0
+                    && event.conflict.getAttackers() && event.conflict.getAttackers().length !== 0
             },
             target: {
                 cardType: CardTypes.Character,

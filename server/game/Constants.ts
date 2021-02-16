@@ -155,7 +155,8 @@ export enum EffectNames {
     LimitHonorGainPerPhase = "limitHonorGainPerPhase",
     RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
     CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants',
-    LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities'
+    LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
+    ParticipatesFromHome = 'participatesFromHome',
 };
 
 export enum Durations {
