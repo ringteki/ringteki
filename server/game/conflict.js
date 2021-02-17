@@ -159,8 +159,8 @@ class Conflict extends GameObject {
     }
 
     checkForIllegalParticipants() {
-        let illegal = this.attackers.filter(card => !card.canParticipateAsAttacker(this.conflictType));
-        illegal = illegal.concat(this.defenders.filter(card => !card.canParticipateAsDefender(this.conflictType)));
+        let illegal = this.getAttackers().filter(card => !card.canParticipateAsAttacker(this.conflictType));
+        illegal = illegal.concat(this.getDefenders().filter(card => !card.canParticipateAsDefender(this.conflictType)));
         if(illegal.length > 0) {
             this.game.addMessage('{0} cannot participate in the conflict any more and {1} sent home bowed', illegal, illegal.length > 1 ? 'are' : 'is');
             this.game.applyGameAction(null, { sendHome: illegal, bow: illegal });
@@ -181,27 +181,53 @@ class Conflict extends GameObject {
     }
 
     isAttacking(card) {
-        return this.attackers.includes(card);
+        return this.getAttackers().includes(card);
     }
 
     isDefending(card) {
-        return this.defenders.includes(card);
+        return this.getDefenders().includes(card);
     }
 
     isParticipating(card) {
         return (this.isAttacking(card) || this.isDefending(card)) && this.declarationComplete;
     }
 
+    getAttackers(predicate = () => true) {
+        let participatingFromHome = [];
+        if(this.attackingPlayer) {
+            participatingFromHome = this.attackingPlayer.cardsInPlay.filter(card => {
+                return card.anyEffect(EffectNames.ParticipatesFromHome) &&
+                        card.canParticipateAsAttacker(this.conflictType) &&
+                        card.isAtHome();
+            });
+        }
+
+        return this.attackers.concat(participatingFromHome).filter(predicate);
+    }
+
+    getDefenders(predicate = () => true) {
+        let participatingFromHome = [];
+        if(this.defendingPlayer) {
+            participatingFromHome = this.defendingPlayer.cardsInPlay.filter(card => {
+                return card.anyEffect(EffectNames.ParticipatesFromHome) &&
+                        card.canParticipateAsDefender(this.conflictType) &&
+                        card.isAtHome();
+            });
+        }
+
+        return this.defenders.concat(participatingFromHome).filter(predicate);
+    }
+
     anyParticipants(predicate) {
-        return this.attackers.concat(this.defenders).some(predicate);
+        return this.getAttackers().concat(this.getDefenders()).some(predicate);
     }
 
     getParticipants(predicate = () => true) {
-        return this.attackers.concat(this.defenders).filter(predicate);
+        return this.getAttackers().concat(this.getDefenders()).filter(predicate);
     }
 
     getNumberOfParticipants(predicate) {
-        let participants = this.attackers.concat(this.defenders);
+        let participants = this.getParticipants();
         return _.reduce(participants, (count, card) => {
             if(predicate(card)) {
                 return count + 1;
@@ -290,7 +316,7 @@ class Conflict extends GameObject {
         } else {
             let additionalAttackers = additionalContributingCards
                 .filter(card => card.getEffects(EffectNames.ContributeToConflict).some(value => value === this.attackingPlayer));
-            this.attackerSkill = this.calculateSkillFor(this.attackers.concat(additionalAttackers)) + this.attackingPlayer.skillModifier;
+            this.attackerSkill = this.calculateSkillFor(this.getAttackers().concat(additionalAttackers)) + this.attackingPlayer.skillModifier;
             if((this.attackingPlayer.imperialFavor === this.conflictType || this.attackingPlayer.imperialFavor === 'both') && this.attackers.length > 0) {
                 this.attackerSkill++;
             }
@@ -301,7 +327,7 @@ class Conflict extends GameObject {
         } else {
             let additionalDefenders = additionalContributingCards
                 .filter(card => card.getEffects(EffectNames.ContributeToConflict).some(value => value === this.defendingPlayer));
-            this.defenderSkill = this.calculateSkillFor(this.defenders.concat(additionalDefenders)) + this.defendingPlayer.skillModifier;
+            this.defenderSkill = this.calculateSkillFor(this.getDefenders().concat(additionalDefenders)) + this.defendingPlayer.skillModifier;
             if((this.defendingPlayer.imperialFavor === this.conflictType || this.defendingPlayer.imperialFavor === 'both') && this.defenders.length > 0) {
                 this.defenderSkill++;
             }
@@ -364,7 +390,7 @@ class Conflict extends GameObject {
         if(!player) {
             return [];
         }
-        return this.attackingPlayer === player ? this.attackers : this.defenders;
+        return this.attackingPlayer === player ? this.getAttackers() : this.getDefenders();
     }
 
     passConflict(message = '{0} has chosen to pass their conflict opportunity') {

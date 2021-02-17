@@ -123,6 +123,7 @@ const Effects = {
     switchBaseSkills: () => EffectBuilder.card.static(EffectNames.SwitchBaseSkills),
     suppressEffects: (condition) => EffectBuilder.card.static(EffectNames.SuppressEffects, new SuppressEffect(condition)),
     takeControl: (player) => EffectBuilder.card.static(EffectNames.TakeControl, player),
+    participatesFromHome: (properties) => EffectBuilder.card.static(EffectNames.ParticipatesFromHome, properties),
     unlessActionCost: (properties) => EffectBuilder.card.static(EffectNames.UnlessActionCost, properties),
     // Ring effects
     addElement: (element) => EffectBuilder.ring.flexible(EffectNames.AddElement, element),

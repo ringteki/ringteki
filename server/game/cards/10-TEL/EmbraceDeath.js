@@ -10,7 +10,7 @@ class EmbraceDeath extends DrawCard {
                 afterConflict: (event, context) =>
                     event.conflict.loser === context.player &&
                     context.player.isAttackingPlayer() &&
-                    event.conflict.attackers.some(card => card.hasTrait('bushi'))
+                    event.conflict.getAttackers().some(card => card.hasTrait('bushi'))
             },
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
