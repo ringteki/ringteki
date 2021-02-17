@@ -99,7 +99,8 @@ describe('Promising Youth', function() {
 
                 this.player2.clickCard(this.assassination);
                 this.player2.clickCard(this.whisperer);
-
+                this.player1.clickCard(this.youth);
+                expect(this.whisperer.location).toBe('dynasty discard pile');
                 expect(this.youth.location).toBe('play area');
             });
 

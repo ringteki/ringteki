@@ -25,18 +25,18 @@ class PromisingYouth extends DrawCard {
         this.whileAttached({
             effect: AbilityDsl.effects.modifyBothSkills(2)
         });
-        this.interrupt({
+        this.wouldInterrupt({
             title: 'when attached char leaves play, turn into character',
             when: {
                 onCardLeavesPlay: (event, context) => event.card === context.source.parent
             },
             gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.detach(),
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.source,
                     duration: Durations.Custom,
                     effect: AbilityDsl.effects.changeType(CardTypes.Character)
-                }))
+                })),
+                AbilityDsl.actions.detach(context => ({target: context.source}))
             ])
         });
     }
