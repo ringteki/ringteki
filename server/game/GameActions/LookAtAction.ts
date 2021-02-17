@@ -4,7 +4,7 @@ import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
 
 export interface LookAtProperties extends CardActionProperties {
-    message?: string;
+    message?: string | ((context) => string);
     messageArgs?: (cards: any) => any[];
 }
 
@@ -51,7 +51,14 @@ export class LookAtAction extends CardGameAction {
         let context = event.context;
         let properties = this.getProperties(context, additionalProperties) as LookAtProperties;
         let messageArgs = properties.messageArgs ? properties.messageArgs(event.cards) : [context.source, event.cards];
-        context.game.addMessage(properties.message, ...messageArgs);
+        context.game.addMessage(this.getMessage(properties.message, context), ...messageArgs);
+    }
+
+    getMessage(message, context) : string {
+        if (typeof message === 'function') {
+            return message(context);
+        }
+        return message;
     }
 
     isEventFullyResolved(event): boolean {
