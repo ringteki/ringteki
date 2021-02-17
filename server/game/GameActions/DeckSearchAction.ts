@@ -9,7 +9,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     targetMode?: TargetModes;
     activePromptTitle?: string;
     amount?: number | ((context: AbilityContext) => number);
-    numCards?: number;
+    numCards?: number | ((context: AbilityContext) => number);
     reveal?: boolean;
     deck?: Decks;
     shuffle?: Boolean | ((context: AbilityContext) => Boolean);
@@ -37,6 +37,13 @@ export class DeckSearchAction extends PlayerAction {
         uniqueNames: false,
         cardCondition: () => true
     };
+
+    getNumCards(numCards, context) : number {
+        if (typeof numCards === 'function') {
+            return numCards(context);
+        }
+        return numCards;
+    }
 
     getAmount(amount, context) : number {
         if (typeof amount === 'function') {
@@ -113,12 +120,12 @@ export class DeckSearchAction extends PlayerAction {
         let canCancel = properties.targetMode !== TargetModes.Exactly;
         let selectAmount = 1;
 
-        if (properties.targetMode === TargetModes.UpTo)
-            selectAmount = properties.numCards;
+        if (properties.targetMode === TargetModes.UpTo || properties.targetMode === TargetModes.UpToVariable)
+            selectAmount = this.getNumCards(properties.numCards, context);
         if (properties.targetMode === TargetModes.Single)
             selectAmount = 1;
-        if (properties.targetMode === TargetModes.Exactly)
-            selectAmount = properties.numCards;
+        if (properties.targetMode === TargetModes.Exactly || properties.targetMode === TargetModes.ExactlyVariable)
+            selectAmount = this.getNumCards(properties.numCards, context);
         if (properties.targetMode === TargetModes.Unlimited)
             selectAmount = -1;
         

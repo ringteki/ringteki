@@ -16,7 +16,7 @@ class WhispersOfPower extends DrawCard {
                 duration: Durations.UntilEndOfConflict,
                 target: context.target,
                 effect: AbilityDsl.effects.modifyPoliticalSkill(
-                    this.getPoliticalPowerChange(context),
+                    this.getPoliticalPowerChange(context)
                 )
             })),
             effect: 'grant {0} +{1} {2} until the end of the conflict',
