@@ -406,8 +406,6 @@ class ConflictFlow extends BaseStepWithPipeline {
         } else {
             this.game.addMessage('{0} does not defend the conflict', this.conflict.defendingPlayer);
         }
-
-        this.game.raiseEvent(EventNames.OnDefendersDeclared, { conflict: this.conflict, defenders: this.conflict.defenders.slice() });
     }
 
     openConflictActionWindow() {
