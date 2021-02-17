@@ -7,7 +7,7 @@ class IssueAChallenge extends DrawCard {
         this.reaction({
             title: 'Prevent more than 1 declared defender',
             when: {
-                onConflictDeclared: (event, context) => context.game.currentConflict.getNumberOfParticipantsFor(context.source.controller) === 1 &&
+                onConflictDeclared: (event, context) => context.game.currentConflict.getNumberOfParticipantsFor(context.player) === 1 &&
                     context.game.currentConflict.getParticipants(participant => participant.hasTrait('bushi') && participant.controller === context.player).length === 1 &&
                     context.player === context.game.currentConflict.attackingPlayer
             },

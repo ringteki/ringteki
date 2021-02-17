@@ -10,7 +10,7 @@ class KensonNoGakka extends ProvinceCard {
                     && event.conflict.loser === context.player
             },
             gameAction: AbilityDsl.actions.honor(context => ({
-                target: context.game.currentConflict.defenders
+                target: context.game.currentConflict.getDefenders()
             }))
         });
     }

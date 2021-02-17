@@ -58,7 +58,7 @@ class GovernorsSpy extends DrawCard {
                 activePromptTitle: 'Choose a province for ' + currentCard.name,
                 context: context,
                 location: Locations.Provinces,
-                controller: targetPlayer === context.source.controller ? Players.Self : Players.Opponent,
+                controller: targetPlayer === context.player ? Players.Self : Players.Opponent,
                 cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(targetPlayer, this.dynastyCards, card),
                 onSelect: (player, card) => {
                     this.game.addMessage('{0} places a card', player);

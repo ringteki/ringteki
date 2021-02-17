@@ -20,9 +20,9 @@ class ThirdWhiskerSneak extends DrawCard {
                 afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictUnopposed && context.source.isParticipating()
             },
             effect: 'look at the top {1} cards of their conflict deck',
-            effectArgs: context => [context.source.controller.getProvinces(a => !a.isBroken).length],
+            effectArgs: context => [context.player.getProvinces(a => !a.isBroken).length],
             gameAction: AbilityDsl.actions.deckSearch({
-                amount: (context) => context.source.controller.getProvinces(a => !a.isBroken).length,
+                amount: (context) => context.player.getProvinces(a => !a.isBroken).length,
                 reveal: false,
                 gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand

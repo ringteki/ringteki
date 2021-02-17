@@ -7,8 +7,8 @@ class SolitaryStrength extends DrawCard {
             effect: AbilityDsl.effects.delayedEffect({
                 condition: context => {
                     if(context.source.parent && context.source.parent.isParticipating()) {
-                        let participantsForController = this.game.currentConflict && this.game.currentConflict.getNumberOfParticipantsFor(context.source.controller);
-                        let parentOwnedByController = context.source.parent.controller === context.source.controller;
+                        let participantsForController = this.game.currentConflict && this.game.currentConflict.getNumberOfParticipantsFor(context.player);
+                        let parentOwnedByController = context.source.parent.controller === context.player;
                         if(parentOwnedByController) {
                             participantsForController = Math.max(0, participantsForController - 1);
                         }

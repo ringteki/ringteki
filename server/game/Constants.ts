@@ -66,6 +66,7 @@ export enum EffectNames {
     EntersPlayWithStatus = "entersPlayWithStatus",
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
+    HonorCostToDeclare = 'honorCostToDeclare',
     FateCostToRingToDeclareConflictAgainst = 'fateCostToRingToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
@@ -153,7 +154,9 @@ export enum EffectNames {
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
     LimitHonorGainPerPhase = "limitHonorGainPerPhase",
     RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
-    CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants'
+    CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants',
+    LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
+    ParticipatesFromHome = 'participatesFromHome',
 };
 
 export enum Durations {

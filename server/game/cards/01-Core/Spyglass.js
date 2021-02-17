@@ -1,7 +1,8 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
 
 class Spyglass extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.reaction({
             title: 'Draw a card',
             when: {
@@ -9,8 +10,8 @@ class Spyglass extends DrawCard {
                 onDefendersDeclared: (event, context) => event.defenders.includes(context.source.parent),
                 onMoveToConflict: (event, context) => event.card === context.source.parent
             },
-            gameAction: ability.actions.draw(),
-            limit: ability.limit.perRound(2)
+            gameAction: AbilityDsl.actions.draw(),
+            limit: AbilityDsl.limit.perRound(2)
         });
     }
 }
