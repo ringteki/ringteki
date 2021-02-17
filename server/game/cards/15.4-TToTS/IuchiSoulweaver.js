@@ -4,15 +4,12 @@ const AbilityDsl = require('../../abilitydsl');
 class IuchiSoulweaver extends DrawCard {
     setupCardAbilities() {
         this.dire({
-            condition: context => context.game.currentConflict.getNumberOfParticipantsFor(context.player) === 1,
-            effect: [
-                AbilityDsl.effects.participatesFromHome(),
-                AbilityDsl.effects.contributeToConflict((card, context) => context.player)
-            ]
+            condition: context => context.game.isDuringConflict() && context.game.currentConflict.getNumberOfParticipantsFor(context.player, card => card !== context.source) > 0,
+            effect: AbilityDsl.effects.participatesFromHome()
         });
-        
+
         this.dire({
-            condition: context => !context.source.inConflict,
+            condition: context => context.source.isAtHome(),
             effect: AbilityDsl.effects.doesNotBow()
         });
     }

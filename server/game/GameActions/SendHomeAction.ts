@@ -1,7 +1,7 @@
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import BaseCard = require('../basecard');
 import AbilityContext = require('../AbilityContext');
-import { CardTypes, EventNames } from '../Constants';
+import { CardTypes, EffectNames, EventNames } from '../Constants';
 
 export interface SendHomeProperties extends CardActionProperties {
 }
@@ -13,7 +13,7 @@ export class SendHomeAction extends CardGameAction {
     targetType = [CardTypes.Character];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        return super.canAffect(card, context) && card.isParticipating();
+        return super.canAffect(card, context) && card.isParticipating() && !card.anyEffect(EffectNames.ParticipatesFromHome);
     }
 
     eventHandler(event): void {

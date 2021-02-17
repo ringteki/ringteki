@@ -185,7 +185,7 @@ class Conflict extends GameObject {
     }
 
     isDefending(card) {
-        return this.getAttackers().includes(card);
+        return this.getDefenders().includes(card);
     }
 
     isParticipating(card) {
@@ -193,11 +193,29 @@ class Conflict extends GameObject {
     }
 
     getAttackers(predicate = () => true) {
-        return this.attackers.filter(predicate);
+        let participatingFromHome = [];
+        if(this.attackingPlayer) {
+            participatingFromHome = this.attackingPlayer.cardsInPlay.filter(card => {
+                return card.anyEffect(EffectNames.ParticipatesFromHome) &&
+                        card.canParticipateAsAttacker(this.conflictType) &&
+                        card.isAtHome();
+            });
+        }
+
+        return this.attackers.concat(participatingFromHome).filter(predicate);
     }
 
     getDefenders(predicate = () => true) {
-        return this.defenders.filter(predicate);
+        let participatingFromHome = [];
+        if(this.defendingPlayer) {
+            participatingFromHome = this.defendingPlayer.cardsInPlay.filter(card => {
+                return card.anyEffect(EffectNames.ParticipatesFromHome) &&
+                        card.canParticipateAsDefender(this.conflictType) &&
+                        card.isAtHome();
+            });
+        }
+
+        return this.defenders.concat(participatingFromHome).filter(predicate);
     }
 
     anyParticipants(predicate) {
