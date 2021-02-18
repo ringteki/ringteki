@@ -13,7 +13,7 @@ class TotalWarfare extends BattlefieldAttachment {
             },
             target: {
                 cardType: CardTypes.Character,
-                player: context => context.source.controller === this.game.currentConflict.loser ? Players.Self : Players.Opponent,
+                player: context => context.player === this.game.currentConflict.loser ? Players.Self : Players.Opponent,
                 cardCondition: card => card.isParticipating() && card.controller === this.game.currentConflict.loser,
                 gameAction: AbilityDsl.actions.sacrifice()
             }

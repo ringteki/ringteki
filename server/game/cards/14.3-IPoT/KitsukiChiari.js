@@ -6,8 +6,8 @@ class KitsukiChiari extends DrawCard {
         this.reaction({
             title: 'Name a card',
             when: {
-                onCardRevealed: (event, context) => event.card.isProvince && event.card.controller === context.source.controller &&
-                    context.source.controller.opponent && context.source.controller.opponent.hand.size() > 0
+                onCardRevealed: (event, context) => event.card.isProvince && event.card.controller === context.player &&
+                    context.player.opponent && context.player.opponent.hand.size() > 0
             },
             cost: AbilityDsl.costs.nameCard(),
             gameAction: AbilityDsl.actions.multipleContext(context => {

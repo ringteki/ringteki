@@ -8,11 +8,11 @@ class TheStrengthOfTheMountain extends DrawCard {
             condition: () => this.game.isDuringConflict(),
             gameAction: [
                 AbilityDsl.actions.cardLastingEffect(context => ({
-                    target: context.game.currentConflict.defenders,
+                    target: context.game.currentConflict.getDefenders(),
                     effect: AbilityDsl.effects.doesNotBow()
                 })),
                 AbilityDsl.actions.cardLastingEffect(context => ({
-                    target: context.game.currentConflict.defenders,
+                    target: context.game.currentConflict.getDefenders(),
                     effect: [
                         AbilityDsl.effects.cardCannot({
                             cannot: 'sendHome',

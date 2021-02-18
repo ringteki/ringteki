@@ -56,6 +56,9 @@ export class DuelAction extends CardGameAction {
         if(!super.canAffect(card, context)) {
             return false;
         }
+        if(card === properties.challenger) {
+            return false; //cannot duel yourself
+        }
         return properties.challenger && !properties.challenger.hasDash(properties.type) && card.location === Locations.PlayArea && !card.hasDash(properties.type);
     }
 
@@ -130,7 +133,7 @@ export class DuelAction extends CardGameAction {
             context.game.addMessage('The duel cannot proceed as at least one participant for each side has to be in play');
             return;
         }
-        let duel = new Duel(context.game, properties.challenger, cards, properties.type, properties.statistic);
+        let duel = new Duel(context.game, properties.challenger, cards, properties.type, properties.statistic, context.player);
         if(properties.challengerEffect) {
             context.game.actions.cardLastingEffect({
                 effect: properties.challengerEffect,
@@ -163,7 +166,7 @@ export class DuelAction extends CardGameAction {
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties): boolean {
         let properties = this.getProperties(context, additionalProperties);
-        let mockDuel = new Duel(context.game, properties.challenger, [], properties.type, properties.statistic);
+        let mockDuel = new Duel(context.game, properties.challenger, [], properties.type, properties.statistic, context.player);
         let gameAction = typeof(properties.gameAction) === 'function' ? properties.gameAction(mockDuel, context) : properties.gameAction;
         return gameAction && gameAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties);
     }

@@ -7,7 +7,7 @@ class ShiroShinjo extends StrongholdCard {
             title: 'Collect additional fate',
             cost: ability.costs.bowSelf(),
             when: {
-                onFateCollected: (event, context) => event.player === context.source.controller
+                onFateCollected: (event, context) => event.player === context.player
             },
             gameAction: ability.actions.gainFate(context => ({ amount: context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince) }))
         });

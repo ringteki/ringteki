@@ -1,16 +1,17 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
 
 class MotoNergui extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Move highest glory character home',
             condition: context => this.game.isDuringConflict('military') && context.source.isParticipating(),
             target: {
                 cardCondition: (card, context) => {
-                    let participants = context.game.currentConflict.attackers.concat(context.game.currentConflict.defenders);
+                    let participants = context.game.currentConflict.getParticipants();
                     return participants.includes(card) && card.getGlory() === Math.max(...participants.map(c => c.getGlory()));
                 },
-                gameAction: ability.actions.sendHome()
+                gameAction: AbilityDsl.actions.sendHome()
             }
         });
     }
