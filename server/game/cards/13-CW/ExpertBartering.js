@@ -17,7 +17,7 @@ class ExpertBartering extends DrawCard {
                     ifAbleAction: AbilityDsl.actions.attach({
                         target: context.source.parent,
                         attachment: context.target,
-                        takeControl: context.target.controller !== context.source.controller
+                        takeControl: context.target.controller !== context.player
                     }),
                     otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.target })
                 })),
@@ -25,7 +25,7 @@ class ExpertBartering extends DrawCard {
                     ifAbleAction: AbilityDsl.actions.attach({
                         target: context.target.parent,
                         attachment: context.source,
-                        giveControl: context.target.controller !== context.source.controller
+                        giveControl: context.target.controller !== context.player
                     }),
                     otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.source })
                 }))

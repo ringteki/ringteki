@@ -84,8 +84,7 @@ class EffectSource extends GameObject {
     }
 
     removeEffectFromEngine(effectArray) {
-        //TODO: Fix for gained abilities through constant effect. See Togashi Kazue 2
-        effectArray && this.game.effectEngine.unapplyAndRemove(effect => effectArray.includes(effect));
+        this.game.effectEngine.unapplyAndRemove(effect => effectArray.includes(effect));
     }
 
     removeLastingEffects() {

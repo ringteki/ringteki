@@ -1,7 +1,8 @@
 const ProvinceCard = require('../../provincecard.js');
+const AbilityDsl = require('../../abilitydsl');
 
 class TheArtOfPeace extends ProvinceCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.interrupt({
             title: 'Honor all defenders and dishonor all attackers',
             when: {
@@ -9,8 +10,8 @@ class TheArtOfPeace extends ProvinceCard {
             },
             effect: 'dishonor all attackers and honor all defenders in this conflict',
             gameAction: [
-                ability.actions.dishonor(context => ({ target: context.event.conflict.attackers })),
-                ability.actions.honor(context => ({ target: context.event.conflict.defenders }))
+                AbilityDsl.actions.dishonor(context => ({ target: context.event.conflict.getAttackers() })),
+                AbilityDsl.actions.honor(context => ({ target: context.event.conflict.getDefenders() }))
             ]
         });
     }

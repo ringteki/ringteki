@@ -55,17 +55,18 @@ describe('Compromised Secrets', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not make you give an honor to yourself if you attach this to a character you control', function() {
+        it('should not be allowed to trigger if you attach this to a character you control (you cannot give honor to yourself)', function() {
             this.player1.playAttachment(this.secrets1, this.rider1);
             this.player2.pass();
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
 
+            expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.rider1);
-            expect(this.rider1.bowed).toBe(false);
+            expect(this.rider1.bowed).toBe(true);
             expect(this.player1.honor).toBe(p1Honor);
             expect(this.player2.honor).toBe(p2Honor);
-            expect(this.player2).toHavePrompt('Action Window');
+            expect(this.player1).toHavePrompt('Action Window');
         });
 
         it('should make you give an honor each time you trigger', function() {

@@ -1,6 +1,6 @@
 const _ = require('underscore');
 const UiPrompt = require('../uiprompt.js');
-const { CardTypes, EffectNames } = require('../../Constants');
+const { CardTypes, EffectNames, EventNames } = require('../../Constants');
 
 const capitalize = {
     military: 'Military',
@@ -92,6 +92,7 @@ class SelectDefendersPrompt extends UiPrompt {
         _.each(this.conflict.defenders, card => card.covert = false);
         this.conflict.setDefendersChosen(true);
         this.complete();
+        this.game.raiseEvent(EventNames.OnDefendersDeclared, { conflict: this.conflict, defenders: this.conflict.defenders.slice() });
         return true;
     }
 }

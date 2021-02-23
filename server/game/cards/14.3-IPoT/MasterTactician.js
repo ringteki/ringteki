@@ -20,7 +20,7 @@ class MasterTactician extends DrawCard {
                         }
                         this.mostRecentEvent = event;
                         return (event.originalLocation === Locations.ConflictDeck && !event.onPlayCardSource && !event.card.fromOutOfPlaySource &&
-                        event.originallyOnTopOfConflictDeck && event.player === context.source.controller && !event.sourceOfCardPlayedFromConflictDeck &&
+                        event.originallyOnTopOfConflictDeck && event.player === context.player && !event.sourceOfCardPlayedFromConflictDeck &&
                         context.source.isParticipating()) && context.game.isTraitInPlay('battlefield');
                     }
                 },
@@ -34,7 +34,7 @@ class MasterTactician extends DrawCard {
                         }
                         this.mostRecentEvent.sourceOfCardPlayedFromConflictDeck = this;
                         this.cardsPlayedThisRound++;
-                        this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} use{3} remaining)', context.source.controller, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
+                        this.game.addMessage('{0} plays a card from their conflict deck due to the ability of {1} ({2} use{3} remaining)', context.player, context.source, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound, MAXIMUM_CARDS_ALLOWED - this.cardsPlayedThisRound === 1 ? '' : 's');
                     }
                 })
             })
@@ -54,7 +54,7 @@ class MasterTactician extends DrawCard {
 
         this.persistentEffect({
             condition: context => {
-                let defending = context.game.currentConflict && context.source.controller.isDefendingPlayer();
+                let defending = context.game.currentConflict && context.player.isDefendingPlayer();
                 let preventShowing = defending && !context.game.currentConflict.defendersChosen;
                 return context.game.isTraitInPlay('battlefield') && context.source.isParticipating() && !preventShowing;
             },

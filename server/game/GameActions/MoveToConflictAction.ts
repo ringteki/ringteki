@@ -1,7 +1,7 @@
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import BaseCard = require('../basecard');
 import AbilityContext = require('../AbilityContext');
-import { Locations, CardTypes, EventNames } from '../Constants';
+import { Locations, CardTypes, EventNames, EffectNames } from '../Constants';
 import Player = require('../player');
 
 export interface MoveToConflictProperties extends CardActionProperties {
@@ -31,6 +31,9 @@ export class MoveToConflictAction extends CardGameAction {
                 return false;
             }
         } else if(!card.canParticipateAsDefender()) {
+            return false;
+        }
+        if(card.anyEffect(EffectNames.ParticipatesFromHome)) {
             return false;
         }
 

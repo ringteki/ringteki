@@ -6,6 +6,12 @@ class GainAbility extends EffectValue {
     constructor(abilityType, ability) {
         super();
         this.abilityType = abilityType;
+        if(ability.createCopies) {
+            this.createCopies = true;
+            this.forCopying = {};
+            this.forCopying.abilityType = abilityType;
+            this.forCopying.ability = ability;
+        }
         this.grantedAbilityLimits = {};
         if(ability.properties) {
             let newProps = { printedAbility: false, abilityIdentifier: ability.abilityIdentifier, origin: ability.card };
@@ -25,6 +31,15 @@ class GainAbility extends EffectValue {
             this.properties.location = Locations.PlayArea;
             this.properties.abilityType = AbilityTypes.Persistent;
         }
+    }
+
+    getCopy() {
+        if(this.createCopies) {
+            const ability = new GainAbility(this.forCopying.abilityType, this.forCopying.ability);
+            ability.context = this.context;
+            return ability;
+        }
+        return this;
     }
 
     reset() {
