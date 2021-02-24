@@ -1,3 +1,5 @@
+const GameModes = require("../../../server/GameModes");
+
 describe('Skirmish Ring Effects', function() {
     integration(function() {
         beforeEach(function () {
@@ -11,7 +13,7 @@ describe('Skirmish Ring Effects', function() {
                     inPlay: ['matsu-tsuko-2', 'akodo-toturi'],
                     hand: ['let-go']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.scout = this.player1.findCardByName('eager-scout');

@@ -1,3 +1,5 @@
+const GameModes = require("../../../server/GameModes");
+
 describe('Skirmish Setup Phase', function() {
     integration(function() {
         beforeEach(function() {
@@ -9,7 +11,7 @@ describe('Skirmish Setup Phase', function() {
                 player2: {
                     inPlay: []
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
         });
 

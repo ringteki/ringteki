@@ -1,3 +1,5 @@
+const GameModes = require("../../../server/GameModes");
+
 describe('Skirmish Draw Bidding', function() {
     integration(function() {
         beforeEach(function() {
@@ -9,7 +11,7 @@ describe('Skirmish Draw Bidding', function() {
                 player2: {
                     inPlay: []
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
         });
 
@@ -41,7 +43,7 @@ describe('Skirmish Dueling', function() {
                 player2: {
                     inPlay: ['callow-delegate']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
@@ -96,7 +98,7 @@ describe('Skirmish Win Conditions', function() {
                 player2: {
                     inPlay: ['callow-delegate']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
@@ -168,7 +170,7 @@ describe('Skirmish Mode Disabled Cards', function() {
                     player2: {
                         inPlay: []
                     },
-                    skirmish: true
+                    gameMode: GameModes.Skirmish
                 });
 
                 this.kaiuShihobu = this.player1.placeCardInProvince('kaiu-shihobu', 'province 1');
@@ -194,7 +196,7 @@ describe('Skirmish Mode Disabled Cards', function() {
                     player2: {
                         inPlay: []
                     },
-                    skirmish: true
+                    gameMode: GameModes.Skirmish
                 });
 
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
@@ -255,7 +257,7 @@ describe('Skirmish Mode Disabled Cards', function() {
                     },
                     player2: {
                     },
-                    skirmish: true
+                    gameMode: GameModes.Skirmish
                 });
 
                 this.spy = this.player1.findCardByName('governor-s-spy');
@@ -349,7 +351,7 @@ describe('Skirmish Reshuffling', function() {
                     inPlay: ['isawa-eju'],
                     dynastyDiscard: ['akodo-toturi', 'imperial-storehouse']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.player1.reduceDeckToNumber('conflict deck', 0);

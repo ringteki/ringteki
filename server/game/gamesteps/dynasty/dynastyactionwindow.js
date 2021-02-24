@@ -1,5 +1,6 @@
 const ActionWindow = require('../actionwindow.js');
 const { EventNames, EffectNames } = require('../../Constants');
+const GameModes = require('../../../GameModes.js');
 
 class DynastyActionWindow extends ActionWindow {
     constructor(game) {
@@ -17,7 +18,7 @@ class DynastyActionWindow extends ActionWindow {
 
     pass() {
         this.currentPlayer.passDynasty();
-        if((!this.currentPlayer.opponent || !this.currentPlayer.opponent.passedDynasty) && !this.game.skirmishMode) {
+        if((!this.currentPlayer.opponent || !this.currentPlayer.opponent.passedDynasty) && this.game.gameMode !== GameModes.Skirmish) {
             this.game.addMessage('{0} is the first to pass, and gains 1 fate', this.currentPlayer);
             this.game.raiseEvent(EventNames.OnPassDuringDynasty, { player: this.currentPlayer, firstToPass: true }, event => event.player.modifyFate(1));
         } else {

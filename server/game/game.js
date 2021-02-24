@@ -37,6 +37,7 @@ const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
 const { EffectNames, Phases, EventNames, Locations, ConflictTypes } = require('./Constants');
+const GameModes = require('../GameModes.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -63,6 +64,7 @@ class Game extends EventEmitter {
         this.currentConflict = null;
         this.currentDuel = null;
         this.manualMode = false;
+        this.gameMode = details.gameMode;
         this.skirmishMode = details.skirmishMode;
         this.currentPhase = '';
         this.password = details.password;
@@ -264,7 +266,7 @@ class Game extends EventEmitter {
     }
 
     getProvinceArray(includeStronghold = true) {
-        if(this.skirmishMode) {
+        if(this.gameMode === GameModes.Skirmish) {
             return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
         }
         let array = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
@@ -513,7 +515,7 @@ class Game extends EventEmitter {
      * function doesn't check to see if a conquest victory has been achieved)
      */
     checkWinCondition() {
-        let honorRequiredToWin = this.skirmishMode ? 12 : 25;
+        let honorRequiredToWin = this.gameMode === GameModes.Skirmish ? 12 : 25;
         for(const player of this.getPlayersInFirstPlayerOrder()) {
             if(player.honor >= honorRequiredToWin) {
                 this.recordWinner(player, 'honor');
@@ -804,7 +806,7 @@ class Game extends EventEmitter {
 
         for(let player of this.getPlayers()) {
             player.initialise();
-            if(!this.skirmishMode && !player.stronghold) {
+            if(this.gameMode !== GameModes.Skirmish && !player.stronghold) {
                 playerWithNoStronghold = player;
             }
         }
@@ -814,7 +816,7 @@ class Game extends EventEmitter {
         }, []));
         this.provinceCards = this.allCards.filter(card => card.isProvince);
 
-        if(!this.skirmishMode) {
+        if(this.gameMode !== GameModes.Skirmish) {
             if(playerWithNoStronghold) {
                 this.queueSimpleStep(() => {
                     this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
@@ -1212,6 +1214,7 @@ class Game extends EventEmitter {
             players: players,
             winner: this.winner ? this.winner.name : undefined,
             winReason: this.winReason,
+            gameMode: this.gameMode,
             skirmishMode: this.skirmishMode,
             finishedAt: this.finishedAt
         };
@@ -1243,7 +1246,7 @@ class Game extends EventEmitter {
                 id: this.id,
                 manualMode: this.manualMode,
                 name: this.name,
-                owner: this.owner,
+                owner: _.omit(this.owner, ['blocklist', 'email', 'emailHash', 'promptedActionWindows', 'settings']),
                 players: playerState,
                 rings: ringState,
                 conflict: conflictState,
@@ -1256,6 +1259,7 @@ class Game extends EventEmitter {
                     };
                 }),
                 started: this.started,
+                gameMode: this.gameMode,
                 skirmishMode: this.skirmishMode,
                 winner: this.winner ? this.winner.name : undefined
             };
@@ -1308,6 +1312,7 @@ class Game extends EventEmitter {
             players: playerSummaries,
             started: this.started,
             startedAt: this.startedAt,
+            gameMode: this.gameMode,
             skirmishMode: this.skirmishMode,
             spectators: this.getSpectators().map(spectator => {
                 return {

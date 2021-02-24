@@ -1,6 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { TargetModes, Locations, Players, CardTypes } = require('../../Constants');
+const GameModes = require('../../../GameModes.js');
 
 class CardWrapper {
     constructor(card) {
@@ -124,7 +125,7 @@ class GovernorsSpy extends DrawCard {
     getEmptyProvinces(cards) {
         let emptyLocations = [];
         let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if(!this.game.skirmishMode) {
+        if(this.game.gameMode !== GameModes.Skirmish) {
             baseLocations.push(Locations.ProvinceFour);
         }
         baseLocations.forEach(p => {

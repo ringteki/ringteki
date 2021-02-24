@@ -2,6 +2,7 @@ const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 const AllPlayerPrompt = require('./allplayerprompt.js');
 const GameActions = require('../GameActions/GameActions');
 const { EventNames } = require('../Constants');
+const GameModes = require('../../GameModes.js');
 
 class HonorBidPrompt extends AllPlayerPrompt {
     constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null) {
@@ -62,7 +63,7 @@ class HonorBidPrompt extends AllPlayerPrompt {
 
     activePrompt(player) {
         let buttons = ['1', '2', '3', '4', '5'];
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             buttons = ['1', '2', '3'];
         }
 
