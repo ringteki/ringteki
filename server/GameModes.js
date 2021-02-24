@@ -1,5 +1,5 @@
 const GameModes = Object.freeze({
-    Stronghold: 'standard',
+    Stronghold: 'stronghold',
     Skirmish: 'skirmish',
     JadeEdict: 'jade-edict'
 });
