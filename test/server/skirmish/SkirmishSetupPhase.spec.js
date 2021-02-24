@@ -1,4 +1,4 @@
-const GameModes = require("../../../server/GameModes");
+const GameModes = require('../../../server/GameModes');
 
 describe('Skirmish Setup Phase', function() {
     integration(function() {
