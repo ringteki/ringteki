@@ -65,7 +65,6 @@ class Game extends EventEmitter {
         this.currentDuel = null;
         this.manualMode = false;
         this.gameMode = details.gameMode;
-        this.skirmishMode = details.skirmishMode;
         this.currentPhase = '';
         this.password = details.password;
         this.roundNumber = 0;
@@ -1215,7 +1214,6 @@ class Game extends EventEmitter {
             winner: this.winner ? this.winner.name : undefined,
             winReason: this.winReason,
             gameMode: this.gameMode,
-            skirmishMode: this.skirmishMode,
             finishedAt: this.finishedAt
         };
     }
@@ -1260,7 +1258,6 @@ class Game extends EventEmitter {
                 }),
                 started: this.started,
                 gameMode: this.gameMode,
-                skirmishMode: this.skirmishMode,
                 winner: this.winner ? this.winner.name : undefined
             };
         }
@@ -1313,7 +1310,6 @@ class Game extends EventEmitter {
             started: this.started,
             startedAt: this.startedAt,
             gameMode: this.gameMode,
-            skirmishMode: this.skirmishMode,
             spectators: this.getSpectators().map(spectator => {
                 return {
                     id: spectator.id,
