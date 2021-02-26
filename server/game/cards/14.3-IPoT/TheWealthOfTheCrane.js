@@ -1,6 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Players, Locations, CardTypes } = require('../../Constants');
+const GameModes = require('../../../GameModes.js');
 
 class TheWealthOfTheCrane extends DrawCard {
     cards = [];
@@ -86,7 +87,7 @@ class TheWealthOfTheCrane extends DrawCard {
 
     hasRemainingTarget() {
         let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if(!this.game.skirmishMode) {
+        if(this.game.gameMode !== GameModes.Skirmish) {
             baseLocations.push(Locations.ProvinceFour);
         }
 

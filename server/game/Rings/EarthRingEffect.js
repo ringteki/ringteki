@@ -1,10 +1,11 @@
+const GameModes = require('../../GameModes.js');
 const BaseAbility = require('../baseability.js');
 const { TargetModes } = require('../Constants');
 
 class EarthRingEffect extends BaseAbility {
-    constructor(optional = true, skirmishMode = false) {
+    constructor(optional = true, gameMode = GameModes.Stronghold) {
         let choices = { };
-        if(skirmishMode) {
+        if(gameMode === GameModes.Skirmish) {
             choices['Draw a card'] = () => true;
             choices['Opponent discards a card'] = context => context.player.opponent;
         } else {

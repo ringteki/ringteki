@@ -5,6 +5,7 @@ const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
 const SetupProvincesPrompt = require('./setup/setupprovincesprompt.js');
 const { Locations } = require('../Constants');
+const GameModes = require('../../GameModes.js');
 
 class SetupPhase extends Phase {
     constructor(game) {
@@ -48,7 +49,7 @@ class SetupPhase extends Phase {
     }
 
     attachStronghold() {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             return;
         }
         _.each(this.game.getPlayers(), player => {
@@ -60,7 +61,7 @@ class SetupPhase extends Phase {
     }
 
     setupProvinces() {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             for(let player of this.game.getPlayers()) {
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceOne);
                 player.moveCard(player.provinceDeck.first(), Locations.ProvinceTwo);
@@ -74,7 +75,7 @@ class SetupPhase extends Phase {
 
     fillProvinces() {
         let provinces = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if(!this.game.skirmishMode) {
+        if(this.game.gameMode !== GameModes.Skirmish) {
             provinces.push(Locations.ProvinceFour);
         }
         _.each(this.game.getPlayers(), player => {
@@ -92,12 +93,12 @@ class SetupPhase extends Phase {
     }
 
     drawStartingHands() {
-        _.each(this.game.getPlayers(), player => player.drawCardsToHand(this.game.skirmishMode ? 3 : 4));
+        _.each(this.game.getPlayers(), player => player.drawCardsToHand(this.game.gameMode === GameModes.Skirmish ? 3 : 4));
     }
 
     startGame() {
         _.each(this.game.getPlayers(), player => {
-            player.honor = this.game.skirmishMode ? 6 : player.stronghold.cardData.honor;
+            player.honor = this.game.gameMode === GameModes.Skirmish ? 6 : player.stronghold.cardData.honor;
             player.readyToStart = true;
         });
         this.endPhase();

@@ -2,6 +2,7 @@
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
 const _ = require('underscore');
+const GameModes = require('../../server/GameModes.js');
 
 require('./objectformatters.js');
 
@@ -149,13 +150,14 @@ global.integration = function(definitions) {
                 if(!options.player2) {
                     options.player2 = {};
                 }
-                if (options.skirmish) {
-                    this.game.skirmishMode = options.skirmish;
+                this.game.gameMode = GameModes.Stronghold;
+                if (options.gameMode) {
+                    this.game.gameMode = options.gameMode;
                 }
 
                 //Build decks
-                this.player1.selectDeck(deckBuilder.customDeck(options.player1, this.game.skirmishMode));
-                this.player2.selectDeck(deckBuilder.customDeck(options.player2, this.game.skirmishMode));
+                this.player1.selectDeck(deckBuilder.customDeck(options.player1, this.game.gameMode));
+                this.player2.selectDeck(deckBuilder.customDeck(options.player2, this.game.gameMode));
 
                 this.startGame();
 
@@ -169,7 +171,7 @@ global.integration = function(definitions) {
                     });
                 }
 
-                if (this.game.skirmishMode) {
+                if (this.game.gameMode === GameModes.Skirmish) {
                     this.player1.setupSkirmishProvinces();
                     this.player2.setupSkirmishProvinces();
                 }

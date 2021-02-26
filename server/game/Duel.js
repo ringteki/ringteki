@@ -1,4 +1,5 @@
 const _ = require('underscore');
+const GameModes = require('../GameModes');
 const { Locations, DuelTypes } = require('./Constants');
 
 const DuelParticipants = Object.freeze({
@@ -51,7 +52,7 @@ class Duel {
     }
 
     getTotals(challengerTotal, targetTotal) {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             if(challengerTotal > targetTotal) {
                 challengerTotal = 1;
                 targetTotal = 0;

@@ -2,11 +2,12 @@ const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 
 const BaseAbility = require('../baseability.js');
 const { TargetModes } = require('../Constants');
+const GameModes = require('../../GameModes.js');
 
 class AirRingEffect extends BaseAbility {
-    constructor(optional = true, skirmishMode = false) {
+    constructor(optional = true, gameMode = GameModes.Stronghold) {
         let choices = { };
-        if(!skirmishMode) {
+        if(gameMode !== GameModes.Skirmish) {
             choices['Gain 2 Honor'] = () => true;
         }
         choices['Take 1 Honor from opponent'] = (context) => context.player.opponent && context.player.opponent.checkRestrictions('takeHonor', context);

@@ -1,10 +1,11 @@
+const GameModes = require('../../GameModes.js');
 const BaseAbility = require('../baseability.js');
 const { Locations, CardTypes } = require('../Constants');
 
 class WaterRingEffect extends BaseAbility {
-    constructor(optional = true, skirmishMode = false) {
+    constructor(optional = true, gameMode = GameModes.Stronghold) {
         let cardCondition = (card, context) => card.location === Locations.PlayArea && ((card.getFate() === 0 && card.allowGameAction('bow', context)) || card.bowed);
-        if(skirmishMode) {
+        if(gameMode === GameModes.Skirmish) {
             cardCondition = (card, context) => card.location === Locations.PlayArea && card.getFate() <= 1 && !card.isParticipating() &&
                 (card.ready && card.allowGameAction('bow', context) || card.bowed && card.allowGameAction('ready', context));
         }

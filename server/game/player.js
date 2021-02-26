@@ -13,6 +13,7 @@ const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 
 const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
+const GameModes = require('../GameModes');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
 
 class Player extends GameObject {
@@ -79,7 +80,7 @@ class Player extends GameObject {
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceTwo),
             new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceThree)
         ];
-        if(!this.game.skirmishMode) {
+        if(this.game.gameMode !== GameModes.Skirmish) {
             this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour));
             this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince));
         }
@@ -329,7 +330,7 @@ class Player extends GameObject {
     getConflictOpportunities() {
         let setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
         let maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
-        let skirmishModeRRGLimit = this.game.skirmishMode ? 1 : 0;
+        let skirmishModeRRGLimit = this.game.gameMode === GameModes.Skirmish ? 1 : 0;
         if(maxConflicts) {
             return this.getConflictsWhenMaxIsSet(maxConflicts);
         }
@@ -382,7 +383,7 @@ class Player extends GameObject {
         const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
         let baselineAvailableConflicts = this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political];
 
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             baselineAvailableConflicts = 1;
         }
 
@@ -545,9 +546,9 @@ class Player extends GameObject {
      */
     deckRanOutOfCards(deck) {
         let discardPile = this.getSourceList(deck + ' discard pile');
-        let action = GameActions.loseHonor({ amount: this.game.skirmishMode ? 3 : 5 });
+        let action = GameActions.loseHonor({ amount: this.game.gameMode === GameModes.Skirmish ? 3 : 5 });
         if(action.canAffect(this, this.game.getFrameworkContext())) {
-            this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.skirmishMode ? 3 : 5);
+            this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.gameMode === GameModes.Skirmish ? 3 : 5);
         } else {
             this.game.addMessage('{0}\'s {1} deck has run out of cards', this, deck);
         }
@@ -1195,7 +1196,7 @@ class Player extends GameObject {
         if(this.opponent) {
             this.opponent.loseImperialFavor();
         }
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             this.imperialFavor = 'both';
             this.game.addMessage('{0} claims the Emperor\'s favor!', this);
             return;
@@ -1333,7 +1334,7 @@ class Player extends GameObject {
      * Returns the amount of fate this player gets from their stronghold a turn
      */
     getTotalIncome() {
-        return this.game.skirmishMode ? 6 : this.stronghold.cardData.fate;
+        return this.game.gameMode === GameModes.Skirmish ? 6 : this.stronghold.cardData.fate;
     }
 
     /**
