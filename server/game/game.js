@@ -68,6 +68,7 @@ class Game extends EventEmitter {
         this.currentPhase = '';
         this.password = details.password;
         this.roundNumber = 0;
+        this.initialFirstPlayer = null;
 
         this.conflictRecord = [];
         this.rings = {
@@ -552,6 +553,9 @@ class Game extends EventEmitter {
      * @param {Player} firstPlayer
      */
     setFirstPlayer(firstPlayer) {
+        if(!this.initialFirstPlayer) {
+            this.initialFirstPlayer = firstPlayer.name;
+        }
         for(let player of this.getPlayers()) {
             if(player === firstPlayer) {
                 player.firstPlayer = true;
@@ -1194,6 +1198,61 @@ class Game extends EventEmitter {
         this.pipeline.continue();
     }
 
+    formatDeckForSaving(deck) {
+        var result = {
+            faction: {},
+            conflictCards: [],
+            dynastyCards: [],
+            provinceCards: [],
+            stronghold: undefined,
+            role: undefined
+        };
+
+        //faction
+        result.faction = deck.faction;
+
+        //conflict
+        deck.conflictCards.forEach(cardData => {
+            if(cardData && cardData.card) {
+                result.conflictCards.push(`${cardData.count}x ${cardData.card.id}`);
+            }
+        });
+
+        //dynasty
+        deck.dynastyCards.forEach(cardData => {
+            if(cardData && cardData.card) {
+                result.dynastyCards.push(`${cardData.count}x ${cardData.card.id}`);
+            }
+        });
+
+        //provinces
+        if(deck.provinceCards) {
+            deck.provinceCards.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.provinceCards.push(cardData.card.id);
+                }
+            });
+        }
+
+        //stronghold & role
+        if(deck.stronghold) {
+            deck.stronghold.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.stronghold = cardData.card.id;
+                }
+            });
+        }
+        if(deck.role) {
+            deck.role.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.role = cardData.card.id;
+                }
+            });
+        }
+
+        return result;
+    }
+
     /*
      * This information is all logged when a game is won
      */
@@ -1202,7 +1261,8 @@ class Game extends EventEmitter {
             return {
                 name: player.name,
                 faction: player.faction.name || player.faction.value,
-                honor: player.getTotalHonor()
+                honor: player.getTotalHonor(),
+                deck: this.formatDeckForSaving(player.deck)
             };
         });
 
@@ -1214,7 +1274,9 @@ class Game extends EventEmitter {
             winner: this.winner ? this.winner.name : undefined,
             winReason: this.winReason,
             gameMode: this.gameMode,
-            finishedAt: this.finishedAt
+            finishedAt: this.finishedAt,
+            roundNumber: this.roundNumber,
+            initialFirstPlayer: this.initialFirstPlayer
         };
     }
 
