@@ -1,3 +1,5 @@
+const GameModes = require('../../../server/GameModes');
+
 describe('Skirmish Mode - Dynasty Phase', function() {
     integration(function() {
         beforeEach(function() {
@@ -10,7 +12,7 @@ describe('Skirmish Mode - Dynasty Phase', function() {
                 player2: {
                     inPlay: ['beloved-advisor']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.challenger = this.player1.findCardByName('doji-challenger');

@@ -3,6 +3,7 @@ const Phase = require('./phase.js');
 const ActionWindow = require('./actionwindow.js');
 const SimpleStep = require('./simplestep.js');
 const { Players, Phases, CardTypes, EventNames, Locations } = require('../Constants');
+const GameModes = require('../../GameModes.js');
 
 /*
 IV. Fate Phase
@@ -71,7 +72,7 @@ class FatePhase extends Phase {
     }
 
     placeFateOnUnclaimedRings() {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             return;
         }
         this.game.raiseEvent(EventNames.OnPlaceFateOnUnclaimedRings, {}, () => {
@@ -97,7 +98,7 @@ class FatePhase extends Phase {
             let province = player.getSourceList(location);
             let dynastyCards = province.filter(card => card.isDynasty && card.isFaceup());
             if(dynastyCards.length > 0 && provinceCard) {
-                if(provinceCard.isBroken && !this.game.skirmishMode) {
+                if(provinceCard.isBroken && this.game.gameMode !== GameModes.Skirmish) {
                     cardsToDiscard = cardsToDiscard.concat(dynastyCards);
                 } else {
                     cardsOnUnbrokenProvinces = cardsOnUnbrokenProvinces.concat(dynastyCards);

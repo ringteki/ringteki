@@ -6,6 +6,7 @@ const ProvinceCard = require('./provincecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 const RoleCard = require('./rolecard.js');
 const { Locations, CardTypes } = require('./Constants');
+const GameModes = require('../GameModes');
 
 class Deck {
     constructor(data) {
@@ -44,7 +45,7 @@ class Deck {
         });
 
         //provinces
-        if(!player.game.skirmishMode) {
+        if(player.game.gameMode !== GameModes.Skirmish) {
             this.eachRepeatedCard(this.data.provinceCards, cardData => {
                 if(cardData && cardData.type === CardTypes.Province) {
                     var provinceCard = this.createCard(ProvinceCard, player, cardData);
@@ -61,7 +62,7 @@ class Deck {
         }
 
         //stronghold & role
-        if(!player.game.skirmishMode) {
+        if(player.game.gameMode !== GameModes.Skirmish) {
             this.eachRepeatedCard(this.data.stronghold, cardData => {
                 if(cardData && cardData.type === CardTypes.Stronghold) {
                     var strongholdCard = this.createCard(StrongholdCard, player, cardData);

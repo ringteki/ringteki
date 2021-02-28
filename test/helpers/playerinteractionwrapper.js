@@ -2,6 +2,7 @@ const _ = require('underscore');
 
 const { matchCardByNameAndPack } = require('./cardutil.js');
 const { detectBinary } = require('../../build/server/util');
+const GameModes = require('../../server/GameModes.js');
 
 class PlayerInteractionWrapper {
     constructor(game, player) {
@@ -601,7 +602,7 @@ class PlayerInteractionWrapper {
      * @param {!String} card - the province to select
      */
     selectStrongholdProvince(card) {
-        if (this.game.skirmishMode) {
+        if (this.game.gameMode === GameModes.Skirmish) {
             return;
         }
         if(!this.hasPrompt('Select stronghold province')) {

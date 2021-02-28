@@ -37,6 +37,7 @@ const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
 const { EffectNames, Phases, EventNames, Locations, ConflictTypes } = require('./Constants');
+const GameModes = require('../GameModes.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -63,10 +64,11 @@ class Game extends EventEmitter {
         this.currentConflict = null;
         this.currentDuel = null;
         this.manualMode = false;
-        this.skirmishMode = details.skirmishMode;
+        this.gameMode = details.gameMode;
         this.currentPhase = '';
         this.password = details.password;
         this.roundNumber = 0;
+        this.initialFirstPlayer = null;
 
         this.conflictRecord = [];
         this.rings = {
@@ -264,7 +266,7 @@ class Game extends EventEmitter {
     }
 
     getProvinceArray(includeStronghold = true) {
-        if(this.skirmishMode) {
+        if(this.gameMode === GameModes.Skirmish) {
             return [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
         }
         let array = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
@@ -513,7 +515,7 @@ class Game extends EventEmitter {
      * function doesn't check to see if a conquest victory has been achieved)
      */
     checkWinCondition() {
-        let honorRequiredToWin = this.skirmishMode ? 12 : 25;
+        let honorRequiredToWin = this.gameMode === GameModes.Skirmish ? 12 : 25;
         for(const player of this.getPlayersInFirstPlayerOrder()) {
             if(player.honor >= honorRequiredToWin) {
                 this.recordWinner(player, 'honor');
@@ -551,6 +553,9 @@ class Game extends EventEmitter {
      * @param {Player} firstPlayer
      */
     setFirstPlayer(firstPlayer) {
+        if(!this.initialFirstPlayer) {
+            this.initialFirstPlayer = firstPlayer.name;
+        }
         for(let player of this.getPlayers()) {
             if(player === firstPlayer) {
                 player.firstPlayer = true;
@@ -804,7 +809,7 @@ class Game extends EventEmitter {
 
         for(let player of this.getPlayers()) {
             player.initialise();
-            if(!this.skirmishMode && !player.stronghold) {
+            if(this.gameMode !== GameModes.Skirmish && !player.stronghold) {
                 playerWithNoStronghold = player;
             }
         }
@@ -814,7 +819,7 @@ class Game extends EventEmitter {
         }, []));
         this.provinceCards = this.allCards.filter(card => card.isProvince);
 
-        if(!this.skirmishMode) {
+        if(this.gameMode !== GameModes.Skirmish) {
             if(playerWithNoStronghold) {
                 this.queueSimpleStep(() => {
                     this.addMessage('Invalid Deck Detected: {0} does not have a stronghold in their decklist', playerWithNoStronghold);
@@ -1193,6 +1198,61 @@ class Game extends EventEmitter {
         this.pipeline.continue();
     }
 
+    formatDeckForSaving(deck) {
+        var result = {
+            faction: {},
+            conflictCards: [],
+            dynastyCards: [],
+            provinceCards: [],
+            stronghold: undefined,
+            role: undefined
+        };
+
+        //faction
+        result.faction = deck.faction;
+
+        //conflict
+        deck.conflictCards.forEach(cardData => {
+            if(cardData && cardData.card) {
+                result.conflictCards.push(`${cardData.count}x ${cardData.card.id}`);
+            }
+        });
+
+        //dynasty
+        deck.dynastyCards.forEach(cardData => {
+            if(cardData && cardData.card) {
+                result.dynastyCards.push(`${cardData.count}x ${cardData.card.id}`);
+            }
+        });
+
+        //provinces
+        if(deck.provinceCards) {
+            deck.provinceCards.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.provinceCards.push(cardData.card.id);
+                }
+            });
+        }
+
+        //stronghold & role
+        if(deck.stronghold) {
+            deck.stronghold.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.stronghold = cardData.card.id;
+                }
+            });
+        }
+        if(deck.role) {
+            deck.role.forEach(cardData => {
+                if(cardData && cardData.card) {
+                    result.role = cardData.card.id;
+                }
+            });
+        }
+
+        return result;
+    }
+
     /*
      * This information is all logged when a game is won
      */
@@ -1201,7 +1261,8 @@ class Game extends EventEmitter {
             return {
                 name: player.name,
                 faction: player.faction.name || player.faction.value,
-                honor: player.getTotalHonor()
+                honor: player.getTotalHonor(),
+                deck: this.formatDeckForSaving(player.deck)
             };
         });
 
@@ -1212,8 +1273,10 @@ class Game extends EventEmitter {
             players: players,
             winner: this.winner ? this.winner.name : undefined,
             winReason: this.winReason,
-            skirmishMode: this.skirmishMode,
-            finishedAt: this.finishedAt
+            gameMode: this.gameMode,
+            finishedAt: this.finishedAt,
+            roundNumber: this.roundNumber,
+            initialFirstPlayer: this.initialFirstPlayer
         };
     }
 
@@ -1243,7 +1306,7 @@ class Game extends EventEmitter {
                 id: this.id,
                 manualMode: this.manualMode,
                 name: this.name,
-                owner: this.owner,
+                owner: _.omit(this.owner, ['blocklist', 'email', 'emailHash', 'promptedActionWindows', 'settings']),
                 players: playerState,
                 rings: ringState,
                 conflict: conflictState,
@@ -1256,7 +1319,7 @@ class Game extends EventEmitter {
                     };
                 }),
                 started: this.started,
-                skirmishMode: this.skirmishMode,
+                gameMode: this.gameMode,
                 winner: this.winner ? this.winner.name : undefined
             };
         }
@@ -1308,7 +1371,7 @@ class Game extends EventEmitter {
             players: playerSummaries,
             started: this.started,
             startedAt: this.startedAt,
-            skirmishMode: this.skirmishMode,
+            gameMode: this.gameMode,
             spectators: this.getSpectators().map(spectator => {
                 return {
                     id: spectator.id,
