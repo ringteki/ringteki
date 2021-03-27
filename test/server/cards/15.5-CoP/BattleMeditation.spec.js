@@ -4,22 +4,19 @@ describe('Battle Meditation', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['repentant-legion', 'hida-kisada'],
+                    inPlay: ['crisis-breaker', 'hida-kisada'],
                     dynastyDiscard: ['doji-whisperer', 'matsu-berserker', 'miya-mystic', 'imperial-storehouse'],
-                    hand: ['battle-meditation']
+                    hand: ['battle-meditation', 'battle-meditation']
                 },
                 player2: {
                     inPlay: ['doji-challenger']
                 }
             });
 
-            this.repentantLegion = this.player1.findCardByName('repentant-legion');
+            this.crisisBreaker = this.player1.findCardByName('crisis-breaker');
             this.kisada = this.player1.findCardByName('hida-kisada');
-
-            this.dojiWhisperer = this.player1.moveCard('doji-whisperer', 'dynasty deck');
-            this.matsuBerserker = this.player1.moveCard('matsu-berserker', 'dynasty deck');
-            this.miyaMystic = this.player1.moveCard('miya-mystic', 'dynasty deck');
-            this.storehouse = this.player1.moveCard('imperial-storehouse', 'dynasty deck');
+            this.battleMeditation = this.player1.findAllCardsByName('battle-meditation')[0];
+            this.battleMeditation2 = this.player1.findAllCardsByName('battle-meditation')[1];
 
             this.dojiChallenger = this.player2.findCardByName('doji-challenger');
         });
@@ -27,7 +24,7 @@ describe('Battle Meditation', function() {
         it('should trigger on breaking an enemy province', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.repentantLegion],
+                attackers: [this.crisisBreaker],
                 defenders: [],
                 type: 'military'
             });
@@ -36,7 +33,30 @@ describe('Battle Meditation', function() {
 
             this.player1.clickPrompt('no');
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.repentantLegion);
+            expect(this.player1).toBeAbleToSelect(this.battleMeditation);
+        });
+
+        it('should have a limit one per conflict', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.crisisBreaker],
+                defenders: [],
+                type: 'military'
+            });
+
+            this.noMoreActions();
+
+            this.player1.clickPrompt('no');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.battleMeditation);
+            expect(this.player1).toBeAbleToSelect(this.battleMeditation2);
+
+            this.player1.clickCard(this.battleMeditation);
+
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.battleMeditation);
+            expect(this.player1).not.toBeAbleToSelect(this.battleMeditation2);
+            expect(this.player1).toHavePrompt('air ring');
         });
 
         it('should not trigger on breaking an enemy province while not participating', function() {
@@ -51,7 +71,6 @@ describe('Battle Meditation', function() {
 
             this.player1.clickPrompt('no');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.repentantLegion);
             expect(this.player1).toHavePrompt('air ring');
         });
 
@@ -61,44 +80,39 @@ describe('Battle Meditation', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiChallenger],
-                defenders: [this.repentantLegion],
+                defenders: [this.crisisBreaker],
                 type: 'military'
             });
 
-            this.repentantLegion.bowed = true;
+            this.crisisBreaker.bowed = true;
             this.noMoreActions();
 
             this.player2.clickPrompt('no');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.repentantLegion);
+            expect(this.player1).not.toBeAbleToSelect(this.battleMeditation);
             expect(this.player2).toHavePrompt('air ring');
         });
 
-        it('should put a card in each non-stronghold rovince facedown', function() {
+        it('should draw 3 cards', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.repentantLegion],
+                attackers: [this.crisisBreaker],
                 defenders: [],
                 type: 'military'
             });
 
             this.noMoreActions();
 
+            const handSize = this.player1.hand.length;
+
             this.player1.clickPrompt('no');
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.repentantLegion);
+            expect(this.player1).toBeAbleToSelect(this.battleMeditation);
 
-            this.player1.clickCard(this.repentantLegion);
+            this.player1.clickCard(this.battleMeditation);
 
-            expect(this.dojiWhisperer.location).toBe('province 4');
-            expect(this.matsuBerserker.location).toBe('province 3');
-            expect(this.miyaMystic.location).toBe('province 2');
-            expect(this.storehouse.location).toBe('province 1');
-
-            expect(this.dojiWhisperer.facedown).toBe(true);
-            expect(this.matsuBerserker.facedown).toBe(true);
-            expect(this.miyaMystic.facedown).toBe(true);
-            expect(this.storehouse.facedown).toBe(true);
+            expect(this.player1.hand.length).toBe(handSize + 2); // -1 BM and +3 cards
+            expect(this.getChatLogs(5)).toContain('player1 plays Battle Meditation to draw 3 cards');
         });
     });
 });

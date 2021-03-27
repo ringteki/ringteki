@@ -7,7 +7,7 @@ class BattleMeditation extends DrawCard {
             title: 'draw 3 cards',
             when: {
                 onBreakProvince: (event, context) => event.conflict.conflictProvince.owner !== context.player
-                    && event.conflict.getParticipants(p => p.controller === context.player && p.hasTrait('berserker'))
+                    && event.conflict.getParticipants().some(p => p.controller === context.player && p.hasTrait('berserker'))
             },
             gameAction: AbilityDsl.actions.draw({
                 amount: 3
