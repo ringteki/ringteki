@@ -290,6 +290,7 @@ export enum EventNames {
     OnDiscardFavor = 'onDiscardFavor',
     OnStatusTokenDiscarded = 'onStatusTokenDiscarded',
     OnStatusTokenMoved = 'onStatusTokenMoved',
+    OnStatusTokenGained = 'onStatusTokenGained',
     OnCardsDrawn = 'onCardsDrawn',
     OnLookAtCards = 'onLookAtCards',
     OnModifyBid = 'onModifyBid',

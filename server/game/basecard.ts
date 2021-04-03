@@ -11,7 +11,7 @@ import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
 import Game = require('./game');
 
-import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players } from './Constants';
+import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players, CharacterStatus } from './Constants';
 import { ActionProps, TriggeredAbilityProps, PersistentEffectProps, AttachmentConditionProps } from './Interfaces';
 import PlayDisguisedCharacterAction = require('./PlayDisguisedCharacterAction');
 import DynastyCardAction = require('./dynastycardaction');
@@ -774,6 +774,10 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
+    setPersonalHonorByTokenType(tokenType) {
+        const token = new StatusToken(this.game, this, tokenType === CharacterStatus.Honored);
+        this.setPersonalHonor(token);
+    }
 
     setPersonalHonor(token) {
         if(this.personalHonor && token !== this.personalHonor) {

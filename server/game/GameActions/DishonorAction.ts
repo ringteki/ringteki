@@ -24,5 +24,8 @@ export class DishonorAction extends CardGameAction {
 
     eventHandler(event): void {
         event.card.dishonor()
+        if (event.card.isDishonored) {
+            event.card.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.card.personalHonor, card: event.card });
+        }
     }
 }
