@@ -6,7 +6,7 @@ class BattleMeditation extends DrawCard {
         this.reaction({
             title: 'draw 3 cards',
             when: {
-                onBreakProvince: (event, context) => event.conflict.conflictProvince.owner !== context.player
+                onBreakProvince: (event, context) => event.card.owner !== context.player
                     && event.conflict.getParticipants().some(p => p.controller === context.player && p.hasTrait('berserker'))
             },
             gameAction: AbilityDsl.actions.draw({
