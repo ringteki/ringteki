@@ -89,7 +89,6 @@ describe('Battle Meditation', function() {
 
             this.player2.clickPrompt('no');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.battleMeditation);
             expect(this.player2).toHavePrompt('air ring');
         });
 
