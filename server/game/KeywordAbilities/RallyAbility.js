@@ -1,18 +1,21 @@
 const TriggeredAbility = require('../triggeredability.js');
 const { AbilityTypes, Locations } = require('../Constants');
+const GameModes = require('../../GameModes.js');
 
 class RallyAbility extends TriggeredAbility {
     constructor(game, card) {
         super(game, card, AbilityTypes.KeywordReaction, {
             when: {
                 onCardRevealed: (event, context) => event.card === context.source &&
-                    this.game.getProvinceArray().includes(event.card.location) &&
+                    context.game.getProvinceArray().includes(event.card.location) &&
                     context.source.hasRally()
             },
             location: [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour],
             title: card.name + '\'s Rally',
             printedAbility: false,
-            message: '{0} places {1} faceup in {2} due to {3}\'s Rally',
+            message: game.gameMode !== GameModes.JadeEdict ?
+                '{0} places {1} faceup in {2} due to {3}\'s Rally' :
+                '{3}\'s Rally effect is suppressed due to the power of the Jade Edict!',
             messageArgs: context => [
                 context.player,
                 context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
@@ -20,7 +23,9 @@ class RallyAbility extends TriggeredAbility {
                 context.source
             ],
             handler: context => {
-                context.player.triggerRally(context.source.location);
+                if(context.game.gameMode !== GameModes.JadeEdict) {
+                    context.player.triggerRally(context.source.location);
+                }
             }
         });
     }

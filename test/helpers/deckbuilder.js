@@ -5,6 +5,7 @@ const _ = require('underscore');
 const {matchCardByNameAndPack} = require('./cardutil.js');
 
 const PathToSubModulePacks = path.join(__dirname, '../../fiveringsdb-data/json/Card');
+const GameModes = require('../../server/GameModes');
 
 const defaultFaction = 'phoenix';
 const defaultRole = 'support-of-the-scorpion';
@@ -48,7 +49,7 @@ class DeckBuilder {
     /*
         options: as player1 and player2 are described in setupTest #1514
     */
-    customDeck(player = {}, skirmishMode = false) {
+    customDeck(player = {}, gameMode = GameModes.Stronghold) {
         let faction = defaultFaction;
         let role = defaultRole;
         let stronghold = defaultStronghold;
@@ -69,10 +70,10 @@ class DeckBuilder {
             stronghold = player.stronghold;
         }
         //Create the province deck
-        if(player.strongholdProvince && !skirmishMode) {
+        if(player.strongholdProvince && gameMode !== GameModes.Skirmish) {
             provinceDeck.push(player.strongholdProvince);
         }
-        if(player.provinces && !skirmishMode) {
+        if(player.provinces && gameMode !== GameModes.Skirmish) {
             if(_.isArray(player.provinces)) {
                 provinceDeck = provinceDeck.concat(player.provinces);
             } else {
@@ -84,7 +85,7 @@ class DeckBuilder {
             }
         }
         //Fill the deck up to minimum number of provinces
-        if (!skirmishMode) {
+        if (gameMode !== GameModes.Skirmish) {
             while(provinceDeck.length < minProvince) {
                 provinceDeck.push(provinceFiller);
             }
@@ -153,7 +154,7 @@ class DeckBuilder {
         //Collect all the cards together
         var deck = provinceDeck.concat(conflictDeck)
             .concat(dynastyDeck).concat(inPlayCards)
-            .concat(skirmishMode ? [] : role).concat(skirmishMode ? [] : stronghold);
+            .concat(gameMode === GameModes.Skirmish ? [] : role).concat(gameMode === GameModes.Skirmish ? [] : stronghold);
 
         return this.buildDeck(faction, deck);
     }

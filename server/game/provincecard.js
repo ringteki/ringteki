@@ -4,6 +4,7 @@ const _ = require('underscore');
 
 const { Locations, EffectNames } = require('./Constants');
 const AbilityDsl = require('./abilitydsl.js');
+const GameModes = require('../GameModes');
 
 class ProvinceCard extends BaseCard {
     constructor(owner, cardData = { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province' }) {
@@ -105,7 +106,7 @@ class ProvinceCard extends BaseCard {
         this.removeAllTokens();
         if(this.controller.opponent) {
             this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
-            if(this.location === Locations.StrongholdProvince || this.game.skirmishMode && this.controller.getProvinces(card => card.isBroken).length > 2) {
+            if(this.location === Locations.StrongholdProvince || this.game.gameMode === GameModes.Skirmish && this.controller.getProvinces(card => card.isBroken).length > 2) {
                 this.game.recordWinner(this.controller.opponent, 'conquest');
             } else {
                 let dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
@@ -195,14 +196,14 @@ class ProvinceCard extends BaseCard {
     }
 
     isFaceup() {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             return false;
         }
         return super.isFaceup();
     }
 
     isFacedown() {
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             return false;
         }
         return super.isFacedown();

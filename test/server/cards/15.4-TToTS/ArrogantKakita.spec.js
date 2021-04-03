@@ -60,6 +60,44 @@ describe('Arrogant Kakita', function() {
             expect(this.getChatLogs(5)).toContain('Duel Effect: send Arrogant Kakita home');
         });
 
+        it('should duel - unlimited times per round', function() {
+            this.initiateConflict({
+                attackers: [this.kakita]
+            });
+            expect(this.player2).toHavePrompt('Choose defenders');
+            this.player2.clickCard(this.wanderer);
+            this.player2.clickPrompt('Done');
+            this.player1.clickCard(this.wanderer);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('5');
+            expect(this.kakita.isParticipating()).toBe(false);
+            expect(this.getChatLogs(5)).toContain('Arrogant Kakita: 4 vs 7: Tattooed Wanderer');
+            expect(this.getChatLogs(5)).toContain('Duel Effect: send Arrogant Kakita home');
+
+            this.noMoreActions();
+
+            this.wanderer.bowed = false;
+            expect(this.player1).toHavePrompt('Action Window');
+            this.noMoreActions();
+            this.player2.clickPrompt('Pass');
+            this.player2.passConflict();
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.kakita],
+                ring: 'earth'
+            });
+            expect(this.player2).toHavePrompt('Choose defenders');
+            this.player2.clickCard(this.wanderer);
+            this.player2.clickPrompt('Done');
+            this.player1.clickCard(this.wanderer);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('5');
+            expect(this.kakita.isParticipating()).toBe(false);
+            expect(this.getChatLogs(5)).toContain('Arrogant Kakita: 4 vs 7: Tattooed Wanderer');
+            expect(this.getChatLogs(5)).toContain('Duel Effect: send Arrogant Kakita home');
+        });
+
         it('should trigger its reaction on defense', function() {
             this.player1.passConflict();
             this.noMoreActions();

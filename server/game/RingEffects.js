@@ -5,11 +5,11 @@ const VoidRingEffect = require('./Rings/VoidRingEffect');
 const WaterRingEffect = require('./Rings/WaterRingEffect');
 
 const ElementToEffect = {
-    air: (optional, skirmishMode) => new AirRingEffect(optional, skirmishMode),
-    earth: (optional, skirmishMode) => new EarthRingEffect(optional, skirmishMode),
-    fire: (optional, skirmishMode) => new FireRingEffect(optional, skirmishMode),
-    void: (optional, skirmishMode) => new VoidRingEffect(optional, skirmishMode),
-    water: (optional, skirmishMode) => new WaterRingEffect(optional, skirmishMode)
+    air: (optional, gameMode) => new AirRingEffect(optional, gameMode),
+    earth: (optional, gameMode) => new EarthRingEffect(optional, gameMode),
+    fire: (optional, gameMode) => new FireRingEffect(optional, gameMode),
+    void: (optional, gameMode) => new VoidRingEffect(optional, gameMode),
+    water: (optional, gameMode) => new WaterRingEffect(optional, gameMode)
 };
 
 const RingNames = {
@@ -30,7 +30,7 @@ class RingEffects {
 
         let context = player.game.getFrameworkContext(player);
         context.source = player.game.rings[element];
-        context.ability = factory(optional, context.game.skirmishMode);
+        context.ability = factory(optional, context.game.gameMode);
         return context;
     }
 
