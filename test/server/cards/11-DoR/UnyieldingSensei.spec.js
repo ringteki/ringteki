@@ -57,6 +57,7 @@ describe('Unyielding Sensei', function() {
                 this.player1.clickPrompt('Kitsu Warrior');
                 expect(this.player1.provinces['province 1'].dynastyCards.length).toBe(cards + 1);
                 expect(this.kitsuWarrior.location).toBe('province 1');
+                expect(this.kitsuWarrior.facedown).toBe(false);
                 expect(this.player1.player.dynastyDeck.first()).toBe(this.storehouse);
 
                 expect(this.getChatLogs(2)).toContain('player1 uses Unyielding Sensei to look at the top two cards of their dynasty deck');

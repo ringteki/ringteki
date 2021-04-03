@@ -14,7 +14,8 @@ class ArrogantKakita extends DrawCard {
                 gameAction: duel => AbilityDsl.actions.sendHome(context => ({
                     target: duel.loser === context.source ? context.source : []
                 }))
-            }
+            },
+            limit: AbilityDsl.limit.perRound(99)
         });
     }
 }

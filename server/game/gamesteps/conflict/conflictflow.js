@@ -12,6 +12,7 @@ const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent'
 const AttackersMatrix = require('./attackersMatrix.js');
 
 const { Players, CardTypes, EventNames, EffectNames, Locations} = require('../../Constants');
+const GameModes = require('../../../GameModes');
 
 /**
 Conflict Resolution
@@ -505,7 +506,7 @@ class ConflictFlow extends BaseStepWithPipeline {
             return;
         }
 
-        if(this.game.skirmishMode) {
+        if(this.game.gameMode === GameModes.Skirmish) {
             if(this.conflict.conflictUnopposed) {
                 this.game.addMessage('{0} has won an unopposed conflict', this.conflict.winner);
             }

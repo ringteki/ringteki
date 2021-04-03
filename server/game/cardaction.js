@@ -1,3 +1,4 @@
+const GameModes = require('../GameModes.js');
 const CardAbility = require('./CardAbility.js');
 const { AbilityTypes, CardTypes, Phases, PlayTypes, EffectNames } = require('./Constants');
 
@@ -54,7 +55,7 @@ class CardAction extends CardAbility {
             return 'phase';
         }
 
-        if(!ignoredRequirements.includes('phase') && this.game.skirmishMode && this.game.currentPhase === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
+        if(!ignoredRequirements.includes('phase') && this.game.gameMode === GameModes.Skirmish && this.game.currentPhase === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
             return 'phase';
         }
 

@@ -1,12 +1,13 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Locations, CardTypes, Players, TargetModes, Decks } = require('../../Constants');
+const GameModes = require('../../../GameModes.js');
 
 class KaiuShihobu extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Look at your dynasty deck',
-            when: { onCharacterEntersPlay: (event, context) => event.card === context.source && !context.game.skirmishMode },
+            when: { onCharacterEntersPlay: (event, context) => event.card === context.source && context.game.gameMode !== GameModes.Skirmish },
             gameAction: AbilityDsl.actions.deckSearch({
                 cardCondition: card => card.type === CardTypes.Holding,
                 targetMode: TargetModes.Unlimited,
@@ -36,7 +37,7 @@ class KaiuShihobu extends DrawCard {
 
         this.action({
             title: 'Put a holding in a province',
-            condition: context => !context.game.skirmishMode,
+            condition: context => context.game.gameMode !== GameModes.Skirmish,
             targets: {
                 first: {
                     activePromptTitle: 'Choose a holding',

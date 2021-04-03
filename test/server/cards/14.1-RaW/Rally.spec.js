@@ -1,3 +1,5 @@
+const GameModes = require('../../../../server/GameModes');
+
 describe('Rally Keyword', function() {
     integration(function() {
         beforeEach(function() {
@@ -168,6 +170,127 @@ describe('Rally Keyword', function() {
             expect(this.season.location).toBe('province 1');
             expect(this.season.facedown).toBe(false);
             expect(this.challenger.location).toBe('province 1');
+            expect(this.challenger.facedown).toBe(false);
+        });
+    });
+});
+
+describe('Rally Keyword - Jade Edict', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'setup',
+                player1: {
+                    inPlay: ['daidoji-nerishma'],
+                    dynastyDeck: [],
+                    dynastyDiscard: ['a-season-of-war', 'doji-challenger', 'prodigy-of-the-waves', 'a-season-of-war', 'hida-kisada']
+                },
+                player2: {
+                    inPlay: []
+                },
+                gameMode: GameModes.JadeEdict
+            });
+
+            this.season = this.player1.filterCardsByName('a-season-of-war')[0];
+            this.season2 = this.player1.filterCardsByName('a-season-of-war')[1];
+            this.nerishma = this.player1.findCardByName('daidoji-nerishma');
+            this.challenger = this.player1.findCardByName('doji-challenger');
+            this.prodigy = this.player1.findCardByName('prodigy-of-the-waves');
+            this.kisada = this.player1.findCardByName('hida-kisada');
+
+            this.shameful = this.player1.findCardByName('shameful-display', 'province 1');
+            this.shameful.facedown = true;
+            this.player1.placeCardInProvince(this.season, 'province 1');
+            this.season.facedown = true;
+        });
+
+        it('when revealed, should print error message', function() {
+            this.keepDynasty();
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.player1.moveCard(this.challenger, 'dynasty deck');
+            this.player1.moveCard(this.prodigy, 'dynasty deck');
+            this.player1.moveCard(this.season2, 'dynasty deck');
+            this.player1.moveCard(this.kisada, 'dynasty deck');
+
+            this.keepConflict();
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.kisada.location).toBe('dynasty deck');
+            expect(this.kisada.facedown).toBe(false);
+            expect(this.getChatLogs(10)).toContain('A Season of War\'s Rally effect is suppressed due to the power of the Jade Edict!');
+        });
+
+        it('when revealed via card effect, should print error message', function() {
+            this.keepDynasty();
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.player1.moveCard(this.prodigy, 'dynasty deck');
+            this.player1.moveCard(this.kisada, 'dynasty deck');
+            this.player1.moveCard(this.challenger, 'dynasty deck');
+            this.player1.moveCard(this.season2, 'dynasty deck');
+
+            this.keepConflict();
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.season2.location).toBe('dynasty deck');
+            expect(this.prodigy.location).toBe('dynasty deck');
+            expect(this.kisada.location).toBe('dynasty deck');
+            expect(this.challenger.location).toBe('dynasty deck');
+
+            expect(this.getChatLogs(10)).toContain('A Season of War\'s Rally effect is suppressed due to the power of the Jade Edict!');
+
+            this.season.facedown = true;
+            this.season.leavesPlay();
+            this.game.checkGameState(true);
+            this.player1.clickCard(this.nerishma);
+            this.player1.clickCard(this.season);
+
+            expect(this.getChatLogs(10)).toContain('A Season of War\'s Rally effect is suppressed due to the power of the Jade Edict!');
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.challenger.location).toBe('dynasty deck');
+            expect(this.challenger.facedown).toBe(false);
+        });
+
+        it('when an event is revealed outside of the dynasty phase, should still print error message', function() {
+            this.keepDynasty();
+            this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.player1.moveCard(this.prodigy, 'dynasty deck');
+            this.player1.moveCard(this.kisada, 'dynasty deck');
+            this.player1.moveCard(this.challenger, 'dynasty deck');
+            this.player1.moveCard(this.season2, 'dynasty deck');
+
+            this.keepConflict();
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.season2.location).toBe('dynasty deck');
+            expect(this.season2.facedown).toBe(false);
+
+            expect(this.prodigy.location).toBe('dynasty deck');
+            expect(this.kisada.location).toBe('dynasty deck');
+            expect(this.challenger.location).toBe('dynasty deck');
+
+            expect(this.getChatLogs(10)).toContain('A Season of War\'s Rally effect is suppressed due to the power of the Jade Edict!');
+
+            this.season.facedown = true;
+            this.season.leavesPlay();
+            this.game.checkGameState(true);
+
+            this.noMoreActions();
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+
+            this.player1.clickCard(this.nerishma);
+            this.player1.clickCard(this.season);
+
+            expect(this.getChatLogs(10)).toContain('A Season of War\'s Rally effect is suppressed due to the power of the Jade Edict!');
+
+            expect(this.season.location).toBe('province 1');
+            expect(this.season.facedown).toBe(false);
+            expect(this.challenger.location).toBe('dynasty deck');
             expect(this.challenger.facedown).toBe(false);
         });
     });

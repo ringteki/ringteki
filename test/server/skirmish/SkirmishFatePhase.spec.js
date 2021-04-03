@@ -1,3 +1,5 @@
+const GameModes = require('../../../server/GameModes');
+
 describe('Skirmish Fate Phase', function() {
     integration(function() {
         beforeEach(function() {
@@ -9,7 +11,7 @@ describe('Skirmish Fate Phase', function() {
                 player2: {
                     inPlay: ['doji-whisperer']
                 },
-                skirmish: true
+                gameMode: GameModes.Skirmish
             });
 
             this.player1.claimRing('air');
