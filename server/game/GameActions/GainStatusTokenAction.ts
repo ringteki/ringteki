@@ -31,7 +31,7 @@ export class GainStatusTokenAction extends CardGameAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as GainStatusTokenProperties;
-        return['give {0} a {1}', [properties.target, properties.token]];
+        return['give {0} a {1} status token', [properties.target, properties.token]];
     }
 
     addPropertiesToEvent(event, card: BaseCard, context: AbilityContext, additionalProperties = {}): void {

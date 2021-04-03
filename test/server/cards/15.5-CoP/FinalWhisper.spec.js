@@ -89,6 +89,7 @@ describe('Final Whisper', function() {
             expect(this.player1).toHavePrompt('Choose a character');
             this.player1.clickCard(this.toshimoko);
             expect(this.toshimoko.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 plays Final Whisper to give Kakita Toshimoko a dishonored status token');
         });
 
         it('should not let you target someone who already has the status token', function() {
