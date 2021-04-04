@@ -24,7 +24,7 @@ class AbilityTargetSelect {
     }
 
     getChoices(context) {
-        if (typeof this.properties.choices === 'function') {
+        if(typeof this.properties.choices === 'function') {
             return this.properties.choices(context);
         }
         return this.properties.choices;
