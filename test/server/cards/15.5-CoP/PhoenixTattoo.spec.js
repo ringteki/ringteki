@@ -44,13 +44,28 @@ describe('Phoenix Tattoo', function() {
             expect(this.mystic.hasKeyword('pride')).toBe(false);
         });
 
-        it('should give pride to other participating characters', function() {
+        it('should give pride to other participating characters - pol', function() {
             this.player1.playAttachment(this.phoenix, this.toshimoko);
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi, this.toshimoko],
                 defenders: [this.dojiChallenger],
                 type: 'political'
+            });
+
+            expect(this.yoshi.hasKeyword('pride')).toBe(true);
+            expect(this.toshimoko.hasKeyword('pride')).toBe(false);
+            expect(this.dojiChallenger.hasKeyword('pride')).toBe(true);
+            expect(this.mystic.hasKeyword('pride')).toBe(false);
+        });
+
+        it('should give pride to other participating characters - mil', function() {
+            this.player1.playAttachment(this.phoenix, this.toshimoko);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi, this.toshimoko],
+                defenders: [this.dojiChallenger],
+                type: 'military'
             });
 
             expect(this.yoshi.hasKeyword('pride')).toBe(true);
