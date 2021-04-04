@@ -124,6 +124,7 @@ describe('Deserted Shrine', function() {
                     expect(cards[0].location).toBe('dynasty discard pile');
                 }
             });
+            expect(this.getChatLogs(5)).toContain('player2 uses Deserted Shrine to discard Fire and Oil, Aranat, Eager Scout, Doji Shizue, Doji Shigeru, Doji Kuzunobu, Doji Kuwanan, Doji Hotaru, Doji Gift Giver and Doji Diplomat');
         });
 
         it('should discard the top 10 cards - player1 conflict', function() {
