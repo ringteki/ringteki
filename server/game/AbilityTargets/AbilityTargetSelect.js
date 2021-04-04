@@ -19,8 +19,15 @@ class AbilityTargetSelect {
     }
 
     hasLegalTarget(context) {
-        let keys = Object.keys(this.properties.choices);
+        let keys = Object.keys(this.getChoices(context));
         return keys.some(key => this.isChoiceLegal(key, context));
+    }
+
+    getChoices(context) {
+        if (typeof this.properties.choices === 'function') {
+            return this.properties.choices(context);
+        }
+        return this.properties.choices;
     }
 
     isChoiceLegal(key, context) {
@@ -35,7 +42,7 @@ class AbilityTargetSelect {
         if(this.dependentTarget && !this.dependentTarget.hasLegalTarget(contextCopy)) {
             return false;
         }
-        let choice = this.properties.choices[key];
+        let choice = this.getChoices(context)[key];
         if(typeof choice === 'function') {
             return choice(contextCopy);
         }
@@ -46,7 +53,7 @@ class AbilityTargetSelect {
         if(!context.selects[this.name]) {
             return [];
         }
-        let choice = this.properties.choices[context.selects[this.name].choice];
+        let choice = this.getChoices(context)[context.selects[this.name].choice];
         if(typeof choice !== 'function') {
             return choice;
         }
@@ -54,7 +61,7 @@ class AbilityTargetSelect {
     }
 
     getAllLegalTargets(context) {
-        return Object.keys(this.properties.choices).filter(key => this.isChoiceLegal(key, context));
+        return Object.keys(this.getChoices(context)).filter(key => this.isChoiceLegal(key, context));
     }
 
     resolve(context, targetResults) {
@@ -71,7 +78,7 @@ class AbilityTargetSelect {
             return;
         }
         let promptTitle = this.properties.activePromptTitle || 'Select one';
-        let choices = Object.keys(this.properties.choices).filter(key => (
+        let choices = Object.keys(this.getChoices(context)).filter(key => (
             this.isChoiceLegal(key, context)
         ));
         let handlers = _.map(choices, choice => {
@@ -131,7 +138,7 @@ class AbilityTargetSelect {
         if(this.properties.targets) {
             return true;
         }
-        let actions = Object.values(this.properties.choices).filter(value => typeof value !== 'function');
+        let actions = Object.values(this.getChoices(context)).filter(value => typeof value !== 'function');
         return actions.some(action => action.hasTargetsChosenByInitiatingPlayer(context));
     }
 }

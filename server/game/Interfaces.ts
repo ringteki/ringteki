@@ -22,7 +22,7 @@ interface ChoicesInterface {
 
 interface TargetSelect extends BaseTarget {
     mode: TargetModes.Select;
-    choices: ChoicesInterface;
+    choices: (ChoicesInterface | {}) | ((context: AbilityContext) => (ChoicesInterface | {}));
     condition?: (context: AbilityContext) => boolean;
     targets?: boolean;
 };
