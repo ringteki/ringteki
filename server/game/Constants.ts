@@ -55,6 +55,7 @@ export enum EffectNames {
     CannotHaveOtherRestrictedAttachments = 'cannotHaveOtherRestrictedAttachments',
     CannotParticipateAsAttacker = 'cannotParticipateAsAttacker',
     CannotParticipateAsDefender = 'cannotParticipateAsDefender',
+    CardCostToAttackMilitary = 'cardCostToAttackMilitary',
     ChangeContributionFunction = 'changeContributionFunction',
     ChangeType = 'changeType',
     CopyCharacter = 'copyCharacter',

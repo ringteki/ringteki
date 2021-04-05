@@ -17,6 +17,7 @@ export interface SelectCardProperties extends CardActionProperties {
     cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
     targets?: boolean;
     message?: string;
+    manuallyRaiseEvent?: boolean;
     messageArgs?: (card: BaseCard, player: Player, properties: SelectCardProperties) => any[];
     gameAction: GameAction;
     selector?: BaseCardSelector;
@@ -31,7 +32,8 @@ export class SelectCardAction extends CardGameAction {
         cardCondition: () => true,
         gameAction: null,
         subActionProperties: card => ({ target: card }),
-        targets: false
+        targets: false,
+        manuallyRaiseEvent: false
     };
 
     constructor(properties: SelectCardProperties | ((context: AbilityContext) => SelectCardProperties)) {
@@ -98,6 +100,9 @@ export class SelectCardAction extends CardGameAction {
                     additionalProperties,
                     properties.subActionProperties(cards)
                 ));
+                if(properties.manuallyRaiseEvent) {
+                    context.game.openEventWindow(events);
+                }
                 return true;
             }
         };
