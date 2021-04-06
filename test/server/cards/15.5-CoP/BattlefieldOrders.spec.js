@@ -160,22 +160,15 @@ describe('Battle Meditation', function() {
             });
 
             this.player2.clickCard(this.orders);
+            let fate = this.kuwanan.fate;
             expect(this.player2).toHavePrompt('Select an ability to resolve');
-            this.player2.clickCard(this.kuwanan);
-            expect(this.player1).toHavePrompt('Choose a character');
-            expect(this.player1).toBeAbleToSelect(this.vice);
-            expect(this.player1).not.toBeAbleToSelect(this.kuwanan); //same
-            expect(this.player1).toBeAbleToSelect(this.shoju);
-            expect(this.player1).toBeAbleToSelect(this.warrior);
-            expect(this.player1).toBeAbleToSelect(this.adept);
-            expect(this.player1).not.toBeAbleToSelect(this.hotaru); //higher
-            expect(this.player1).toBeAbleToSelect(this.advisor);
+            this.player2.clickCard(this.warrior);
+            this.player1.clickCard(this.kuwanan);
+            expect(this.warrior.location).toBe('dynasty discard pile');
+            expect(this.kuwanan.fate).toBe(fate + 1);
 
-            this.player1.clickCard(this.advisor);
-            expect(this.advisor.bowed).toBe(true);
-
-            expect(this.getChatLogs(10)).toContain('player2 plays Battlefield Orders to trigger Doji Kuwanan\'s \'Bow a participating character with lower military skill\' ability');
-            expect(this.getChatLogs(10)).toContain('player1 resolves Doji Kuwanan to bow Beloved Advisor');
+            expect(this.getChatLogs(10)).toContain('player2 plays Battlefield Orders to trigger Vanguard Warrior\'s \'Sacrifice to put fate on one character\' ability');
+            expect(this.getChatLogs(10)).toContain('player1 resolves Vanguard Warrior, sacrificing Vanguard Warrior to place 1 fate on Doji Kuwanan');
         });
     });
 });
