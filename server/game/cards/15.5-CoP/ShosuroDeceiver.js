@@ -1,6 +1,5 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes } = require('../../Constants');
 
 class ShosuroDeceiver extends DrawCard {
     setupCardAbilities() {

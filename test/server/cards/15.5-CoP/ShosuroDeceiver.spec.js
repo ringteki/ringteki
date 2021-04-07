@@ -295,10 +295,10 @@ describe('Shosuro Deceiver -  Two Deceivers', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['shosuro-deceiver', 'shosuro-deceiver', 'blackmail-artist'],
+                    inPlay: ['shosuro-deceiver', 'shosuro-deceiver', 'blackmail-artist']
                 },
                 player2: {
-                    inPlay: ['beloved-advisor'],
+                    inPlay: ['beloved-advisor']
                 }
             });
 
@@ -309,7 +309,7 @@ describe('Shosuro Deceiver -  Two Deceivers', function() {
             this.advisor = this.player2.findCardByName('beloved-advisor');
         });
 
-        it('should gain limited copies of the abilities', function() {
+        it('should not gain abilities from other deceivers', function() {
             this.advisor.dishonor();
             this.deceiver1.dishonor();
             this.deceiver2.dishonor();
@@ -323,8 +323,34 @@ describe('Shosuro Deceiver -  Two Deceivers', function() {
 
             this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');
-            this.player1.clickCard(this.deceiver);
-            expect(this.player1).toHavePromptButton('hi');
+            this.player1.clickCard(this.deceiver1);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shosuro Deceiver\'s gained ability from Beloved Advisor to draw 1 card');
+        });
+
+        it('should not gain abilities from other deceivers', function() {
+            this.advisor.dishonor();
+            this.deceiver1.dishonor();
+            this.deceiver2.dishonor();
+            this.artist.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.deceiver1, this.deceiver2, this.artist],
+                defenders: [this.advisor],
+                type: 'political'
+            });
+
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.artist);
+            expect(this.player1).toBeAbleToSelect(this.deceiver1);
+            expect(this.player1).toBeAbleToSelect(this.deceiver2);
+
+            this.player1.clickCard(this.deceiver1);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.deceiver1);
+            expect(this.player1).toBeAbleToSelect(this.deceiver2);
         });
     });
 });
