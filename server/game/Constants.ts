@@ -71,6 +71,7 @@ export enum EffectNames {
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
+    GainAllAbilitiesDynamic = 'gainAllAbilitiesDynamic',
     GainExtraFateWhenPlayed = 'gainExtraFateWhenPlayed',
     GainPlayAction = 'gainPlayAction',
     HideWhenFaceUp = 'hideWhenFaceUp',

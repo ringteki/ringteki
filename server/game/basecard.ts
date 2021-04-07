@@ -98,6 +98,14 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
         }
+        if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+            let context = this.game.getFrameworkContext(this.controller);
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+            effects.forEach(effect => {
+                effect.value.calculate(this, context); //fetch new abilities
+                actions = actions.concat(effect.value.getActions(this))
+            });
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = actions.concat(effectActions);
@@ -119,6 +127,14 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
         }
+        if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+            let context = this.game.getFrameworkContext(this.controller);
+            effects.forEach(effect => {
+                effect.value.calculate(this, context); //fetch new abilities
+                reactions = reactions.concat(effect.value.getReactions(this))
+            });
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = reactions.concat(effectReactions);
@@ -137,6 +153,14 @@ class BaseCard extends EffectSource {
         if(this.anyEffect(EffectNames.GainAllAbilities)) {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
+        }
+        if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+            let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+            let context = this.game.getFrameworkContext(this.controller);
+            effects.forEach(effect => {
+                effect.value.calculate(this, context); //fetch new abilities
+                gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects())
+            });
         }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
