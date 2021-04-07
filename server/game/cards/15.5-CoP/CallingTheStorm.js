@@ -7,7 +7,6 @@ class CallingTheStorm extends DrawCard {
         this.action({
             title: 'Make top card of conflict deck playable',
             cost: AbilityDsl.costs.discardHand(),
-            condition: context => context.player.conflictDeck.size() > 0,
             effect: 'play cards from their conflict deck this phase',
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.cardLastingEffect(context => ({
@@ -17,7 +16,9 @@ class CallingTheStorm extends DrawCard {
                     targetController: Players.Self,
                     canChangeZoneNTimes: 9999999, // can change zones infinite times and still be playable if it ends up in the deck
                     effect: AbilityDsl.effects.canPlayFromOutOfPlay((player, card) => {
-                        return player && player.conflictDeck && card === player.conflictDeck.first() && player === card.owner && card.location === Locations.ConflictDeck;
+                        return player && player.conflictDeck &&
+                            context.player.conflictDeck.size() > 0 && card === player.conflictDeck.first() &&
+                            player === card.owner && card.location === Locations.ConflictDeck;
                     }, PlayTypes.PlayFromHand)
                 })),
                 AbilityDsl.actions.playerLastingEffect(() => ({

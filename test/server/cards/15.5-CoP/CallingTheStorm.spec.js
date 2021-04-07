@@ -256,6 +256,7 @@ describe('Calling the Storm', function() {
             it('should work if your conflict deck is empty', function () {
                 this.player1.reduceDeckToNumber('conflict deck', 0);
                 this.player1.clickCard(this.storm);
+                expect(this.getChatLogs(5)).toContain('player1 plays Calling the Storm to play cards from their conflict deck this phase');
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
