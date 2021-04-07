@@ -149,7 +149,7 @@ class BaseCard extends EffectSource {
         if(lostAllNonKeywordsAbilities) {
             allAbilities = allAbilities.filter(a => a.isKeywordAbility());
         }
-        return allAbilities;        
+        return allAbilities;
     }
 
     get reactions(): TriggeredAbility[] {
