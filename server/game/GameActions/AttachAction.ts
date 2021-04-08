@@ -60,6 +60,8 @@ export class AttachAction extends CardGameAction {
             return false;
         } else if(!properties.controlSwitchOptional && properties.giveControl && properties.attachment.controller !== context.player) {
             return false;
+        } else if (!card.checkRestrictions('play', context)) {
+            return false;
         }
         return card.allowAttachment(properties.attachment) && super.canAffect(card, context);
     }

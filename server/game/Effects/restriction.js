@@ -29,6 +29,8 @@ const checkRestrictions = {
         context.source.type === CardTypes.Event &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
     nonSpellEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('spell'),
+    opponentsAttachments: (context, effect) =>
+        context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Attachment,
     opponentsCardEffects: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
