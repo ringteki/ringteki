@@ -477,7 +477,21 @@ const Costs = {
             promptsPlayer: true
         };
     },
-
+    discardHand: function () {
+        return {
+            canPay: function (context) {
+                return context.game.actions.chosenDiscard().canAffect(context.player, context);
+            },
+            resolve: function (context, result) { // eslint-disable-line no-unused-vars
+                context.costs.discardHand = context.player.hand.value();
+            },
+            payEvent: function (context) {
+                let action = context.game.actions.discardCard({ target: context.costs.discardHand });
+                return action.getEvent(context.costs.discardHand, context);
+            },
+            promptsPlayer: true
+        };
+    },
     optionalFateCost: function (amount) {
         return {
             canPay: function () {
