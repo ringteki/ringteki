@@ -68,6 +68,7 @@ const Effects = {
     entersPlayWithStatus: (status) => EffectBuilder.card.static(EffectNames.EntersPlayWithStatus, status),
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectNames.EntersPlayForOpponent),
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
+    cardCostToAttackMilitary: (amount = 1) => EffectBuilder.card.flexible(EffectNames.CardCostToAttackMilitary, amount),
     honorCostToDeclare: (amount = 1) => EffectBuilder.card.flexible(EffectNames.HonorCostToDeclare, amount),
     fateCostToRingToDeclareConflictAgainst: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),

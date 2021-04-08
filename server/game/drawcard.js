@@ -8,7 +8,7 @@ const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
 
-const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -728,6 +728,10 @@ class DrawCard extends BaseCard {
         );
 
         if(elementsAdded.some(element => this.game.rings[element].getEffects(EffectNames.CannotDeclareRing).some(match => match(this.controller)))) {
+            return false;
+        }
+
+        if(conflictType === ConflictTypes.Military && attackers.reduce((total, card) => total + card.sumEffects(EffectNames.CardCostToAttackMilitary), 0) > this.controller.hand.size()) {
             return false;
         }
 
