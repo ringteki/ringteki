@@ -224,7 +224,7 @@ class CardAbility extends ThenAbility {
         let gainedAbility = origin ? '\'s gained ability from ' : '';
         let messageArgs = [context.player, ' ' + messageVerb + ' ', context.source, gainedAbility, origin];
         let costMessages = this.cost.map(cost => {
-            if(cost.getCostMessage) {
+            if(cost.getCostMessage && cost.getCostMessage(context)) {
                 let card = context.costs[cost.getActionName(context)];
                 if(card && card.isFacedown && card.isFacedown()) {
                     card = 'a facedown card';

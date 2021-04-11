@@ -68,7 +68,8 @@ const Costs = {
     /**
      * Cost that requires discarding a card to be selected by the player.
      */
-    discardCard: properties => getSelectCost(GameActions.discardCard(), Object.assign({ location: Locations.Hand }, properties), 'Select card to discard'),
+    discardCard: properties => getSelectCost(GameActions.discardCard(), Object.assign({ location: Locations.Hand, mode: TargetModes.Exactly }, properties),
+        properties && properties.numCards && properties.numCards > 1 ? `Select ${properties.numCards} cards to discard` : 'Select card to discard'),
     /**
      * Cost that will discard a fate from the card
      */
@@ -477,7 +478,21 @@ const Costs = {
             promptsPlayer: true
         };
     },
-
+    discardHand: function () {
+        return {
+            canPay: function (context) {
+                return context.game.actions.chosenDiscard().canAffect(context.player, context);
+            },
+            resolve: function (context, result) { // eslint-disable-line no-unused-vars
+                context.costs.discardHand = context.player.hand.value();
+            },
+            payEvent: function (context) {
+                let action = context.game.actions.discardCard({ target: context.costs.discardHand });
+                return action.getEvent(context.costs.discardHand, context);
+            },
+            promptsPlayer: true
+        };
+    },
     optionalFateCost: function (amount) {
         return {
             canPay: function () {
