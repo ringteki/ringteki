@@ -27,6 +27,7 @@ import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
 import { GainFateAction, GainFateProperties } from './GainFateAction';
 import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
+import { GainStatusTokenAction, GainStatusTokenProperties } from './GainStatusTokenAction';
 import { HandlerAction, HandlerProperties } from './HandlerAction';
 import { HonorAction, HonorProperties } from './HonorAction';
 import { IfAbleAction, IfAbleActionProperties } from './IfAbleAction';
@@ -129,6 +130,7 @@ const GameActions = {
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
     triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
+    gainStatusToken: (propertyFactory: GainStatusTokenProperties | ((context: TriggeredAbilityContext) => GainStatusTokenProperties) = {}) => new GainStatusTokenAction(propertyFactory),
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1

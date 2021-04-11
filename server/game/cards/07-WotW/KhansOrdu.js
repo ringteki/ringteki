@@ -20,7 +20,7 @@ class KhansOrdu extends ProvinceCard {
                     duration: Durations.UntilEndOfPhase
                 })
             ]),
-            effect: 'switch the conflict type to {1} and make all future conflicts {1} for this round',
+            effect: 'switch the conflict type to {1} and make all future conflicts {1} for this phase',
             effectArgs: ['military']
         });
     }
