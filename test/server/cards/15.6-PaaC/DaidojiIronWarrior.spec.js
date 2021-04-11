@@ -65,7 +65,7 @@ describe('Daidoji Iron Warrior', function() {
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });
 
-        it('should not trigger when wnning a conflict on attack without being participating', function() {
+        it('should not trigger when winning a conflict on attack without being participating', function() {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
