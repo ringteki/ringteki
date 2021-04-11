@@ -8,7 +8,7 @@ describe('Ujiaki\'s Offer', function() {
                         inPlay: ['niten-adept', 'bayushi-shoju']
                     },
                     player2: {
-                        inPlay: ['togashi-mitsu'],
+                        inPlay: ['kakita-toshimoko'],
                         hand: ['ujiaki-s-offer']
                     }
                 });
@@ -17,7 +17,7 @@ describe('Ujiaki\'s Offer', function() {
                 this.shoju = this.player1.findCardByName('bayushi-shoju');
 
                 this.offer = this.player2.findCardByName('ujiaki-s-offer');
-                this.togashiMitsu = this.player2.findCardByName('togashi-mitsu');
+                this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
 
             });
 
@@ -26,7 +26,7 @@ describe('Ujiaki\'s Offer', function() {
                 this.initiateConflict({
                     type: 'military',
                     attackers: [this.shoju],
-                    defenders: [this.togashiMitsu]
+                    defenders: [this.toshimoko]
                 });
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.offer);
@@ -38,15 +38,15 @@ describe('Ujiaki\'s Offer', function() {
                 this.initiateConflict({
                     type: 'political',
                     attackers: [this.adept, this.shoju],
-                    defenders: [this.togashiMitsu]
+                    defenders: [this.toshimoko]
                 });
                 let adeptFate = this.adept.fate;
                 this.player2.clickCard(this.offer);
                 this.player2.clickCard(this.adept);
+                expect(this.adept.fate).toBe(adeptFate + 1);
                 expect(this.adept.bowed).toBe(true);
                 expect(this.adept.inConflict).toBe(false);
                 expect(this.adept.isDishonored).toBe(true);
-                expect(this.adept.fate).toBe(adeptFate + 1);
                 expect(this.getChatLogs(5)).toContain('player2 plays Ujiaki\'s Offer to place a fate on Niten Adept then bow, dishonor, and move them home.');
             });
 
@@ -55,11 +55,11 @@ describe('Ujiaki\'s Offer', function() {
                 this.initiateConflict({
                     type: 'political',
                     attackers: [this.shoju],
-                    defenders: [this.togashiMitsu]
+                    defenders: [this.toshimoko]
                 });
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.offer);
-                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.player2).toHavePrompt('Choose a character');
             });
         });
     });

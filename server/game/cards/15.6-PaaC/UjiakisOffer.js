@@ -10,14 +10,16 @@ class UjiakisOffer extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && context.player.cardsInPlay.some(myCard => (
-                    myCard.isParticipating() && myCard.printedCost > card.printedCost)),
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.bow(),
-                    AbilityDsl.actions.dishonor(),
-                    AbilityDsl.actions.placeFate(),
-                    AbilityDsl.actions.sendHome()
-                ])
+                    myCard.isParticipating() && myCard.printedCost >= card.printedCost)),
+                gameAction: AbilityDsl.actions.placeFate()
             },
+            then: context => ({
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.bow({target: context.target}),
+                    AbilityDsl.actions.dishonor({target: context.target}),
+                    AbilityDsl.actions.sendHome({target: context.target})
+                ])
+            }),
             effect: 'place a fate on {0} then bow, dishonor, and move them home.'
         });
     }
