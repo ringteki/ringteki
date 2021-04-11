@@ -30,6 +30,17 @@ class Conflict extends GameObject {
         this.defenderSkill = 0;
     }
 
+    getConflictProvinces() {
+        if(!this.conflictProvince) {
+            return [];
+        }
+        return [this.conflictProvince];
+    }
+
+    isCardInConflictProvince(card) {
+        return this.getConflictProvinces().some(a => a.location === card.location && a.controller === card.controller);
+    }
+
     get conflictType() {
         return this.ring ? this.ring.conflictType : '';
     }
@@ -54,7 +65,7 @@ class Conflict extends GameObject {
             type: this.conflictType,
             elements: this.elements,
             attackerWins: this.attackers.length > 0 && this.attackerSkill >= this.defenderSkill,
-            breaking: this.conflictProvince && (this.conflictProvince.getStrength() - (this.attackerSkill - this.defenderSkill) <= 0),
+            breaking: this.conflictProvince && (this.getConflictProvinces().some(p => p.getStrength() - (this.attackerSkill - this.defenderSkill) <= 0)),
             unopposed: !(this.defenders && this.defenders.length > 0 && !forcedUnopposed),
             declarationComplete: this.declarationComplete,
             defendersChosen: this.defendersChosen
@@ -78,9 +89,7 @@ class Conflict extends GameObject {
     resetCards() {
         this.attackingPlayer.resetForConflict();
         this.defendingPlayer.resetForConflict();
-        if(this.conflictProvince) {
-            this.conflictProvince.inConflict = false;
-        }
+        this.getConflictProvinces().forEach(a => a.inConflict = false);
     }
 
     addAttackers(attackers) {
@@ -358,7 +367,13 @@ class Conflict extends GameObject {
     determineWinner() {
         this.calculateSkill();
         this.winnerDetermined = true;
-        this.provinceStrengthAtResolution = this.conflictProvince !== null ? this.conflictProvince.getStrength() : 0;
+        this.provinceStrengthsAtResolution = [];
+        this.getConflictProvinces().filter(a => a).forEach(a => {
+            this.provinceStrengthsAtResolution.push({
+                province: a,
+                strength: a.getStrength()
+            })
+        });
 
         if(this.attackerSkill === 0 && this.defenderSkill === 0) {
             this.loser = undefined;

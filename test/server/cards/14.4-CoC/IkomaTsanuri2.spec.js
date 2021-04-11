@@ -148,6 +148,7 @@ describe('Ikoma Tsanuri 2', function() {
             this.player1.pass();
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.trader2);
+            this.player2.clickCard(this.abandoning);
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.negotiator);
             this.player2.clickCard(this.negotiator);

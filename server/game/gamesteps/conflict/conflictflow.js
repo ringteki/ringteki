@@ -535,11 +535,13 @@ class ConflictFlow extends BaseStepWithPipeline {
             return;
         }
 
-        let province = this.conflict.conflictProvince;
-        let strength = this.conflict.provinceStrengthAtResolution === undefined ? province.getStrength() : this.conflict.provinceStrengthAtResolution;
-        if(this.conflict.isAttackerTheWinner() && this.conflict.skillDifference >= strength && !province.isBroken) {
-            this.game.applyGameAction(null, { break: province });
-        }
+        this.conflict.provinceStrengthsAtResolution.forEach(a => {
+            let province = a.province;
+            let strength = a.strength === undefined ? province.getStrength() : a.strength;
+            if(this.conflict.isAttackerTheWinner() && this.conflict.skillDifference >= strength && !province.isBroken) {
+                this.game.applyGameAction(null, { break: province });
+            }    
+        })
     }
 
     resolveRingEffects() {

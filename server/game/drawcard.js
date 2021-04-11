@@ -115,6 +115,10 @@ class DrawCard extends BaseCard {
         return rawEffects.length > 0 ? apparentFate : this.fate;
     }
 
+    isInConflictProvince() {
+        return this.game.currentConflict.isCardInConflictProvince(this);
+    }
+
     costLessThan(num) {
         let cost = this.getCost();
         return num && (cost || cost === 0) && cost < num;
