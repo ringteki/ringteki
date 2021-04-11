@@ -16,7 +16,7 @@ class DaidojiIronWarrior extends DrawCard {
                 AbilityDsl.actions.chosenDiscard(context => ({
                     target: context.player,
                     amount: Math.max(0, context.player.hand.size() - 4)
-                })),
+                }))
             ]),
             effect: 'make both players discard down to 4 cards'
         });
