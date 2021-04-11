@@ -4,7 +4,7 @@ const AbilityDsl = require('../../abilitydsl');
 class DaidojiIronWarrior extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Force each payer to discard to 4 cards',
+            title: 'Force each player to discard to 4 cards',
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
