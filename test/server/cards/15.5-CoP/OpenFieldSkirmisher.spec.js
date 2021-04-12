@@ -57,7 +57,8 @@ describe('Open Field Skirmisher', function() {
             expect(this.skirmisher.fate).toBe(fate - 1);
             expect(this.pilgrimage.getStrength()).toBe(strength - 3);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Open Field Skirmisher, removing 1 fate from Open Field Skirmisher to reduce the strength of Pilgrimage by 3');
+            expect(this.getChatLogs(5)).toContain('player1 uses Open Field Skirmisher, removing 1 fate from Open Field Skirmisher to reduce the strength of an attacked province by 3');
+            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Pilgrimage by 3');
         });
     });
 });

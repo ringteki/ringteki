@@ -74,7 +74,7 @@ class CardAction extends CardAbility {
 
     checkProvinceCondition() {
         return this.card.type !== CardTypes.Province || this.canTriggerOutsideConflict ||
-            this.game.currentConflict && this.conflictProvinceCondition(this.game.currentConflict.conflictProvince);
+            this.game.currentConflict && this.game.currentConflict.getConflictProvinces().some(p => this.conflictProvinceCondition(p));
     }
 
     isAction() {

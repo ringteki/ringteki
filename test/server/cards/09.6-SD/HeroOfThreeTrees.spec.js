@@ -101,7 +101,8 @@ describe('Hero Of Three Trees', function() {
             expect(this.p2Shameful.strength).toBe(strength - 1);
             expect(this.p2Shameful2.strength).toBe(strength);
             expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.getChatLogs(3)).toContain('player1 uses Hero of Three Trees to reduce the strength of Shameful Display by 1');
+            expect(this.getChatLogs(5)).toContain('player1 uses Hero of Three Trees to reduce the strength of an attacked province by 1');
+            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Shameful Display by 1');
         });
 
         it('Option 2: Should be be selectable if the province strength is already 0', function() {

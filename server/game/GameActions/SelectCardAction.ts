@@ -23,6 +23,7 @@ export interface SelectCardProperties extends CardActionProperties {
     selector?: BaseCardSelector;
     mode?: TargetModes;
     numCards?: number;
+    hidePromptIfSingleCard?: boolean;
     subActionProperties?: (card: BaseCard) => any;
     cancelHandler?: () => void;
 }
@@ -33,6 +34,7 @@ export class SelectCardAction extends CardGameAction {
         gameAction: null,
         subActionProperties: card => ({ target: card }),
         targets: false,
+        hidePromptIfSingleCard: false,
         manuallyRaiseEvent: false
     };
 
@@ -106,7 +108,16 @@ export class SelectCardAction extends CardGameAction {
                 return true;
             }
         };
-        context.game.promptForSelect(player, Object.assign(defaultProperties, properties));
+        const finalProperties = Object.assign(defaultProperties, properties);
+        if(properties.hidePromptIfSingleCard) {
+            const cards = properties.selector.getAllLegalTargets(context);
+            if(cards.length === 1) {
+                finalProperties.onSelect(player, cards[0]);
+                return;
+            }
+
+        }
+        context.game.promptForSelect(player, finalProperties);
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {

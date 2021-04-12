@@ -45,7 +45,8 @@ describe('Doom Thrower', function () {
             expect(this.player1).toBeAbleToSelect(this.outrider);
             this.player1.clickCard(this.outrider);
             expect(this.p2Pilgrimage.strength).toBe(pStrength - 2);
-            expect(this.getChatLogs(3)).toContain('player1 uses Doom Thrower, sacrificing Shinjo Outrider to reduce the attacked province\'s strength by 2');
+            expect(this.getChatLogs(5)).toContain('player1 uses Doom Thrower, sacrificing Shinjo Outrider to reduce an attacked province\'s strength by 2');
+            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Pilgrimage');
         });
 
         it('should activate during a conflict and let you sacrifice a character, reducing strength by 5 if it has fate', function () {
@@ -60,7 +61,8 @@ describe('Doom Thrower', function () {
             this.player1.clickCard(this.thrower);
             this.player1.clickCard(this.rider);
             expect(this.p2Pilgrimage.strength).toBe(pStrength - 5);
-            expect(this.getChatLogs(3)).toContain('player1 uses Doom Thrower, sacrificing Border Rider to reduce the attacked province\'s strength by 5');
+            expect(this.getChatLogs(5)).toContain('player1 uses Doom Thrower, sacrificing Border Rider to reduce an attacked province\'s strength by 5');
+            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Pilgrimage');
         });
     });
 });

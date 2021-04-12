@@ -46,7 +46,8 @@ describe('Fulfill Your Duty', function () {
             this.player2.clickCard(this.fulfillYourDuty);
             this.player2.clickCard(this.toturi);
             expect(this.p2Pilgrimage.strength).toBe(pStrength + toturiStrength);
-            expect(this.getChatLogs(3)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 6 to the attacked province\'s strength');
+            expect(this.getChatLogs(5)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 6 to an attacked province\'s strength');
+            expect(this.getChatLogs(5)).toContain('player2 increases the strength of Pilgrimage');
         });
 
         it('should count attachment bonuses', function () {
@@ -63,7 +64,7 @@ describe('Fulfill Your Duty', function () {
             this.player2.clickCard(this.fulfillYourDuty);
             this.player2.clickCard(this.toturi);
             expect(this.p2Pilgrimage.strength).toBe(pStrength + toturiStrength);
-            expect(this.getChatLogs(3)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 4 to the attacked province\'s strength');
+            expect(this.getChatLogs(5)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 4 to an attacked province\'s strength');
         });
 
         it('should count event bonuses', function () {
@@ -88,7 +89,7 @@ describe('Fulfill Your Duty', function () {
             this.player2.clickCard(this.fulfillYourDuty);
             this.player2.clickCard(this.toturi);
             expect(this.p2Pilgrimage.strength).toBe(pStrength + toturiStrength);
-            expect(this.getChatLogs(3)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 10 to the attacked province\'s strength');
+            expect(this.getChatLogs(5)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 10 to an attacked province\'s strength');
         });
 
         it('should work as the attacker', function () {
@@ -108,7 +109,7 @@ describe('Fulfill Your Duty', function () {
             this.player2.clickCard(this.fulfillYourDuty);
             this.player2.clickCard(this.toturi);
             expect(this.p1Pilgrimage.strength).toBe(pStrength + toturiStrength);
-            expect(this.getChatLogs(3)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 6 to the attacked province\'s strength');
+            expect(this.getChatLogs(5)).toContain('player2 plays Fulfill Your Duty, sacrificing Akodo Toturi to add 6 to an attacked province\'s strength');
         });
     });
 });

@@ -34,9 +34,9 @@ class ThirdWhiskerWarrens extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => {
-                if(context.player.isDefendingPlayer() && this.game.currentConflict.conflictProvince) {
-                    let cards = context.player.getDynastyCardsInProvince(this.game.currentConflict.conflictProvince.location);
-                    return cards.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall'));
+                if(context.player.isDefendingPlayer()) {
+                    let cards = context.game.currentConflict.getConflictProvinces().map(a => context.player.getDynastyCardsInProvince(a.location));
+                    return cards.some(c => c.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall')));
                 }
                 return false;
             },
@@ -53,9 +53,9 @@ class ThirdWhiskerWarrens extends DrawCard {
 
         this.persistentEffect({
             condition: context => {
-                if(context.player.isDefendingPlayer() && this.game.currentConflict.conflictProvince) {
-                    let cards = context.player.getDynastyCardsInProvince(this.game.currentConflict.conflictProvince.location);
-                    return cards.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall'));
+                if(context.player.isDefendingPlayer()) {
+                    let cards = context.game.currentConflict.getConflictProvinces().map(a => context.player.getDynastyCardsInProvince(a.location));
+                    return cards.some(c => c.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall')));
                 }
                 return false;
             },

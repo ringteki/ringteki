@@ -24,15 +24,25 @@ class ConflictActionWindow extends ActionWindow {
             let conflictText = capitalize[this.conflict.conflictType] + ' ' + capitalize[this.conflict.element] + ' conflict';
             this.game.addMessage('{0} - Attacker: {1} Defender: {2}', conflictText, this.conflict.attackerSkill, this.conflict.defenderSkill);
             let winnerText = 'Attacker is winning the conflict';
+            let breakingProvinces = [];
             if(this.conflict.attackerSkill === 0 && this.conflict.defenderSkill === 0) {
                 winnerText = 'No-one is winning the conflict';
             } else if(this.conflict.defenderSkill > this.conflict.attackerSkill) {
                 winnerText = 'Defender is winning the conflict';
-            } else if(this.conflict.conflictProvince && !this.conflict.conflictProvince.isBroken && this.conflict.conflictProvince.allowGameAction('break') &&
-                this.conflict.attackerSkill >= this.conflict.defenderSkill + this.conflict.conflictProvince.getStrength()) {
-                winnerText = winnerText + ' - {0} is breaking!';
+            } else {
+                const provinces = this.conflict.getConflictProvinces();
+                provinces.forEach(province => {
+                    if(province && !province.isBroken && province.allowGameAction('break') && this.conflict.attackerSkill >= this.conflict.defenderSkill + province.getStrength()) {
+                        breakingProvinces.push(province);
+                    }
+                });
+                if(breakingProvinces.length === 1) {
+                    winnerText = winnerText + ' - {0} is breaking!';
+                } else if(breakingProvinces.length > 1) {
+                    winnerText = winnerText + ' - {0} are breaking!';
+                }
             }
-            this.game.addMessage(winnerText, this.conflict.conflictProvince);
+            this.game.addMessage(winnerText, breakingProvinces);
             this.displayTotals = false;
         }
         return completed;

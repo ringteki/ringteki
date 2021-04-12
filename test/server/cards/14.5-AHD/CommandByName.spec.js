@@ -43,7 +43,8 @@ describe('Command By Name', function() {
                 expect(this.player1.honor).toBe(honor - 1);
                 expect(this.katana.location).toBe('conflict discard pile');
                 expect(this.pilgrimage.getStrength()).toBe(0);
-                expect(this.getChatLogs(5)).toContain('player1 plays Command By Name, losing 1 honor and discarding Fine Katana to reduce the strength of Pilgrimage to 0');
+                expect(this.getChatLogs(5)).toContain('player1 plays Command By Name, losing 1 honor and discarding Fine Katana to reduce the strength of an attacked province to 0');
+                expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Pilgrimage to 0');
             });
 
             it('should set base not total', function() {
