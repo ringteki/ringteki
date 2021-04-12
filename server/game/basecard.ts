@@ -11,7 +11,7 @@ import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
 import Game = require('./game');
 
-import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players } from './Constants';
+import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players, CharacterStatus } from './Constants';
 import { ActionProps, TriggeredAbilityProps, PersistentEffectProps, AttachmentConditionProps } from './Interfaces';
 import PlayDisguisedCharacterAction = require('./PlayDisguisedCharacterAction');
 import DynastyCardAction = require('./dynastycardaction');
@@ -87,7 +87,7 @@ class BaseCard extends EffectSource {
         this.printedName = name;
     }
 
-    get actions(): CardAction[] {
+    _getActions(ignoreDynamicGains = false): CardAction[] {
         let actions = this.abilities.actions;
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
@@ -98,6 +98,16 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
         }
+        if(!ignoreDynamicGains) {
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let context = this.game.getFrameworkContext(this.controller);
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    actions = actions.concat(effect.value.getActions(this))
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = actions.concat(effectActions);
@@ -107,7 +117,11 @@ class BaseCard extends EffectSource {
         return allAbilities;
     }
 
-    get reactions(): TriggeredAbility[] {
+    get actions(): CardAction[] {
+        return this._getActions();
+    }
+
+    _getReactions(ignoreDynamicGains = false): TriggeredAbility[] {
         const TriggeredAbilityTypes = [AbilityTypes.ForcedInterrupt, AbilityTypes.ForcedReaction, AbilityTypes.Interrupt, AbilityTypes.Reaction, AbilityTypes.WouldInterrupt];
         let reactions =  this.abilities.reactions;
         if(this.anyEffect(EffectNames.CopyCharacter)) {
@@ -119,6 +133,16 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
         }
+        if(!ignoreDynamicGains) {
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                let context = this.game.getFrameworkContext(this.controller);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    reactions = reactions.concat(effect.value.getReactions(this))
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = reactions.concat(effectReactions);
@@ -128,7 +152,11 @@ class BaseCard extends EffectSource {
         return allAbilities;
     }
 
-    get persistentEffects(): any[] {
+    get reactions(): TriggeredAbility[] {
+        return this._getReactions();
+    }
+
+    _getPersistentEffects(ignoreDynamicGains = false): any[] {
         let gainedPersistentEffects = this.getEffects(EffectNames.GainAbility).filter(ability => ability.abilityType === AbilityTypes.Persistent);
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
@@ -138,6 +166,19 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
         }
+        if(!ignoreDynamicGains) {
+            // This is needed even though there are no dynamic persistent effects
+            // Because the effect itself is persistent and to ensure we pick up all reactions/interrupts, we need this check to happen
+            // As the game state is applying the effect
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                let context = this.game.getFrameworkContext(this.controller);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects())
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         if(lostAllNonKeywordsAbilities) {
@@ -146,6 +187,10 @@ class BaseCard extends EffectSource {
             return allAbilities;
         }
         return this.isBlank() ? gainedPersistentEffects : this.abilities.persistentEffects.concat(gainedPersistentEffects);
+    }
+
+    get persistentEffects(): any[] {
+        return this._getPersistentEffects();
     }
 
     /**
@@ -452,6 +497,10 @@ class BaseCard extends EffectSource {
     }
 
     isConflictProvince(): boolean {
+        return false;
+    }
+
+    isInConflictProvince(): boolean {
         return false;
     }
 
@@ -774,6 +823,10 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
+    setPersonalHonorByTokenType(tokenType) {
+        const token = new StatusToken(this.game, this, tokenType === CharacterStatus.Honored);
+        this.setPersonalHonor(token);
+    }
 
     setPersonalHonor(token) {
         if(this.personalHonor && token !== this.personalHonor) {

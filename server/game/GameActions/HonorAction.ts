@@ -24,5 +24,8 @@ export class HonorAction extends CardGameAction {
 
     eventHandler(event): void {
         event.card.honor();
+        if (event.card.isHonored) {
+            event.card.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.card.personalHonor, card: event.card });
+        }
     }
 }

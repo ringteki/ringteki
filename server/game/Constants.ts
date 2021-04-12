@@ -55,6 +55,7 @@ export enum EffectNames {
     CannotHaveOtherRestrictedAttachments = 'cannotHaveOtherRestrictedAttachments',
     CannotParticipateAsAttacker = 'cannotParticipateAsAttacker',
     CannotParticipateAsDefender = 'cannotParticipateAsDefender',
+    CardCostToAttackMilitary = 'cardCostToAttackMilitary',
     ChangeContributionFunction = 'changeContributionFunction',
     ChangeType = 'changeType',
     CopyCharacter = 'copyCharacter',
@@ -71,6 +72,7 @@ export enum EffectNames {
     FateCostToTarget = 'fateCostToTarget',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
+    GainAllAbilitiesDynamic = 'gainAllAbilitiesDynamic',
     GainExtraFateWhenPlayed = 'gainExtraFateWhenPlayed',
     GainPlayAction = 'gainPlayAction',
     HideWhenFaceUp = 'hideWhenFaceUp',
@@ -157,6 +159,7 @@ export enum EffectNames {
     CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants',
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
+    AdditionalAttackedProvince = 'additionalAttackedProvince',
 };
 
 export enum Durations {
@@ -290,6 +293,7 @@ export enum EventNames {
     OnDiscardFavor = 'onDiscardFavor',
     OnStatusTokenDiscarded = 'onStatusTokenDiscarded',
     OnStatusTokenMoved = 'onStatusTokenMoved',
+    OnStatusTokenGained = 'onStatusTokenGained',
     OnCardsDrawn = 'onCardsDrawn',
     OnLookAtCards = 'onLookAtCards',
     OnModifyBid = 'onModifyBid',

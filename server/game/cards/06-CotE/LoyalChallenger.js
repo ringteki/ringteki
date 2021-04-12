@@ -8,7 +8,7 @@ class LoyalChallenger extends DrawCard {
             effect: [
                 AbilityDsl.effects.delayedEffect({
                     when: {
-                        afterConflict: (event, context) => event.conflict.winner === context.player &&
+                        afterConflict: (event, context) => event.conflict.winner === context.source.controller &&
                             context.source.isParticipating()
                     },
                     message: '{0} gains 1 honor due to {1} winning a conflict',
@@ -18,7 +18,7 @@ class LoyalChallenger extends DrawCard {
                 ,
                 AbilityDsl.effects.delayedEffect({
                     when: {
-                        afterConflict: (event, context) => event.conflict.loser === context.player &&
+                        afterConflict: (event, context) => event.conflict.loser === context.source.controller &&
                             context.source.isParticipating()
                     },
                     message: '{0} loses 1 honor due to {1} losing a conflict',

@@ -7,7 +7,7 @@ class AsakoMaezawa2 extends DrawCard {
         this.reaction({
             title: 'Bow a character with no fate',
             when:{
-                afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.player && context.player.opponent
+                afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller && context.player.opponent
             },
             target: {
                 cardType: CardTypes.Character,

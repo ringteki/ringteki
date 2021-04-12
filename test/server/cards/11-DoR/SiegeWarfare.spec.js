@@ -37,7 +37,8 @@ describe('Siege Warfare', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.siegeWarfare);
                 expect(this.p1.getStrength()).toBe(strength - 2);
-                expect(this.getChatLogs(3)).toContain('player1 plays Siege Warfare to reduce the province strength of Shameful Display by 2');
+                expect(this.getChatLogs(5)).toContain('player1 plays Siege Warfare to reduce the province strength of an attacked province by 2');
+                expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Shameful Display by 2');
             });
 
             it('should not reduce the strength of the attacked province below 0', function () {

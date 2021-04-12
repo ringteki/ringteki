@@ -355,6 +355,10 @@ class PlayerInteractionWrapper {
         return this.filterCardsByName(name, locations, side)[0];
     }
 
+    findAllCardsByName(name, locations = 'any', side) {
+        return this.filterCardsByName(name, locations, side);
+    }
+
     /**
      * Filters all of a player's cards using the name and location of a card
      * @param {String} name - the name of the card

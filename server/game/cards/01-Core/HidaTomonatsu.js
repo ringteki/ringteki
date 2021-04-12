@@ -6,7 +6,7 @@ class HidaTomonatsu extends DrawCard {
         this.reaction({
             title: 'Return a character to deck',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isDefending()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isDefending()
             },
             cost: ability.costs.sacrificeSelf(),
             target: {

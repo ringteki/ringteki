@@ -74,7 +74,7 @@ class ProvinceCard extends BaseCard {
     }
 
     isConflictProvince() {
-        return this.game.currentConflict && this.game.currentConflict.conflictProvince === this;
+        return this.game.currentConflict && this.game.currentConflict.getConflictProvinces().includes(this);
     }
 
     canBeAttacked() {
@@ -156,7 +156,8 @@ class ProvinceCard extends BaseCard {
         let menu = super.getMenu();
 
         if(menu) {
-            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.game.currentConflict.conflictProvince && this.controller === this.game.currentConflict.conflictProvince.controller) {
+            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked()
+                && this.game.currentConflict.getConflictProvinces().some(a => a.controller === this.controller)) {
                 menu.push({ command: 'move_conflict', text: 'Move Conflict'});
             }
 

@@ -126,8 +126,8 @@ describe('Ikoma Tsanuri 2', function() {
             this.player1.clickCard(this.tsanuri);
             this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
-            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
-            expect(this.player1).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of an attacked province');
+            expect(this.player1).toHavePrompt('Do you want to trigger a province ability?');
             this.player1.clickPrompt('Yes');
             expect(this.player1.fate).toBe(fate + 1);
             expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -148,6 +148,7 @@ describe('Ikoma Tsanuri 2', function() {
             this.player1.pass();
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.trader2);
+            this.player2.clickCard(this.abandoning);
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.negotiator);
             this.player2.clickCard(this.negotiator);

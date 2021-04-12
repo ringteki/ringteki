@@ -43,6 +43,7 @@ export class MoveTokenAction extends TokenAction {
             } else if(!event.recipient.personalHonor) {
                 event.recipient.setPersonalHonor(event.token);
             }
+            event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.token, card: event.recipient });
         }
     }
 }

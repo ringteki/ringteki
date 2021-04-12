@@ -17,11 +17,13 @@ export interface SelectCardProperties extends CardActionProperties {
     cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
     targets?: boolean;
     message?: string;
+    manuallyRaiseEvent?: boolean;
     messageArgs?: (card: BaseCard, player: Player, properties: SelectCardProperties) => any[];
     gameAction: GameAction;
     selector?: BaseCardSelector;
     mode?: TargetModes;
     numCards?: number;
+    hidePromptIfSingleCard?: boolean;
     subActionProperties?: (card: BaseCard) => any;
     cancelHandler?: () => void;
 }
@@ -31,7 +33,9 @@ export class SelectCardAction extends CardGameAction {
         cardCondition: () => true,
         gameAction: null,
         subActionProperties: card => ({ target: card }),
-        targets: false
+        targets: false,
+        hidePromptIfSingleCard: false,
+        manuallyRaiseEvent: false
     };
 
     constructor(properties: SelectCardProperties | ((context: AbilityContext) => SelectCardProperties)) {
@@ -98,10 +102,22 @@ export class SelectCardAction extends CardGameAction {
                     additionalProperties,
                     properties.subActionProperties(cards)
                 ));
+                if(properties.manuallyRaiseEvent) {
+                    context.game.openEventWindow(events);
+                }
                 return true;
             }
         };
-        context.game.promptForSelect(player, Object.assign(defaultProperties, properties));
+        const finalProperties = Object.assign(defaultProperties, properties);
+        if(properties.hidePromptIfSingleCard) {
+            const cards = properties.selector.getAllLegalTargets(context);
+            if(cards.length === 1) {
+                finalProperties.onSelect(player, cards[0]);
+                return;
+            }
+
+        }
+        context.game.promptForSelect(player, finalProperties);
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {

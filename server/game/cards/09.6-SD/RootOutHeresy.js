@@ -1,4 +1,5 @@
 const DrawCard = require('../../drawcard.js');
+const { Locations, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class RootOutHeresy extends DrawCard {
@@ -8,13 +9,21 @@ class RootOutHeresy extends DrawCard {
             condition: () => this.game.isDuringConflict('political'),
             gameAction: AbilityDsl.actions.discardAtRandom(context => ({ target: context.player.opponent })),
             then: context => ({
-                gameAction: AbilityDsl.actions.cardLastingEffect(() => {
-                    let amount = this.getStrengthModifier(context);
-                    return ({
-                        target: this.game.currentConflict.conflictProvince,
-                        effect: AbilityDsl.effects.modifyProvinceStrength(amount)
-                    });
-                })
+                gameAction: AbilityDsl.actions.selectCard(({
+                    activePromptTitle: 'Choose an attacked province',
+                    hidePromptIfSingleCard: true,
+                    cardType: CardTypes.Province,
+                    location: Locations.Provinces,
+                    cardCondition: card => card.isConflictProvince(),
+                    message: '{0} reduces the strength of {1} by {2}',
+                    messageArgs: cards => [context.player, cards, this.getStrengthModifier(context)],
+                    gameAction: AbilityDsl.actions.cardLastingEffect(() => {
+                        let amount = this.getStrengthModifier(context);
+                        return ({
+                            effect: AbilityDsl.effects.modifyProvinceStrength(amount)
+                        });
+                    })
+                }))
             })
         });
     }
