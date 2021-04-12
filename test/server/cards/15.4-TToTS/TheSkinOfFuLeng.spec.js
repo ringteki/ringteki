@@ -1360,7 +1360,7 @@ describe('The Skin of Fu Leng', function() {
 
                         this.player1.clickPrompt('5');
                         this.player2.clickPrompt('1');
-                        expect(this.player2).toHavePrompt('Do you want to trigger Shameful Display?');
+                        expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
                     });
 
                     it('should allow the "controller of the winning character" to trigger the province', function() {
@@ -1376,7 +1376,7 @@ describe('The Skin of Fu Leng', function() {
 
                         this.player1.clickPrompt('1');
                         this.player2.clickPrompt('5');
-                        expect(this.player2).toHavePrompt('Do you want to trigger Shameful Display?');
+                        expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
                     });
                 });
             });

@@ -5,7 +5,7 @@ class MidnightProwler extends DrawCard {
         this.reaction({
             title: 'Look at the top two card of your opponents conflict deck.',
             when: {
-                afterConflict: (event, context) => this.game.isDuringConflict('military') && context.source.isParticipating() && event.conflict.winner === context.player && context.player.opponent
+                afterConflict: (event, context) => this.game.isDuringConflict('military') && context.source.isParticipating() && event.conflict.winner === context.source.controller && context.player.opponent
             },
             handler: (context) => this.game.promptWithHandlerMenu(context.player, {
                 activePromptTitle: 'Which card do you want to discard?',

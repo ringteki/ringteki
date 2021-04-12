@@ -13,7 +13,7 @@ class StudyTheNaturalWorld extends DrawCard {
                 AbilityDsl.actions.ringLastingEffect(context => ({
                     duration: Durations.UntilEndOfConflict,
                     target: context.game.currentConflict.ring,
-                    effect: AbilityDsl.effects.addElement(context.game.currentConflict.conflictProvince.element)
+                    effect: AbilityDsl.effects.addElement(this.getElementsOfAttackedProvinces(context))
                 })),
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     targetController: context.player,
@@ -39,6 +39,14 @@ class StudyTheNaturalWorld extends DrawCard {
         });
     }
 
+    getElementsOfAttackedProvinces(context) {
+        let elements = [];
+        context.game.currentConflict.getConflictProvinces().forEach(a => {
+            elements = elements.concat(a.getElement());
+        });
+        return elements;
+    }
+
     getElements(context) {
         const capitalize = {
             air: 'Air',
@@ -49,7 +57,7 @@ class StudyTheNaturalWorld extends DrawCard {
         };
 
         let string = '';
-        let elements = context.game.currentConflict.conflictProvince.getElement();
+        let elements = this.getElementsOfAttackedProvinces(context);
         for(let i = 0; i < elements.length; i++) {
             if(i !== 0) {
                 if(i === elements.length - 1) {

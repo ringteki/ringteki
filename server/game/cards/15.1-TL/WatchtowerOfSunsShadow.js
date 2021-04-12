@@ -6,11 +6,14 @@ class WatchtowerOfSunsShadow extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => {
-                if(context.game.currentConflict && context.game.currentConflict.conflictProvince && context.player.isDefendingPlayer()) {
-                    let cards = context.player.getDynastyCardsInProvince(context.game.currentConflict.conflictProvince.location);
-                    return cards.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall'));
+                if(!context.player.isDefendingPlayer()) {
+                    return false;
                 }
-                return false;
+                let cardsInProvinces = [];
+                context.game.currentConflict.getConflictProvinces().forEach(p => {
+                    cardsInProvinces = cardsInProvinces.concat(context.player.getDynastyCardsInProvince(p.location));
+                });
+                return cardsInProvinces.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall'));
             },
             targetController: Players.Opponent,
             match: (card) => card.isAttacking(),

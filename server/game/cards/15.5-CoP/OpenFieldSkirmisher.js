@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class OpenFieldSkirmisher extends DrawCard {
@@ -7,13 +7,20 @@ class OpenFieldSkirmisher extends DrawCard {
         this.action({
             title: 'Reduce Province Strength',
             condition: context => context.source.isAttacking(),
-            effect: 'reduce the strength of {1} by 3',
+            effect: 'reduce the strength of an attacked province by 3',
             cost: AbilityDsl.costs.removeFateFromSelf(),
-            effectArgs: context => context.game.currentConflict.conflictProvince,
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
-                target: context.game.currentConflict.conflictProvince,
-                targetLocation: Locations.Provinces,
-                effect: AbilityDsl.effects.modifyProvinceStrength(-3)
+            gameAction: AbilityDsl.actions.selectCard(context => ({
+                activePromptTitle: 'Choose an attacked province',
+                hidePromptIfSingleCard: true,
+                cardType: CardTypes.Province,
+                location: Locations.Provinces,
+                cardCondition: card => card.isConflictProvince(),
+                message: '{0} reduces the strength of {1} by 3',
+                messageArgs: cards => [context.player, cards],
+                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                    targetLocation: Locations.Provinces,
+                    effect: AbilityDsl.effects.modifyProvinceStrength(-3)
+                }))
             }))
         });
     }

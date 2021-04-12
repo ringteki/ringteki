@@ -10,8 +10,7 @@ class HirumaYoshino extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 location: Locations.Provinces,
-                cardCondition: card => card.location === this.game.currentConflict.conflictProvince.location &&
-                    card.controller === this.game.currentConflict.conflictProvince.controller &&
+                cardCondition: card => card.isInConflictProvince() &&
                     card.printedMilitarySkill > 0,
                 gameAction: AbilityDsl.actions.cardLastingEffect({
                     targetLocation: Locations.Provinces,

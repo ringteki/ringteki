@@ -8,7 +8,7 @@ class UnifiedCompany extends DrawCard {
             title: 'Put a 2 cost or less bushi into play from dynasty discard',
             when: {
                 afterConflict: (event, context) => {
-                    return event.conflict.winner === context.player &&
+                    return event.conflict.winner === context.source.controller &&
                         context.source.isParticipating() &&
                         context.player.opponent &&
                         context.player.hand.size() < context.player.opponent.hand.size();

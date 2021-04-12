@@ -500,6 +500,10 @@ class BaseCard extends EffectSource {
         return false;
     }
 
+    isInConflictProvince(): boolean {
+        return false;
+    }
+
     isAttacking(): boolean {
         return this.game.currentConflict && this.game.currentConflict.isAttacking(this);
     }

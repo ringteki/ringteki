@@ -87,6 +87,7 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player1.fate;
             this.player1.clickCard(this.trader);
+            this.player1.clickCard(this.revels);
             expect(this.player1).toHavePrompt('Midnight Revels');
             expect(this.player1).toBeAbleToSelect(this.trader);
             expect(this.player1).toBeAbleToSelect(this.trader2);
@@ -94,7 +95,8 @@ describe('Countryside Trader', function() {
             this.player1.clickCard(this.trader2);
 
             expect(this.player1.fate).toBe(playerFatePreTrader - 1);
-            expect(this.getChatLogs(10)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve the province ability of Midnight Revels');
+            expect(this.getChatLogs(10)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve Midnight Revels\'s Bow a character ability');
+            expect(this.getChatLogs(10)).toContain('player1 resolves Midnight Revels to bow Countryside Trader');
             expect(this.trader2.bowed).toBe(true);
         });
 
@@ -112,13 +114,15 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player1.fate;
             this.player1.clickCard(this.trader);
+            this.player1.clickCard(this.restoration);
             expect(this.player2).toHavePrompt('Restoration of Balance');
 
             this.player2.clickCard(this.katana);
             expect(this.katana.location).toBe('conflict discard pile');
 
             expect(this.player1.fate).toBe(playerFatePreTrader - 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve the province ability of Restoration of Balance');
+            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve Restoration of Balance\'s Force opponent to discard to 4 cards ability');
+            expect(this.getChatLogs(5)).toContain('player1 resolves Restoration of Balance to make player2 discard 1 cards');
             expect(this.getChatLogs(5)).toContain('player2 discards Fine Katana');
         });
 
@@ -136,9 +140,10 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player1.fate;
             this.player1.clickCard(this.trader);
+            this.player1.clickCard(this.manicuredGarden);
 
             expect(this.player1.fate).toBe(playerFatePreTrader); // manicured fate
-            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve the province ability of Manicured Garden');
+            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve Manicured Garden\'s Gain 1 fate ability');
             expect(this.getChatLogs(5)).toContain('player1 resolves Manicured Garden to gain 1 fate');
         });
 
@@ -156,12 +161,15 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player1.fate;
             this.player1.clickCard(this.trader);
+            this.player1.clickCard(this.meditations);
             expect(this.player1).toHavePrompt('Meditations on the Tao');
             expect(this.player1).toBeAbleToSelect(this.trader); // attacker
             expect(this.player1).not.toBeAbleToSelect(this.trader2); // defender
 
             expect(this.player1.fate).toBe(playerFatePreTrader - 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve the province ability of Meditations on the Tao');
+            this.player1.clickCard(this.trader);
+            expect(this.getChatLogs(5)).toContain('player1 uses Countryside Trader, spending 1 fate to resolve Meditations on the Tao\'s Remove a fate from a character ability');
+            expect(this.getChatLogs(5)).toContain('player1 resolves Meditations on the Tao to remove 1 fate from Countryside Trader');
         });
 
         it('should regard card text - mentions defending characters', function() {
@@ -180,12 +188,14 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player2.fate;
             this.player2.clickCard(this.trader2);
+            this.player2.clickCard(this.kensonNoGakka);
 
             expect(this.trader2.isHonored).toBe(false); // attacker
             expect(this.trader.isHonored).toBe(true); // defender
 
             expect(this.player2.fate).toBe(playerFatePreTrader - 1);
-            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve the province ability of Kenson no Gakka');
+            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve Kenson no Gakka\'s Honor all defenders ability');
+            expect(this.getChatLogs(5)).toContain('player2 resolves Kenson no Gakka to honor Countryside Trader');
         });
 
         it('should regard card text - mentions attacking player', function() {
@@ -204,11 +214,13 @@ describe('Countryside Trader', function() {
 
             const playerFatePreTrader = this.player2.fate;
             this.player2.clickCard(this.trader2);
+            this.player2.clickCard(this.upholding);
 
             expect(this.player2).toHavePrompt('Upholding Authority');
 
             expect(this.player2.fate).toBe(playerFatePreTrader - 1);
-            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve the province ability of Upholding Authority');
+            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve Upholding Authority\'s Look at the attacking player\'s hand and discard all copies of a card ability');
+            expect(this.getChatLogs(5)).toContain('player2 resolves Upholding Authority to look at the attacking player\'s hand and choose a card to be discarded');
             expect(this.getChatLogs(5)).toContain('player2 reveals their hand: Court Games, Fine Katana, For Shame!, Ornate Fan and Way of the Crane');
         });
 
@@ -229,6 +241,7 @@ describe('Countryside Trader', function() {
             const playerFatePreTrader = this.player2.fate;
             const playerHonorPreTrader = this.player2.honor;
             this.player2.clickCard(this.trader2);
+            this.player2.clickCard(this.brothersGiftDojo);
 
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.trader2);
@@ -238,7 +251,8 @@ describe('Countryside Trader', function() {
             expect(this.player2.honor).toBe(playerHonorPreTrader - 1); // dojo cost
             expect(this.trader2.isAttacking()).toBe(false);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve the province ability of Brother’s Gift Dōjō');
+            expect(this.getChatLogs(5)).toContain('player2 uses Countryside Trader, spending 1 fate to resolve Brother’s Gift Dōjō\'s Move a character home ability');
+            expect(this.getChatLogs(5)).toContain('player2 resolves Brother’s Gift Dōjō, losing 1 honor to send Countryside Trader home');
         });
     });
 });

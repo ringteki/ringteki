@@ -7,7 +7,7 @@ class HidaSugi extends DrawCard {
         this.reaction({
             title: 'Move a discarded dynasty card',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             target: {
                 location: Locations.DynastyDiscardPile,

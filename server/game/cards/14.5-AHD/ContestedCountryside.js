@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class ContestedCountryside extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            match: card => card === this.game.currentConflict.conflictProvince,
+            match: card => card.isConflictProvince(),
             targetLocation: Locations.Provinces,
             condition: context => context.player.isAttackingPlayer(),
             targetController: Players.Opponent,

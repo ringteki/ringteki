@@ -10,7 +10,7 @@ class Pilgrimage extends ProvinceCard {
     }
 
     cancelRingEffect(event) {
-        if(!this.isBroken && !this.isBlank() && event.context.game.currentConflict && event.context.game.currentConflict.conflictProvince === this && !event.cancelled) {
+        if(!this.isBroken && !this.isBlank() && event.context.game.currentConflict && this.isConflictProvince() && !event.cancelled) {
             event.cancel();
             this.game.addMessage('{0} cancels the ring effect', this);
         }
