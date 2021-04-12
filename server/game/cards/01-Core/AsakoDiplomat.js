@@ -7,7 +7,7 @@ class AsakoDiplomat extends DrawCard {
         this.reaction({
             title: 'Honor or dishonor a character',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player &&
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller &&
                                                    context.source.isParticipating()
             },
             target: {

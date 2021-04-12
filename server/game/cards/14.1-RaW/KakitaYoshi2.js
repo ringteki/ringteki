@@ -7,7 +7,7 @@ class KakitaYoshi2 extends DrawCard {
         this.reaction({
             title: 'Dishonor characters',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isAttacking() && event.conflict.conflictType === 'political'
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isAttacking() && event.conflict.conflictType === 'political'
             },
             target: {
                 mode: TargetModes.UpToVariable,

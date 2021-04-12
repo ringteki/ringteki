@@ -7,7 +7,7 @@ class GarantoGuardian extends DrawCard {
         this.reaction({
             title: 'Resolve a ring effect',
             when: {
-                afterConflict: (event, context) => context.player.isDefendingPlayer() && event.conflict.winner === context.player && context.source.isParticipating()
+                afterConflict: (event, context) => context.player.isDefendingPlayer() && event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             gameAction: AbilityDsl.actions.selectRing(context => ({
                 activePromptTitle: 'Choose a ring effect to resolve',

@@ -16,7 +16,7 @@ class SelfUnderstanding extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Resolve all claimed ring effects',
                 when: {
-                    afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating()
+                    afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
                 },
                 condition: context => context.player.getClaimedRings().length > 0,
                 gameAction: AbilityDsl.actions.resolveRingEffect(context => ({

@@ -8,7 +8,7 @@ class DaidojiHarrier extends DrawCard {
             title: 'Discard an opponent\'s card',
             when: {
                 afterConflict: (event, context) => context.source.isParticipating() &&
-                                                    event.conflict.winner === context.player &&
+                                                    event.conflict.winner === context.source.controller &&
                                                     context.player.opponent && event.conflict.conflictType === 'military'
             },
             target: {
