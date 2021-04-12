@@ -7,7 +7,7 @@ class RepentantLegion extends DrawCard {
         this.reaction({
             title: 'fill provinces with a card',
             when: {
-                onBreakProvince: (event, context) => context.source.isParticipating() && event.conflict.conflictProvince.owner !== context.player
+                onBreakProvince: (event, context) => context.source.isParticipating() && event.conflict.getConflictProvinces().some(a => a.owner !== context.player)
             },
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.moveCard(context => ({

@@ -9,7 +9,7 @@ class Breakthrough extends DrawCard {
                 onConflictFinished: (event, context) =>
                     event.conflict.attackingPlayer === context.player && event.conflict.winner === context.player &&
                     this.game.getConflicts(context.player).filter(conflict => !conflict.passed).length === 1 &&
-                    event.conflict.conflictProvince && event.conflict.conflictProvince.isBroken
+                    event.conflict.getConflictProvinces().some(a => a === a.isBroken)
             },
             gameAction: AbilityDsl.actions.initiateConflict({ canPass: false })
         });

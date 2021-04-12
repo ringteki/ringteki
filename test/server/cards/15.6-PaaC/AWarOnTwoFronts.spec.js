@@ -246,7 +246,7 @@ describe('A War on Two Fronts', function() {
                     player2: {
                         inPlay: ['doji-whisperer'],
                         hand: ['raise-the-alarm', 'talisman-of-the-sun'],
-                        provinces: ['manicured-garden', 'meditations-on-the-tao', 'midnight-revels', 'kuni-wasteland'],
+                        provinces: ['manicured-garden', 'meditations-on-the-tao', 'midnight-revels', 'defend-the-wall'],
                         dynastyDiscard: ['kakita-toshimoko', 'kakita-yoshi']
                     }
                 });
@@ -272,7 +272,7 @@ describe('A War on Two Fronts', function() {
                 this.garden = this.player2.findCardByName('manicured-garden');
                 this.tao = this.player2.findCardByName('meditations-on-the-tao');
                 this.revels = this.player2.findCardByName('midnight-revels');
-                this.wasteland = this.player2.findCardByName('kuni-wasteland');
+                this.wall = this.player2.findCardByName('defend-the-wall');
                 this.sd = this.player2.findCardByName('shameful-display', 'stronghold province');
                 this.alarm = this.player2.findCardByName('raise-the-alarm');
             });
@@ -396,7 +396,7 @@ describe('A War on Two Fronts', function() {
                 expect(this.player2).not.toBeAbleToSelect(this.garden);
                 expect(this.player2).not.toBeAbleToSelect(this.tao);
                 expect(this.player2).toBeAbleToSelect(this.revels);
-                expect(this.player2).toBeAbleToSelect(this.wasteland);
+                expect(this.player2).toBeAbleToSelect(this.wall);
                 expect(this.player2).not.toBeAbleToSelect(this.sd);
 
                 this.player2.clickCard(this.revels);
@@ -404,6 +404,30 @@ describe('A War on Two Fronts', function() {
                 expect(this.game.currentConflict.getConflictProvinces()).not.toContain(this.garden);
                 expect(this.game.currentConflict.getConflictProvinces()).toContain(this.tao);
                 expect(this.game.currentConflict.getConflictProvinces()).toContain(this.revels);
+            });
+
+            it('Defend The Wall - should trigger if its the second province', function() {
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    attackers: [this.negotiator],
+                    type: 'military',
+                    province: this.garden,
+                    ring: 'air'
+                });
+                this.player1.clickCard(this.war);
+                this.player1.clickCard(this.wall);
+
+                this.player2.clickCard(this.dojiWhisperer);
+                this.player2.clickPrompt('Done');
+                this.player2.playAttachment(this.talisman, this.dojiWhisperer);
+                this.negotiator.bowed = true;
+                this.noMoreActions();
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.wall);
+                this.player2.clickCard(this.wall);
+                expect(this.player2).toHavePrompt('Air Ring');
             });
         });
     });

@@ -18,7 +18,7 @@ class AWarOnTwoFronts extends DrawCard {
                     AbilityDsl.actions.conflictLastingEffect(context => ({
                         duration: Durations.UntilEndOfConflict,
                         effect: AbilityDsl.effects.additionalAttackedProvince(context.target)
-                    })),
+                    }))
                 ])
             },
             effect: '{2}also attack {1} this conflict!',
