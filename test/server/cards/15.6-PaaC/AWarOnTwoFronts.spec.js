@@ -121,6 +121,8 @@ describe('A War on Two Fronts', function() {
                 let honor = this.player1.honor;
 
                 this.player2.clickPrompt('Done');
+                this.player2.clickCard(this.garden);
+                expect(this.getChatLogs(5)).toContain('Attacker is winning the conflict - Manicured Garden and Before the Throne are breaking!');
                 this.noMoreActions();
                 expect(this.player1).toHavePrompt('Break Manicured Garden');
                 this.player1.clickPrompt('No');
@@ -148,6 +150,8 @@ describe('A War on Two Fronts', function() {
                 this.player1.clickCard(this.garden);
 
                 this.player2.clickPrompt('Done');
+                this.player2.clickCard(this.garden);
+                expect(this.getChatLogs(5)).toContain('Attacker is winning the conflict - Manicured Garden is breaking!');
                 this.noMoreActions();
                 expect(this.player1).toHavePrompt('Break Manicured Garden');
                 this.player1.clickPrompt('No');
