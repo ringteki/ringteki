@@ -49,6 +49,8 @@ describe('Disdainful Remark', function () {
 
                 it('should increase the province\'s strength by the opponent\'s hand size', function () {
                     // Pilgrimage 5 PS, card ability +3 from opponent's hand size
+                    expect(this.getChatLogs(5)).toContain('player2 plays Disdainful Remark to increase the strength of an attacked province');
+                    expect(this.getChatLogs(5)).toContain('player2 increases the strength of Pilgrimage by 3');
                     expect(this.game.currentConflict.conflictProvince.getStrength()).toBe(parseInt(this.game.currentConflict.conflictProvince.cardData.strength) + this.player1.hand.length);
                 });
             });

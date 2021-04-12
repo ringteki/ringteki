@@ -1,4 +1,4 @@
-import { Locations } from '../../Constants.js';
+import { Locations, CardTypes } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 
@@ -9,12 +9,18 @@ class MatsuTsuko2 extends DrawCard {
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.player
                     && context.source.isAttacking()
-                    && event.conflict.conflictProvince
-                    && event.conflict.conflictProvince.location !== Locations.StrongholdProvince
                     && context.player.opponent && context.player.getTotalHonor() > context.player.opponent.getTotalHonor()
             },
-            gameAction: AbilityDsl.actions.break(context => ({
-                target: context.game.currentConflict.conflictProvince
+            effect: 'break an attacked province',
+            gameAction: AbilityDsl.actions.selectCard(context => ({
+                activePromptTitle: 'Choose an attacked province',
+                hidePromptIfSingleCard: true,
+                cardType: CardTypes.Province,
+                location: Locations.Provinces,
+                cardCondition: card => card.isConflictProvince() && card.location !== Locations.StrongholdProvince,
+                message: '{0} breaks {1}',
+                messageArgs: cards => [context.player, cards],
+                gameAction: AbilityDsl.actions.break()
             }))
         });
     }
