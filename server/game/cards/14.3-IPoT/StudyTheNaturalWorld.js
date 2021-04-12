@@ -43,7 +43,7 @@ class StudyTheNaturalWorld extends DrawCard {
         let elements = [];
         context.game.currentConflict.getConflictProvinces().forEach(a => {
             elements = elements.concat(a.getElement());
-        })
+        });
         return elements;
     }
 

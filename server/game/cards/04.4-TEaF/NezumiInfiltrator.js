@@ -44,7 +44,7 @@ class NezumiInfiltrator extends DrawCard {
                             targetLocation: Locations.Provinces,
                             effect: (
                                 context.target.getStrength() > 1 ?
-                                AbilityDsl.effects.modifyProvinceStrength(-1) : []
+                                    AbilityDsl.effects.modifyProvinceStrength(-1) : []
                             )
                         }))
                     }

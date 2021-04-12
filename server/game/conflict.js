@@ -372,7 +372,7 @@ class Conflict extends GameObject {
             this.provinceStrengthsAtResolution.push({
                 province: a,
                 strength: a.getStrength()
-            })
+            });
         });
 
         if(this.attackerSkill === 0 && this.defenderSkill === 0) {

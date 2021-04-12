@@ -24,7 +24,7 @@ class HeroOfThreeTrees extends DrawCard {
                             return ({ target: card });
                         },
                         message: '{0} reduces the strength of {1} by 1',
-                        messageArgs: cards => [context.player, cards],        
+                        messageArgs: cards => [context.player, cards],
                         gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                             effect: (
                                 context.target.getStrength() > 1 ?

@@ -11,7 +11,7 @@ class RazeToTheGround extends DrawCard {
                 AbilityDsl.costs.breakProvince({ cardCondition: card => card.isFaceup() })
             ],
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player&& event.conflict.conflictType === 'military'
+                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictType === 'military'
             },
             effect: 'break an attacked province',
             gameAction: AbilityDsl.actions.selectCard(context => ({
