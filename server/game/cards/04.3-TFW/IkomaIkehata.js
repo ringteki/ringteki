@@ -6,7 +6,7 @@ class IkomaIkehata extends DrawCard {
         this.reaction({
             title: 'Honor a character and draw a card',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating() && event.conflict.conflictType === 'political'
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating() && event.conflict.conflictType === 'political'
             },
             target: {
                 activePromptTitle: 'Choose a character to honor',

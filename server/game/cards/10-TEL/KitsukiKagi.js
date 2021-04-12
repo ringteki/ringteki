@@ -7,7 +7,7 @@ class KitsukiKagi extends DrawCard {
         this.reaction({
             title: 'Remove cards from the game',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             targets: {
                 first: {

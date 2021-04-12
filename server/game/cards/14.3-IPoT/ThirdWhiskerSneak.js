@@ -17,7 +17,7 @@ class ThirdWhiskerSneak extends DrawCard {
         this.reaction({
             title: 'Add a card to your hand',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.conflictUnopposed && context.source.isParticipating()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && event.conflict.conflictUnopposed && context.source.isParticipating()
             },
             effect: 'look at the top {1} cards of their conflict deck',
             effectArgs: context => [context.player.getProvinces(a => !a.isBroken).length],

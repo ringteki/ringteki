@@ -7,7 +7,7 @@ class MatsuTsuko2 extends DrawCard {
         this.reaction({
             title: 'Break the province',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller
                     && context.source.isAttacking()
                     && context.player.opponent && context.player.getTotalHonor() > context.player.opponent.getTotalHonor()
             },

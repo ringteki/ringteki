@@ -5,7 +5,7 @@ class HidaKotoe extends DrawCard {
     setupCardAbilities(ability) {
         this.reaction({
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isDefending()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isDefending()
             },
             title: 'Discard an attachment',
             target: {

@@ -8,7 +8,7 @@ class GoldenPlainsRaider extends DrawCard {
             title: 'Discard a card in a province',
             when: {
                 afterConflict: (event, context) => context.source.isAttacking() &&
-                                                    event.conflict.winner === context.player && context.player.opponent
+                                                    event.conflict.winner === context.source.controller && context.player.opponent
             },
             target: {
                 location: Locations.Provinces,
