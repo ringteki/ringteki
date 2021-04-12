@@ -34,7 +34,12 @@ class Conflict extends GameObject {
         if(!this.conflictProvince) {
             return [];
         }
-        return [this.conflictProvince];
+        let provinces = [this.conflictProvince];
+        let effects = this.getEffects(EffectNames.AdditionalAttackedProvince);
+        if(effects.length !== 0) {
+            provinces = provinces.concat(effects);
+        }
+        return provinces;
     }
 
     isCardInConflictProvince(card) {

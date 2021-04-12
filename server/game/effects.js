@@ -238,7 +238,8 @@ const Effects = {
     modifyConflictElementsToResolve: (value) => EffectBuilder.conflict.static(EffectNames.ModifyConflictElementsToResolve, value), // TODO: Add this to lasting effect checks
     restrictNumberOfDefenders: (value) => EffectBuilder.conflict.static(EffectNames.RestrictNumberOfDefenders, value), // TODO: Add this to lasting effect checks
     resolveConflictEarly: () => EffectBuilder.player.static(EffectNames.ResolveConflictEarly),
-    forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed)
+    forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed),
+    additionalAttackedProvince: (province) => EffectBuilder.conflict.static(EffectNames.AdditionalAttackedProvince, province),
 };
 
 module.exports = Effects;

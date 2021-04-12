@@ -159,6 +159,7 @@ export enum EffectNames {
     CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants',
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
+    AdditionalAttackedProvince = 'additionalAttackedProvince',
 };
 
 export enum Durations {
