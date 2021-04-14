@@ -66,7 +66,7 @@ class AncestralSight extends DrawCard {
                     cardCondition: (card, context) => {
                         return !context.costs.ancestralSightCost || context.costs.ancestralSightCost && card.name === context.costs.ancestralSightCost.name;
                     },
-                    gameAction: AbilityDsl.actions.placeFate()
+                    gameAction: AbilityDsl.actions.placeFate(context => ({ origin: context.target.controller }))
                 }
             })
         });
