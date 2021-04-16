@@ -71,7 +71,8 @@ describe('Ancestral Sight', function() {
             expect(this.player1).not.toBeAbleToSelect(this.spiritcaller);
         });
 
-        it('should put a fate on the selected character', function() {
+        it('should put a fate on the selected character from your pool', function() {
+            let pfate = this.player1.fate;
             let fate = this.toshimoko.fate;
             this.player1.clickCard(this.sight);
             this.player1.clickCard(this.spiritcaller);
@@ -80,6 +81,7 @@ describe('Ancestral Sight', function() {
             this.player1.clickCard(this.toshimoko2);
             this.player1.clickCard(this.toshimoko);
 
+            expect(this.player1.fate).toBe(pfate - 1);
             expect(this.toshimoko.fate).toBe(fate + 1);
             expect(this.toshimoko2.location).toBe('dynasty deck');
             expect(this.player1.player.dynastyDeck.last()).toBe(this.toshimoko2);
