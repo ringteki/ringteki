@@ -5,7 +5,7 @@ describe('Shosuro Deceiver', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['shosuro-deceiver', 'doji-kuwanan', 'blackmail-artist', 'asahina-artisan'],
-                    hand: ['duelist-training', 'for-shame', 'let-go', 'hawk-tattoo']
+                    hand: ['duelist-training', 'for-shame', 'let-go', 'hawk-tattoo', 'way-with-words', 'soul-beyond-reproach']
                 },
                 player2: {
                     inPlay: ['beloved-advisor', 'kaiu-envoy', 'ageless-crone', 'miya-mystic', 'blackmail-artist', 'shiba-yojimbo'],
@@ -21,6 +21,8 @@ describe('Shosuro Deceiver', function() {
             this.letGo = this.player1.findCardByName('let-go');
             this.hawk = this.player1.findCardByName('hawk-tattoo');
             this.artisan = this.player1.findCardByName('asahina-artisan');
+            this.words = this.player1.findCardByName('way-with-words');
+            this.soul = this.player1.findCardByName('soul-beyond-reproach');
 
             this.advisor = this.player2.findCardByName('beloved-advisor');
             this.envoy = this.player2.findCardByName('kaiu-envoy');
@@ -99,6 +101,56 @@ describe('Shosuro Deceiver', function() {
             this.player1.clickCard(this.deceiver);
             this.player2.clickCard(this.cloud);
             this.player2.clickCard(this.deceiver);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.deceiver);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.letGo);
+            this.player1.clickCard(this.cloud);
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.deceiver);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should not get the ability if the target is clouded', function() {
+            this.advisor.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.deceiver],
+                defenders: [this.advisor],
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.cloud);
+            this.player2.clickCard(this.advisor);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.deceiver);
+            expect(this.getChatLogs(5)).not.toContain('player1 uses Shosuro Deceiver\'s gained ability from Beloved Advisor to draw 1 card');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.letGo);
+            this.player1.clickCard(this.cloud);
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.deceiver);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shosuro Deceiver\'s gained ability from Beloved Advisor to draw 1 card');
+        });
+
+        it('should not regain the ability if the target is clouded', function() {
+            this.advisor.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.deceiver],
+                defenders: [this.advisor],
+                type: 'military'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.deceiver);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(5)).toContain('player1 uses Shosuro Deceiver\'s gained ability from Beloved Advisor to draw 1 card');
+            this.player2.clickCard(this.cloud);
+            this.player2.clickCard(this.advisor);
             expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.deceiver);
             expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -285,6 +337,61 @@ describe('Shosuro Deceiver', function() {
             this.player1.clickCard(this.deceiver);
             expect(this.artisan.inConflict).toBe(true);
             expect(this.getChatLogs(5)).toContain('player1 uses Shosuro Deceiver\'s gained ability from Shiba Yōjimbō to cancel the effects of Way of the Open Hand');
+        });
+
+        it('should lose reactions if the character is rehonored', function() {
+            this.advisor.dishonor();
+            this.artist.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.deceiver, this.artist],
+                defenders: [this.advisor, this.artist2],
+                type: 'political'
+            });
+
+            let honor1 = this.player1.honor;
+            let honor2 = this.player2.honor;
+
+            this.player2.pass();
+            this.player1.clickCard(this.soul);
+            this.player1.clickCard(this.artist);
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.artist);
+            expect(this.player1).not.toBeAbleToSelect(this.deceiver);
+
+            this.player1.clickCard(this.artist);
+            this.player1.clickCard(this.deceiver);
+
+            expect(this.player1.honor).toBe(honor1 + 1);
+            expect(this.player2.honor).toBe(honor2 - 1);
+        });
+
+        it('should not gain abilities on itself', function() {
+            this.deceiver.dishonor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.deceiver, this.artist],
+                defenders: [this.advisor, this.artist2],
+                type: 'political'
+            });
+
+            let honor1 = this.player1.honor;
+            let honor2 = this.player2.honor;
+
+            this.player2.pass();
+            this.player1.playAttachment(this.words, this.deceiver);
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.deceiver);
+            this.player1.clickCard(this.deceiver);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.deceiver);
+            this.player1.clickCard(this.deceiver);
+
+            expect(this.player1.honor).toBe(honor1 + 1);
+            expect(this.player2.honor).toBe(honor2 - 1);
         });
     });
 });

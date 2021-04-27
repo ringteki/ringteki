@@ -19,7 +19,7 @@ class HidaKisada extends DrawCard {
     }
 
     onInitiateAbilityEffectsWouldInterrupt(event) {
-        if(!this.firstActionEvent[event.context.player.uuid] && this.game.isDuringConflict() && event.context.ability.abilityType === 'action' && !event.context.ability.cannotBeCancelled) {
+        if(!this.firstActionEvent[event.context.player.uuid] && this.game.isDuringConflict() && event.context.ability.abilityType === 'action' && !event.context.ability.isKeywordAbility() && !event.context.ability.cannotBeCancelled) {
             this.firstActionEvent[event.context.player.uuid] = event;
         }
     }
