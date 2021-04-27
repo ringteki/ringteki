@@ -169,5 +169,42 @@ describe('Hida Kisada', function() {
                 expect(this.berserker.location).toBe('play area');
             });
         });
+
+        describe('Hida Kisada\'s constant effect with covert', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['underhanded-samurai'],
+                        hand: ['banzai']
+                    },
+                    player2: {
+                        inPlay: ['hida-kisada']
+                    }
+                });
+
+                this.samurai = this.player1.findCardByName('underhanded-samurai');
+                this.banzai = this.player1.findCardByName('banzai');
+                this.hidaKisada = this.player2.findCardByName('hida-kisada');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+            });
+
+            it('should not cancel covert', function() {
+                this.noMoreActions();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.shamefulDisplay);
+                this.player1.clickCard(this.samurai);
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Choose covert target for Underhanded Samurai');
+                this.player1.clickCard(this.hidaKisada);
+                this.player2.clickCard(this.hidaKisada);
+                this.player2.clickPrompt('Done');
+                expect(this.hidaKisada.inConflict).toBe(false);
+                this.player2.pass();
+                this.player1.clickCard(this.banzai);
+                this.player1.clickCard(this.samurai);
+                expect(this.getChatLogs(10)).toContain('player1 attempts to initiate Banzai!, but Hida Kisada cancels it');
+            });
+        });
     });
 });

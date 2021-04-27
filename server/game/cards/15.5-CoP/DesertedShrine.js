@@ -32,7 +32,9 @@ class DesertedShrine extends ProvinceCard {
 
                     return choices;
                 }
-            }
+            },
+            effect: 'discard the top 10 cards of {1} deck',
+            effectArgs: context => [context.select]
         });
     }
 
