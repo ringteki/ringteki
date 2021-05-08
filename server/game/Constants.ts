@@ -21,7 +21,8 @@ export enum Locations {
 
 export enum CharacterStatus {
     Honored = 'honored',
-    Dishonored = 'dishonored'
+    Dishonored = 'dishonored',
+    Tainted = 'tainted'
 }
 
 export enum Decks {
