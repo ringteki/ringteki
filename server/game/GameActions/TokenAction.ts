@@ -1,6 +1,6 @@
 import { GameAction, GameActionProperties } from './GameAction';
 import AbilityContext = require('../AbilityContext');
-import StatusToken = require('../StatusToken');
+import StatusToken = require('../StatusTokens/StatusToken');
 
 export interface TokenActionProperties extends GameActionProperties {}
 

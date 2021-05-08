@@ -1,6 +1,6 @@
-const EffectSource = require('./EffectSource');
-const AbilityDsl = require('./abilitydsl');
-const { CardTypes } = require('./Constants');
+const EffectSource = require('../EffectSource');
+const AbilityDsl = require('../abilitydsl');
+const { CardTypes } = require('../Constants');
 
 class StatusToken extends EffectSource {
     constructor(game, card, isHonored) {

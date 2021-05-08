@@ -1,7 +1,7 @@
 import { TokenAction, TokenActionProperties} from './TokenAction';
 import { EventNames } from '../Constants';
 import AbilityContext = require("../AbilityContext");
-import StatusToken = require('../StatusToken');
+import StatusToken = require('../StatusTokens/StatusToken');
 
 export interface DiscardStatusProperties extends TokenActionProperties {
 }

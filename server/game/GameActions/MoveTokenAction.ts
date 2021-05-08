@@ -1,7 +1,7 @@
 import { TokenAction, TokenActionProperties} from './TokenAction';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
-import StatusToken = require('../StatusToken');
+import StatusToken = require('../StatusTokens/StatusToken');
 import { EventNames, Locations } from '../Constants';
 
 export interface MoveTokenProperties extends TokenActionProperties {
