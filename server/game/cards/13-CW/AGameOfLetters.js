@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { TargetModes, Players, CardTypes } = require('../../Constants');
+const { TargetModes, Players, CardTypes, CharacterStatus } = require('../../Constants');
 
 class AGameOfLetters extends DrawCard {
     setupCardAbilities() {
@@ -20,7 +20,7 @@ class AGameOfLetters extends DrawCard {
                     cardCondition: (card, context) => card.controller !== context.tokens.token.card.controller && card.isParticipating(),
                     player: Players.Any,
                     gameAction: AbilityDsl.actions.conditional({
-                        condition: context => context.tokens.token.honored,
+                        condition: context => context.tokens.token.grantedStatus === CharacterStatus.Honored,
                         trueGameAction: AbilityDsl.actions.honor(),
                         falseGameAction: AbilityDsl.actions.dishonor()
                     })

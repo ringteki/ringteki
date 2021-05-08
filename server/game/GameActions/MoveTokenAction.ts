@@ -2,7 +2,7 @@ import { TokenAction, TokenActionProperties} from './TokenAction';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import StatusToken = require('../StatusTokens/StatusToken');
-import { EventNames, Locations } from '../Constants';
+import { EventNames, Locations, CharacterStatus } from '../Constants';
 
 export interface MoveTokenProperties extends TokenActionProperties {
     recipient: DrawCard;
@@ -21,9 +21,9 @@ export class MoveTokenAction extends TokenAction {
         const { recipient } = this.getProperties(context) as MoveTokenProperties;
         if(!recipient || recipient.location !== Locations.PlayArea) {
             return false;
-        } else if(token.honored && (recipient.isHonored || !recipient.checkRestrictions('receiveHonorToken', context))) {
+        } else if(token.grantedStatus === CharacterStatus.Honored && (recipient.isHonored || !recipient.checkRestrictions('receiveHonorToken', context))) {
             return false;
-        } else if(token.dishonored && (recipient.isDishonored || !recipient.checkRestrictions('receiveDishonorToken', context))) {
+        } else if(token.grantedStatus === CharacterStatus.Dishonored && (recipient.isDishonored || !recipient.checkRestrictions('receiveDishonorToken', context))) {
             return false;
         }
         return super.canAffect(token, context, additionalProperties);
@@ -38,7 +38,7 @@ export class MoveTokenAction extends TokenAction {
     eventHandler(event): void {
         if(event.token.card.personalHonor === event.token) {
             event.token.card.makeOrdinary();
-            if(event.recipient.isHonored && event.token.dishonored || event.recipient.isDishonored && event.token.honored) {
+            if((event.recipient.isHonored && event.token.grantedStatus === CharacterStatus.Dishonored) || (event.recipient.isDishonored && event.token.grantedStatus === CharacterStatus.Honored)) {
                 event.recipient.makeOrdinary();
             } else if(!event.recipient.personalHonor) {
                 event.recipient.setPersonalHonor(event.token);

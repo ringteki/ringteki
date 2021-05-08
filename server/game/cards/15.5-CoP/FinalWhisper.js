@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Players, CharacterStatus } = require('../../Constants');
+const { CardTypes, Players } = require('../../Constants');
 
 class FinalWhisper extends DrawCard {
     setupCardAbilities() {
@@ -15,7 +15,7 @@ class FinalWhisper extends DrawCard {
                 controller: Players.Opponent,
                 cardCondition: (card, context) => card !== context.event.card && card.controller === context.event.card.controller,
                 gameAction: AbilityDsl.actions.gainStatusToken(context => ({
-                    token: context.event.token.honored ? CharacterStatus.Honored : CharacterStatus.Dishonored
+                    token: context.event.token.grantedStatus
                 }))
             }
         });

@@ -19,7 +19,9 @@ import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');
-const StatusToken = require('./StatusToken');
+const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
+const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
+const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 
 const ValidKeywords = [
     'ancestral',
@@ -824,7 +826,12 @@ class BaseCard extends EffectSource {
     }
 
     setPersonalHonorByTokenType(tokenType) {
-        const token = new StatusToken(this.game, this, tokenType === CharacterStatus.Honored);
+        let token = undefined;
+        if (tokenType === CharacterStatus.Honored) {
+            token = new HonoredStatusToken(this.game, this);
+        } else if (tokenType === CharacterStatus.Dishonored) {
+            token = new DishonoredStatusToken(this.game, this);
+        }
         this.setPersonalHonor(token);
     }
 
@@ -839,7 +846,7 @@ class BaseCard extends EffectSource {
     }
 
     get isHonored() {
-        return !!this.personalHonor && !!this.personalHonor.honored;
+        return !!this.personalHonor && this.personalHonor.grantedStatus === CharacterStatus.Honored;
     }
 
     honor() {
@@ -848,12 +855,12 @@ class BaseCard extends EffectSource {
         } else if(this.isDishonored) {
             this.makeOrdinary();
         } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, true));
+            this.setPersonalHonor(new HonoredStatusToken(this.game, this));
         }
     }
 
     get isDishonored() {
-        return !!this.personalHonor && !!this.personalHonor.dishonored;
+        return !!this.personalHonor && this.personalHonor.grantedStatus === CharacterStatus.Dishonored;
     }
 
     dishonor() {
@@ -862,7 +869,7 @@ class BaseCard extends EffectSource {
         } if(this.isHonored) {
             this.makeOrdinary();
         } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, false));
+            this.setPersonalHonor(new DishonoredStatusToken(this.game, this));
         }
     }
 

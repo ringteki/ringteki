@@ -1,45 +1,35 @@
-const EffectSource = require('../EffectSource');
+const StatusToken = require('./StatusToken');
 const AbilityDsl = require('../abilitydsl');
-const { CardTypes } = require('../Constants');
+const { CardTypes, CharacterStatus } = require('../Constants');
 
-class StatusToken extends EffectSource {
-    constructor(game, card, isHonored) {
-        super(game, isHonored ? 'Honored Token' : 'Dishonored Token');
-        this.honored = !!isHonored;
-        this.dishonored = !isHonored;
-        this.card = card;
-        this.printedType = 'token';
-        this.persistentEffects = [];
-
-        this.applyHonorEffects();
+class TaintedStatusToken extends StatusToken {
+    constructor(game, card) {
+        super(game, card, CharacterStatus.Tainted, 'Tainted Token');
     }
 
-    applyHonorEffects() {
-        if(!this.card || this.card.type !== CardTypes.Character) {
+    applyEffects() {
+        if(!this.card) {
             return;
         }
-        let amount = this.honored ? card => card.getGlory() : card => 0 - card.getGlory();
-        let effect = {
-            match: this.card,
-            effect: AbilityDsl.effects.modifyBothSkills(amount)
-        };
+        let effect = undefined;
+        if(this.card.type === CardTypes.Character) {
+            effect = {
+                match: this.card,
+                effect: AbilityDsl.effects.modifyBothSkills(2),
+                ref: undefined
+            };
+        } else if(this.card.type === CardTypes.Province) {
+            effect = {
+                match: this.card,
+                effect: AbilityDsl.effects.modifyProvinceStrength(2),
+                ref: undefined
+            };
+        } else {
+            return;
+        }
         this.persistentEffects.push(effect);
         effect.ref = this.addEffectToEngine(effect);
     }
-
-    removeHonorEffects() {
-        this.persistentEffects.forEach(effect => {
-            this.removeEffectFromEngine(effect.ref);
-            effect.ref = [];
-        });
-        this.persistentEffects = [];
-    }
-
-    setCard(card) {
-        this.removeHonorEffects();
-        this.card = card;
-        this.applyHonorEffects();
-    }
 }
 
-module.exports = StatusToken;
+module.exports = TaintedStatusToken;
