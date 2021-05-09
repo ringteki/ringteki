@@ -389,10 +389,11 @@ class DrawCard extends BaseCard {
                 }
             });
         }
+        // This is Sadako's ability
         let reverseEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusReverseModifySkill);
         if(reverseEffects.length > 0) {
             modifiers.forEach(modifier => {
-                if(modifier.type === 'token' && modifier.amount !== 0) {
+                if(modifier.type === 'token' && modifier.amount !== 0 && modifier.name === 'Dishonored Token') {
                     modifier.amount = 0 - modifier.amount;
                     modifier.name += ` (${StatModifier.getEffectName(reverseEffects[0])})`;
                 }
