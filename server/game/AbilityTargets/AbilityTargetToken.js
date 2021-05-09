@@ -20,7 +20,7 @@ class AbilityTargetToken {
 
     getSelector(properties) {
         let cardCondition = (card, context) => {
-            let tokens = card.statusTokens[0];
+            let tokens = card.statusTokens;
             if(!tokens || tokens.length === 0) {
                 return false;
             }

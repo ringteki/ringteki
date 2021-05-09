@@ -1,12 +1,13 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
 
 class PerfectLandEthos extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Discard each status token',
             effect: 'discard each status token',
-            gameAction: ability.actions.discardStatusToken(context => ({
-                target: context.game.findAnyCardsInAnyList(card => card.isHonored || card.isDishonored || card.isTainted).map(card => card.statusTokens[0])
+            gameAction: AbilityDsl.actions.discardStatusToken(context => ({
+                target: context.game.findAnyCardsInAnyList(card => card.isHonored || card.isDishonored || card.isTainted).map(card => card.statusTokens)
             }))
         });
     }

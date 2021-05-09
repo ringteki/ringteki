@@ -30,6 +30,10 @@ export class DiscardStatusAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        event.token.card.removeStatusToken(event.token);
+        let tokens = event.token;
+        if(!Array.isArray(tokens)) {
+            tokens = [tokens];
+        }
+        tokens.forEach(token => token.card.removeStatusToken(token));
     }
 }

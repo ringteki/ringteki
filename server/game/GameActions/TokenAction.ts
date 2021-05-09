@@ -12,6 +12,9 @@ export class TokenAction extends GameAction {
     }
 
     canAffect(target: StatusToken, context: AbilityContext, additionalProperties = {}): boolean {
+        if(Array.isArray(target)) {
+            return target.length > 0 && target.every(a => a.type === 'token');
+        }
         return target.type === 'token';
     }
 
@@ -22,5 +25,8 @@ export class TokenAction extends GameAction {
     addPropertiesToEvent(event, token: StatusToken, context: AbilityContext, additionalProperties): void {
         super.addPropertiesToEvent(event, token, context, additionalProperties);
         event.token = token;
+        if(Array.isArray(event.token)) {
+            event.token = [...event.token];
+        }
     }
 }
