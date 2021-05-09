@@ -68,6 +68,17 @@ describe('Court of Deception', function() {
                 this.player1.clickCard(this.yojiro);
                 expect(this.yojiro.isDishonored).toBe(false);
             });
+
+            it('should correctly discard the dishonored token if there are multiple tokens', function() {
+                this.player1.honor = 6;
+                this.yojiro.dishonor();
+                this.yojiro.taint();
+                this.game.checkGameState(true);
+                this.player1.clickCard(this.CoD);
+                this.player1.clickCard(this.yojiro);
+                expect(this.yojiro.isDishonored).toBe(false);
+                expect(this.yojiro.isTainted).toBe(true);
+            });
         });
     });
 });
