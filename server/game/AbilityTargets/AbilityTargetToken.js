@@ -87,7 +87,7 @@ class AbilityTargetToken {
             context: context,
             selector: this.selector,
             onSelect: (player, card) => {
-                let validTokens = card.statusTokens.filter(token => this.properties.gameAction.some(action => action.canAffect(token, context)));
+                let validTokens = card.statusTokens.filter(token => (!this.properties.tokenCondition || this.properties.tokenCondition(token, context)) && (this.properties.gameAction.length === 0 || this.properties.gameAction.some(action => action.canAffect(token, context))));
                 if(this.properties.singleToken && validTokens.length > 1) {
                     const choices = validTokens.map(token => token.name);
                     const handlers = validTokens.map(token => {

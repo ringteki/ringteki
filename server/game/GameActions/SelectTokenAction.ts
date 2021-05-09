@@ -76,7 +76,6 @@ export class SelectTokenAction extends TokenAction {
                         context.game.addMessage(properties.message, ...properties.messageArgs(token, player));
                     }
                     context.tokens[this.name] = token;
-                    properties.gameAction.properties = {};
                     properties.gameAction.addEventsToArray(events, context, Object.assign({}, additionalProperties, properties.subActionProperties(token)));
                 };
             });
@@ -87,7 +86,6 @@ export class SelectTokenAction extends TokenAction {
                 context: context
             });
         } else {
-            properties.gameAction.properties = {};
             context.tokens[this.name] = validTokens;
             if(properties.message) {
                 context.game.addMessage(properties.message, ...properties.messageArgs(validTokens, player));
