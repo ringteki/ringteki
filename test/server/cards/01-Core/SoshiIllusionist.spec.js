@@ -47,7 +47,7 @@ describe('Soshi Illusionst', function() {
             expect(this.whisperer.isHonored).toBe(true);
             expect(this.whisperer.isTainted).toBe(true);
 
-            expect(this.player1).toHavePrompt('Which token do you wish to select?');
+            expect(this.player1).toHavePrompt('Which token do you wish to discard?');
             expect(this.player1).toHavePromptButton('Honored Token');
             expect(this.player1).toHavePromptButton('Tainted Token');
             this.player1.clickPrompt('Honored Token');
@@ -65,7 +65,7 @@ describe('Soshi Illusionst', function() {
             expect(this.whisperer.isHonored).toBe(true);
             expect(this.whisperer.isTainted).toBe(true);
 
-            expect(this.player1).toHavePrompt('Which token do you wish to select?');
+            expect(this.player1).toHavePrompt('Which token do you wish to discard?');
             expect(this.player1).toHavePromptButton('Honored Token');
             expect(this.player1).toHavePromptButton('Tainted Token');
             this.player1.clickPrompt('Tainted Token');

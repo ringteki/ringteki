@@ -49,6 +49,7 @@ describe('Unmask', function() {
                         defenders: [this.matsuBerserker]
                     });
                     this.yoritomo.honor();
+                    this.yoritomo.taint();
                     this.player2.clickCard('unmask');
                 });
 
@@ -61,8 +62,10 @@ describe('Unmask', function() {
 
                 it('should remove any status token on the target', function() {
                     expect(this.yoritomo.isHonored).toBe(true);
+                    expect(this.yoritomo.isTainted).toBe(true);
                     this.player2.clickCard(this.yoritomo);
                     expect(this.yoritomo.isHonored).toBe(false);
+                    expect(this.yoritomo.isTainted).toBe(false);
                 });
 
                 it('should set the target\'s skill to match it\'s base skill for the duration of the conflict', function() {
