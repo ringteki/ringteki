@@ -110,7 +110,10 @@ describe('Imbued with Shadows', function() {
 
                 expect(this.player2.honor).toBe(honor - 3);
 
-                expect(this.getChatLogs(1)).toContain('player2 plays Imbued With Shadows to lose 3 honor to discard status tokens from Doji Whisperer, Moto Youth and Bayushi Liar');
+                expect(this.getChatLogs(10)).toContain('player2 plays Imbued With Shadows to lose 3 honor to discard status tokens from Doji Whisperer, Moto Youth and Bayushi Liar');
+                expect(this.getChatLogs(10)).toContain('player2 discards Honored Token from Doji Whisperer');
+                expect(this.getChatLogs(10)).toContain('player2 discards Dishonored Token from Moto Youth');
+                expect(this.getChatLogs(10)).toContain('player2 discards Dishonored Token from Bayushi Liar');
             });
 
             it('Should not let you choose more characters than you chose to lose honor', function() {
@@ -133,7 +136,9 @@ describe('Imbued with Shadows', function() {
 
                 expect(this.player2.honor).toBe(honor - 2);
 
-                expect(this.getChatLogs(1)).toContain('player2 plays Imbued With Shadows to lose 2 honor to discard status tokens from Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(10)).toContain('player2 plays Imbued With Shadows to lose 2 honor to discard status tokens from Doji Whisperer and Moto Youth');
+                expect(this.getChatLogs(10)).toContain('player2 discards Honored Token from Doji Whisperer');
+                expect(this.getChatLogs(10)).toContain('player2 discards Dishonored Token from Moto Youth');
             });
 
             it('Should not let you choose less characters than you lost honor', function() {
@@ -173,6 +178,51 @@ describe('Imbued with Shadows', function() {
                 expect(this.ambusher.isDishonored).toBe(true);
 
                 expect(this.player2.honor).toBe(honor - 3);
+            });
+
+            it('Should prompt you if a character has multiple status tokens', function() {
+                let honor = this.player2.honor;
+
+                this.youth.taint();
+                this.liar.taint();
+
+                this.player1.pass();
+                this.player2.clickCard(this.shadows);
+                this.player2.clickPrompt('3');
+                this.player2.clickCard(this.whisperer);
+                this.player2.clickCard(this.youth);
+                this.player2.clickCard(this.liar);
+                this.player2.clickPrompt('Done');
+
+                expect(this.player2.honor).toBe(honor - 3);
+
+                expect(this.getChatLogs(10)).toContain('player2 plays Imbued With Shadows to lose 3 honor to discard status tokens from Doji Whisperer, Moto Youth and Bayushi Liar');
+                expect(this.getChatLogs(10)).toContain('player2 discards Honored Token from Doji Whisperer');
+
+                expect(this.player2).toHavePrompt('Which token do you wish to discard from Moto Youth?');
+                expect(this.player2).toHavePromptButton('Dishonored Token');
+                expect(this.player2).toHavePromptButton('Tainted Token');
+                this.player2.clickPrompt('Tainted Token');
+                expect(this.getChatLogs(10)).toContain('player2 discards Tainted Token from Moto Youth');
+
+                expect(this.player2).toHavePrompt('Which token do you wish to discard from Bayushi Liar?');
+                expect(this.player2).toHavePromptButton('Dishonored Token');
+                expect(this.player2).toHavePromptButton('Tainted Token');
+                this.player2.clickPrompt('Dishonored Token');
+
+                expect(this.getChatLogs(10)).toContain('player2 discards Dishonored Token from Bayushi Liar');
+
+                expect(this.whisperer.isDishonored).toBe(false);
+                expect(this.whisperer.isHonored).toBe(false);
+                expect(this.whisperer.isTainted).toBe(false);
+
+                expect(this.youth.isDishonored).toBe(true);
+                expect(this.youth.isHonored).toBe(false);
+                expect(this.youth.isTainted).toBe(false);
+
+                expect(this.liar.isDishonored).toBe(false);
+                expect(this.liar.isHonored).toBe(false);
+                expect(this.liar.isTainted).toBe(true);
             });
         });
 

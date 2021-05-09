@@ -20,16 +20,34 @@ class ImbuedWithShadows extends DrawCard {
                     return this.getNumberOfLegalTargets(context);
                 },
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.discardStatusToken(context => {
+                gameAction: AbilityDsl.actions.multipleContext(context => {
                     let targets = [];
                     targets = _.flatten(_.values(context.targets));
                     targets = targets.concat(_.flatten(_.values(context.selects)));
-
-                    return ({ target: targets.map(card => card.statusTokens[0]) });
+                    return ({
+                        gameActions: this.getStatusTokenPrompts(targets)
+                    });
                 })
             },
-            cannotTargetFirst: true
+            cannotTargetFirst: true,
         });
+    }
+
+    getStatusTokenPrompts(targets) {
+        let actions = [];
+        targets.forEach(target => {
+            actions.push(
+                AbilityDsl.actions.selectToken(() => ({
+                    card: target,
+                    activePromptTitle: `Which token do you wish to discard from ${target.name}?`,
+                    message: '{0} discards {1} from {2}',
+                    messageArgs: (token, player) => [player, token, target],
+                    gameAction: AbilityDsl.actions.discardStatusToken()
+                })),
+            );
+        });
+
+        return actions;
     }
 
     getNumberOfLegalTargets(context) {
