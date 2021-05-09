@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Players, CardTypes } = require('../../Constants');
+const { Players, CardTypes, CharacterStatus } = require('../../Constants');
 
 class OrigamiMaster extends DrawCard {
     setupCardAbilities() {
@@ -9,8 +9,9 @@ class OrigamiMaster extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
+                condition: context => context.source.isHonored,
                 gameAction: AbilityDsl.actions.moveStatusToken(context => ({
-                    target: context.source.personalHonor,
+                    target: context.source.getStatusToken(CharacterStatus.Honored),
                     recipient: context.target
                 }))
             }

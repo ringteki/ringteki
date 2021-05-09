@@ -4,7 +4,7 @@ class LiarsMask extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
             title: 'Discard status token from attached character',
-            gameAction: ability.actions.discardStatusToken(context => ({ target: context.source.parent.personalHonor }))
+            gameAction: ability.actions.discardStatusToken(context => ({ target: context.source.parent.statusTokens[0] }))
         });
     }
 

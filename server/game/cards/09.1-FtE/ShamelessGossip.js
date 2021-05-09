@@ -22,13 +22,13 @@ class ShamelessGossip extends DrawCard {
                         card.controller === context.targets.first.controller &&
                         card !== context.targets.first,
                     gameAction: AbilityDsl.actions.moveStatusToken(context => ({
-                        target: context.targets.first.personalHonor,
+                        target: context.targets.first.statusTokens[0],
                         recipient: context.targets.second
                     }))
                 }
             },
             effect: 'move {1}\'s {2} to {3}',
-            effectArgs: context => [context.targets.first, context.targets.first.personalHonor, context.targets.second]
+            effectArgs: context => [context.targets.first, context.targets.first.statusTokens[0], context.targets.second]
         });
     }
 }

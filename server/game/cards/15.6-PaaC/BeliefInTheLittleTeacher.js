@@ -8,7 +8,7 @@ class BeliefInTheLittleTeacher extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
                 title: 'Discard character\'s status token',
                 gameAction: AbilityDsl.actions.discardStatusToken(context => ({
-                    target: context.source.personalHonor
+                    target: context.source.statusTokens[0]
                 }))
             })
         });

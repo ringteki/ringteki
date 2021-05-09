@@ -25,6 +25,8 @@ export class MoveTokenAction extends TokenAction {
             return false;
         } else if(token.grantedStatus === CharacterStatus.Dishonored && (recipient.isDishonored || !recipient.checkRestrictions('receiveDishonorToken', context))) {
             return false;
+        } else if(token.grantedStatus === CharacterStatus.Tainted && (recipient.isTainted || !recipient.checkRestrictions('receiveTaintedToken', context))) {
+            return false;
         }
         return super.canAffect(token, context, additionalProperties);
     }
@@ -36,14 +38,8 @@ export class MoveTokenAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        if(event.token.card.personalHonor === event.token) {
-            event.token.card.makeOrdinary();
-            if((event.recipient.isHonored && event.token.grantedStatus === CharacterStatus.Dishonored) || (event.recipient.isDishonored && event.token.grantedStatus === CharacterStatus.Honored)) {
-                event.recipient.makeOrdinary();
-            } else if(!event.recipient.personalHonor) {
-                event.recipient.setPersonalHonor(event.token);
-            }
-            event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.token, card: event.recipient });
-        }
+        event.token.card.removeStatusToken(event.token);
+        event.recipient.addStatusToken(event.token);
+        event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.token, card: event.recipient });
     }
 }

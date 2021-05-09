@@ -6,7 +6,7 @@ class PerfectLandEthos extends DrawCard {
             title: 'Discard each status token',
             effect: 'discard each status token',
             gameAction: ability.actions.discardStatusToken(context => ({
-                target: context.game.findAnyCardsInAnyList(card => card.isHonored || card.isDishonored).map(card => card.personalHonor)
+                target: context.game.findAnyCardsInAnyList(card => card.isHonored || card.isDishonored || card.isTainted).map(card => card.statusTokens[0])
             }))
         });
     }

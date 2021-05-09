@@ -25,7 +25,7 @@ class ImbuedWithShadows extends DrawCard {
                     targets = _.flatten(_.values(context.targets));
                     targets = targets.concat(_.flatten(_.values(context.selects)));
 
-                    return ({ target: targets.map(card => card.personalHonor) });
+                    return ({ target: targets.map(card => card.statusTokens[0]) });
                 })
             },
             cannotTargetFirst: true

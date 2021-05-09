@@ -41,10 +41,6 @@ export class GainStatusTokenAction extends CardGameAction {
     }
 
     eventHandler(event): void {
-        if(event.token === CharacterStatus.Honored && event.card.isDishonored || event.token === CharacterStatus.Dishonored && event.card.isHonored) {
-            event.card.makeOrdinary();
-        } else {
-            event.card.setPersonalHonorByTokenType(event.token);
-        }
+        event.card.addStatusToken(event.token);
     }
 }

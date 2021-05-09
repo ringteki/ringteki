@@ -25,10 +25,10 @@ class MenuCommands {
             case 'taint':
                 if(card.isTainted) {
                     game.addMessage('{0} cleanses {1}', player, card);
-                    card.isTainted = false;
+                    card.untaint();
                 } else {
                     game.addMessage('{0} taints {1}', player, card);
-                    card.isTainted = true;    
+                    card.taint();    
                 }
                 break;
             case 'addfate':

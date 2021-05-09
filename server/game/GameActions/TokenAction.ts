@@ -8,7 +8,7 @@ export class TokenAction extends GameAction {
     targetType = ['token'];
 
     defaultTargets(context: AbilityContext): StatusToken[] {
-        return context.source.personalHonor ? [context.source.personalHonor] : [];
+        return context.source.statusTokens ? [...context.source.statusTokens] : [];
     }
 
     canAffect(target: StatusToken, context: AbilityContext, additionalProperties = {}): boolean {

@@ -37,7 +37,6 @@ describe('Bayushi Dairu', function() {
                 });
 
                 it('should allow moving a dishonor token', function() {
-                    let token = this.youngRumormonger.personalHonor;
                     expect(this.youngRumormonger.isDishonored).toBe(true);
                     expect(this.bayushiDairu.isDishonored).toBe(false);
                     this.player2.pass();
@@ -51,7 +50,6 @@ describe('Bayushi Dairu', function() {
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                     expect(this.youngRumormonger.isDishonored).toBe(false);
                     expect(this.bayushiDairu.isDishonored).toBe(true);
-                    expect(this.bayushiDairu.personalHonor).toBe(token);
                 });
 
                 it('should cancel out tokens if both are on Dairu', function() {
@@ -67,7 +65,6 @@ describe('Bayushi Dairu', function() {
                 });
 
                 it('should allow moving an honor token', function() {
-                    let token = this.kakitaYoshi.personalHonor;
                     expect(this.kakitaYoshi.isHonored).toBe(true);
                     expect(this.bayushiDairu.isHonored).toBe(false);
                     this.player2.pass();
@@ -77,7 +74,6 @@ describe('Bayushi Dairu', function() {
                     this.player1.clickCard(this.kakitaYoshi);
                     expect(this.kakitaYoshi.isHonored).toBe(false);
                     expect(this.bayushiDairu.isHonored).toBe(true);
-                    expect(this.bayushiDairu.personalHonor).toBe(token);
                 });
 
                 it('should not allow taking a dishonor token if Steward is in play when ordinary', function() {

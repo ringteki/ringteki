@@ -8,7 +8,7 @@ class ObsidianTalisman extends DrawCard {
             limit: AbilityDsl.limit.perRound(Infinity),
             cost: AbilityDsl.costs.payHonor(1),
             gameAction: AbilityDsl.actions.discardStatusToken(context => ({
-                target: context.source.parent.personalHonor
+                target: context.source.parent.statusTokens[0]
             }))
         });
     }

@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CharacterStatus } = require('../../Constants.js');
 
 class StandYourGround extends DrawCard {
     setupCardAbilities() {
@@ -12,7 +13,7 @@ class StandYourGround extends DrawCard {
             effectArgs: context => context.event.card,
             cannotBeMirrored: true,
             gameAction: AbilityDsl.actions.cancel(context => ({
-                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.event.card.personalHonor })
+                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.source.getStatusToken(CharacterStatus.Honored) })
             }))
         });
     }

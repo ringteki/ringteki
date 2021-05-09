@@ -32,7 +32,7 @@ class PrepareForWar extends DrawCard {
                                     this.game.addMessage('{0} chooses to discard the status token from {1}', context.player, context.target);
                                 }
 
-                                return { target: (choice === 'Yes' ? context.target.personalHonor : []) };
+                                return { target: (choice === 'Yes' ? context.target.statusTokens[0] : []) };
                             },
                             player: Players.Self,
                             gameAction: AbilityDsl.actions.discardStatusToken()

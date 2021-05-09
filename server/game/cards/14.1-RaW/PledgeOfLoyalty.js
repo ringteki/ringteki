@@ -1,5 +1,6 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CharacterStatus } = require('../../Constants.js');
 
 class PledgeOfLoyalty extends ProvinceCard {
     setupCardAbilities() {
@@ -11,7 +12,7 @@ class PledgeOfLoyalty extends ProvinceCard {
             effect: 'prevent {1} from leaving play',
             effectArgs: context => context.event.card,
             gameAction: AbilityDsl.actions.cancel(context => ({
-                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.event.card.personalHonor })
+                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.event.card.getStatusToken(CharacterStatus.Honored) })
             }))
         });
     }

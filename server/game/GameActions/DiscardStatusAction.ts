@@ -30,8 +30,6 @@ export class DiscardStatusAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        if(event.token.card && event.token.card.personalHonor === event.token) {
-            event.token.card.makeOrdinary();
-        }
+        event.token.card.removeStatusToken(event.token);
     }
 }

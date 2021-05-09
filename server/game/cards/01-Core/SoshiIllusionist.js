@@ -9,7 +9,7 @@ class SoshiIllusionist extends DrawCard {
             cost: AbilityDsl.costs.payFate(1),
             target: {
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.discardStatusToken(context => ({ target: context.target.personalHonor }))
+                gameAction: AbilityDsl.actions.discardStatusToken(context => ({ target: context.target.statusTokens[0] }))
             }
         });
     }

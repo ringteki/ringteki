@@ -20,19 +20,19 @@ class AbilityTargetToken {
 
     getSelector(properties) {
         let cardCondition = (card, context) => {
-            let token = card.personalHonor;
-            if(!token) {
+            let tokens = card.statusTokens[0];
+            if(!tokens || tokens.length === 0) {
                 return false;
             }
             let contextCopy = context.copy();
-            contextCopy.tokens[this.name] = token;
+            contextCopy.tokens[this.name] = tokens;
             if(this.name === 'target') {
-                contextCopy.token = token;
+                contextCopy.token = tokens;
             }
             if(context.stage === Stages.PreTarget && this.dependentCost && !this.dependentCost.canPay(contextCopy)) {
                 return false;
             }
-            return (!properties.cardCondition || properties.cardCondition(token, contextCopy)) &&
+            return (!properties.cardCondition || properties.cardCondition(tokens, contextCopy)) &&
                        (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
                        (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
@@ -81,9 +81,9 @@ class AbilityTargetToken {
             context: context,
             selector: this.selector,
             onSelect: (player, card) => {
-                context.tokens[this.name] = card.personalHonor;
+                context.tokens[this.name] = card.statusTokens[0];
                 if(this.name === 'target') {
-                    context.token = card.personalHonor;
+                    context.token = card.statusTokens[0];
                 }
                 return true;
             },
