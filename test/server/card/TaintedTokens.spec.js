@@ -30,6 +30,28 @@ describe('Tainted Tokens', function() {
             expect(this.brash.getPoliticalSkill()).toBe(pol + 2);
         });
 
+        it('should stack with honored status tokens', function() {
+            let mil = this.brash.getMilitarySkill();
+            let pol = this.brash.getPoliticalSkill();
+            this.brash.taint();
+            this.brash.honor();
+            this.game.checkGameState(true);
+
+            expect(this.brash.getMilitarySkill()).toBe(mil + 4);
+            expect(this.brash.getPoliticalSkill()).toBe(pol + 4);
+        });
+
+        it('should stack with dishonored status tokens', function() {
+            let mil = this.whisperer.getMilitarySkill();
+            let pol = this.whisperer.getPoliticalSkill();
+            this.whisperer.taint();
+            this.whisperer.dishonor();
+            this.game.checkGameState(true);
+
+            expect(this.whisperer.getMilitarySkill()).toBe(mil + 1);
+            expect(this.whisperer.getPoliticalSkill()).toBe(pol + 1);
+        });
+
         it('should give tainted provinces +2 strength', function() {
             let str = this.shameful.getStrength();
             this.shameful.taint();
