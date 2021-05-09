@@ -380,6 +380,7 @@ class DrawCard extends BaseCard {
     }
 
     adjustHonorStatusModifiers(modifiers) {
+        // This is Yojiro's ability
         let doesNotModifyEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusDoesNotModifySkill);
         if(doesNotModifyEffects.length > 0) {
             modifiers.forEach(modifier => {
