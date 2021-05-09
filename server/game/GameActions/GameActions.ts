@@ -68,6 +68,7 @@ import { ReturnToHandAction, ReturnToHandProperties } from './ReturnToHandAction
 import { RevealAction, RevealProperties } from './RevealAction';
 import { SelectCardAction, SelectCardProperties } from './SelectCardAction';
 import { SelectRingAction, SelectRingProperties } from './SelectRingActions';
+import { SelectTokenAction, SelectTokenProperties } from './SelectTokenAction';
 import { SendHomeAction, SendHomeProperties } from './SendHomeAction';
 import { SequentialAction } from './SequentialAction';
 import { SequentialContextAction, SequentialContextProperties } from './SequentialContextAction';
@@ -187,6 +188,7 @@ const GameActions = {
     multipleContext: (propertyFactory: MultipleContextActionProperties | ((context: TriggeredAbilityContext) => MultipleContextActionProperties)) => new MultipleContextGameAction(propertyFactory),
     menuPrompt: (propertyFactory: MenuPromptProperties | ((context: TriggeredAbilityContext) => MenuPromptProperties)) => new MenuPromptAction(propertyFactory),
     selectCard: (propertyFactory: SelectCardProperties | ((context: TriggeredAbilityContext) => SelectCardProperties)) => new SelectCardAction(propertyFactory),
+    selectToken: (propertyFactory: SelectTokenProperties | ((context: TriggeredAbilityContext) => SelectTokenProperties)) => new SelectTokenAction(propertyFactory),
     sequential: (gameActions: GameAction[]) => new SequentialAction(gameActions), // takes an array of gameActions, not a propertyFactory
     sequentialContext: (propertyFactory: SequentialContextProperties | ((context: TriggeredAbilityContext) => SequentialContextProperties)) => new SequentialContextAction(propertyFactory)
 };

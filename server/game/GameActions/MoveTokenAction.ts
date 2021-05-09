@@ -14,7 +14,13 @@ export class MoveTokenAction extends TokenAction {
 
     getEffectMessage(context: AbilityContext, additionalProperties = {}): [string, any[]] {
         const { target, recipient } = this.getProperties(context, additionalProperties) as MoveTokenProperties;
-        return ['move {0}\'s status token to {1}', [(target as StatusToken).card, recipient]];
+        let card = undefined;
+        if(Array.isArray(target)) {
+            card = (target[0] as StatusToken).card;
+        } else {
+            card = (target as StatusToken).card;
+        }
+        return ['move {0}\'s {1} to {2}', [card, target, recipient]];
     }
 
     canAffect(token: StatusToken, context: AbilityContext, additionalProperties = {}): boolean {
@@ -38,8 +44,14 @@ export class MoveTokenAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        event.token.card.removeStatusToken(event.token);
-        event.recipient.addStatusToken(event.token);
-        event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.token, card: event.recipient });
+        let tokens = event.token;
+        if(!Array.isArray(tokens)) {
+            tokens = [tokens];
+        }
+        tokens.forEach(token => {
+            token.card.removeStatusToken(token);
+            event.recipient.addStatusToken(token);
+            event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: token, card: event.recipient });    
+        })
     }
 }
