@@ -897,7 +897,7 @@ class BaseCard extends EffectSource {
         if(this.isTainted) {
             return;
         }
-        this.addStatusToken(new TaintedStatusToken(this.game, this));
+        this.addStatusToken(CharacterStatus.Tainted);
     }
 
     untaint() {
