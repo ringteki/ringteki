@@ -920,6 +920,7 @@ class BaseCard extends EffectSource {
             type: this.getType(),
             isDishonored: this.isDishonored,
             isHonored: this.isHonored,
+            isTainted: !!this.isTainted,
             uuid: this.uuid
         };
 

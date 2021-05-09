@@ -41,6 +41,7 @@ class DrawCard extends BaseCard {
             { command: 'bow', text: 'Bow/Ready' },
             { command: 'honor', text: 'Honor' },
             { command: 'dishonor', text: 'Dishonor' },
+            { command: 'taint', text: 'Taint/Cleanse' },
             { command: 'addfate', text: 'Add 1 fate' },
             { command: 'remfate', text: 'Remove 1 fate' },
             { command: 'move', text: 'Move into/out of conflict' },
