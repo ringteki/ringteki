@@ -65,6 +65,32 @@ describe('Purity of Spirit', function() {
                 expect(this.player1).toHavePrompt('Action Window');
                 expect(this.tsukune.isDishonored).toBe(false);
             });
+
+            it('should work if there is no token to discard after the conflict', function() {
+                this.tsukune.dishonor();
+                this.player2.pass();
+                this.player1.clickCard(this.purity);
+                this.player1.clickCard(this.tsukune);
+                this.noMoreActions();
+                this.player1.clickPrompt('Yes');
+                this.player1.clickPrompt('Gain 2 Honor');
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.tsukune.isHonored).toBe(false);
+            });
+
+            it('should discard all tokens if there are multiple', function() {
+                this.tsukune.taint();
+                this.player2.pass();
+                this.player1.clickCard(this.purity);
+                this.player1.clickCard(this.tsukune);
+                this.noMoreActions();
+                this.player1.clickPrompt('Yes');
+                this.player1.clickPrompt('Gain 2 Honor');
+                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.tsukune.isHonored).toBe(false);
+                expect(this.tsukune.isTainted).toBe(false);
+                expect(this.getChatLogs(5)).toContain('Tainted Token and Honored Token are removed from Shiba Tsukune due to the delayed effect of Purity of Spirit');
+            });
         });
     });
 });
