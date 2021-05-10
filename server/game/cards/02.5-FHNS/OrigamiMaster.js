@@ -6,10 +6,10 @@ class OrigamiMaster extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move an honor token',
+            condition: context => context.source.isHonored,
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                condition: context => context.source.isHonored,
                 gameAction: AbilityDsl.actions.moveStatusToken(context => ({
                     target: context.source.getStatusToken(CharacterStatus.Honored),
                     recipient: context.target
