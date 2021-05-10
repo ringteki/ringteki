@@ -35,7 +35,7 @@ class AbilityTargetToken {
             }
 
             let tokensValid = true;
-            if (properties.tokenCondition) {
+            if(properties.tokenCondition) {
                 tokensValid = tokensValid && tokens.some(a => properties.tokenCondition(a, context));
             }
 

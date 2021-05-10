@@ -28,7 +28,7 @@ class MenuCommands {
                     card.untaint();
                 } else {
                     game.addMessage('{0} taints {1}', player, card);
-                    card.taint();    
+                    card.taint();
                 }
                 break;
             case 'addfate':

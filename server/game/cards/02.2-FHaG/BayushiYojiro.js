@@ -11,7 +11,7 @@ class BayushiYojiro extends DrawCard {
             effect: [
                 AbilityDsl.effects.honorStatusDoesNotModifySkill(),
                 AbilityDsl.effects.honorStatusDoesNotAffectLeavePlay(),
-                AbilityDsl.effects.taintedStatusDoesNotCostHonor(),
+                AbilityDsl.effects.taintedStatusDoesNotCostHonor()
             ]
         });
     }

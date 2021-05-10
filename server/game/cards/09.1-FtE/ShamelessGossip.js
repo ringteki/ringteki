@@ -29,7 +29,7 @@ class ShamelessGossip extends DrawCard {
                         gameAction: AbilityDsl.actions.moveStatusToken(context => ({
                             recipient: context.targets.second
                         }))
-                    })),
+                    }))
                 }
             },
             effect: 'move a status token from {1} to {2}',

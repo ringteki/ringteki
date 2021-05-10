@@ -124,7 +124,7 @@ describe('Shameless Gossip', function() {
                 expect(this.player1).toHavePromptButton('Honored Token');
                 expect(this.player1).toHavePromptButton('Tainted Token');
                 this.player1.clickPrompt('Honored Token');
-    
+
                 expect(this.dojiWhisperer.isHonored).toBe(false);
                 expect(this.dojiWhisperer.isDishonored).toBe(false);
                 expect(this.dojiWhisperer.isTainted).toBe(false);

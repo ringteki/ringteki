@@ -29,7 +29,7 @@ class ImbuedWithShadows extends DrawCard {
                     });
                 })
             },
-            cannotTargetFirst: true,
+            cannotTargetFirst: true
         });
     }
 
@@ -43,7 +43,7 @@ class ImbuedWithShadows extends DrawCard {
                     message: '{0} discards {1} from {2}',
                     messageArgs: (token, player) => [player, token, target],
                     gameAction: AbilityDsl.actions.discardStatusToken()
-                })),
+                }))
             );
         });
 

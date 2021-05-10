@@ -28,7 +28,7 @@ class PrepareForWar extends DrawCard {
                                 })),
                                 ...promptActions
                             ]
-                        })
+                        });
                     }),
                     AbilityDsl.actions.honor(context => ({
                         target: context.target.hasTrait('commander') ? context.target : []
@@ -76,7 +76,7 @@ class PrepareForWar extends DrawCard {
                         if(displayMessage && choice === 'Yes') {
                             this.game.addMessage('{0} chooses to discard {1} from {2}', context.player, token, context.target);
                         }
-        
+
                         return { target: (choice === 'Yes' ? token : []) };
                     },
                     player: Players.Self,

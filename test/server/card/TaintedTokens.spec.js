@@ -8,7 +8,7 @@ describe('Tainted Tokens', function() {
                     hand: ['favored-mount']
                 },
                 player2: {
-                    inPlay: ['hantei-sotorii', 'doomed-shugenja'],
+                    inPlay: ['hantei-sotorii', 'doomed-shugenja']
                 }
             });
 
@@ -117,7 +117,7 @@ describe('Tainted Tokens', function() {
             expect(this.getChatLogs(10)).toContain('player2 pays 2 honor to declare their defenders');
             expect(this.player1.honor).toBe(honor1);
             expect(this.player2.honor).toBe(honor2 - 2);
-            
+
             this.player2.pass();
             this.player1.clickCard(this.mount);
             expect(this.brash.isParticipating()).toBe(true);

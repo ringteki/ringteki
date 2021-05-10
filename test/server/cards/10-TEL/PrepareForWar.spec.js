@@ -140,7 +140,7 @@ describe('Prepare for War', function() {
 
             expect(this.akodoZentaro.isDishonored).toBe(false);
             expect(this.akodoZentaro.isTainted).toBe(false);
-            
+
             expect(this.getChatLogs(5)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
             expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Akodo Zentarō');
             expect(this.getChatLogs(3)).toContain('player1 chooses to discard Tainted Token from Akodo Zentarō');
@@ -161,7 +161,7 @@ describe('Prepare for War', function() {
 
             expect(this.akodoZentaro.isDishonored).toBe(false);
             expect(this.akodoZentaro.isTainted).toBe(true);
-            
+
             expect(this.getChatLogs(5)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
             expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Akodo Zentarō');
             expect(this.getChatLogs(3)).not.toContain('player1 chooses to discard Tainted Token from Akodo Zentarō');

@@ -56,7 +56,7 @@ describe('Liar\'s Mask', function() {
                 expect(this.player1).toHavePromptButton('Dishonored Token');
                 expect(this.player1).toHavePromptButton('Tainted Token');
                 this.player1.clickPrompt('Tainted Token');
-    
+
                 expect(this.liar.isDishonored).toBe(true);
                 expect(this.liar.isTainted).toBe(false);
                 expect(this.getChatLogs(5)).toContain('player1 uses Liar\'s Mask to discard a status token from Bayushi Liar');

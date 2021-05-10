@@ -11,7 +11,9 @@ class StatusToken extends EffectSource {
         this.applyEffects();
     }
 
-    get controller() { return this.card.controller; };
+    get controller() {
+        return this.card.controller;
+    }
 
     applyEffects() {
     }
