@@ -1,6 +1,6 @@
 const StatusToken = require('./StatusToken');
 const AbilityDsl = require('../abilitydsl');
-const { CardTypes, CharacterStatus } = require('../Constants');
+const { CardTypes, CharacterStatus, EffectNames } = require('../Constants');
 
 class TaintedStatusToken extends StatusToken {
     constructor(game, card) {
@@ -11,24 +11,44 @@ class TaintedStatusToken extends StatusToken {
         if(!this.card) {
             return;
         }
-        let effect = undefined;
+        let effects = [];
         if(this.card.type === CardTypes.Character) {
-            effect = {
+            effects.push({
                 match: this.card,
                 effect: AbilityDsl.effects.modifyBothSkills(2),
                 ref: undefined
-            };
+            });
+            effects.push({
+                match: this.card,
+                condition: () => !this.card.anyEffect(EffectNames.TaintedStatusDoesNotCostHonor),
+                effect: AbilityDsl.effects.honorCostToDeclare(1),
+                ref: undefined
+            });
         } else if(this.card.type === CardTypes.Province) {
-            effect = {
+            effects.push({
                 match: this.card,
                 effect: AbilityDsl.effects.modifyProvinceStrength(2),
                 ref: undefined
-            };
+            });
+            effects.push({
+                match: this.card.controller,
+                effect: AbilityDsl.effects.costToDeclareAnyParticipants({
+                    type: 'defenders',
+                    message: 'loses 1 honor',
+                    cost: (player) => AbilityDsl.actions.loseHonor({
+                        target: player,
+                        amount: 1
+                    })
+                }),
+                ref: undefined
+            });
         } else {
             return;
         }
-        this.persistentEffects.push(effect);
-        effect.ref = this.addEffectToEngine(effect);
+        effects.forEach(effect => {
+            this.persistentEffects.push(effect);
+            effect.ref = this.addEffectToEngine(effect);
+        });
     }
 }
 
