@@ -1,8 +1,8 @@
 import { TokenAction, TokenActionProperties} from './TokenAction';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
-import StatusToken = require('../StatusToken');
-import { EventNames, Locations } from '../Constants';
+import StatusToken = require('../StatusTokens/StatusToken');
+import { EventNames, Locations, CharacterStatus } from '../Constants';
 
 export interface MoveTokenProperties extends TokenActionProperties {
     recipient: DrawCard;
@@ -14,16 +14,24 @@ export class MoveTokenAction extends TokenAction {
 
     getEffectMessage(context: AbilityContext, additionalProperties = {}): [string, any[]] {
         const { target, recipient } = this.getProperties(context, additionalProperties) as MoveTokenProperties;
-        return ['move {0}\'s status token to {1}', [(target as StatusToken).card, recipient]];
+        let card = undefined;
+        if(Array.isArray(target)) {
+            card = (target[0] as StatusToken).card;
+        } else {
+            card = (target as StatusToken).card;
+        }
+        return ['move {0}\'s {1} to {2}', [card, target, recipient]];
     }
 
     canAffect(token: StatusToken, context: AbilityContext, additionalProperties = {}): boolean {
         const { recipient } = this.getProperties(context) as MoveTokenProperties;
         if(!recipient || recipient.location !== Locations.PlayArea) {
             return false;
-        } else if(token.honored && (recipient.isHonored || !recipient.checkRestrictions('receiveHonorToken', context))) {
+        } else if(token.grantedStatus === CharacterStatus.Honored && (recipient.isHonored || !recipient.checkRestrictions('receiveHonorToken', context))) {
             return false;
-        } else if(token.dishonored && (recipient.isDishonored || !recipient.checkRestrictions('receiveDishonorToken', context))) {
+        } else if(token.grantedStatus === CharacterStatus.Dishonored && (recipient.isDishonored || !recipient.checkRestrictions('receiveDishonorToken', context))) {
+            return false;
+        } else if(token.grantedStatus === CharacterStatus.Tainted && (recipient.isTainted || !recipient.checkRestrictions('receiveTaintedToken', context))) {
             return false;
         }
         return super.canAffect(token, context, additionalProperties);
@@ -36,14 +44,14 @@ export class MoveTokenAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        if(event.token.card.personalHonor === event.token) {
-            event.token.card.makeOrdinary();
-            if(event.recipient.isHonored && event.token.dishonored || event.recipient.isDishonored && event.token.honored) {
-                event.recipient.makeOrdinary();
-            } else if(!event.recipient.personalHonor) {
-                event.recipient.setPersonalHonor(event.token);
-            }
-            event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.token, card: event.recipient });
+        let tokens = event.token;
+        if(!Array.isArray(tokens)) {
+            tokens = [tokens];
         }
+        tokens.forEach(token => {
+            token.card.removeStatusToken(token);
+            event.recipient.addStatusToken(token);
+            event.recipient.game.raiseEvent(EventNames.OnStatusTokenGained, { token: token, card: event.recipient });    
+        })
     }
 }

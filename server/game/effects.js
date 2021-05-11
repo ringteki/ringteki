@@ -87,6 +87,7 @@ const Effects = {
     hideWhenFaceUp: () => EffectBuilder.card.static(EffectNames.HideWhenFaceUp),
     honorStatusDoesNotAffectLeavePlay: () => EffectBuilder.card.flexible(EffectNames.HonorStatusDoesNotAffectLeavePlay),
     honorStatusDoesNotModifySkill: () => EffectBuilder.card.flexible(EffectNames.HonorStatusDoesNotModifySkill),
+    taintedStatusDoesNotCostHonor: () => EffectBuilder.card.flexible(EffectNames.TaintedStatusDoesNotCostHonor),
     honorStatusReverseModifySkill: () => EffectBuilder.card.flexible(EffectNames.HonorStatusReverseModifySkill),
     immunity: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(properties)),
     increaseLimitOnAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnAbilities, abilities),

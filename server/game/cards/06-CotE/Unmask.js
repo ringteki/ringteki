@@ -11,7 +11,7 @@ class Unmask extends DrawCard {
                 controller: Players.Any,
                 cardCondition: card => card.isParticipating(),
                 gameAction: ability.actions.multiple([
-                    ability.actions.discardStatusToken(context => ({ target: context.target.personalHonor })),
+                    ability.actions.discardStatusToken(context => ({ target: context.target.statusTokens })),
                     ability.actions.cardLastingEffect(context => ({
                         effect: [
                             ability.effects.setMilitarySkill(context.target.printedMilitarySkill),
@@ -21,7 +21,7 @@ class Unmask extends DrawCard {
                 ])
             },
             gameAction: ability.actions.gainHonor(context => ({ amount: 2, target: context.target.controller })),
-            effect: 'discard any status token on {0} and set its skill to its printed value until the end of the conflict. {1} gains 2 honor.',
+            effect: 'discard all status tokens on {0} and set its skill to its printed value until the end of the conflict. {1} gains 2 honor.',
             effectArgs: context => context.target.controller
         });
     }

@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, TargetModes, Players, Locations } from '../../Constants.js';
+import { CardTypes, TargetModes, Players, Locations, CharacterStatus } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
 
 class FearlessSkirmisher extends DrawCard {
@@ -14,8 +14,8 @@ class FearlessSkirmisher extends DrawCard {
                     activePromptTitle: 'Choose a dishonored token',
                     mode: TargetModes.Token,
                     location: Locations.Any,
-                    cardCondition: card => {
-                        return card.dishonored;
+                    tokenCondition: token => {
+                        return token.grantedStatus === CharacterStatus.Dishonored;
                     }
                 },
                 character: {

@@ -5,7 +5,7 @@ import { CardTypes, EventNames, Stages } from '../Constants';
 import BaseCard = require('../basecard');
 import Ring = require ('../ring');
 import Player = require('../player');
-import StatusToken = require('../StatusToken');
+import StatusToken = require('../StatusTokens/StatusToken');
 
 type PlayerOrRingOrCardOrToken = Player | Ring | BaseCard | StatusToken;
 

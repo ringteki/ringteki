@@ -21,7 +21,8 @@ export enum Locations {
 
 export enum CharacterStatus {
     Honored = 'honored',
-    Dishonored = 'dishonored'
+    Dishonored = 'dishonored',
+    Tainted = 'tainted'
 }
 
 export enum Decks {
@@ -78,6 +79,7 @@ export enum EffectNames {
     HideWhenFaceUp = 'hideWhenFaceUp',
     HonorStatusDoesNotAffectLeavePlay = 'honorStatusDoesNotAffectLeavePlay',
     HonorStatusDoesNotModifySkill = 'honorStatusDoesNotModifySkill',
+    TaintedStatusDoesNotCostHonor = 'taintedStatusDoesNotCostHonor',
     HonorStatusReverseModifySkill = 'honorStatusReverseModifySkill',
     IncreaseLimitOnAbilities = 'increaseLimitOnAbilities',
     LoseKeyword = 'loseKeyword',

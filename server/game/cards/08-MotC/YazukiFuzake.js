@@ -13,7 +13,7 @@ class YasukiFuzake extends DrawCard {
                 first: {
                     cardType: CardTypes.Character,
                     gameAction: AbilityDsl.actions.discardStatusToken(context => ({
-                        target: context.targets.first.personalHonor
+                        target: context.targets.first.statusTokens
                     }))
                 },
                 second: {
@@ -22,11 +22,11 @@ class YasukiFuzake extends DrawCard {
                     optional: true,
                     cardCondition: (card, context) => card.controller !== context.targets.first.controller,
                     gameAction: AbilityDsl.actions.discardStatusToken(context => ({
-                        target: !Array.isArray(context.targets.second) && context.targets.second.personalHonor
+                        target: !Array.isArray(context.targets.second) && context.targets.second.statusTokens
                     }))
                 }
             },
-            effect: 'discard the status token from {1}{2}{3}',
+            effect: 'discard all status tokens from {1}{2}{3}',
             effectArgs: context => [context.targets.first, context.targets.second[0] ? '' : ' and ', context.targets.second]
         });
     }

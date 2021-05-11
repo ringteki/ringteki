@@ -85,11 +85,11 @@ describe('Prepare for War', function() {
             expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
             this.player1.clickCard(this.matsuBerserker);
 
-            expect(this.player1).toHavePrompt('Do you wish to discard the status token?');
+            expect(this.player1).toHavePrompt('Do you wish to discard Honored Token?');
             this.player1.clickPrompt('Yes');
 
             expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to choose to discard the status token from Matsu Berserker');
-            expect(this.getChatLogs(1)).toContain('player1 chooses to discard the status token from Matsu Berserker');
+            expect(this.getChatLogs(1)).toContain('player1 chooses to discard Honored Token from Matsu Berserker');
             expect(this.matsuBerserker.isHonored).toBe(false);
         });
 
@@ -99,11 +99,11 @@ describe('Prepare for War', function() {
             expect(this.player1).toBeAbleToSelect(this.akodoZentaro);
             this.player1.clickCard(this.akodoZentaro);
 
-            expect(this.player1).toHavePrompt('Do you wish to discard the status token?');
+            expect(this.player1).toHavePrompt('Do you wish to discard Dishonored Token?');
             this.player1.clickPrompt('Yes');
 
             expect(this.getChatLogs(2)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
-            expect(this.getChatLogs(1)).toContain('player1 chooses to discard the status token from Akodo Zentarō');
+            expect(this.getChatLogs(1)).toContain('player1 chooses to discard Dishonored Token from Akodo Zentarō');
             expect(this.akodoZentaro.isHonored).toBe(true);
         });
 
@@ -113,7 +113,7 @@ describe('Prepare for War', function() {
             expect(this.player1).toBeAbleToSelect(this.akodoZentaro);
             this.player1.clickCard(this.akodoZentaro);
 
-            expect(this.player1).toHavePrompt('Do you wish to discard the status token?');
+            expect(this.player1).toHavePrompt('Do you wish to discard Honored Token?');
             this.player1.clickPrompt('Yes');
 
             expect(this.akodoZentaro.isHonored).toBe(true);
@@ -124,6 +124,48 @@ describe('Prepare for War', function() {
             this.player1.clickCard(this.prepareForWar);
             this.player1.clickCard(this.akodoZentaro);
             expect(this.getChatLogs(3)).toContain('player1 plays Prepare for War to honor Akodo Zentarō');
+        });
+
+        it('should prompt to discard each the status token from the character', function() {
+            this.akodoZentaro.dishonor();
+            this.akodoZentaro.taint();
+            this.player1.clickCard(this.prepareForWar);
+            expect(this.player1).toBeAbleToSelect(this.akodoZentaro);
+            this.player1.clickCard(this.akodoZentaro);
+
+            expect(this.player1).toHavePrompt('Do you wish to discard Dishonored Token?');
+            this.player1.clickPrompt('Yes');
+            expect(this.player1).toHavePrompt('Do you wish to discard Tainted Token?');
+            this.player1.clickPrompt('Yes');
+
+            expect(this.akodoZentaro.isDishonored).toBe(false);
+            expect(this.akodoZentaro.isTainted).toBe(false);
+
+            expect(this.getChatLogs(5)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
+            expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Akodo Zentarō');
+            expect(this.getChatLogs(3)).toContain('player1 chooses to discard Tainted Token from Akodo Zentarō');
+            expect(this.akodoZentaro.isHonored).toBe(true);
+        });
+
+        it('should prompt to discard each the status token from the character', function() {
+            this.akodoZentaro.dishonor();
+            this.akodoZentaro.taint();
+            this.player1.clickCard(this.prepareForWar);
+            expect(this.player1).toBeAbleToSelect(this.akodoZentaro);
+            this.player1.clickCard(this.akodoZentaro);
+
+            expect(this.player1).toHavePrompt('Do you wish to discard Dishonored Token?');
+            this.player1.clickPrompt('Yes');
+            expect(this.player1).toHavePrompt('Do you wish to discard Tainted Token?');
+            this.player1.clickPrompt('No');
+
+            expect(this.akodoZentaro.isDishonored).toBe(false);
+            expect(this.akodoZentaro.isTainted).toBe(true);
+
+            expect(this.getChatLogs(5)).toContain('player1 plays Prepare for War to honor and choose to discard the status token from Akodo Zentarō');
+            expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Akodo Zentarō');
+            expect(this.getChatLogs(3)).not.toContain('player1 chooses to discard Tainted Token from Akodo Zentarō');
+            expect(this.akodoZentaro.isHonored).toBe(true);
         });
     });
 });

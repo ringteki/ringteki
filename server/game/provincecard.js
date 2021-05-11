@@ -12,7 +12,13 @@ class ProvinceCard extends BaseCard {
 
         this.isProvince = true;
         this.isBroken = false;
-        this.menu = _([{ command: 'break', text: 'Break/unbreak this province' }, { command: 'hide', text: 'Flip face down' }]);
+        this.menu = _([
+            { command: 'break', text: 'Break/unbreak this province' },
+            { command: 'hide', text: 'Flip face down' },
+            { command: 'dishonor', text: 'Dishonor' },
+            { command: 'honor', text: 'Honor' },
+            { command: 'taint', text: 'Taint/Cleanse' }
+        ]);
 
         this.persistentEffect({
             condition: context => context.source.hasEminent(),

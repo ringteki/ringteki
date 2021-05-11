@@ -19,7 +19,10 @@ import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');
-const StatusToken = require('./StatusToken');
+const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
+const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
+const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
+import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
 
 const ValidKeywords = [
     'ancestral',
@@ -72,6 +75,7 @@ class BaseCard extends EffectSource {
         this.printedFaction = cardData.clan;
         this.attachments = _([]);
         this.childCards = [];
+        this.statusTokens = [];
 
         this.setupCardAbilities(AbilityDsl);
         this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
@@ -413,6 +417,7 @@ class BaseCard extends EffectSource {
         if(!activeLocations[Locations.Provinces].includes(from) || !activeLocations[Locations.Provinces].includes(to)) {
             this.removeLastingEffects();
         }
+        this.updateStatusTokenEffects();
         _.each(this.persistentEffects, effect => {
             if(effect.location !== Locations.Any) {
                 if(activeLocations[effect.location].includes(to) && !activeLocations[effect.location].includes(from)) {
@@ -823,51 +828,88 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
-    setPersonalHonorByTokenType(tokenType) {
-        const token = new StatusToken(this.game, this, tokenType === CharacterStatus.Honored);
-        this.setPersonalHonor(token);
+    addStatusToken(tokenType) {
+        tokenType = tokenType.grantedStatus || tokenType;
+        if(!this.statusTokens.find(a => a.grantedStatus === tokenType)) {
+            if(tokenType === CharacterStatus.Honored && this.isDishonored) {
+                this.removeStatusToken(CharacterStatus.Dishonored);
+            } else if(tokenType === CharacterStatus.Dishonored && this.isHonored) {
+                this.removeStatusToken(CharacterStatus.Honored);
+            } else {
+                const token = GetStatusToken(this.game, this, tokenType);
+                if(token) {
+                    token.setCard(this);
+                    this.statusTokens.push(token);
+                }
+            }
+        }
     }
 
-    setPersonalHonor(token) {
-        if(this.personalHonor && token !== this.personalHonor) {
-            this.personalHonor.setCard(null);
+    removeStatusToken(tokenType) {
+        tokenType = tokenType.grantedStatus || tokenType;
+        const index = this.statusTokens.findIndex(a => a.grantedStatus === tokenType);
+        if(index > -1) {
+            const realToken = this.statusTokens[index];
+            realToken.setCard(null);
+            this.statusTokens.splice(index, 1);
         }
-        this.personalHonor = token || null;
-        if(this.personalHonor) {
-            this.personalHonor.setCard(this);
+    }
+
+    getStatusToken(tokenType) {
+        return this.statusTokens.find(a => a.grantedStatus === tokenType);
+    }
+
+    updateStatusTokenEffects() {
+        if(this.statusTokens) {
+            this.statusTokens.forEach(token => {
+                token.setCard(this);
+            })
         }
     }
 
     get isHonored() {
-        return !!this.personalHonor && !!this.personalHonor.honored;
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);
     }
 
     honor() {
         if(this.isHonored) {
             return;
-        } else if(this.isDishonored) {
-            this.makeOrdinary();
-        } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, true));
         }
+        this.addStatusToken(CharacterStatus.Honored);
     }
 
     get isDishonored() {
-        return !!this.personalHonor && !!this.personalHonor.dishonored;
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Dishonored);
     }
 
     dishonor() {
         if(this.isDishonored) {
             return;
-        } if(this.isHonored) {
-            this.makeOrdinary();
-        } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, false));
         }
+        this.addStatusToken(CharacterStatus.Dishonored);
+    }
+
+    get isTainted() {
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Tainted);
+    }
+
+    taint() {
+        if(this.isTainted) {
+            return;
+        }
+        this.addStatusToken(CharacterStatus.Tainted);
+    }
+
+    untaint() {
+        if(!this.isTainted) {
+            return;
+        }
+        this.removeStatusToken(CharacterStatus.Tainted);
     }
 
     makeOrdinary() {
-        this.setPersonalHonor(null);
+        this.removeStatusToken(CharacterStatus.Honored);
+        this.removeStatusToken(CharacterStatus.Dishonored);
     }
 
     isOrdinary() {
@@ -913,6 +955,7 @@ class BaseCard extends EffectSource {
             type: this.getType(),
             isDishonored: this.isDishonored,
             isHonored: this.isHonored,
+            isTainted: !!this.isTainted,
             uuid: this.uuid
         };
 

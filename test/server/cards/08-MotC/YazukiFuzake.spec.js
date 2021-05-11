@@ -22,6 +22,7 @@ describe('Yasuki Fuzake', function() {
                 this.dojiChallenger.honor();
                 this.eagerScout.honor();
                 this.asahinaStoryteller.honor();
+                this.asahinaStoryteller.taint();
                 this.yasukiFuzake.dishonor();
                 this.player1.pass();
                 this.player2.clickCard('noble-sacrifice');
@@ -67,11 +68,15 @@ describe('Yasuki Fuzake', function() {
             });
 
             it('should remove the status tokens of chosen characters', function() {
+                expect(this.eagerScout.isHonored).toBe(true);
+                expect(this.asahinaStoryteller.isHonored).toBe(true);
+                expect(this.asahinaStoryteller.isTainted).toBe(true);
                 this.player1.clickCard(this.yasukiFuzake);
                 this.player1.clickCard(this.eagerScout);
                 this.player1.clickCard(this.asahinaStoryteller);
                 expect(this.eagerScout.isHonored).toBe(false);
                 expect(this.asahinaStoryteller.isHonored).toBe(false);
+                expect(this.asahinaStoryteller.isTainted).toBe(false);
                 expect(this.yasukiFuzake.location).toBe('dynasty discard pile');
             });
         });
