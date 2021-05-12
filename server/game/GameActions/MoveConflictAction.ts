@@ -20,7 +20,7 @@ export class MoveConflictAction extends CardGameAction {
     }
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card || !context.game.isDuringConflict() || card.type !== CardTypes.Province || card.isConflictProvince() || !card.canBeAttacked() || card.controller !== context.game.currentConflict.conflictProvince.controller) {
+        if(!card || !context.game.isDuringConflict() || card.type !== CardTypes.Province || card.isConflictProvince() || !card.canBeAttacked() || !context.game.currentConflict.getConflictProvinces().some(a => a.controller === card.controller)) {
             return false;
         }
         return super.canAffect(card, context);

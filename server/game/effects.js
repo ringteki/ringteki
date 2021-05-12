@@ -3,6 +3,7 @@ const _ = require('underscore');
 const AbilityLimit = require('./abilitylimit.js');
 const CopyCharacter = require('./Effects/CopyCharacter');
 const GainAllAbiliites = require('./Effects/GainAllAbilities.js');
+const GainAllAbiliitesDynamic = require('./Effects/GainAllAbilitiesDynamic.js');
 const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
 const GainAbility = require('./Effects/GainAbility');
@@ -67,11 +68,13 @@ const Effects = {
     entersPlayWithStatus: (status) => EffectBuilder.card.static(EffectNames.EntersPlayWithStatus, status),
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectNames.EntersPlayForOpponent),
     fateCostToAttack: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToAttack, amount),
+    cardCostToAttackMilitary: (amount = 1) => EffectBuilder.card.flexible(EffectNames.CardCostToAttackMilitary, amount),
     honorCostToDeclare: (amount = 1) => EffectBuilder.card.flexible(EffectNames.HonorCostToDeclare, amount),
     fateCostToRingToDeclareConflictAgainst: (amount = 1) => EffectBuilder.card.flexible(EffectNames.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),
     gainAbility: (abilityType, properties) => EffectBuilder.card.static(EffectNames.GainAbility, new GainAbility(abilityType, properties)),
     gainAllAbilities: (character) => EffectBuilder.card.static(EffectNames.GainAllAbilities, new GainAllAbiliites(character)),
+    gainAllAbilitiesDynamic: (match) => EffectBuilder.card.static(EffectNames.GainAllAbilitiesDynamic, new GainAllAbiliitesDynamic(match)),
     gainExtraFateWhenPlayed: (amount = 1) => EffectBuilder.card.flexible(EffectNames.GainExtraFateWhenPlayed, amount),
     gainPlayAction: (playActionClass) => EffectBuilder.card.detached(EffectNames.GainPlayAction, {
         apply: card => {
@@ -84,6 +87,7 @@ const Effects = {
     hideWhenFaceUp: () => EffectBuilder.card.static(EffectNames.HideWhenFaceUp),
     honorStatusDoesNotAffectLeavePlay: () => EffectBuilder.card.flexible(EffectNames.HonorStatusDoesNotAffectLeavePlay),
     honorStatusDoesNotModifySkill: () => EffectBuilder.card.flexible(EffectNames.HonorStatusDoesNotModifySkill),
+    taintedStatusDoesNotCostHonor: () => EffectBuilder.card.flexible(EffectNames.TaintedStatusDoesNotCostHonor),
     honorStatusReverseModifySkill: () => EffectBuilder.card.flexible(EffectNames.HonorStatusReverseModifySkill),
     immunity: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(properties)),
     increaseLimitOnAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnAbilities, abilities),
@@ -235,7 +239,8 @@ const Effects = {
     modifyConflictElementsToResolve: (value) => EffectBuilder.conflict.static(EffectNames.ModifyConflictElementsToResolve, value), // TODO: Add this to lasting effect checks
     restrictNumberOfDefenders: (value) => EffectBuilder.conflict.static(EffectNames.RestrictNumberOfDefenders, value), // TODO: Add this to lasting effect checks
     resolveConflictEarly: () => EffectBuilder.player.static(EffectNames.ResolveConflictEarly),
-    forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed)
+    forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed),
+    additionalAttackedProvince: (province) => EffectBuilder.conflict.static(EffectNames.AdditionalAttackedProvince, province)
 };
 
 module.exports = Effects;

@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, CharacterStatus } = require('../../Constants');
 
 class BayushiCollector extends DrawCard {
     setupCardAbilities(ability) {
@@ -10,7 +10,8 @@ class BayushiCollector extends DrawCard {
                 cardCondition: card => card.parent && card.parent.type === CardTypes.Character && card.parent.isDishonored,
                 gameAction: [ability.actions.discardFromPlay(),
                     ability.actions.discardStatusToken(context => ({
-                        target: context.target.parent.personalHonor}))
+                        target: context.target.parent.getStatusToken(CharacterStatus.Dishonored)
+                    }))
                 ]
             }
         });

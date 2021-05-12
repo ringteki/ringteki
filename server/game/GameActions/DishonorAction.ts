@@ -1,5 +1,5 @@
 import { CardGameAction, CardActionProperties} from './CardGameAction';
-import { CardTypes, Locations, EventNames } from '../Constants';
+import { CardTypes, Locations, EventNames, CharacterStatus } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
 
@@ -24,5 +24,8 @@ export class DishonorAction extends CardGameAction {
 
     eventHandler(event): void {
         event.card.dishonor()
+        if (event.card.isDishonored) {
+            event.card.game.raiseEvent(EventNames.OnStatusTokenGained, { token: event.card.getStatusToken(CharacterStatus.Dishonored), card: event.card });
+        }
     }
 }

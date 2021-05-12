@@ -25,6 +25,7 @@ class TheWesternWind extends DrawCard {
                             this.game.addMessage('{0} selects {1} and puts {2} into {3}', event.player, cards, cards.length > 1 ? 'them' : 'it', context.target.facedown ? context.target.location : context.target);
                             cards.forEach(card => {
                                 event.player.moveCard(card, context.target.location);
+                                card.facedown = false;
                             });
                         } else {
                             this.game.addMessage('{0} selects no characters', event.player);

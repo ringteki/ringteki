@@ -85,6 +85,29 @@ describe('Bayushi Yojiro', function() {
                 )).toBe(true);
             });
 
+            it('should stop tainted status modifying skills', function() {
+                this.initiateConflict({
+                    attackers: [this.bayushiYojiro, this.bayushiAramoro],
+                    defenders: [this.youngHarrier]
+                });
+                expect(this.youngHarrier.getMilitarySkill()).toBe(1);
+                expect(this.youngHarrier.getPoliticalSkill()).toBe(1);
+                expect(this.youngHarrier.isTainted).toBe(false);
+                this.youngHarrier.taint();
+                this.game.checkGameState(true);
+                expect(this.youngHarrier.isTainted).toBe(true);
+                expect(this.youngHarrier.getMilitarySkill()).toBe(1);
+                expect(this.youngHarrier.getPoliticalSkill()).toBe(1);
+                expect(this.youngHarrier.getMilitaryModifiers().some(modifier =>
+                    modifier.name === 'Tainted Token (Bayushi Yojiro)' &&
+                    modifier.amount === 0
+                )).toBe(true);
+                expect(this.youngHarrier.getPoliticalModifiers().some(modifier =>
+                    modifier.name === 'Tainted Token (Bayushi Yojiro)' &&
+                    modifier.amount === 0
+                )).toBe(true);
+            });
+
             it('should stop honor status adding honor on leaving play', function() {
                 this.initiateConflict({
                     attackers: [this.bayushiYojiro, this.bayushiAramoro],

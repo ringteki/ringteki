@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, TargetModes, Players, Locations } from '../../Constants.js';
+import { CardTypes, TargetModes, Players, Locations, CharacterStatus } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
 
 class FearlessSkirmisher extends DrawCard {
@@ -7,15 +7,15 @@ class FearlessSkirmisher extends DrawCard {
         this.reaction({
             title: 'Move a dishonored status token',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating() && event.conflict.conflictType === 'military'
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating() && event.conflict.conflictType === 'military'
             },
             targets: {
                 token: {
                     activePromptTitle: 'Choose a dishonored token',
                     mode: TargetModes.Token,
                     location: Locations.Any,
-                    cardCondition: card => {
-                        return card.dishonored;
+                    tokenCondition: token => {
+                        return token.grantedStatus === CharacterStatus.Dishonored;
                     }
                 },
                 character: {

@@ -114,7 +114,7 @@ describe('The Western Wind', function() {
             expect(this.player1.player.getDynastyCardsInProvince('province 1').length).toBe(p1Count + 2);
         });
 
-        it('should put the new cards in facedown', function() {
+        it('should put the new cards in faceup', function() {
             this.p21.facedown = false;
             this.p22.facedown = false;
             this.game.checkGameState(true);
@@ -125,8 +125,8 @@ describe('The Western Wind', function() {
 
             expect(this.chagatai.location).toBe(this.p1.location);
             expect(this.kageyu.location).toBe(this.p1.location);
-            expect(this.chagatai.facedown).toBe(true);
-            expect(this.kageyu.facedown).toBe(true);
+            expect(this.chagatai.facedown).toBe(false);
+            expect(this.kageyu.facedown).toBe(false);
         });
 
         it('should shuffle', function() {

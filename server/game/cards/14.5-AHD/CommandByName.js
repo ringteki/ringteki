@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Locations } = require('../../Constants');
+const { Locations, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 
 class CommandByName extends DrawCard {
@@ -10,14 +10,21 @@ class CommandByName extends DrawCard {
                 AbilityDsl.costs.payHonor(1),
                 AbilityDsl.costs.discardCard({ location: Locations.Hand })
             ],
-            condition: (context) => context.game.isDuringConflict() && context.game.currentConflict.conflictProvince,
-            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                target: context.game.currentConflict.conflictProvince,
-                targetLocation: Locations.Provinces,
-                effect: AbilityDsl.effects.setBaseProvinceStrength(0)
+            condition: (context) => context.game.isDuringConflict(),
+            gameAction: AbilityDsl.actions.selectCard(context => ({
+                activePromptTitle: 'Choose an attacked province',
+                hidePromptIfSingleCard: true,
+                cardType: CardTypes.Province,
+                location: Locations.Provinces,
+                cardCondition: card => card.isConflictProvince(),
+                message: '{0} reduces the strength of {1} to 0',
+                messageArgs: cards => [context.player, cards],
+                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                    targetLocation: Locations.Provinces,
+                    effect: AbilityDsl.effects.setBaseProvinceStrength(0)
+                }))
             })),
-            effect: 'reduce the strength of {1} to 0',
-            effectArgs: context => [context.game.currentConflict.conflictProvince]
+            effect: 'reduce the strength of an attacked province to 0'
         });
     }
 }

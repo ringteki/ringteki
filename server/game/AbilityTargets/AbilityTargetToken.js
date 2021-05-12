@@ -7,6 +7,7 @@ class AbilityTargetToken {
         this.properties = properties;
         this.properties.location = this.properties.location || Locations.PlayArea;
         this.selector = this.getSelector(properties);
+        this.properties.singleToken = this.properties.singleToken || true;
         for(let gameAction of this.properties.gameAction) {
             gameAction.setDefaultTarget(context => context.tokens[name]);
         }
@@ -20,21 +21,26 @@ class AbilityTargetToken {
 
     getSelector(properties) {
         let cardCondition = (card, context) => {
-            let token = card.personalHonor;
-            if(!token) {
+            let tokens = [...card.statusTokens];
+            if(!tokens || tokens.length === 0) {
                 return false;
             }
             let contextCopy = context.copy();
-            contextCopy.tokens[this.name] = token;
+            contextCopy.tokens[this.name] = tokens;
             if(this.name === 'target') {
-                contextCopy.token = token;
+                contextCopy.token = tokens;
             }
             if(context.stage === Stages.PreTarget && this.dependentCost && !this.dependentCost.canPay(contextCopy)) {
                 return false;
             }
-            return (!properties.cardCondition || properties.cardCondition(token, contextCopy)) &&
-                       (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
-                       (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
+
+            let tokensValid = true;
+            if(properties.tokenCondition) {
+                tokensValid = tokensValid && tokens.some(a => properties.tokenCondition(a, context));
+            }
+
+            return (tokensValid) && (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
+                    (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
         let cardType = properties.cardType || [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding, CardTypes.Province, CardTypes.Role, CardTypes.Stronghold];
         return CardSelector.for(Object.assign({}, properties, { cardType: cardType, cardCondition: cardCondition, targets: false }));
@@ -81,9 +87,28 @@ class AbilityTargetToken {
             context: context,
             selector: this.selector,
             onSelect: (player, card) => {
-                context.tokens[this.name] = card.personalHonor;
-                if(this.name === 'target') {
-                    context.token = card.personalHonor;
+                let validTokens = card.statusTokens.filter(token => (!this.properties.tokenCondition || this.properties.tokenCondition(token, context)) && (this.properties.gameAction.length === 0 || this.properties.gameAction.some(action => action.canAffect(token, context))));
+                if(this.properties.singleToken && validTokens.length > 1) {
+                    const choices = validTokens.map(token => token.name);
+                    const handlers = validTokens.map(token => {
+                        return () => {
+                            context.tokens[this.name] = [token];
+                            if(this.name === 'target') {
+                                context.token = [token];
+                            }
+                        };
+                    });
+                    context.game.promptWithHandlerMenu(player, {
+                        activePromptTitle: 'Which token do you wish to select?',
+                        choices: choices,
+                        handlers: handlers,
+                        context: context
+                    });
+                } else {
+                    context.tokens[this.name] = validTokens;
+                    if(this.name === 'target') {
+                        context.token = validTokens;
+                    }
                 }
                 return true;
             },
@@ -103,10 +128,10 @@ class AbilityTargetToken {
     }
 
     checkTarget(context) {
-        if(!context.tokens[this.name] || context.choosingPlayerOverride && this.getChoosingPlayer(context) === context.player) {
+        if(!context.tokens[this.name] || context.tokens[this.name].length === 0 || context.choosingPlayerOverride && this.getChoosingPlayer(context) === context.player) {
             return false;
         }
-        return this.selector.canTarget(context.tokens[this.name].card, context);
+        return this.selector.canTarget(context.tokens[this.name][0].card, context);
     }
 
     getChoosingPlayer(context) {

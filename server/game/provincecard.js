@@ -12,7 +12,13 @@ class ProvinceCard extends BaseCard {
 
         this.isProvince = true;
         this.isBroken = false;
-        this.menu = _([{ command: 'break', text: 'Break/unbreak this province' }, { command: 'hide', text: 'Flip face down' }]);
+        this.menu = _([
+            { command: 'break', text: 'Break/unbreak this province' },
+            { command: 'hide', text: 'Flip face down' },
+            { command: 'dishonor', text: 'Dishonor' },
+            { command: 'honor', text: 'Honor' },
+            { command: 'taint', text: 'Taint/Cleanse' }
+        ]);
 
         this.persistentEffect({
             condition: context => context.source.hasEminent(),
@@ -74,7 +80,7 @@ class ProvinceCard extends BaseCard {
     }
 
     isConflictProvince() {
-        return this.game.currentConflict && this.game.currentConflict.conflictProvince === this;
+        return this.game.currentConflict && this.game.currentConflict.getConflictProvinces().includes(this);
     }
 
     canBeAttacked() {
@@ -156,7 +162,8 @@ class ProvinceCard extends BaseCard {
         let menu = super.getMenu();
 
         if(menu) {
-            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked() && this.game.currentConflict.conflictProvince && this.controller === this.game.currentConflict.conflictProvince.controller) {
+            if(this.game.isDuringConflict() && !this.isConflictProvince() && this.canBeAttacked()
+                && this.game.currentConflict.getConflictProvinces().some(a => a.controller === this.controller)) {
                 menu.push({ command: 'move_conflict', text: 'Move Conflict'});
             }
 

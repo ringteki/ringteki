@@ -11,7 +11,7 @@ import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
 import Game = require('./game');
 
-import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players } from './Constants';
+import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players, CharacterStatus } from './Constants';
 import { ActionProps, TriggeredAbilityProps, PersistentEffectProps, AttachmentConditionProps } from './Interfaces';
 import PlayDisguisedCharacterAction = require('./PlayDisguisedCharacterAction');
 import DynastyCardAction = require('./dynastycardaction');
@@ -19,7 +19,10 @@ import PlayCharacterAction = require('./playcharacteraction');
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');
-const StatusToken = require('./StatusToken');
+const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
+const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
+const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
+import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
 
 const ValidKeywords = [
     'ancestral',
@@ -72,6 +75,7 @@ class BaseCard extends EffectSource {
         this.printedFaction = cardData.clan;
         this.attachments = _([]);
         this.childCards = [];
+        this.statusTokens = [];
 
         this.setupCardAbilities(AbilityDsl);
         this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
@@ -87,7 +91,7 @@ class BaseCard extends EffectSource {
         this.printedName = name;
     }
 
-    get actions(): CardAction[] {
+    _getActions(ignoreDynamicGains = false): CardAction[] {
         let actions = this.abilities.actions;
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
@@ -98,6 +102,16 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => actions = actions.concat(effect.value.getActions(this)));
         }
+        if(!ignoreDynamicGains) {
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let context = this.game.getFrameworkContext(this.controller);
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    actions = actions.concat(effect.value.getActions(this))
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = actions.concat(effectActions);
@@ -107,7 +121,11 @@ class BaseCard extends EffectSource {
         return allAbilities;
     }
 
-    get reactions(): TriggeredAbility[] {
+    get actions(): CardAction[] {
+        return this._getActions();
+    }
+
+    _getReactions(ignoreDynamicGains = false): TriggeredAbility[] {
         const TriggeredAbilityTypes = [AbilityTypes.ForcedInterrupt, AbilityTypes.ForcedReaction, AbilityTypes.Interrupt, AbilityTypes.Reaction, AbilityTypes.WouldInterrupt];
         let reactions =  this.abilities.reactions;
         if(this.anyEffect(EffectNames.CopyCharacter)) {
@@ -119,6 +137,16 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => reactions = reactions.concat(effect.value.getReactions(this)));
         }
+        if(!ignoreDynamicGains) {
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                let context = this.game.getFrameworkContext(this.controller);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    reactions = reactions.concat(effect.value.getReactions(this))
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         let allAbilities = reactions.concat(effectReactions);
@@ -128,7 +156,11 @@ class BaseCard extends EffectSource {
         return allAbilities;
     }
 
-    get persistentEffects(): any[] {
+    get reactions(): TriggeredAbility[] {
+        return this._getReactions();
+    }
+
+    _getPersistentEffects(ignoreDynamicGains = false): any[] {
         let gainedPersistentEffects = this.getEffects(EffectNames.GainAbility).filter(ability => ability.abilityType === AbilityTypes.Persistent);
         if(this.anyEffect(EffectNames.CopyCharacter)) {
             let mostRecentEffect = _.last(this.getRawEffects().filter(effect => effect.type === EffectNames.CopyCharacter));
@@ -138,6 +170,19 @@ class BaseCard extends EffectSource {
             let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilities);
             effects.forEach(effect => gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()));
         }
+        if(!ignoreDynamicGains) {
+            // This is needed even though there are no dynamic persistent effects
+            // Because the effect itself is persistent and to ensure we pick up all reactions/interrupts, we need this check to happen
+            // As the game state is applying the effect
+            if(this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
+                let effects = this.getRawEffects().filter(effect => effect.type === EffectNames.GainAllAbilitiesDynamic);
+                let context = this.game.getFrameworkContext(this.controller);
+                effects.forEach(effect => {
+                    effect.value.calculate(this, context); //fetch new abilities
+                    gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects())
+                });
+            }
+        }
 
         const lostAllNonKeywordsAbilities = this.anyEffect(EffectNames.LoseAllNonKeywordAbilities);
         if(lostAllNonKeywordsAbilities) {
@@ -146,6 +191,10 @@ class BaseCard extends EffectSource {
             return allAbilities;
         }
         return this.isBlank() ? gainedPersistentEffects : this.abilities.persistentEffects.concat(gainedPersistentEffects);
+    }
+
+    get persistentEffects(): any[] {
+        return this._getPersistentEffects();
     }
 
     /**
@@ -368,6 +417,7 @@ class BaseCard extends EffectSource {
         if(!activeLocations[Locations.Provinces].includes(from) || !activeLocations[Locations.Provinces].includes(to)) {
             this.removeLastingEffects();
         }
+        this.updateStatusTokenEffects();
         _.each(this.persistentEffects, effect => {
             if(effect.location !== Locations.Any) {
                 if(activeLocations[effect.location].includes(to) && !activeLocations[effect.location].includes(from)) {
@@ -452,6 +502,10 @@ class BaseCard extends EffectSource {
     }
 
     isConflictProvince(): boolean {
+        return false;
+    }
+
+    isInConflictProvince(): boolean {
         return false;
     }
 
@@ -774,47 +828,88 @@ class BaseCard extends EffectSource {
         this.controller.moveCard(card, location);
     }
 
-
-    setPersonalHonor(token) {
-        if(this.personalHonor && token !== this.personalHonor) {
-            this.personalHonor.setCard(null);
+    addStatusToken(tokenType) {
+        tokenType = tokenType.grantedStatus || tokenType;
+        if(!this.statusTokens.find(a => a.grantedStatus === tokenType)) {
+            if(tokenType === CharacterStatus.Honored && this.isDishonored) {
+                this.removeStatusToken(CharacterStatus.Dishonored);
+            } else if(tokenType === CharacterStatus.Dishonored && this.isHonored) {
+                this.removeStatusToken(CharacterStatus.Honored);
+            } else {
+                const token = GetStatusToken(this.game, this, tokenType);
+                if(token) {
+                    token.setCard(this);
+                    this.statusTokens.push(token);
+                }
+            }
         }
-        this.personalHonor = token || null;
-        if(this.personalHonor) {
-            this.personalHonor.setCard(this);
+    }
+
+    removeStatusToken(tokenType) {
+        tokenType = tokenType.grantedStatus || tokenType;
+        const index = this.statusTokens.findIndex(a => a.grantedStatus === tokenType);
+        if(index > -1) {
+            const realToken = this.statusTokens[index];
+            realToken.setCard(null);
+            this.statusTokens.splice(index, 1);
+        }
+    }
+
+    getStatusToken(tokenType) {
+        return this.statusTokens.find(a => a.grantedStatus === tokenType);
+    }
+
+    updateStatusTokenEffects() {
+        if(this.statusTokens) {
+            this.statusTokens.forEach(token => {
+                token.setCard(this);
+            })
         }
     }
 
     get isHonored() {
-        return !!this.personalHonor && !!this.personalHonor.honored;
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);
     }
 
     honor() {
         if(this.isHonored) {
             return;
-        } else if(this.isDishonored) {
-            this.makeOrdinary();
-        } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, true));
         }
+        this.addStatusToken(CharacterStatus.Honored);
     }
 
     get isDishonored() {
-        return !!this.personalHonor && !!this.personalHonor.dishonored;
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Dishonored);
     }
 
     dishonor() {
         if(this.isDishonored) {
             return;
-        } if(this.isHonored) {
-            this.makeOrdinary();
-        } else {
-            this.setPersonalHonor(new StatusToken(this.game, this, false));
         }
+        this.addStatusToken(CharacterStatus.Dishonored);
+    }
+
+    get isTainted() {
+        return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Tainted);
+    }
+
+    taint() {
+        if(this.isTainted) {
+            return;
+        }
+        this.addStatusToken(CharacterStatus.Tainted);
+    }
+
+    untaint() {
+        if(!this.isTainted) {
+            return;
+        }
+        this.removeStatusToken(CharacterStatus.Tainted);
     }
 
     makeOrdinary() {
-        this.setPersonalHonor(null);
+        this.removeStatusToken(CharacterStatus.Honored);
+        this.removeStatusToken(CharacterStatus.Dishonored);
     }
 
     isOrdinary() {
@@ -860,6 +955,7 @@ class BaseCard extends EffectSource {
             type: this.getType(),
             isDishonored: this.isDishonored,
             isHonored: this.isHonored,
+            isTainted: !!this.isTainted,
             uuid: this.uuid
         };
 

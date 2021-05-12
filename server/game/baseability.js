@@ -16,6 +16,8 @@ const { Stages, TargetModes } = require('./Constants.js');
  * ability is generated from.
  */
 class BaseAbility {
+    abilityType = 'action';
+
     /**
      * Creates an ability.
      *

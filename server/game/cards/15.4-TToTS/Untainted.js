@@ -15,7 +15,7 @@ class Untainted extends DrawCard {
                 activePromptTitle: 'Choose a status token',
                 mode: TargetModes.Token,
                 location: Locations.Any,
-                cardCondition: (token, context) => {
+                tokenCondition: (token, context) => {
                     return token.card === context.source.parent || token.card.isParticipating();
                 }
             },
@@ -26,7 +26,9 @@ class Untainted extends DrawCard {
                 AbilityDsl.actions.gainHonor(context => ({
                     target: context.player
                 }))
-            ])
+            ]),
+            effect: 'gain 1 honor and discard {1} from {2}',
+            effectArgs: context => [context.token, Array.isArray(context.token) ? context.token[0].card : context.token.card]
         });
     }
 

@@ -82,5 +82,33 @@ describe('Untainted', function() {
             expect(this.yoshi.isHonored).toBe(false);
             expect(this.player1.honor).toBe(initialHonor + 1);
         });
+
+        it('should prompt between two tokens to discard', function() {
+            const initialHonor = this.player1.honor;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi],
+                defenders: [this.challenger],
+                type: 'political'
+            });
+
+            this.yoshi.taint();
+            this.noMoreActions();
+
+            this.player1.clickCard(this.untainted);
+            this.player1.clickCard(this.yoshi);
+
+            expect(this.player1).toHavePrompt('Which token do you wish to select?');
+            expect(this.player1).toHavePromptButton('Honored Token');
+            expect(this.player1).toHavePromptButton('Tainted Token');
+            this.player1.clickPrompt('Tainted Token');
+
+            expect(this.yoshi.isHonored).toBe(true);
+            expect(this.yoshi.isTainted).toBe(false);
+            expect(this.player1.honor).toBe(initialHonor + 1);
+
+            expect(this.getChatLogs(5)).toContain('player1 uses Untainted to gain 1 honor and discard Tainted Token from Kakita Yoshi');
+        });
     });
 });

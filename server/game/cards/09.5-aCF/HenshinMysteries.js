@@ -10,7 +10,7 @@ class HenshinMysteries extends ProvinceCard {
     }
 
     cancelRingClaim(event) {
-        if(!this.isBroken && !this.isBlank() && event.conflict && event.conflict.conflictProvince === this && !event.cancelled) {
+        if(!this.isBroken && !this.isBlank() && event.conflict && event.conflict.getConflictProvinces().some(a => a === this) && !event.cancelled) {
             event.cancel();
             this.game.addMessage('{0} cancels the ring being claimed', this);
         }

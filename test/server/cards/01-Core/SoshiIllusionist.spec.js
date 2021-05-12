@@ -35,7 +35,42 @@ describe('Soshi Illusionst', function() {
             expect(this.shibaPeacemaker.isDishonored).toBe(false);
             expect(this.player1.fate).toBe(fate - 1);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Soshi Illusionist, spending 1 fate to discard Shiba Peacemaker\'s status token');
+            expect(this.getChatLogs(3)).toContain('player1 uses Soshi Illusionist, spending 1 fate to discard a status token from Shiba Peacemaker');
+            expect(this.getChatLogs(3)).toContain('player1 discards Dishonored Token');
+        });
+
+        it('Should prompt you to pick which token to discard if a character has two, then discard it', function() {
+            this.whisperer.taint();
+            this.player1.clickCard(this.illusionist);
+            this.player1.clickCard(this.whisperer);
+
+            expect(this.whisperer.isHonored).toBe(true);
+            expect(this.whisperer.isTainted).toBe(true);
+
+            expect(this.player1).toHavePrompt('Which token do you wish to discard?');
+            expect(this.player1).toHavePromptButton('Honored Token');
+            expect(this.player1).toHavePromptButton('Tainted Token');
+            this.player1.clickPrompt('Honored Token');
+            expect(this.whisperer.isHonored).toBe(false);
+            expect(this.whisperer.isTainted).toBe(true);
+            expect(this.getChatLogs(3)).toContain('player1 uses Soshi Illusionist, spending 1 fate to discard a status token from Doji Whisperer');
+            expect(this.getChatLogs(3)).toContain('player1 discards Honored Token');
+        });
+
+        it('Should prompt you to pick which token to discard if a character has two, then discard it', function() {
+            this.whisperer.taint();
+            this.player1.clickCard(this.illusionist);
+            this.player1.clickCard(this.whisperer);
+
+            expect(this.whisperer.isHonored).toBe(true);
+            expect(this.whisperer.isTainted).toBe(true);
+
+            expect(this.player1).toHavePrompt('Which token do you wish to discard?');
+            expect(this.player1).toHavePromptButton('Honored Token');
+            expect(this.player1).toHavePromptButton('Tainted Token');
+            this.player1.clickPrompt('Tainted Token');
+            expect(this.whisperer.isHonored).toBe(true);
+            expect(this.whisperer.isTainted).toBe(false);
         });
     });
 });

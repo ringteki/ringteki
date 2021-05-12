@@ -79,7 +79,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
-            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
             expect(this.player2).toHavePromptButton('Yes');
             expect(this.player2).toHavePromptButton('No');
         });
@@ -97,7 +97,7 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('2');
             this.player2.clickPrompt('1');
-            expect(this.player1).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player1).toHavePrompt('Do you want to trigger a province ability?');
             expect(this.player1).toHavePromptButton('Yes');
             expect(this.player1).toHavePromptButton('No');
         });
@@ -116,10 +116,10 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
-            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
             this.player2.clickPrompt('Yes');
-            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
-            expect(this.getChatLogs(10)).toContain('player2 chooses to trigger Manicured Garden\'s ability');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of an attacked province');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to trigger a province ability');
             expect(this.getChatLogs(10)).toContain('player2 uses Manicured Garden to gain 1 fate');
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.player2.fate).toBe(fate + 1);
@@ -139,10 +139,10 @@ describe('Cunning Negotiator', function() {
             this.player1.clickCard(this.cunning);
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('2');
-            expect(this.player2).toHavePrompt('Do you want to trigger Manicured Garden?');
+            expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
             this.player2.clickPrompt('No');
-            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of the attacked province');
-            expect(this.getChatLogs(10)).toContain('player2 chooses not to trigger Manicured Garden\'s ability');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: resolve the action ability of an attacked province');
+            expect(this.getChatLogs(10)).toContain('player2 chooses not to trigger a province ability');
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.player2.fate).toBe(fate);
         });

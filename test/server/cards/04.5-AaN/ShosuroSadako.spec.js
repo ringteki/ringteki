@@ -49,6 +49,19 @@ describe('Shosuro Sadako', function() {
                 expect(this.shosuroSadako.politicalSkill).toBe(4);
             });
 
+            it('should not impact tainted tokens', function() {
+                this.player2.clickCard('court-games');
+                this.player2.clickPrompt('Dishonor an opposing character');
+                this.player1.clickCard(this.shosuroSadako);
+                expect(this.shosuroSadako.isDishonored).toBe(true);
+                expect(this.shosuroSadako.militarySkill).toBe(4);
+                expect(this.shosuroSadako.politicalSkill).toBe(4);
+                this.shosuroSadako.taint();
+                this.game.checkGameState(true);
+                expect(this.shosuroSadako.militarySkill).toBe(6);
+                expect(this.shosuroSadako.politicalSkill).toBe(6);
+            });
+
             it('should be removed when Cloud the mind is played', function() {
                 this.player2.clickCard('court-games');
                 this.player2.clickPrompt('Dishonor an opposing character');

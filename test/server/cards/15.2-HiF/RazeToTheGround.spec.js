@@ -177,7 +177,8 @@ describe('Raze to the Ground', function() {
             this.player1.clickCard(this.garden);
             this.player1.clickPrompt('No');
             expect(this.entrenched.isBroken).toBe(true);
-            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Doji Challenger and breaking Manicured Garden to break Entrenched Position');
+            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Doji Challenger and breaking Manicured Garden to break an attacked province');
+            expect(this.getChatLogs(10)).toContain('player1 breaks Entrenched Position');
         });
 
         it('should trigger on break provinces that you break as a cost', function() {
@@ -222,7 +223,8 @@ describe('Raze to the Ground', function() {
             expect(this.player2).toBeAbleToSelect(this.publicForum);
             this.player2.clickCard(this.publicForum);
             expect(this.publicForum.isBroken).toBe(false);
-            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Doji Challenger and breaking Manicured Garden to break Public Forum');
+            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Doji Challenger and breaking Manicured Garden to break an attacked province');
+            expect(this.getChatLogs(10)).toContain('player1 breaks Public Forum');
             expect(this.getChatLogs(10)).toContain('player2 uses Public Forum to add an honor token to Public Forum instead of breaking it');
         });
 
@@ -258,7 +260,7 @@ describe('Raze to the Ground', function() {
             this.player1.clickCard(this.akodoToturi);
             this.player1.clickCard(this.garden);
             this.player2.clickPrompt('No');
-            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Akodo Toturi and breaking Manicured Garden');
+            expect(this.getChatLogs(10)).toContain('player1 plays Raze to the Ground, dishonoring Akodo Toturi and breaking Manicured Garden to break an attacked province');
         });
     });
 });

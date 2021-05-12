@@ -110,7 +110,9 @@ class PlayDisguisedCharacterAction extends BaseAction {
                 for(const attachment of replacedCharacter.attachments.toArray()) {
                     context.game.actions.attach({ target: context.source, attachment: attachment, viaDisguised: true }).addEventsToArray(moveEvents, context);
                 }
-                context.game.actions.moveStatusToken({ target: replacedCharacter.personalHonor, recipient: context.source }).addEventsToArray(moveEvents, context);
+                for(const token of replacedCharacter.statusTokens) {
+                    context.game.actions.moveStatusToken({ target: token, recipient: context.source }).addEventsToArray(moveEvents, context);
+                }
                 moveEvents.push(context.game.getEvent(EventNames.Unnamed, {}, () => {
                     context.game.checkGameState(true);
                     context.game.openThenEventWindow(context.game.actions.discardFromPlay({ cannotBeCancelled: true }).getEvent(replacedCharacter, context));

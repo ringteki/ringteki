@@ -291,6 +291,14 @@ class Player extends GameObject {
     }
 
     /**
+     * Returns an array of all conflict cards matching the predicate owned by this player
+     * @param {Function} predicate - DrawCard => Boolean
+     */
+    getAllConflictCards(predicate = (() => true)) {
+        return this.game.allCards.filter(card => card.owner === this && card.isConflict && predicate(card));
+    }
+
+    /**
      * Returns an Array of all characters and attachments matching the predicate controlled by this player
      * @param {Function} predicate  - DrawCard => Boolean
      */

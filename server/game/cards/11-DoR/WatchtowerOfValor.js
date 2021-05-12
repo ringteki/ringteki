@@ -8,13 +8,13 @@ class WatchtowerOfValor extends DrawCard {
             title: 'Draw a card',
             when: {
                 afterConflict: (event, context) => {
-                    if(event && event.conflict && event.conflict.conflictProvince && event.conflict.conflictProvince.location) {
-                        let cards = context.player.getDynastyCardsInProvince(event.conflict.conflictProvince.location);
-                        return cards.some((card) => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall'))
-                                && context.player.isDefendingPlayer() && event.conflict.winner === context.player;
+                    if(context.player.isDefendingPlayer() && event.conflict.winner === context.player) {
+                        let cards = event.conflict.getConflictProvinces().map(a => context.player.getDynastyCardsInProvince(a.location));
+                        return cards.some(c => c.some(card => card.isFaceup() && card.type === CardTypes.Holding && card.hasTrait('kaiu-wall')));
                     }
                     return false;
                 }
+
             },
             gameAction: AbilityDsl.actions.draw(),
             limit: AbilityDsl.limit.unlimitedPerConflict()

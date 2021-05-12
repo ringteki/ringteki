@@ -11,7 +11,7 @@ const SelectDefendersPrompt = require('./selectdefendersprompt.js');
 const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent');
 const AttackersMatrix = require('./attackersMatrix.js');
 
-const { Players, CardTypes, EventNames, EffectNames, Locations} = require('../../Constants');
+const { Players, CardTypes, EventNames, EffectNames, Locations, ConflictTypes} = require('../../Constants');
 const GameModes = require('../../../GameModes');
 
 /**
@@ -143,6 +143,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         if(!this.conflict.conflictPassed) {
             const totalFateCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.FateCostToAttack), 0);
             const totalHonorCost = this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.HonorCostToDeclare), 0);
+            const totalCardCost = this.conflict.conflictType === ConflictTypes.Military ? this.conflict.attackers.reduce((total, card) => total + card.sumEffects(EffectNames.CardCostToAttackMilitary), 0) : 0;
             const costEvents = [];
             if(!this.conflict.conflictPassed && totalFateCost > 0) {
                 this.game.addMessage('{0} pays {1} fate to declare their attackers', this.conflict.attackingPlayer, totalFateCost);
@@ -151,6 +152,16 @@ class ConflictFlow extends BaseStepWithPipeline {
             if(!this.conflict.conflictPassed && totalHonorCost > 0) {
                 this.game.addMessage('{0} pays {1} honor to declare their attackers', this.conflict.attackingPlayer, totalHonorCost);
                 Costs.payHonor(totalHonorCost).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer));
+            }
+            if(!this.conflict.conflictPassed && totalCardCost > 0) {
+                this.game.addMessage('{0} must discard {1} card{2} to declare their attackers', this.conflict.attackingPlayer, totalCardCost, totalCardCost > 1 ? 's' : '');
+                const props = {
+                    numCards: totalCardCost,
+                    manuallyRaiseEvent: true,
+                    message: '{0} discards {1}',
+                    messageArgs: (cards, player) => [player, cards]
+                };
+                Costs.discardCard(props).addEventsToArray(costEvents, this.game.getFrameworkContext(this.conflict.attackingPlayer), true);
             }
             if(costEvents.length > 0) {
                 this.game.openEventWindow(costEvents);
@@ -524,11 +535,13 @@ class ConflictFlow extends BaseStepWithPipeline {
             return;
         }
 
-        let province = this.conflict.conflictProvince;
-        let strength = this.conflict.provinceStrengthAtResolution === undefined ? province.getStrength() : this.conflict.provinceStrengthAtResolution;
-        if(this.conflict.isAttackerTheWinner() && this.conflict.skillDifference >= strength && !province.isBroken) {
-            this.game.applyGameAction(null, { break: province });
-        }
+        this.conflict.provinceStrengthsAtResolution.forEach(a => {
+            let province = a.province;
+            let strength = a.strength === undefined ? province.getStrength() : a.strength;
+            if(this.conflict.isAttackerTheWinner() && this.conflict.skillDifference >= strength && !province.isBroken) {
+                this.game.applyGameAction(null, { break: province });
+            }
+        });
     }
 
     resolveRingEffects() {

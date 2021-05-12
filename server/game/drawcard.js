@@ -8,7 +8,7 @@ const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
 
-const { Locations, EffectNames, CardTypes, PlayTypes } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -35,12 +35,12 @@ class DrawCard extends BaseCard {
         this.covert = false;
         this.isConflict = cardData.side === 'conflict';
         this.isDynasty = cardData.side === 'dynasty';
-        this.personalHonor = null;
 
         this.menu = _([
             { command: 'bow', text: 'Bow/Ready' },
             { command: 'honor', text: 'Honor' },
             { command: 'dishonor', text: 'Dishonor' },
+            { command: 'taint', text: 'Taint/Cleanse' },
             { command: 'addfate', text: 'Add 1 fate' },
             { command: 'remfate', text: 'Remove 1 fate' },
             { command: 'move', text: 'Move into/out of conflict' },
@@ -115,6 +115,10 @@ class DrawCard extends BaseCard {
         return rawEffects.length > 0 ? apparentFate : this.fate;
     }
 
+    isInConflictProvince() {
+        return this.game.currentConflict.isCardInConflictProvince(this);
+    }
+
     costLessThan(num) {
         let cost = this.getCost();
         return num && (cost || cost === 0) && cost < num;
@@ -146,7 +150,7 @@ class DrawCard extends BaseCard {
         clone.effects = _.clone(this.effects);
         clone.controller = this.controller;
         clone.bowed = this.bowed;
-        clone.personalHonor = this.personalHonor;
+        clone.statusTokens = [...this.statusTokens];
         clone.location = this.location;
         clone.parent = this.parent;
         clone.fate = this.fate;
@@ -376,6 +380,7 @@ class DrawCard extends BaseCard {
     }
 
     adjustHonorStatusModifiers(modifiers) {
+        // This is Yojiro's ability
         let doesNotModifyEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusDoesNotModifySkill);
         if(doesNotModifyEffects.length > 0) {
             modifiers.forEach(modifier => {
@@ -385,10 +390,11 @@ class DrawCard extends BaseCard {
                 }
             });
         }
+        // This is Sadako's ability
         let reverseEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusReverseModifySkill);
         if(reverseEffects.length > 0) {
             modifiers.forEach(modifier => {
-                if(modifier.type === 'token' && modifier.amount !== 0) {
+                if(modifier.type === 'token' && modifier.amount !== 0 && modifier.name === 'Dishonored Token') {
                     modifier.amount = 0 - modifier.amount;
                     modifier.name += ` (${StatModifier.getEffectName(reverseEffects[0])})`;
                 }
@@ -691,11 +697,6 @@ class DrawCard extends BaseCard {
         super.leavesPlay();
     }
 
-    updateEffects(from, to) {
-        super.updateEffects(from, to);
-        this.setPersonalHonor(this.personalHonor);
-    }
-
     resetForConflict() {
         this.covert = false;
         this.inConflict = false;
@@ -728,6 +729,10 @@ class DrawCard extends BaseCard {
         );
 
         if(elementsAdded.some(element => this.game.rings[element].getEffects(EffectNames.CannotDeclareRing).some(match => match(this.controller)))) {
+            return false;
+        }
+
+        if(conflictType === ConflictTypes.Military && attackers.reduce((total, card) => total + card.sumEffects(EffectNames.CardCostToAttackMilitary), 0) > this.controller.hand.size()) {
             return false;
         }
 

@@ -7,7 +7,7 @@ class SlovenlyScavenger extends DrawCard {
         this.reaction({
             title: 'Shuffle a discard pile into a deck',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && context.source.isParticipating()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             cost: AbilityDsl.costs.sacrificeSelf(),
             target: {

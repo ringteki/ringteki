@@ -27,6 +27,7 @@ import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
 import { GainFateAction, GainFateProperties } from './GainFateAction';
 import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
+import { GainStatusTokenAction, GainStatusTokenProperties } from './GainStatusTokenAction';
 import { HandlerAction, HandlerProperties } from './HandlerAction';
 import { HonorAction, HonorProperties } from './HonorAction';
 import { IfAbleAction, IfAbleActionProperties } from './IfAbleAction';
@@ -67,6 +68,7 @@ import { ReturnToHandAction, ReturnToHandProperties } from './ReturnToHandAction
 import { RevealAction, RevealProperties } from './RevealAction';
 import { SelectCardAction, SelectCardProperties } from './SelectCardAction';
 import { SelectRingAction, SelectRingProperties } from './SelectRingActions';
+import { SelectTokenAction, SelectTokenProperties } from './SelectTokenAction';
 import { SendHomeAction, SendHomeProperties } from './SendHomeAction';
 import { SequentialAction } from './SequentialAction';
 import { SequentialContextAction, SequentialContextProperties } from './SequentialContextAction';
@@ -129,6 +131,7 @@ const GameActions = {
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
     triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
+    gainStatusToken: (propertyFactory: GainStatusTokenProperties | ((context: TriggeredAbilityContext) => GainStatusTokenProperties) = {}) => new GainStatusTokenAction(propertyFactory),
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
@@ -185,6 +188,7 @@ const GameActions = {
     multipleContext: (propertyFactory: MultipleContextActionProperties | ((context: TriggeredAbilityContext) => MultipleContextActionProperties)) => new MultipleContextGameAction(propertyFactory),
     menuPrompt: (propertyFactory: MenuPromptProperties | ((context: TriggeredAbilityContext) => MenuPromptProperties)) => new MenuPromptAction(propertyFactory),
     selectCard: (propertyFactory: SelectCardProperties | ((context: TriggeredAbilityContext) => SelectCardProperties)) => new SelectCardAction(propertyFactory),
+    selectToken: (propertyFactory: SelectTokenProperties | ((context: TriggeredAbilityContext) => SelectTokenProperties)) => new SelectTokenAction(propertyFactory),
     sequential: (gameActions: GameAction[]) => new SequentialAction(gameActions), // takes an array of gameActions, not a propertyFactory
     sequentialContext: (propertyFactory: SequentialContextProperties | ((context: TriggeredAbilityContext) => SequentialContextProperties)) => new SequentialContextAction(propertyFactory)
 };

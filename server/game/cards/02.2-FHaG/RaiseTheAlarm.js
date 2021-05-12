@@ -12,7 +12,7 @@ class RaiseTheAlarm extends DrawCard {
             target: {
                 controller: Players.Self,
                 location: Locations.Provinces,
-                cardCondition: card => card.location === this.game.currentConflict.conflictProvince.location && card.isFacedown(),
+                cardCondition: card => card.isInConflictProvince() && card.isFacedown(),
                 gameAction: AbilityDsl.actions.flipDynasty()
             },
             then: context => ({

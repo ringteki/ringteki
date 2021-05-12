@@ -104,7 +104,35 @@ describe('Shameless Gossip', function() {
                 expect(this.dojiWhisperer.isDishonored).toBe(false);
                 expect(this.dojiHotaru.isHonored).toBe(false);
                 expect(this.dojiHotaru.isDishonored).toBe(false);
-                expect(this.getChatLogs(3)).toContain('player1 uses Shameless Gossip to move Doji Hotaru\'s Honored Token to Doji Whisperer');
+                expect(this.getChatLogs(5)).toContain('player1 uses Shameless Gossip to move a status token from Doji Hotaru to Doji Whisperer');
+                expect(this.getChatLogs(5)).toContain('player1 chooses to move Honored Token');
+            });
+
+            it('should let you choose which token to move and then move the chosen token', function() {
+                this.dojiHotaru.taint();
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.shamelessGossip],
+                    defenders: []
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.shamelessGossip);
+                this.player1.clickCard(this.dojiHotaru);
+                this.player1.clickCard(this.dojiWhisperer);
+
+                expect(this.player1).toHavePrompt('Which token do you wish to move?');
+                expect(this.player1).toHavePromptButton('Honored Token');
+                expect(this.player1).toHavePromptButton('Tainted Token');
+                this.player1.clickPrompt('Honored Token');
+
+                expect(this.dojiWhisperer.isHonored).toBe(false);
+                expect(this.dojiWhisperer.isDishonored).toBe(false);
+                expect(this.dojiWhisperer.isTainted).toBe(false);
+                expect(this.dojiHotaru.isTainted).toBe(true);
+                expect(this.dojiHotaru.isHonored).toBe(false);
+                expect(this.dojiHotaru.isDishonored).toBe(false);
+                expect(this.getChatLogs(5)).toContain('player1 uses Shameless Gossip to move a status token from Doji Hotaru to Doji Whisperer');
+                expect(this.getChatLogs(5)).toContain('player1 chooses to move Honored Token');
             });
         });
     });
