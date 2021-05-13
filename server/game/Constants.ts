@@ -162,6 +162,7 @@ export enum EffectNames {
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
     AdditionalAttackedProvince = 'additionalAttackedProvince',
+    ReplacePrintedElement = 'replacePrintedElement',
 };
 
 export enum Durations {

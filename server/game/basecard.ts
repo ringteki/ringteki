@@ -916,6 +916,24 @@ class BaseCard extends EffectSource {
         return !this.isHonored && !this.isDishonored;
     }
 
+    hasElementSymbols() {
+        return false;
+    }
+
+    getPrintedElementSymbols() {
+        return [];
+    }
+
+    getCurrentElementSymbols() {
+        const symbols = this.getPrintedElementSymbols();
+        let changeEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.ReplacePrintedElement);
+        changeEffects.forEach(effect => {
+            let sym = symbols.find(a => a.key === effect.value.key);
+            sym.element = effect.value.element;
+        })
+        return symbols;
+    }
+
     getShortSummaryForControls(activePlayer) {
         if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
