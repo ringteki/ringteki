@@ -1,16 +1,28 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl');
+const { Elements } = require('../../Constants');
 
 class Kudaka extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.reaction({
             title: 'Gain 1 fate and draw 1 card',
-            limit: ability.limit.perRound(2),
+            limit: AbilityDsl.limit.perRound(2),
             effect: 'gain 1 fate and draw 1 card',
             when: {
-                onClaimRing: (event, context) => ((event.conflict && event.conflict.hasElement('air')) || event.ring.hasElement('air')) && event.player === context.player
+                onClaimRing: (event, context) => ((event.conflict && event.conflict.hasElement(this.getCurrentElementSymbol('kudaka-air'))) || event.ring.hasElement(this.getCurrentElementSymbol('kudaka-air'))) && event.player === context.player
             },
-            gameAction: [ability.actions.gainFate(), ability.actions.draw()]
+            gameAction: [AbilityDsl.actions.gainFate(), AbilityDsl.actions.draw()]
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: 'kudaka-air',
+            prettyName: 'Claimed Ring',
+            element: Elements.Air
+        });
+        return symbols;
     }
 }
 

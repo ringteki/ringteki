@@ -934,6 +934,15 @@ class BaseCard extends EffectSource {
         return symbols;
     }
 
+    getCurrentElementSymbol(key) {
+        const symbols = this.getCurrentElementSymbols();
+        const symbol = symbols.find(a => a.key === key);
+        if (symbol) {
+            return symbol.element;
+        }
+        return 'none';
+    }
+
     getShortSummaryForControls(activePlayer) {
         if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };

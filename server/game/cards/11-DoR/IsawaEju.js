@@ -1,12 +1,12 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Locations, CardTypes } = require('../../Constants');
+const { Locations, CardTypes, Elements } = require('../../Constants');
 
 class IsawaEju extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Discard all cards in a province and refill it faceup',
-            condition: context => this.game.rings.air.isConsideredClaimed(context.player),
+            condition: context => this.game.rings[this.getCurrentElementSymbol('isawa-eju-air')].isConsideredClaimed(context.player),
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province
@@ -25,6 +25,16 @@ class IsawaEju extends DrawCard {
             }),
             limit: AbilityDsl.limit.perRound(3)
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: 'isawa-eju-air',
+            prettyName: 'Claimed Ring',
+            element: Elements.Air
+        });
+        return symbols;
     }
 }
 

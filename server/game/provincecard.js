@@ -65,12 +65,12 @@ class ProvinceCard extends BaseCard {
         const symbols = this.getCurrentElementSymbols();
         const elementArray = [];
         symbols.forEach(symbol => {
-            if (symbol.key.startsWith('province-element')) {
+            if(symbol.key.startsWith('province-element')) {
                 elementArray.push(symbol.element);
             }
-        })
+        });
 
-        return elementArray; // this.cardData.element;
+        return elementArray;
     }
 
     isElement(element) {
@@ -83,18 +83,18 @@ class ProvinceCard extends BaseCard {
 
     getPrintedElementSymbols() {
         let symbols = [];
-        if (this.hasElementSymbols()) {
+        if(this.hasElementSymbols()) {
             let elements = this.cardData.element;
-            if (elements === 'all') {
+            if(elements === 'all') {
                 elements = ['air', 'earth', 'fire', 'void', 'water'];
             }
             elements.forEach((element, index) => {
                 symbols.push({
                     key: `province-element-${index}`,
-                    prettyName: 'Province Element',
+                    prettyName: 'Printed Province Element',
                     element: element
-                })
-            })
+                });
+            });
         }
         return symbols;
     }

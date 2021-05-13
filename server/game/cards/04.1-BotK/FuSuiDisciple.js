@@ -1,18 +1,19 @@
 const DrawCard = require('../../drawcard.js');
-const { Players, TargetModes, CardTypes } = require('../../Constants');
+const { Players, TargetModes, CardTypes, Elements } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
 
 class FuSuiDisciple extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
-            title: 'Honor or dishonor a character controlled by a player with the air ring',
+            title: 'Honor or dishonor a character',
             targets: {
                 player: {
                     mode: TargetModes.Select,
                     activePromptTitle: 'Choose a player',
                     targets: true,
                     choices: {
-                        [this.owner.name]: context => context.game.rings.air.isConsideredClaimed(this.owner),
-                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings.air.isConsideredClaimed(this.owner.opponent)
+                        [this.owner.name]: context => context.game.rings[this.getCurrentElementSymbol('fu-sui-disciple-air')].isConsideredClaimed(this.owner),
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings[this.getCurrentElementSymbol('fu-sui-disciple-air')].isConsideredClaimed(this.owner.opponent)
                     }
                 },
                 character: {
@@ -29,12 +30,22 @@ class FuSuiDisciple extends DrawCard {
                     dependsOn: 'character',
                     mode: TargetModes.Select,
                     choices: {
-                        'Honor this character': ability.actions.honor(context => ({ target: context.targets.character })),
-                        'Dishonor this character': ability.actions.dishonor(context => ({ target: context.targets.character }))
+                        'Honor this character': AbilityDsl.actions.honor(context => ({ target: context.targets.character })),
+                        'Dishonor this character': AbilityDsl.actions.dishonor(context => ({ target: context.targets.character }))
                     }
                 }
             }
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: 'fu-sui-disciple-air',
+            prettyName: 'Claimed Ring',
+            element: Elements.Air
+        });
+        return symbols;
     }
 }
 
