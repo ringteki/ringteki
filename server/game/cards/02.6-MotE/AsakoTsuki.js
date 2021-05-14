@@ -1,19 +1,32 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
+const { CardTypes, Elements } = require('../../Constants');
+
+const elementKey = 'asako-tsuki-water';
 
 class AsakoTsuki extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.reaction({
             title: 'Honor a scholar character',
             when: {
-                onClaimRing: event => (event.conflict && event.conflict.hasElement('water')) || event.ring.hasElement('water')
+                onClaimRing: event => (event.conflict && event.conflict.hasElement(this.getCurrentElementSymbol(elementKey))) || event.ring.hasElement(this.getCurrentElementSymbol(elementKey))
             },
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.hasTrait('scholar'),
-                gameAction: ability.actions.honor()
+                gameAction: AbilityDsl.actions.honor()
             }
         });
+    }
+        
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Claimed Ring',
+            element: Elements.Water
+        });
+        return symbols;
     }
 }
 

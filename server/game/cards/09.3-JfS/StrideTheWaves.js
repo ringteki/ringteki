@@ -1,5 +1,8 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { Elements } = require('../../Constants');
+
+const elementKey = 'stride-the-waves-water';
 
 class StrideTheWaves extends DrawCard {
     setupCardAbilities() {
@@ -11,7 +14,7 @@ class StrideTheWaves extends DrawCard {
             title: 'Move attached character in or out of the conflict',
             limit: AbilityDsl.limit.perRound(2),
             condition: context => context.game.isDuringConflict() &&
-                context.game.rings.water.isConsideredClaimed(context.player),
+                context.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(context.player),
             gameAction: AbilityDsl.actions.conditional({
                 condition: context => context.source.parent.inConflict,
                 trueGameAction: AbilityDsl.actions.sendHome(context => ({
@@ -29,6 +32,16 @@ class StrideTheWaves extends DrawCard {
             ]
         });
     }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Claimed Ring',
+            element: Elements.Water
+        });
+        return symbols;
+    }    
 }
 
 StrideTheWaves.id = 'stride-the-waves';
