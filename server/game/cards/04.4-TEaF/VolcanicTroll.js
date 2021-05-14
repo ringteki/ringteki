@@ -1,11 +1,24 @@
 const DrawCard = require('../../drawcard.js');
+import { Elements } from '../../Constants.js';
+const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'isawa-tsuke-2-fire';
 class VolcanicTroll extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.persistentEffect({
-            condition: () => this.game.rings['fire'].isUnclaimed(),
-            effect: ability.effects.modifyBothSkills(2)
+            condition: () => this.game.rings[this.getCurrentElementSymbol(elementKey)].isUnclaimed(),
+            effect: AbilityDsl.effects.modifyBothSkills(2)
         });
+    }
+    
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Unclaimed Ring',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }
 

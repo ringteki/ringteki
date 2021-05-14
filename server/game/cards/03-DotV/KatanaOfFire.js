@@ -1,10 +1,13 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Elements } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
+
+const elementKey = 'katana-of-fire-fire';
 
 class KatanaOfFire extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.whileAttached({
-            effect: ability.effects.modifyMilitarySkill(() => this.totalKatanaModifier())
+            effect: AbilityDsl.effects.modifyMilitarySkill(() => this.totalKatanaModifier())
         });
     }
 
@@ -18,7 +21,7 @@ class KatanaOfFire extends DrawCard {
 
     // Helper methods for clarity - TODO: needs fixing to not use this.controller
     controllerHasFireRing() {
-        return this.game.rings.fire.isConsideredClaimed(this.controller);
+        return this.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(this.controller);
     }
     numberOfFireCards() {
         return this.controller.getNumberOfCardsInPlay(card => card.hasTrait('fire'));
@@ -27,6 +30,16 @@ class KatanaOfFire extends DrawCard {
         var skillModifier = this.controllerHasFireRing() ? 2 : 0;
         skillModifier += this.numberOfFireCards();
         return skillModifier;
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Claimed Ring',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }
 
