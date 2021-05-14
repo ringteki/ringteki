@@ -17,7 +17,7 @@ class BattleMaidenRecruit extends DrawCard {
             effect: AbilityDsl.effects.modifyMilitarySkill(2)
         });
     }
-    
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({

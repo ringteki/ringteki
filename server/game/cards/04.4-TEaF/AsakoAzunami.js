@@ -36,7 +36,7 @@ class AsakoAzunami extends DrawCard {
             }))
         });
     }
-    
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({

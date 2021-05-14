@@ -10,7 +10,7 @@ class VolcanicTroll extends DrawCard {
             effect: AbilityDsl.effects.modifyBothSkills(2)
         });
     }
-    
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({

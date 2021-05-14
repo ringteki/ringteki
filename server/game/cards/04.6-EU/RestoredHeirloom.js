@@ -33,7 +33,7 @@ class RestoredHeirloom extends DrawCard {
             element: Elements.Water
         });
         return symbols;
-    }    
+    }
 }
 
 RestoredHeirloom.id = 'restored-heirloom';

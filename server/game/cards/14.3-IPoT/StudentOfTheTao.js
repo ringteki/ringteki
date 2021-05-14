@@ -16,7 +16,7 @@ class StudentOfTheTao extends DrawCard {
             }
         });
     }
-  
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({

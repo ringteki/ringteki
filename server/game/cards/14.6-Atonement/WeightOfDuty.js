@@ -37,7 +37,7 @@ class WeightOfDuty extends ProvinceCard {
             return !a.isUnique() && (a.allowGameAction('bow', context) || a.allowGameAction('dishonor', context));
         });
     }
-      
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({

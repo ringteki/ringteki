@@ -21,7 +21,7 @@ class ProdigyOfTheWaves extends DrawCard {
             element: Elements.Water
         });
         return symbols;
-    }    
+    }
 }
 
 ProdigyOfTheWaves.id = 'prodigy-of-the-waves';

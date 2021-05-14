@@ -25,7 +25,7 @@ class ThePursuitOfJustice extends ProvinceCard {
             element: Elements.Water
         });
         return symbols;
-    }    
+    }
 }
 
 ThePursuitOfJustice.id = 'the-pursuit-of-justice';

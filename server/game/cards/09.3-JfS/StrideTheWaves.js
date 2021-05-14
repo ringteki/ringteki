@@ -41,7 +41,7 @@ class StrideTheWaves extends DrawCard {
             element: Elements.Water
         });
         return symbols;
-    }    
+    }
 }
 
 StrideTheWaves.id = 'stride-the-waves';
