@@ -7,7 +7,7 @@ const elementKey = 'fire-tensai-acolyte-fire';
 class FireTensaiAcolyte extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.canOnlyBeDeclaredAsAttackerWithElement(this.getCurrentElementSymbol(elementKey))
+            effect: AbilityDsl.effects.canOnlyBeDeclaredAsAttackerWithElement(() => this.getCurrentElementSymbol(elementKey))
         });
     }
 

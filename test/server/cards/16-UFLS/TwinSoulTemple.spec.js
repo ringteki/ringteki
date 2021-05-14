@@ -104,6 +104,7 @@ describe('Twin Soul Temple', function() {
 
         it('Kaede', function() {
             this.prodigy.fate = 4;
+            this.player1.player.optionSettings.orderForcedAbilities = true;
             this.player1.clickCard(this.twinSoul1);
             this.player1.clickCard(this.kaede);
             this.player1.clickPrompt('Earth');
@@ -137,24 +138,51 @@ describe('Twin Soul Temple', function() {
                 this.initiateConflict({
                     type: 'military',
                     ring: 'fire',
-                    attackers: [this.acolyte, this.azunami],
+                    attackers: [this.fireTensai, this.azunami],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.azunami);
-                expect(this.game.currentConflict.attackers).not.toContain(this.acolyte);
+                expect(this.game.currentConflict.attackers).not.toContain(this.fireTensai);
             });
 
             it('should be able to attack during void conflicts', function() {
-                this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
                     ring: 'void',
-                    attackers: [this.acolyte, this.azunami],
+                    attackers: [this.fireTensai, this.azunami],
                     defenders: []
                 });
                 expect(this.game.currentConflict.attackers).toContain(this.azunami);
-                expect(this.game.currentConflict.attackers).toContain(this.acolyte);
+                expect(this.game.currentConflict.attackers).toContain(this.fireTensai);
             });
+        });
+
+        it('Master Alchemist', function() {
+            this.player1.clickCard(this.twinSoul1);
+            this.player1.clickCard(this.alchemist);
+            this.player1.clickPrompt('Void');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                ring: 'air',
+                attackers: [this.alchemist],
+                defenders: [this.challenger]
+            });
+
+            this.player2.pass();
+            let fireFate = this.game.rings.fire.fate;
+            let voidFate = this.game.rings.void.fate;
+            this.player1.clickCard(this.alchemist);
+            this.player1.clickPrompt('Pay costs first');
+            expect(this.player1).not.toBeAbleToSelectRing('fire');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            this.player1.clickRing('void');
+            this.player1.clickCard(this.challenger);
+            this.player1.clickPrompt('Honor this character');
+            expect(this.game.rings.fire.fate).toBe(fireFate);
+            expect(this.game.rings.void.fate).toBe(voidFate + 1);
+            expect(this.challenger.isHonored).toBe(true);
         });
     });
 });

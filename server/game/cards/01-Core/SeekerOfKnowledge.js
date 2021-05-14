@@ -7,7 +7,7 @@ const elementKey = 'seeker-of-knowledge-air';
 class SeekerOfKnowledge extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.addElementAsAttacker(this.getCurrentElementSymbol(elementKey))
+            effect: AbilityDsl.effects.addElementAsAttacker(() => this.getCurrentElementSymbol(elementKey))
         });
     }
 

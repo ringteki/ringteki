@@ -12,7 +12,7 @@ class IsawaKaede extends DrawCard {
             })
         });
         this.persistentEffect({
-            effect: AbilityDsl.effects.addElementAsAttacker(this.getCurrentElementSymbol(elementKey))
+            effect: AbilityDsl.effects.addElementAsAttacker(() => this.getCurrentElementSymbol(elementKey))
         });
         this.persistentEffect({
             condition: context => context.source.isAttacking() && this.game.currentConflict.winner === context.player,

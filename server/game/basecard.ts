@@ -927,7 +927,7 @@ class BaseCard extends EffectSource {
 
     getCurrentElementSymbols() {
         if (!this.isInPlay()) {
-            return [];
+            return this.getPrintedElementSymbols();
         }
         const symbols = this.getPrintedElementSymbols();
         let changeEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.ReplacePrintedElement);

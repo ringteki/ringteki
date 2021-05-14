@@ -20,6 +20,9 @@ class AbilityTargetElementSymbol {
 
     getSelector(properties) {
         let cardCondition = card => {
+            if (!card.isInPlay()) {
+                return false;
+            }
             let elements = card.getCurrentElementSymbols();
             if(elements.length === 0) {
                 return false;
