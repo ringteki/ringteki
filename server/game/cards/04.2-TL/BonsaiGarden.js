@@ -2,11 +2,13 @@ const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Elements } = require('../../Constants');
 
+const elementKey = 'bonsai-garden-air';
+
 class BonsaiGarden extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Gain 1 honor',
-            condition: context => context.game.isDuringConflict(this.getCurrentElementSymbol('bonsai-garden-air')),
+            condition: context => context.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             gameAction: AbilityDsl.actions.gainHonor()
         });
     }
@@ -14,7 +16,7 @@ class BonsaiGarden extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'bonsai-garden-air',
+            key: elementKey,
             prettyName: 'Conflict Ring',
             element: Elements.Air
         });

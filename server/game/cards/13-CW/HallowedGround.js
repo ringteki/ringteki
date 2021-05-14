@@ -2,11 +2,17 @@ const DrawCard = require('../../drawcard.js');
 const { Players, Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKeys = {
+    air: 'hallowed-ground-air',
+    earth: 'hallowed-ground-earth',
+    fire: 'hallowed-ground-fire'
+};
+
 class HallowedGround extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             targetController: Players.Opponent,
-            condition: context => context.game.rings[this.getCurrentElementSymbol('hallowed-ground-fire')].isConsideredClaimed(context.player.opponent),
+            condition: context => context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerCannot({
                 cannot: 'placeFateWhenPlayingCharacter'
             })
@@ -14,7 +20,7 @@ class HallowedGround extends DrawCard {
 
         this.persistentEffect({
             targetController: Players.Opponent,
-            condition: context => context.game.rings[this.getCurrentElementSymbol('hallowed-ground-air')].isConsideredClaimed(context.player.opponent),
+            condition: context => context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player.opponent),
             effect: AbilityDsl.effects.playerDelayedEffect({
                 when: {
                     afterConflict: (event, context) => event.conflict.loser === context.player.opponent && event.conflict.conflictUnopposed
@@ -30,17 +36,17 @@ class HallowedGround extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'hallowed-ground-air',
+            key: elementKeys.air,
             prettyName: 'Honor Loss',
             element: Elements.Air
         });
         symbols.push({
-            key: 'hallowed-ground-earth',
+            key: elementKeys.earth,
             prettyName: 'Cannot Claim Rings',
             element: Elements.Earth
         });
         symbols.push({
-            key: 'hallowed-ground-fire',
+            key: elementKeys.fire,
             prettyName: 'Cannot Fate Characters',
             element: Elements.Fire
         });

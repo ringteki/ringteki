@@ -2,10 +2,12 @@ const DrawCard = require('../../drawcard.js');
 const { CardTypes, TargetModes, Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'kuni-yori-earth';
+
 class KuniYori extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol('kuni-yori-earth')),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             match: card => card.getType() === CardTypes.Character,
             effect: AbilityDsl.effects.modifyBothSkills(1)
         });
@@ -29,7 +31,7 @@ class KuniYori extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'kuni-yori-earth',
+            key: elementKey,
             prettyName: 'Conflict Type',
             element: Elements.Earth
         });

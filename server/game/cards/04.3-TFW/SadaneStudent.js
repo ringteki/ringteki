@@ -2,12 +2,17 @@ const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Elements } = require('../../Constants');
 
+const elementKeys = {
+    air: 'sadane-student-air',
+    water: 'sadane-student-fire'
+};
+
 class SadaneStudent extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => (
-                this.game.rings[this.getCurrentElementSymbol('sadane-student-air')].isConsideredClaimed(context.player) ||
-                this.game.rings[this.getCurrentElementSymbol('sadane-student-fire')].isConsideredClaimed(context.player)
+                context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player) ||
+                context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player)
             ),
             effect: AbilityDsl.effects.modifyPoliticalSkill(2)
         });
@@ -16,12 +21,12 @@ class SadaneStudent extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'sadane-student-air',
+            key: elementKeys.air,
             prettyName: 'Claimed Ring',
             element: Elements.Air
         });
         symbols.push({
-            key: 'sadane-student-fire',
+            key: elementKeys.fire,
             prettyName: 'Claimed Ring',
             element: Elements.Fire
         });

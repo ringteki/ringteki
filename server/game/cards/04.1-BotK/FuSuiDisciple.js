@@ -2,6 +2,8 @@ const DrawCard = require('../../drawcard.js');
 const { Players, TargetModes, CardTypes, Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'fu-sui-disciple-air';
+
 class FuSuiDisciple extends DrawCard {
     setupCardAbilities() {
         this.action({
@@ -12,8 +14,8 @@ class FuSuiDisciple extends DrawCard {
                     activePromptTitle: 'Choose a player',
                     targets: true,
                     choices: {
-                        [this.owner.name]: context => context.game.rings[this.getCurrentElementSymbol('fu-sui-disciple-air')].isConsideredClaimed(this.owner),
-                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings[this.getCurrentElementSymbol('fu-sui-disciple-air')].isConsideredClaimed(this.owner.opponent)
+                        [this.owner.name]: context => context.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(this.owner),
+                        [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(this.owner.opponent)
                     }
                 },
                 character: {
@@ -41,7 +43,7 @@ class FuSuiDisciple extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'fu-sui-disciple-air',
+            key: elementKey,
             prettyName: 'Claimed Ring',
             element: Elements.Air
         });

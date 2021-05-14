@@ -2,10 +2,12 @@ const DrawCard = require('../../drawcard.js');
 const { Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'reclusive-zokujin-earth';
+
 class ReclusiveZokujin extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol('reclusive-zokujin-earth')),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             effect: [
                 AbilityDsl.effects.addKeyword('covert'),
                 AbilityDsl.effects.immunity({
@@ -18,7 +20,7 @@ class ReclusiveZokujin extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'reclusive-zokujin-earth',
+            key: elementKey,
             prettyName: 'Conflict Type',
             element: Elements.Earth
         });

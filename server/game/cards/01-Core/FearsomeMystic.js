@@ -2,10 +2,12 @@ const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Elements } = require('../../Constants');
 
+const elementKey = 'fearsome-mystic-air';
+
 class FearsomeMystic extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol('fearsome-mystic-air')),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             effect: AbilityDsl.effects.modifyGlory(2)
         });
 
@@ -21,7 +23,7 @@ class FearsomeMystic extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'fearsome-mystic-air',
+            key: elementKey,
             prettyName: '+2 Glory',
             element: Elements.Air
         });

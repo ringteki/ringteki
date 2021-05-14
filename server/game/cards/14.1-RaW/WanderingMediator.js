@@ -2,11 +2,13 @@ const DrawCard = require('../../drawcard.js');
 const { Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'seeker-of-knowledge-air';
+
 class WanderingMediator extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move in/out the conflict',
-            condition: context => context.game.isDuringConflict() && context.game.currentConflict.getConflictProvinces().some(a => a.isElement(this.getCurrentElementSymbol('wandering-mediator-air'))),
+            condition: context => context.game.isDuringConflict() && context.game.currentConflict.getConflictProvinces().some(a => a.isElement(this.getCurrentElementSymbol(elementKey))),
             gameAction: AbilityDsl.actions.conditional({
                 condition: context => context.source.isParticipating(),
                 trueGameAction: AbilityDsl.actions.sendHome(context => ({
@@ -22,7 +24,7 @@ class WanderingMediator extends DrawCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'wandering-mediator-air',
+            key: elementKey,
             prettyName: 'Province Element',
             element: Elements.Air
         });

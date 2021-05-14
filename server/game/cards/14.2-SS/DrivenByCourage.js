@@ -2,11 +2,13 @@ const ProvinceCard = require('../../provincecard.js');
 const { Players, CardTypes, Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
+const elementKey = 'driven-by-courage-air';
+
 class DrivenByCourage extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'give target character +2/+2',
-            conflictProvinceCondition: province => province.isElement(this.getCurrentElementSymbol('driven-by-courage-air')),
+            conflictProvinceCondition: province => province.isElement(this.getCurrentElementSymbol(elementKey)),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
@@ -23,7 +25,7 @@ class DrivenByCourage extends ProvinceCard {
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: 'driven-by-courage-air',
+            key: elementKey,
             prettyName: 'Province Type',
             element: Elements.Air
         });
