@@ -41,8 +41,8 @@ class TwinSoulTemple extends StrongholdCard {
         let currentEl = context.element.element;
 
         const index = els.indexOf(currentEl);
-        if (index > -1) {
-          els.splice(index, 1);
+        if(index > -1) {
+            els.splice(index, 1);
         }
         els.forEach((e, i) => els[i] = this.capitalize(e));
         return els;

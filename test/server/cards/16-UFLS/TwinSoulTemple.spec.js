@@ -17,7 +17,7 @@ describe('Twin Soul Temple', function() {
 
             this.twinSoul1 = this.player1.findCardByName('twin-soul-temple');
             this.twinSoul2 = this.player2.findCardByName('twin-soul-temple');
-            
+
             this.azunami = this.player1.findCardByName('asako-azunami');
             this.kaede = this.player1.findCardByName('isawa-kaede');
             this.alchemist = this.player1.findCardByName('master-alchemist');
@@ -38,7 +38,7 @@ describe('Twin Soul Temple', function() {
 
             this.garden.facedown = true;
             this.pilgrimage.facedown = false;
-            this.reward.facedown =false;
+            this.reward.facedown = false;
             this.tsuma.facedown = false;
             this.player1.placeCardInProvince(this.yori, 'province 1');
             this.player1.placeCardInProvince(this.lab, 'province 2');
@@ -183,6 +183,82 @@ describe('Twin Soul Temple', function() {
             expect(this.game.rings.fire.fate).toBe(fireFate);
             expect(this.game.rings.void.fate).toBe(voidFate + 1);
             expect(this.challenger.isHonored).toBe(true);
+        });
+
+        it('should prompt you to pick which element if there are two - province and effect', function() {
+            this.player1.clickCard(this.twinSoul1);
+            expect(this.player1).toHavePrompt('Choose an element to replace');
+            this.player1.clickCard(this.reward);
+            expect(this.player1).toHavePrompt('Which element do you wish to select?');
+            expect(this.player1).toHavePromptButton('Printed Province Element (fire)');
+            expect(this.player1).toHavePromptButton('Province Type (fire)');
+            this.player1.clickPrompt('Printed Province Element (fire)');
+            expect(this.reward.isElement('fire')).toBe(true);
+            expect(this.player1).toHavePrompt('Choose the new element');
+            expect(this.player1).toHavePromptButton('Air');
+            expect(this.player1).toHavePromptButton('Earth');
+            expect(this.player1).not.toHavePromptButton('Fire');
+            expect(this.player1).toHavePromptButton('Void');
+            expect(this.player1).toHavePromptButton('Water');
+            this.player1.clickPrompt('Void');
+            expect(this.reward.isElement('fire')).toBe(false);
+            expect(this.reward.isElement('void')).toBe(true);
+        });
+
+        it('should prompt you to pick which element if there are two - multiple province elements', function() {
+            this.player1.clickCard(this.twinSoul1);
+            expect(this.player1).toHavePrompt('Choose an element to replace');
+            this.player1.clickCard(this.tsuma);
+            expect(this.player1).toHavePrompt('Which element do you wish to select?');
+            expect(this.player1).toHavePromptButton('Printed Province Element (air)');
+            expect(this.player1).toHavePromptButton('Printed Province Element (fire)');
+            this.player1.clickPrompt('Printed Province Element (fire)');
+            expect(this.tsuma.isElement('fire')).toBe(true);
+            expect(this.player1).toHavePrompt('Choose the new element');
+            expect(this.player1).toHavePromptButton('Air');
+            expect(this.player1).toHavePromptButton('Earth');
+            expect(this.player1).not.toHavePromptButton('Fire');
+            expect(this.player1).toHavePromptButton('Void');
+            expect(this.player1).toHavePromptButton('Water');
+            this.player1.clickPrompt('Air');
+            expect(this.tsuma.isElement('fire')).toBe(false);
+            expect(this.tsuma.isElement('air')).toBe(true);
+        });
+
+        it('triggered abilities that care about province elements', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                ring: 'air',
+                province: this.tsuma,
+                attackers: [this.challenger],
+                defenders: [this.alchemist]
+            });
+
+            this.player1.clickCard(this.reward);
+            expect(this.player1).toHavePrompt('Honor\'s Reward');
+            this.player1.clickPrompt('Cancel');
+            this.player1.clickCard(this.twinSoul1);
+            this.player1.clickCard(this.tsuma);
+            this.player1.clickPrompt('Printed Province Element (fire)');
+            this.player1.clickPrompt('Void');
+
+            this.player2.pass();
+            this.player1.clickCard(this.reward);
+            expect(this.player1).not.toHavePrompt('Honor\'s Reward');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('Constant Abilities', function() {
+            this.player2.claimRing('void');
+            expect(this.student.getPoliticalSkill()).toBe(2);
+            this.player1.clickCard(this.twinSoul1);
+            this.player1.clickCard(this.student);
+            this.player1.clickPrompt('Claimed Ring (air)');
+            this.player1.clickPrompt('Void');
+            expect(this.student.getPoliticalSkill()).toBe(4);
         });
     });
 });
