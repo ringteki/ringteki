@@ -260,5 +260,21 @@ describe('Twin Soul Temple', function() {
             this.player1.clickPrompt('Void');
             expect(this.student.getPoliticalSkill()).toBe(4);
         });
+
+        it('Two Twin Soul Temples', function() {
+            this.player2.claimRing('void');
+            expect(this.student.getPoliticalSkill()).toBe(2);
+            this.player1.clickCard(this.twinSoul1);
+            this.player1.clickCard(this.student);
+            this.player1.clickPrompt('Claimed Ring (air)');
+            this.player1.clickPrompt('Void');
+            expect(this.twinSoul1.bowed).toBe(true);
+            expect(this.student.getPoliticalSkill()).toBe(4);
+            this.player2.clickCard(this.twinSoul2);
+            this.player2.clickCard(this.student);
+            this.player2.clickPrompt('Claimed Ring (void)');
+            this.player2.clickPrompt('Earth');
+            expect(this.student.getPoliticalSkill()).toBe(2);
+        });
     });
 });
