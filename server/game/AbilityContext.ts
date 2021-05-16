@@ -6,6 +6,7 @@ import Ring = require('./ring');
 import StatusToken = require('./StatusTokens/StatusToken');
 import { Stages, Locations, PlayTypes } from './Constants.js';
 import { GameAction } from './GameActions/GameAction.js';
+import BaseCard = require('./basecard.js');
 
 interface AbilityContextProperties {
     game: Game;
@@ -17,6 +18,7 @@ interface AbilityContextProperties {
     rings?: any;
     selects?: any;
     tokens?: any;
+    elements?: any;
     events?: any[];
     stage?: Stages;
     targetAbility?: any;
@@ -32,6 +34,7 @@ class AbilityContext {
     rings: any;
     selects: any;
     tokens: any;
+    elements: any;
     events: any[] = [];
     stage: Stages;
     targetAbility: any;
@@ -39,6 +42,8 @@ class AbilityContext {
     select: string;
     ring: Ring;
     token: StatusToken;
+    element: any;
+    elementCard: BaseCard;
     provincesToRefill: any[] = [];
     subResolution = false;
     choosingPlayerOverride: Player = null;
@@ -55,6 +60,7 @@ class AbilityContext {
         this.rings = properties.rings || {};
         this.selects = properties.selects || {};
         this.tokens = properties.tokens || {};
+        this.elements = properties.elements || {};
         this.stage = properties.stage || Stages.Effect;
         this.targetAbility = properties.targetAbility;
         // const location = this.player && this.player.playableLocations.find(location => location.contains(this.source));
@@ -65,6 +71,8 @@ class AbilityContext {
         let copy = this.createCopy(newProps);
         copy.target = this.target;
         copy.token = this.token;
+        copy.element = this.element;
+        copy.elementCard = this.elementCard;
         copy.select = this.select;
         copy.ring = this.ring;
         copy.provincesToRefill = this.provincesToRefill;
@@ -108,6 +116,7 @@ class AbilityContext {
             rings: Object.assign({}, this.rings),
             selects: Object.assign({}, this.selects),
             tokens: Object.assign({}, this.tokens),
+            elements: Object.assign({}, this.elements),
             events: this.events,
             stage: this.stage,
             targetAbility: this.targetAbility

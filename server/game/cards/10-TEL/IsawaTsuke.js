@@ -1,6 +1,8 @@
-import { EventNames } from '../../Constants.js';
+import { EventNames, Elements } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
+
+const elementKey = 'isawa-tsuke-fire';
 
 class IsawaTsuke extends DrawCard {
     setupCardAbilities() {
@@ -10,12 +12,14 @@ class IsawaTsuke extends DrawCard {
                 onCardDishonored: (event, context) => {
                     const dishonoredByYourEffect = (context.player === event.context.player);
                     const dishonoredByRingEffect = (event.context.source.type === 'ring');
-                    return dishonoredByYourEffect && dishonoredByRingEffect;
+                    const currentlyFire = this.getCurrentElementSymbol(elementKey) === Elements.Fire;
+                    return dishonoredByYourEffect && dishonoredByRingEffect && currentlyFire;
                 },
                 onCardHonored: (event, context) => {
                     const honoredByYourEffect = (context.player === event.context.player);
                     const honoredByRingEffect = (event.context.source.type === 'ring');
-                    return honoredByYourEffect && honoredByRingEffect;
+                    const currentlyFire = this.getCurrentElementSymbol(elementKey) === Elements.Fire;
+                    return honoredByYourEffect && honoredByRingEffect && currentlyFire;
                 }
             },
             gameAction: AbilityDsl.actions.conditional(context => ({
@@ -36,6 +40,16 @@ class IsawaTsuke extends DrawCard {
         return targetedCharacterController
             .cardsInPlay
             .filter(card => card.printedCost === targetedCharacter.printedCost);
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Ring Effect',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }
 

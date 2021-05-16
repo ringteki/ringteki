@@ -162,6 +162,7 @@ export enum EffectNames {
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
     AdditionalAttackedProvince = 'additionalAttackedProvince',
+    ReplacePrintedElement = 'replacePrintedElement',
 };
 
 export enum Durations {
@@ -194,6 +195,7 @@ export enum TargetModes {
     Select = 'select',
     Ability = 'ability',
     Token = 'token',
+    ElementSymbol = 'elementSymbol',
     AutoSingle = 'autoSingle',
     Exactly = 'exactly',
     ExactlyVariable = 'exactlyVariable',

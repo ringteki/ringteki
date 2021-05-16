@@ -23,6 +23,7 @@ const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
 const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
 const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
+import ElementSymbol = require('./ElementSymbol');
 
 const ValidKeywords = [
     'ancestral',
@@ -914,6 +915,41 @@ class BaseCard extends EffectSource {
 
     isOrdinary() {
         return !this.isHonored && !this.isDishonored;
+    }
+
+    hasElementSymbols() {
+        return false;
+    }
+
+    getPrintedElementSymbols() {
+        return [];
+    }
+
+    getCurrentElementSymbols() {
+        if (!this.isInPlay()) {
+            return this.getPrintedElementSymbols();
+        }
+        const symbols = this.getPrintedElementSymbols();
+        let changeEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.ReplacePrintedElement);
+        changeEffects.forEach(effect => {
+            const newElement = effect.value.value;
+            let sym = symbols.find(a => a.key === newElement.key);
+            sym.element = newElement.element;
+        })
+        const mapped = [];
+        symbols.forEach(symbol => {
+            mapped.push(new ElementSymbol(this.game, this, symbol));
+        });
+        return mapped;
+    }
+
+    getCurrentElementSymbol(key) {
+        const symbols = this.getCurrentElementSymbols();
+        const symbol = symbols.find(a => a.key === key);
+        if (symbol) {
+            return symbol.element;
+        }
+        return 'none';
     }
 
     getShortSummaryForControls(activePlayer) {

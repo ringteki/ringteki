@@ -62,11 +62,41 @@ class ProvinceCard extends BaseCard {
     }
 
     getElement() {
-        return this.cardData.element;
+        const symbols = this.getCurrentElementSymbols();
+        const elementArray = [];
+        symbols.forEach(symbol => {
+            if(symbol.key.startsWith('province-element')) {
+                elementArray.push(symbol.element);
+            }
+        });
+
+        return elementArray;
     }
 
     isElement(element) {
-        return this.element === 'all' || this.element.includes(element);
+        return this.element.includes(element);
+    }
+
+    hasElementSymbols() {
+        return this.cardData.element && this.cardData.element.length > 0;
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = [];
+        if(this.hasElementSymbols()) {
+            let elements = this.cardData.element;
+            if(elements === 'all') {
+                elements = ['air', 'earth', 'fire', 'void', 'water'];
+            }
+            elements.forEach((element, index) => {
+                symbols.push({
+                    key: `province-element-${index}`,
+                    prettyName: 'Printed Province Element',
+                    element: element
+                });
+            });
+        }
+        return symbols;
     }
 
     flipFaceup() {

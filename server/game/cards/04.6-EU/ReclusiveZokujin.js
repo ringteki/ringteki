@@ -1,19 +1,33 @@
 const DrawCard = require('../../drawcard.js');
+const { Elements } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
+
+const elementKey = 'reclusive-zokujin-earth';
 
 class ReclusiveZokujin extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.persistentEffect({
-            condition: () => this.game.isDuringConflict('earth'),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             effect: [
-                ability.effects.addKeyword('covert'),
-                ability.effects.immunity({
+                AbilityDsl.effects.addKeyword('covert'),
+                AbilityDsl.effects.immunity({
                     restricts: 'opponentsCardEffects'
                 })
             ]
         });
     }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Conflict Type',
+            element: Elements.Earth
+        });
+        return symbols;
+    }
 }
 
-ReclusiveZokujin.id = 'reclusive-zokujin'; // This is a guess at what the id might be - please check it!!!
+ReclusiveZokujin.id = 'reclusive-zokujin';
 
 module.exports = ReclusiveZokujin;
