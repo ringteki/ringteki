@@ -1,4 +1,4 @@
-describe('Borderlands Defender', function () {
+describe('Way of the Warrior', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

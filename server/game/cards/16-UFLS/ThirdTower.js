@@ -6,7 +6,7 @@ class ThirdTower extends DrawCard {
     setupCardAbilities() {
         this.grantedAbilityLimits = {};
         this.reaction({
-            title: 'Make opponent lose an honor',
+            title: 'Take an honor from your opponent',
             when: {
                 onConflictDeclared: (event, context) => {
                     if(event.conflict.attackingPlayer === context.player) {

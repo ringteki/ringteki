@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class WayOfTheWarrior extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Give a character a lot of things',
+            title: 'Let a bushi embrace the way of the warrior',
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
