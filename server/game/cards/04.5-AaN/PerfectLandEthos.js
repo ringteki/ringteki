@@ -7,7 +7,7 @@ class PerfectLandEthos extends DrawCard {
             title: 'Discard each status token',
             effect: 'discard each status token',
             gameAction: AbilityDsl.actions.discardStatusToken(context => ({
-                target: context.game.findAnyCardsInAnyList(card => card.statusTokens.length > 0).map(card => card.statusTokens)
+                target: context.game.findAnyCardsInAnyList(card => card.hasStatusTokens).map(card => card.statusTokens)
             }))
         });
     }
