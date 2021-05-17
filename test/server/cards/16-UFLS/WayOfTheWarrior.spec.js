@@ -59,6 +59,7 @@ describe('Borderlands Defender', function () {
             this.player2.clickCard(this.challenger);
             this.player1.clickCard(this.admitDefeat);
             expect(this.player1).not.toHavePrompt('Admit Defeat');
+            expect(this.getChatLogs(5)).toContain('player2 plays Way of the Warrior to ready and prevent opponent\'s card effects from bowing, sending home, or dishonoring Doji Challenger');
         });
 
         it('should not be able to be sent home by opponent\'s card effects', function () {
@@ -120,5 +121,21 @@ describe('Borderlands Defender', function () {
             this.player2.clickCard(this.challenger);
             expect(this.challenger.isParticipating()).toBe(false);
         });
+
+        it('should ready if bowed', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.togashiYokuni],
+                defenders: [this.challenger]
+            });
+            this.challenger.bow();
+            this.player2.clickCard(this.warrior);
+            expect(this.challenger.bowed).toBe(true);
+            this.player2.clickCard(this.challenger);
+            this.player1.clickCard(this.admitDefeat);
+            expect(this.challenger.bowed).toBe(false);
+        });
+
     });
 });
