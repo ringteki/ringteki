@@ -19,6 +19,8 @@ export interface SelectTokenProperties extends TokenActionProperties {
     message?: string;
     messageArgs?: (token: StatusToken, player: Player) => any[];
     gameAction: GameAction;
+    effect?: string;
+    effectArgs?: (context) => string[];
 }
 
 export class SelectTokenAction extends TokenAction {
@@ -36,7 +38,10 @@ export class SelectTokenAction extends TokenAction {
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let { target } = this.getProperties(context);
+        let { target, effect, effectArgs } = this.getProperties(context) as SelectTokenProperties;
+        if (effect) {
+            return [effect, effectArgs(context) || []]
+        }
         return ['choose a status token for {0}', [target]];
     }
 
