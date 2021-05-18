@@ -13,13 +13,6 @@ export class TaintAction extends CardGameAction {
     cost = 'tainting {0}';
     effect = 'taint {0}';
 
-    // getCostMessage(context: AbilityContext): [string, any[]] {
-    //     let properties = this.getProperties(context) as TaintProperties;
-    //     const target = Array.isArray(properties.target) ? properties.target[0] : properties.target;
-    //     let arg = target.type === CardTypes.Province ? (target.facedown ? target.location : target) : target;
-    //     return ['tainting {0}', [arg]];
-    // }
-
     canAffect(card: BaseCard, context: AbilityContext): boolean {
         if(card.isTainted) {
             return false;
