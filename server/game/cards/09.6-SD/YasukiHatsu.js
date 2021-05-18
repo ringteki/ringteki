@@ -7,7 +7,7 @@ class YasukiHatsu extends DrawCard {
         this.action({
             title: 'Search top 5 card for attachment',
             effect: 'look at the top five cards of their deck',
-            condition: context => context.source.isParticipating() && context.player.opponent && context.player.honor < context.player.opponent.honor,
+            condition: context => context.source.isParticipating() && context.player.opponent && context.player.isLessHonorable(),
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
                 cardCondition: card => card.type === CardTypes.Attachment,

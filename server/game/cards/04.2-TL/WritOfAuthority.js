@@ -5,7 +5,7 @@ class WritOfAuthority extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             effect: AbilityDsl.effects.delayedEffect({
-                condition: context => context.player.opponent && context.player.opponent.honor > context.player.honor,
+                condition: context => context.player.opponent && context.player.opponent.isMoreHonorable(),
                 message: '{0} is discarded from play as its controller has less honor',
                 messageArgs: context => [context.source],
                 gameAction: AbilityDsl.actions.discardFromPlay()

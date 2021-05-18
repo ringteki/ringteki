@@ -5,7 +5,7 @@ class SageOfGiseiToshi extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
             title: 'Move home, then move character home',
-            condition: context => this.game.isDuringConflict() && context.player.opponent && context.player.opponent.honor < context.player.honor,
+            condition: context => this.game.isDuringConflict() && context.player.opponent && context.player.isMoreHonorable(),
             gameAction: ability.actions.sendHome(),
             target: {
                 cardType: CardTypes.Character,

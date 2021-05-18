@@ -7,7 +7,7 @@ class AWarOnTwoFronts extends DrawCard {
         this.reaction({
             title: 'Attack a second province',
             when: {
-                onConflictDeclared: (event, context) => event.conflict.attackingPlayer === context.player && event.conflict.conflictType === ConflictTypes.Military
+                onConflictDeclared: (event, context) => event.conflict.attackingPlayer === context.player && event.conflict.conflictType === ConflictTypes.Military && context.player.isMoreHonorable()
             },
             target: {
                 cardType: CardTypes.Province,

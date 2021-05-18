@@ -8,7 +8,7 @@ class Forgery extends DrawCard {
             title: 'Cancel an event',
             when: {
                 onInitiateAbilityEffects: (event, context) => event.card.type === CardTypes.Event && context.player.opponent &&
-                    context.player.honor < context.player.opponent.honor
+                    context.player.isLessHonorable()
             },
             cannotBeMirrored: true,
             gameAction: AbilityDsl.actions.cancel()

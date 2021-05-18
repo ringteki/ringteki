@@ -1134,14 +1134,6 @@ class Player extends GameObject {
         return this.game.currentConflict && this.game.currentConflict.defendingPlayer === this;
     }
 
-    /**
-     * Returns true if this player is less honorable than its opponent.  Returns false if
-     * the player does not have an opponent.
-     */
-    isLessHonorableThanOpponent() {
-        return this.honor < (this.opponent ? this.opponent.honor : -1);
-    }
-
     resetForConflict() {
         this.cardsInPlay.each(card => {
             card.resetForConflict();
@@ -1184,6 +1176,14 @@ class Player extends GameObject {
     resetHonorEvents(round, phase) {
         // in case a phase is restarded during the same round, reset honor tracking of that phase.
         this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
+    }
+
+    isMoreHonorable() {
+        return this.honor > this.opponent.honor;
+    }
+
+    isLessHonorable() {
+        return this.honor < this.opponent.honor;
     }
 
     /**
