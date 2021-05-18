@@ -10,7 +10,7 @@ class SwellOfSeafoam extends DrawCard {
         this.eventRegistrar.register(['onConflictFinished', 'onCardPlayed']);
 
         this.action({
-            title: 'Prevent opponent\'s bow and send home effects',
+            title: 'Prevent bowing after conflict',
             condition: () => this.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,

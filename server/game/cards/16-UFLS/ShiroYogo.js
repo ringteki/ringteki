@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class ShiroYogo extends StrongholdCard {
     setupCardAbilities() {
         this.action({
-            title: 'Bow this stronghold',
+            title: 'Prevent a character from triggering abilities',
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Character,

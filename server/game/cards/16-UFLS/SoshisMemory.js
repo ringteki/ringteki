@@ -5,7 +5,7 @@ const { TargetModes, Locations, Decks } = require('../../Constants');
 class SoshisMemory extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Reveal and may play top conflict card',
+            title: 'Put a card into a player\'s hand',
             condition: context => context.source.controller.isTraitInPlay('shugenja'),
             effect: 'let {1} look at the top {2} cards of their conflict deck',
             effectArgs: context => [context.select, context.player.cardsInPlay.reduce((total, card) => total + (card.hasTrait('shugenja') ? 1 : 0), 0)],
