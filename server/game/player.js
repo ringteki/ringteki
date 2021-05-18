@@ -1179,11 +1179,23 @@ class Player extends GameObject {
     }
 
     isMoreHonorable() {
-        return this.opponent && this.honor > this.opponent.honor;
+        if(this.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return false;
+        }
+        if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return true;
+        }
+        return this.opponent && (this.honor > this.opponent.honor);
     }
 
     isLessHonorable() {
-        return this.opponent && this.honor < this.opponent.honor;
+        if(this.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return true;
+        }
+        if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return false;
+        }
+        return this.opponent && (this.honor < this.opponent.honor);
     }
 
     /**
