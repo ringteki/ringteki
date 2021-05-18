@@ -163,6 +163,7 @@ export enum EffectNames {
     ParticipatesFromHome = 'participatesFromHome',
     AdditionalAttackedProvince = 'additionalAttackedProvince',
     ReplacePrintedElement = 'replacePrintedElement',
+    ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased'
 };
 
 export enum Durations {

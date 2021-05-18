@@ -54,7 +54,15 @@ class ProvinceCard extends BaseCard {
 
     getDynastyOrStrongholdCardModifier() {
         let province = this.controller.getSourceList(this.location);
-        return province.reduce((bonus, card) => bonus + card.getProvinceStrengthBonus(), 0);
+        const canBeIncreased = !this.anyEffect(EffectNames.ProvinceCannotHaveSkillIncreased);
+
+        return province.reduce((bonus, card) => {
+            let s = card.getProvinceStrengthBonus();
+            if(!canBeIncreased && s > 0) {
+                s = 0;
+            }
+            return bonus + s;
+        }, 0);
     }
 
     get element() {

@@ -31,6 +31,12 @@ const PoliticalModifiers = [
     EffectNames.AttachmentPoliticalSkillModifier
 ];
 
+const ProvinceStrengthModifiers = [
+    EffectNames.ModifyProvinceStrength,
+    EffectNames.ModifyProvinceStrengthMultiplier,
+    EffectNames.SetBaseProvinceStrength
+];
+
 const hasDash = {
     modifyBaseMilitarySkillMultiplier: card => card.hasDash('military'),
     modifyBasePoliticalSkillMultiplier: card => card.hasDash('political'),
@@ -126,6 +132,10 @@ class StaticEffect {
 
     isSkillModifier() {
         return this.isMilitaryModifier() || this.isPoliticalModifier();
+    }
+
+    isProvinceStrengthModifier() {
+        return ProvinceStrengthModifiers.includes(this.type);
     }
 
     checkConflictingEffects(type, target) {

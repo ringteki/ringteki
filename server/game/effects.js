@@ -124,6 +124,7 @@ const Effects = {
     setPoliticalSkill: (value) => EffectBuilder.card.static(EffectNames.SetPoliticalSkill, value),
     setProvinceStrength: (value) => EffectBuilder.card.static(EffectNames.SetProvinceStrength, value),
     setProvinceStrengthBonus: (value) => EffectBuilder.card.flexible(EffectNames.SetProvinceStrengthBonus, value),
+    provinceCannotHaveSkillIncreased: (value) => EffectBuilder.card.static(EffectNames.ProvinceCannotHaveSkillIncreased, value),
     switchBaseSkills: () => EffectBuilder.card.static(EffectNames.SwitchBaseSkills),
     suppressEffects: (condition) => EffectBuilder.card.static(EffectNames.SuppressEffects, new SuppressEffect(condition)),
     takeControl: (player) => EffectBuilder.card.static(EffectNames.TakeControl, player),
