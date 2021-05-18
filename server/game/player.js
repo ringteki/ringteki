@@ -1179,11 +1179,11 @@ class Player extends GameObject {
     }
 
     isMoreHonorable() {
-        return this.honor > this.opponent.honor;
+        return this.opponent && this.honor > this.opponent.honor;
     }
 
     isLessHonorable() {
-        return this.honor < this.opponent.honor;
+        return this.opponent && this.honor < this.opponent.honor;
     }
 
     /**
