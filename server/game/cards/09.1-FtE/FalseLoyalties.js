@@ -9,7 +9,7 @@ class FalseLoyalties extends DrawCard {
             when: {
                 afterConflict: (event, context) => {
                     return context.player.opponent && event.conflict.winner === context.player.opponent &&
-                    context.player.honor < context.player.opponent.honor;
+                    context.player.opponent.isMoreHonorable();
                 }
             },
             targets: {

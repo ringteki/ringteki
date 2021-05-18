@@ -17,6 +17,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     gameAction?: GameAction;
     message?: string;
     uniqueNames?: boolean;
+    player?: Player;
     messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
@@ -101,7 +102,7 @@ export class DeckSearchAction extends PlayerAction {
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
-        let player = context.player;
+        let player = properties.player || context.player;
         let event = this.getEvent(player, context) as any;
         let amount = event.amount > -1 ? event.amount : this.getDeck(player, properties).size();
         let cards = this.getDeck(player, properties).first(amount);

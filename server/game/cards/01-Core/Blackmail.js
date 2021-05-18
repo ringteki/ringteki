@@ -20,7 +20,7 @@ class Blackmail extends DrawCard {
     }
 
     canPlay(context, playType) {
-        if(context.player.opponent && context.player.honor < context.player.opponent.honor) {
+        if(context.player.opponent && context.player.isLessHonorable()) {
             return super.canPlay(context, playType);
         }
         return false;

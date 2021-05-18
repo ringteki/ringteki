@@ -8,7 +8,7 @@ class MotoAriq extends DrawCard {
             title: 'Move a ready character to the conflict',
             condition: context => context.source.isParticipating()
                 && context.player.opponent
-                && context.player.opponent.honor > context.player.honor,
+                && context.player.opponent.isMoreHonorable(),
             target: {
                 player: Players.Opponent,
                 cardCondition: card => !card.bowed,
