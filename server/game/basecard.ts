@@ -868,6 +868,10 @@ class BaseCard extends EffectSource {
         }
     }
 
+    get hasStatusTokens() {
+        return !!this.statusTokens && this.statusTokens.length > 0;
+    }
+
     get isHonored() {
         return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);
     }
