@@ -12,7 +12,7 @@ class TogashiDreamer extends DrawCard {
             targets: {
                 character: {
                     cardType: CardTypes.Character,
-                    cardCondition: card => card.hasStatusTokens
+                    cardCondition: card => card.hasStatusTokens && card.isParticipating()
                 },
                 ring: {
                     mode: TargetModes.Ring,
