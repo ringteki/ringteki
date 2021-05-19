@@ -33,6 +33,7 @@ const ValidKeywords = [
     'courtesy',
     'pride',
     'covert',
+    'corrupted',
     'rally',
     'eminent'
 ];
