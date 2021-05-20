@@ -1,4 +1,4 @@
-describe('Darkness Rising', function() {
+describe('Preeminent Decree', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

@@ -1,4 +1,4 @@
-describe('Battle Aspirant', function() {
+describe('Moto Beastmaster', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

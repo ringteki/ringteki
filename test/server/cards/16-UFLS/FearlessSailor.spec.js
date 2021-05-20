@@ -1,4 +1,4 @@
-describe('Togashi Dreamer', function() {
+describe('Fearless Sailor', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

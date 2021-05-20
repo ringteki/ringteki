@@ -5,10 +5,10 @@ const AbilityDsl = require('../../abilitydsl.js');
 class HidaBackbreaker extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Honor a character',
+            title: 'Dishonor a character',
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.source.controller &&
-                                                   context.source.isParticipating()
+                                                   context.source.isParticipating() && context.game.isDuringConflict('military')
             },
             target: {
                 activePromptTitle: 'Choose a character to dishonor',

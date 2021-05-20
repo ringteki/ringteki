@@ -1,4 +1,4 @@
-describe('Lurking Affliction', function() {
+describe('Field Tactician', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
