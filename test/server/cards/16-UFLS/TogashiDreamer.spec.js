@@ -8,7 +8,7 @@ describe('Togashi Dreamer', function() {
                     hand: ['iron-foundations-stance', 'lurking-affliction']
                 },
                 player2: {
-                    inPlay: ['doji-whisperer', 'togashi-dreamer']
+                    inPlay: ['doji-whisperer', 'togashi-dreamer', 'doji-challenger']
                 }
             });
             this.dreamer = this.player1.findCardByName('togashi-dreamer');
@@ -17,10 +17,13 @@ describe('Togashi Dreamer', function() {
             this.lurk = this.player1.findCardByName('lurking-affliction');
             this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
             this.dreamer2 = this.player2.findCardByName('togashi-dreamer');
+            this.challenger = this.player2.findCardByName('doji-challenger');
 
             this.dreamer.taint();
             this.dojiWhisperer.honor();
             this.dreamer2.dishonor();
+            this.challenger.honor();
+            this.challenger.fate = 5;
             this.dreamer.fate = 5;
             this.dojiWhisperer.fate = 3;
             this.initiate.fate = 2;
@@ -59,6 +62,7 @@ describe('Togashi Dreamer', function() {
             expect(this.player1).toBeAbleToSelect(this.dreamer);
             expect(this.player1).not.toBeAbleToSelect(this.dreamer2);
             expect(this.player1).not.toBeAbleToSelect(this.initiate);
+            expect(this.player1).not.toBeAbleToSelect(this.challenger);
         });
 
         it('should prompt you to choose an unclaimed ring and move a fate from the character to the ring', function() {
