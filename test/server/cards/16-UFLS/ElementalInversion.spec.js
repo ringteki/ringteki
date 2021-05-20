@@ -1,4 +1,4 @@
-describe('Acclaimed Geisha House', function() {
+describe('Elemental Inversion', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
