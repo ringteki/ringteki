@@ -165,7 +165,8 @@ export enum EffectNames {
     AdditionalAttackedProvince = 'additionalAttackedProvince',
     ReplacePrintedElement = 'replacePrintedElement',
     ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased',
-    ConsideredLessHonorable = 'consideredLessHonorable'
+    ConsideredLessHonorable = 'consideredLessHonorable',
+    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval'
 };
 
 export enum Durations {
