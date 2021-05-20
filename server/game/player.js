@@ -598,14 +598,14 @@ class Player extends GameObject {
         return true;
     }
 
-    triggerRally(location) {
+    putTopDynastyCardInProvince(location, facedown = false) {
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
-            this.game.queueSimpleStep(() => this.triggerRally(location));
+            this.game.queueSimpleStep(() => this.putTopDynastyCardInProvince(location, facedown));
         } else {
             let cardFromDeck = this.dynastyDeck.first();
             this.moveCard(cardFromDeck, location);
-            cardFromDeck.facedown = false;
+            cardFromDeck.facedown = facedown;
             return true;
         }
         return true;
