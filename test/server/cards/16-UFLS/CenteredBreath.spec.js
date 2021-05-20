@@ -1,4 +1,4 @@
-describe('Swell of Seafoam', function() {
+describe('Centered Breath', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

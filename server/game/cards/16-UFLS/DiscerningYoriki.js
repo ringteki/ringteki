@@ -5,7 +5,7 @@ const { Locations, CardTypes } = require('../../Constants');
 class DiscerningYoriki extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Draw 2 cards and return 1',
+            title: 'Honor a character',
             when: {
                 onCardRevealed: (event, context) => {
                     let cards = event.card;
