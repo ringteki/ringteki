@@ -474,13 +474,23 @@ class BaseCard extends EffectSource {
 
     getModifiedLimitMax(player: Player, ability: CardAbility, max: number): number {
         const effects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnAbilities);
-        return effects.reduce((total, effect) => {
+        let total = max;
+        effects.forEach(effect => {
             const value = effect.getValue(this);
             if((value === true || value === ability) && effect.context.player === player) {
-                return total + 1;
+                total++;
             }
-            return total;
-        }, max);
+        });
+
+        const printedEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnPrintedAbilities);
+        printedEffects.forEach(effect => {
+            const value = effect.getValue(this);
+            if(ability.printedAbility && (value === true || value === ability) && effect.context.player === player) {
+                total++;
+            }
+        });
+
+        return total;
     }
 
     getMenu() {

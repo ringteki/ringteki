@@ -82,6 +82,7 @@ export enum EffectNames {
     TaintedStatusDoesNotCostHonor = 'taintedStatusDoesNotCostHonor',
     HonorStatusReverseModifySkill = 'honorStatusReverseModifySkill',
     IncreaseLimitOnAbilities = 'increaseLimitOnAbilities',
+    IncreaseLimitOnPrintedAbilities = 'IncreaseLimitOnPrintedAbilities',
     LoseKeyword = 'loseKeyword',
     ModifyBaseMilitarySkillMultiplier = 'modifyBaseMilitarySkillMultiplier',
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
