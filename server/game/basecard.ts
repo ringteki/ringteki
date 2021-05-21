@@ -873,6 +873,12 @@ class BaseCard extends EffectSource {
 
     updateStatusTokenEffects() {
         if(this.statusTokens) {
+            if (this.isHonored && this.isDishonored) {
+                this.removeStatusToken(CharacterStatus.Honored);
+                this.removeStatusToken(CharacterStatus.Dishonored);
+                this.game.addMessage('Honored and Dishonored status tokens nullify each other and are both discarded from {0}', this);
+            }
+
             this.statusTokens.forEach(token => {
                 token.setCard(this);
             })
@@ -882,6 +888,11 @@ class BaseCard extends EffectSource {
     get hasStatusTokens() {
         return !!this.statusTokens && this.statusTokens.length > 0;
     }
+
+    hasStatusToken(type) {
+        return !!this.statusTokens && this.statusTokens.some(a => a.grantedStatus === type);
+    }
+
 
     get isHonored() {
         return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);
