@@ -91,6 +91,7 @@ const Effects = {
     honorStatusReverseModifySkill: () => EffectBuilder.card.flexible(EffectNames.HonorStatusReverseModifySkill),
     immunity: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(properties)),
     increaseLimitOnAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnAbilities, abilities),
+    increaseLimitOnPrintedAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnPrintedAbilities, abilities),
     loseAllNonKeywordAbilities: () => EffectBuilder.card.static(EffectNames.LoseAllNonKeywordAbilities),
     loseKeyword: (keyword) => EffectBuilder.card.static(EffectNames.LoseKeyword, keyword),
     modifyBaseMilitarySkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseMilitarySkillMultiplier, value),
@@ -235,6 +236,7 @@ const Effects = {
     defendersChosenFirstDuringConflict: (amountOfAttackers) => EffectBuilder.player.static(EffectNames.DefendersChosenFirstDuringConflict, amountOfAttackers),
     costToDeclareAnyParticipants: (properties) => EffectBuilder.player.static(EffectNames.CostToDeclareAnyParticipants, properties),
     consideredLessHonorable: () => EffectBuilder.player.static(EffectNames.ConsideredLessHonorable),
+    customFatePhaseFateRemoval: (refillFunc) => EffectBuilder.player.static(EffectNames.CustomFatePhaseFateRemoval, refillFunc), //refillFunc: (Player, numFate) => { }
     // Conflict effects
     charactersCannot: (properties) => EffectBuilder.conflict.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ restricts: 'characters', type: properties.cannot || properties }, properties))),
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),

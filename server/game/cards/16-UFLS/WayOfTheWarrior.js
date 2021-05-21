@@ -11,19 +11,22 @@ class WayOfTheWarrior extends DrawCard {
                 controller: Players.Any,
                 cardCondition: card => card.isParticipating() && card.hasTrait('bushi'),
                 gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect(() => ({
+                    AbilityDsl.actions.cardLastingEffect(context => ({
                         effect: [
                             AbilityDsl.effects.cardCannot({
                                 cannot: 'sendHome',
-                                restricts: 'opponentsCardEffects'
+                                restricts: 'opponentsCardEffects',
+                                applyingPlayer: context.player
                             }),
                             AbilityDsl.effects.cardCannot({
                                 cannot: 'bow',
-                                restricts: 'opponentsCardEffects'
+                                restricts: 'opponentsCardEffects',
+                                applyingPlayer: context.player
                             }),
                             AbilityDsl.effects.cardCannot({
                                 cannot: 'dishonor',
-                                restricts: 'opponentsCardEffects'
+                                restricts: 'opponentsCardEffects',
+                                applyingPlayer: context.player
                             })
                         ]
                     })),

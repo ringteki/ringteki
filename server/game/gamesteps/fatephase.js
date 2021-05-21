@@ -2,7 +2,7 @@ const _ = require('underscore');
 const Phase = require('./phase.js');
 const ActionWindow = require('./actionwindow.js');
 const SimpleStep = require('./simplestep.js');
-const { Players, Phases, CardTypes, EventNames, Locations } = require('../Constants');
+const { Players, Phases, CardTypes, EventNames, Locations, EffectNames } = require('../Constants');
 const GameModes = require('../../GameModes.js');
 
 /*
@@ -68,7 +68,21 @@ class FatePhase extends Phase {
     }
 
     removeFateFromCharacters() {
-        this.game.applyGameAction(null, { removeFate: this.game.findAnyCardsInPlay(card => card.allowGameAction('removeFate')) });
+        const context = this.game.getFrameworkContext();
+        const events = this.game.applyGameAction(context, { removeFate: this.game.findAnyCardsInPlay(card => card.allowGameAction('removeFate')) });
+        let processed = false;
+        this.game.queueSimpleStep(() => {
+            for(let player of this.game.getPlayersInFirstPlayerOrder()) {
+                if(!processed) {
+                    const numFate = events.filter(a => !a.recipient).length;
+                    let postFunc = player.mostRecentEffect(EffectNames.CustomFatePhaseFateRemoval);
+                    if(postFunc) {
+                        postFunc(player, numFate);
+                        processed = true;
+                    }
+                }
+            }
+        });
     }
 
     placeFateOnUnclaimedRings() {
