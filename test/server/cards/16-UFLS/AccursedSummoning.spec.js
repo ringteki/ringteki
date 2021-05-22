@@ -162,5 +162,32 @@ describe('Accursed Summoning', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Accursed Summoning, losing 2 honor to put Bog Hag into play in the conflict');
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
+
+        it('should not let you summon dashes into the wrong conflict type', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.doomed],
+                defenders: [this.whisperer],
+                type: 'political'
+            });
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.summoning);
+            this.player1.clickPrompt('1');
+            expect(this.player1).toHavePrompt('Select a creature to summon');
+            expect(this.player1).not.toHavePromptButton('Skeletal Warrior');
+            expect(this.player1).toHavePromptButton('Scavenging Goblin');
+            expect(this.player1).toHavePromptButton('Insatiable Gaki');
+            expect(this.player1).toHavePromptButton('Bloodthirsty Kansen');
+            expect(this.player1).toHavePromptButton('Back');
+            expect(this.player1).toHavePromptButton('Cancel');
+
+            this.player1.clickPrompt('Back');
+            this.player1.clickPrompt('All');
+            expect(this.player1).not.toHavePromptButton('Skeletal Warrior');
+            expect(this.player1).toHavePromptButton('Scavenging Goblin');
+            expect(this.player1).toHavePromptButton('Fouleye\'s Elite');
+            expect(this.player1).not.toHavePromptButton('Endless Ranks');
+        });
     });
 });
