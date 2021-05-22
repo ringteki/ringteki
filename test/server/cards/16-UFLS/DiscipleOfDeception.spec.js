@@ -10,7 +10,7 @@ describe('Disciple of Deception', function() {
                 player2: {
                     honor: 10,
                     inPlay: ['kakita-yoshi'],
-                    hand: ['soul-beyond-reproach']
+                    hand: ['soul-beyond-reproach', 'assassination']
                 }
             });
             this.bayushiDairu = this.player1.findCardByName('bayushi-dairu');
@@ -19,6 +19,7 @@ describe('Disciple of Deception', function() {
             this.illusionist = this.player1.findCardByName('soshi-illusionist');
             this.deception = this.player1.findCardByName('disciple-of-deception');
             this.soul = this.player2.findCardByName('soul-beyond-reproach');
+            this.assassination = this.player2.findCardByName('assassination');
 
             this.youngRumormonger.dishonor();
             this.bayushiDairu.taint();
@@ -165,6 +166,33 @@ describe('Disciple of Deception', function() {
             expect(this.kakitaYoshi.isDishonored).toBe(false);
             expect(this.kakitaYoshi.isHonored).toBe(true);
             expect(this.kakitaYoshi.isTainted).toBe(false);
+            expect(this.kakitaYoshi.getMilitarySkill()).toBe(5);
+            expect(this.kakitaYoshi.getPoliticalSkill()).toBe(9);
+        });
+
+        it('should expire at the end of the conflict even if Disciple leaves play', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.bayushiDairu],
+                defenders: [this.kakitaYoshi]
+            });
+
+            this.bayushiDairu.bow();
+            this.player2.pass();
+            this.player1.clickCard(this.deception);
+            this.player1.clickCard(this.youngRumormonger);
+            this.player1.clickCard(this.kakitaYoshi);
+            expect(this.kakitaYoshi.isDishonored).toBe(true);
+            expect(this.kakitaYoshi.isHonored).toBe(false);
+            expect(this.kakitaYoshi.getMilitarySkill()).toBe(0);
+            expect(this.kakitaYoshi.getPoliticalSkill()).toBe(3);
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.deception);
+            expect(this.deception.location).toBe('dynasty discard pile');
+            this.noMoreActions();
+
+            expect(this.kakitaYoshi.isDishonored).toBe(false);
+            expect(this.kakitaYoshi.isHonored).toBe(true);
             expect(this.kakitaYoshi.getMilitarySkill()).toBe(5);
             expect(this.kakitaYoshi.getPoliticalSkill()).toBe(9);
         });
