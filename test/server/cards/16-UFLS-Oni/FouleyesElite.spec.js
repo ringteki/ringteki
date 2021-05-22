@@ -28,7 +28,7 @@ describe('Fouleye\'s Elite', function () {
             expect(this.player1).toBeAbleToSelect(this.elite);
             this.player1.clickCard(this.elite);
             expect(this.player1).not.toBeAbleToSelect(this.elite);
-            expect(this.player1).not.toBeAbleToSelect(this.elite);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
             expect(this.player1).not.toBeAbleToSelect(this.daidojiUji);
             expect(this.player1).toBeAbleToSelect(this.maraudingOni);
             this.player1.clickCard(this.maraudingOni);
