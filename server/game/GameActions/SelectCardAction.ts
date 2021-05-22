@@ -26,6 +26,8 @@ export interface SelectCardProperties extends CardActionProperties {
     hidePromptIfSingleCard?: boolean;
     subActionProperties?: (card: BaseCard) => any;
     cancelHandler?: () => void;
+    effect?: string;
+    effectArgs?: (context) => string[];
 }
 
 export class SelectCardAction extends CardGameAction {
@@ -43,7 +45,10 @@ export class SelectCardAction extends CardGameAction {
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let { target } = this.getProperties(context);
+        let { target, effect, effectArgs } = this.getProperties(context) as SelectCardProperties;
+        if (effect) {
+            return [effect, effectArgs(context) || []]
+        }
         return ['choose a target for {0}', [target]];
     }
 

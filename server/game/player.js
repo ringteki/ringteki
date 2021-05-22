@@ -598,14 +598,14 @@ class Player extends GameObject {
         return true;
     }
 
-    triggerRally(location) {
+    putTopDynastyCardInProvince(location, facedown = false) {
         if(this.dynastyDeck.size() === 0) {
             this.deckRanOutOfCards('dynasty');
-            this.game.queueSimpleStep(() => this.triggerRally(location));
+            this.game.queueSimpleStep(() => this.putTopDynastyCardInProvince(location, facedown));
         } else {
             let cardFromDeck = this.dynastyDeck.first();
             this.moveCard(cardFromDeck, location);
-            cardFromDeck.facedown = false;
+            cardFromDeck.facedown = facedown;
             return true;
         }
         return true;
@@ -679,6 +679,7 @@ class Player extends GameObject {
                 }
             }
         });
+        this.outsideTheGameCards = preparedDeck.outsideTheGameCards;
     }
 
     /**
@@ -1134,14 +1135,6 @@ class Player extends GameObject {
         return this.game.currentConflict && this.game.currentConflict.defendingPlayer === this;
     }
 
-    /**
-     * Returns true if this player is less honorable than its opponent.  Returns false if
-     * the player does not have an opponent.
-     */
-    isLessHonorableThanOpponent() {
-        return this.honor < (this.opponent ? this.opponent.honor : -1);
-    }
-
     resetForConflict() {
         this.cardsInPlay.each(card => {
             card.resetForConflict();
@@ -1184,6 +1177,26 @@ class Player extends GameObject {
     resetHonorEvents(round, phase) {
         // in case a phase is restarded during the same round, reset honor tracking of that phase.
         this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
+    }
+
+    isMoreHonorable() {
+        if(this.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return false;
+        }
+        if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return true;
+        }
+        return this.opponent && (this.honor > this.opponent.honor);
+    }
+
+    isLessHonorable() {
+        if(this.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return true;
+        }
+        if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
+            return false;
+        }
+        return this.opponent && (this.honor < this.opponent.honor);
     }
 
     /**

@@ -7,7 +7,7 @@ class Pragmatism extends DrawCard {
         });
 
         this.whileAttached({
-            condition: () => this.controller.isLessHonorableThanOpponent(),
+            condition: context => context.player.isLessHonorable(),
             effect: [
                 ability.effects.modifyMilitarySkill(1),
                 ability.effects.modifyPoliticalSkill(1),

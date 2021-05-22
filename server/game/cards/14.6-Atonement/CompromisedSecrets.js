@@ -33,7 +33,7 @@ class CompromisedSecrets extends DrawCard {
     }
 
     canPlay(context, playType) {
-        return context.player.opponent && context.player.honor < context.player.opponent.honor && super.canPlay(context, playType);
+        return context.player.opponent && context.player.isLessHonorable() && super.canPlay(context, playType);
     }
 }
 

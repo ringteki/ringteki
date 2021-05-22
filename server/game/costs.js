@@ -97,6 +97,10 @@ const Costs = {
     /**
      * Cost that will discard the status token on a card to be selected by the player
      */
+    /**
+     * Cost that requires tainting a card to be selected by the player
+    */
+    taint: properties => getSelectCost(GameActions.taint(), properties, 'Select card to taint'),
     discardStatusToken: properties => new MetaActionCost(
         GameActions.selectCard(
             Object.assign({ gameAction: GameActions.discardStatusToken(), subActionProperties: card => ({ target: card.getStatusToken(CharacterStatus.Honored) }) }, properties)

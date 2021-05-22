@@ -33,6 +33,7 @@ const ValidKeywords = [
     'courtesy',
     'pride',
     'covert',
+    'corrupted',
     'rally',
     'eminent'
 ];
@@ -473,13 +474,23 @@ class BaseCard extends EffectSource {
 
     getModifiedLimitMax(player: Player, ability: CardAbility, max: number): number {
         const effects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnAbilities);
-        return effects.reduce((total, effect) => {
+        let total = max;
+        effects.forEach(effect => {
             const value = effect.getValue(this);
             if((value === true || value === ability) && effect.context.player === player) {
-                return total + 1;
+                total++;
             }
-            return total;
-        }, max);
+        });
+
+        const printedEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnPrintedAbilities);
+        printedEffects.forEach(effect => {
+            const value = effect.getValue(this);
+            if(ability.printedAbility && (value === true || value === ability) && effect.context.player === player) {
+                total++;
+            }
+        });
+
+        return total;
     }
 
     getMenu() {
@@ -862,11 +873,26 @@ class BaseCard extends EffectSource {
 
     updateStatusTokenEffects() {
         if(this.statusTokens) {
+            if (this.isHonored && this.isDishonored) {
+                this.removeStatusToken(CharacterStatus.Honored);
+                this.removeStatusToken(CharacterStatus.Dishonored);
+                this.game.addMessage('Honored and Dishonored status tokens nullify each other and are both discarded from {0}', this);
+            }
+
             this.statusTokens.forEach(token => {
                 token.setCard(this);
             })
         }
     }
+
+    get hasStatusTokens() {
+        return !!this.statusTokens && this.statusTokens.length > 0;
+    }
+
+    hasStatusToken(type) {
+        return !!this.statusTokens && this.statusTokens.some(a => a.grantedStatus === type);
+    }
+
 
     get isHonored() {
         return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);

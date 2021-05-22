@@ -689,6 +689,7 @@ class DrawCard extends BaseCard {
             this.game.openThenEventWindow(honorGainAction.getEvent(this.controller, frameworkContext));
         }
 
+        this.untaint();
         this.makeOrdinary();
         this.bowed = false;
         this.covert = false;
