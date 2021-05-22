@@ -2,34 +2,26 @@ const { Players, CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
 const BaseOni = require('./BaseOni.js');
 
-class OniOfObsidianAndBlood extends BaseOni {
+class LostSamurai extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Discard a character',
+            title: 'Bow a character',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating();
                 }
             },
             target: {
-                controller: Players.Opponent,
+                controller: Players.Any,
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isTainted,
-                gameAction: AbilityDsl.actions.discardFromPlay()
+                cardCondition: card => card.isParticipating() && !card.isFaction('shadowlands'),
+                gameAction: AbilityDsl.actions.dishonor()
             }
         });
     }
-
-    allowAttachment(attachment) {
-        if(!attachment.isFaction('shadowlands')) {
-            return false;
-        }
-
-        return super.allowAttachment(attachment);
-    }
 }
 
-OniOfObsidianAndBlood.id = 'oni-of-obsidian-and-blood';
+LostSamurai.id = 'lost-samurai';
 
-module.exports = OniOfObsidianAndBlood;
+module.exports = LostSamurai;
