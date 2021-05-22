@@ -85,7 +85,7 @@ class Deck {
                 let card = this.createCard(DrawCard, player, cardData);
                 card.location = Locations.OutsideTheGame;
                 shadowlandsNonUniques.push(card);
-            });    
+            });
         }
 
         result.outsideTheGameCards = shadowlandsNonUniques;
