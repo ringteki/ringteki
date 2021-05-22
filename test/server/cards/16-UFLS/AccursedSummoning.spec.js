@@ -64,7 +64,7 @@ describe('Accursed Summoning', function() {
 
             this.oni = this.player1.player.cardsInPlay.filter(a => a.id === 'oni-of-obsidian-and-blood')[0];
             expect(this.oni.isAttacking()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Accursed Summoning, losing 4 honor to put Oni of Obsidian and Blood into play in the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 plays Accursed Summoning, losing 4 honor to summon an Oni of Obsidian and Blood from the depths of the Shadowlands!');
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
@@ -159,7 +159,7 @@ describe('Accursed Summoning', function() {
 
             this.oni = this.player1.player.cardsInPlay.filter(a => a.id === 'bog-hag')[0];
             expect(this.oni.isAttacking()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Accursed Summoning, losing 2 honor to put Bog Hag into play in the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 plays Accursed Summoning, losing 2 honor to summon a Bog Hag from the depths of the Shadowlands!');
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
@@ -188,6 +188,12 @@ describe('Accursed Summoning', function() {
             expect(this.player1).toHavePromptButton('Scavenging Goblin');
             expect(this.player1).toHavePromptButton('Fouleye\'s Elite');
             expect(this.player1).not.toHavePromptButton('Endless Ranks');
+        });
+
+        it('should not work outside of a conflict', function() {
+            expect(this.player1).toHavePrompt('Action Window');
+            this.player1.clickCard(this.summoning);
+            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

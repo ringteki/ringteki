@@ -102,7 +102,17 @@ class AccursedSummoning extends DrawCard {
             condition: context => context.game.isDuringConflict(),
             gameAction: AbilityDsl.actions.putIntoConflict(context => ({
                 target: context.costs.accursedSummoningCostCreature || context.player.outsideTheGameCards[1]
-            }))
+            })),
+            effect: 'summon a{2} {1} from the depths of the Shadowlands!',
+            effectArgs: context => {
+                var testStr = context.costs.accursedSummoningCostCreature.name;
+                var vowelRegex = '^[aieouAIEOU].*';
+                var matched = testStr.match(vowelRegex);
+                return [
+                    context.costs.accursedSummoningCostCreature,
+                    matched ? 'n' : ''
+                ];
+            }
         });
     }
 
