@@ -28,7 +28,7 @@ describe('Oni of Obsidian and Blood', function () {
             expect(this.player1).toBeAbleToSelect(this.daidojiUji);
             expect(this.player1).toBeAbleToSelect(this.maraudingOni);
         });
-        
+
         it('should trigger and discard a tainted character after winning a conflict', function () {
             this.noMoreActions();
             this.initiateConflict({

@@ -20,7 +20,7 @@ class OniOfObsidianAndBlood extends BaseOni {
             }
         });
     }
-    
+
     allowAttachment(attachment) {
         if(!attachment.isFaction('shadowlands') && !attachment.hasTrait('shadowlands')) {
             return false;
