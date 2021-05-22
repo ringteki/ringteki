@@ -8,7 +8,7 @@ class BogHag extends BaseOni {
             title: 'Resolve the contested ring',
             when: {
                 afterConflict: (event, context) => {
-                    return event.conflict.winner === context.source.controller && context.source.isParticipating() && context.player.opponent;
+                    return event.conflict.winner === context.source.controller && context.source.isParticipating() && context.player.opponent && context.player.opponent.conflictDeck.size() > 0;
                 }
             },
             gameAction: AbilityDsl.actions.discardCard(context => ({ target: context.player.opponent.conflictDeck.first(8) })),
