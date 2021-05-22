@@ -19,6 +19,7 @@ class Deck {
             conflictCards: [],
             dynastyCards: [],
             provinceCards: [],
+            outOfPlayCards: [],
             stronghold: undefined,
             role: undefined
         };
@@ -78,6 +79,16 @@ class Deck {
             });
         }
 
+        const shadowlandsNonUniques = [];
+        if(this.data.outsideTheGameCards) {
+            this.data.outsideTheGameCards.forEach(cardData => {
+                let card = this.createCard(DrawCard, player, cardData);
+                card.location = Locations.OutsideTheGame;
+                shadowlandsNonUniques.push(card);
+            });
+        }
+
+        result.outsideTheGameCards = shadowlandsNonUniques;
         result.allCards = result.provinceCards.concat(result.conflictCards).concat(result.dynastyCards);
 
         if(result.stronghold) {
