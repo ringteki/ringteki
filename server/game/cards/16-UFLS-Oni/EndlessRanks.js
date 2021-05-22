@@ -6,7 +6,7 @@ class EndlessRanks extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Put a dynasty character on top of your deck',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating();

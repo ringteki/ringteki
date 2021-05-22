@@ -5,7 +5,7 @@ class DarkMoto extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Place a fate and prevent from bowing',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating();

@@ -5,7 +5,7 @@ class BogHag extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Resolve the contested ring',
+            title: 'Discard from the conflict deck',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating() && context.player.opponent && context.player.opponent.conflictDeck.size() > 0;

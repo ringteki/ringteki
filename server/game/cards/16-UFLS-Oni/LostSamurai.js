@@ -6,7 +6,7 @@ class LostSamurai extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Dishonor a character',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating();

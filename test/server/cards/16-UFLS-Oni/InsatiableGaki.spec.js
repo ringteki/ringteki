@@ -1,4 +1,4 @@
-describe('Fouleye\'s Elite', function () {
+describe('Insatiable Gaki', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

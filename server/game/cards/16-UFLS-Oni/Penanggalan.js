@@ -6,7 +6,7 @@ class Penanggalan extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Move a fate onto this character',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating();

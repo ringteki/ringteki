@@ -1,4 +1,4 @@
-describe('Fouleye\'s Elite', function () {
+describe('Undead Horror', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

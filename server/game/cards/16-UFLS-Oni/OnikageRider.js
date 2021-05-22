@@ -6,7 +6,7 @@ class OnikageRider extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Discard cards in provinces',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating() && context.player.opponent;

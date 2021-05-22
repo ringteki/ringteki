@@ -6,7 +6,7 @@ class UndeadHorror extends BaseOni {
     setupCardAbilities() {
         super.setupCardAbilities();
         this.reaction({
-            title: 'Bow a character',
+            title: 'Attach a character to this card',
             when: {
                 afterConflict: (event, context) => {
                     return event.conflict.winner === context.source.controller && context.source.isParticipating() && context.player.opponent && context.player.opponent.dynastyDiscardPile.filter(card => card.type === CardTypes.Character).length > 0;
