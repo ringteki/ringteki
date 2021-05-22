@@ -80,11 +80,13 @@ class Deck {
         }
 
         const shadowlandsNonUniques = [];
-        this.data.outsideTheGameCards.forEach(cardData => {
-            let card = this.createCard(DrawCard, player, cardData);
-            card.location = Locations.OutsideTheGame;
-            shadowlandsNonUniques.push(card);
-        })
+        if(this.data.outsideTheGameCards) {
+            this.data.outsideTheGameCards.forEach(cardData => {
+                let card = this.createCard(DrawCard, player, cardData);
+                card.location = Locations.OutsideTheGame;
+                shadowlandsNonUniques.push(card);
+            });    
+        }
 
         result.outsideTheGameCards = shadowlandsNonUniques;
         result.allCards = result.provinceCards.concat(result.conflictCards).concat(result.dynastyCards);

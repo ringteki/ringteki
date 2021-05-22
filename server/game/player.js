@@ -679,7 +679,7 @@ class Player extends GameObject {
                 }
             }
         });
-        this.outsideTheGameCards = preparedDeck.outsideTheGameCards
+        this.outsideTheGameCards = preparedDeck.outsideTheGameCards;
     }
 
     /**
