@@ -679,6 +679,7 @@ class Player extends GameObject {
                 }
             }
         });
+        this.outsideTheGameCards = preparedDeck.outsideTheGameCards
     }
 
     /**
