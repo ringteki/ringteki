@@ -29,7 +29,7 @@ describe('Spell Scroll', function () {
             this.censure = this.player1.findCardByName('censure');
         });
 
-        it('should let you pick a non-character card from your discard that matches a trait on attached character', function () {
+        it('should let you pick a non-character card from your discard that matches a trait on attached character, move it to hand and discard spell scroll', function () {
             this.player1.playAttachment(this.scroll1, this.atsuko);
             this.player2.pass();
             this.player1.clickCard(this.scroll1);
@@ -43,7 +43,8 @@ describe('Spell Scroll', function () {
 
             this.player1.clickCard(this.etv);
             expect(this.etv.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Spell Scroll to move Embrace the Void to player1\'s hand');
+            expect(this.scroll1.location).toBe('conflict discard pile');
+            expect(this.getChatLogs(5)).toContain('player1 uses Spell Scroll to move Embrace the Void to their hand and sacrifice Spell Scroll');
         });
 
         it('should do nothing if there are no legal targets', function () {
@@ -62,7 +63,8 @@ describe('Spell Scroll', function () {
 
             this.player1.clickCard(this.censure);
             expect(this.censure.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Spell Scroll to move Censure to player1\'s hand');
+            expect(this.scroll1.location).toBe('conflict discard pile');
+            expect(this.getChatLogs(5)).toContain('player1 uses Spell Scroll to move Censure to their hand and sacrifice Spell Scroll');
         });
 
         it('should give +3 pol when participating in a conflict that matches element', function () {

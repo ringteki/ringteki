@@ -18,10 +18,16 @@ class SpellScroll extends DrawCard {
                 cardCondition: (card, context) => {
                     return card.type !== CardTypes.Character && context.source.parent.getTraits().some(trait => card.hasTrait(trait));
                 },
-                gameAction: AbilityDsl.actions.moveCard({
-                    destination: Locations.Hand
-                })
-            }
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.moveCard(context => ({
+                        target: context.target,
+                        destination: Locations.Hand
+                    })),
+                    AbilityDsl.actions.sacrifice(context => ({ target: context.source }))
+                ])
+            },
+            effect: 'move {1} to their hand and sacrifice {2}',
+            effectArgs: context => [context.target, context.source]
         });
     }
 }
