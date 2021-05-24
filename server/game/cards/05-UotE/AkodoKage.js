@@ -8,7 +8,7 @@ class AkodoKage extends DrawCard {
                 onHonorDialsRevealed: (event, context) =>
                     context.player.opponent &&
                     context.player.honorBid < context.player.opponent.honorBid &&
-                    context.player.honor > context.player.opponent.honor
+                    context.player.isMoreHonorable()
             },
             gameAction: ability.actions.setHonorDial(context => ({ value: context.player.showBid }))
         });

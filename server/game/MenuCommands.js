@@ -22,6 +22,15 @@ class MenuCommands {
                 game.addMessage('{0} dishonors {1}', player, card);
                 card.dishonor();
                 break;
+            case 'taint':
+                if(card.isTainted) {
+                    game.addMessage('{0} cleanses {1}', player, card);
+                    card.untaint();
+                } else {
+                    game.addMessage('{0} taints {1}', player, card);
+                    card.taint();
+                }
+                break;
             case 'addfate':
                 game.addMessage('{0} adds a fate to {1}', player, card);
                 card.modifyFate(1);

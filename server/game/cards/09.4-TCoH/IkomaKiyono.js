@@ -7,7 +7,7 @@ class IkomaKiyono extends DrawCard {
             title: 'Ready for Glory Count',
             when: {
                 onGloryCount: (event, context) => { // eslint-disable-line no-unused-vars
-                    return context.player && context.player.opponent && context.player.honor > context.player.opponent.honor;
+                    return context.player && context.player.opponent && context.player.isMoreHonorable();
                 }
             },
             gameAction: AbilityDsl.actions.ready()

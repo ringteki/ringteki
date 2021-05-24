@@ -68,6 +68,7 @@ import { ReturnToHandAction, ReturnToHandProperties } from './ReturnToHandAction
 import { RevealAction, RevealProperties } from './RevealAction';
 import { SelectCardAction, SelectCardProperties } from './SelectCardAction';
 import { SelectRingAction, SelectRingProperties } from './SelectRingActions';
+import { SelectTokenAction, SelectTokenProperties } from './SelectTokenAction';
 import { SendHomeAction, SendHomeProperties } from './SendHomeAction';
 import { SequentialAction } from './SequentialAction';
 import { SequentialContextAction, SequentialContextProperties } from './SequentialContextAction';
@@ -75,6 +76,7 @@ import { SetDialAction, SetDialProperties } from './SetDialAction';
 import { ShuffleDeckAction, ShuffleDeckProperties } from './ShuffleDeckAction';
 import { SwitchConflictElementAction, SwitchConflictElementProperties } from './SwitchConflictElementAction';
 import { SwitchConflictTypeAction, SwitchConflictTypeProperties } from './SwitchConflictTypeAction';
+import { TaintAction, TaintProperties } from './TaintAction';
 import { TakeControlAction, TakeControlProperties } from './TakeControlAction';
 import { TakeFateRingAction, TakeFateRingProperties } from './TakeFateRingAction';
 import { TakeRingAction, TakeRingProperties } from './TakeRingAction';
@@ -127,6 +129,7 @@ const GameActions = {
     reveal: (propertyFactory: RevealProperties | ((context: TriggeredAbilityContext) => RevealProperties) = {}) => new RevealAction(propertyFactory), // chatMessage = false
     sendHome: (propertyFactory: SendHomeProperties | ((context: TriggeredAbilityContext) => SendHomeProperties) = {}) => new SendHomeAction(propertyFactory),
     sacrifice: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory, true),
+    taint: (propertyFactory: TaintProperties | ((context: TriggeredAbilityContext) => TaintProperties) = {}) => new TaintAction(propertyFactory),
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
     triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
@@ -187,6 +190,7 @@ const GameActions = {
     multipleContext: (propertyFactory: MultipleContextActionProperties | ((context: TriggeredAbilityContext) => MultipleContextActionProperties)) => new MultipleContextGameAction(propertyFactory),
     menuPrompt: (propertyFactory: MenuPromptProperties | ((context: TriggeredAbilityContext) => MenuPromptProperties)) => new MenuPromptAction(propertyFactory),
     selectCard: (propertyFactory: SelectCardProperties | ((context: TriggeredAbilityContext) => SelectCardProperties)) => new SelectCardAction(propertyFactory),
+    selectToken: (propertyFactory: SelectTokenProperties | ((context: TriggeredAbilityContext) => SelectTokenProperties)) => new SelectTokenAction(propertyFactory),
     sequential: (gameActions: GameAction[]) => new SequentialAction(gameActions), // takes an array of gameActions, not a propertyFactory
     sequentialContext: (propertyFactory: SequentialContextProperties | ((context: TriggeredAbilityContext) => SequentialContextProperties)) => new SequentialContextAction(propertyFactory)
 };

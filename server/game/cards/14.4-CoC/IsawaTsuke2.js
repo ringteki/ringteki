@@ -1,7 +1,9 @@
 const _ = require('underscore');
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, TargetModes } from '../../Constants.js';
+import { CardTypes, TargetModes, Elements } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
+
+const elementKey = 'isawa-tsuke-2-fire';
 
 class IsawaTsuke2 extends DrawCard {
     setupCardAbilities() {
@@ -9,7 +11,7 @@ class IsawaTsuke2 extends DrawCard {
             title: 'Lose honor to discard fate',
             effect: 'lose {1} honor to discard a fate from {2}',
             effectArgs: context => [context.costs.variableHonorCost, context.target],
-            condition: context => context.game.isDuringConflict() && context.game.rings['fire'].isUnclaimed(),
+            condition: context => context.game.isDuringConflict() && context.game.rings[this.getCurrentElementSymbol(elementKey)].isUnclaimed(),
             cost: AbilityDsl.costs.variableHonorCost(context => this.getNumberOfLegalTargets(context)),
             target: {
                 mode: TargetModes.ExactlyVariable,
@@ -44,6 +46,16 @@ class IsawaTsuke2 extends DrawCard {
         });
 
         return selectedCards.length;
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Unclaimed Ring',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }
 

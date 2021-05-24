@@ -8,6 +8,7 @@ import ProvinceCard = require('./provincecard');
 import CardAbility = require('./CardAbility');
 import { DuelProperties } from './GameActions/DuelAction';
 import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } from './Constants';
+import StatusToken = require('./StatusTokens/StatusToken');
 
 interface BaseTarget {
     activePromptTitle?: string;
@@ -44,7 +45,15 @@ interface TargetToken extends BaseTarget {
     mode: TargetModes.Token;
     location?: Locations | Locations[];
     cardType?: CardTypes | CardTypes[];
+    singleToken?: boolean;
     cardCondition?: (card: BaseCard, context?: AbilityContext) => boolean;
+    tokenCondition?: (token: StatusToken, context?: AbilityContext) => boolean;
+};
+
+interface TargetElementSymbol extends BaseTarget {
+    mode: TargetModes.ElementSymbol;
+    location?: Locations | Locations[];
+    cardType?: CardTypes | CardTypes[];
 };
 
 interface BaseTargetCard extends BaseTarget {
@@ -75,7 +84,7 @@ interface TargetCardSingleUnlimited extends BaseTargetCard {
     mode?: TargetModes.Single | TargetModes.Unlimited;
 };
 
-type TargetCard = TargetCardExactlyUpTo | TargetCardExactlyUpToVariable | TargetCardMaxStat | TargetCardSingleUnlimited | TargetAbility | TargetToken;
+type TargetCard = TargetCardExactlyUpTo | TargetCardExactlyUpToVariable | TargetCardMaxStat | TargetCardSingleUnlimited | TargetAbility | TargetToken | TargetElementSymbol;
 
 interface SubTarget {
     dependsOn?: string;

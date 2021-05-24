@@ -4,8 +4,7 @@ class VenerableHistorian extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
             title: 'Honor this character',
-            condition: context => context.source.isParticipating() && context.player.opponent &&
-                                  context.player.opponent.honor < context.player.honor,
+            condition: context => context.source.isParticipating() && context.player.opponent && context.player.isMoreHonorable(),
             gameAction: ability.actions.honor()
         });
     }

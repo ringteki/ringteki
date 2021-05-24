@@ -5,7 +5,7 @@ const GameActions = require('./GameActions/GameActions');
 const GameActionCost = require('./costs/GameActionCost');
 const MetaActionCost = require('./costs/MetaActionCost');
 const Event = require('./Events/Event');
-const { EventNames, Locations, Players, TargetModes, PlayTypes } = require('./Constants');
+const { EventNames, Locations, Players, TargetModes, PlayTypes, CharacterStatus } = require('./Constants');
 
 function getSelectCost(action, properties, activePromptTitle) {
     return new MetaActionCost(GameActions.selectCard(Object.assign({ gameAction: action }, properties)), activePromptTitle);
@@ -97,9 +97,13 @@ const Costs = {
     /**
      * Cost that will discard the status token on a card to be selected by the player
      */
+    /**
+     * Cost that requires tainting a card to be selected by the player
+    */
+    taint: properties => getSelectCost(GameActions.taint(), properties, 'Select card to taint'),
     discardStatusToken: properties => new MetaActionCost(
         GameActions.selectCard(
-            Object.assign({ gameAction: GameActions.discardStatusToken(), subActionProperties: card => ({ target: card.personalHonor }) }, properties)
+            Object.assign({ gameAction: GameActions.discardStatusToken(), subActionProperties: card => ({ target: card.getStatusToken(CharacterStatus.Honored) }) }, properties)
         ),
         'Select character to discard honored status token from'
     ),

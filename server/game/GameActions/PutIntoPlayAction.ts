@@ -112,6 +112,9 @@ export class PutIntoPlayAction extends CardGameAction {
         } else if(event.status === 'dishonored') {
             event.card.dishonor();
         }
+        if(event.card.hasPrintedKeyword('corrupted')) {
+            event.card.taint();
+        }
 
         player.moveCard(event.card, Locations.PlayArea);
 

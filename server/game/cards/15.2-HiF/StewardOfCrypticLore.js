@@ -1,6 +1,8 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Locations, CardTypes } = require('../../Constants');
+const { Locations, CardTypes, Elements } = require('../../Constants');
+
+const elementKey = 'courteous-greeting-earth';
 
 class StewardOfCrypticLore extends DrawCard {
     setupCardAbilities() {
@@ -10,7 +12,7 @@ class StewardOfCrypticLore extends DrawCard {
 
         this.action({
             title: 'Changes the strength of the attacked province',
-            condition: context => context.game.isDuringConflict('earth'),
+            condition: context => context.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             effect: 'change the province strength of an attacked province',
             gameAction: AbilityDsl.actions.selectCard(context => ({
                 activePromptTitle: 'Choose an attacked province',
@@ -40,6 +42,16 @@ class StewardOfCrypticLore extends DrawCard {
                 }))
             }))
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Conflict Type',
+            element: Elements.Earth
+        });
+        return symbols;
     }
 }
 

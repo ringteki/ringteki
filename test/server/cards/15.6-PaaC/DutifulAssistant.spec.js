@@ -31,6 +31,7 @@ describe('Dutiful Assistant', function() {
             this.yoshi.honor();
             this.game.checkGameState(true);
             expect(this.yoshi.getGlory()).toBe(this.glory + 2);
+            expect(this.yoshi.getPoliticalSkill()).toBe(this.yoshi.printedPoliticalSkill + this.glory + 2);
         });
     });
 });

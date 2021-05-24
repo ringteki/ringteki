@@ -9,7 +9,7 @@ class MatsuTsuko2 extends DrawCard {
             when: {
                 afterConflict: (event, context) => event.conflict.winner === context.source.controller
                     && context.source.isAttacking()
-                    && context.player.opponent && context.player.getTotalHonor() > context.player.opponent.getTotalHonor()
+                    && context.player.opponent && context.player.isMoreHonorable()
             },
             effect: 'break an attacked province',
             gameAction: AbilityDsl.actions.selectCard(context => ({

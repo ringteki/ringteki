@@ -99,6 +99,15 @@ describe('Disguise', function() {
                 expect(this.kageyu.isHonored).toBe(true);
             });
 
+            it('should transfer multiple status tokens', function() {
+                this.whisperer.honor();
+                this.whisperer.taint();
+                this.player1.clickCard(this.kageyu);
+                this.player1.clickCard(this.whisperer);
+                expect(this.kageyu.isHonored).toBe(true);
+                expect(this.kageyu.isTainted).toBe(true);
+            });
+
             it('should transfer attachments that are keyword dependent if the keyword is gained from another attachment', function() {
                 this.player1.playAttachment(this.newName, this.brash);
                 this.player2.pass();

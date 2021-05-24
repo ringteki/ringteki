@@ -1,7 +1,7 @@
 import { TokenAction, TokenActionProperties} from './TokenAction';
 import { EventNames } from '../Constants';
 import AbilityContext = require("../AbilityContext");
-import StatusToken = require('../StatusToken');
+import StatusToken = require('../StatusTokens/StatusToken');
 
 export interface DiscardStatusProperties extends TokenActionProperties {
 }
@@ -30,8 +30,10 @@ export class DiscardStatusAction extends TokenAction {
     }
 
     eventHandler(event): void {
-        if(event.token.card && event.token.card.personalHonor === event.token) {
-            event.token.card.makeOrdinary();
+        let tokens = event.token;
+        if(!Array.isArray(tokens)) {
+            tokens = [tokens];
         }
+        tokens.forEach(token => token.card.removeStatusToken(token));
     }
 }

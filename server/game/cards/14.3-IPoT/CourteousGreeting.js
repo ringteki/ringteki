@@ -2,11 +2,13 @@ const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Players, CardTypes, Elements } = require('../../Constants');
 
+const elementKey = 'courteous-greeting-earth';
+
 class CourteousGreeting extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow a character from each side',
-            conflictProvinceCondition: province => province.isElement(Elements.Earth),
+            conflictProvinceCondition: province => province.isElement(this.getCurrentElementSymbol(elementKey)),
             targets: {
                 myCharacter: {
                     cardType: CardTypes.Character,
@@ -26,6 +28,15 @@ class CourteousGreeting extends ProvinceCard {
         });
     }
 
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Province Type',
+            element: Elements.Earth
+        });
+        return symbols;
+    }
 }
 
 CourteousGreeting.id = 'courteous-greeting';

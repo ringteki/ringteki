@@ -1,17 +1,30 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Elements } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
+
+const elementKey = 'solemn-scholar-earth';
 
 class SolemnScholar extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Bow an attacking character',
-            condition: context => this.game.rings.earth.isConsideredClaimed(context.player),
+            condition: context => this.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(context.player),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: card => card.isAttacking(),
-                gameAction: ability.actions.bow()
+                gameAction: AbilityDsl.actions.bow()
             }
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Claimed Ring',
+            element: Elements.Earth
+        });
+        return symbols;
     }
 }
 

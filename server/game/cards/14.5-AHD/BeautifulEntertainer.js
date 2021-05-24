@@ -6,7 +6,7 @@ class BeautifulEntertainer extends DrawCard {
         this.interrupt({
             title: 'Gain 2 Honor',
             when: {
-                onCardLeavesPlay: (event, context) => event.card === context.source && context.player.opponent && context.player.honor < context.player.opponent.honor
+                onCardLeavesPlay: (event, context) => event.card === context.source && context.player.opponent && context.player.isLessHonorable()
             },
             gameAction: AbilityDsl.actions.gainHonor(context => ({
                 target: context.player,

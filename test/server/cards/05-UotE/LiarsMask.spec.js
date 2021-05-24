@@ -42,6 +42,27 @@ describe('Liar\'s Mask', function() {
                 expect(this.liar.isDishonored).toBe(false);
             });
 
+            it('should prompt you to choose which status token to discard if there are multiples', function() {
+                this.player1.honor = 5;
+                this.liar.dishonor();
+                this.liar.taint();
+                this.player1.clickCard(this.mask);
+                this.player1.clickCard(this.liar);
+                expect(this.liar.attachments.toArray()).toContain(this.mask);
+                this.player2.pass();
+                this.player1.clickCard(this.mask);
+
+                expect(this.player1).toHavePrompt('Which token do you wish to discard?');
+                expect(this.player1).toHavePromptButton('Dishonored Token');
+                expect(this.player1).toHavePromptButton('Tainted Token');
+                this.player1.clickPrompt('Tainted Token');
+
+                expect(this.liar.isDishonored).toBe(true);
+                expect(this.liar.isTainted).toBe(false);
+                expect(this.getChatLogs(5)).toContain('player1 uses Liar\'s Mask to discard a status token from Bayushi Liar');
+                expect(this.getChatLogs(5)).toContain('player1 discards Tainted Token');
+            });
+
             it('should work if steward of law is participating in a conflict and attached char is honored', function() {
                 this.player1.honor = 5;
                 this.liar.honor();

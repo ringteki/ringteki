@@ -14,7 +14,7 @@ class BladeOf10000Battles extends DrawCard {
                 afterConflict: (event, context) => context.source.parent.isParticipating() &&
                                                     event.conflict.winner === context.source.parent.controller &&
                                                     context.player.opponent &&
-                                                    context.player.honor > context.player.opponent.honor
+                                                    context.player.isMoreHonorable()
             },
             title: 'Add a card from the discard pile to the hand',
             target: {
