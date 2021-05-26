@@ -5,7 +5,9 @@ describe('Adept of the Waves', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['adept-of-the-waves']
+                        inPlay: ['adept-of-the-waves', 'solemn-scholar'],
+                        hand: ['common-cause'],
+                        stronghold: ['twin-soul-temple']
                     },
                     player2: {
                         inPlay: ['kitsu-spiritcaller'],
@@ -17,7 +19,9 @@ describe('Adept of the Waves', function() {
                 this.kitsuSpiritcaller = this.player2.findCardByName('kitsu-spiritcaller');
                 this.cloudTheMind = this.player2.findCardByName('cloud-the-mind');
                 this.entrenchedPosition = this.player2.findCardByName('entrenched-position');
-
+                this.cause = this.player1.findCardByName('common-cause');
+                this.scholar = this.player1.findCardByName('solemn-scholar');
+                this.temple = this.player1.findCardByName('twin-soul-temple');
             });
 
             it('should be able to grant covert to any character', function() {
@@ -53,6 +57,25 @@ describe('Adept of the Waves', function() {
                 this.noMoreActions();
                 this.player1.clickRing('water');
                 this.player1.clickCard(this.adeptOfTheWaves);
+                this.player1.clickCard(this.entrenchedPosition);
+                expect(this.player1).toHavePrompt('Choose defenders to Covert');
+            });
+
+            it('should grant covert during non-water conflicts if element is changed and Adept leaves play', function() {
+                this.scholar.bow();
+                this.player1.clickCard(this.temple);
+                this.player1.clickCard(this.adeptOfTheWaves);
+                this.player1.clickPrompt('air');
+                this.player2.pass();
+                this.player1.clickCard(this.adeptOfTheWaves);
+                this.player1.clickCard(this.scholar);
+                this.player2.pass();
+                this.player1.clickCard(this.cause);
+                this.player1.clickCard(this.scholar);
+                this.player1.clickCard(this.adeptOfTheWaves);
+                this.noMoreActions();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.scholar);
                 this.player1.clickCard(this.entrenchedPosition);
                 expect(this.player1).toHavePrompt('Choose defenders to Covert');
             });
