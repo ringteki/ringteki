@@ -148,7 +148,7 @@ describe('Betrayed Vision', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should work with dashes and cost', function() {
+        it('should work with dashes and cost (should not copy cost as virtually all abilities refer to printed cost)', function() {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'political',
@@ -167,9 +167,7 @@ describe('Betrayed Vision', function() {
             expect(this.getChatLogs(5)).toContain('Sinister Soshi cannot participate in the conflict any more and is sent home bowed');
             this.player2.pass();
             this.player1.clickCard(this.assassination);
-            expect(this.player1).toBeAbleToSelect(this.ikomaUjiaki);
-            this.player1.clickCard(this.ikomaUjiaki);
-            expect(this.ikomaUjiaki.location).toBe('dynasty discard pile');
+            expect(this.player1).not.toBeAbleToSelect(this.ikomaUjiaki);
         });
     });
 });

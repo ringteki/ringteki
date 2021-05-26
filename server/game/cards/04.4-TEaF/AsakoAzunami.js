@@ -11,7 +11,8 @@ class AsakoAzunami extends DrawCard {
             when: {
                 onResolveRingElement: (event, context) => event.ring.element === this.getCurrentElementSymbol(elementKey) && event.player === context.player
             },
-            effect: 'replace the water ring effect with bowing and readying two characters',
+            effect: 'replace the {1} ring effect with bowing and readying two characters',
+            effectArgs: () => [this.getCurrentElementSymbol(elementKey)],
             gameAction: AbilityDsl.actions.cancel(context => ({
                 replacementGameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.selectCard({

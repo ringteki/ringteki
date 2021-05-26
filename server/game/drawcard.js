@@ -120,7 +120,7 @@ class DrawCard extends BaseCard {
     }
 
     costLessThan(num) {
-        let cost = this.getCost();
+        let cost = this.printedCost;
         return num && (cost || cost === 0) && cost < num;
     }
 
