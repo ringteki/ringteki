@@ -10,13 +10,21 @@ class AdeptOfTheWaves extends DrawCard {
             title: 'Grant Covert to a character',
             target: {
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
-                    duration: Durations.UntilEndOfPhase,
-                    condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
-                    effect: AbilityDsl.effects.addKeyword('covert')
-                }))
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.handler({
+                        handler: () => {
+                            this.elementWhenTriggered = this.getCurrentElementSymbol(elementKey);
+                        }
+                    }),
+                    AbilityDsl.actions.cardLastingEffect(() => ({
+                        duration: Durations.UntilEndOfPhase,
+                        condition: () => this.game.isDuringConflict(this.elementWhenTriggered),
+                        effect: AbilityDsl.effects.addKeyword('covert')
+                    }))
+                ])
             },
-            effect: 'grant Covert during Water conflicts to {0}'
+            effect: 'grant Covert during {1} conflicts to {0}',
+            effectArgs: () => [this.getCurrentElementSymbol(elementKey)]
         });
     }
 
