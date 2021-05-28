@@ -25,6 +25,7 @@ class SoshisMemory extends DrawCard {
         return AbilityDsl.actions.deckSearch(() => ({
             player: player,
             activePromptTitle: 'Choose a card to put into your hand',
+            reveal: false,
             amount: context => context.player.cardsInPlay.reduce((total, card) => total + (card.hasTrait('shugenja') ? 1 : 0), 0),
             deck: Decks.ConflictDeck,
             gameAction: AbilityDsl.actions.moveCard({
