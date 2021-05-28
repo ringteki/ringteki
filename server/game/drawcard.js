@@ -120,7 +120,7 @@ class DrawCard extends BaseCard {
     }
 
     costLessThan(num) {
-        let cost = this.getCost();
+        let cost = this.printedCost;
         return num && (cost || cost === 0) && cost < num;
     }
 
@@ -689,6 +689,7 @@ class DrawCard extends BaseCard {
             this.game.openThenEventWindow(honorGainAction.getEvent(this.controller, frameworkContext));
         }
 
+        this.untaint();
         this.makeOrdinary();
         this.bowed = false;
         this.covert = false;

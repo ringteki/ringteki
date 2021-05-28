@@ -179,7 +179,8 @@ class DeckBuilder {
             role: _.filter(cardCounts, count => count.card.type === 'role'),
             conflictCards: _.filter(cardCounts, count => count.card.side === 'conflict'),
             dynastyCards: _.filter(cardCounts, count => count.card.side === 'dynasty'),
-            provinceCards: _.filter(cardCounts, count => count.card.type === 'province')
+            provinceCards: _.filter(cardCounts, count => count.card.type === 'province'),
+            outsideTheGameCards: this.getShadowlandsSummonables()
         };
     }
 
@@ -201,6 +202,29 @@ class DeckBuilder {
 
         return cardsByName[0];
     }
+
+    getShadowlandsSummonables() {
+        const val = [];
+    
+        val.push(this.cards['bloodthirsty-kansen']);
+        val.push(this.cards['bog-hag']);
+        val.push(this.cards['dark-moto']);
+        val.push(this.cards['endless-ranks']);
+        val.push(this.cards['fouleye-s-elite']);
+        val.push(this.cards['goblin-brawler']);
+        val.push(this.cards['insatiable-gaki']);
+        val.push(this.cards['lost-samurai']);
+        val.push(this.cards['onikage-rider']);
+        val.push(this.cards['oni-of-obsidian-and-blood']);
+        val.push(this.cards['penanggalan']);
+        val.push(this.cards['scavenging-goblin']);
+        val.push(this.cards['shambling-servant']);
+        val.push(this.cards['skeletal-warrior']);
+        val.push(this.cards['undead-horror']);
+        val.push(this.cards['wild-ogre']);
+    
+        return val;
+    };
 }
 
 module.exports = DeckBuilder;

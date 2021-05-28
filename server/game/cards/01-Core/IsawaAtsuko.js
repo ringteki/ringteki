@@ -1,22 +1,36 @@
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl.js');
+const { Elements } = require('../../Constants');
+
+const elementKey = 'isawa-atsuko-void';
 
 class IsawaAtsuko extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Wield the power of the void',
-            condition: () => this.game.isDuringConflict('void'),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             effect: 'give friendly characters +1/+1 and opposing characters -1/-1',
             gameAction: [
-                ability.actions.cardLastingEffect(context => ({
+                AbilityDsl.actions.cardLastingEffect(context => ({
                     target: this.game.currentConflict.getCharacters(context.player),
-                    effect: ability.effects.modifyBothSkills(1)
+                    effect: AbilityDsl.effects.modifyBothSkills(1)
                 })),
-                ability.actions.cardLastingEffect(context => ({
+                AbilityDsl.actions.cardLastingEffect(context => ({
                     target: this.game.currentConflict.getCharacters(context.player.opponent),
-                    effect: ability.effects.modifyBothSkills(-1)
+                    effect: AbilityDsl.effects.modifyBothSkills(-1)
                 }))
             ]
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Contested Ring',
+            element: Elements.Void
+        });
+        return symbols;
     }
 }
 

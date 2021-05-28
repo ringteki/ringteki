@@ -2,12 +2,14 @@ const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { CardTypes, Elements, Players, TargetModes } = require('../../Constants');
 
+const elementKey = 'weight-of-duty-void';
+
 class WeightOfDuty extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow & dishonor a character',
             condition: context => context.game.isDuringConflict() && context.player.opponent,
-            conflictProvinceCondition: province => province.isElement(Elements.Void),
+            conflictProvinceCondition: province => province.isElement(this.getCurrentElementSymbol(elementKey)),
             cannotTargetFirst: true,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
@@ -34,6 +36,16 @@ class WeightOfDuty extends ProvinceCard {
         return context.player.opponent.cardsInPlay.any(a => {
             return !a.isUnique() && (a.allowGameAction('bow', context) || a.allowGameAction('dishonor', context));
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Province Element',
+            element: Elements.Void
+        });
+        return symbols;
     }
 }
 

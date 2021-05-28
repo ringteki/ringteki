@@ -24,7 +24,7 @@ class RallyAbility extends TriggeredAbility {
             ],
             handler: context => {
                 if(context.game.gameMode !== GameModes.JadeEdict) {
-                    context.player.triggerRally(context.source.location);
+                    context.player.putTopDynastyCardInProvince(context.source.location);
                 }
             }
         });

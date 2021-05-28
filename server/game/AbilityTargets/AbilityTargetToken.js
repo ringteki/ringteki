@@ -38,8 +38,12 @@ class AbilityTargetToken {
             if(properties.tokenCondition) {
                 tokensValid = tokensValid && tokens.some(a => properties.tokenCondition(a, context));
             }
+            let cardValid = true;
+            if(properties.cardCondition) {
+                cardValid = cardValid && properties.cardCondition(card, context);
+            }
 
-            return (tokensValid) && (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
+            return (tokensValid && cardValid) && (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
                     (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
         let cardType = properties.cardType || [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding, CardTypes.Province, CardTypes.Role, CardTypes.Stronghold];

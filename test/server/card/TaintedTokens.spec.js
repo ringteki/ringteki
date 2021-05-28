@@ -8,7 +8,8 @@ describe('Tainted Tokens', function() {
                     hand: ['favored-mount']
                 },
                 player2: {
-                    inPlay: ['hantei-sotorii', 'doomed-shugenja']
+                    inPlay: ['hantei-sotorii', 'doomed-shugenja'],
+                    hand: ['assassination']
                 }
             });
 
@@ -20,6 +21,7 @@ describe('Tainted Tokens', function() {
 
             this.sotorii = this.player2.findCardByName('hantei-sotorii');
             this.shugenja = this.player2.findCardByName('doomed-shugenja');
+            this.assassination = this.player2.findCardByName('assassination');
         });
 
         it('should give tainted characters +2/+2', function() {
@@ -75,6 +77,25 @@ describe('Tainted Tokens', function() {
             });
             expect(this.getChatLogs(10)).toContain('player2 loses 1 honor in order to declare defending characters');
             expect(this.player2.honor).toBe(honor - 1);
+        });
+
+        it('should remove the token when the card leaves play (but not when a province flips faceup)', function () {
+            this.shameful.taint();
+            this.brash.taint();
+            expect(this.shameful.isTainted).toBe(true);
+            expect(this.shameful.facedown).toBe(true);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.brash],
+                defenders: [this.sotorii, this.shugenja],
+                province: this.shameful
+            });
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.brash);
+            expect(this.brash.isTainted).toBe(false);
+            expect(this.shameful.isTainted).toBe(true);
+            expect(this.shameful.facedown).toBe(false);
         });
 
         it('should make you lose an honor to assign a tainted character as an attacker or defender', function () {

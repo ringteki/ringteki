@@ -6,9 +6,11 @@ describe('A War on Two Fronts', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['doji-challenger'],
-                        hand: ['a-war-on-two-fronts', 'a-new-name']
+                        hand: ['a-war-on-two-fronts', 'a-new-name'],
+                        honor: 12
                     },
                     player2: {
+                        honor: 10,
                         inPlay: ['doji-whisperer'],
                         hand: ['nezumi-infiltrator'],
                         provinces: ['manicured-garden', 'before-the-throne', 'midnight-revels', 'kuni-wasteland'],
@@ -38,7 +40,7 @@ describe('A War on Two Fronts', function() {
                 this.nezumi = this.player2.findCardByName('nezumi-infiltrator');
             });
 
-            it('should trigger on your mil attack', function() {
+            it('should trigger on your mil attack when more honorable', function() {
                 this.noMoreActions();
 
                 this.initiateConflict({
@@ -48,6 +50,32 @@ describe('A War on Two Fronts', function() {
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.war);
+            });
+
+            it('should trigger on your mil attack when equally honorable', function() {
+                this.player2.honor = this.player1.honor;
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    attackers: [this.challenger],
+                    type: 'military'
+                });
+
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player2).toHavePrompt('Choose Defenders');
+            });
+
+            it('should trigger on your mil attack when less honorable', function() {
+                this.player2.honor = this.player1.honor + 1;
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    attackers: [this.challenger],
+                    type: 'military'
+                });
+
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player2).toHavePrompt('Choose Defenders');
             });
 
             it('should not trigger on your pol attack', function() {
@@ -244,10 +272,12 @@ describe('A War on Two Fronts', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
+                        honor: 12,
                         inPlay: ['cunning-negotiator', 'ikoma-tsanuri-2'],
                         hand: ['a-war-on-two-fronts', 'a-new-name']
                     },
                     player2: {
+                        honor: 10,
                         inPlay: ['doji-whisperer'],
                         hand: ['raise-the-alarm', 'talisman-of-the-sun'],
                         provinces: ['manicured-garden', 'meditations-on-the-tao', 'midnight-revels', 'defend-the-wall'],

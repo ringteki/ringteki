@@ -6,7 +6,7 @@ const AbilityDsl = require('../../abilitydsl');
 class RightHandOfTheEmperor extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.player.opponent && context.player.honor > context.player.opponent.honor,
+            condition: context => context.player.opponent && context.player.isMoreHonorable(),
             location: Locations.ConflictDiscardPile,
             effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
         });

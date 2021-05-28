@@ -8,7 +8,7 @@ class Subterfuge extends DrawCard {
             title: 'Prevent draw',
             when: {
                 onCardsDrawn: (event, context) => {
-                    return context.player.opponent && context.player.honor < context.player.opponent.honor
+                    return context.player.opponent && context.player.isLessHonorable()
                         && context.game.currentPhase !== Phases.Draw && event.player === context.player.opponent;
                 }
             },

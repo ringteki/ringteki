@@ -1,15 +1,18 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Elements } = require('../../Constants');
+
+const elementKey = 'asako-azunami-water';
 
 class AsakoAzunami extends DrawCard {
     setupCardAbilities() {
         this.wouldInterrupt({
-            title: 'Bow and ready two characters instead of the water effect',
+            title: 'Bow and ready two characters instead of the ring effect',
             when: {
-                onResolveRingElement: (event, context) => event.ring.element === 'water' && event.player === context.player
+                onResolveRingElement: (event, context) => event.ring.element === this.getCurrentElementSymbol(elementKey) && event.player === context.player
             },
-            effect: 'replace the water ring effect with bowing and readying two characters',
+            effect: 'replace the {1} ring effect with bowing and readying two characters',
+            effectArgs: () => [this.getCurrentElementSymbol(elementKey)],
             gameAction: AbilityDsl.actions.cancel(context => ({
                 replacementGameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.selectCard({
@@ -33,6 +36,16 @@ class AsakoAzunami extends DrawCard {
                 ])
             }))
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Resolved Ring',
+            element: Elements.Water
+        });
+        return symbols;
     }
 }
 

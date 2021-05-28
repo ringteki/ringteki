@@ -12,7 +12,7 @@ export class RemoveFromGameAction extends CardGameAction {
     name = 'removeFromGame';
     eventName = EventNames.OnCardLeavesPlay;
     cost = 'removing {0} from the game';
-    targetType = [CardTypes.Character, CardTypes.Attachment, CardTypes.Holding];
+    targetType = [CardTypes.Character, CardTypes.Attachment, CardTypes.Holding, CardTypes.Event];
     effect = 'remove {0} from the game'
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties): boolean {

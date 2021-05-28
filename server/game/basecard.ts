@@ -23,6 +23,7 @@ const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
 const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
 const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
+import ElementSymbol = require('./ElementSymbol');
 
 const ValidKeywords = [
     'ancestral',
@@ -32,6 +33,7 @@ const ValidKeywords = [
     'courtesy',
     'pride',
     'covert',
+    'corrupted',
     'rally',
     'eminent'
 ];
@@ -472,13 +474,23 @@ class BaseCard extends EffectSource {
 
     getModifiedLimitMax(player: Player, ability: CardAbility, max: number): number {
         const effects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnAbilities);
-        return effects.reduce((total, effect) => {
+        let total = max;
+        effects.forEach(effect => {
             const value = effect.getValue(this);
             if((value === true || value === ability) && effect.context.player === player) {
-                return total + 1;
+                total++;
             }
-            return total;
-        }, max);
+        });
+
+        const printedEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.IncreaseLimitOnPrintedAbilities);
+        printedEffects.forEach(effect => {
+            const value = effect.getValue(this);
+            if(ability.printedAbility && (value === true || value === ability) && effect.context.player === player) {
+                total++;
+            }
+        });
+
+        return total;
     }
 
     getMenu() {
@@ -861,11 +873,26 @@ class BaseCard extends EffectSource {
 
     updateStatusTokenEffects() {
         if(this.statusTokens) {
+            if (this.isHonored && this.isDishonored) {
+                this.removeStatusToken(CharacterStatus.Honored);
+                this.removeStatusToken(CharacterStatus.Dishonored);
+                this.game.addMessage('Honored and Dishonored status tokens nullify each other and are both discarded from {0}', this);
+            }
+
             this.statusTokens.forEach(token => {
                 token.setCard(this);
             })
         }
     }
+
+    get hasStatusTokens() {
+        return !!this.statusTokens && this.statusTokens.length > 0;
+    }
+
+    hasStatusToken(type) {
+        return !!this.statusTokens && this.statusTokens.some(a => a.grantedStatus === type);
+    }
+
 
     get isHonored() {
         return !!this.statusTokens && !!this.statusTokens.find(a => a.grantedStatus === CharacterStatus.Honored);
@@ -914,6 +941,41 @@ class BaseCard extends EffectSource {
 
     isOrdinary() {
         return !this.isHonored && !this.isDishonored;
+    }
+
+    hasElementSymbols() {
+        return false;
+    }
+
+    getPrintedElementSymbols() {
+        return [];
+    }
+
+    getCurrentElementSymbols() {
+        if (!this.isInPlay()) {
+            return this.getPrintedElementSymbols();
+        }
+        const symbols = this.getPrintedElementSymbols();
+        let changeEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.ReplacePrintedElement);
+        changeEffects.forEach(effect => {
+            const newElement = effect.value.value;
+            let sym = symbols.find(a => a.key === newElement.key);
+            sym.element = newElement.element;
+        })
+        const mapped = [];
+        symbols.forEach(symbol => {
+            mapped.push(new ElementSymbol(this.game, this, symbol));
+        });
+        return mapped;
+    }
+
+    getCurrentElementSymbol(key) {
+        const symbols = this.getCurrentElementSymbols();
+        const symbol = symbols.find(a => a.key === key);
+        if (symbol) {
+            return symbol.element;
+        }
+        return 'none';
     }
 
     getShortSummaryForControls(activePlayer) {

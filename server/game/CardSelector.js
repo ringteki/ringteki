@@ -23,6 +23,7 @@ const ModeToSelector = {
     maxStat: p => new MaxStatCardSelector(p),
     single: p => new SingleCardSelector(p),
     token: p => new SingleCardSelector(p),
+    elementSymbol: p => new SingleCardSelector(p),
     unlimited: p => new UnlimitedCardSelector(p),
     upTo: p => new UpToXCardSelector(p.numCards, p),
     upToVariable: p => new UpToVariableXCardSelector(p.numCardsFunc, p)

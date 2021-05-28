@@ -5,7 +5,7 @@ const { DuelTypes } = require('../../Constants');
 class DaringChallenger extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.player.opponent && context.player.honor < context.player.opponent.honor,
+            condition: context => context.player.opponent && context.player.isLessHonorable(),
             effect: AbilityDsl.effects.modifyMilitarySkill(1)
         });
 

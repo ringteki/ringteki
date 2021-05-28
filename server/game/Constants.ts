@@ -15,6 +15,7 @@ export enum Locations {
     ProvinceDeck = 'province deck',
     RemovedFromGame = 'removed from game',
     UnderneathStronghold = 'underneath stronghold',
+    OutsideTheGame = 'outside the game',
     BeingPlayed = 'being played',
     Role = 'role'
 };
@@ -82,6 +83,7 @@ export enum EffectNames {
     TaintedStatusDoesNotCostHonor = 'taintedStatusDoesNotCostHonor',
     HonorStatusReverseModifySkill = 'honorStatusReverseModifySkill',
     IncreaseLimitOnAbilities = 'increaseLimitOnAbilities',
+    IncreaseLimitOnPrintedAbilities = 'IncreaseLimitOnPrintedAbilities',
     LoseKeyword = 'loseKeyword',
     ModifyBaseMilitarySkillMultiplier = 'modifyBaseMilitarySkillMultiplier',
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
@@ -162,6 +164,10 @@ export enum EffectNames {
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
     AdditionalAttackedProvince = 'additionalAttackedProvince',
+    ReplacePrintedElement = 'replacePrintedElement',
+    ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased',
+    ConsideredLessHonorable = 'consideredLessHonorable',
+    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval'
 };
 
 export enum Durations {
@@ -194,6 +200,7 @@ export enum TargetModes {
     Select = 'select',
     Ability = 'ability',
     Token = 'token',
+    ElementSymbol = 'elementSymbol',
     AutoSingle = 'autoSingle',
     Exactly = 'exactly',
     ExactlyVariable = 'exactlyVariable',
@@ -270,6 +277,7 @@ export enum EventNames {
     OnCardDetached = 'onCardDetached',
     OnCardHonored = 'onCardHonored',
     OnCardDishonored = 'onCardDishonored',
+    OnCardTainted = 'onCardTainted',
     OnCardBowed = 'onCardBowed',
     OnCardReadied = 'onCardReadied',
     OnCardsDiscarded = 'onCardsDiscarded',

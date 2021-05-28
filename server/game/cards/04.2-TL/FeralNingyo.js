@@ -1,12 +1,14 @@
 const DrawCard = require('../../drawcard.js');
-const { Durations, Locations } = require('../../Constants');
+const { Durations, Locations, Elements } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
+
+const elementKey = 'feral-ningyo-water';
 
 class FeralNingyo extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Put into play',
-            condition: () => this.game.isDuringConflict('water'),
+            condition: () => this.game.isDuringConflict(this.getCurrentElementSymbol(elementKey)),
             location: [Locations.Hand, Locations.PlayArea],
             effect: '{1}return {0} to the deck at the end of the conflict',
             effectArgs: context => [context.source.location !== Locations.PlayArea ? ['put {0} into play into the conflict and ', context.source] : ''],
@@ -29,6 +31,16 @@ class FeralNingyo extends DrawCard {
                 }))
             ])
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Conflict Type',
+            element: Elements.Water
+        });
+        return symbols;
     }
 }
 

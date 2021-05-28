@@ -11,7 +11,7 @@ class AgashaSumiko2 extends DrawCard {
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.loseHonor(context => ({
                     target: context.player.opponent,
-                    amount: context.player.opponent.honor > context.player.honor ? 2 : 0
+                    amount: context.player.opponent.isMoreHonorable() ? 2 : 0
                 })),
                 AbilityDsl.actions.loseFate(context => ({
                     target: context.player.opponent,

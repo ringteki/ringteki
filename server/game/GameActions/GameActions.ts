@@ -76,6 +76,7 @@ import { SetDialAction, SetDialProperties } from './SetDialAction';
 import { ShuffleDeckAction, ShuffleDeckProperties } from './ShuffleDeckAction';
 import { SwitchConflictElementAction, SwitchConflictElementProperties } from './SwitchConflictElementAction';
 import { SwitchConflictTypeAction, SwitchConflictTypeProperties } from './SwitchConflictTypeAction';
+import { TaintAction, TaintProperties } from './TaintAction';
 import { TakeControlAction, TakeControlProperties } from './TakeControlAction';
 import { TakeFateRingAction, TakeFateRingProperties } from './TakeFateRingAction';
 import { TakeRingAction, TakeRingProperties } from './TakeRingAction';
@@ -128,6 +129,7 @@ const GameActions = {
     reveal: (propertyFactory: RevealProperties | ((context: TriggeredAbilityContext) => RevealProperties) = {}) => new RevealAction(propertyFactory), // chatMessage = false
     sendHome: (propertyFactory: SendHomeProperties | ((context: TriggeredAbilityContext) => SendHomeProperties) = {}) => new SendHomeAction(propertyFactory),
     sacrifice: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory, true),
+    taint: (propertyFactory: TaintProperties | ((context: TriggeredAbilityContext) => TaintProperties) = {}) => new TaintAction(propertyFactory),
     takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
     triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),

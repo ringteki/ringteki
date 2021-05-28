@@ -1,12 +1,14 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { Locations, Players, CardTypes } = require('../../Constants');
+const { Locations, Players, CardTypes, Elements } = require('../../Constants');
+
+const elementKey = 'serene-seer-void';
 
 class SereneSeer extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Look at a province',
-            condition: context => this.game.rings.void.isConsideredClaimed(context.player.opponent),
+            condition: context => this.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(context.player.opponent),
             effect: 'look at a province',
             gameAction: AbilityDsl.actions.selectCard({
                 activePromptTitle: 'Choose a province to look at',
@@ -19,6 +21,16 @@ class SereneSeer extends DrawCard {
                 }))
             })
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Claimed Ring',
+            element: Elements.Void
+        });
+        return symbols;
     }
 }
 
