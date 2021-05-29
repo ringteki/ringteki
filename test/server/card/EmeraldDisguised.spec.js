@@ -1,6 +1,6 @@
 const GameModes = require('../../../server/GameModes');
 
-describe('Covert - Emerald', function() {
+describe('Disguised - Emerald', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

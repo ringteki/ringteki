@@ -1,6 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Players, CardTypes } = require('../../Constants');
+const GameModes = require('../../../GameModes.js');
 
 class WayOfTheCrab extends DrawCard {
     setupCardAbilities() {
@@ -9,7 +10,7 @@ class WayOfTheCrab extends DrawCard {
             condition: context => context.player.opponent,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isFaction('crab')
+                cardCondition: (card, context) => card.isFaction('crab') && (context.game.gameMode !== GameModes.Emerald || card.isParticipating())
             }),
             effect: 'force {1} to sacrifice a character',
             effectArgs: context => context.player.opponent,
