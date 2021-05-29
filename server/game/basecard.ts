@@ -24,6 +24,7 @@ const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
 const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
 import ElementSymbol = require('./ElementSymbol');
+import GameModes = require('../GameModes');
 
 const ValidKeywords = [
     'ancestral',
@@ -689,8 +690,17 @@ class BaseCard extends EffectSource {
         for(const effectCard of this.getEffects(EffectNames.CannotHaveOtherRestrictedAttachments)) {
             illegalAttachments = illegalAttachments.concat(this.attachments.filter(card => card.isRestricted() && card !== effectCard));
         }
-        for(const card of this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit))) {
-            const limit = Math.max(...card.getEffects(EffectNames.AttachmentLimit));
+
+        let attachmentLimits = this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit));
+        if(this.game.gameMode === GameModes.Emerald) {
+            attachmentLimits = this.attachments.filter(() => true);
+        }
+
+        for(const card of attachmentLimits) {
+            let limit = Math.max(...card.getEffects(EffectNames.AttachmentLimit));
+            if(this.game.gameMode === GameModes.Emerald) {
+                limit = Math.max(limit, 1);
+            }
             const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id);
             illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -limit));
         }
