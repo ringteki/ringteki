@@ -1576,11 +1576,11 @@ class Player extends GameObject {
             state.stronghold = this.stronghold.getSummary(activePlayer);
         }
 
-        if(this.isTopConflictCardShown(activePlayer)) {
+        if(this.isTopConflictCardShown(activePlayer) && this.conflictDeck.first()) {
             state.conflictDeckTopCard = this.conflictDeck.first().getSummary(activePlayer);
         }
 
-        if(this.isTopDynastyCardShown(activePlayer)) {
+        if(this.isTopDynastyCardShown(activePlayer) && this.dynastyDeck.first()) {
             state.dynastyDeckTopCard = this.dynastyDeck.first().getSummary(activePlayer);
         }
 

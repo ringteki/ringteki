@@ -13,7 +13,7 @@ class CommanderOfTheLegions extends DrawCard {
 
         this.persistentEffect({
             condition: context =>
-                context.game.currentPhase === Phases.Fate
+                context.game.currentPhase === Phases.Fate && context.player.opponent
                 && context.player.honor >= context.player.opponent.honor + 5,
             match: (card, context) =>
                 card.type === CardTypes.Character
