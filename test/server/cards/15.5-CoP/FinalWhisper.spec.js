@@ -8,7 +8,8 @@ describe('Final Whisper', function() {
                 },
                 player2: {
                     inPlay: ['shameless-gossip', 'soshi-illusionist', 'brash-samurai'],
-                    hand: ['way-of-the-scorpion', 'final-whisper']
+                    hand: ['way-of-the-scorpion', 'final-whisper'],
+                    conflictDiscard: ['final-whisper']
                 }
             });
 
@@ -16,7 +17,8 @@ describe('Final Whisper', function() {
             this.illusionist = this.player2.findCardByName('soshi-illusionist');
             this.brash = this.player2.findCardByName('brash-samurai');
             this.scorp = this.player2.findCardByName('way-of-the-scorpion');
-            this.whisper = this.player2.findCardByName('final-whisper');
+            this.whisper = this.player2.findCardByName('final-whisper', 'hand');
+            this.whisper2 = this.player2.findCardByName('final-whisper', 'conflict discard pile');
 
             this.yokuni = this.player1.findCardByName('togashi-yokuni');
             this.initiate = this.player1.findCardByName('togashi-initiate');
@@ -150,6 +152,36 @@ describe('Final Whisper', function() {
             expect(this.player1).not.toBeAbleToSelect(this.gossip);
             expect(this.player1).not.toBeAbleToSelect(this.illusionist);
             expect(this.player1).not.toBeAbleToSelect(this.brash);
+        });
+
+        it('should chain properly let your opponent choose a character', function() {
+            this.player2.moveCard(this.whisper2, 'hand');
+
+            this.player2.clickCard(this.scorp);
+            this.player2.clickCard(this.initiate);
+            this.player2.clickCard(this.whisper);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.yokuni);
+            expect(this.player1).not.toBeAbleToSelect(this.initiate);
+            expect(this.player1).toBeAbleToSelect(this.harrier);
+            expect(this.player1).toBeAbleToSelect(this.toshimoko);
+            expect(this.player1).not.toBeAbleToSelect(this.gossip);
+            expect(this.player1).not.toBeAbleToSelect(this.illusionist);
+            expect(this.player1).not.toBeAbleToSelect(this.brash);
+
+            this.player1.clickCard(this.yokuni);
+            this.player2.clickCard(this.whisper2);
+
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).not.toBeAbleToSelect(this.yokuni);
+            expect(this.player1).not.toBeAbleToSelect(this.initiate);
+            expect(this.player1).toBeAbleToSelect(this.harrier);
+            expect(this.player1).toBeAbleToSelect(this.toshimoko);
+            expect(this.player1).not.toBeAbleToSelect(this.gossip);
+            expect(this.player1).not.toBeAbleToSelect(this.illusionist);
+            expect(this.player1).not.toBeAbleToSelect(this.brash);
+
+            this.player1.clickCard(this.harrier);
         });
     });
 });
