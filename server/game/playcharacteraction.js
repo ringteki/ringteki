@@ -15,7 +15,7 @@ class PlayCharacterAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty || context.game.gameMode !== GameModes.Emerald)) {
+        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty && context.game.gameMode !== GameModes.Emerald)) {
             return 'phase';
         }
         if(!ignoredRequirements.includes('location') && !context.player.isCardInPlayableLocation(context.source, PlayTypes.PlayFromHand)) {
