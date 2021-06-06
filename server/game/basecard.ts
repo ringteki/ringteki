@@ -691,19 +691,22 @@ class BaseCard extends EffectSource {
             illegalAttachments = illegalAttachments.concat(this.attachments.filter(card => card.isRestricted() && card !== effectCard));
         }
 
-        let attachmentLimits = this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit));
-        if(this.game.gameMode === GameModes.Emerald) {
-            attachmentLimits = this.attachments.filter(() => true);
-        }
+        const attachmentLimits = this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit));
+        const allAttachments = this.attachments.filter(() => true);
 
         for(const card of attachmentLimits) {
             let limit = Math.max(...card.getEffects(EffectNames.AttachmentLimit));
-            if(this.game.gameMode === GameModes.Emerald) {
-                limit = Math.max(limit, 1);
-            }
             const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id);
             illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -limit));
         }
+
+        if(this.game.gameMode === GameModes.Emerald) {
+            for(const card of allAttachments) {
+                const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id && attachment.controller === card.controller);
+                illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -1));
+            }    
+        }
+
         for(const object of this.attachments.reduce((array, card) => array.concat(card.getEffects(EffectNames.AttachmentRestrictTraitAmount)), [])) {
             for(const trait of Object.keys(object)) {
                 const matchingAttachments = this.attachments.filter(attachment => attachment.hasTrait(trait));

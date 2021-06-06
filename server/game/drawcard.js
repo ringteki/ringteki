@@ -799,7 +799,7 @@ class DrawCard extends BaseCard {
 
     allowAttachment(attachment) {
         if(this.game.gameMode === GameModes.Emerald && this.type === CardTypes.Character) {
-            if(this.attachments.some(a => a.id === attachment.id && a !== attachment)) {
+            if(this.attachments.some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
                 return false;
             }
         }

@@ -2,6 +2,7 @@ const BaseAction = require('./BaseAction');
 const Costs = require('./costs.js');
 const GameActions = require('./GameActions/GameActions');
 const { Phases, EventNames, Locations, CardTypes } = require('./Constants');
+const GameModes = require('../GameModes');
 
 class PlayAttachmentAction extends BaseAction {
     constructor(card, ignoreType = false) {
@@ -14,7 +15,7 @@ class PlayAttachmentAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('phase') && context.game.currentPhase === Phases.Dynasty) {
+        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty || context.game.gameMode !== GameModes.Emerald)) {
             return 'phase';
         }
         if(!ignoredRequirements.includes('location') && !context.player.isCardInPlayableLocation(context.source, context.playType)) {

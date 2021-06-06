@@ -20,6 +20,7 @@ class WayOfTheCrab extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Opponent,
                 message: '{0} sacrifices {1} to {2}',
+                targets: this.game.gameMode === GameModes.Emerald,
                 messageArgs: card => [context.player.opponent, card, context.source],
                 gameAction: AbilityDsl.actions.sacrifice()
             })),

@@ -26,7 +26,7 @@ describe('Attachments - Emerald', function() {
             this.ann = this.player1.findCardByName('a-new-name');
         });
 
-        it('should not let you attach two of the same attachment to the same character', function() {
+        it('should not let you attach two of the same attachment to the same character from the same controller', function() {
             this.player1.clickCard(this.katana1);
             expect(this.player1).toBeAbleToSelect(this.mitsu);
             expect(this.player1).toBeAbleToSelect(this.sotorii);
@@ -35,7 +35,7 @@ describe('Attachments - Emerald', function() {
             expect(this.mitsu.attachments.toArray()).toContain(this.katana1);
 
             this.player2.clickCard(this.katana3);
-            expect(this.player2).not.toBeAbleToSelect(this.mitsu);
+            expect(this.player2).toBeAbleToSelect(this.mitsu);
             expect(this.player2).toBeAbleToSelect(this.sotorii);
             expect(this.player2).toBeAbleToSelect(this.challenger);
             this.player2.clickCard(this.challenger);
@@ -43,9 +43,34 @@ describe('Attachments - Emerald', function() {
             this.player1.clickCard(this.katana2);
             expect(this.player1).not.toBeAbleToSelect(this.mitsu);
             expect(this.player1).toBeAbleToSelect(this.sotorii);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
             this.player1.clickCard(this.mitsu);
             expect(this.mitsu.attachments.toArray()).toContain(this.katana1);
+            expect(this.mitsu.attachments.toArray()).not.toContain(this.katana2);
+            expect(this.player1).toHavePrompt('Fine Katana');
+        });
+
+        it('should let you attach two of the same attachment to the same character from different controllers', function() {
+            this.player1.clickCard(this.katana1);
+            expect(this.player1).toBeAbleToSelect(this.mitsu);
+            expect(this.player1).toBeAbleToSelect(this.sotorii);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            this.player1.clickCard(this.mitsu);
+            expect(this.mitsu.attachments.toArray()).toContain(this.katana1);
+
+            this.player2.clickCard(this.katana3);
+            expect(this.player2).toBeAbleToSelect(this.mitsu);
+            expect(this.player2).toBeAbleToSelect(this.sotorii);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            this.player2.clickCard(this.mitsu);
+
+            this.player1.clickCard(this.katana2);
+            expect(this.player1).not.toBeAbleToSelect(this.mitsu);
+            expect(this.player1).toBeAbleToSelect(this.sotorii);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            this.player1.clickCard(this.mitsu);
+            expect(this.mitsu.attachments.toArray()).toContain(this.katana1);
+            expect(this.mitsu.attachments.toArray()).toContain(this.katana3);
             expect(this.mitsu.attachments.toArray()).not.toContain(this.katana2);
             expect(this.player1).toHavePrompt('Fine Katana');
         });
