@@ -12,7 +12,7 @@ export class SwitchConflictElementAction extends RingAction {
     eventName = EventNames.OnSwitchConflictElement;
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}): boolean {
-        return ring.isUnclaimed() && context.game.isDuringConflict() && 
+        return !ring.isRemovedFromGame() && context.game.isDuringConflict() && 
             super.canAffect(ring, context, additionalProperties);
     }
 
