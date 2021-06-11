@@ -166,7 +166,13 @@ class Conflict extends GameObject {
             newRing.flipConflictType();
         }
         if(this.ring) {
-            this.ring.resetRing();
+            if(newRing.isClaimed()) {
+                const claimedPlayer = this.game.getPlayers().find(player => newRing.claimedBy === player.name);
+                this.ring.claimRing(claimedPlayer);
+                newRing.resetRing();
+            } else {
+                this.ring.resetRing();
+            }
         }
         newRing.contested = true;
         this.ring = newRing;

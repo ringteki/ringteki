@@ -12,6 +12,7 @@ class KuroiMori extends ProvinceCard {
                     'Switch the contested ring': AbilityDsl.actions.selectRing({
                         activePromptTitle: 'Choose a ring to switch with the contested ring',
                         message: '{0} switches the contested ring with {1}',
+                        ringCondition: ring => ring.isUnclaimed(),
                         messageArgs: (ring, player) => [player, ring],
                         gameAction: AbilityDsl.actions.switchConflictElement()
                     }),
