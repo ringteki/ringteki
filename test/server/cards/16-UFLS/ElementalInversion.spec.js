@@ -35,7 +35,7 @@ describe('Elemental Inversion', function() {
             });
             this.player2.pass();
             this.player1.clickCard(this.inversion);
-            expect(this.player1).toHavePrompt('Choose an unclaimed ring');
+            expect(this.player1).toHavePrompt('Choose an uncontested ring');
         });
 
         it('should switch the contested ring, moving all fate from it instead of giving it to the attacking player', function() {
@@ -51,8 +51,8 @@ describe('Elemental Inversion', function() {
             this.player2.pass();
             this.player1.clickCard(this.inversion);
             expect(this.player1).not.toBeAbleToSelectRing('air');
-            expect(this.player1).not.toBeAbleToSelectRing('earth');
-            expect(this.player1).not.toBeAbleToSelectRing('void');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+            expect(this.player1).toBeAbleToSelectRing('void');
             expect(this.player1).toBeAbleToSelectRing('fire');
             expect(this.player1).toBeAbleToSelectRing('water');
             this.player1.clickRing('water');
@@ -75,8 +75,8 @@ describe('Elemental Inversion', function() {
             this.player2.pass();
             this.player1.clickCard(this.inversion);
             expect(this.player1).not.toBeAbleToSelectRing('air');
-            expect(this.player1).not.toBeAbleToSelectRing('earth');
-            expect(this.player1).not.toBeAbleToSelectRing('void');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+            expect(this.player1).toBeAbleToSelectRing('void');
             expect(this.player1).toBeAbleToSelectRing('fire');
             expect(this.player1).toBeAbleToSelectRing('water');
             this.player1.clickRing('water');
@@ -85,6 +85,25 @@ describe('Elemental Inversion', function() {
             expect(this.game.rings.air.fate).toBe(0);
             expect(this.game.rings.water.fate).toBe(0);
             expect(this.getChatLogs(4)).toContain('player1 plays Elemental Inversion to move all fate from the Water Ring and switch it with the contested ring');
+        });
+
+        it('should work on a claimed ring', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.youth],
+                defenders: [],
+                ring: 'air'
+            });
+            expect(this.game.currentConflict.ring.element).toBe('air');
+            expect(this.game.rings.earth.claimedBy).toBe(this.player1.player.name);
+            expect(this.game.rings.earth.isClaimed()).toBe(true);
+            this.player2.pass();
+            this.player1.clickCard(this.inversion);
+            this.player1.clickRing('earth');
+            expect(this.game.currentConflict.ring.element).toBe('earth');
+            expect(this.game.rings.earth.isClaimed()).toBe(false);
+            expect(this.game.rings.air.claimedBy).toBe(this.player1.player.name);
+            expect(this.getChatLogs(4)).toContain('player1 plays Elemental Inversion to move all fate from the Earth Ring and switch it with the contested ring');
         });
     });
 });
