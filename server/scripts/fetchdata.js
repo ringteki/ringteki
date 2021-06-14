@@ -4,11 +4,13 @@ const monk = require('monk');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
+const _ = require('underscore');
 
 const CardService = require('../services/CardService.js');
+const PathToJSON = path.join(__dirname, '../../test/json/card');
 
 function apiRequest(path) {
-    const apiUrl = 'https://api.fiveringsdb.com/';
+    const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
 
     return new Promise((resolve, reject) => {
         request.get(apiUrl + path, function(error, res, body) {
@@ -32,19 +34,20 @@ let db = monk('mongodb://127.0.0.1:27017/ringteki');
 let cardService = new CardService(db);
 
 let fetchCards = apiRequest('cards')
-    .then(cards => cardService.replaceCards(cards.records))
+    .then(cards => cardService.replaceCards(cards))
     .then(cards => {
         console.info(cards.length + ' cards fetched');
 
         let imageDir = path.join(__dirname, '..', '..', 'public', 'img', 'cards');
         mkdirp(imageDir);
+        mkdirp(PathToJSON);
 
         var i = 0;
 
         cards.forEach(function (card) {
-            if(card.pack_cards.length > 0) {
+            if(card.versions.length > 0) {
                 var imagePath = path.join(imageDir, card.id + '.jpg');
-                let firstCardWithImageUrl = card.pack_cards.find(card => card.image_url);
+                let firstCardWithImageUrl = card.versions.find(card => card.image_url);
                 if(firstCardWithImageUrl) {
                     let imageSrc = firstCardWithImageUrl.image_url;
                     if(imageSrc && !fs.existsSync(imagePath)) {
@@ -52,6 +55,9 @@ let fetchCards = apiRequest('cards')
                     }
                 }
             }
+            const filePath = path.join(PathToJSON, `${card.id}.json`);
+            fs.writeFile(filePath, JSON.stringify([card]), () => {});
+            console.log(`Created file ${filePath}`);
         });
 
         return cards;
@@ -61,7 +67,7 @@ let fetchCards = apiRequest('cards')
     });
 
 let fetchPacks = apiRequest('packs')
-    .then(packs => cardService.replacePacks(packs.records))
+    .then(packs => cardService.replacePacks(packs))
     .then(packs => {
         console.info(packs.length + ' packs fetched');
     })

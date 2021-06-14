@@ -75,7 +75,7 @@ class BaseCard extends EffectSource {
         this.printedName = cardData.name;
         this.printedType = cardData.type;
         this.traits = cardData.traits || [];
-        this.printedFaction = cardData.clan;
+        this.printedFaction = cardData.clan || cardData.faction;
         this.attachments = _([]);
         this.childCards = [];
         this.statusTokens = [];
@@ -563,7 +563,7 @@ class BaseCard extends EffectSource {
     }
 
     getPrintedFaction(): string {
-        return this.cardData.clan;
+        return this.cardData.clan || this.cardData.faction;
     }
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
