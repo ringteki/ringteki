@@ -555,7 +555,7 @@ class BaseCard extends EffectSource {
     }
 
     isUnique(): boolean{
-        return this.cardData.unicity;
+        return this.cardData.is_unique;
     }
 
     isBlank(): boolean {
