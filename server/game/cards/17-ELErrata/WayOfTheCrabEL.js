@@ -2,14 +2,14 @@ const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Players, CardTypes } = require('../../Constants');
 
-class WayOfTheCrab extends DrawCard {
+class WayOfTheCrabEL extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Make your opponent sacrifice a character',
             condition: context => context.player.opponent,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isFaction('crab')
+                cardCondition: card => card.isFaction('crab') && card.isParticipating()
             }),
             effect: 'force {1} to sacrifice a character',
             effectArgs: context => context.player.opponent,
@@ -27,6 +27,6 @@ class WayOfTheCrab extends DrawCard {
     }
 }
 
-WayOfTheCrab.id = 'way-of-the-crab';
+WayOfTheCrabEL.id = 'way-of-the-crab-el';
 
-module.exports = WayOfTheCrab;
+module.exports = WayOfTheCrabEL;

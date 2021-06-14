@@ -4,7 +4,6 @@ const monk = require('monk');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const _ = require('underscore');
 
 const CardService = require('../services/CardService.js');
 const PathToJSON = path.join(__dirname, '../../test/json/card');
