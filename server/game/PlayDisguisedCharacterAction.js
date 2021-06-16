@@ -89,7 +89,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
         if(!replacedCharacter) {
             return;
         }
-        const conflictOnly = this.intoConflictOnly || context.game.gameMode === GameModes.Emerald;
+        const conflictOnly = this.intoConflictOnly || (context.game.gameMode === GameModes.Emerald && replacedCharacter.isParticipating());
 
         let intoConflict = conflictOnly;
         if(replacedCharacter.inConflict && !conflictOnly) {
