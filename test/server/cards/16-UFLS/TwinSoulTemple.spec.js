@@ -190,9 +190,9 @@ describe('Twin Soul Temple', function() {
             expect(this.player1).toHavePrompt('Choose an element to replace');
             this.player1.clickCard(this.reward);
             expect(this.player1).toHavePrompt('Which element do you wish to select?');
-            expect(this.player1).toHavePromptButton('Printed Province Element (fire)');
-            expect(this.player1).toHavePromptButton('Province Type (fire)');
-            this.player1.clickPrompt('Printed Province Element (fire)');
+            expect(this.player1).toHavePromptButton('The Province\'s Element (fire)');
+            expect(this.player1).toHavePromptButton('Ability - Province Element (fire)');
+            this.player1.clickPrompt('The Province\'s Element (fire)');
             expect(this.reward.isElement('fire')).toBe(true);
             expect(this.player1).toHavePrompt('Choose the new element');
             expect(this.player1).toHavePromptButton('Air');
@@ -210,9 +210,9 @@ describe('Twin Soul Temple', function() {
             expect(this.player1).toHavePrompt('Choose an element to replace');
             this.player1.clickCard(this.tsuma);
             expect(this.player1).toHavePrompt('Which element do you wish to select?');
-            expect(this.player1).toHavePromptButton('Printed Province Element (air)');
-            expect(this.player1).toHavePromptButton('Printed Province Element (fire)');
-            this.player1.clickPrompt('Printed Province Element (fire)');
+            expect(this.player1).toHavePromptButton('The Province\'s Element (air)');
+            expect(this.player1).toHavePromptButton('The Province\'s Element (fire)');
+            this.player1.clickPrompt('The Province\'s Element (fire)');
             expect(this.tsuma.isElement('fire')).toBe(true);
             expect(this.player1).toHavePrompt('Choose the new element');
             expect(this.player1).toHavePromptButton('Air');
@@ -242,7 +242,7 @@ describe('Twin Soul Temple', function() {
             this.player1.clickPrompt('Cancel');
             this.player1.clickCard(this.twinSoul1);
             this.player1.clickCard(this.tsuma);
-            this.player1.clickPrompt('Printed Province Element (fire)');
+            this.player1.clickPrompt('The Province\'s Element (fire)');
             this.player1.clickPrompt('Void');
 
             this.player2.pass();
