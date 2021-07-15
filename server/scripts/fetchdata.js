@@ -9,7 +9,7 @@ const CardService = require('../services/CardService.js');
 const PathToJSON = path.join(__dirname, '../../test/json/card');
 
 function apiRequest(path) {
-    const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
+    const apiUrl = 'https://www.emeralddb.org/api/';
 
     return new Promise((resolve, reject) => {
         request.get(apiUrl + path, function(error, res, body) {

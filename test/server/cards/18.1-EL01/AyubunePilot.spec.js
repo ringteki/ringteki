@@ -1,15 +1,15 @@
-describe('Forward Scout', function() {
+describe('Ayubune Pilot', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-hotaru', 'togashi-initiate'],
-                    hand: ['forward-scout']
+                    hand: ['ayubune-pilot']
                 },
                 player2: {
                     inPlay: ['akodo-toturi', 'doji-whisperer'],
-                    hand: ['forward-scout']
+                    hand: ['ayubune-pilot']
                 }
             });
 
@@ -18,8 +18,8 @@ describe('Forward Scout', function() {
             this.toturi = this.player2.findCardByName('akodo-toturi');
             this.whisperer = this.player2.findCardByName('doji-whisperer');
 
-            this.scout = this.player1.findCardByName('forward-scout');
-            this.scout2 = this.player2.findCardByName('forward-scout');
+            this.scout = this.player1.findCardByName('ayubune-pilot');
+            this.scout2 = this.player2.findCardByName('ayubune-pilot');
 
             this.player1.playAttachment(this.scout, this.hotaru);
         });
@@ -35,7 +35,7 @@ describe('Forward Scout', function() {
             this.player1.clickCard(this.scout);
             expect(this.hotaru.isParticipating()).toBe(true);
             expect(this.scout.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 uses Forward Scout, sacrificing Forward Scout to move Doji Hotaru into the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 uses Ayubune Pilot, sacrificing Ayubune Pilot to move Doji Hotaru into the conflict');
         });
 
         it('should not allow you to move into the conflict when bowed', function() {
@@ -52,7 +52,7 @@ describe('Forward Scout', function() {
             expect(this.hotaru.isParticipating()).toBe(false);
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.scout.location).toBe('play area');
-            expect(this.getChatLogs(5)).not.toContain('player1 uses Forward Scout, sacrificing Forward Scout to move Doji Hotaru into the conflict');
+            expect(this.getChatLogs(5)).not.toContain('player1 uses Ayubune Pilot, sacrificing Ayubune Pilot to move Doji Hotaru into the conflict');
         });
 
         it('should not attach to opponent\'s characters', function() {

@@ -1,14 +1,14 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl.js');
 
-const forwardScoutCaptureParentCost = function() {
+const ayubunePilotCaptureParentCost = function() {
     return {
-        action: { name: 'forwardScoutCaptureParentCost', getCostMessage: () => '' },
+        action: { name: 'ayubunePilotCaptureParentCost', getCostMessage: () => '' },
         canPay: function() {
             return true;
         },
         resolve: function(context) {
-            context.costs.forwardScoutCaptureParentCost = context.source.parent;
+            context.costs.ayubunePilotCaptureParentCost = context.source.parent;
         },
         pay: function() {
         }
@@ -16,7 +16,7 @@ const forwardScoutCaptureParentCost = function() {
 };
 
 
-class ForwardScout extends DrawCard {
+class AyubunePilot extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
             myControl: true
@@ -25,17 +25,17 @@ class ForwardScout extends DrawCard {
         this.action({
             title: 'Move attached character into the conflict',
             cost: [
-                forwardScoutCaptureParentCost(),
+                ayubunePilotCaptureParentCost(),
                 AbilityDsl.costs.sacrificeSelf()
             ],
             condition: context => context.source.parent && !context.source.parent.bowed,
-            gameAction: AbilityDsl.actions.moveToConflict(context => ({ target: [context.source.parent, context.costs.forwardScoutCaptureParentCost] }))
+            gameAction: AbilityDsl.actions.moveToConflict(context => ({ target: [context.source.parent, context.costs.ayubunePilotCaptureParentCost] }))
         });
     }
 }
 
-ForwardScout.id = 'forward-scout';
+AyubunePilot.id = 'ayubune-pilot';
 
-module.exports = ForwardScout;
+module.exports = AyubunePilot;
 
 
