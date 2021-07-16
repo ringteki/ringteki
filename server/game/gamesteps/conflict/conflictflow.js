@@ -262,6 +262,11 @@ class ConflictFlow extends BaseStepWithPipeline {
     }
 
     promptForCovert() {
+        if(this.game.gameMode === GameModes.Emerald) {
+            this.promptForCovertEmerald();
+            return;
+        }
+
         this.covert = [];
         if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
             return;
@@ -320,6 +325,61 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
     }
 
+    promptForCovertEmerald() {
+        this.covert = [];
+        if(this.conflict.conflictPassed || this.conflict.isSinglePlayer) {
+            return;
+        }
+
+        let targets = this.conflict.defendingPlayer.cardsInPlay.filter(card => card.covert);
+        let sources = this.conflict.attackers.filter(card => card.isCovert());
+        let contexts = sources.map(card => new AbilityContext({
+            game: this.game,
+            player: this.conflict.attackingPlayer,
+            source: card,
+            ability: new CovertAbility()
+        }));
+        contexts = contexts.filter(context => context.source.canInitiateKeywords(context));
+
+        for(let target of targets) {
+            target.covert = false;
+        }
+
+        if(contexts.length === 0) {
+            return;
+        }
+
+        for(const context of contexts) {
+            if(!context.player.checkRestrictions('initiateKeywords', context)) {
+                return;
+            }
+        }
+
+        this.game.promptForSelect(this.conflict.attackingPlayer, {
+            activePromptTitle: 'Choose character to evade with covert',
+            buttons: [{ text: 'No Target', arg: 'cancel' }],
+            cardType: CardTypes.Character,
+            controller: Players.Opponent,
+            source: 'Choose Covert',
+            cardCondition: card => {
+                let valid = false;
+                for(const context of contexts) {
+                    valid = valid || card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context);
+                }
+                return valid;
+            },
+            onSelect: (player, card) => {
+                for(const context of contexts) {
+                    if(card.canBeBypassedByCovert(context) && card.checkRestrictions('target', context)) {
+                        context['target'] = context.targets.target = card;
+                        this.covert.push(context);
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
     resolveCovert() {
         if(this.covert.length === 0) {
             return;
@@ -329,7 +389,16 @@ class ConflictFlow extends BaseStepWithPipeline {
             { card: context.source, context: context },
             () => context.target.covert = true
         ));
-        events = events.concat(this.covert.map(context => this.game.getEvent(EventNames.OnCovertResolved, { card: context.source, context: context })));
+
+        if(this.game.gameMode === GameModes.Emerald) {
+            events = [new InitiateCardAbilityEvent(
+                { card: this.covert.map(a => a.source), context: this.covert[0] },
+                () => this.covert[0].target.covert = true
+            )];
+            events = events.concat(this.game.getEvent(EventNames.OnCovertResolved, { card: this.covert.map(a => a.source), context: this.covert[0] }));
+        } else {
+            events = events.concat(this.covert.map(context => this.game.getEvent(EventNames.OnCovertResolved, { card: context.source, context: context })));
+        }
         this.game.openThenEventWindow(events);
     }
 

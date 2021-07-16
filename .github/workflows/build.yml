@@ -17,10 +17,13 @@ jobs:
           node-version: '12.18.3'
       - run: npm install
       - run: npm install -g typescript@3.4.5
+      - run: tsc
       - name: Submodule Init
         run: git submodule init
       - name: Submodule Update
         run: git submodule update
+      - name: Fetch Data
+        run: node server/scripts/fetchdata.js
       - name: Test
         run: npm test
       - name: Lint

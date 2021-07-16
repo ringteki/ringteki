@@ -24,6 +24,7 @@ const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
 const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
 import ElementSymbol = require('./ElementSymbol');
+import GameModes = require('../GameModes');
 
 const ValidKeywords = [
     'ancestral',
@@ -74,7 +75,7 @@ class BaseCard extends EffectSource {
         this.printedName = cardData.name;
         this.printedType = cardData.type;
         this.traits = cardData.traits || [];
-        this.printedFaction = cardData.clan;
+        this.printedFaction = cardData.clan || cardData.faction;
         this.attachments = _([]);
         this.childCards = [];
         this.statusTokens = [];
@@ -554,7 +555,7 @@ class BaseCard extends EffectSource {
     }
 
     isUnique(): boolean{
-        return this.cardData.unicity;
+        return this.cardData.is_unique;
     }
 
     isBlank(): boolean {
@@ -562,7 +563,7 @@ class BaseCard extends EffectSource {
     }
 
     getPrintedFaction(): string {
-        return this.cardData.clan;
+        return this.cardData.clan || this.cardData.faction;
     }
 
     checkRestrictions(actionType, context: AbilityContext): boolean {
@@ -689,11 +690,23 @@ class BaseCard extends EffectSource {
         for(const effectCard of this.getEffects(EffectNames.CannotHaveOtherRestrictedAttachments)) {
             illegalAttachments = illegalAttachments.concat(this.attachments.filter(card => card.isRestricted() && card !== effectCard));
         }
-        for(const card of this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit))) {
-            const limit = Math.max(...card.getEffects(EffectNames.AttachmentLimit));
+
+        const attachmentLimits = this.attachments.filter(card => card.anyEffect(EffectNames.AttachmentLimit));
+        const allAttachments = this.attachments.filter(() => true);
+
+        for(const card of attachmentLimits) {
+            let limit = Math.max(...card.getEffects(EffectNames.AttachmentLimit));
             const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id);
             illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -limit));
         }
+
+        if(this.game.gameMode === GameModes.Emerald) {
+            for(const card of allAttachments) {
+                const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id && attachment.controller === card.controller);
+                illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -1));
+            }    
+        }
+
         for(const object of this.attachments.reduce((array, card) => array.concat(card.getEffects(EffectNames.AttachmentRestrictTraitAmount)), [])) {
             for(const trait of Object.keys(object)) {
                 const matchingAttachments = this.attachments.filter(attachment => attachment.hasTrait(trait));

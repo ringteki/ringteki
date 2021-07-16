@@ -7,7 +7,7 @@ class ShinjoYasamura extends DrawCard {
         this.reaction({
             title: 'Prevent a character from defending this phase',
             when: {
-                onCovertResolved: (event, context) => event.card === context.source && event.context.target.covert
+                onCovertResolved: (event, context) => (event.card === context.source || (Array.isArray(event.card) && event.card.includes(context.source))) && event.context.target.covert
             },
             effect: 'prevent {1} from defending this phase',
             effectArgs: context => context.event.context.target,

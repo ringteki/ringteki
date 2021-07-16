@@ -15,7 +15,7 @@ class SpiritOfTheRiver extends DrawCard {
             text: '',
             type: CardTypes.Character,
             traits: ['spirit', 'cavalry'],
-            unicity: false
+            is_unique: false
         });
         this.facedownCard = facedownCard;
     }

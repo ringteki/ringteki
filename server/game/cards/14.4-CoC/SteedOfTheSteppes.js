@@ -13,7 +13,6 @@ const steedOfTheSteppesCaptureParentCost = function() {
         pay: function() {
         }
     };
-
 };
 
 class SteedOfTheSteppes extends DrawCard {

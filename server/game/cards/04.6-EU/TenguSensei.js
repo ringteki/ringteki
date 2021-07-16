@@ -6,15 +6,21 @@ class TenguSensei extends DrawCard {
         this.reaction({
             title: 'Prevent a character from attacking this phase',
             when: {
-                onCovertResolved: (event, context) => event.card === context.source
+                onCovertResolved: (event, context) => {
+                    return (event.card === context.source || (Array.isArray(event.card) && event.card.includes(context.source)));
+                }
             },
             effect: 'prevent {1} from attacking this phase',
-            effectArgs: context => context.event.context.target,
-            gameAction: ability.actions.cardLastingEffect(context => ({
-                target: context.event.context.target,
-                duration: Durations.UntilEndOfPhase,
-                effect: ability.effects.cardCannot('declareAsAttacker')
-            }))
+            effectArgs: context => {
+                return context.event.context.target;
+            },
+            gameAction: ability.actions.cardLastingEffect(context => {
+                return ({
+                    target: context.event.context.target,
+                    duration: Durations.UntilEndOfPhase,
+                    effect: ability.effects.cardCannot('declareAsAttacker')
+                });
+            })
         });
     }
 }

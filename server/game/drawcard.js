@@ -9,6 +9,7 @@ const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
 
 const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
+const GameModes = require('../GameModes');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -794,6 +795,15 @@ class DrawCard extends BaseCard {
 
     play() {
     //empty function so playcardaction doesn't crash the game
+    }
+
+    allowAttachment(attachment) {
+        if(this.game.gameMode === GameModes.Emerald && this.type === CardTypes.Character) {
+            if(this.attachments.some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
+                return false;
+            }
+        }
+        return super.allowAttachment(attachment);
     }
 
     getSummary(activePlayer, hideWhenFaceup) {

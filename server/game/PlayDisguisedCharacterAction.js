@@ -2,6 +2,7 @@ const BaseAction = require('./BaseAction.js');
 const ReduceableFateCost = require('./costs/ReduceableFateCost');
 
 const { CardTypes, EventNames, Phases, Players, EffectNames } = require ('./Constants');
+const GameModes = require('../GameModes.js');
 
 const ChooseDisguisedCharacterCost = function(intoConflictOnly) {
     return {
@@ -88,8 +89,10 @@ class PlayDisguisedCharacterAction extends BaseAction {
         if(!replacedCharacter) {
             return;
         }
-        let intoConflict = this.intoConflictOnly;
-        if(replacedCharacter.inConflict && !this.intoConflictOnly) {
+        const conflictOnly = this.intoConflictOnly || (context.game.gameMode === GameModes.Emerald && replacedCharacter.isParticipating());
+
+        let intoConflict = conflictOnly;
+        if(replacedCharacter.inConflict && !conflictOnly) {
             context.game.promptWithHandlerMenu(context.player, {
                 activePromptTitle: 'Where do you wish to play this character?',
                 source: context.source,
