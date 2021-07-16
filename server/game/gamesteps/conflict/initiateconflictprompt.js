@@ -4,6 +4,7 @@ const { Locations, CardTypes } = require('../../Constants');
 const AttackersMatrix = require('./attackersMatrix.js');
 const AbilityContext = require('../../AbilityContext');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
+const GameModes = require('../../../GameModes.js');
 
 const capitalize = {
     military: 'Military',
@@ -226,7 +227,7 @@ class InitiateConflictPrompt extends UiPrompt {
             if(this.selectedDefenders.includes(card)) {
                 return true;
             }
-            if(card.isCovert() || !this.covertRemaining) {
+            if(card.isCovert() || !this.covertRemaining || this.game.gameMode === GameModes.Emerald) {
                 return false;
             }
 

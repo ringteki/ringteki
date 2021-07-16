@@ -86,20 +86,20 @@ class ProvinceCard extends BaseCard {
     }
 
     hasElementSymbols() {
-        return this.cardData.element && this.cardData.element.length > 0;
+        return this.cardData.elements && this.cardData.elements.length > 0;
     }
 
     getPrintedElementSymbols() {
         let symbols = [];
         if(this.hasElementSymbols()) {
-            let elements = this.cardData.element;
+            let elements = this.cardData.elements;
             if(elements === 'all') {
                 elements = ['air', 'earth', 'fire', 'void', 'water'];
             }
             elements.forEach((element, index) => {
                 symbols.push({
                     key: `province-element-${index}`,
-                    prettyName: 'Printed Province Element',
+                    prettyName: 'The Province\'s Element',
                     element: element
                 });
             });

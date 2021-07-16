@@ -10,6 +10,7 @@ class ElementalFury extends ProvinceCard {
             },
             gameAction: AbiltyDsl.actions.selectRing({
                 message: '{0} switches the contested ring with {1}',
+                ringCondition: ring => ring.isUnclaimed(),
                 messageArgs: (ring, player) => [player, ring],
                 gameAction: AbiltyDsl.actions.switchConflictElement()
             }),
