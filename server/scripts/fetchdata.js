@@ -52,5 +52,5 @@ let fetchCards = apiRequest('cards')
 
 Promise.all([fetchCards])
     .then(() => console.log('fetched'))
-    .catch(() => console.log('error fetching');
+    .catch(() => console.log('error fetching'))
 
