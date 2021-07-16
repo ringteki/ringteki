@@ -16,7 +16,10 @@ function apiRequest(path) {
                 return reject(error);
             }
 
-            resolve(JSON.parse(body));
+            console.log('parsing json');
+            const res = JSON.parse(body);
+            console.log(res);
+            resolve(res);
         });
     });
 }
