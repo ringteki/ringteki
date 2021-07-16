@@ -17,9 +17,9 @@ function apiRequest(path) {
             }
 
             console.log('parsing json');
-            const res = JSON.parse(body);
-            console.log(res);
-            resolve(res);
+            const result = JSON.parse(body);
+            console.log(result);
+            resolve(result);
         });
     });
 }
