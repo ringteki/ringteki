@@ -29,15 +29,7 @@ function fetchImage(url, id, imagePath, timeout) {
     }, timeout);
 }
 
-let db = monk('mongodb://127.0.0.1:27017/ringteki');
-let cardService = new CardService(db);
-
 let fetchCards = apiRequest('cards')
-    .then(cards => {
-        console.log(cards.length);
-        cardService.replaceCards(cards)
-        console.log(cards.length);
-    })
     .then(cards => {
         console.log(cards.length + ' cards fetched');
         console.log(`making ${PathToJSON}`);
@@ -58,16 +50,7 @@ let fetchCards = apiRequest('cards')
         console.log('Unable to fetch cards');
     });
 
-let fetchPacks = apiRequest('packs')
-    .then(packs => cardService.replacePacks(packs))
-    .then(packs => {
-        console.info(packs.length + ' packs fetched');
-    })
-    .catch(() => {
-        console.error('Unable to fetch packs');
-    });
-
-Promise.all([fetchCards, fetchPacks])
-    .then(() => db.close())
-    .catch(() => db.close());
+Promise.all([fetchCards])
+    .then(() => console.log('fetched'))
+    .catch(() => console.log('error fetching');
 
