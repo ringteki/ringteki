@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 
 const CardService = require('../services/CardService.js');
-const PathToJSON = path.join(__dirname, '../../test/json/card');
+const PathToJSON = path.join(__dirname, '../../test/json/Card');
 
 function apiRequest(path) {
     const apiUrl = 'https://www.emeralddb.org/api/';
