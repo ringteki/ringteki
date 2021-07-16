@@ -16,9 +16,7 @@ function apiRequest(path) {
                 return reject(error);
             }
 
-            console.log('parsing json');
             const result = JSON.parse(body);
-            console.log(result);
             resolve(result);
         });
     });
@@ -35,7 +33,11 @@ let db = monk('mongodb://127.0.0.1:27017/ringteki');
 let cardService = new CardService(db);
 
 let fetchCards = apiRequest('cards')
-    .then(cards => cardService.replaceCards(cards))
+    .then(cards => {
+        console.log(cards.length);
+        cardService.replaceCards(cards)
+        console.log(cards.length);
+    })
     .then(cards => {
         console.log(cards.length + ' cards fetched');
         console.log(`making ${PathToJSON}`);
