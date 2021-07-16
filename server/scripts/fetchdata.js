@@ -10,13 +10,14 @@ const PathToJSON = path.join(__dirname, '../../test/json/card');
 
 function apiRequest(path) {
     const apiUrl = 'https://www.emeralddb.org/api/';
-
+    console.log(`requesting ${apiUrl + path}`);
     return new Promise((resolve, reject) => {
         request.get(apiUrl + path, function(error, res, body) {
             if(error) {
                 return reject(error);
             }
 
+            console.log(`received response ${body.length}`);
             resolve(JSON.parse(body));
         });
     });
