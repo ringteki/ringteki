@@ -6,18 +6,18 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 
 const CardService = require('../services/CardService.js');
-const PathToJSON = path.join(__dirname, '../../test/json/card');
+const PathToJSON = path.join(__dirname, '../../test/json/Card');
 
 function apiRequest(path) {
-    const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
-
+    const apiUrl = 'https://www.emeralddb.org/api/';
     return new Promise((resolve, reject) => {
         request.get(apiUrl + path, function(error, res, body) {
             if(error) {
                 return reject(error);
             }
 
-            resolve(JSON.parse(body));
+            const result = JSON.parse(body);
+            resolve(result);
         });
     });
 }
@@ -29,31 +29,16 @@ function fetchImage(url, id, imagePath, timeout) {
     }, timeout);
 }
 
-let db = monk('mongodb://127.0.0.1:27017/ringteki');
-let cardService = new CardService(db);
-
 let fetchCards = apiRequest('cards')
-    .then(cards => cardService.replaceCards(cards))
     .then(cards => {
-        console.info(cards.length + ' cards fetched');
-
-        let imageDir = path.join(__dirname, '..', '..', 'public', 'img', 'cards');
-        mkdirp(imageDir);
+        console.log(cards.length + ' cards fetched');
+        console.log(`making ${PathToJSON}`);
         mkdirp(PathToJSON);
+        console.log('made path to json');
 
         var i = 0;
 
         cards.forEach(function (card) {
-            if(card.versions.length > 0) {
-                var imagePath = path.join(imageDir, card.id + '.jpg');
-                let firstCardWithImageUrl = card.versions.find(card => card.image_url);
-                if(firstCardWithImageUrl) {
-                    let imageSrc = firstCardWithImageUrl.image_url;
-                    if(imageSrc && !fs.existsSync(imagePath)) {
-                        fetchImage(imageSrc, card.id, imagePath, i++ * 200);
-                    }
-                }
-            }
             const filePath = path.join(PathToJSON, `${card.id}.json`);
             fs.writeFile(filePath, JSON.stringify([card]), () => {});
             console.log(`Created file ${filePath}`);
@@ -62,19 +47,10 @@ let fetchCards = apiRequest('cards')
         return cards;
     })
     .catch(() => {
-        console.error('Unable to fetch cards');
+        console.log('Unable to fetch cards');
     });
 
-let fetchPacks = apiRequest('packs')
-    .then(packs => cardService.replacePacks(packs))
-    .then(packs => {
-        console.info(packs.length + ' packs fetched');
-    })
-    .catch(() => {
-        console.error('Unable to fetch packs');
-    });
-
-Promise.all([fetchCards, fetchPacks])
-    .then(() => db.close())
-    .catch(() => db.close());
+Promise.all([fetchCards])
+    .then(() => console.log('fetched'))
+    .catch(() => console.log('error fetching'))
 

@@ -25,7 +25,7 @@ class HonorsReward extends ProvinceCard {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
             key: elementKey,
-            prettyName: 'Province Type',
+            prettyName: 'Ability - Province Element',
             element: Elements.Fire
         });
         return symbols;

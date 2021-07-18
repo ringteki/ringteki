@@ -21,7 +21,7 @@ class ThePursuitOfJustice extends ProvinceCard {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
             key: elementKey,
-            prettyName: 'Province Element',
+            prettyName: 'Ability - Province Element',
             element: Elements.Water
         });
         return symbols;

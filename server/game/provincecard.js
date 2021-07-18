@@ -99,7 +99,7 @@ class ProvinceCard extends BaseCard {
             elements.forEach((element, index) => {
                 symbols.push({
                     key: `province-element-${index}`,
-                    prettyName: 'Printed Province Element',
+                    prettyName: 'The Province\'s Element',
                     element: element
                 });
             });
