@@ -1,15 +1,14 @@
 /*eslint no-console:0 */
 const request = require('request');
-const monk = require('monk');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
-const CardService = require('../services/CardService.js');
 const PathToJSON = path.join(__dirname, '../../test/json/Card');
 
 function apiRequest(path) {
-    const apiUrl = 'https://www.emeralddb.org/api/';
+    const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
+    // const apiUrl = 'https://www.emeralddb.org/api/';
     return new Promise((resolve, reject) => {
         request.get(apiUrl + path, function(error, res, body) {
             if(error) {
