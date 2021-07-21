@@ -1,6 +1,6 @@
-const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
+const DrawCard = require('../../../drawcard.js');
+const { CardTypes } = require('../../../Constants');
+const AbilityDsl = require('../../../abilitydsl.js');
 
 class Disarm extends DrawCard {
     setupCardAbilities() {
