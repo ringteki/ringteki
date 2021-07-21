@@ -33,12 +33,11 @@ class DeckBuilder {
     loadCards(directory) {
         var cards = {};
 
-        console.log('loading cards');
+        console.log('loading cards from', directory);
         var jsonCards = fs.readdirSync(directory).filter(file => file.endsWith('.json'));
         console.log(jsonCards);
         _.each(jsonCards, file => {
             var cardsInPack = require(path.join(PathToSubModulePacks, file));
-            console.log(cardsInPack);
             _.each(cardsInPack, card => {
                 cards[card.id] = card;
             });
