@@ -33,6 +33,7 @@ class DeckBuilder {
     loadCards(directory) {
         var cards = {};
 
+        console.log('loading cards');
         var jsonCards = fs.readdirSync(directory).filter(file => file.endsWith('.json'));
 
         _.each(jsonCards, file => {
@@ -43,6 +44,7 @@ class DeckBuilder {
             });
         });
 
+        console.log(`loaded ${Object.keys(cards).length} cards`);
         return cards;
     }
 
