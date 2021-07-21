@@ -29,7 +29,7 @@ let fetchCards = apiRequest('cards')
 
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
-            fs.writeFile(filePath, JSON.stringify([card]), () => {});
+            fs.writeFile(filePath, JSON.stringify([card]), (err) => { console.log(`write done for ${filePath}`, err) });
         });
 
         return cards;
