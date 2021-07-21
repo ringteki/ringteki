@@ -30,7 +30,6 @@ let fetchCards = apiRequest('cards')
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
             fs.writeFile(filePath, JSON.stringify([card]), () => {});
-            console.log(`Created file ${filePath}`);
         });
 
         return cards;
@@ -40,6 +39,6 @@ let fetchCards = apiRequest('cards')
     });
 
 Promise.all([fetchCards])
-    .then(() => console.log('fetched'))
+    .then(() => console.log('fetched successfully'))
     .catch(() => console.log('error fetching'));
 

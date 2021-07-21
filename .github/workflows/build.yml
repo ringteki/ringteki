@@ -21,6 +21,6 @@ jobs:
       - name: Fetch Data
         run: node server/scripts/fetchdata.js
       - name: Test
-        run: npm test
+        run: npm run jasmine_ci
       - name: Lint
         run: npm run lint
