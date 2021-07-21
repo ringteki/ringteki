@@ -23,13 +23,12 @@ function apiRequest(path) {
 let fetchCards = apiRequest('cards')
     .then(cards => {
         console.log(cards.length + ' cards fetched');
-        const made = mkdirp.sync(PathToJSON);
-        console.log(`made directories, starting with ${made}`)
-        console.log('made path to json', PathToJSON);
-
+        mkdirp.sync(PathToJSON);
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
-            fs.writeFile(filePath, JSON.stringify([card]), (err) => { console.log(`write done for ${filePath}`, err) });
+            fs.writeFile(filePath, JSON.stringify([card]), (err) => {
+                if (err)console.log(`write error for ${filePath}`, err);
+            });
         });
 
         return cards;
