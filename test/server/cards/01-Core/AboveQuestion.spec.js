@@ -12,7 +12,7 @@ describe('Above Question', function() {
                         hand: ['court-games', 'assassination']
                     }
                 });
-
+                console.log('hi');
                 this.agashaSwordsmith = this.player1.findCardByName('agasha-swordsmith');
                 this.doomedShugenja = this.player1.findCardByName('doomed-shugenja');
                 this.togashiInitiate = this.player1.findCardByName('togashi-initiate');
