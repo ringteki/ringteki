@@ -27,7 +27,9 @@ let fetchCards = apiRequest('cards')
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
             fs.writeFile(filePath, JSON.stringify([card]), (err) => {
-                if (err)console.log(`write error for ${filePath}`, err);
+                if(err) {
+                    console.log(`write error for ${filePath}`, err);
+                }
             });
         });
 
