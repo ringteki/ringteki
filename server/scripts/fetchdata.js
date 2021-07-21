@@ -23,9 +23,9 @@ function apiRequest(path) {
 let fetchCards = apiRequest('cards')
     .then(cards => {
         console.log(cards.length + ' cards fetched');
-        console.log(`making ${PathToJSON}`);
-        mkdirp(PathToJSON);
-        console.log('made path to json');
+        const made = mkdirp.sync(PathToJSON);
+        console.log(`made directories, starting with ${made}`)
+        console.log('made path to json', PathToJSON);
 
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
