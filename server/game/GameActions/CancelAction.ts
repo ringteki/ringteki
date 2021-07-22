@@ -29,7 +29,7 @@ export class CancelAction extends GameAction {
         }
         let { replacementGameAction } = this.getProperties(context);
         let cannotBeCancelled = context.event.cannotBeCancelled;
-        if (context.event.card && context.event.card.getType() === CardTypes.Event && context.event.card.owner && context.event.card.owner.eventsCannotBeCancelled()) {
+        if (context.event.card && typeof(context.event.card.getType) === 'function' && context.event.card.getType() === CardTypes.Event && context.event.card.owner && context.event.card.owner.eventsCannotBeCancelled()) {
             cannotBeCancelled = true;
         }
 

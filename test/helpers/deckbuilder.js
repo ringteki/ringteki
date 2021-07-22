@@ -34,10 +34,8 @@ class DeckBuilder {
         var cards = {};
 
         var jsonCards = fs.readdirSync(directory).filter(file => file.endsWith('.json'));
-
         _.each(jsonCards, file => {
             var cardsInPack = require(path.join(PathToSubModulePacks, file));
-
             _.each(cardsInPack, card => {
                 cards[card.id] = card;
             });
