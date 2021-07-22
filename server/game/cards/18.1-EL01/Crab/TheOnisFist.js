@@ -43,6 +43,6 @@ class TheOnisFist extends DrawCard {
     }
 }
 
-TheOnisFist.id = 'generic-holding';
+TheOnisFist.id = 'the-oni-s-fist';
 
 module.exports = TheOnisFist;
