@@ -11,8 +11,8 @@ class HeraldOfJade extends DrawCard {
             },
             target: {
                 mode: TargetModes.Token,
-                cardType: [CardTypes.Character, CardTypes.Province],
-                location: Locations.Any,
+                cardType: CardTypes.Character,
+                location: Locations.PlayArea,
                 gameAction: AbilityDsl.actions.discardStatusToken()
             },
             effect: 'discard {1}\'s {2}',
