@@ -289,6 +289,7 @@ export enum EventNames {
     OnCardPlayed = 'onCardPlayed',
     OnDeckShuffled = 'onDeckShuffled',
     AfterDuel = 'afterDuel',
+    OnDuelStarted = 'onDuelStarted',
     OnDuelResolution = 'onDuelResolution',
     OnDuelFinished = 'onDuelFinished',
     OnDynastyCardTurnedFaceup = 'onDynastyCardTurnedFaceup',
