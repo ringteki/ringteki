@@ -22,6 +22,6 @@ class EloquentAdvocate extends DrawCard {
     }
 }
 
-EloquentAdvocate.id = 'generic-dynasty-character';
+EloquentAdvocate.id = 'eloquent-advocate';
 module.exports = EloquentAdvocate;
 

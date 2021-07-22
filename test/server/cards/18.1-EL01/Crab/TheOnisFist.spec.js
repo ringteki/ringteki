@@ -5,7 +5,7 @@ describe('The Oni\'s Fist', function() {
                 phase: 'dynasty',
                 player1: {
                     inPlay: ['daidoji-nerishma'],
-                    dynastyDiscard: ['generic-holding', 'recalled-defenses']
+                    dynastyDiscard: ['the-oni-s-fist', 'recalled-defenses']
                 },
                 player2: {
                     inPlay: []
@@ -13,7 +13,7 @@ describe('The Oni\'s Fist', function() {
             });
 
             this.nerishma = this.player1.findCardByName('daidoji-nerishma');
-            this.fist = this.player1.findCardByName('generic-holding');
+            this.fist = this.player1.findCardByName('the-oni-s-fist');
             this.defenses = this.player1.findCardByName('recalled-defenses');
             this.player1.placeCardInProvince(this.fist, 'province 1');
             this.fist.facedown = false;

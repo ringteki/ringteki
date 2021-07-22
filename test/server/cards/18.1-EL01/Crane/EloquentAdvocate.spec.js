@@ -10,13 +10,13 @@ describe('Eloquent Advocate', function() {
                 },
                 player2: {
                     honor: 10,
-                    inPlay: ['generic-dynasty-character', 'kakita-yoshi'],
+                    inPlay: ['eloquent-advocate', 'kakita-yoshi'],
                     hand: ['policy-debate', 'ornate-fan']
                 }
             });
 
             this.yoshi = this.player2.findCardByName('kakita-yoshi');
-            this.advocate = this.player2.findCardByName('generic-dynasty-character');
+            this.advocate = this.player2.findCardByName('eloquent-advocate');
             this.policyDebate = this.player2.findCardByName('policy-debate');
             this.fan = this.player2.findCardByName('ornate-fan');
 
