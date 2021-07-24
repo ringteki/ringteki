@@ -1,11 +1,9 @@
 /*eslint no-console:0 */
 const request = require('request');
-const monk = require('monk');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
-const CardService = require('../services/CardService.js');
 const PathToJSON = path.join(__dirname, '../../test/json/Card');
 
 function apiRequest(path) {
@@ -22,26 +20,17 @@ function apiRequest(path) {
     });
 }
 
-function fetchImage(url, id, imagePath, timeout) {
-    setTimeout(function() {
-        console.log('Downloading image for ' + id);
-        request(url).pipe(fs.createWriteStream(imagePath));
-    }, timeout);
-}
-
 let fetchCards = apiRequest('cards')
     .then(cards => {
         console.log(cards.length + ' cards fetched');
-        console.log(`making ${PathToJSON}`);
-        mkdirp(PathToJSON);
-        console.log('made path to json');
-
-        var i = 0;
-
+        mkdirp.sync(PathToJSON);
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
-            fs.writeFile(filePath, JSON.stringify([card]), () => {});
-            console.log(`Created file ${filePath}`);
+            fs.writeFile(filePath, JSON.stringify([card]), (err) => {
+                if(err) {
+                    console.log(`write error for ${filePath}`, err);
+                }
+            });
         });
 
         return cards;
@@ -51,6 +40,6 @@ let fetchCards = apiRequest('cards')
     });
 
 Promise.all([fetchCards])
-    .then(() => console.log('fetched'))
-    .catch(() => console.log('error fetching'))
+    .then(() => console.log('fetched successfully'))
+    .catch(() => console.log('error fetching'));
 
