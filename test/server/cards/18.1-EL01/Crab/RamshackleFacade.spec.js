@@ -25,62 +25,29 @@ describe('Ramshackle Facade', function() {
             this.facade = this.player1.findCardByName('ramshackle-facade');
 
             this.player1.placeCardInProvince(this.tower, 'province 1');
+            this.player1.placeCardInProvince(this.pyre, 'province 2');
+            this.player1.placeCardInProvince(this.wall, 'province 3');
             this.tower.facedown = false;
-        });
-
-        it('should prompt you to sacrifice a holding', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate],
-                defenders: [this.challenger, this.toshimoko, this.whisperer]
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.facade);
-            expect(this.player1).toBeAbleToSelect(this.tower);
-        });
-    
-        it('should prompt you to select a character with mil less than province strength, then bow it', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate],
-                defenders: [this.challenger, this.toshimoko, this.whisperer]
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.facade);
-            this.player1.clickCard(this.tower);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-            expect(this.player1).toBeAbleToSelect(this.initiate);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-            expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
-
-            this.player1.clickCard(this.whisperer);
-            expect(this.whisperer.bowed).toBe(true);
-            expect(this.tower.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 plays Ramshackle Facade, sacrificing Seventh Tower to bow Doji Whisperer');
-        });
-
-        it('should take into account strength bonuses', function() {
-            this.player1.placeCardInProvince(this.wall, 'province 2');
+            this.pyre.facedown = false;
             this.wall.facedown = false;
+        });
 
+        it('should prompt you to select a character with mil <= to the # of provinces you control and bow it', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.initiate],
                 defenders: [this.challenger, this.toshimoko, this.whisperer]
             });
-            this.toshimoko.honor();
             this.player2.pass();
             this.player1.clickCard(this.facade);
-            this.player1.clickCard(this.tower);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
             expect(this.player1).toBeAbleToSelect(this.initiate);
             expect(this.player1).toBeAbleToSelect(this.challenger);
             expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
 
-            this.player1.clickCard(this.challenger);
-            expect(this.challenger.bowed).toBe(true);
-            expect(this.tower.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 plays Ramshackle Facade, sacrificing Seventh Tower to bow Doji Challenger');
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.bowed).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player1 plays Ramshackle Facade to bow Doji Whisperer');
         });
     });
 });
