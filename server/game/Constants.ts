@@ -109,6 +109,7 @@ export enum EffectNames {
     SetBasePoliticalSkill = 'setBasePoliticalSkill',
     SetBaseProvinceStrength = 'setBaseProvinceStrength',
     SetConflictDeclarationType = 'setConflictDeclarationType',
+    ProvideConflictDeclarationType = 'provideConflictDeclarationType',
     SetConflictTotalSkill = 'setConflictTotalSkill',
     SetDash = 'setDash',
     SetGlory = 'setGlory',

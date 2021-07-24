@@ -225,6 +225,7 @@ const Effects = {
         unapply: (player, context, reducer) => player.removeCostReducer(reducer)
     }),
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
+    provideConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ProvideConflictDeclarationType, type),
     setMaxConflicts: (amount) => EffectBuilder.player.static(EffectNames.SetMaxConflicts, amount),
     setConflictTotalSkill: (value) => EffectBuilder.player.static(EffectNames.SetConflictTotalSkill, value),
     showTopConflictCard: (players = Players.Any) => EffectBuilder.player.static(EffectNames.ShowTopConflictCard, players),
