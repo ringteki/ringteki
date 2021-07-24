@@ -4,7 +4,7 @@ const { CardTypes, Players, Durations, DuelTypes } = require('../../../Constants
 
 class EloquentAdvocate extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
+        this.interrupt({
             title: 'Give a character a political bonus',
             when: { onDuelStarted: event => event.duel.type === DuelTypes.Political },
             target: {

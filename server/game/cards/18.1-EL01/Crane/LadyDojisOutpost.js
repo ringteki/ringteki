@@ -1,5 +1,4 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const PlayAttachmentAction = require('../../../playattachmentaction.js');
 const { CardTypes, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
