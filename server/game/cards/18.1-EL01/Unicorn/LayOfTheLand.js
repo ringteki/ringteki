@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Players, TargetModes } = require('../../../Constants');
+const { CardTypes, Players, TargetModes, Locations } = require('../../../Constants');
 
 class LayOfTheLand extends DrawCard {
     setupCardAbilities() {
@@ -12,11 +12,15 @@ class LayOfTheLand extends DrawCard {
             },
             target: {
                 cardType: CardTypes.Province,
+                activePromptTitle: 'Choose any number of provinces to reveal',
                 controller: Players.Any,
+                location: Locations.Provinces,
                 cardCondition: card => card.facedown,
                 mode: TargetModes.Unlimited,
                 gameAction: AbilityDsl.actions.reveal(),
             },
+            effect: 'reveal {1}',
+            effectArgs: context => [context.target]
         });
     }
 }
