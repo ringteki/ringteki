@@ -23,13 +23,14 @@ function apiRequest(path) {
 let fetchCards = apiRequest('cards')
     .then(cards => {
         console.log(cards.length + ' cards fetched');
-        console.log(`making ${PathToJSON}`);
-        mkdirp(PathToJSON);
-        console.log('made path to json');
-
+        mkdirp.sync(PathToJSON);
         cards.forEach(function (card) {
             const filePath = path.join(PathToJSON, `${card.id}.json`);
-            fs.writeFile(filePath, JSON.stringify([card]), () => {});
+            fs.writeFile(filePath, JSON.stringify([card]), (err) => {
+                if(err) {
+                    console.log(`write error for ${filePath}`, err);
+                }
+            });
         });
 
         return cards;
