@@ -1,5 +1,12 @@
+const { hashDeck } = require('../hashDeck');
 const logger = require('../log.js');
 
+function addHashPropertyToDeckIfNeeded(deck) {
+    if (!deck.hash) {
+        deck.hash = hashDeck(deck);
+    }
+    return deck;
+}
 class DeckService {
     constructor(db) {
         this.decks = db.get('decks');
@@ -7,6 +14,7 @@ class DeckService {
 
     getById(id) {
         return this.decks.findOne({ _id: id })
+            .then(addHashPropertyToDeckIfNeeded)
             .catch(err => {
                 logger.error('Unable to fetch deck', err);
                 throw new Error('Unable to fetch deck ' + id);
@@ -14,7 +22,8 @@ class DeckService {
     }
 
     findByUserName(userName) {
-        return this.decks.find({ username: userName }, { sort: { lastUpdated: -1 } });
+        return this.decks.find({ username: userName }, { sort: { lastUpdated: -1 } })
+            .then(decks => decks.map(addHashPropertyToDeckIfNeeded));
     }
 
     create(deck) {
@@ -30,6 +39,7 @@ class DeckService {
             alliance: deck.alliance,
             lastUpdated: new Date()
         };
+        properties.hash = hashDeck(properties);
 
         return this.decks.insert(properties);
     }
@@ -46,6 +56,7 @@ class DeckService {
             alliance: deck.alliance,
             lastUpdated: new Date()
         };
+        properties.hash = hashDeck(properties);
 
         return this.decks.update({ _id: deck.id }, { '$set': properties });
     }
