@@ -1,6 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Locations } = require('../../../Constants');
 
 class ShinjoPathfinder extends DrawCard {
     setupCardAbilities() {

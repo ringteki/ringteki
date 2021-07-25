@@ -17,7 +17,7 @@ class LayOfTheLand extends DrawCard {
                 location: Locations.Provinces,
                 cardCondition: card => card.facedown,
                 mode: TargetModes.Unlimited,
-                gameAction: AbilityDsl.actions.reveal(),
+                gameAction: AbilityDsl.actions.reveal()
             },
             effect: 'reveal {1}',
             effectArgs: context => [context.target]

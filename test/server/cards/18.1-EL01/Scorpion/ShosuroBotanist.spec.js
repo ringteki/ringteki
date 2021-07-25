@@ -5,7 +5,7 @@ describe('Shosuro Botanist', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['shosuro-botanist', 'doji-challenger'],
-                    hand: ['fine-katana'],
+                    hand: ['fine-katana']
                 },
                 player2: {
                     inPlay: ['adept-of-the-waves', 'miya-mystic'],

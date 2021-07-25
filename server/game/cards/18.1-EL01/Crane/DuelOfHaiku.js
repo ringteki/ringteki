@@ -43,12 +43,12 @@ class DuelOfHaiku extends DrawCard {
                                 })),
                                 falseGameAction: AbilityDsl.actions.handler({
                                     handler: () => true
-                                }),
+                                })
                             })
                         ]
-                    })
+                    });
                 })
-            },
+            }
         });
     }
 }

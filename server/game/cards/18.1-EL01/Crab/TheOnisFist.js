@@ -20,7 +20,7 @@ class TheOnisFist extends DrawCard {
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
-            gameAction: AbilityDsl.actions.addToken(),
+            gameAction: AbilityDsl.actions.addToken()
         });
 
         this.interrupt({
@@ -39,7 +39,7 @@ class TheOnisFist extends DrawCard {
                 cardCondition: card => !card.facedown && card.location !== Locations.StrongholdProvince,
                 gameAction: AbilityDsl.actions.break()
             }
-        })
+        });
     }
 }
 

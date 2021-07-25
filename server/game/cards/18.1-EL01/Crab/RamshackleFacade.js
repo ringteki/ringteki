@@ -12,7 +12,7 @@ class RamshackleFacade extends DrawCard {
                 controller: Players.Any,
                 cardCondition: (card, context) => card.isParticipating() && card.getMilitarySkill() <= context.player.getNumberOfHoldingsInPlay(),
                 gameAction: AbilityDsl.actions.bow()
-            },
+            }
         });
     }
 }

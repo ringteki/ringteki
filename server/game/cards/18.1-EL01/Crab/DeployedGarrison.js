@@ -18,10 +18,10 @@ class DeployedGarrison extends DrawCard {
                 })),
                 AbilityDsl.actions.playCard(context => ({
                     target: context.source,
-                    source: this,
+                    source: this
                 }))
             ]),
-            effect: 'play {0}',
+            effect: 'play {0}'
         });
     }
 }

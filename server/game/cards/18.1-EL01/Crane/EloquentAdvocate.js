@@ -14,7 +14,7 @@ class EloquentAdvocate extends DrawCard {
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     effect: AbilityDsl.effects.modifyPoliticalSkill(context.source.getPoliticalSkill()),
                     duration: Durations.UntilEndOfDuel
-                })),
+                }))
             },
             effect: 'give {0} +{1}{2} until the end of the duel',
             effectArgs: context => [context.source.getPoliticalSkill(), 'political']
