@@ -44,7 +44,7 @@ describe('Daidoji Ienori', function() {
             expect(this.yoshi.getMilitarySkill()).toBe(2);
             expect(this.yoshi.getPoliticalSkill()).toBe(6);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Daidoji Ienori, discarding a status token to set the skills of Moto Chagatai to 1military/1political');
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ienori, discarding a status token to set the skills of Moto Chagatai to 1military/1political');
         });
     });
 });

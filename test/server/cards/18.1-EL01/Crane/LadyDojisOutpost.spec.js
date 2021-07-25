@@ -1,4 +1,4 @@
-describe('Iron Mountain Castle', function() {
+describe('Lady Dojis Outpost', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -36,7 +36,7 @@ describe('Iron Mountain Castle', function() {
             expect(this.challenger.isHonored).toBe(true);
             expect(this.yoshi.isHonored).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Lady Doji\'s Outpost to honor Kakita Yoshi');
+            expect(this.getChatLogs(5)).toContain('player1 uses Lady Dōji\'s Outpost to honor Kakita Yoshi');
         });
 
         it('should not react when a character you don\'t control is honored', function() {
