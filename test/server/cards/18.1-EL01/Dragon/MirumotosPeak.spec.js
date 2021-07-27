@@ -100,6 +100,5 @@ describe('Mirumoto\'s Peak', function() {
             this.player1.clickCard(this.peak);
             expect(this.player1).toHavePrompt('Action Window');
         });
-
     });
 });
