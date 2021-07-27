@@ -12,6 +12,7 @@ class LadyDojisOutpost extends StrongholdCard {
 
         this.reaction({
             title: 'Honor a character',
+            cost: AbilityDsl.costs.bowSelf(),
             when: {
                 onCardHonored: (event, context) => event.card.controller === context.player && event.card !== context.source
             },
