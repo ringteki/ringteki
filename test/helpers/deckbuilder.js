@@ -40,7 +40,6 @@ class DeckBuilder {
                 cards[card.id] = card;
             });
         });
-
         return cards;
     }
 
