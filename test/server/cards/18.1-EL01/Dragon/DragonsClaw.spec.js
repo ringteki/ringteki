@@ -1,4 +1,4 @@
-describe('Mirumoto\'s Peak', function() {
+describe('Dragons Claw', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
