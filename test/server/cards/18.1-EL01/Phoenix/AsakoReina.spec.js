@@ -1,100 +1,97 @@
-const DrawCard = require('../../drawcard.js');
-const { Players, CardTypes, Elements } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
-const { IfAbleAction } = require('../../GameActions/IfAbleAction.js');
-const elementKeys = {
-    air: 'asako-reina-air',
-    earth: 'asako-reina-earth',
-    fire: 'asako-reina-fire',
-    water: 'asako-reina-water',
-    void: 'asako-reina-void'
-};
+describe('Asako Reina', function () {
+    integration(function () {
+        describe('Asako Reina\'s ability', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['asako-reina', 'seeker-of-knowledge'],
+                        hand: ['know-the-world']
+                    }
+                });
+                this.seeker = this.player1.findCardByName('seeker-of-knowledge');
+                this.asakoReina = this.player1.findCardByName('asako-reina');
+                this.seeker.bow();
+                this.asakoReina.bow();
+            });
 
-class AsakoReina extends DrawCard {
-    setupCardAbilities() {
-        this.action({
-            title: 'Gain boons based based on your currently claimed rings',
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.gainHonor(
-                    context =>
-                    ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.draw(
-                    context => ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.earth)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.gainFate(
-                    context => ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.void)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.selectCard(
-                    context => ({
-                        activePromptTitle: 'Choose a 2 cost or lower character to ready',
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.water)].isConsideredClaimed(context.player),
-                        cardCondition: card => card.costLessThan(3),
-                        cardType: CardTypes.Character,
-                        optional: false,
-                        gameAction: AbilityDsl.actions.ready(),
-                        targets: false,
-                        message: '{0} chooses to ready {1} with {2}\'s effect',
-                        messageArgs: (card, player) => [player, card, context.source]
-                    })
-                ),
-                AbilityDsl.actions.selectCard(
-                    context => ({
-                        activePromptTitle: 'Choose a character to honor',
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player),
-                        cardType: CardTypes.Character,
-                        optional: false,
-                        gameAction: AbilityDsl.actions.honor(),
-                        targets: false,
-                        message: '{0} chooses to honor {1} with {2}\'s effect',
-                        messageArgs: (card, player) => [player, card, context.source]
-                    })
-                ),
+            describe('should end up with +1 honor', function () {
+                it('when the air ring is claimed', function () {
+                    this.game.rings.air.claimRing(this.player1.player);
+                    this.player1
+                    this.player1.honor = 10;
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1.honor).toBe(11);
+                });
+            });
 
-            ])
-        });
-    }
-    getPrintedElementSymbols() {
-        let symbols = super.getPrintedElementSymbols();
-        symbols.push({
-            key: elementKeys.air,
-            prettyName: '+1 honor',
-            element: Elements.Air
-        });
-        symbols.push({
-            key: elementKeys.earth,
-            prettyName: 'draw a card',
-            element: Elements.Earth
-        });
-        symbols.push({
-            key: elementKeys.fire,
-            prettyName: 'honor a character',
-            element: Elements.Fire
-        });
+            describe('should give +1 card ', function () {
+                it('when the earth ring is claimed', function () {
+                    this.game.rings.earth.claimRing(this.player1.player);
+                    let hand = this.player1.hand.length;
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1.hand.length).toBe(hand + 2);
+                });
+            });
 
-        symbols.push({
-            key: elementKeys.water,
-            prettyName: 'ready a 2 cost or less character',
-            element: Elements.Water
-        });
+            describe('should let you choose a character to be honored', function () {
+                it('when the fire ring is claimed', function () {
+                    this.game.rings.fire.claimRing(this.player1.player);
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1).toBeAbleToSelect(this.asakoReina);
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.asakoReina.isHonored).toBe(true)
+                });
+            });
+            describe('should let you choose a character to be readied', function () {
+                it('when the water ring is claimed', function () {
+                    this.game.rings.water.claimRing(this.player1.player);
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1).toBeAbleToSelect(this.seeker);
+                    this.player1.clickCard(this.seeker);
+                    expect(this.seeker.bowed).toBe(false)
+                });
+                it('when the water ring is claimed but not for a 3 coster or above', function () {
+                    this.game.rings.water.claimRing(this.player1.player);
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1).not.toBeAbleToSelect(this.asakoReina);
+                    this.player1.clickCard(this.asakoReina);
+                    this.player1.clickCard(this.seeker);
+                    expect(this.asakoReina.bowed).toBe(true)
+                    expect(this.seeker.bowed).toBe(false)
+                });
+            });
+            describe('should gain +1 fate', function () {
+                it('when the void ring is claimed', function () {
+                    this.game.rings.void.claimRing(this.player1.player);
+                    let fate = this.player1.fate;
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1.fate).toBe(fate + 1);
+                });
+            });
+            describe('should trigger all conditions', function () {
+                it('when all rings are claimed', function () {
+                    this.game.rings.void.claimRing(this.player1.player);
+                    this.game.rings.air.claimRing(this.player1.player);
+                    this.game.rings.earth.claimRing(this.player1.player);
+                    this.game.rings.water.claimRing(this.player1.player);
+                    this.game.rings.fire.claimRing(this.player1.player);
 
-        symbols.push({
-            key: elementKeys.void,
-            prettyName: '+1 fate',
-            element: Elements.Void
+                    let fate = this.player1.fate;
+                    let handsize = this.player1.hand.size;
+                    let honor = this.player1.honor;
+                    this.player1.clickCard(this.asakoReina);
+                    expect(this.player1).toBeAbleToSelect(this.seeker);
+                    this.player1.clickCard(this.seeker);
+                    expect(this.player1).toBeAbleToSelect(this.seeker);
+                    this.player1.clickCard(this.seeker);
+                    expect(this.player1.fate).toBe(handsize + 1);
+                    expect(this.player1.fate).toBe(honor + 1);
+                    expect(this.player1.fate).toBe(fate + 1);
+                    expect(this.seeker.isHonored).toBe(true);
+                    expect(this.seeker.bowed).toBe(false);
+                });
+            });
         });
-        return symbols;
-    }
-}
-
-AsakoReina.id = 'asako-reina';
-module.exports = AsakoReina;
+    });
+});
