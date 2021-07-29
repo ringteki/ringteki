@@ -11,15 +11,15 @@ class StormOfSteel extends DrawCard {
                 character: {
                     player: Players.Self,
                     cardType: CardTypes.Character,
-                    cardCondition: card => card.isParticipating(),
+                    cardCondition: card => card.isParticipating()
                 },
                 weapons: {
                     activePromptTitle: 'Choose weapons to bow',
                     dependsOn: 'character',
                     player: Players.Self,
                     mode: TargetModes.Unlimited,
-                    cardCondition: (card, context) => card.hasTrait('weapon') && !card.bowed && card.parent === context.targets.character,
-                },
+                    cardCondition: (card, context) => card.hasTrait('weapon') && !card.bowed && card.parent === context.targets.character
+                }
             },
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.cardLastingEffect(context => ({

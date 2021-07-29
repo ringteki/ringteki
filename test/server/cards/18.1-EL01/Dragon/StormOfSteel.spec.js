@@ -5,7 +5,7 @@ describe('Mirumoto\'s Peak', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-challenger', 'doji-kuwanan'],
-                    hand: ['fine-katana', 'pathfinder-s-blade', 'inscribed-tanto', 'scarlet-sabre', 'ornate-fan', 'spell-scroll', 'storm-of-steel'],
+                    hand: ['fine-katana', 'pathfinder-s-blade', 'inscribed-tanto', 'scarlet-sabre', 'ornate-fan', 'spell-scroll', 'storm-of-steel']
                 },
                 player2: {
                     inPlay: ['kakita-yoshi'],

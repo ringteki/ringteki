@@ -19,8 +19,8 @@ class FalseAlarm extends DrawCard {
                     optional: true,
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
-                    cardCondition: (card, context) => card.isParticipating() && context.game.actions.dishonor().canAffect(card, context),
-                },
+                    cardCondition: (card, context) => card.isParticipating() && context.game.actions.dishonor().canAffect(card, context)
+                }
             },
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.sendHome(context => ({ target: context.targets.shinobi })),

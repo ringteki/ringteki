@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Players, TargetModes } = require('../../../Constants.js');
+const { CardTypes, Players } = require('../../../Constants.js');
 
 class DragonsClaw extends DrawCard {
     setupCardAbilities() {

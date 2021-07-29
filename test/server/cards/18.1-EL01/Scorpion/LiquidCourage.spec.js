@@ -26,13 +26,13 @@ describe('Liquid Courage', function() {
         it('should give pride', function() {
             this.player1.pass();
             expect(this.warrior.hasKeyword('pride')).toBe(false);
-            this.player2.playAttachment(this.courage, this.warrior)
+            this.player2.playAttachment(this.courage, this.warrior);
             expect(this.warrior.hasKeyword('pride')).toBe(true);
         });
-        
+
         it('should automatically add target as a defender', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.warrior)
+            this.player2.playAttachment(this.courage, this.warrior);
 
             this.noMoreActions();
             this.player1.clickRing('air');
@@ -46,7 +46,7 @@ describe('Liquid Courage', function() {
 
         it('should not allow removing target from the conflict as a defender', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.warrior)
+            this.player2.playAttachment(this.courage, this.warrior);
 
             this.noMoreActions();
             this.player1.clickRing('air');
@@ -62,7 +62,7 @@ describe('Liquid Courage', function() {
 
         it('should not automatically add an illegal target as a defender', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.brash)
+            this.player2.playAttachment(this.courage, this.brash);
 
             this.noMoreActions();
             this.player1.clickRing('air');
@@ -76,7 +76,7 @@ describe('Liquid Courage', function() {
 
         it('pol conflict - should not do anything', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.warrior)
+            this.player2.playAttachment(this.courage, this.warrior);
 
             this.noMoreActions();
             this.player1.clickRing('air');
@@ -93,7 +93,7 @@ describe('Liquid Courage', function() {
 
         it('should automatically add target as an attacker and not allow removing', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.yumino)
+            this.player2.playAttachment(this.courage, this.yumino);
 
             this.noMoreActions();
             this.player1.clickRing('air');
@@ -105,7 +105,7 @@ describe('Liquid Courage', function() {
 
         it('should let you remove if you switch to pol', function() {
             this.player1.pass();
-            this.player2.playAttachment(this.courage, this.yumino)
+            this.player2.playAttachment(this.courage, this.yumino);
 
             this.noMoreActions();
             this.player1.clickRing('air');

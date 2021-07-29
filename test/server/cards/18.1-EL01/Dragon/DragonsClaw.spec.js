@@ -4,7 +4,7 @@ describe('Dragons Claw', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger', 'doji-kuwanan'],
+                    inPlay: ['doji-challenger', 'doji-kuwanan']
                 },
                 player2: {
                     inPlay: ['kakita-yoshi'],
@@ -18,7 +18,7 @@ describe('Dragons Claw', function() {
 
             this.claw = this.player2.findCardByName('dragon-s-claw');
             this.fang = this.player2.findCardByName('dragon-s-fang');
-            
+
             this.player1.pass();
             this.player2.playAttachment(this.claw, this.yoshi);
         });

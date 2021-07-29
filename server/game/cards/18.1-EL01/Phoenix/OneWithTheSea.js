@@ -9,7 +9,7 @@ const oneWithTheSeaCost = function () {
             return 'oneWithTheSeaCost';
         },
         getCostMessage: function (context) { // eslint-disable-line no-unused-vars
-            if (context.oneWithTheSeaCostPaid) {
+            if(context.oneWithTheSeaCostPaid) {
                 return ['returning the Water Ring'];
             }
             return undefined;
@@ -40,7 +40,7 @@ const oneWithTheSeaCost = function () {
             if(context.costs.oneWithTheSeaCostPaid) {
                 let events = [];
 
-                let returnRingAction = context.game.actions.returnRing({ target: context.game.rings['water'] })
+                let returnRingAction = context.game.actions.returnRing({ target: context.game.rings['water'] });
                 events.push(returnRingAction.getEvent(context.game.rings['water'], context));
                 context.game.addMessage('{0} chooses to return the water ring', context.player);
 

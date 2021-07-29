@@ -15,7 +15,7 @@ class NightshadeInfiltrator extends DrawCard {
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.target,
                     effect: AbilityDsl.effects.modifyBothSkills(-3)
-                })),
+                }))
             },
             effect: 'give {0} -1{1}/-1{2}',
             effectArgs: () => ['military', 'political']

@@ -13,27 +13,27 @@ class MirumotoRei extends DrawCard {
                 cardCondition: (card, context) => card.hasTrait('bushi') && card !== context.source,
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => {
                     const milModifiers = context.target.getEffects(EffectNames.AttachmentMilitarySkillModifier);
-                    const milBonus = milModifiers.reduce((a, b) => a + b, 0)
+                    const milBonus = milModifiers.reduce((a, b) => a + b, 0);
 
                     const polModifiers = context.target.getEffects(EffectNames.AttachmentPoliticalSkillModifier);
-                    const polBonus = polModifiers.reduce((a, b) => a + b, 0)
+                    const polBonus = polModifiers.reduce((a, b) => a + b, 0);
                     return {
                         target: context.source,
                         effect: [
                             AbilityDsl.effects.modifyMilitarySkill(milBonus),
-                            AbilityDsl.effects.modifyPoliticalSkill(polBonus),
+                            AbilityDsl.effects.modifyPoliticalSkill(polBonus)
                         ],
                         duration: Durations.UntilEndOfConflict
                     };
-                }),
+                })
             },
             effect: 'give {1} a skill bonus equal to the total attachment skill bonus on {0} ({2}{3}/{4}{5})',
             effectArgs: context => {
                 const milModifiers = context.target.getEffects(EffectNames.AttachmentMilitarySkillModifier);
-                const milBonus = milModifiers.reduce((a, b) => a + b, 0)
+                const milBonus = milModifiers.reduce((a, b) => a + b, 0);
 
                 const polModifiers = context.target.getEffects(EffectNames.AttachmentPoliticalSkillModifier);
-                const polBonus = polModifiers.reduce((a, b) => a + b, 0)
+                const polBonus = polModifiers.reduce((a, b) => a + b, 0);
 
                 return [
                     context.source,

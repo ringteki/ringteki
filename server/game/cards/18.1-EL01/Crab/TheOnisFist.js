@@ -20,7 +20,8 @@ class TheOnisFist extends DrawCard {
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
-            gameAction: AbilityDsl.actions.addToken()
+            gameAction: AbilityDsl.actions.addToken(),
+            max: AbilityDsl.limit.perRound(1)
         });
 
         this.interrupt({
@@ -31,6 +32,7 @@ class TheOnisFist extends DrawCard {
                     context.source.getTokenCount(TokenTypes.Honor) > 0
             },
             cost: AbilityDsl.costs.removeSelfFromGame(),
+            max: AbilityDsl.limit.perRound(1),
             target: {
                 cardType: CardTypes.Province,
                 player: Players.Opponent,
