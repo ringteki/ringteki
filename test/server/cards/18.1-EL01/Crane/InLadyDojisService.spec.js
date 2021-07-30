@@ -10,7 +10,7 @@ describe('Stinger', function() {
                 },
                 player2: {
                     honor: 10,
-                    inPlay: ['doji-hotaru-2'],
+                    inPlay: ['doji-hotaru-2']
                 }
             });
 

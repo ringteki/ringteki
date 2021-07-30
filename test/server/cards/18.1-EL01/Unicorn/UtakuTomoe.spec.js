@@ -22,7 +22,7 @@ describe('Utaku Tomoe', function() {
         it('should trigger on declaration', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.tomoe],
+                attackers: [this.tomoe]
             });
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.tomoe);
