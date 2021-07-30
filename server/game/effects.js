@@ -111,6 +111,7 @@ const Effects = {
     modifyRestrictedAttachmentAmount: (value) => EffectBuilder.card.flexible(EffectNames.ModifyRestrictedAttachmentAmount, value),
     mustBeChosen: (properties) => EffectBuilder.card.static(EffectNames.MustBeChosen, new Restriction(Object.assign({ type: 'target' }, properties))),
     mustBeDeclaredAsAttacker: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttacker, type),
+    mustBeDeclaredAsAttackerIfType: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttackerIfType, type),
     mustBeDeclaredAsDefender: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsDefender, type),
     refillProvinceTo: (refillAmount) => EffectBuilder.card.flexible(EffectNames.RefillProvinceTo, refillAmount),
     setApparentFate: (value) => EffectBuilder.card.static(EffectNames.SetApparentFate, value),

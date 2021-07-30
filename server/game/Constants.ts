@@ -102,6 +102,7 @@ export enum EffectNames {
     ModifyRestrictedAttachmentAmount = 'modifyRestrictedAttachmentAmount',
     MustBeChosen = 'mustBeChosen',
     MustBeDeclaredAsAttacker = 'mustBeDeclaredAsAttacker',
+    MustBeDeclaredAsAttackerIfType = 'mustBeDeclaredAsAttackerifType',
     MustBeDeclaredAsDefender = 'mustBeDeclaredAsDefender',
     SetApparentFate = 'setApparentFate',
     SetBaseDash = 'setBaseDash',

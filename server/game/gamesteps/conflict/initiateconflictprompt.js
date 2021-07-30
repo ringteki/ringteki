@@ -149,8 +149,6 @@ class InitiateConflictPrompt extends UiPrompt {
             ring.contested = true;
         }
 
-        this.game.checkGameState(true);
-
         _.each(this.conflict.attackers, card => {
             if(!card.canDeclareAsAttacker(ring.conflictType, ring)) {
                 this.removeFromConflict(card);

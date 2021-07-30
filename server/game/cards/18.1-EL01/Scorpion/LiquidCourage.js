@@ -8,10 +8,9 @@ class LiquidCourage extends DrawCard {
         });
 
         this.whileAttached({
-            condition: context => context.game.isDuringConflict('military'),
             effect: [
-                AbilityDsl.effects.mustBeDeclaredAsAttacker(),
-                AbilityDsl.effects.mustBeDeclaredAsDefender()
+                AbilityDsl.effects.mustBeDeclaredAsAttackerIfType('military'),
+                AbilityDsl.effects.mustBeDeclaredAsDefender('military')
             ]
         });
     }
