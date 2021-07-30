@@ -30,7 +30,7 @@ class SpiritofValor extends DrawCard {
                             attachment: context.source
                         }),
                         otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.source })
-                    }))    
+                    }))
                 ])
             }
         });

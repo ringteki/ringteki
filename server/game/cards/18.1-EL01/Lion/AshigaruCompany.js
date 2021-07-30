@@ -1,6 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
 const { Locations, CardTypes } = require('../../../Constants');
-const AbilityDsl = require('../../../abilitydsl');
 
 class AshigaruCompany extends DrawCard {
     setupCardAbilities() {

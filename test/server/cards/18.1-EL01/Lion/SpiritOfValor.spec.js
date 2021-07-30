@@ -6,7 +6,7 @@ describe('Spirit of Valor', function() {
                 player1: {
                     inPlay: ['doomed-shugenja'],
                     hand: ['spirit-of-valor'],
-                    dynastyDiscard: ['brash-samurai', 'doji-whisperer'],
+                    dynastyDiscard: ['brash-samurai', 'doji-whisperer']
                 },
                 player2: {
                     inPlay: [],
@@ -53,12 +53,12 @@ describe('Spirit of Valor', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
-                defenders: [],
+                defenders: []
             });
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.brash);
             expect(this.brash.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');            
+            expect(this.getChatLogs(5)).toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');
         });
 
         it('should not remove attached character from game if attachment leaves play first', function() {
@@ -70,7 +70,7 @@ describe('Spirit of Valor', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
-                defenders: [],
+                defenders: []
             });
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.valor);
@@ -80,7 +80,7 @@ describe('Spirit of Valor', function() {
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.brash);
             expect(this.brash.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).not.toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');            
+            expect(this.getChatLogs(5)).not.toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');
         });
     });
 });

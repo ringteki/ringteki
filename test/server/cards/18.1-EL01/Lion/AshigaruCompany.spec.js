@@ -6,7 +6,7 @@ describe('Ashigaru Company', function() {
                 player1: {
                     inPlay: ['doomed-shugenja'],
                     hand: ['ashigaru-company'],
-                    conflictDiscard: ['ashigaru-company', 'ayubune-pilot', 'banzai', 'assassination', 'charge', 'against-the-waves', 'let-go'],
+                    conflictDiscard: ['ashigaru-company', 'ayubune-pilot', 'banzai', 'assassination', 'charge', 'against-the-waves', 'let-go']
                 },
                 player2: {
                     inPlay: []

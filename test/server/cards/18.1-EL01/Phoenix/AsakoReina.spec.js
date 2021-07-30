@@ -43,7 +43,7 @@ describe('Asako Reina', function () {
             this.player1.clickCard(this.asakoReina);
             expect(this.player1).toBeAbleToSelect(this.asakoReina);
             this.player1.clickCard(this.asakoReina);
-            expect(this.asakoReina.isHonored).toBe(true)
+            expect(this.asakoReina.isHonored).toBe(true);
         });
 
         it('when the water ring is claimed', function () {
@@ -52,7 +52,7 @@ describe('Asako Reina', function () {
             this.player1.clickCard(this.asakoReina);
             expect(this.player1).toBeAbleToSelect(this.seeker);
             this.player1.clickCard(this.seeker);
-            expect(this.seeker.bowed).toBe(false)
+            expect(this.seeker.bowed).toBe(false);
         });
 
         it('when the water ring is claimed but not for a 3 coster or above', function () {
@@ -62,8 +62,8 @@ describe('Asako Reina', function () {
             expect(this.player1).not.toBeAbleToSelect(this.asakoReina);
             this.player1.clickCard(this.asakoReina);
             this.player1.clickCard(this.seeker);
-            expect(this.asakoReina.bowed).toBe(true)
-            expect(this.seeker.bowed).toBe(false)
+            expect(this.asakoReina.bowed).toBe(true);
+            expect(this.seeker.bowed).toBe(false);
         });
 
         it('when the void ring is claimed', function () {

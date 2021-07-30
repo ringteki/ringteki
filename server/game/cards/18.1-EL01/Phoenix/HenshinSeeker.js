@@ -24,7 +24,7 @@ class HenshinSeeker extends DrawCard {
     }
 
     isCopyInDiscard = function(card, context) {
-        return context.player.conflictDiscardPile.any(c => c.name === card.name)
+        return context.player.conflictDiscardPile.any(c => c.name === card.name);
     };
 
     getPrintedElementSymbols() {
