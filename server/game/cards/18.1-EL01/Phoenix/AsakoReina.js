@@ -1,7 +1,6 @@
-const DrawCard = require('../../drawcard.js');
-const { Players, CardTypes, Elements } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
-const { IfAbleAction } = require('../../GameActions/IfAbleAction.js');
+const DrawCard = require('../../../drawcard.js');
+const { CardTypes, Elements } = require('../../../Constants');
+const AbilityDsl = require('../../../abilitydsl.js');
 const elementKeys = {
     air: 'asako-reina-air',
     earth: 'asako-reina-earth',
@@ -15,54 +14,76 @@ class AsakoReina extends DrawCard {
         this.action({
             title: 'Gain boons based based on your currently claimed rings',
             gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.gainHonor(
-                    context =>
-                    ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.draw(
-                    context => ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.earth)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.gainFate(
-                    context => ({
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.void)].isConsideredClaimed(context.player),
-                        amount: 1
-                    })
-                ),
-                AbilityDsl.actions.selectCard(
-                    context => ({
+                AbilityDsl.actions.gainHonor(context => ({
+                    target: context.player,
+                    amount: context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player) ? 1 : 0
+                })),
+                AbilityDsl.actions.draw(context => ({
+                    target: context.player,
+                    amount: context.game.rings[this.getCurrentElementSymbol(elementKeys.earth)].isConsideredClaimed(context.player) ? 1 : 0
+                })),
+                AbilityDsl.actions.gainFate(context => ({
+                    target: context.player,
+                    amount: context.game.rings[this.getCurrentElementSymbol(elementKeys.void)].isConsideredClaimed(context.player) ? 1 : 0
+                })),
+                AbilityDsl.actions.conditional({
+                    condition: context => context.game.rings[this.getCurrentElementSymbol(elementKeys.water)].isConsideredClaimed(context.player),
+                    trueGameAction: AbilityDsl.actions.selectCard(context => ({
                         activePromptTitle: 'Choose a 2 cost or lower character to ready',
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.water)].isConsideredClaimed(context.player),
-                        cardCondition: card => card.costLessThan(3),
+                        cardCondition: card =>  card.costLessThan(3),
                         cardType: CardTypes.Character,
-                        optional: false,
                         gameAction: AbilityDsl.actions.ready(),
                         targets: false,
                         message: '{0} chooses to ready {1} with {2}\'s effect',
                         messageArgs: (card, player) => [player, card, context.source]
-                    })
-                ),
-                AbilityDsl.actions.selectCard(
-                    context => ({
+                    })),
+                    falseGameAction: AbilityDsl.actions.draw(() => ({ amount: 0 }))
+                }),
+                AbilityDsl.actions.conditional({
+                    condition: context => context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player),
+                    trueGameAction: AbilityDsl.actions.selectCard(context => ({
                         activePromptTitle: 'Choose a character to honor',
-                        condition: context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player),
                         cardType: CardTypes.Character,
-                        optional: false,
                         gameAction: AbilityDsl.actions.honor(),
                         targets: false,
                         message: '{0} chooses to honor {1} with {2}\'s effect',
                         messageArgs: (card, player) => [player, card, context.source]
-                    })
-                ),
-
-            ])
+                    })),
+                    falseGameAction: AbilityDsl.actions.draw(() => ({ amount: 0 }))
+                })
+            ]),
+            effect: '{1}',
+            effectArgs: context => [this.createEffectMessage(context)]
         });
     }
+
+    createEffectMessage(context) {
+        const strings = [];
+        if(context.game.rings[this.getCurrentElementSymbol(elementKeys.air)].isConsideredClaimed(context.player)) {
+            strings.push('gain 1 honor');
+        }
+        if(context.game.rings[this.getCurrentElementSymbol(elementKeys.earth)].isConsideredClaimed(context.player)) {
+            strings.push('draw 1 card');
+        }
+        if(context.game.rings[this.getCurrentElementSymbol(elementKeys.void)].isConsideredClaimed(context.player)) {
+            strings.push('gain 1 fate');
+        }
+        if(context.game.rings[this.getCurrentElementSymbol(elementKeys.fire)].isConsideredClaimed(context.player)) {
+            strings.push('honor a character');
+        }
+        if(context.game.rings[this.getCurrentElementSymbol(elementKeys.water)].isConsideredClaimed(context.player)) {
+            strings.push('ready a character');
+        }
+
+        if (strings.length <= 1) {
+            return strings.join('');
+        }
+        const range = strings.splice(0, strings.length - 1);
+        const last = strings[strings.length - 1];
+
+        return `${range.join(', ')} and ${last}`;
+    }
+
     getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
