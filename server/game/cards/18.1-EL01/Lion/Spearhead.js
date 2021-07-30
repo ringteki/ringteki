@@ -17,7 +17,8 @@ class Spearhead extends DrawCard {
                 controller: Players.Opponent,
                 cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.bow()
-            }
+            },
+            cannotTargetFirst: true
         });
     }
 }
