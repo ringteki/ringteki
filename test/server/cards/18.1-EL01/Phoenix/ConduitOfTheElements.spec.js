@@ -1,4 +1,4 @@
-describe('One With the Sea', function() {
+describe('Conduit of the Elements', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

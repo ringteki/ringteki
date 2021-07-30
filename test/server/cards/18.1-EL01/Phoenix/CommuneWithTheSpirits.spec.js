@@ -1,4 +1,4 @@
-describe('One With the Sea', function() {
+describe('Commune With the Spirits', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
