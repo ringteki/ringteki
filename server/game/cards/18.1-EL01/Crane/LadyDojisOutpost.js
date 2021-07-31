@@ -1,5 +1,5 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const { CardTypes, Players } = require('../../../Constants');
+const { CardTypes, Players, CharacterStatus } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class LadyDojisOutpost extends StrongholdCard {
@@ -14,7 +14,10 @@ class LadyDojisOutpost extends StrongholdCard {
             title: 'Honor a character',
             cost: AbilityDsl.costs.bowSelf(),
             when: {
-                onCardHonored: (event, context) => event.card.controller === context.player && event.card !== context.source
+                onStatusTokenGained: (event, context) => {
+                    const token = context.event.token.grantedStatus || context.event.token;
+                    return event.card.controller === context.player && event.card !== context.source && token === CharacterStatus.Honored
+                }
             },
             target: {
                 cardType: CardTypes.Character,

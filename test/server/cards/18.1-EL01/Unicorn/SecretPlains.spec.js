@@ -151,7 +151,7 @@ describe('Secret Plains', function() {
             expect(this.player1).toBeAbleToSelect(this.vassalFields);
             this.player1.clickCard(this.vassalFields);
             expect(this.player2.fate).toBe(p2fate - 2);
-            expect(this.getChatLogs(5)).toContain('player1 uses Secret Plains to resolve Vassal Fields\'s Make opponent lose 1 fate ability');
+            expect(this.getChatLogs(5)).toContain('player1 uses Secret Plains, bowing Secret Plains to resolve Vassal Fields\'s Make opponent lose 1 fate ability');
         });
 
         it('Riot in the Streets (province has a triggering condition)', function() {

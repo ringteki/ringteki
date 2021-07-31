@@ -47,6 +47,15 @@ describe('Lady Dojis Outpost', function() {
             expect(this.savvy.isHonored).toBe(true);
         });
 
+        it('should not react when a character is made neutral', function() {
+            this.challenger.dishonor();
+            this.player1.clickCard(this.resourcefulness);
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.kuwanan);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.challenger.isHonored).toBe(false);
+        });
+
         it('should give honored Courtiers you control +1 glory', function() {
             expect(this.challenger.getGlory()).toBe(2);
             expect(this.yoshi.getGlory()).toBe(3);

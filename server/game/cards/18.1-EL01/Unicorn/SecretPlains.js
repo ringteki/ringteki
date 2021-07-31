@@ -7,6 +7,7 @@ class SecretPlains extends StrongholdCard {
         this.action({
             title: 'Resolve the ability on a province',
             condition: context => context.game.isDuringConflict(),
+            cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,

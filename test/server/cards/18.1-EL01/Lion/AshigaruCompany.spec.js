@@ -46,7 +46,7 @@ describe('Ashigaru Company', function() {
             this.player1.clickCard(this.company1);
             this.player1.clickCard(this.doomed);
             this.player1.clickCard(this.company1);
-            expect(this.player1).toHavePrompt('Choose a card to put in your hand');
+            expect(this.player1).toHavePrompt('Choose an attachment');
             expect(this.player1).toHavePromptButton('Ashigaru Company');
             expect(this.player1).toHavePromptButton('Ayubune Pilot');
             expect(this.player1).toHaveDisabledPromptButton('Banzai!');
@@ -54,27 +54,31 @@ describe('Ashigaru Company', function() {
             expect(this.player1).toHaveDisabledPromptButton('Assassination');
         });
 
-        it('should add the chosen card to your hand and put the rest on the bottom', function() {
+        it('should prompt you to attach the chosen card to a character you control and put the rest on the bottom of the deck', function() {
             this.player1.clickCard(this.company1);
             this.player1.clickCard(this.doomed);
             this.player1.clickCard(this.company1);
-            this.player1.clickPrompt('Ashigaru Company');
-            expect(this.company2.location).toBe('hand');
+            this.player1.clickPrompt('Ayubune Pilot');
+            
+            expect(this.player1).toBeAbleToSelect(this.doomed);
+            this.player1.clickCard(this.doomed);
+            expect(this.pilot.location).toBe('play area');
+            expect(this.pilot.parent).toBe(this.doomed);
 
             const deck = this.player1.conflictDeck;
             const L = this.player1.conflictDeck.length;
             const banzaiBottom = deck[L - 4] === this.banzai || deck[L - 3] === this.banzai || deck[L - 2] === this.banzai || deck[L - 1] === this.banzai;
             const chargeBottom = deck[L - 4] === this.charge || deck[L - 3] === this.charge || deck[L - 2] === this.charge || deck[L - 1] === this.charge;
             const assassinationBottom = deck[L - 4] === this.assassination || deck[L - 3] === this.assassination || deck[L - 2] === this.assassination || deck[L - 1] === this.assassination;
-            const pilotBottom = deck[L - 4] === this.pilot || deck[L - 3] === this.pilot || deck[L - 2] === this.pilot || deck[L - 1] === this.pilot;
+            const ashigaruBottom = deck[L - 4] === this.company2 || deck[L - 3] === this.company2 || deck[L - 2] === this.company2 || deck[L - 1] === this.company2;
 
             expect(banzaiBottom).toBe(true);
             expect(chargeBottom).toBe(true);
             expect(assassinationBottom).toBe(true);
-            expect(pilotBottom).toBe(true);
+            expect(ashigaruBottom).toBe(true);
 
             expect(this.getChatLogs(5)).toContain('player1 uses Ashigaru Company to look at the top five cards of their deck');
-            expect(this.getChatLogs(5)).toContain('player1 takes Ashigaru Company');
+            expect(this.getChatLogs(5)).toContain('player1 chooses to attach Ayubune Pilot to Doomed Shugenja');
             expect(this.getChatLogs(5)).toContain('player1 puts 4 cards on the bottom of their conflict deck');
         });
     });
