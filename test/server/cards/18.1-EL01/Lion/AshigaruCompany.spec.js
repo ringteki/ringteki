@@ -59,7 +59,7 @@ describe('Ashigaru Company', function() {
             this.player1.clickCard(this.doomed);
             this.player1.clickCard(this.company1);
             this.player1.clickPrompt('Ayubune Pilot');
-            
+
             expect(this.player1).toBeAbleToSelect(this.doomed);
             this.player1.clickCard(this.doomed);
             expect(this.pilot.location).toBe('play area');

@@ -41,7 +41,7 @@ class AshigaruCompany extends DrawCard {
                             }
                         })
                     ]
-                })
+                });
             })
         });
     }

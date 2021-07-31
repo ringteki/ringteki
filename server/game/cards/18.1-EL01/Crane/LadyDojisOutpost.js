@@ -16,7 +16,7 @@ class LadyDojisOutpost extends StrongholdCard {
             when: {
                 onStatusTokenGained: (event, context) => {
                     const token = context.event.token.grantedStatus || context.event.token;
-                    return event.card.controller === context.player && event.card !== context.source && token === CharacterStatus.Honored
+                    return event.card.controller === context.player && event.card !== context.source && token === CharacterStatus.Honored;
                 }
             },
             target: {
