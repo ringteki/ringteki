@@ -1,21 +1,26 @@
 const DrawCard = require('../../../drawcard.js');
-const { TargetModes, CardTypes, Locations } = require('../../../Constants');
+const { TargetModes, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class HeraldOfJade extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Discard a status token off a character',
+            title: 'Discard a status token',
             when: {
                 onCharacterEntersPlay: (event, context) => event.card === context.source
             },
             target: {
                 mode: TargetModes.Token,
-                cardType: CardTypes.Character,
-                location: Locations.PlayArea,
-                gameAction: AbilityDsl.actions.discardStatusToken()
+                location: Locations.Any,
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.discardStatusToken(),
+                    AbilityDsl.actions.gainHonor(context => ({
+                        target: context.player,
+                        amount: 1
+                    }))
+                ])
             },
-            effect: 'discard {1}\'s {2}',
+            effect: 'discard {1}\'s {2} and gain 1 honor',
             effectArgs: context => [
                 context.token[0].card,
                 context.token

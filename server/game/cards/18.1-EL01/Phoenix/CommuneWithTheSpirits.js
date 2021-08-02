@@ -16,8 +16,7 @@ class CommuneWithTheSpirits extends DrawCard {
                         amount: context.ring.fate,
                         removeOnly: true
                     })),
-                    AbilityDsl.actions.claimRing({ takeFate: false, type: 'political'}),
-                    AbilityDsl.actions.resolveRingEffect(context => ({ player: context.player }))
+                    AbilityDsl.actions.claimRing({ takeFate: false, type: 'political'})
                 ])
             },
             max: AbilityDsl.limit.perRound(1),

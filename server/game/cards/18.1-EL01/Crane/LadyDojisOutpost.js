@@ -7,7 +7,7 @@ class LadyDojisOutpost extends StrongholdCard {
         this.persistentEffect({
             match: card => card.hasTrait('courtier') && card.isHonored,
             targetController: Players.Self,
-            effect: AbilityDsl.effects.modifyGlory(1)
+            effect: AbilityDsl.effects.modifyPoliticalSkill(1)
         });
 
         this.reaction({

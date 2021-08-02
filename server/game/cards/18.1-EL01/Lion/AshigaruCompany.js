@@ -1,6 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { Locations, CardTypes, Players } = require('../../../Constants');
-const AbilityDsl = require('../../../abilitydsl.js');
+const { Locations, CardTypes } = require('../../../Constants');
 
 class AshigaruCompany extends DrawCard {
     setupCardAbilities() {
@@ -10,39 +9,30 @@ class AshigaruCompany extends DrawCard {
                 onCardAttached: (event, context) => event.card === context.source && event.originalLocation !== Locations.PlayArea
             },
             effect: 'look at the top five cards of their deck',
-            gameAction: AbilityDsl.actions.sequentialContext(context => {
-                const topCards = context.player.conflictDeck.first(5);
-                return ({
-                    gameActions: [
-                        AbilityDsl.actions.cardMenu(context => ({
-                            activePromptTitle: 'Choose an attachment',
-                            cards: topCards,
-                            cardCondition: card => card.type === CardTypes.Attachment,
-                            choices: ['Take nothing'],
-                            handlers: [() => {
-                                this.game.addMessage('{0} takes nothing', context.player);
-                                return true;
-                            }],
-                            subActionProperties: card => ({ attachment: card }),
-                            gameAction: AbilityDsl.actions.selectCard({
-                                controller: Players.Self,
-                                location: Locations.PlayArea,
-                                cardType: CardTypes.Character,
-                                message: '{0} chooses to attach {1} to {2}',
-                                // @ts-ignore
-                                messageArgs: (card, action, properties) => [context.player, properties.attachment, card],
-                                gameAction: AbilityDsl.actions.attach()
-                            })
-                        })),
-                        AbilityDsl.actions.handler({
-                            handler: context => {
-                                const cardsToMove = topCards.filter(a => a.location !== Locations.ConflictDeck);
-                                this.putCardsOnBottom(cardsToMove, context);
-                            }
-                        })
-                    ]
+            handler: context => {
+                if(context.player.conflictDeck.size() === 0) {
+                    return;
+                }
+                const cards = context.player.conflictDeck.first(5);
+                this.game.promptWithHandlerMenu(context.player, {
+                    activePromptTitle: 'Choose a card to put in your hand',
+                    context: context,
+                    cards: context.player.conflictDeck.first(5),
+                    cardCondition: card => card.hasTrait('follower') && card.type === CardTypes.Attachment,
+                    cardHandler: card => {
+                        this.game.addMessage('{0} takes {1}', context.player, card);
+                        context.player.moveCard(card, Locations.Hand);
+                        const cardsToMove = cards.filter(a => a !== card);
+                        if(cardsToMove.length > 0) {
+                            this.shuffleArray(cardsToMove);
+                            cardsToMove.forEach(c => {
+                                context.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
+                            });
+                            context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', context.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
+                        }
+                    }
                 });
-            })
+            }
         });
     }
 

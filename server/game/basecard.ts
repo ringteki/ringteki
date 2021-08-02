@@ -638,7 +638,7 @@ class BaseCard extends EffectSource {
         var potentialKeywords = [];
         _.each(lines, line => {
             line = line.slice(0, -1);
-            _.each(line.split('. '), k => potentialKeywords.push(k));
+            _.each(line.split('.'), k => potentialKeywords.push(k.trim()));
         });
 
         this.printedKeywords = [];

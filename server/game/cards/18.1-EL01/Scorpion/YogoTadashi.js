@@ -25,7 +25,7 @@ class YogoTadashi extends DrawCard {
                 ])
             },
             gameAction: AbilityDsl.actions.draw(),
-            limit: AbilityDsl.limit.perRound(2),
+            limit: AbilityDsl.limit.unlimitedPerConflict(),
             effect: 'give {0} -1{1}/-1{2} and {3} +1{1}/+1{2}',
             effectArgs: context => ['military', 'political', context.source]
         });

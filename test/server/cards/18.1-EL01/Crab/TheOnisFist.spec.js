@@ -48,6 +48,7 @@ describe('The Oni\'s Fist', function() {
         it('should give itself an honor token at the start of the conflict phase', function() {
             expect(this.fist.getTokenCount('honor')).toBe(0);
             this.advancePhases('conflict');
+            this.player1.clickCard(this.fist);
             expect(this.fist.getTokenCount('honor')).toBe(1);
             expect(this.getChatLogs(5)).toContain('player1 uses The Oni\'s Fist to add a honor token to The Oni\'s Fist');
         });
@@ -56,12 +57,14 @@ describe('The Oni\'s Fist', function() {
             this.sd.isBroken = true;
             expect(this.fist.getTokenCount('honor')).toBe(0);
             this.advancePhases('conflict');
+            this.player1.clickCard(this.fist);
             expect(this.fist.getTokenCount('honor')).toBe(1);
         });
 
         it('should trigger at the end of the conflict phase and ask your opponent to break a province', function() {
             this.nerishma.bowed = true;
             this.advancePhases('conflict');
+            this.player1.clickCard(this.fist);
             this.noMoreActions();
             this.noMoreActions();
             this.noMoreActions();
@@ -87,6 +90,7 @@ describe('The Oni\'s Fist', function() {
         it('should not trigger at the end of the conflict phase on a broken province', function() {
             this.nerishma.bowed = true;
             this.advancePhases('conflict');
+            this.player1.clickCard(this.fist);
             this.sd.isBroken = true;
             this.noMoreActions();
             this.noMoreActions();

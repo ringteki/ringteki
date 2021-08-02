@@ -27,7 +27,7 @@ describe('Daidoji Ienori', function() {
             });
         });
 
-        it('should react to a duel initiating', function() {
+        it('should set to 3/3', function() {
             this.player2.clickCard(this.ienori);
             expect(this.player2).toBeAbleToSelect(this.chagatai);
             expect(this.player2).toBeAbleToSelect(this.ienori);
@@ -38,13 +38,13 @@ describe('Daidoji Ienori', function() {
             expect(this.player2).toBeAbleToSelect(this.yoshi);
 
             this.player2.clickCard(this.yoshi);
-            expect(this.chagatai.getMilitarySkill()).toBe(1);
-            expect(this.chagatai.getPoliticalSkill()).toBe(1);
+            expect(this.chagatai.getMilitarySkill()).toBe(3);
+            expect(this.chagatai.getPoliticalSkill()).toBe(3);
 
             expect(this.yoshi.getMilitarySkill()).toBe(2);
             expect(this.yoshi.getPoliticalSkill()).toBe(6);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ienori, discarding a status token to set the skills of Moto Chagatai to 1military/1political');
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ienori, discarding a status token to set the skills of Moto Chagatai to 3military/3political');
         });
     });
 });

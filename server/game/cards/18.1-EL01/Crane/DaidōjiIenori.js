@@ -16,12 +16,12 @@ class DaidojiIenori extends DrawCard {
                 cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.cardLastingEffect({
                     effect: [
-                        AbilityDsl.effects.setMilitarySkill(1),
-                        AbilityDsl.effects.setPoliticalSkill(1)
+                        AbilityDsl.effects.setMilitarySkill(3),
+                        AbilityDsl.effects.setPoliticalSkill(3)
                     ]
                 })
             },
-            effect: 'set the skills of {0} to 1{1}/1{2}',
+            effect: 'set the skills of {0} to 3{1}/3{2}',
             effectArgs: () => ['military', 'political']
         });
     }

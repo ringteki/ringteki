@@ -46,7 +46,7 @@ describe('Ashigaru Company', function() {
             this.player1.clickCard(this.company1);
             this.player1.clickCard(this.doomed);
             this.player1.clickCard(this.company1);
-            expect(this.player1).toHavePrompt('Choose an attachment');
+            expect(this.player1).toHavePrompt('Choose a card to put in your hand');
             expect(this.player1).toHavePromptButton('Ashigaru Company');
             expect(this.player1).toHavePromptButton('Ayubune Pilot');
             expect(this.player1).toHaveDisabledPromptButton('Banzai!');
@@ -59,11 +59,7 @@ describe('Ashigaru Company', function() {
             this.player1.clickCard(this.doomed);
             this.player1.clickCard(this.company1);
             this.player1.clickPrompt('Ayubune Pilot');
-
-            expect(this.player1).toBeAbleToSelect(this.doomed);
-            this.player1.clickCard(this.doomed);
-            expect(this.pilot.location).toBe('play area');
-            expect(this.pilot.parent).toBe(this.doomed);
+            expect(this.pilot.location).toBe('hand');
 
             const deck = this.player1.conflictDeck;
             const L = this.player1.conflictDeck.length;
@@ -78,7 +74,7 @@ describe('Ashigaru Company', function() {
             expect(ashigaruBottom).toBe(true);
 
             expect(this.getChatLogs(5)).toContain('player1 uses Ashigaru Company to look at the top five cards of their deck');
-            expect(this.getChatLogs(5)).toContain('player1 chooses to attach Ayubune Pilot to Doomed Shugenja');
+            expect(this.getChatLogs(5)).toContain('player1 takes Ayubune Pilot');
             expect(this.getChatLogs(5)).toContain('player1 puts 4 cards on the bottom of their conflict deck');
         });
     });

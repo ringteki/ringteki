@@ -37,15 +37,11 @@ describe('Commune With the Spirits', function() {
             expect(this.player1.fate).toBe(fate - 2);
         });
 
-        it('should resolve the ring effect', function() {
-            let honor = this.player1.honor;
+        it('should not resolve the ring effect', function() {
             this.player1.clickCard(this.spirits);
             this.player1.clickRing('air');
-            expect(this.player1).toHavePrompt('Air Ring');
-            this.player1.clickPrompt('Gain 2 Honor');
-            expect(this.player1.honor).toBe(honor + 2);
+            expect(this.player1).not.toHavePrompt('Air Ring');
             expect(this.getChatLogs(5)).toContain('player1 plays Commune with the Spirits to discard all fate from the Air Ring and claim it as a political ring');
-            expect(this.getChatLogs(5)).toContain('player1 resolves the air ring, gaining 2 honor');
         });
     });
 });

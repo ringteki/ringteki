@@ -56,10 +56,10 @@ describe('Lady Dojis Outpost', function() {
             expect(this.challenger.isHonored).toBe(false);
         });
 
-        it('should give honored Courtiers you control +1 glory', function() {
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(3);
-            expect(this.savvy.getGlory()).toBe(1);
+        it('should give honored Courtiers you control +1 political', function() {
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
+            expect(this.yoshi.getPoliticalSkill()).toBe(6);
+            expect(this.savvy.getPoliticalSkill()).toBe(2);
 
             this.challenger.honor();
             this.yoshi.honor();
@@ -67,14 +67,15 @@ describe('Lady Dojis Outpost', function() {
 
             this.game.checkGameState(true);
 
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(4);
-            expect(this.savvy.getGlory()).toBe(1);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
+            expect(this.yoshi.getPoliticalSkill()).toBe(10);
+            expect(this.yoshi.getMilitarySkill()).toBe(5);
+            expect(this.savvy.getPoliticalSkill()).toBe(3);
 
             this.yoshi.dishonor();
             this.yoshi.dishonor();
             this.game.checkGameState(true);
-            expect(this.yoshi.getGlory()).toBe(3);
+            expect(this.yoshi.getPoliticalSkill()).toBe(3);
         });
     });
 });

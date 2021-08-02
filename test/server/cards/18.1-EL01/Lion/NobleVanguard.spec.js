@@ -5,13 +5,15 @@ describe('Noble Vanguard', function() {
                 phase: 'dynasty',
                 player1: {
                     inPlay: ['shosuro-botanist', 'daidoji-uji'],
-                    dynastyDiscard: ['noble-vanguard']
+                    dynastyDiscard: ['noble-vanguard'],
+                    hand: ['fine-katana']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan']
                 }
             });
 
+            this.katana = this.player1.findCardByName('fine-katana');
             this.vanguard = this.player1.findCardByName('noble-vanguard');
             this.botanist = this.player1.findCardByName('shosuro-botanist');
             this.uji = this.player1.findCardByName('daidoji-uji');
@@ -19,31 +21,21 @@ describe('Noble Vanguard', function() {
             this.player1.placeCardInProvince(this.vanguard, 'province 1');
         });
 
-        it('should react on being played from province and put a fate on a bushi', function() {
+        it('should put the top card of your deck into a +1/+1 attachment', function() {
+            this.player1.moveCard(this.katana, 'conflict deck');
+
             this.player1.clickCard(this.vanguard);
             this.player1.clickPrompt('1');
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.vanguard);
             this.player1.clickCard(this.vanguard);
-
-            expect(this.player1).not.toBeAbleToSelect(this.botanist);
-            expect(this.player1).toBeAbleToSelect(this.uji);
-            expect(this.player1).toBeAbleToSelect(this.kuwanan);
-            expect(this.uji.fate).toBe(0);
             this.player1.clickCard(this.uji);
-            expect(this.uji.fate).toBe(1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Noble Vanguard to place 1 fate on Daidoji Uji');
-        });
 
-        it('should not react on being played from "hand"', function() {
-            this.uji.honor();
-            this.noMoreActions();
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
-            this.player1.clickCard(this.vanguard);
-            this.player1.clickPrompt('1');
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.vanguard.location).toBe('play area');
+            expect(this.katana.location).toBe('removed from game');
+            expect(this.uji.attachments.size()).toBe(1);
+            expect(this.uji.getMilitarySkill()).toBe(7);
+            expect(this.uji.getPoliticalSkill()).toBe(3);
+            expect(this.getChatLogs(5)).toContain('player1 uses Noble Vanguard to attach the top card of their conflict deck to Daidoji Uji as a +1/+1 attachment');
         });
     });
 });

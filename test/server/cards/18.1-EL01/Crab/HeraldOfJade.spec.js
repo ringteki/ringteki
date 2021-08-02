@@ -30,7 +30,7 @@ describe('Herald of Jade', function() {
             expect(this.player1).toBeAbleToSelect(this.herald);
         });
 
-        it('should let you choose a character with a status token', function() {
+        it('should let you choose a card with a status token', function() {
             this.player1.clickCard(this.herald);
             this.player1.clickPrompt('0');
             this.player1.clickCard(this.herald);
@@ -38,17 +38,19 @@ describe('Herald of Jade', function() {
             expect(this.player1).not.toBeAbleToSelect(this.initiate);
             expect(this.player1).toBeAbleToSelect(this.toturi);
             expect(this.player1).not.toBeAbleToSelect(this.whisperer);
-            expect(this.player1).not.toBeAbleToSelect(this.sd1);
+            expect(this.player1).toBeAbleToSelect(this.sd1);
         });
 
-        it('should discard the chosen token', function() {
+        it('should discard the chosen token and give you 1 honor', function() {
+            let honor = this.player1.honor;
             this.player1.clickCard(this.herald);
             this.player1.clickPrompt('0');
             this.player1.clickCard(this.herald);
             expect(this.toturi.isTainted).toBe(true);
             this.player1.clickCard(this.toturi);
             expect(this.toturi.isTainted).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 uses Herald of Jade to discard Akodo Toturi\'s Tainted Token');
+            expect(this.player1.honor).toBe(honor + 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses Herald of Jade to discard Akodo Toturi\'s Tainted Token and gain 1 honor');
         });
     });
 });

@@ -44,30 +44,23 @@ describe('Spearhead', function() {
             expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
         });
 
-        it('should prompt you to select a card from your hand', function() {
-            this.player1.clickCard(this.landing);
-            this.player1.clickCard(this.challenger);
-            expect(this.player1).toHavePrompt('Choose a card to turn into an attachment');
-            expect(this.player1).toBeAbleToSelect(this.crane);
-            expect(this.player1).toBeAbleToSelect(this.katana);
-            expect(this.player1).toBeAbleToSelect(this.welcome);
-        });
+        it('should put the top card of your deck into a +1/+1 attachment', function() {
+            this.player1.moveCard(this.katana, 'conflict deck');
 
-        it('should turn it into a +1/+1 attachment', function() {
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
-            this.player1.clickCard(this.katana);
 
             expect(this.katana.location).toBe('removed from game');
             expect(this.challenger.attachments.size()).toBe(1);
             expect(this.challenger.getMilitarySkill()).toBe(4);
             expect(this.challenger.getPoliticalSkill()).toBe(4);
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
         });
 
         it('if let go should turn back into the original card', function() {
+            this.player1.moveCard(this.crane, 'conflict deck');
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
-            this.player1.clickCard(this.crane);
 
             const attachment = this.challenger.attachments.first();
 

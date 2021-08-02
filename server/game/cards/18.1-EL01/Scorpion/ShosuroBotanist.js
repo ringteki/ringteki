@@ -9,6 +9,7 @@ class ShosuroBotanist extends DrawCard {
             target: {
                 cardType: CardTypes.Attachment,
                 controller: Players.Self,
+                cardCondition: card => !card.hasTrait('weapon'),
                 gameAction: AbilityDsl.actions.returnToHand()
             },
             effect: 'return {0} to {1}\'s hand',

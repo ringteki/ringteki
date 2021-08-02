@@ -7,10 +7,13 @@ class RamshackleFacade extends DrawCard {
         this.action({
             title: 'Bow a character',
             condition: context => context.game.isDuringConflict(),
+            cost: AbilityDsl.costs.sacrifice({
+                cardType: CardTypes.Holding
+            }),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                cardCondition: (card, context) => card.isParticipating() && card.getMilitarySkill() <= context.player.getNumberOfHoldingsInPlay(),
+                cardCondition: card => card.isAttacking() && card.costLessThan(4),
                 gameAction: AbilityDsl.actions.bow()
             }
         });

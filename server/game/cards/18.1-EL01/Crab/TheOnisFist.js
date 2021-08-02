@@ -15,7 +15,7 @@ class TheOnisFist extends DrawCard {
             })
         });
 
-        this.forcedReaction({
+        this.reaction({
             title: 'Place an honor token',
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
