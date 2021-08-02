@@ -1,4 +1,4 @@
-describe('Daidoji Ienori', function() {
+describe('Yogo Tadashi', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -39,7 +39,7 @@ describe('Daidoji Ienori', function() {
             expect(this.player2).toBeAbleToSelect(this.tadashi);
         });
 
-        it('should give a chosen character -1/-1, give itself +1/+1 twice per turn', function() {
+        it('should give a chosen character -1/-1, give itself +1/+1 unlimited times', function() {
             let cMil = this.chagatai.getMilitarySkill();
             let cPol = this.chagatai.getPoliticalSkill();
 
@@ -72,8 +72,7 @@ describe('Daidoji Ienori', function() {
 
             this.player1.pass();
             this.player2.playAttachment(this.softskin, this.chagatai);
-            expect(this.player2).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
         });
     });
 });

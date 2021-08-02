@@ -1,4 +1,4 @@
-describe('Spearhead', function() {
+describe('Akodos Landing', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
