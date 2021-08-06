@@ -5,29 +5,51 @@ const { CardTypes, Players, Locations } = require('../../../Constants');
 class LayOfTheLand extends DrawCard {
     setupCardAbilities() {
         this.action({
-            condition: context => !context.game.isDuringConflict(),
-            title: 'Reveal/Flip Facedown two provinces',
+            // condition: context => !context.game.isDuringConflict(),
+            title: 'Reveal a province and discard status tokens',
             target: {
-                activePromptTitle: 'Choose a faceup province',
+                activePromptTitle: 'Choose an unbroken province',
                 cardType: CardTypes.Province,
                 controller: Players.Any,
                 location: Locations.Provinces,
-                cardCondition: card => !card.isBroken && !card.isFacedown(),
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.turnFacedown(),
-                    AbilityDsl.actions.selectCard(context => ({
-                        activePromptTitle: 'Choose a province to reveal',
-                        controller: Players.Any,
-                        cardType: CardTypes.Province,
-                        location: Locations.Provinces,
-                        cardCondition: (card, context) => card !== context.target && card.controller === context.target.controller,
-                        message: '{0} uses {2} to reveal {1}',
-                        messageArgs: card => [context.player, card, context.source],
-                        gameAction: AbilityDsl.actions.reveal()
-                    }))
-                ])
-            }
+                cardCondition: card => !card.isBroken,
+                gameAction: AbilityDsl.actions.multipleContext(context => {
+                    const promptActions = this.getStatusTokenPrompts(context);
+                    return ({
+                        gameActions: [
+                            AbilityDsl.actions.reveal(context => ({ target: context.target })),
+                            ...promptActions
+                        ]
+                    });
+                })
+            },
+            effect: 'reveal and disard any number of status tokens from {0}'
         });
+    }
+
+    getStatusTokenPrompts(context) {
+        const tokens = context.target.statusTokens;
+        let prompts = [];
+        tokens.forEach(token => {
+            prompts.push(
+                AbilityDsl.actions.menuPrompt(context => ({
+                    activePromptTitle: `Do you wish to discard ${token.name}?`,
+                    choices: ['Yes', 'No'],
+                    optional: true,
+                    choiceHandler: (choice, displayMessage) => {
+                        if(displayMessage && choice === 'Yes') {
+                            this.game.addMessage('{0} chooses to discard {1} from {2}', context.player, token, context.target);
+                        }
+
+                        return { target: (choice === 'Yes' ? token : []) };
+                    },
+                    player: Players.Self,
+                    gameAction: AbilityDsl.actions.discardStatusToken()
+                }))
+            );
+        });
+
+        return prompts;
     }
 }
 

@@ -26,10 +26,10 @@ describe('One With the Sea', function() {
             this.noMoreActions();
 
             this.player1.clickCard(this.shrine);
-            this.player1.clickRing('water');
+            this.player1.clickRing('fire');
         });
 
-        it('should not prompt you to return a ring you can\'t return', function() {
+        it('should not prompt you to spend a fate if you don\'t have the water ring', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
@@ -47,7 +47,7 @@ describe('One With the Sea', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays One with the Sea to move Doji Kuwanan into the conflict');
         });
 
-        it('should prompt you to return the water ring', function() {
+        it('should prompt you to spend a fate', function() {
             this.player1.claimRing('water');
             this.noMoreActions();
             this.initiateConflict({
@@ -56,7 +56,8 @@ describe('One With the Sea', function() {
             });
             this.player2.pass();
             this.player1.clickCard(this.sea);
-            expect(this.player1).toHavePrompt('Return the water ring?');
+            let fate = this.player1.fate;
+            expect(this.player1).toHavePrompt('Spend 1 fate?');
             expect(this.player1).toHavePromptButton('Yes');
             expect(this.player1).toHavePromptButton('No');
 
@@ -68,11 +69,12 @@ describe('One With the Sea', function() {
 
             this.player1.clickCard(this.yoshi);
             expect(this.yoshi.isParticipating()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 chooses to return the water ring');
+            expect(this.getChatLogs(5)).toContain('player1 chooses to spend 1 fate');
             expect(this.getChatLogs(5)).toContain('player1 plays One with the Sea to move Kakita Yoshi into the conflict');
+            expect(this.player1.fate).toBe(fate - 1);
         });
 
-        it('if you don\'t return the ring', function() {
+        it('if you don\'t spend the fate', function() {
             this.player1.claimRing('water');
             this.noMoreActions();
             this.initiateConflict({
@@ -81,7 +83,7 @@ describe('One With the Sea', function() {
             });
             this.player2.pass();
             this.player1.clickCard(this.sea);
-            expect(this.player1).toHavePrompt('Return the water ring?');
+            expect(this.player1).toHavePrompt('Spend 1 fate?');
             expect(this.player1).toHavePromptButton('Yes');
             expect(this.player1).toHavePromptButton('No');
 

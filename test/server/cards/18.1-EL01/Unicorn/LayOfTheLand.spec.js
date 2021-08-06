@@ -30,103 +30,72 @@ describe('Lay of the Land', function() {
 
             this.garden.facedown = false;
             this.fury.facedown = false;
+            this.garden.isBroken = true;
             this.game.checkGameState(true);
 
             this.studentOfWar.fate = 5;
         });
 
-        it('should prompt to choose two provinces controlled by the same player and reveal one and turn the other facedown', function() {
+        it('should prompt to choose an unbroken province', function() {
             this.player1.clickCard(this.land);
-            expect(this.player1).toHavePrompt('Choose a faceup province');
-            expect(this.player1).toBeAbleToSelect(this.fury);
-            expect(this.player1).not.toBeAbleToSelect(this.temple);
-            expect(this.player1).not.toBeAbleToSelect(this.brushfires);
-            expect(this.player1).not.toBeAbleToSelect(this.khans);
-            expect(this.player1).not.toBeAbleToSelect(this.market);
-            expect(this.player1).toBeAbleToSelect(this.garden);
-
-            this.player1.clickCard(this.garden);
-
-            expect(this.player1).toHavePrompt('Choose a province to reveal');
+            expect(this.player1).toHavePrompt('Choose an unbroken province');
             expect(this.player1).not.toBeAbleToSelect(this.fury);
-            expect(this.player1).not.toBeAbleToSelect(this.temple);
+            expect(this.player1).toBeAbleToSelect(this.temple);
             expect(this.player1).toBeAbleToSelect(this.brushfires);
             expect(this.player1).toBeAbleToSelect(this.khans);
             expect(this.player1).toBeAbleToSelect(this.market);
             expect(this.player1).not.toBeAbleToSelect(this.garden);
 
             this.player1.clickCard(this.brushfires);
-            expect(this.garden.facedown).toBe(true);
             expect(this.brushfires.facedown).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to turn Manicured Garden facedown');
-            expect(this.getChatLogs(5)).toContain('player1 uses Lay of the Land to reveal Brushfires');
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from Brushfires');
         });
 
-        it('should prompt to choose two provinces controlled by the same player and reveal one and turn the other facedown', function() {
-            this.player1.clickCard(this.land);
-            expect(this.player1).toHavePrompt('Choose a faceup province');
-            expect(this.player1).toBeAbleToSelect(this.fury);
-            expect(this.player1).not.toBeAbleToSelect(this.temple);
-            expect(this.player1).not.toBeAbleToSelect(this.brushfires);
-            expect(this.player1).not.toBeAbleToSelect(this.khans);
-            expect(this.player1).not.toBeAbleToSelect(this.market);
-            expect(this.player1).toBeAbleToSelect(this.garden);
+        it('status tokens', function() {
+            this.fury.taint();
+            this.fury.dishonor();
 
-            this.player1.clickCard(this.fury);
-
-            expect(this.player1).toHavePrompt('Choose a province to reveal');
-            expect(this.player1).not.toBeAbleToSelect(this.fury);
-            expect(this.player1).toBeAbleToSelect(this.temple);
-            expect(this.player1).not.toBeAbleToSelect(this.brushfires);
-            expect(this.player1).not.toBeAbleToSelect(this.khans);
-            expect(this.player1).not.toBeAbleToSelect(this.market);
-            expect(this.player1).not.toBeAbleToSelect(this.garden);
-
-            this.player1.clickCard(this.temple);
-            expect(this.fury.facedown).toBe(true);
-            expect(this.temple.facedown).toBe(false);
-        });
-
-        it('should work if there\'s no province to reveal', function() {
-            this.garden.facedown = false;
-            this.fury.facedown = false;
-            this.temple.facedown = false;
-            this.brushfires.facedown = false;
-            this.khans.facedown = false;
-            this.market.facedown = false;
-            this.sd.facedown = false;
-            this.game.checkGameState(true);
+            this.brushfires.taint();
+            this.brushfires.dishonor();
 
             this.player1.clickCard(this.land);
-            expect(this.player1).toHavePrompt('Choose a faceup province');
+            expect(this.player1).toHavePrompt('Choose an unbroken province');
             expect(this.player1).toBeAbleToSelect(this.fury);
             expect(this.player1).toBeAbleToSelect(this.temple);
             expect(this.player1).toBeAbleToSelect(this.brushfires);
             expect(this.player1).toBeAbleToSelect(this.khans);
             expect(this.player1).toBeAbleToSelect(this.market);
-            expect(this.player1).toBeAbleToSelect(this.garden);
+            expect(this.player1).not.toBeAbleToSelect(this.garden);
 
-            this.player1.clickCard(this.garden);
+            this.player1.clickCard(this.brushfires);
+            expect(this.player1).toHavePrompt('Do you wish to discard Tainted Token?');
+            this.player1.clickPrompt('Yes');
+            expect(this.player1).toHavePrompt('Do you wish to discard Dishonored Token?');
+            this.player1.clickPrompt('Yes');
 
-            expect(this.player1).not.toHavePrompt('Choose a province to reveal');
-            expect(this.player2).toHavePrompt('Action Window');
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to turn Manicured Garden facedown');
+            expect(this.brushfires.isDishonored).toBe(false);
+            expect(this.brushfires.isTainted).toBe(false);
+            expect(this.brushfires.facedown).toBe(false);
+
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from Brushfires');
+            expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Brushfires');
+            expect(this.getChatLogs(3)).toContain('player1 chooses to discard Tainted Token from Brushfires');
         });
 
-        it('should not work in a conflict', function() {
+        // it('should not work in a conflict', function() {
 
-            this.noMoreActions();
-            this.initiateConflict({
-                type: 'military',
-                attackers: [this.studentOfWar],
-                defenders: [],
-                province: this.garden
-            });
+        //     this.noMoreActions();
+        //     this.initiateConflict({
+        //         type: 'military',
+        //         attackers: [this.studentOfWar],
+        //         defenders: [],
+        //         province: this.garden
+        //     });
 
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-            this.player1.clickCard(this.land);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-        });
+        //     this.player2.pass();
+        //     expect(this.player1).toHavePrompt('Conflict Action Window');
+        //     this.player1.clickCard(this.land);
+        //     expect(this.player1).toHavePrompt('Conflict Action Window');
+        // });
     });
 });

@@ -1,31 +1,51 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const { CardTypes, Players, CharacterStatus } = require('../../../Constants');
+const EventRegistrar = require('../../../eventregistrar.js');
+const { EventNames, Phases, CardTypes, AbilityTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class LadyDojisOutpost extends StrongholdCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            match: card => card.hasTrait('courtier') && card.isHonored,
-            targetController: Players.Self,
-            effect: AbilityDsl.effects.modifyPoliticalSkill(1)
-        });
+        this.namedCard = undefined;
+        this.abilityRegistrar = new EventRegistrar(this.game, this);
+        this.abilityRegistrar.register([{
+            [EventNames.OnInitiateAbilityEffects + ':' + AbilityTypes.OtherEffects]: 'onInitiateAbilityEffectsOtherEffects'
+        }]);
+        this.abilityRegistrar.register([
+            EventNames.OnPhaseEnded
+        ]);
 
         this.reaction({
             title: 'Honor a character',
-            cost: AbilityDsl.costs.bowSelf(),
             when: {
-                onStatusTokenGained: (event, context) => {
-                    const token = context.event.token.grantedStatus || context.event.token;
-                    return event.card.controller === context.player && event.card !== context.source && token === CharacterStatus.Honored;
-                }
+                onPhaseStarted: event => event.phase === Phases.Conflict
             },
-            target: {
-                cardType: CardTypes.Character,
-                controller: Players.Any,
-                cardCondition: card => card.hasTrait('courtier'),
-                gameAction: AbilityDsl.actions.honor()
-            }
+            cost: [
+                AbilityDsl.costs.bowSelf(),
+                AbilityDsl.costs.nameCard()
+            ],
+            gameAction: AbilityDsl.actions.handler({
+                handler: context => {
+                    this.namedCard = context.costs.nameCardCost
+                }
+            }),
+            effect: 'cancel the first ability triggered by {1} from a non-Stronghold card named {2}',
+            effectArgs: context => [context.player.opponent, context.costs.nameCardCost],
         });
+    }
+
+    onInitiateAbilityEffectsOtherEffects(event) {
+        if(!this.namedCard) {
+            return;
+        }
+        if(event.context.player === this.controller.opponent && !event.cancelled && event.card.type !== CardTypes.Stronghold && event.card.name === this.namedCard) {
+            event.cancel();
+            this.namedCard = undefined;
+            this.game.addMessage('{0} attempts to initiate {1}{2}, but {3} cancels it', event.context.player, event.card, event.card.type === CardTypes.Event ? '' : '\'s ability', this);
+        }
+    }
+
+    onPhaseEnded() {
+        this.namedCard = undefined;
     }
 }
 

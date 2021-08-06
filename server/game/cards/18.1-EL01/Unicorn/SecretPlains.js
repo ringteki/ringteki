@@ -1,5 +1,5 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const { CardTypes, Locations } = require('../../../Constants');
+const { CardTypes, Locations, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class SecretPlains extends StrongholdCard {
@@ -11,7 +11,8 @@ class SecretPlains extends StrongholdCard {
             target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                cardCondition: card => !card.facedown && !card.isBroken && card.abilities.actions.length > 0,
+                controller: Players.Self,
+                cardCondition: card => !card.facedown && !card.isBroken && card.location !== Locations.StrongholdProvince && card.abilities.actions.length > 0,
                 gameAction: AbilityDsl.actions.resolveAbility(context => ({
                     target: context.target,
                     ability: context.target.abilities.actions[0],

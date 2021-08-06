@@ -33,8 +33,8 @@ describe('Kaiu Mitsurugi', function() {
             expect(this.tower.hasKeyword('rally')).toBe(true);
         });
 
-        it('should let you sacrifice a holding to gain an honor and draw a card', function() {
-            let honor = this.player1.honor;
+        it('should let you sacrifice a holding to gain an fate and draw a card', function() {
+            let fate = this.player1.fate;
             let hand = this.player1.hand.length;
             this.tower.facedown = false;
             this.challenger.facedown = false;
@@ -46,10 +46,10 @@ describe('Kaiu Mitsurugi', function() {
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
 
             this.player1.clickCard(this.tower);
-            expect(this.player1.honor).toBe(honor + 1);
+            expect(this.player1.fate).toBe(fate + 1);
             expect(this.player1.hand.length).toBe(hand + 1);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Kaiu Mitsurugi, sacrificing Seventh Tower to gain 1 honor and draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Kaiu Mitsurugi, sacrificing Seventh Tower to gain 1 fate and draw 1 card');
         });
     });
 });

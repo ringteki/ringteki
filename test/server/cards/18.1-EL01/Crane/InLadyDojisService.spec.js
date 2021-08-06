@@ -1,4 +1,4 @@
-describe('Stinger', function() {
+describe('In Lady Dojis Service', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -28,7 +28,7 @@ describe('Stinger', function() {
             this.hotaru.honor();
         });
 
-        it('should react at the start of the fate phase and give all honored courtiers you control Courtesy', function() {
+        it('should react at the start of the fate phase and give all courtiers you control Courtesy', function() {
             this.advancePhases('fate');
             let fate = this.player1.fate;
             expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -36,15 +36,16 @@ describe('Stinger', function() {
             this.player1.clickCard(this.service);
             expect(this.yoshi.hasKeyword('courtesy')).toBe(true);
             expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.diplomat.hasKeyword('courtesy')).toBe(false);
+            expect(this.diplomat.hasKeyword('courtesy')).toBe(true);
             expect(this.brash.hasKeyword('courtesy')).toBe(false);
             expect(this.hotaru.hasKeyword('courtesy')).toBe(false);
 
             this.player1.clickPrompt('Done');
-            expect(this.player1.fate).toBe(fate + 2);
+            expect(this.player1.fate).toBe(fate + 3);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays In Lady Dōji\'s Service to give Courtesy to Doji Whisperer and Kakita Yoshi');
+            expect(this.getChatLogs(10)).toContain('player1 plays In Lady Dōji\'s Service to give Courtesy to Doji Whisperer, Doji Diplomat and Kakita Yoshi');
             expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Doji Whisperer\'s Courtesy');
+            expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Doji Diplomat\'s Courtesy');
             expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Kakita Yoshi\'s Courtesy');
         });
     });

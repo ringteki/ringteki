@@ -10,7 +10,7 @@ const oneWithTheSeaCost = function () {
         },
         getCostMessage: function (context) { // eslint-disable-line no-unused-vars
             if(context.oneWithTheSeaCostPaid) {
-                return ['returning the Water Ring'];
+                return ['spending 1 fate'];
             }
             return undefined;
         },
@@ -19,14 +19,20 @@ const oneWithTheSeaCost = function () {
         },
         resolve: function (context) {
             let ringAvailable = false;
-            if(context.game.rings['water'].claimedBy === context.player.name) {
+            let fateAvailable = true;
+            if(context.game.rings['water'].isConsideredClaimed(context.player)) {
                 ringAvailable = true;
             }
-
+            if(context.player.fate < 1) {
+                fateAvailable = false;
+            }
+            if(!context.player.checkRestrictions('spendFate', context)) {
+                fateAvailable = false;
+            }
             context.costs.oneWithTheSeaCostPaid = false;
-            if(ringAvailable) {
+            if(ringAvailable && fateAvailable) {
                 context.game.promptWithHandlerMenu(context.player, {
-                    activePromptTitle: 'Return the water ring?',
+                    activePromptTitle: 'Spend 1 fate?',
                     source: context.source,
                     choices: ['Yes', 'No'],
                     handlers: [
@@ -40,9 +46,9 @@ const oneWithTheSeaCost = function () {
             if(context.costs.oneWithTheSeaCostPaid) {
                 let events = [];
 
-                let returnRingAction = context.game.actions.returnRing({ target: context.game.rings['water'] });
-                events.push(returnRingAction.getEvent(context.game.rings['water'], context));
-                context.game.addMessage('{0} chooses to return the water ring', context.player);
+                let fateAction = context.game.actions.loseFate({ target: context.player, amount: 1 });
+                events.push(fateAction.getEvent(context.player, context));
+                context.game.addMessage('{0} chooses to spend 1 fate', context.player);
 
                 return events;
             }

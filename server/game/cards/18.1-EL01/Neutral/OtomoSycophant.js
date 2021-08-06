@@ -5,7 +5,7 @@ class OtomoSycophant extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Honor Self',
-            cost: AbilityDsl.costs.discardImperialFavor(),
+            condition: context => context.player.imperialFavor !== '',
             gameAction: AbilityDsl.actions.honor()
         });
     }

@@ -13,14 +13,14 @@ describe('Empress\'s Retainer', function() {
             this.otomo = this.player1.findCardByName('otomo-sycophant');
         });
 
-        it('should let you toss favor to honor', function() {
+        it('should let you honor if you have favor', function() {
             this.player1.clickCard(this.otomo);
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.player.imperialFavor = 'military';
             this.game.checkGameState(true);
             this.player1.clickCard(this.otomo);
             expect(this.otomo.isHonored).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Otomo Sycophant, discarding the Imperial Favor to honor Otomo Sycophant');
+            expect(this.getChatLogs(5)).toContain('player1 uses Otomo Sycophant to honor Otomo Sycophant');
         });
     });
 });

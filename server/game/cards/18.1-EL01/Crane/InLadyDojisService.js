@@ -11,11 +11,11 @@ class InLadyDojisService extends DrawCard {
             },
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 effect: AbilityDsl.effects.addKeyword('courtesy'),
-                target: context.player.cardsInPlay.filter(card => card.hasTrait('courtier') && card.isHonored),
+                target: context.player.cardsInPlay.filter(card => card.hasTrait('courtier')),
                 duration: Durations.UntilEndOfPhase
             })),
             effect: 'give Courtesy to {1}',
-            effectArgs: context => [context.player.cardsInPlay.filter(card => card.hasTrait('courtier') && card.isHonored)]
+            effectArgs: context => [context.player.cardsInPlay.filter(card => card.hasTrait('courtier'))]
         });
     }
 }

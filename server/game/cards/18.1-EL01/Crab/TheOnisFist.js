@@ -34,7 +34,7 @@ class TheOnisFist extends DrawCard {
             cost: AbilityDsl.costs.removeSelfFromGame(),
             target: {
                 cardType: CardTypes.Province,
-                player: Players.Opponent,
+                player: Players.Self,
                 controller: Players.Opponent,
                 location: Locations.Provinces,
                 cardCondition: card => !card.facedown && card.location !== Locations.StrongholdProvince,

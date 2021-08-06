@@ -7,6 +7,7 @@ class StormOfSteel extends DrawCard {
         this.action({
             title: 'Give a character a skill bonus',
             condition: context => context.game.isDuringConflict(),
+            max: AbilityDsl.limit.perConflict(1),
             targets: {
                 character: {
                     player: Players.Self,

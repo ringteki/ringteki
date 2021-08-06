@@ -73,15 +73,15 @@ describe('The Oni\'s Fist', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.fist);
             this.player1.clickCard(this.fist);
-            expect(this.player2).toHavePrompt('Choose a province');
-            expect(this.player2).toBeAbleToSelect(this.sd1);
-            expect(this.player2).not.toBeAbleToSelect(this.sd2);
-            expect(this.player2).not.toBeAbleToSelect(this.sd3);
-            expect(this.player2).toBeAbleToSelect(this.sd4);
-            expect(this.player2).not.toBeAbleToSelect(this.sdSH);
-            expect(this.player2).not.toBeAbleToSelect(this.sd);
+            expect(this.player1).toHavePrompt('Choose a province');
+            expect(this.player1).toBeAbleToSelect(this.sd1);
+            expect(this.player1).not.toBeAbleToSelect(this.sd2);
+            expect(this.player1).not.toBeAbleToSelect(this.sd3);
+            expect(this.player1).toBeAbleToSelect(this.sd4);
+            expect(this.player1).not.toBeAbleToSelect(this.sdSH);
+            expect(this.player1).not.toBeAbleToSelect(this.sd);
 
-            this.player2.clickCard(this.sd1);
+            this.player1.clickCard(this.sd1);
             expect(this.sd1.isBroken).toBe(true);
             expect(this.fist.location).toBe('removed from game');
             expect(this.getChatLogs(5)).toContain('player1 uses The Oni\'s Fist, removing The Oni\'s Fist from the game to break Shameful Display');

@@ -4,17 +4,15 @@ const AbilityDsl = require('../../../abilitydsl.js');
 
 class WarOfWords extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
+        this.action({
             title: 'Both players may always declare political conflicts',
-            when: {
-                onPhaseStarted: event => event.phase === Phases.Conflict
-            },
-            effect: 'allow each player to declare any conflict as political',
-            gameAction: AbilityDsl.actions.playerLastingEffect({
-                duration: Durations.UntilEndOfPhase,
-                targetController: Players.Any,
-                effect: AbilityDsl.effects.provideConflictDeclarationType(ConflictTypes.Political)
-            })
+            condition: context => context.game.isDuringConflict('military'),
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                duration: Durations.UntilEndOfConflict,
+                targetController: Players.Self,
+                effect: AbilityDsl.effects.changeConflictSkillFunctionPlayer(card => card.getPoliticalSkill())
+            })),
+            effect: 'count their political skill towards conflict resolution',
         });
     }
 }

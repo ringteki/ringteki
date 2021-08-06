@@ -12,19 +12,19 @@ class KaiuMitsurugi extends DrawCard {
         });
 
         this.action({
-            title: 'Draw a card and gain an honor',
+            title: 'Draw a card and gain an fate',
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Holding
             }),
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.gainHonor(context => ({
+                AbilityDsl.actions.gainFate(context => ({
                     target: context.player
                 })),
                 AbilityDsl.actions.draw(context => ({
                     target: context.player
                 }))
             ]),
-            effect: 'gain 1 honor and draw 1 card'
+            effect: 'gain 1 fate and draw 1 card'
         });
     }
 }
