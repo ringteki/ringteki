@@ -13,7 +13,7 @@ class ShinjoPlaceholder extends DrawCard {
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
                     location: Locations.PlayArea,
-                    cardCondition: (card, context) => card.isParticipating() && card.allowGameAction('dishonor', context)
+                    cardCondition: (card, context) => card.isParticipating() && card.allowGameAction('bow', context)
                 },
                 province: {
                     activePromptTitle: 'Choose a province to reveal',
