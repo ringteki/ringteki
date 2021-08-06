@@ -5,7 +5,6 @@ const { CardTypes, Players, Locations } = require('../../../Constants');
 class LayOfTheLand extends DrawCard {
     setupCardAbilities() {
         this.action({
-            // condition: context => !context.game.isDuringConflict(),
             title: 'Reveal a province and discard status tokens',
             target: {
                 activePromptTitle: 'Choose an unbroken province',

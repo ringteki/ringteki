@@ -67,6 +67,7 @@ class OneWithTheSea extends DrawCard {
         this.action({
             title: 'Move a character to the conflict',
             cost: oneWithTheSeaCost(),
+            max: AbilityDsl.limit.perRound(1),
             condition: context => context.game.isDuringConflict(),
             cannotTargetFirst: true,
             target: {
