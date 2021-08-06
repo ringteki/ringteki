@@ -85,7 +85,6 @@ describe('Secret Plains', function() {
                 province: this.vassalFields
             });
 
-            let p1fate = this.player1.fate;
             let p2fate = this.player2.fate;
 
             this.player1.clickCard(this.plains);

@@ -25,11 +25,11 @@ class LadyDojisOutpost extends StrongholdCard {
             ],
             gameAction: AbilityDsl.actions.handler({
                 handler: context => {
-                    this.namedCard = context.costs.nameCardCost
+                    this.namedCard = context.costs.nameCardCost;
                 }
             }),
             effect: 'cancel the first ability triggered by {1} from a non-Stronghold card named {2}',
-            effectArgs: context => [context.player.opponent, context.costs.nameCardCost],
+            effectArgs: context => [context.player.opponent, context.costs.nameCardCost]
         });
     }
 

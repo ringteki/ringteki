@@ -1,6 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Players, Durations, DuelTypes } = require('../../../Constants');
 
 class EloquentAdvocate extends DrawCard {
     setupCardAbilities() {
