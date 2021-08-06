@@ -82,20 +82,21 @@ describe('Lay of the Land', function() {
             expect(this.getChatLogs(3)).toContain('player1 chooses to discard Tainted Token from Brushfires');
         });
 
-        // it('should not work in a conflict', function() {
+        it('should not work in a conflict', function() {
+            this.garden.isBroken = false;
 
-        //     this.noMoreActions();
-        //     this.initiateConflict({
-        //         type: 'military',
-        //         attackers: [this.studentOfWar],
-        //         defenders: [],
-        //         province: this.garden
-        //     });
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.studentOfWar],
+                defenders: [],
+                province: this.garden
+            });
 
-        //     this.player2.pass();
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        //     this.player1.clickCard(this.land);
-        //     expect(this.player1).toHavePrompt('Conflict Action Window');
-        // });
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.land);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
     });
 });

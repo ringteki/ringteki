@@ -26,6 +26,14 @@ class LayOfTheLand extends DrawCard {
         });
     }
 
+    canPlay(context, playType) {
+        if(this.game.isDuringConflict()) {
+            return false;
+        }
+
+        return super.canPlay(context, playType);
+    }
+
     getStatusTokenPrompts(context) {
         const tokens = context.target.statusTokens;
         let prompts = [];
