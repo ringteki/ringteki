@@ -61,7 +61,7 @@ describe('Eloquent Advocate', function() {
             this.initiateConflict({
                 attackers: [this.borderRider],
                 defenders: [this.advocate, this.yoshi],
-                type: 'political'
+                type: 'military'
             });
 
             this.noMoreActions();
