@@ -44,8 +44,10 @@ describe('Akodos Landing', function() {
             expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
         });
 
-        it('should put the top card of your deck into a +1/+1 attachment', function() {
+        it('should put the bottom card of your deck into a +1/+1 attachment', function() {
+            this.player1.reduceDeckToNumber('conflict deck', 0);
             this.player1.moveCard(this.katana, 'conflict deck');
+            this.player1.moveCard(this.crane, 'conflict deck');
 
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
@@ -54,10 +56,11 @@ describe('Akodos Landing', function() {
             expect(this.challenger.attachments.size()).toBe(1);
             expect(this.challenger.getMilitarySkill()).toBe(4);
             expect(this.challenger.getPoliticalSkill()).toBe(4);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the bottom card of their conflict deck to Doji Challenger as a +1/+1 attachment');
         });
 
         it('if let go should turn back into the original card', function() {
+            this.player1.reduceDeckToNumber('conflict deck', 0);
             this.player1.moveCard(this.crane, 'conflict deck');
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
