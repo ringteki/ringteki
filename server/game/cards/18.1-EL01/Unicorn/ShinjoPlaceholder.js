@@ -4,6 +4,11 @@ const { CardTypes, Players, Locations } = require('../../../Constants.js');
 
 class ShinjoPlaceholder extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            condition: context => context.source.controller.getNumberOfFacedownProvinces() === 0,
+            effect: AbilityDsl.effects.modifyBothSkills(2)
+        });
+
         this.action({
             title: 'Bow a character',
             condition: context => context.source.isParticipating(),

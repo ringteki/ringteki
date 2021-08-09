@@ -17,7 +17,7 @@ class NightshadeInfiltrator extends DrawCard {
                     effect: AbilityDsl.effects.modifyBothSkills(-3)
                 }))
             },
-            effect: 'give {0} -1{1}/-1{2}',
+            effect: 'give {0} -3{1}/-3{2}',
             effectArgs: () => ['military', 'political']
         });
     }

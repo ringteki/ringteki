@@ -6,7 +6,7 @@ describe('Spirit of Valor', function() {
                 player1: {
                     inPlay: ['doomed-shugenja'],
                     hand: ['spirit-of-valor'],
-                    dynastyDiscard: ['brash-samurai', 'doji-whisperer']
+                    dynastyDiscard: ['brash-samurai', 'doji-whisperer', 'ikoma-tsanuri']
                 },
                 player2: {
                     inPlay: [],
@@ -19,6 +19,7 @@ describe('Spirit of Valor', function() {
 
             this.brash = this.player1.findCardByName('brash-samurai');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
+            this.tsanuri = this.player1.findCardByName('ikoma-tsanuri');
 
             this.assassination = this.player2.findCardByName('assassination');
             this.letGo = this.player2.findCardByName('let-go');
@@ -37,6 +38,7 @@ describe('Spirit of Valor', function() {
             this.player1.clickCard(this.valor);
             expect(this.player1).toBeAbleToSelect(this.brash);
             expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+            expect(this.player1).not.toBeAbleToSelect(this.tsanuri);
             expect(this.valor.parent).toBe(this.doomed);
             this.player1.clickCard(this.brash);
             expect(this.getChatLogs(5)).toContain('player1 uses Spirit of Valor to put Brash Samurai into play');

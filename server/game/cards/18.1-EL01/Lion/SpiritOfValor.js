@@ -20,7 +20,7 @@ class SpiritofValor extends DrawCard {
             target: {
                 activePromptTitle: 'Choose a character from your dynasty discard pile',
                 location: [Locations.DynastyDiscardPile],
-                cardCondition: card => card.hasTrait('bushi') && card.costLessThan(3),
+                cardCondition: card => card.hasTrait('bushi') && card.costLessThan(3) && !card.isUnique(),
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.putIntoPlay(),

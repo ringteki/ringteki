@@ -21,6 +21,9 @@ describe('Flagship of the Unicorn', function() {
             this.rider = this.player1.findCardByName('border-rider');
             this.garden = this.player2.findCardByName('manicured-garden');
             this.pilgrimage = this.player2.findCardByName('pilgrimage');
+            this.sd3 = this.player2.findCardByName('shameful-display', 'province 3');
+            this.sd4 = this.player2.findCardByName('shameful-display', 'province 4');
+            this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
         it('should prompt you to choose a character and a facedown province', function() {
@@ -62,6 +65,36 @@ describe('Flagship of the Unicorn', function() {
             this.player2.clickCard(this.pilgrimage);
             expect(this.chagatai.bowed).toBe(false);
             expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Placeholder to reveal Pilgrimage and fail to bow Moto Chagatai');
+        });
+
+        it('should get +2/+2 if you have no facedown provinces', function() {
+            const mil = this.shinjo.getMilitarySkill();
+            const pol = this.shinjo.getPoliticalSkill();
+
+            this.garden.facedown = false;
+            this.game.checkGameState(true);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
+
+            this.pilgrimage.facedown = false;
+            this.game.checkGameState(true);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
+
+            this.sd3.facedown = false;
+            this.game.checkGameState(true);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
+
+            this.sd4.facedown = false;
+            this.game.checkGameState(true);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
+
+            this.sd5.facedown = false;
+            this.game.checkGameState(true);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil + 2);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol + 2);
         });
     });
 });

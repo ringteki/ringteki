@@ -42,7 +42,7 @@ describe('Nightshade Infiltrator', function() {
             expect(this.kuwanan.getPoliticalSkill()).toBe(pol - 3);
             expect(this.nightshade.isDishonored).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Nightshade Infiltrator, dishonoring Nightshade Infiltrator to give Doji Kuwanan -1military/-1political');
+            expect(this.getChatLogs(5)).toContain('player2 uses Nightshade Infiltrator, dishonoring Nightshade Infiltrator to give Doji Kuwanan -3military/-3political');
         });
     });
 });
