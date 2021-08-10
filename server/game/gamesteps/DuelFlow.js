@@ -1,8 +1,6 @@
 const BaseStepWithPipeline = require('./basestepwithpipeline.js');
 const SimpleStep = require('./simplestep.js');
-const { EventNames } = require('../Constants');
-
-const { EffectNames } = require('../Constants');
+const { EventNames, EffectNames } = require('../Constants');
 
 /**
 D. Duel Timing
@@ -47,6 +45,9 @@ class DuelFlow extends BaseStepWithPipeline {
     }
 
     promptForHonorBid() {
+        if(this.duel.challenger.mostRecentEffect(EffectNames.WinDuel) === this.duel) {
+            return;
+        }
         let prohibitedBids = {};
         for(const player of this.game.getPlayers()) {
             prohibitedBids[player.uuid] = [...new Set(player.getEffects(EffectNames.CannotBidInDuels))];
@@ -63,7 +64,11 @@ class DuelFlow extends BaseStepWithPipeline {
     }
 
     announceResult() {
-        this.game.addMessage(this.duel.getTotalsForDisplay());
+        if(this.duel.challenger.mostRecentEffect(EffectNames.WinDuel) === this.duel) {
+            this.game.addMessage('{0} wins the duel vs {1}', this.duel.challenger, this.duel.target);
+        } else {
+            this.game.addMessage(this.duel.getTotalsForDisplay());
+        }
         if(!this.duel.winner) {
             this.game.addMessage('The duel ends in a draw');
         }

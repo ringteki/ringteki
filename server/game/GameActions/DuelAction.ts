@@ -115,6 +115,7 @@ export class DuelAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, cards, context: AbilityContext, additionalProperties): void {
+        let properties = this.getProperties(context, additionalProperties);
         if(!cards) {
             cards = this.getProperties(context, additionalProperties).target;
         }
@@ -123,6 +124,12 @@ export class DuelAction extends CardGameAction {
         }
         event.cards = cards;
         event.context = context;
+        event.duelType = properties.type;
+        event.challenger = properties.challenger;
+        event.duelTarget = properties.target;
+
+        let duel = new Duel(context.game, properties.challenger, cards, properties.type, properties.statistic, context.player);
+        event.duel = duel;
     }
 
     eventHandler(event, additionalProperties): void {
@@ -133,7 +140,8 @@ export class DuelAction extends CardGameAction {
             context.game.addMessage('The duel cannot proceed as at least one participant for each side has to be in play');
             return;
         }
-        let duel = new Duel(context.game, properties.challenger, cards, properties.type, properties.statistic, context.player);
+        let duel = event.duel;
+        // let duel = new Duel(context.game, properties.challenger, cards, properties.type, properties.statistic, context.player);
         if(properties.challengerEffect) {
             context.game.actions.cardLastingEffect({
                 effect: properties.challengerEffect,

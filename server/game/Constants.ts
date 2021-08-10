@@ -169,7 +169,8 @@ export enum EffectNames {
     ReplacePrintedElement = 'replacePrintedElement',
     ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased',
     ConsideredLessHonorable = 'consideredLessHonorable',
-    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval'
+    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
+    WinDuel = 'winDuel'
 };
 
 export enum Durations {

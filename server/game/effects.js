@@ -133,6 +133,7 @@ const Effects = {
     participatesFromHome: (properties) => EffectBuilder.card.static(EffectNames.ParticipatesFromHome, properties),
     unlessActionCost: (properties) => EffectBuilder.card.static(EffectNames.UnlessActionCost, properties),
     replacePrintedElement: (value) => EffectBuilder.card.static(EffectNames.ReplacePrintedElement, value),
+    winDuel: (duel) => EffectBuilder.card.static(EffectNames.WinDuel, duel),
     // Ring effects
     addElement: (element) => EffectBuilder.ring.flexible(EffectNames.AddElement, element),
     cannotBidInDuels: num => EffectBuilder.player.static(EffectNames.CannotBidInDuels, num),
