@@ -1,15 +1,29 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const { Players } = require('../../../Constants');
+const { Players, Phases, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class LadyDojisOutpost extends StrongholdCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.game.isDuringConflict('political'),
-            match: card => card.hasTrait('courtier') && !card.isDishonored,
+            condition: context => context.game.isDuringConflict(),
+            match: (card, context) => card.isParticipatingFor(context.player) && context.game.currentConflict.getNumberOfParticipantsFor(context.player) === 1,
             targetController: Players.Self,
-            effect: AbilityDsl.effects.modifyGlory(1)
+            effect: AbilityDsl.effects.modifyBothSkills(1)
         });
+
+        this.action({
+            title: 'Gain fate',
+            phase: Phases.Conflict,
+            cost: [
+                AbilityDsl.costs.bowSelf(),
+                AbilityDsl.costs.dishonor({ cardCondition: card => card.type === CardTypes.Character })
+            ],
+            gameAction: AbilityDsl.actions.gainFate(context => ({
+                target: context.player,
+                amount: 2
+            }))
+        });
+
     }
 }
 

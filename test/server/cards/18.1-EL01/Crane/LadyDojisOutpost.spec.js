@@ -6,7 +6,8 @@ describe('Lady Dojis Outpost', function() {
                 player1: {
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'doji-kuwanan', 'doji-whisperer'],
                     hand: ['resourcefulness'],
-                    stronghold: ['lady-doji-s-outpost']
+                    stronghold: ['lady-doji-s-outpost'],
+                    dynastyDiscard: ['favorable-ground']
                 },
                 player2: {
                     inPlay: ['savvy-politician']
@@ -14,72 +15,46 @@ describe('Lady Dojis Outpost', function() {
             });
 
             this.outpost = this.player1.findCardByName('lady-doji-s-outpost');
+            this.ground = this.player1.findCardByName('favorable-ground');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.resourcefulness = this.player1.findCardByName('resourcefulness');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.kuwanan = this.player1.findCardByName('doji-kuwanan');
             this.savvy = this.player2.findCardByName('savvy-politician');
+
+            this.player1.placeCardInProvince(this.ground, 'province 1');
         });
 
-        it('should give non-dishonored honored Courtiers you control +1 glory in political conflicts', function() {
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(3);
-            expect(this.savvy.getGlory()).toBe(1);
-            expect(this.whisperer.getGlory()).toBe(1);
-
-            this.challenger.honor();
-            this.yoshi.honor();
-            this.savvy.honor();
-
-            this.game.checkGameState(true);
+        it('should give characters participating alone +1/+1', function() {
+            let mil = this.yoshi.getMilitarySkill();
+            let pol = this.yoshi.getPoliticalSkill();
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: [],
-                type: 'political'
+                attackers: [this.yoshi],
+                defenders: [this.savvy]
             });
 
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(4);
-            expect(this.whisperer.getGlory()).toBe(2);
-            expect(this.savvy.getGlory()).toBe(1);
+            expect(this.yoshi.getMilitarySkill()).toBe(mil + 1);
+            expect(this.yoshi.getPoliticalSkill()).toBe(pol + 1);
 
-            this.yoshi.dishonor();
-            this.yoshi.dishonor();
-            this.game.checkGameState(true);
-            expect(this.yoshi.getGlory()).toBe(3);
+            this.player2.pass();
+            this.player1.clickCard(this.ground);
+            this.player1.clickCard(this.challenger);
+
+            expect(this.yoshi.getMilitarySkill()).toBe(mil);
+            expect(this.yoshi.getPoliticalSkill()).toBe(pol);
         });
 
-        it('should not give non-dishonored honored Courtiers you control +1 glory in military conflicts', function() {
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(3);
-            expect(this.savvy.getGlory()).toBe(1);
-            expect(this.whisperer.getGlory()).toBe(1);
+        it('should dishonor someone to gain 2 fate', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.outpost);
+            this.player1.clickCard(this.challenger);
 
-            this.challenger.honor();
-            this.yoshi.honor();
-            this.savvy.honor();
-
-            this.game.checkGameState(true);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: [],
-                type: 'military'
-            });
-
-            expect(this.challenger.getGlory()).toBe(2);
-            expect(this.yoshi.getGlory()).toBe(3);
-            expect(this.whisperer.getGlory()).toBe(1);
-            expect(this.savvy.getGlory()).toBe(1);
-
-            this.yoshi.dishonor();
-            this.yoshi.dishonor();
-            this.game.checkGameState(true);
-            expect(this.yoshi.getGlory()).toBe(3);
+            expect(this.player1.fate).toBe(fate + 2);
+            expect(this.challenger.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player1 uses Lady Dōji\'s Outpost, bowing Lady Dōji\'s Outpost and dishonoring Doji Challenger to gain 2 fate');
         });
     });
 });

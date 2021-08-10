@@ -2,37 +2,46 @@ describe('Deployed Garrison', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
-                phase: 'dynasty',
+                phase: 'conflict',
                 player1: {
-                    dynastyDiscard: ['deployed-garrison', 'imperial-storehouse', 'hida-kisada']
+                    dynastyDiscard: ['deployed-garrison', 'imperial-storehouse', 'hida-kisada'],
+                    inPlay: ['brash-samurai', 'savvy-politician'],
+                    hand: ['common-cause']
                 }
             });
 
             this.storehouse = this.player1.moveCard('imperial-storehouse', 'province 1');
-            this.garrison = this.player1.moveCard('deployed-garrison', 'province 2');
-            this.kisada = this.player1.moveCard('hida-kisada', 'province 3');
+            this.garrison = this.player1.findCardByName('deployed-garrison');
+            this.kisada = this.player1.findCardByName('hida-kisada');
+            this.brash = this.player1.findCardByName('brash-samurai');
+
+            this.commonCause = this.player1.findCardByName('common-cause');
+            this.savvy = this.player1.findCardByName('savvy-politician');
+            this.savvy.bow();
         });
 
-        it('should let you play it, reducing its fate cost to play', function() {
-            let fate = this.player1.fate;
+        it('should let you put it into play during a conflict and remove from game when it leaves play', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash],
+                defenders: []
+            });
 
+            this.player2.pass();
             this.player1.clickCard(this.garrison);
-            expect(this.player1).toHavePromptButton('Sacrifice a holding to play this character');
-            this.player1.clickPrompt('Sacrifice a holding to play this character');
             expect(this.player1).toHavePrompt('Select card to sacrifice');
             expect(this.player1).toBeAbleToSelect(this.storehouse);
-            expect(this.player1).not.toBeAbleToSelect(this.kisada);
             this.player1.clickCard(this.storehouse);
-            expect(this.player1).toHavePromptButton('0');
-            expect(this.player1).toHavePromptButton('1');
-            expect(this.player1).toHavePromptButton('2');
-
-            this.player1.clickPrompt('2');
             expect(this.garrison.location).toBe('play area');
-            expect(this.garrison.fate).toBe(2);
-            expect(this.player1.fate).toBe(fate - 2);
-            expect(this.getChatLogs(5)).toContain('player1 uses Deployed Garrison, sacrificing Imperial Storehouse to play Deployed Garrison');
-            expect(this.getChatLogs(5)).toContain('player1 plays Deployed Garrison with 2 additional fate');
+            expect(this.garrison.fate).toBe(0);
+            expect(this.getChatLogs(5)).toContain('player1 uses Deployed Garrison, sacrificing Imperial Storehouse to put Deployed Garrison into play in the conflict');
+
+            this.player2.pass();
+            this.player1.clickCard(this.commonCause);
+            this.player1.clickCard(this.savvy);
+            this.player1.clickCard(this.garrison);
+            expect(this.garrison.location).toBe('removed from game');
+            expect(this.getChatLogs(5)).toContain('Deployed Garrison is removed from the game due to their effect');
         });
     });
 });

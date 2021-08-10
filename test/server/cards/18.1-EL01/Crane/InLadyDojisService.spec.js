@@ -6,11 +6,11 @@ describe('In Lady Dojis Service', function() {
                 player1: {
                     honor: 10,
                     inPlay: ['doji-whisperer', 'doji-diplomat', 'brash-samurai', 'kakita-yoshi'],
-                    hand: ['in-lady-doji-s-service']
+                    hand: ['in-lady-doji-s-service', 'i-can-swim', 'game-of-sadane']
                 },
                 player2: {
                     honor: 10,
-                    inPlay: ['doji-hotaru-2']
+                    inPlay: ['kakita-asami']
                 }
             });
 
@@ -19,34 +19,53 @@ describe('In Lady Dojis Service', function() {
             this.diplomat = this.player1.findCardByName('doji-diplomat');
             this.brash = this.player1.findCardByName('brash-samurai');
 
-            this.hotaru = this.player2.findCardByName('doji-hotaru-2');
+            this.asami = this.player2.findCardByName('kakita-asami');
             this.service = this.player1.findCardByName('in-lady-doji-s-service');
-
-            this.yoshi.honor();
-            this.whisperer.honor();
-            this.brash.honor();
-            this.hotaru.honor();
+            this.swim = this.player1.findCardByName('i-can-swim');
+            this.sadane = this.player1.findCardByName('game-of-sadane');
         });
 
-        it('should react at the start of the fate phase and give all courtiers you control Courtesy', function() {
-            this.advancePhases('fate');
-            let fate = this.player1.fate;
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.service);
+        it('should reduce the cost to play events by 1', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi],
+                defenders: [this.asami]
+            });
+
+            this.player2.pass();
             this.player1.clickCard(this.service);
-            expect(this.yoshi.hasKeyword('courtesy')).toBe(true);
-            expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.diplomat.hasKeyword('courtesy')).toBe(true);
-            expect(this.brash.hasKeyword('courtesy')).toBe(false);
-            expect(this.hotaru.hasKeyword('courtesy')).toBe(false);
+            this.player2.pass();
 
-            this.player1.clickPrompt('Done');
-            expect(this.player1.fate).toBe(fate + 3);
+            expect(this.getChatLogs(5)).toContain('player1 plays In Lady Dōji\'s Service to reduce the cost of events this conflict');
 
-            expect(this.getChatLogs(10)).toContain('player1 plays In Lady Dōji\'s Service to give Courtesy to Doji Whisperer, Doji Diplomat and Kakita Yoshi');
-            expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Doji Whisperer\'s Courtesy');
-            expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Doji Diplomat\'s Courtesy');
-            expect(this.getChatLogs(10)).toContain('player1 gains a fate due to Kakita Yoshi\'s Courtesy');
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.sadane);
+            this.player1.clickCard(this.yoshi);
+            this.player1.clickCard(this.asami);
+            this.player1.clickPrompt('2');
+            this.player2.clickPrompt('1');
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.asami.isDishonored).toBe(true);
+            this.player2.pass();
+            this.player1.clickCard(this.swim);
+            this.player1.clickCard(this.asami);
+
+            expect(this.player1.fate).toBe(fate - 1);
+        });
+
+        it('should not be playable if you don\'t control a participating character', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.asami],
+                defenders: []
+            });
+
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.service);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

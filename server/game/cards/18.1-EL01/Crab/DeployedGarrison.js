@@ -1,28 +1,34 @@
 const DrawCard = require('../../../drawcard.js');
-const { Locations, Phases, CardTypes } = require('../../../Constants');
+const { Locations, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
+const EventRegistrar = require('../../../eventregistrar');
 
 class DeployedGarrison extends DrawCard {
     setupCardAbilities() {
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register(['onCardLeavesPlay']);
+
         this.action({
-            title: 'Sacrifice a holding to play this character',
-            location: Locations.Provinces,
-            phase: Phases.Dynasty,
+            title: 'Sacrifice a holding to put this character into play',
+            location: Locations.DynastyDiscardPile,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Holding
             }),
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: context.player,
-                    effect: AbilityDsl.effects.reduceNextPlayedCardCost(3)
-                })),
-                AbilityDsl.actions.playCard(context => ({
+                AbilityDsl.actions.putIntoConflict(context => ({
                     target: context.source,
-                    source: this
                 }))
             ]),
-            effect: 'play {0}'
         });
+    }
+
+    onCardLeavesPlay(event) {
+        if(event.card === this && !event.card.isBlank()) {
+            if(this.location !== Locations.RemovedFromGame) {
+                this.game.addMessage('{0} is removed from the game due to their effect', this);
+                this.owner.moveCard(this, Locations.RemovedFromGame);
+            }
+        }
     }
 }
 

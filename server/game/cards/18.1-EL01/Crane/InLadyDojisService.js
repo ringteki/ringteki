@@ -1,22 +1,30 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Phases, Durations } = require('../../../Constants.js');
+const { CardTypes } = require('../../../Constants.js');
 
 class InLadyDojisService extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Give Courtiers Courtesy',
-            when: {
-                onPhaseStarted: event => event.phase === Phases.Fate
-            },
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
-                effect: AbilityDsl.effects.addKeyword('courtesy'),
-                target: context.player.cardsInPlay.filter(card => card.hasTrait('courtier')),
-                duration: Durations.UntilEndOfPhase
-            })),
-            effect: 'give Courtesy to {1}',
-            effectArgs: context => [context.player.cardsInPlay.filter(card => card.hasTrait('courtier'))]
+        this.action({
+            title: 'Reduce the cost of events by 1',
+            max: AbilityDsl.limit.perConflict(1),
+            condition: context => context.game.isDuringConflict(),
+            effect: 'reduce the cost of events this conflict',
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
+                effect: AbilityDsl.effects.reduceCost({
+                    amount: 1,
+                    match: card => card.type === CardTypes.Event
+                })
+            }))
         });
+    }
+
+    canPlay(context, playType) {
+        if(!context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.isParticipating())) {
+            return false;
+        }
+
+        return super.canPlay(context, playType);
     }
 }
 
