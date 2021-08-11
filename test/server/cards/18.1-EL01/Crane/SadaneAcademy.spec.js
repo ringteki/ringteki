@@ -12,7 +12,7 @@ describe('Sadane Academy', function() {
                     honor: 10,
                     inPlay: ['eloquent-advocate', 'kakita-yoshi'],
                     hand: ['policy-debate', 'ornate-fan'],
-                    provinces: ['generic-province']
+                    provinces: ['sadane-academy']
                 }
             });
 
@@ -20,7 +20,7 @@ describe('Sadane Academy', function() {
             this.advocate = this.player2.findCardByName('eloquent-advocate');
             this.policyDebate = this.player2.findCardByName('policy-debate');
             this.fan = this.player2.findCardByName('ornate-fan');
-            this.academy = this.player2.findCardByName('generic-province');
+            this.academy = this.player2.findCardByName('sadane-academy');
             this.sd = this.player2.findCardByName('shameful-display', 'province 2');
 
             this.borderRider = this.player1.findCardByName('border-rider');
@@ -42,7 +42,7 @@ describe('Sadane Academy', function() {
             expect(this.player2).toBeAbleToSelect(this.academy);
             this.player2.clickCard(this.academy);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses A Generic Province to win the duel originating from Policy Debate');
+            expect(this.getChatLogs(5)).toContain('player2 uses Sadane Academy to win the duel originating from Policy Debate');
         });
 
         it('should give a pol bonus until the end of the duel', function() {
