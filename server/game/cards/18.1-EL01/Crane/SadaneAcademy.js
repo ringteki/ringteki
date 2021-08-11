@@ -1,5 +1,5 @@
 const ProvinceCard = require('../../../provincecard.js');
-const { Players, DuelTypes, Durations } = require('../../../Constants');
+const { DuelTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class SadaneAcademy extends ProvinceCard {
@@ -11,17 +11,17 @@ class SadaneAcademy extends ProvinceCard {
                 onDuelInitiated: (event, context) => {
                     return event.challenger && event.challenger.controller === context.player &&
                         event.duelType === DuelTypes.Political;
-                    }
+                }
             },
             gameAction: AbilityDsl.actions.cardLastingEffect(context => {
                 return ({
                     target: context.event.challenger,
                     effect: AbilityDsl.effects.winDuel(context.event.duel),
                     duration: Durations.UntilEndOfDuel
-                })
+                });
             }),
             effect: 'win the duel originating from {1}',
-            effectArgs: context => context.event.context.source,
+            effectArgs: context => context.event.context.source
         });
     }
 }

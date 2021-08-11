@@ -16,9 +16,9 @@ class DeployedGarrison extends DrawCard {
             }),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.putIntoConflict(context => ({
-                    target: context.source,
+                    target: context.source
                 }))
-            ]),
+            ])
         });
     }
 

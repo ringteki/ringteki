@@ -41,13 +41,11 @@ describe('Sadane Academy', function() {
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.academy);
             this.player2.clickCard(this.academy);
-            
+
             expect(this.getChatLogs(5)).toContain('player2 uses A Generic Province to win the duel originating from Policy Debate');
         });
 
         it('should give a pol bonus until the end of the duel', function() {
-            let yoshiSkill = this.yoshi.getPoliticalSkill();
-
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.borderRider],

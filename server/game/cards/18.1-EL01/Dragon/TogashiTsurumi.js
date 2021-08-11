@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 const EventRegistrar = require('../../../eventregistrar');
-const { Locations, Players, PlayTypes, TargetModes, Decks, CardTypes } = require('../../../Constants');
+const { Locations, Players, PlayTypes, CardTypes } = require('../../../Constants');
 
 class TogashiTsurumi extends DrawCard {
     setupCardAbilities() {
@@ -72,7 +72,7 @@ class TogashiTsurumi extends DrawCard {
     }
 
     getSkillBonus(card) {
-        return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length
+        return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length;
     }
 
     onCardLeavesPlay(event) {

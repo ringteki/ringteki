@@ -20,7 +20,7 @@ class ConduitOfTheElements extends DrawCard {
                 effect: AbilityDsl.effects.addElement(this.getElementsOfPlayedCard(context))
             })),
             effect: 'add {1} to the conflict ring',
-            effectArgs: context => [this.getElements(context)],
+            effectArgs: context => [this.getElements(context)]
         });
     }
 
@@ -29,10 +29,10 @@ class ConduitOfTheElements extends DrawCard {
         const card = context.event.card;
         const eArray = [Elements.Air, Elements.Earth, Elements.Fire, Elements.Water, Elements.Void];
         eArray.forEach(e => {
-            if (card.hasTrait(e)) {
+            if(card.hasTrait(e)) {
                 elements.push(e);
             }
-        })
+        });
         return elements;
     }
 
