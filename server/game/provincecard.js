@@ -142,7 +142,9 @@ class ProvinceCard extends BaseCard {
     }
 
     isBlank() {
-        return this.isBroken || this.isDishonored || super.isBlank();
+        const ignoreTokens = this.game.currentConflict && this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens) && this.isConflictProvince();
+        const dishonored = this.isDishonored && !ignoreTokens;
+        return this.isBroken || dishonored || super.isBlank();
     }
 
     breakProvince() {

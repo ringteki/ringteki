@@ -93,11 +93,13 @@ class StatusToken extends EffectSource {
         } else if(this.card.type === CardTypes.Province) {
             effects.push({
                 match: this.card,
+                condition: () => !(this.card.game.currentConflict && this.card.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens) && this.card.isConflictProvince()),
                 effect: AbilityDsl.effects.modifyProvinceStrength(2),
                 ref: undefined
             });
             effects.push({
                 match: this.card.controller,
+                condition: () => this.card.isConflictProvince(),
                 effect: AbilityDsl.effects.costToDeclareAnyParticipants({
                     type: 'defenders',
                     message: 'loses 1 honor',

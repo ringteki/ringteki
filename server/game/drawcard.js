@@ -383,7 +383,11 @@ class DrawCard extends BaseCard {
     adjustHonorStatusModifiers(modifiers) {
         // This is Yojiro's ability
         let doesNotModifyEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusDoesNotModifySkill);
-        if(doesNotModifyEffects.length > 0) {
+        let doesNotModifyConflictEffects = false;
+        if(this.game.currentConflict && this.isParticipating()) {
+            doesNotModifyConflictEffects = this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens);
+        }
+        if(doesNotModifyEffects.length > 0 || doesNotModifyConflictEffects) {
             modifiers.forEach(modifier => {
                 if(modifier.type === 'token' && modifier.amount !== 0) {
                     modifier.amount = 0;
@@ -669,11 +673,20 @@ class DrawCard extends BaseCard {
             this.parent = null;
         }
 
+        const cacheParticipating = this.isParticipating();
+
         if(this.isParticipating()) {
             this.game.currentConflict.removeFromConflict(this);
         }
 
-        if(this.isDishonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
+        let honorStatusDoesNotAffectLeavePlayEffects = this.anyEffect(EffectNames.HonorStatusDoesNotModifySkill);
+        let honorStatusDoesNotAffectLeavePlayConflictEffects = false;
+        if(this.game.currentConflict) {
+            honorStatusDoesNotAffectLeavePlayConflictEffects = cacheParticipating && this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens);
+        }
+        const ignoreHonorStatus = honorStatusDoesNotAffectLeavePlayEffects || honorStatusDoesNotAffectLeavePlayConflictEffects;
+
+        if(this.isDishonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorLossAction = this.game.actions.loseHonor();
 
@@ -681,7 +694,7 @@ class DrawCard extends BaseCard {
                 this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
             }
             this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
-        } else if(this.isHonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
+        } else if(this.isHonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorGainAction = this.game.actions.gainHonor();
             if(honorGainAction.canAffect(this.controller, frameworkContext)) {

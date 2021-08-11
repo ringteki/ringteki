@@ -34,7 +34,7 @@ describe('Commune With the Spirits', function() {
             expect(this.game.rings.air.conflictType).toBe('political');
             expect(this.game.rings.air.fate).toBe(0);
             expect(this.game.rings.air.isClaimed()).toBe(true);
-            expect(this.player1.fate).toBe(fate - 2);
+            expect(this.player1.fate).toBe(fate - 1);
         });
 
         it('should not resolve the ring effect', function() {

@@ -170,7 +170,8 @@ export enum EffectNames {
     ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased',
     ConsideredLessHonorable = 'consideredLessHonorable',
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
-    WinDuel = 'winDuel'
+    WinDuel = 'winDuel',
+    ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens'
 };
 
 export enum Durations {
