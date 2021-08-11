@@ -2,7 +2,7 @@ const { CardTypes, Players, Elements } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 const ProvinceCard = require('../../../provincecard.js');
 
-const elementKey = 'flagship-of-the-unicorn-water';
+const elementKey = 'higashi-no-kaze-water';
 
 class FlagshipofTheUnicorn extends ProvinceCard {
     setupCardAbilities() {
@@ -28,6 +28,6 @@ class FlagshipofTheUnicorn extends ProvinceCard {
     }
 }
 
-FlagshipofTheUnicorn.id = 'flagship-of-the-unicorn';
+FlagshipofTheUnicorn.id = 'higashi-no-kaze';
 
 module.exports = FlagshipofTheUnicorn;
