@@ -12,7 +12,7 @@ class SecretPlains extends StrongholdCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => !card.facedown && !card.isBroken && card.location !== Locations.StrongholdProvince && card.abilities.actions.length > 0,
+                cardCondition: card => !card.facedown && !card.isBroken && card.abilities.actions.length > 0,
                 gameAction: AbilityDsl.actions.resolveAbility(context => ({
                     target: context.target,
                     ability: context.target.abilities.actions[0],
