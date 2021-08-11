@@ -52,5 +52,5 @@ class ShinjoPlaceholder extends DrawCard {
     }
 }
 
-ShinjoPlaceholder.id = 'shinjo-placeholder';
+ShinjoPlaceholder.id = 'shinjo-atagi';
 module.exports = ShinjoPlaceholder;
