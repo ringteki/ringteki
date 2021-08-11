@@ -95,6 +95,9 @@ describe('Stoicism', function() {
             this.player1.clickCard(this.fumiki);
             expect(this.fumiki.getMilitarySkill()).toBe(0);
             expect(this.fumiki.isHonored).toBe(true);
+
+            this.player2.clickCard(this.garden);
+            expect(this.player2.fate).toBe(fate + 1);
         });
     });
 });
