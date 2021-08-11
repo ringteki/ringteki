@@ -26,6 +26,6 @@ class SadaneAcademy extends ProvinceCard {
     }
 }
 
-SadaneAcademy.id = 'generic-province';
+SadaneAcademy.id = 'sadane-academy';
 
 module.exports = SadaneAcademy;
