@@ -1,4 +1,4 @@
-describe('Flagship of the Unicorn', function() {
+describe('Shinjo Atagi', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -9,14 +9,14 @@ describe('Flagship of the Unicorn', function() {
                 },
                 player2: {
                     honor: 10,
-                    inPlay: ['shinjo-placeholder', 'kakita-yoshi'],
+                    inPlay: ['shinjo-atagi', 'kakita-yoshi'],
                     provinces: ['manicured-garden', 'pilgrimage']
                 }
             });
 
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.yoshi = this.player2.findCardByName('kakita-yoshi');
-            this.shinjo = this.player2.findCardByName('shinjo-placeholder');
+            this.shinjo = this.player2.findCardByName('shinjo-atagi');
             this.chagatai = this.player1.findCardByName('moto-chagatai');
             this.rider = this.player1.findCardByName('border-rider');
             this.garden = this.player2.findCardByName('manicured-garden');
@@ -49,7 +49,7 @@ describe('Flagship of the Unicorn', function() {
 
             this.player2.clickCard(this.pilgrimage);
             expect(this.rider.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Placeholder to reveal Pilgrimage and bow Border Rider');
+            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to reveal Pilgrimage and bow Border Rider');
         });
 
         it('should prompt you to choose a character and a facedown province - no bow', function() {
@@ -64,7 +64,7 @@ describe('Flagship of the Unicorn', function() {
             this.player2.clickCard(this.chagatai);
             this.player2.clickCard(this.pilgrimage);
             expect(this.chagatai.bowed).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Placeholder to reveal Pilgrimage and fail to bow Moto Chagatai');
+            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to reveal Pilgrimage and fail to bow Moto Chagatai');
         });
 
         it('should get +2/+2 if you have no facedown provinces', function() {

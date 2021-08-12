@@ -9,7 +9,7 @@ class SadaneAcademy extends ProvinceCard {
             limit: AbilityDsl.limit.unlimitedPerConflict(),
             when: {
                 onDuelInitiated: (event, context) => {
-                    return event.challenger && event.challenger.controller === context.player &&
+                    return context.source.isConflictProvince() && event.challenger && event.challenger.controller === context.player &&
                         event.duelType === DuelTypes.Political;
                 }
             },

@@ -4,7 +4,7 @@ const ProvinceCard = require('../../../provincecard.js');
 
 const elementKey = 'higashi-no-kaze-water';
 
-class FlagshipofTheUnicorn extends ProvinceCard {
+class HigashiNoKaze extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'Move a character into the conflict',
@@ -28,6 +28,6 @@ class FlagshipofTheUnicorn extends ProvinceCard {
     }
 }
 
-FlagshipofTheUnicorn.id = 'higashi-no-kaze';
+HigashiNoKaze.id = 'higashi-no-kaze';
 
-module.exports = FlagshipofTheUnicorn;
+module.exports = HigashiNoKaze;

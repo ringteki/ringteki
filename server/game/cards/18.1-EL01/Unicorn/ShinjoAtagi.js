@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
 const { CardTypes, Players, Locations } = require('../../../Constants.js');
 
-class ShinjoPlaceholder extends DrawCard {
+class ShinjoAtagi extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => context.source.controller.getNumberOfFacedownProvinces() === 0,
@@ -52,5 +52,5 @@ class ShinjoPlaceholder extends DrawCard {
     }
 }
 
-ShinjoPlaceholder.id = 'shinjo-atagi';
-module.exports = ShinjoPlaceholder;
+ShinjoAtagi.id = 'shinjo-atagi';
+module.exports = ShinjoAtagi;
