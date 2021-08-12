@@ -45,7 +45,7 @@ describe('Sadane Academy', function() {
             expect(this.getChatLogs(5)).toContain('player2 uses Sadane Academy to win the duel originating from Policy Debate');
         });
 
-        it('should give a pol bonus until the end of the duel', function() {
+        it('should win a pol duel', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.borderRider],
