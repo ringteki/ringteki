@@ -385,18 +385,25 @@ class ConflictFlow extends BaseStepWithPipeline {
             return;
         }
 
-        let events = this.covert.map(context => new InitiateCardAbilityEvent(
-            { card: context.source, context: context },
-            () => context.target.covert = true
-        ));
+        let events = [];
 
         if(this.game.gameMode === GameModes.Emerald) {
-            events = [new InitiateCardAbilityEvent(
-                { card: this.covert[0].source, cardArray: this.covert.map(a => a.source), context: this.covert[0] },
-                () => this.covert[0].target.covert = true
-            )];
-            events = events.concat(this.game.getEvent(EventNames.OnCovertResolved, { card: this.covert.map(a => a.source), context: this.covert[0] }));
+            let goodContext = undefined;
+            this.covert.forEach(context => {
+                if(events.length === 0 && context.source && context.target) {
+                    events = [new InitiateCardAbilityEvent(
+                        { card: context.source, context: context },
+                        () => context.target.covert = true
+                    )];
+                    goodContext = context;
+                }
+            });
+            events = events.concat(this.game.getEvent(EventNames.OnCovertResolved, { card: this.covert.map(a => a.source), context: goodContext }));
         } else {
+            events = this.covert.map(context => new InitiateCardAbilityEvent(
+                { card: context.source, context: context },
+                () => context.target.covert = true
+            ));
             events = events.concat(this.covert.map(context => this.game.getEvent(EventNames.OnCovertResolved, { card: context.source, context: context })));
         }
         this.game.openThenEventWindow(events);
