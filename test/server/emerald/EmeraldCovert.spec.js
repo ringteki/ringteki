@@ -196,7 +196,7 @@ describe('Covert - Emerald Bug Checking', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['togashi-mitsu', 'tengu-sensei', 'ikoma-ikehata', 'shinjo-yasamura'],
+                    inPlay: ['togashi-mitsu', 'tengu-sensei', 'ikoma-ikehata', 'shinjo-yasamura', 'adept-of-the-waves'],
                     hand: ['pathfinder-s-blade']
                 },
                 player2: {
@@ -214,6 +214,7 @@ describe('Covert - Emerald Bug Checking', function() {
             this.tengu = this.player1.findCardByName('tengu-sensei');
             this.ikehata = this.player1.findCardByName('ikoma-ikehata');
             this.pfb = this.player1.findCardByName('pathfinder-s-blade');
+            this.adept = this.player1.findCardByName('adept-of-the-waves');
 
             this.sotorii = this.player2.findCardByName('hantei-sotorii');
             this.masterAlchemist = this.player2.findCardByName('master-alchemist');
@@ -274,6 +275,30 @@ describe('Covert - Emerald Bug Checking', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.pfb);
             this.player1.clickCard(this.pfb);
+        });
+
+        it('Adept of the Waves and FoJ', function() {
+            this.player1.clickCard(this.adept);
+            this.player1.clickCard(this.adept);
+            this.player2.playAttachment(this.jade, this.sotorii);
+            this.player1.playAttachment(this.pfb, this.adept);
+            this.noMoreActions();
+            this.player1.clickRing('water');
+            this.player1.clickCard(this.retire);
+            this.player1.clickCard(this.adept);
+            this.player1.clickPrompt('Initiate Conflict');
+            this.player1.clickCard(this.sotorii);
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.jade);
+
+            this.player2.clickCard(this.jade);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.retire);
+            this.player2.clickCard(this.retire);
+            // expect(this.player1).toHavePrompt('Triggered Abilities');
+            // expect(this.player1).toBeAbleToSelect(this.pfb);
+            // this.player1.clickCard(this.pfb);
         });
     });
 });
