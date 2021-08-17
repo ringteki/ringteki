@@ -13,7 +13,7 @@ class StandYourGround extends DrawCard {
             effectArgs: context => context.event.card,
             cannotBeMirrored: true,
             gameAction: AbilityDsl.actions.cancel(context => ({
-                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.source.getStatusToken(CharacterStatus.Honored) })
+                replacementGameAction: AbilityDsl.actions.discardStatusToken({ target: context.event.card.getStatusToken(CharacterStatus.Honored) })
             }))
         });
     }
