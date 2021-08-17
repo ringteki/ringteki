@@ -5,7 +5,7 @@ describe('Akodos Landing', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-yoshi', 'iron-crane-legion', 'doji-challenger'],
-                    hand: ['way-of-the-crane', 'warm-welcome', 'fine-katana', 'a-new-name'],
+                    hand: ['way-of-the-crane', 'warm-welcome', 'fine-katana', 'a-new-name', 'dutiful-assistant'],
                     stronghold: ['akodo-s-landing']
                 },
                 player2: {
@@ -18,6 +18,7 @@ describe('Akodos Landing', function() {
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.legion = this.player1.findCardByName('iron-crane-legion');
             this.challenger = this.player1.findCardByName('doji-challenger');
+            this.assistant = this.player1.findCardByName('dutiful-assistant');
 
             this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
 
@@ -31,11 +32,12 @@ describe('Akodos Landing', function() {
             this.player1.player.showBid = 1;
             this.player2.player.showBid = 5;
 
-            this.player1.playAttachment(this.ann, this.yoshi);
+            this.player1.playAttachment(this.ann, this.challenger);
             this.player2.pass();
+            this.player1.playAttachment(this.assistant, this.yoshi)
         });
 
-        it('should prompt you to select a character who can attach the card and has no attachments', function() {
+        it('should prompt you to select a character who can attach the card and has no followers', function() {
             this.player1.clickCard(this.landing);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).not.toBeAbleToSelect(this.yoshi);
@@ -44,10 +46,10 @@ describe('Akodos Landing', function() {
             expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
         });
 
-        it('should put the bottom card of your deck into a +1/+1 attachment', function() {
+        it('should put the top card of your deck into a +1/+1 attachment', function() {
             this.player1.reduceDeckToNumber('conflict deck', 0);
-            this.player1.moveCard(this.katana, 'conflict deck');
             this.player1.moveCard(this.crane, 'conflict deck');
+            this.player1.moveCard(this.katana, 'conflict deck');
 
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
@@ -56,7 +58,7 @@ describe('Akodos Landing', function() {
             expect(this.challenger.attachments.size()).toBe(1);
             expect(this.challenger.getMilitarySkill()).toBe(4);
             expect(this.challenger.getPoliticalSkill()).toBe(4);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the bottom card of their conflict deck to Doji Challenger as a +1/+1 attachment');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
         });
 
         it('if let go should turn back into the original card', function() {

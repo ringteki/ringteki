@@ -41,11 +41,10 @@ describe('Scouts Steed', function() {
                 attackers: [this.toshimoko]
             });
             this.player1.clickCard(this.steed);
-            expect(this.steed.location).toBe('conflict discard pile');
             this.player2.clickPrompt('Done');
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.player2).toHavePrompt('Waiting for opponent to take an action or pass');
-            expect(this.getChatLogs(5)).toContain('player1 uses Scout\'s Steed, sacrificing Scout\'s Steed to get the first action in this conflict');
+            expect(this.getChatLogs(5)).toContain('player1 uses Scout\'s Steed to get the first action in this conflict');
         });
     });
 });

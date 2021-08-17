@@ -12,12 +12,12 @@ class ScoutsSteed extends DrawCard {
             when: {
                 onConflictDeclared: (event, context) => context.source.parent && event.attackers.includes(context.source.parent)
             },
-            cost: AbilityDsl.costs.sacrificeSelf(),
             effect: 'get the first action in this conflict',
             gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                 targetController: context.player,
                 effect: AbilityDsl.effects.gainActionPhasePriority()
-            }))
+            })),
+            limit: AbilityDsl.limit.perRound(2)
         });
     }
 }

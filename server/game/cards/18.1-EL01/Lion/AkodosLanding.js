@@ -14,10 +14,10 @@ class AkodosLanding extends StrongholdCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.attachments.size() === 0 && context.game.actions.attach({ attachment: DummyAttachment }).canAffect(card, context),
+                cardCondition: (card, context) => card.attachments.filter(a => a.hasTrait('follower')).size() === 0 && context.game.actions.attach({ attachment: DummyAttachment }).canAffect(card, context),
                 gameAction: AbilityDsl.actions.handler({
                     handler: context => {
-                        const card = context.player.conflictDeck.last();
+                        const card = context.player.conflictDeck.first();
                         let token = context.game.createToken(card, Soldier);
                         card.owner.removeCardFromPile(card);
                         card.moveTo(Locations.RemovedFromGame);
@@ -28,7 +28,7 @@ class AkodosLanding extends StrongholdCard {
                     }
                 })
             },
-            effect: 'attach the bottom card of their conflict deck to {0} as a +1/+1 attachment'
+            effect: 'attach the top card of their conflict deck to {0} as a +1/+1 attachment'
         });
     }
 }

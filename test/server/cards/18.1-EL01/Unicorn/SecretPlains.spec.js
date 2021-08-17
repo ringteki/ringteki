@@ -70,9 +70,9 @@ describe('Secret Plains', function() {
             expect(this.player1).not.toBeAbleToSelect(this.kuroiMori);
             expect(this.player1).not.toBeAbleToSelect(this.rallyToTheCause);
             expect(this.player1).not.toBeAbleToSelect(this.riotInTheStreets);
-            expect(this.player1).not.toBeAbleToSelect(this.alongTheRiverOfGold);
+            expect(this.player1).toBeAbleToSelect(this.alongTheRiverOfGold);
             expect(this.player1).not.toBeAbleToSelect(this.frostbittenCrossing);
-            expect(this.player1).not.toBeAbleToSelect(this.brothersGiftDojo);
+            expect(this.player1).toBeAbleToSelect(this.brothersGiftDojo);
         });
 
         it('Vassal Fields (province references opponent)', function() {

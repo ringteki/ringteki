@@ -13,17 +13,16 @@ class TogashiTsurumi extends DrawCard {
             title: 'Place a kiho underneath self',
             cost: AbilityDsl.costs.payFate(),
             limit: AbilityDsl.limit.unlimitedPerConflict(),
-            effect: 'place {0} from their hand beneath {1}{2}',
+            effect: 'place a card from their hand beneath {1}{2}',
             effectArgs: context => [
                 context.source,
                 !this.triggeredThisRound ? ' and draw a card' : ''
             ],
             target: {
-                activePromptTitle: 'Choose a kiho',
+                activePromptTitle: 'Choose a card',
                 location: Locations.Hand,
                 controller: Players.Self,
                 cardType: [CardTypes.Event, CardTypes.Attachment, CardTypes.Character],
-                cardCondition: card => card.hasTrait('kiho'),
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.draw(context => ({
                         target: context.player,
@@ -56,7 +55,7 @@ class TogashiTsurumi extends DrawCard {
             targetLocation: this.uuid,
             targetController: Players.Self,
             match: card => {
-                return card.location === this.uuid;
+                return card.location === this.uuid && card.hasTrait('kiho');
             },
             effect: [
                 AbilityDsl.effects.canPlayFromOutOfPlay(player => {

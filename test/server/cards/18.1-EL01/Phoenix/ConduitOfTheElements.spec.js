@@ -27,37 +27,16 @@ describe('Conduit of the Elements', function() {
             });
             this.player2.pass();
             expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('air')).toBe(false);
+            expect(this.game.rings.water.hasElement('void')).toBe(false);
 
             this.player1.clickCard(this.punch);
             this.player1.clickCard(this.conduit);
             this.player1.clickCard(this.conduit);
 
             expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('air')).toBe(true);
+            expect(this.game.rings.water.hasElement('void')).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Conduit of the Elements to add Air to the conflict ring');
-        });
-
-        it('should add elements to rings if you play a kiho', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.conduit],
-                defenders: [],
-                ring: 'water'
-            });
-            this.player2.pass();
-            expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('earth')).toBe(false);
-
-            this.player1.clickCard(this.stance);
-            this.player1.clickCard(this.conduit);
-            this.player1.clickCard(this.conduit);
-
-            expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('earth')).toBe(true);
-
-            expect(this.getChatLogs(5)).toContain('player1 uses Conduit of the Elements to add Earth to the conflict ring');
+            expect(this.getChatLogs(5)).toContain('player1 uses Conduit of the Elements to add Void to the conflict ring');
         });
 
         it('should not add elements to rings if you play a non-kiho', function() {
@@ -69,14 +48,14 @@ describe('Conduit of the Elements', function() {
             });
             this.player2.pass();
             expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('earth')).toBe(false);
+            expect(this.game.rings.water.hasElement('void')).toBe(false);
 
             this.player1.clickCard(this.hammer);
             this.player1.clickCard(this.conduit);
             this.player1.clickCard(this.conduit);
 
             expect(this.game.rings.water.hasElement('water')).toBe(true);
-            expect(this.game.rings.water.hasElement('earth')).toBe(false);
+            expect(this.game.rings.water.hasElement('void')).toBe(false);
         });
     });
 });

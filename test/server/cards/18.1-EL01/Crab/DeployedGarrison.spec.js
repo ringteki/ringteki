@@ -20,7 +20,7 @@ describe('Deployed Garrison', function() {
             this.savvy.bow();
         });
 
-        it('should let you put it into play during a conflict and remove from game when it leaves play', function() {
+        it('should let you put it into play from discard during a conflict and remove from game when it leaves play', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
@@ -44,7 +44,7 @@ describe('Deployed Garrison', function() {
             expect(this.getChatLogs(5)).toContain('Deployed Garrison is removed from the game due to their effect');
         });
 
-        it('should let you put it into play during a conflict and remove from game when it leaves play', function() {
+        it('should not let you put it into play from a province', function() {
             this.player1.moveCard(this.garrison, 'province 2');
 
             this.noMoreActions();
@@ -54,20 +54,9 @@ describe('Deployed Garrison', function() {
             });
 
             this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.garrison);
-            expect(this.player1).toHavePrompt('Select card to sacrifice');
-            expect(this.player1).toBeAbleToSelect(this.storehouse);
-            this.player1.clickCard(this.storehouse);
-            expect(this.garrison.location).toBe('play area');
-            expect(this.garrison.fate).toBe(0);
-            expect(this.getChatLogs(5)).toContain('player1 uses Deployed Garrison, sacrificing Imperial Storehouse to put Deployed Garrison into play in the conflict');
-
-            this.player2.pass();
-            this.player1.clickCard(this.commonCause);
-            this.player1.clickCard(this.savvy);
-            this.player1.clickCard(this.garrison);
-            expect(this.garrison.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Deployed Garrison is removed from the game due to their effect');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

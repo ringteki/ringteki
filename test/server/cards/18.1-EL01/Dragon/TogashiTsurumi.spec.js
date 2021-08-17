@@ -35,10 +35,10 @@ describe('Togashi Tsurumi', function() {
             this.player1.clickCard(this.tsurumi);
             expect(this.player1).toBeAbleToSelect(this.punch);
             expect(this.player1).toBeAbleToSelect(this.stance);
-            expect(this.player1).not.toBeAbleToSelect(this.hammer);
+            expect(this.player1).toBeAbleToSelect(this.hammer);
             this.player1.clickCard(this.punch);
             expect(this.punch.location).toBe(this.tsurumi.uuid);
-            expect(this.getChatLogs(5)).toContain('player1 uses Togashi Tsurumi, spending 1 fate to place Hurricane Punch from their hand beneath Togashi Tsurumi and draw a card');
+            expect(this.getChatLogs(5)).toContain('player1 uses Togashi Tsurumi, spending 1 fate to place a card from their hand beneath Togashi Tsurumi and draw a card');
 
             expect(this.player1.fate).toBe(fate - 1);
             expect(this.tsurumi.getMilitarySkill()).toBe(mil + 1);
@@ -50,7 +50,7 @@ describe('Togashi Tsurumi', function() {
             this.player1.clickCard(this.tsurumi);
             this.player1.clickCard(this.stance);
             expect(this.stance.location).toBe(this.tsurumi.uuid);
-            expect(this.getChatLogs(5)).toContain('player1 uses Togashi Tsurumi, spending 1 fate to place Iron Foundations Stance from their hand beneath Togashi Tsurumi');
+            expect(this.getChatLogs(5)).toContain('player1 uses Togashi Tsurumi, spending 1 fate to place a card from their hand beneath Togashi Tsurumi');
 
             expect(this.player1.fate).toBe(fate - 2);
             expect(this.tsurumi.getMilitarySkill()).toBe(mil + 2);
@@ -58,7 +58,7 @@ describe('Togashi Tsurumi', function() {
             expect(this.player1.hand.length).toBe(hand - 1);
         });
 
-        it('cards underneath self should be playable', function() {
+        it('kihos cards underneath self should be playable', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.tsurumi],
@@ -84,6 +84,23 @@ describe('Togashi Tsurumi', function() {
             expect(this.tsurumi.getPoliticalSkill()).toBe(pol - 1);
 
             expect(this.getChatLogs(5)).toContain('player1 plays Iron Foundations Stance from their cards set aside by Togashi Tsurumi');
+        });
+
+        it('non kihos cards underneath self should not be playable', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.tsurumi],
+                defenders: [],
+                ring: 'water'
+            });
+            this.player2.pass();
+
+            this.player1.clickCard(this.tsurumi);
+            this.player1.clickCard(this.hammer);
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.hammer);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });
