@@ -91,7 +91,7 @@ class InitiateConflictPrompt extends UiPrompt {
             } else if(this.conflict.attackers.length === 0) {
                 menuTitle = 'Choose attackers';
             } else {
-                if(this.covertRemaining) {
+                if(this.covertRemaining && this.game.gameMode !== GameModes.Emerald) {
                     menuTitle = 'Choose defenders to Covert';
                 } else {
                     menuTitle = capitalize[this.conflict.conflictType] + ' skill: '.concat(this.conflict.attackerSkill);
