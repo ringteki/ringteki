@@ -14,6 +14,7 @@ describe('Tainted Tokens', function() {
             });
 
             this.shameful = this.player2.findCardByName('shameful-display', 'province 1');
+            this.shameful2 = this.player2.findCardByName('shameful-display', 'province 2');
             this.brash = this.player1.findCardByName('brash-samurai');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.mount = this.player1.findCardByName('favored-mount');
@@ -64,7 +65,7 @@ describe('Tainted Tokens', function() {
             expect(this.shameful.getStrength()).toBe(str + 2);
         });
 
-        it('should make you lose an honor if you defend', function () {
+        it('should make you lose an honor if you defend on tainted province', function () {
             this.shameful.taint();
             let honor = this.player2.honor;
 
@@ -77,6 +78,20 @@ describe('Tainted Tokens', function() {
             });
             expect(this.getChatLogs(10)).toContain('player2 loses 1 honor in order to declare defending characters');
             expect(this.player2.honor).toBe(honor - 1);
+        });
+
+        it('should NOT make you lose an honor if you defend on non-tainted province', function () {
+            this.shameful.taint();
+            let honor = this.player2.honor;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.brash],
+                defenders: [this.sotorii, this.shugenja],
+                province: this.shameful2
+            });
+            expect(this.player2.honor).toBe(honor);
         });
 
         it('should remove the token when the card leaves play (but not when a province flips faceup)', function () {
