@@ -34,7 +34,8 @@ describe('Akodos Landing', function() {
 
             this.player1.playAttachment(this.ann, this.challenger);
             this.player2.pass();
-            this.player1.playAttachment(this.assistant, this.yoshi)
+            this.player1.playAttachment(this.assistant, this.yoshi);
+            this.player2.pass();
         });
 
         it('should prompt you to select a character who can attach the card and has no followers', function() {
@@ -55,9 +56,9 @@ describe('Akodos Landing', function() {
             this.player1.clickCard(this.challenger);
 
             expect(this.katana.location).toBe('removed from game');
-            expect(this.challenger.attachments.size()).toBe(1);
-            expect(this.challenger.getMilitarySkill()).toBe(4);
-            expect(this.challenger.getPoliticalSkill()).toBe(4);
+            expect(this.challenger.attachments.size()).toBe(2);
+            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
             expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
         });
 
@@ -67,7 +68,7 @@ describe('Akodos Landing', function() {
             this.player1.clickCard(this.landing);
             this.player1.clickCard(this.challenger);
 
-            const attachment = this.challenger.attachments.first();
+            const attachment = this.challenger.attachments.last();
 
             expect(this.crane.location).toBe('removed from game');
             this.player2.clickCard(this.letGo);

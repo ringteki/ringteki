@@ -8,13 +8,13 @@ class AkodosLanding extends StrongholdCard {
         const DummyAttachment = new Soldier(this);
 
         this.action({
-            title: 'Honor a character',
+            title: 'Give a character a +1/+1 attachment',
             cost: AbilityDsl.costs.bowSelf(),
             condition: context => context.player.conflictDeck.size() > 0,
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.attachments.filter(a => a.hasTrait('follower')).size() === 0 && context.game.actions.attach({ attachment: DummyAttachment }).canAffect(card, context),
+                cardCondition: (card, context) => card.attachments.filter(a => a.hasTrait('follower')).length === 0 && context.game.actions.attach({ attachment: DummyAttachment }).canAffect(card, context),
                 gameAction: AbilityDsl.actions.handler({
                     handler: context => {
                         const card = context.player.conflictDeck.first();

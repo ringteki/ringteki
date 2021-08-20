@@ -6,12 +6,12 @@ describe('Cherished Family Servant', function() {
                 player1: {
                     honor: 5,
                     inPlay: ['doomed-shugenja'],
-                    hand: ['cherished-family-servant', 'fiery-madness', 'tainted-koku', 'assassination'],
+                    hand: ['cherished-family-servant', 'fiery-madness', 'tainted-koku', 'assassination']
                 },
                 player2: {
                     honor: 10,
                     inPlay: ['miya-mystic'],
-                    hand: ['finger-of-jade', 'assassination'],
+                    hand: ['finger-of-jade', 'assassination']
                 }
             });
             this.shugenja = this.player1.findCardByName('doomed-shugenja');

@@ -9,7 +9,7 @@ class VoidAcolyte extends DrawCard {
         this.reaction({
             title: 'Gain fate',
             when: {
-                onClaimRing: (event, context) =>  event.player === context.player &&
+                onClaimRing: (event, context) => event.player === context.player &&
                 (event.conflict && event.conflict.elements.some(element => element === this.getCurrentElementSymbol(elementKey)) || event.ring.element === this.getCurrentElementSymbol(elementKey))
             },
             gameAction: AbilityDsl.actions.placeFate()

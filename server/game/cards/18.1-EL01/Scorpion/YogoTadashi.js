@@ -19,9 +19,9 @@ class YogoTadashi extends DrawCard {
                     target: context.target,
                     effect: AbilityDsl.effects.cardCannot({
                         cannot: 'target',
-                        restricts: 'opponentsEvents',
+                        restricts: 'opponentsEvents'
                     })
-                })),
+                }))
             },
             gameAction: AbilityDsl.actions.draw(),
             limit: AbilityDsl.limit.unlimitedPerConflict(),

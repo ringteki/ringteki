@@ -7,7 +7,7 @@ class SurveillanceDetail extends DrawCard {
             title: 'Discard a card',
             when: {
                 onConflictDeclared: (event, context) => event.attackers.includes(context.source.parent),
-                onDefendersDeclared: (event, context) => event.defenders.includes(context.source.parent),
+                onDefendersDeclared: (event, context) => event.defenders.includes(context.source.parent)
             },
             gameAction: AbilityDsl.actions.chosenDiscard(context => ({
                 target: context.player.opponent

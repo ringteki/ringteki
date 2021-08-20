@@ -19,7 +19,7 @@ class DaidojiTreasureFleet extends StrongholdCard {
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     effect: AbilityDsl.effects.addKeyword('courtesy'),
                     target: context.costs.dishonor,
-                    duration: Durations.UntilEndOfRound,
+                    duration: Durations.UntilEndOfRound
                 }))
             ]),
             effect: 'gain a fate and give {1} Courtesy until the end of the round',

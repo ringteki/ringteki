@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Durations, Elements } = require('../../../Constants');
+const { Durations } = require('../../../Constants');
 
 class ConduitOfTheElements extends DrawCard {
     setupCardAbilities() {
