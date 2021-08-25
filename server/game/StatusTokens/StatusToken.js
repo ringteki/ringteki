@@ -98,6 +98,7 @@ class StatusToken extends EffectSource {
             });
             effects.push({
                 match: this.card.controller,
+                condition: () => this.card.isConflictProvince(),
                 effect: AbilityDsl.effects.costToDeclareAnyParticipants({
                     type: 'defenders',
                     message: 'loses 1 honor',
