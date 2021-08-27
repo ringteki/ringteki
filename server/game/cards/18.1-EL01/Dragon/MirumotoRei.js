@@ -10,7 +10,7 @@ class MirumotoRei extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.hasTrait('bushi') && card !== context.source,
+                cardCondition: (card, context) => card.isParticipating() && card.hasTrait('bushi') && card !== context.source,
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => {
                     const milModifiers = context.target.getEffects(EffectNames.AttachmentMilitarySkillModifier);
                     const milBonus = milModifiers.reduce((a, b) => a + b, 0);

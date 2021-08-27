@@ -2,7 +2,7 @@ const StrongholdCard = require('../../../strongholdcard.js');
 const { Phases, CardTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class DaidojiTreasureFleet extends StrongholdCard {
+class MiokosSong extends StrongholdCard {
     setupCardAbilities() {
         this.action({
             title: 'Gain fate',
@@ -28,6 +28,6 @@ class DaidojiTreasureFleet extends StrongholdCard {
     }
 }
 
-DaidojiTreasureFleet.id = 'daidoji-treasure-fleet';
+MiokosSong.id = 'mioko-s-song';
 
-module.exports = DaidojiTreasureFleet;
+module.exports = MiokosSong;

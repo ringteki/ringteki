@@ -4,110 +4,79 @@ describe('Henshin Seeker', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['henshin-seeker', 'ancient-master'],
-                    hand: ['void-fist', 'against-the-waves'],
-                    conflictDiscard: ['fine-katana', 'hurricane-punch', 'centipede-tattoo', 'against-the-waves', 'censure', 'ornate-fan', 'ki-alignment', 'hurricane-punch', 'void-fist']
+                    inPlay: ['henshin-seeker', 'ancient-master']
                 },
                 player2: {
-                    inPlay: ['tattooed-wanderer']
+                    inPlay: ['tattooed-wanderer'],
+                    hand: ['mark-of-shame', 'mark-of-shame', 'mark-of-shame']
                 }
             });
             this.seeker = this.player1.findCardByName('henshin-seeker');
             this.ancientMaster = this.player1.findCardByName('ancient-master');
             this.wanderer = this.player2.findCardByName('tattooed-wanderer');
-            this.voidFist = this.player1.findCardByName('void-fist', 'conflict discard pile');
-            this.voidFistH = this.player1.findCardByName('void-fist', 'hand');
 
-            this.atw = this.player1.findCardByName('against-the-waves', 'conflict discard pile');
-            this.atwH = this.player1.findCardByName('against-the-waves', 'hand');
-            this.HP1 = this.player1.filterCardsByName('hurricane-punch')[0];
-            this.HP2 = this.player1.filterCardsByName('hurricane-punch')[1];
+            this.shame1 = this.player2.filterCardsByName('mark-of-shame')[0];
+            this.shame2 = this.player2.filterCardsByName('mark-of-shame')[1];
+            this.shame3 = this.player2.filterCardsByName('mark-of-shame')[2];
 
-            this.player1.reduceDeckToNumber('conflict deck', 0);
-            this.player1.player.conflictDiscardPile.each(a => this.player1.moveCard(a, 'conflict deck'));
-            this.noMoreActions();
+
+            this.seeker.honor();
+            this.ancientMaster.honor();
+            this.wanderer.honor();
         });
 
-        it('should whiff if there is nothing in your discard', function() {
-            this.initiateConflict({
-                attackers: [this.seeker],
-                defenders: [],
-                ring: 'void'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toHavePrompt('Select a card to reveal');
-            expect(this.player1).toHaveDisabledPromptButton('Void Fist');
-            expect(this.player1).toHaveDisabledPromptButton('Hurricane Punch (2)');
-            expect(this.player1).toHaveDisabledPromptButton('Ki Alignment');
-            expect(this.player1).toHaveDisabledPromptButton('Against the Waves');
-            expect(this.player1).toHaveDisabledPromptButton('Ornate Fan');
-            expect(this.player1).toHaveDisabledPromptButton('Censure');
-            expect(this.player1).toHaveDisabledPromptButton('Centipede Tattoo');
-            expect(this.player1).toHavePromptButton('Take nothing');
+        it('should prevent receiving dishonored status tokens if you have the fire ring claimed', function() {
+            this.player1.claimRing('fire');
+            this.player1.pass();
+            this.player2.clickCard(this.shame1);
+            this.player2.clickCard(this.seeker);
+            this.player2.clickCard(this.shame1);
+
+            this.player1.pass();
+            this.player2.clickCard(this.shame2);
+            this.player2.clickCard(this.ancientMaster);
+            this.player2.clickCard(this.shame2);
+
+            this.player1.pass();
+            this.player2.clickCard(this.shame3);
+            this.player2.clickCard(this.wanderer);
+            this.player2.clickCard(this.shame3);
+
+            expect(this.seeker.isHonored).toBe(false);
+            expect(this.seeker.isDishonored).toBe(false);
+
+            expect(this.ancientMaster.isHonored).toBe(false);
+            expect(this.ancientMaster.isDishonored).toBe(false);
+
+            expect(this.wanderer.isHonored).toBe(false);
+            expect(this.wanderer.isDishonored).toBe(true);
         });
 
-        it('should let you pick a card in your discard and put it in your hand', function() {
-            this.player1.moveCard(this.atwH, 'conflict discard pile');
-            this.player1.moveCard(this.voidFistH, 'conflict discard pile');
-            this.initiateConflict({
-                attackers: [this.seeker],
-                defenders: [],
-                ring: 'void'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toHavePrompt('Select a card to reveal');
-            expect(this.player1).toHavePromptButton('Void Fist');
-            expect(this.player1).toHaveDisabledPromptButton('Hurricane Punch (2)');
-            expect(this.player1).toHaveDisabledPromptButton('Ki Alignment');
-            expect(this.player1).toHavePromptButton('Against the Waves');
-            expect(this.player1).toHaveDisabledPromptButton('Ornate Fan');
-            expect(this.player1).toHaveDisabledPromptButton('Censure');
-            expect(this.player1).toHaveDisabledPromptButton('Centipede Tattoo');
-            expect(this.player1).toHavePromptButton('Take nothing');
-            this.player1.clickPrompt('Void Fist');
+        it('should not prevent receiving dishonored status tokens if you don\'t have the fire ring claimed', function() {
+            this.player1.claimRing('earth');
+            this.player1.pass();
+            this.player2.clickCard(this.shame1);
+            this.player2.clickCard(this.seeker);
+            this.player2.clickCard(this.shame1);
 
-            expect(this.voidFist.location).toBe('hand');
+            this.player1.pass();
+            this.player2.clickCard(this.shame2);
+            this.player2.clickCard(this.ancientMaster);
+            this.player2.clickCard(this.shame2);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Henshin Seeker to look at the top eight cards of their deck for a kiho or spell');
-            expect(this.getChatLogs(5)).toContain('player1 takes Void Fist');
-            expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
-        });
+            this.player1.pass();
+            this.player2.clickCard(this.shame3);
+            this.player2.clickCard(this.wanderer);
+            this.player2.clickCard(this.shame3);
 
-        it('should not trigger in a non void conflict', function() {
-            this.initiateConflict({
-                attackers: [this.seeker],
-                defenders: [],
-                ring: 'air'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-        });
+            expect(this.seeker.isHonored).toBe(false);
+            expect(this.seeker.isDishonored).toBe(true);
 
-        it('should trigger if you have the void ring claimed', function() {
-            this.player1.claimRing('void');
-            this.initiateConflict({
-                attackers: [this.seeker],
-                defenders: [],
-                ring: 'air'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toHavePrompt('Select a card to reveal');
-        });
+            expect(this.ancientMaster.isHonored).toBe(false);
+            expect(this.ancientMaster.isDishonored).toBe(true);
 
-        it('should not trigger if opponent has void ring claimed', function() {
-            this.player2.claimRing('void');
-            this.initiateConflict({
-                attackers: [this.seeker],
-                defenders: [],
-                ring: 'air'
-            });
-            this.player2.pass();
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.wanderer.isHonored).toBe(false);
+            expect(this.wanderer.isDishonored).toBe(true);
         });
     });
 });

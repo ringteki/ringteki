@@ -20,6 +20,7 @@ class TheOnisFist extends DrawCard {
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
+            cost: AbilityDsl.costs.payHonor(1),
             gameAction: AbilityDsl.actions.addToken(),
             max: AbilityDsl.limit.perRound(1)
         });

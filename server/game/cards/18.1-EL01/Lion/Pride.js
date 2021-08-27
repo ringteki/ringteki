@@ -3,7 +3,7 @@ const { CardTypes, Players, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 const Soldier = require('../../Soldier.js');
 
-class AkodosLanding extends StrongholdCard {
+class Pride extends StrongholdCard {
     setupCardAbilities() {
         const DummyAttachment = new Soldier(this);
 
@@ -33,6 +33,6 @@ class AkodosLanding extends StrongholdCard {
     }
 }
 
-AkodosLanding.id = 'akodo-s-landing';
+Pride.id = 'pride';
 
-module.exports = AkodosLanding;
+module.exports = Pride;

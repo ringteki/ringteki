@@ -1,35 +1,39 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Players, Locations, Decks } = require('../../../Constants');
+const { CardTypes, Players, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class TheEmpressLegacy extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            effect: AbilityDsl.effects.reduceCost({
+                amount: 1,
+                targetCondition: target => target.type === CardTypes.Character && !target.isFaction('neutral'),
+                match: (card, source) => card === source
+            })
+        });
+
+        this.persistentEffect({
+            effect: AbilityDsl.effects.cardCannot({
+                cannot: 'target',
+                restricts: 'cardEffects',
+                source: this
+            })
+        });
+
         this.action({
-            title: 'Search for a character card',
-            target: {
-                cardType: CardTypes.Province,
-                controller: Players.Self,
-                location: Locations.Provinces,
-                cardCondition: card => !card.isBroken && !card.isFacedown() && card.location !== Locations.StrongholdProvince,
-                gameAction: AbilityDsl.actions.deckSearch({
-                    activePromptTitle: 'Choose a character',
-                    deck: Decks.DynastyDeck,
-                    cardCondition: card => card.type === CardTypes.Character && card.isUnique(),
-                    shuffle: true,
-                    message: '{0} puts {1} facedown into {2}',
-                    messageArgs: (context, cards) => [context.player, cards, context.target.name],
-                    gameAction: AbilityDsl.actions.moveCard(context => ({
-                        destination: context.target.location,
-                        faceup: false
-                    }))
-                })
-            },
-            effect: 'choose a character to place in a province'
+            title: 'Claim the imperial favor',
+            cost: AbilityDsl.costs.sacrificeSelf(),
+            max: AbilityDsl.limit.perRound(1),
+            gameAction: AbilityDsl.actions.claimImperialFavor(context => ({
+                target: context.player
+            }))
         });
     }
 }
 
-TheEmpressLegacy.id = 'the-empress-s-legacy';
+TheEmpressLegacy.id = 'the-empress-legacy';
 
 module.exports = TheEmpressLegacy;
 

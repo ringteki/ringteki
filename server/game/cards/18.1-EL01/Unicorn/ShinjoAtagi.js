@@ -6,7 +6,7 @@ class ShinjoAtagi extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => context.source.controller.getNumberOfFacedownProvinces() === 0,
-            effect: AbilityDsl.effects.modifyBothSkills(2)
+            effect: AbilityDsl.effects.modifyBothSkills(1)
         });
 
         this.action({

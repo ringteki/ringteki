@@ -46,11 +46,13 @@ describe('The Oni\'s Fist', function() {
         });
 
         it('should give itself an honor token at the start of the conflict phase', function() {
+            let honor = this.player1.honor;
             expect(this.fist.getTokenCount('honor')).toBe(0);
             this.advancePhases('conflict');
             this.player1.clickCard(this.fist);
             expect(this.fist.getTokenCount('honor')).toBe(1);
-            expect(this.getChatLogs(5)).toContain('player1 uses The Oni\'s Fist to add a honor token to The Oni\'s Fist');
+            expect(this.player1.honor).toBe(honor - 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses The Oni\'s Fist, losing 1 honor to add a honor token to The Oni\'s Fist');
         });
 
         it('should give itself an honor token at the start of the conflict phase even on a broken province', function() {

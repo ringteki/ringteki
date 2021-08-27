@@ -3,9 +3,12 @@ const AbilityDsl = require('../../../abilitydsl.js');
 
 class Yuta extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            condition: context => context.source.getFate() >= 2,
-            effect: AbilityDsl.effects.modifyBothSkills(2)
+        this.reaction({
+            title: 'Steal a fate',
+            when: {
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isAttacking()
+            },
+            gameAction: AbilityDsl.actions.takeFate()
         });
     }
 }

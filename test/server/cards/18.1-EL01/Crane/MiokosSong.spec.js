@@ -1,4 +1,4 @@
-describe('Daidoji Treasure Fleet', function() {
+describe('Mioko\'s Song', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -6,7 +6,7 @@ describe('Daidoji Treasure Fleet', function() {
                 player1: {
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'doji-kuwanan', 'doji-whisperer'],
                     hand: ['resourcefulness'],
-                    stronghold: ['daidoji-treasure-fleet'],
+                    stronghold: ['mioko-s-song'],
                     dynastyDiscard: ['favorable-ground']
                 },
                 player2: {
@@ -15,7 +15,7 @@ describe('Daidoji Treasure Fleet', function() {
                 }
             });
 
-            this.sh = this.player1.findCardByName('daidoji-treasure-fleet');
+            this.sh = this.player1.findCardByName('mioko-s-song');
             this.ground = this.player1.findCardByName('favorable-ground');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
@@ -36,7 +36,7 @@ describe('Daidoji Treasure Fleet', function() {
             expect(this.player1.fate).toBe(fate + 1);
             expect(this.whisperer.isDishonored).toBe(true);
             expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Daidōji Treasure Fleet, bowing Daidōji Treasure Fleet and dishonoring Doji Whisperer to gain a fate and give Doji Whisperer Courtesy until the end of the round');
+            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to gain a fate and give Doji Whisperer Courtesy until the end of the round');
 
             this.noMoreActions();
 

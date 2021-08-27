@@ -2,7 +2,7 @@ const StrongholdCard = require('../../../strongholdcard.js');
 const { CardTypes, Locations, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class SecretPlains extends StrongholdCard {
+class TheEastWind extends StrongholdCard {
     setupCardAbilities() {
         this.action({
             title: 'Resolve the ability on a province',
@@ -25,6 +25,6 @@ class SecretPlains extends StrongholdCard {
     }
 }
 
-SecretPlains.id = 'secret-plains';
+TheEastWind.id = 'the-east-wind';
 
-module.exports = SecretPlains;
+module.exports = TheEastWind;

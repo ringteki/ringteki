@@ -93,8 +93,8 @@ describe('Shinjo Atagi', function() {
 
             this.sd5.facedown = false;
             this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil + 2);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol + 2);
+            expect(this.shinjo.getMilitarySkill()).toBe(mil + 1);
+            expect(this.shinjo.getPoliticalSkill()).toBe(pol + 1);
         });
     });
 });

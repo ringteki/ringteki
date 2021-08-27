@@ -1,4 +1,4 @@
-describe('Akodos Landing', function() {
+describe('Pride', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -6,7 +6,7 @@ describe('Akodos Landing', function() {
                 player1: {
                     inPlay: ['kakita-yoshi', 'iron-crane-legion', 'doji-challenger'],
                     hand: ['way-of-the-crane', 'warm-welcome', 'fine-katana', 'a-new-name', 'dutiful-assistant'],
-                    stronghold: ['akodo-s-landing']
+                    stronghold: ['pride']
                 },
                 player2: {
                     inPlay: ['doji-whisperer'],
@@ -14,7 +14,7 @@ describe('Akodos Landing', function() {
                 }
             });
 
-            this.landing = this.player1.findCardByName('akodo-s-landing');
+            this.pride = this.player1.findCardByName('pride');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.legion = this.player1.findCardByName('iron-crane-legion');
             this.challenger = this.player1.findCardByName('doji-challenger');
@@ -39,7 +39,7 @@ describe('Akodos Landing', function() {
         });
 
         it('should prompt you to select a character who can attach the card and has no followers', function() {
-            this.player1.clickCard(this.landing);
+            this.player1.clickCard(this.pride);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).not.toBeAbleToSelect(this.yoshi);
             expect(this.player1).not.toBeAbleToSelect(this.legion);
@@ -52,20 +52,20 @@ describe('Akodos Landing', function() {
             this.player1.moveCard(this.crane, 'conflict deck');
             this.player1.moveCard(this.katana, 'conflict deck');
 
-            this.player1.clickCard(this.landing);
+            this.player1.clickCard(this.pride);
             this.player1.clickCard(this.challenger);
 
             expect(this.katana.location).toBe('removed from game');
             expect(this.challenger.attachments.size()).toBe(2);
             expect(this.challenger.getMilitarySkill()).toBe(5);
             expect(this.challenger.getPoliticalSkill()).toBe(5);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo\'s Landing, bowing Akodo\'s Landing to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
+            expect(this.getChatLogs(5)).toContain('player1 uses Pride, bowing Pride to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
         });
 
         it('if let go should turn back into the original card', function() {
             this.player1.reduceDeckToNumber('conflict deck', 0);
             this.player1.moveCard(this.crane, 'conflict deck');
-            this.player1.clickCard(this.landing);
+            this.player1.clickCard(this.pride);
             this.player1.clickCard(this.challenger);
 
             const attachment = this.challenger.attachments.last();

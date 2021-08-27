@@ -1,26 +1,33 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes } = require('../../../Constants.js');
+const { CardTypes, Players, Durations } = require('../../../Constants.js');
 
 class InLadyDojisService extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Reduce the cost of events by 1',
-            max: AbilityDsl.limit.perConflict(1),
-            condition: context => context.game.isDuringConflict(),
-            effect: 'reduce the cost of events this conflict',
-            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
-                targetController: context.player,
-                effect: AbilityDsl.effects.reduceCost({
-                    amount: 1,
-                    match: card => card.type === CardTypes.Event
+            title: 'Pacify a character',
+            max: AbilityDsl.limit.perRound(1),
+            cost: AbilityDsl.costs.bow({
+                cardType: CardTypes.Character,
+                cardCondition: card => !card.isUnique()
+            }),
+            target: {
+                controller: Players.Any,
+                cardType: CardTypes.Character,
+                gameAction: AbilityDsl.actions.cardLastingEffect({
+                    duration: Durations.UntilEndOfPhase,
+                    effect: [
+                        AbilityDsl.effects.cardCannot('declareAsAttacker'),
+                        AbilityDsl.effects.cardCannot('declareAsDefender')
+                    ]
                 })
-            }))
+            },
+            effect: 'prevent {0} from being declared as an attacker or defender this round'
         });
     }
 
     canPlay(context, playType) {
-        if(!context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.isParticipating())) {
+        if(context.game.isDuringConflict()) {
             return false;
         }
 

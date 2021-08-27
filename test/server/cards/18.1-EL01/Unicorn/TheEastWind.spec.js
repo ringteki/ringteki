@@ -1,4 +1,4 @@
-describe('Secret Plains', function() {
+describe('The East Wind', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -7,14 +7,14 @@ describe('Secret Plains', function() {
                     inPlay: ['keeper-of-secret-names', 'doji-challenger', 'brash-samurai', 'graceful-guardian', 'cautious-scout'],
                     hand: ['fine-katana'],
                     provinces: ['meditations-on-the-tao', 'vassal-fields', 'kuroi-mori', 'rally-to-the-cause'],
-                    stronghold: ['secret-plains']
+                    stronghold: ['the-east-wind']
                 },
                 player2: {
                     inPlay: ['keeper-of-secret-names'],
                     provinces: ['riot-in-the-streets', 'along-the-river-of-gold', 'frostbitten-crossing', 'brother-s-gift-dojo']
                 }
             });
-            this.plains = this.player1.findCardByName('secret-plains');
+            this.plains = this.player1.findCardByName('the-east-wind');
             this.p1Keeper = this.player1.findCardByName('keeper-of-secret-names');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.brash = this.player1.findCardByName('brash-samurai');
@@ -137,7 +137,7 @@ describe('Secret Plains', function() {
             expect(this.player1).toBeAbleToSelect(this.vassalFields);
             this.player1.clickCard(this.vassalFields);
             expect(this.player2.fate).toBe(p2fate - 2);
-            expect(this.getChatLogs(5)).toContain('player1 uses Secret Plains, bowing Secret Plains to resolve Vassal Fields\'s Make opponent lose 1 fate ability');
+            expect(this.getChatLogs(5)).toContain('player1 uses The East Wind, bowing The East Wind to resolve Vassal Fields\'s Make opponent lose 1 fate ability');
         });
 
         it('should not work not during a conflict', function() {

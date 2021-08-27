@@ -29,7 +29,7 @@ describe('One With the Sea', function() {
             this.player1.clickRing('fire');
         });
 
-        it('should not prompt you to spend a fate if you don\'t have the water ring', function() {
+        it('should not prompt you to choose an action if you don\'t have the water ring', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
@@ -47,7 +47,7 @@ describe('One With the Sea', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays One with the Sea to move Doji Kuwanan into the conflict');
         });
 
-        it('should prompt you to spend a fate', function() {
+        it('should prompt you to choose an action if you have the water ring', function() {
             this.player1.claimRing('water');
             this.noMoreActions();
             this.initiateConflict({
@@ -57,11 +57,11 @@ describe('One With the Sea', function() {
             this.player2.pass();
             this.player1.clickCard(this.sea);
             let fate = this.player1.fate;
-            expect(this.player1).toHavePrompt('Spend 1 fate?');
-            expect(this.player1).toHavePromptButton('Yes');
-            expect(this.player1).toHavePromptButton('No');
+            expect(this.player1).toHavePrompt('One with the Sea');
+            expect(this.player1).toHavePromptButton('Move a character you control to the conflict');
+            expect(this.player1).toHavePromptButton('Move any character to the conflict');
 
-            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('Move any character to the conflict');
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.kuwanan);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
@@ -69,8 +69,7 @@ describe('One With the Sea', function() {
 
             this.player1.clickCard(this.yoshi);
             expect(this.yoshi.isParticipating()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 chooses to spend 1 fate');
-            expect(this.getChatLogs(5)).toContain('player1 plays One with the Sea to move Kakita Yoshi into the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 plays One with the Sea, spending 1 fate to move Kakita Yoshi into the conflict');
             expect(this.player1.fate).toBe(fate - 1);
         });
 
@@ -83,11 +82,11 @@ describe('One With the Sea', function() {
             });
             this.player2.pass();
             this.player1.clickCard(this.sea);
-            expect(this.player1).toHavePrompt('Spend 1 fate?');
-            expect(this.player1).toHavePromptButton('Yes');
-            expect(this.player1).toHavePromptButton('No');
+            expect(this.player1).toHavePrompt('One with the Sea');
+            expect(this.player1).toHavePromptButton('Move a character you control to the conflict');
+            expect(this.player1).toHavePromptButton('Move any character to the conflict');
 
-            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('Move a character you control to the conflict');
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.kuwanan);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
