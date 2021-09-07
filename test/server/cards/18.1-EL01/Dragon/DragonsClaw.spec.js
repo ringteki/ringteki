@@ -37,7 +37,7 @@ describe('Dragons Claw', function() {
             this.player1.pass();
             this.player2.clickCard(this.claw);
             expect(this.player2).toBeAbleToSelect(this.challenger);
-            expect(this.player2).toBeAbleToSelect(this.kuwanan);
+            expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
             expect(this.player2).not.toBeAbleToSelect(this.yoshi);
 
             this.player2.clickCard(this.challenger);

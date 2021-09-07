@@ -28,6 +28,7 @@ const checkRestrictions = {
     eventsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Event &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
+    nonMonstrousEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('monstrous'),
     nonSpellEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('spell'),
     opponentsAttachments: (context, effect) =>
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Attachment,

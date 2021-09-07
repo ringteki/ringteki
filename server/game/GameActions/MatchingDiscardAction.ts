@@ -55,6 +55,9 @@ export class MatchingDiscardAction extends PlayerAction {
         }
         let cards = event.cards;
         let cardsToDiscard = cards.filter(a => event.match(context, a));
+        if (amount < cardsToDiscard.length) {
+            cardsToDiscard = cardsToDiscard.slice(0, amount);
+        }
         event.cards = cardsToDiscard;
         event.discardedCards = cardsToDiscard;
         if(event.reveal) {

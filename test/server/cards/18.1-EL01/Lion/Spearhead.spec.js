@@ -62,6 +62,20 @@ describe('Spearhead', function() {
             expect(this.getChatLogs(3)).toContain('player1 plays Spearhead, sacrificing Fine Katana to bow Doji Whisperer');
         });
 
+        it('should not work in pol conflicts', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi],
+                defenders: [this.dojiWhisperer],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.spearhead);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
         it('should not work if no opponent characters participating', function() {
             this.noMoreActions();
             this.initiateConflict({

@@ -34,7 +34,12 @@ class PlayCharacterAction extends BaseAction {
     }
 
     executeHandler(context) {
-        const extraFate = context.source.sumEffects(EffectNames.GainExtraFateWhenPlayed);
+        let extraFate = context.source.sumEffects(EffectNames.GainExtraFateWhenPlayed);
+        let legendaryFate = context.source.sumEffects(EffectNames.LegendaryFate);
+        if(!context.source.checkRestrictions('placeFate', context)) {
+            extraFate = 0;
+        }
+        extraFate = extraFate + legendaryFate;
         let cardPlayedEvent = context.game.getEvent(EventNames.OnCardPlayed, {
             player: context.player,
             card: context.source,

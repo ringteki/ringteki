@@ -6,7 +6,7 @@ class Spearhead extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow a character',
-            condition: context => context.game.isDuringConflict(),
+            condition: context => context.game.isDuringConflict('military'),
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Attachment,
                 cardCondition: (card, context) => card.parent && card.parent.controller === context.player && card.parent.isParticipating()

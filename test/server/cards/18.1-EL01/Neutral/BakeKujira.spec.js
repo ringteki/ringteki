@@ -4,9 +4,9 @@ describe('Bake Kujira', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['bake-kujira'],
-                    hand: ['unleash-the-djinn'],
-                    dynastyDiscard: ['funeral-pyre']
+                    inPlay: ['bake-kujira', 'doji-diplomat', 'doji-whisperer'],
+                    hand: ['unleash-the-djinn', 'command-the-tributary'],
+                    dynastyDiscard: ['funeral-pyre', 'iron-mine']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan', 'doji-fumiki'],
@@ -16,7 +16,11 @@ describe('Bake Kujira', function() {
             });
 
             this.whale = this.player1.findCardByName('bake-kujira');
+            this.diplomat = this.player1.findCardByName('doji-diplomat');
+            this.whisperer = this.player1.findCardByName('doji-whisperer');
+            this.command = this.player1.findCardByName('command-the-tributary');
             this.pyre = this.player1.placeCardInProvince('funeral-pyre', 'province 1');
+            this.mine = this.player1.findCardByName('iron-mine');
             this.djinn = this.player1.findCardByName('unleash-the-djinn');
 
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
@@ -28,6 +32,9 @@ describe('Bake Kujira', function() {
             this.echoes = this.player2.findCardByName('forebearer-s-echoes');
 
             this.whale2 = this.player2.findCardByName('bake-kujira');
+
+            this.diplomat.fate = 5;
+            this.player1.playAttachment(this.command, this.diplomat);
         });
 
         it('should be immune to events and not able to be put into play', function() {
@@ -112,6 +119,107 @@ describe('Bake Kujira', function() {
             this.player1.clickCard(this.whale);
             expect(this.fumiki.location).toBe('conflict deck');
             expect(this.getChatLogs(5)).toContain('Doji Fumiki is put on the bottom of the deck due to Bake-Kujira leaving play');
+        });
+
+        it('should not be able to be saved', function() {
+            this.player2.moveCard(this.whale2, 'play area');
+            this.player1.placeCardInProvince(this.mine, 'province 2');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whale],
+                defenders: [this.kuwanan, this.whale2]
+            });
+
+            let mil = this.whale2.getMilitarySkill();
+
+            this.player2.clickCard(this.whale2);
+            this.player2.clickCard(this.whale);
+
+            expect(this.whale2.getMilitarySkill()).toBe(mil + 2);
+            expect(this.whale.location).toBe(this.whale2.uuid);
+
+            expect(this.getChatLogs(5)).toContain('player2 uses Bake-Kujira to swallow Bake-Kujira whole!');
+        });
+
+        it('should not be able to be saved - testing setup', function() {
+            this.player2.moveCard(this.whale2, 'play area');
+            this.player1.placeCardInProvince(this.mine, 'province 2');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whale, this.diplomat],
+                defenders: [this.kuwanan, this.whale2]
+            });
+
+            this.player2.clickCard(this.whale2);
+            this.player2.clickCard(this.diplomat);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.mine);
+        });
+
+        it('should not be able to put fate on it', function() {
+            this.player2.pass();
+            this.player1.clickCard(this.diplomat);
+            expect(this.player1).not.toBeAbleToSelect(this.diplomat);
+            expect(this.player1).not.toBeAbleToSelect(this.whale);
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.fate).toBe(1);
+        });
+    });
+});
+
+describe('Bake Kujira - Dynasty', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'dynasty',
+                player1: {
+                    dynastyDiscard: ['bake-kujira', 'bake-kujira'],
+                    provinces: ['tsuma', 'toshi-ranbo', 'manicured-garden'],
+                    fate: 20
+                },
+                player2: {
+                }
+            });
+
+            this.whale = this.player1.filterCardsByName('bake-kujira')[0];
+            this.whale2 = this.player1.filterCardsByName('bake-kujira')[1];
+            this.tsuma = this.player1.findCardByName('tsuma');
+            this.ranbo = this.player1.findCardByName('toshi-ranbo');
+
+            this.player1.placeCardInProvince(this.whale, this.tsuma.location);
+            this.player1.placeCardInProvince(this.whale2, this.ranbo.location);
+        });
+
+        it('should not prompt you to add fate, but enter play with 1 fate', function() {
+            this.player1.clickCard(this.whale);
+            expect(this.player1).toHavePromptButton('0');
+            expect(this.player1).not.toHavePromptButton('1');
+            expect(this.player1).not.toHavePromptButton('2');
+            this.player1.clickPrompt('0');
+            expect(this.whale.location).toBe('play area');
+            expect(this.whale.isHonored).toBe(true);
+            expect(this.whale.fate).toBe(1);
+        });
+
+        it('should not be able to dupe for fate', function() {
+            this.player1.clickCard(this.whale);
+            this.player1.clickPrompt('0');
+            expect(this.whale.fate).toBe(1);
+            this.player2.pass();
+            this.player1.clickCard(this.whale2);
+            expect(this.whale.fate).toBe(1);
+            expect(this.whale2.location).toBe(this.ranbo.location);
+        });
+
+        it('should not gain fate from Toshi Ranbo', function() {
+            this.player1.clickCard(this.whale2);
+            this.player1.clickPrompt('0');
+            expect(this.whale2.fate).toBe(1);
         });
     });
 });

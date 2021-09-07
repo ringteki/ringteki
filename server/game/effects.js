@@ -92,6 +92,7 @@ const Effects = {
     immunity: (properties) => EffectBuilder.card.static(EffectNames.AbilityRestrictions, new Restriction(properties)),
     increaseLimitOnAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnAbilities, abilities),
     increaseLimitOnPrintedAbilities: (abilities) => EffectBuilder.card.static(EffectNames.IncreaseLimitOnPrintedAbilities, abilities),
+    legendaryFate: (amount = 1) => EffectBuilder.card.flexible(EffectNames.LegendaryFate, amount),
     loseAllNonKeywordAbilities: () => EffectBuilder.card.static(EffectNames.LoseAllNonKeywordAbilities),
     loseKeyword: (keyword) => EffectBuilder.card.static(EffectNames.LoseKeyword, keyword),
     modifyBaseMilitarySkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseMilitarySkillMultiplier, value),

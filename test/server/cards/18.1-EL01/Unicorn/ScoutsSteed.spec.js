@@ -5,6 +5,7 @@ describe('Scouts Steed', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-toshimoko'],
+                    dynastyDiscard: ['doji-whisperer'],
                     hand: ['scout-s-steed']
                 },
                 player2: {
@@ -15,6 +16,7 @@ describe('Scouts Steed', function() {
 
             this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
             this.steed = this.player1.findCardByName('scout-s-steed');
+            this.whisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 1');
 
             this.wanderingRonin = this.player2.findCardByName('wandering-ronin');
             this.talismanOfTheSun = this.player2.findCardByName('talisman-of-the-sun');
@@ -35,16 +37,45 @@ describe('Scouts Steed', function() {
             expect(this.player1).toBeAbleToSelect(this.steed);
         });
 
-        it('should sac itself to give the attacking player the first action opportunity', function() {
+        it('should let you play a character into the conflict', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko]
             });
             this.player1.clickCard(this.steed);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1).toHavePromptButton('0');
+            expect(this.player1).toHavePromptButton('1');
+            expect(this.player1).toHavePromptButton('2');
+
+            this.player1.clickPrompt('2');
+            expect(this.whisperer.location).toBe('play area');
+            expect(this.whisperer.isParticipating()).toBe(true);
+            expect(this.whisperer.fate).toBe(2);
+            expect(this.getChatLogs(10)).toContain('player1 uses Scout\'s Steed to play Doji Whisperer into the conflict');
+            expect(this.getChatLogs(10)).toContain('player1 plays Doji Whisperer into the conflict with 2 additional fate');
+        });
+
+        it('if you cancel should not let you play the character', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.toshimoko]
+            });
+            this.player1.clickCard(this.steed);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.whisperer);
+            this.player1.clickPrompt('Cancel');
+            expect(this.whisperer.location).toBe('province 1');
+            expect(this.getChatLogs(10)).toContain('player1 uses Scout\'s Steed to play Doji Whisperer into the conflict');
             this.player2.clickPrompt('Done');
+
+            this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');
-            expect(this.player2).toHavePrompt('Waiting for opponent to take an action or pass');
-            expect(this.getChatLogs(5)).toContain('player1 uses Scout\'s Steed to get the first action in this conflict');
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

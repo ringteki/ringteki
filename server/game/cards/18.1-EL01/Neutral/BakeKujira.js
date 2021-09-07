@@ -5,6 +5,29 @@ const { Locations } = require('../../../Constants');
 
 class BakeKujira extends DrawCard {
     setupCardAbilities() {
+        // Legendary X
+        this.persistentEffect({
+            location: Locations.Any,
+            targetLocation: Locations.Any,
+            effect: [
+                AbilityDsl.effects.playerCannot({
+                    cannot: 'placeFateWhenPlayingCharacterFromProvince',
+                    restricts: 'source'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'putIntoPlay',
+                    restricts: 'cardEffects'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'placeFate'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'preventedFromLeavingPlay'
+                }),
+                AbilityDsl.effects.legendaryFate(1)
+            ]
+        });
+
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register(['onCardLeavesPlay']);
 
@@ -13,13 +36,9 @@ class BakeKujira extends DrawCard {
         });
 
         this.persistentEffect({
-            location: Locations.Any,
-            targetLocation: Locations.Any,
-            effect: AbilityDsl.effects.cardCannot('putIntoPlay')
-        });
-
-        this.persistentEffect({
-            effect: AbilityDsl.effects.immunity({ restricts: 'events' })
+            effect: AbilityDsl.effects.immunity({
+                restricts: 'nonMonstrousEvents'
+            })
         });
 
         this.action({
