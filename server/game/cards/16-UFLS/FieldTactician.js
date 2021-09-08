@@ -16,9 +16,13 @@ class FieldTactician extends DrawCard {
                 controller: Players.Any,
                 gameAction: AbilityDsl.actions.handler({
                     handler: context => {
-                        const player = context.target.owner;
+                        const card = context.target;
+                        const player = card.owner;
+                        player.moveCard(card, Locations.ConflictDeck);
+                        const index = player.conflictDeck.indexOf(card);
+                        player.conflictDeck.splice(index, 1);
                         const orderedCards = player.conflictDeck.first(2);
-                        orderedCards.push(context.target);
+                        orderedCards.push(card);
                         player.conflictDeck.splice(0, 2, ...orderedCards);
                     }
                 })
