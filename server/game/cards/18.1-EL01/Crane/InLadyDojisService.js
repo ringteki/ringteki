@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Players, Durations } = require('../../../Constants.js');
+const { CardTypes, Players, TargetModes, Durations } = require('../../../Constants.js');
 
 class InLadyDojisService extends DrawCard {
     setupCardAbilities() {
@@ -8,21 +8,36 @@ class InLadyDojisService extends DrawCard {
             title: 'Pacify a character',
             max: AbilityDsl.limit.perRound(1),
             cost: AbilityDsl.costs.bow({
-                cardType: CardTypes.Character,
-                cardCondition: card => !card.isUnique()
+                cardType: CardTypes.Character
             }),
-            target: {
-                controller: Players.Any,
-                cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.cardLastingEffect({
-                    duration: Durations.UntilEndOfPhase,
-                    effect: [
-                        AbilityDsl.effects.cardCannot('declareAsAttacker'),
-                        AbilityDsl.effects.cardCannot('declareAsDefender')
-                    ]
-                })
+            targets: {
+                character: {
+                    cardType: CardTypes.Character,
+                    controller: Players.Any
+                },
+                select: {
+                    mode: TargetModes.Select,
+                    dependsOn: 'character',
+                    choices: {
+                        'Prevent Attacking': AbilityDsl.actions.cardLastingEffect(context => ({
+                            target: context.targets.character,
+                            duration: Durations.UntilEndOfPhase,
+                            effect: [
+                                AbilityDsl.effects.cardCannot('declareAsAttacker')
+                            ]
+                        })),
+                        'Prevent Defending': AbilityDsl.actions.cardLastingEffect(context => ({
+                            target: context.targets.character,
+                            duration: Durations.UntilEndOfPhase,
+                            effect: [
+                                AbilityDsl.effects.cardCannot('declareAsDefender')
+                            ]
+                        }))
+                    }
+                }
             },
-            effect: 'prevent {0} from being declared as an attacker or defender this round'
+            effect: 'prevent {1} from being declared as {2} this phase',
+            effectArgs: context => [context.targets.character, context.selects.select.choice === 'Prevent Attacking' ? 'an attacker' : 'a defender']
         });
     }
 

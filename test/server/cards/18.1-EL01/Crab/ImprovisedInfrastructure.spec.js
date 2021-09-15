@@ -45,7 +45,7 @@ describe('Improvised Infrastructure', function() {
             this.grounds.facedown = false;
         });
 
-        it('should allow you to select a faceup holding in an unbroken province', function() {
+        it('should allow you to select a faceup holding in a province', function() {
             this.storehouse.facedown = true;
             this.game.checkGameState(true);
 
@@ -60,13 +60,13 @@ describe('Improvised Infrastructure', function() {
             expect(this.player1).not.toBeAbleToSelect(this.assault);
         });
 
-        it('should allow you to select a faceup holding in an unbroken province', function() {
+        it('should allow you to select a faceup holding in a province', function() {
             this.assault.isBroken = true;
             this.game.checkGameState(true);
 
             this.player1.clickCard(this.infrastructure);
             expect(this.player1).toHavePrompt('Choose a holding');
-            expect(this.player1).not.toBeAbleToSelect(this.storehouse);
+            expect(this.player1).toBeAbleToSelect(this.storehouse);
             expect(this.player1).toBeAbleToSelect(this.ground);
             expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
             expect(this.player1).not.toBeAbleToSelect(this.dispatch);

@@ -26,11 +26,19 @@ describe('In Lady Dojis Service', function() {
             this.sadane = this.player1.findCardByName('game-of-sadane');
         });
 
+        it('should let you choose attacker or defender', function () {
+            this.player1.clickCard(this.service);
+            this.player1.clickCard(this.asami);
+            expect(this.player1).toHavePromptButton('Prevent Attacking');
+            expect(this.player1).toHavePromptButton('Prevent Defending');
+        });
+
         it('should prevent the targeted character from being declared as an attacker', function () {
             this.player1.clickCard(this.service);
             this.player1.clickCard(this.asami);
+            this.player1.clickPrompt('Prevent Attacking');
             this.player1.clickCard(this.whisperer);
-            expect(this.getChatLogs(5)).toContain('player1 plays In Lady Dōji\'s Service, bowing Doji Whisperer to prevent Kakita Asami from being declared as an attacker or defender this round');
+            expect(this.getChatLogs(5)).toContain('player1 plays In Lady Dōji\'s Service, bowing Doji Whisperer to prevent Kakita Asami from being declared as an attacker this phase');
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
@@ -45,7 +53,9 @@ describe('In Lady Dojis Service', function() {
         it('should prevent the targeted character from being declared as a defender until the end of the round', function () {
             this.player1.clickCard(this.service);
             this.player1.clickCard(this.asami);
+            this.player1.clickPrompt('Prevent Defending');
             this.player1.clickCard(this.whisperer);
+            expect(this.getChatLogs(5)).toContain('player1 plays In Lady Dōji\'s Service, bowing Doji Whisperer to prevent Kakita Asami from being declared as a defender this phase');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat],

@@ -11,7 +11,7 @@ class ImprovisedInfrastructure extends DrawCard {
                     cardType: CardTypes.Holding,
                     controller: Players.Self,
                     location: Locations.Provinces,
-                    cardCondition: (card, context) => !context.player.getProvinceCardInProvince(card.location).isBroken && !card.isFacedown()
+                    cardCondition: card => !card.isFacedown()
                 },
                 province: {
                     targets: false,

@@ -5,7 +5,7 @@ describe('Mioko\'s Song', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'doji-kuwanan', 'doji-whisperer'],
-                    hand: ['resourcefulness'],
+                    hand: ['festival-for-the-fortunes', 'way-of-the-crane'],
                     stronghold: ['mioko-s-song'],
                     dynastyDiscard: ['favorable-ground']
                 },
@@ -16,10 +16,11 @@ describe('Mioko\'s Song', function() {
             });
 
             this.sh = this.player1.findCardByName('mioko-s-song');
+            this.crane = this.player1.findCardByName('way-of-the-crane');
             this.ground = this.player1.findCardByName('favorable-ground');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
-            this.resourcefulness = this.player1.findCardByName('resourcefulness');
+            this.festival = this.player1.findCardByName('festival-for-the-fortunes');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.kuwanan = this.player1.findCardByName('doji-kuwanan');
             this.savvy = this.player2.findCardByName('savvy-politician');
@@ -28,15 +29,40 @@ describe('Mioko\'s Song', function() {
             this.assassination = this.player2.findCardByName('assassination');
         });
 
-        it('should dishonor someone to gain 1 fate and give them Courtesy', function() {
+        it('should dishonor someone to reduce the cost of the next event by 1 fate', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.sh);
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.isDishonored).toBe(true);
+
+            this.player2.pass();
+            this.player1.clickCard(this.festival);
+            expect(this.player1.fate).toBe(fate - 2);
+        });
+
+        it('should dishonor someone to reduce the cost of the next event by 1 fate', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.sh);
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.isDishonored).toBe(true);
+
+            this.player2.pass();
+            this.player1.clickCard(this.crane);
+            this.player1.clickCard(this.whisperer);
+
+            this.player2.pass();
+            this.player1.clickCard(this.festival);
+            expect(this.player1.fate).toBe(fate - 3);
+        });
+
+        it('should give target Courtesy', function() {
             let fate = this.player1.fate;
             this.player1.clickCard(this.sh);
             this.player1.clickCard(this.whisperer);
 
-            expect(this.player1.fate).toBe(fate + 1);
             expect(this.whisperer.isDishonored).toBe(true);
             expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to gain a fate and give Doji Whisperer Courtesy until the end of the round');
+            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to reduce the cost of their next event this phase by 1 and give Doji Whisperer Courtesy until the end of the round');
 
             this.noMoreActions();
 
@@ -46,7 +72,7 @@ describe('Mioko\'s Song', function() {
             });
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.whisperer);
-            expect(this.player1.fate).toBe(fate + 2);
+            expect(this.player1.fate).toBe(fate + 1);
             expect(this.getChatLogs(5)).toContain('player1 gains a fate due to Doji Whisperer\'s Courtesy');
         });
     });

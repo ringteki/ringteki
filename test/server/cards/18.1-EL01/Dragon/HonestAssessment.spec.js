@@ -1,112 +1,99 @@
-describe('Dragons Claw', function() {
+describe('Honest Assessment', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger', 'kakita-yoshi'],
-                    hand: ['honest-assessment']
+                    inPlay: ['isawa-tadaka-2'],
+                    hand: ['ornate-fan', 'fine-katana', 'banzai', 'ornate-fan'],
+                    conflictDiscard: ['let-go', 'assassination', 'fiery-madness']
                 },
                 player2: {
-                    hand: ['dragon-s-claw', 'dragon-s-fang', 'fine-katana', 'fine-katana']
+                    inPlay: ['doji-diplomat', 'doji-challenger'],
+                    hand: ['honest-assessment']
                 }
             });
 
-            this.yoshi = this.player1.findCardByName('kakita-yoshi');
-            this.challenger = this.player1.findCardByName('doji-challenger');
-            this.assessment = this.player1.findCardByName('honest-assessment');
+            this.fineKatana = this.player1.findCardByName('fine-katana');
+            this.ornateFan = this.player1.filterCardsByName('ornate-fan')[0];
+            this.ornateFan2 = this.player1.filterCardsByName('ornate-fan')[1];
+            this.banzai = this.player1.findCardByName('banzai');
+            this.letGo = this.player1.findCardByName('let-go');
+            this.assassinate = this.player1.findCardByName('assassination');
+            this.madness = this.player1.findCardByName('fiery-madness');
 
-            this.claw = this.player2.findCardByName('dragon-s-claw');
-            this.fang = this.player2.findCardByName('dragon-s-fang');
-            this.katana1 = this.player2.filterCardsByName('fine-katana')[0];
-            this.katana2 = this.player2.filterCardsByName('fine-katana')[1];
+            this.isawaTadaka = this.player1.findCardByName('isawa-tadaka-2');
+            this.diplomat = this.player2.findCardByName('doji-diplomat');
+            this.challenger = this.player2.findCardByName('doji-challenger');
+
+            this.assessment = this.player2.findCardByName('honest-assessment');
+            this.player1.pass();
         });
 
         it('should attach to a courtier', function() {
-            this.player1.clickCard(this.assessment);
-            expect(this.player1).toBeAbleToSelect(this.yoshi);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-
-            this.player1.clickCard(this.yoshi);
-            expect(this.assessment.parent).toBe(this.yoshi);
+            this.player2.clickCard(this.assessment);
+            expect(this.player2).toBeAbleToSelect(this.diplomat);
+            expect(this.player2).not.toBeAbleToSelect(this.challenger);
+            this.player2.clickCard(this.diplomat);
+            expect(this.assessment.parent).toBe(this.diplomat);
         });
 
-        it('should prompt you to name a card and reveal hand if opponent doesn\'t have the card', function() {
-            this.player1.clickCard(this.assessment);
-            this.player1.clickCard(this.yoshi);
-
-            this.player2.pass();
-            this.player1.clickCard(this.yoshi);
-            expect(this.player1).toHavePrompt('Name a card');
-            this.player1.chooseCardInPrompt(this.assessment.name, 'card-name');
-
-            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Yoshi\'s gained ability from Honest Assessment, naming Honest Assessment to look at player2\'s hand for cards named Honest Assessment');
-            expect(this.getChatLogs(10)).toContain('Kakita Yoshi sees Dragon\'s Claw, Dragon\'s Fang, Fine Katana and Fine Katana');
+        it('should prompt you to name a card', function() {
+            this.player2.clickCard(this.assessment);
+            this.player2.clickCard(this.diplomat);
+            this.player1.pass();
+            this.player2.clickCard(this.assessment);
+            expect(this.player2).toHavePrompt('Name a card');
         });
 
-        it('should prompt opponent to choose to discard if they have the card', function() {
-            this.player1.clickCard(this.assessment);
-            this.player1.clickCard(this.yoshi);
+        it('should let you to name a card and then sac itself to discard all matching cards from a revealed random subset of your opponent\'s hand', function() {
+            this.player2.clickCard(this.assessment);
+            this.player2.clickCard(this.diplomat);
+            this.player1.pass();
 
-            this.player2.pass();
-            this.player1.clickCard(this.yoshi);
-            expect(this.player1).toHavePrompt('Name a card');
-            this.player1.chooseCardInPrompt(this.katana1.name, 'card-name');
+            let hand = this.player1.hand.length;
+            this.player2.clickCard(this.assessment);
+            expect(this.player2).toHavePrompt('Name a card');
+            this.player2.chooseCardInPrompt(this.ornateFan.name, 'card-name');
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Yoshi\'s gained ability from Honest Assessment, naming Fine Katana to look at player2\'s hand for cards named Fine Katana');
-            expect(this.getChatLogs(10)).toContain('Kakita Yoshi sees Dragon\'s Claw, Dragon\'s Fang, Fine Katana and Fine Katana');
-            expect(this.player2).toHavePrompt('Discard a copy of Fine Katana?');
-            expect(this.player2).toHavePromptButton('Yes');
-            expect(this.player2).toHavePromptButton('No');
+            expect(this.player1.hand.length).toBe(hand - 2);
+            expect(this.getChatLogs(10)).toContain('player2 uses Honest Assessment, sacrificing Honest Assessment and naming Ornate Fan to look at 4 random cards in player1\'s hand and discard all cards named Ornate Fan');
+            expect(this.getChatLogs(10)).toContain('Honest Assessment sees Banzai!, Fine Katana, Ornate Fan and Ornate Fan');
+            expect(this.getChatLogs(10)).toContain('player1 discards Ornate Fan and Ornate Fan');
+            expect(this.assessment.location).toBe('conflict discard pile');
         });
 
-        it('choosing to discard', function() {
-            this.player1.clickCard(this.assessment);
-            this.player1.clickCard(this.yoshi);
-            this.player2.pass();
+        it('hand has no matching cards', function() {
+            this.player2.clickCard(this.assessment);
+            this.player2.clickCard(this.diplomat);
+            this.player1.pass();
 
-            let hand1 = this.player1.hand.length;
-            let hand2 = this.player2.hand.length;
+            let hand = this.player1.hand.length;
+            this.player2.clickCard(this.assessment);
+            expect(this.player2).toHavePrompt('Name a card');
+            this.player2.chooseCardInPrompt(this.letGo.name, 'card-name');
 
-            this.player1.clickCard(this.yoshi);
-            expect(this.player1).toHavePrompt('Name a card');
-            this.player1.chooseCardInPrompt(this.katana1.name, 'card-name');
-            this.player2.clickPrompt('Yes');
-
-            expect(this.player1.hand.length).toBe(hand1);
-            expect(this.player2.hand.length).toBe(hand2 - 1);
-
-            let katana1Discarded = this.katana1.location === 'conflict discard pile';
-            let katana2Discarded = this.katana2.location === 'conflict discard pile';
-
-            expect(katana1Discarded || katana2Discarded).toBe(true);
-            expect(katana1Discarded && katana2Discarded).toBe(false);
-            expect(this.getChatLogs(10)).toContain('player2 chooses to discard a copy of Fine Katana');
-            expect(this.getChatLogs(10)).toContain('player2 discards Fine Katana');
+            expect(this.player1.hand.length).toBe(hand);
+            expect(this.getChatLogs(10)).toContain('player2 uses Honest Assessment, sacrificing Honest Assessment and naming Let Go to look at 4 random cards in player1\'s hand and discard all cards named Let Go');
+            expect(this.getChatLogs(10)).toContain('Honest Assessment sees Banzai!, Fine Katana, Ornate Fan and Ornate Fan');
+            expect(this.getChatLogs(10)).toContain('player1 does not discard anything');
         });
 
-        it('choosing not to discard', function() {
-            this.player1.clickCard(this.assessment);
-            this.player1.clickCard(this.yoshi);
-            this.player2.pass();
+        it('shoud work with less than 4 cards', function() {
+            this.player1.moveCard(this.ornateFan, 'conflict disard pile');
+            let hand = this.player1.hand.length;
 
-            let hand1 = this.player1.hand.length;
-            let hand2 = this.player2.hand.length;
+            this.player2.clickCard(this.assessment);
+            this.player2.clickCard(this.diplomat);
+            this.player1.pass();
+            this.player2.clickCard(this.assessment);
+            expect(this.player2).toHavePrompt('Name a card');
+            this.player2.chooseCardInPrompt(this.letGo.name, 'card-name');
 
-            this.player1.clickCard(this.yoshi);
-            expect(this.player1).toHavePrompt('Name a card');
-            this.player1.chooseCardInPrompt(this.katana1.name, 'card-name');
-            this.player2.clickPrompt('No');
-
-            expect(this.player1.hand.length).toBe(hand1 + 1);
-            expect(this.player2.hand.length).toBe(hand2);
-
-            let katana1Discarded = this.katana1.location === 'conflict discard pile';
-            let katana2Discarded = this.katana2.location === 'conflict discard pile';
-
-            expect(katana1Discarded || katana2Discarded).toBe(false);
-            expect(katana1Discarded && katana2Discarded).toBe(false);
-            expect(this.getChatLogs(10)).toContain('player2 chooses to let player1 draw a card');
+            expect(this.player1.hand.length).toBe(hand);
+            expect(this.getChatLogs(10)).toContain('player2 uses Honest Assessment, sacrificing Honest Assessment and naming Let Go to look at 4 random cards in player1\'s hand and discard all cards named Let Go');
+            expect(this.getChatLogs(10)).toContain('Honest Assessment sees Banzai!, Fine Katana and Ornate Fan');
+            expect(this.getChatLogs(10)).toContain('player1 does not discard anything');
         });
     });
 });

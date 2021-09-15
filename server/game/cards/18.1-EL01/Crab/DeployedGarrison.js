@@ -1,34 +1,36 @@
 const DrawCard = require('../../../drawcard.js');
-const { Locations, CardTypes } = require('../../../Constants');
+const { Locations, CardTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
-const EventRegistrar = require('../../../eventregistrar');
 
 class DeployedGarrison extends DrawCard {
     setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onCardLeavesPlay']);
-
         this.action({
             title: 'Sacrifice a holding to put this character into play',
             location: Locations.DynastyDiscardPile,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Holding
             }),
-            gameAction: AbilityDsl.actions.sequential([
+            gameAction: AbilityDsl.actions.joint([
                 AbilityDsl.actions.putIntoConflict(context => ({
                     target: context.source
+                })),
+                AbilityDsl.actions.cardLastingEffect(context => ({
+                    target: context.source,
+                    duration: Durations.UntilEndOfPhase,
+                    location: [Locations.PlayArea],
+                    effect: AbilityDsl.effects.delayedEffect({
+                        when: {
+                            onConflictFinished: () => true
+                        },
+                        message: '{0} is removed from the game due to its effect',
+                        messageArgs: [context.source],
+                        gameAction: AbilityDsl.actions.removeFromGame()
+                    })
                 }))
-            ])
+            ]),
+            effect: 'put {1} into play in the conflict',
+            effectArgs: context => [context.source]
         });
-    }
-
-    onCardLeavesPlay(event) {
-        if(event.card === this && !event.card.isBlank()) {
-            if(this.location !== Locations.RemovedFromGame) {
-                this.game.addMessage('{0} is removed from the game due to their effect', this);
-                this.owner.moveCard(this, Locations.RemovedFromGame);
-            }
-        }
     }
 }
 

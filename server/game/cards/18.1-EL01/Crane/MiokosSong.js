@@ -12,9 +12,10 @@ class MiokosSong extends StrongholdCard {
                 AbilityDsl.costs.dishonor({ cardCondition: card => card.type === CardTypes.Character })
             ],
             gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.gainFate(context => ({
-                    target: context.player,
-                    amount: 1
+                AbilityDsl.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
+                    duration: Durations.UntilEndOfPhase,
+                    effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, card => card.type === CardTypes.Event)
                 })),
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     effect: AbilityDsl.effects.addKeyword('courtesy'),
@@ -22,7 +23,7 @@ class MiokosSong extends StrongholdCard {
                     duration: Durations.UntilEndOfRound
                 }))
             ]),
-            effect: 'gain a fate and give {1} Courtesy until the end of the round',
+            effect: 'reduce the cost of their next event this phase by 1 and give {1} Courtesy until the end of the round',
             effectArgs: context => [context.costs.dishonor]
         });
     }
