@@ -23,8 +23,6 @@ class YogoTadashi extends DrawCard {
                     })
                 }))
             },
-            gameAction: AbilityDsl.actions.draw(),
-            limit: AbilityDsl.limit.unlimitedPerConflict(),
             effect: 'prevent {0} from being targeted by events played by {1}',
             effectArgs: context => [context.player.opponent]
         });
