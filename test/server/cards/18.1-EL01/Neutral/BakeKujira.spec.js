@@ -82,6 +82,7 @@ describe('Bake Kujira', function() {
 
             this.player1.clickCard(this.whale);
             expect(this.player1).not.toBeAbleToSelect(this.fumiki);
+            expect(this.player1).not.toBeAbleToSelect(this.whale);
             expect(this.player1).toBeAbleToSelect(this.kuwanan);
             this.player1.clickCard(this.kuwanan);
             expect(this.whale.getMilitarySkill()).toBe(mil + 2);

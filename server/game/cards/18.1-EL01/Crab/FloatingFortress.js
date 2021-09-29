@@ -5,8 +5,13 @@ const AbilityDsl = require('../../../abilitydsl');
 class FloatingFortress extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Ready this character',
+            title: 'Rebuild a holding',
             condition: context => context.player.isDefendingPlayer(),
+            cost: AbilityDsl.costs.discardCard({
+                location: Locations.Hand,
+                targets: true
+            }),
+            max: AbilityDsl.limit.perRound(1),
             target: {
                 cardType: CardTypes.Holding,
                 controller: Players.Self,

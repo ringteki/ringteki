@@ -47,7 +47,7 @@ class BakeKujira extends DrawCard {
             condition: context => context.source.isParticipating(),
             target: {
                 activePromptTitle: 'Choose a character',
-                cardCondition: card => card.isParticipating(),
+                cardCondition: (card, context) => card.isParticipating() && card !== context.source,
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.discardFromPlay(),
                     AbilityDsl.actions.handler({

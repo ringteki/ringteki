@@ -1,19 +1,21 @@
 const DrawCard = require('../../../drawcard.js');
+const { Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class HonestAssessment extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            trait: 'courtier'
+            trait: 'courtier',
+            myControl: true
         });
 
-        this.action({
+        this.reaction({
             title: 'Name a card',
-            printedAbility: false,
-            cost: [
-                AbilityDsl.costs.sacrificeSelf(),
-                AbilityDsl.costs.nameCard()
-            ],
+            when: {
+                onCardAttached: (event, context) => event.card === context.source && event.originalLocation !== Locations.PlayArea
+            },
+            cost: AbilityDsl.costs.nameCard(),
+            max: AbilityDsl.limit.perRound(1),
             gameAction: AbilityDsl.actions.multipleContext(context => {
                 let cards = context.player.opponent.hand.shuffle().slice(0, 4).sort((a, b) => a.name.localeCompare(b.name));
                 return ({

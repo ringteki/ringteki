@@ -45,9 +45,9 @@ describe('Cherished Family Servant', function() {
             expect(this.jade.location).toBe('play area');
         });
 
-        it('should give poison attachmenst ancestral', function() {
+        it('should give poison attachmenst ancestral when dire', function() {
             this.player1.clickCard(this.servant);
-            this.player1.clickPrompt('1');
+            this.player1.clickPrompt('0');
 
             expect(this.madness.hasKeyword('ancestral')).toBe(true);
             expect(this.koku.hasKeyword('ancestral')).toBe(false);
@@ -62,6 +62,52 @@ describe('Cherished Family Servant', function() {
             this.player1.clickCard(this.assassination);
             this.player1.clickCard(this.mystic);
             expect(this.madness.location).toBe('hand');
+        });
+
+        it('should not give poison attachmenst ancestral when not dire', function() {
+            this.player1.clickCard(this.servant);
+            this.player1.clickPrompt('1');
+
+            expect(this.madness.hasKeyword('ancestral')).toBe(false);
+            expect(this.koku.hasKeyword('ancestral')).toBe(false);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.shugenja],
+                defenders: [this.mystic]
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.assassination);
+            this.player1.clickCard(this.mystic);
+            expect(this.madness.location).toBe('conflict discard pile');
+        });
+
+        it('should not lose fate or be discarded during the fate phase when not dishonored', function() {
+            this.player1.clickCard(this.servant);
+            this.player1.clickPrompt('1');
+
+            this.servantFate = this.servant.fate;
+
+            this.advancePhases('fate');
+
+            this.player1.clickPrompt('Done');
+            this.player2.clickPrompt('Done');
+            expect(this.servant.fate).toBe(this.servantFate);
+        });
+
+        it('should lose fate during the fate phase when dishonored', function() {
+            this.player1.clickCard(this.servant);
+            this.player1.clickPrompt('1');
+            this.servant.dishonor();
+
+            this.servantFate = this.servant.fate;
+
+            this.advancePhases('fate');
+
+            this.player1.clickPrompt('Done');
+            this.player2.clickPrompt('Done');
+            expect(this.servant.fate).toBe(this.servantFate - 1);
         });
     });
 });

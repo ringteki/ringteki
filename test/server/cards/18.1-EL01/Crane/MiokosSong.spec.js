@@ -40,7 +40,7 @@ describe('Mioko\'s Song', function() {
             expect(this.player1.fate).toBe(fate - 2);
         });
 
-        it('should dishonor someone to reduce the cost of the next event by 1 fate', function() {
+        it('should dishonor someone to reduce the cost of the next event that costs 1 or more by 1 fate', function() {
             let fate = this.player1.fate;
             this.player1.clickCard(this.sh);
             this.player1.clickCard(this.whisperer);
@@ -52,7 +52,7 @@ describe('Mioko\'s Song', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.festival);
-            expect(this.player1.fate).toBe(fate - 3);
+            expect(this.player1.fate).toBe(fate - 2);
         });
 
         it('should give target Courtesy', function() {
@@ -62,7 +62,7 @@ describe('Mioko\'s Song', function() {
 
             expect(this.whisperer.isDishonored).toBe(true);
             expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to reduce the cost of their next event this phase by 1 and give Doji Whisperer Courtesy until the end of the round');
+            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to reduce the cost of their next event this phase with printed cost 1 or more by 1 and give Doji Whisperer Courtesy until the end of the round');
 
             this.noMoreActions();
 

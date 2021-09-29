@@ -22,6 +22,10 @@ class ScoutsSteedPlayAction extends PlayCharacterAction {
 
 class ScoutsSteed extends DrawCard {
     setupCardAbilities() {
+        this.attachmentConditions({
+            myControl: true
+        });
+
         this.whileAttached({
             effect: AbilityDsl.effects.addTrait('cavalry')
         });

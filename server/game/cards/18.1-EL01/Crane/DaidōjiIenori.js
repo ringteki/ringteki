@@ -6,10 +6,7 @@ class DaidojiIenori extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Set a participating character to 1/1',
-            condition: () => this.game.isDuringConflict(),
-            cost: AbilityDsl.costs.discardStatusToken({
-                cardCondition: card => card.isHonored && card.isParticipating()
-            }),
+            condition: (context) => context.source.isParticipating() && context.source.isHonored,
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,

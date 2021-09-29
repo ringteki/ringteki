@@ -17,8 +17,7 @@ describe('Daidoji Ienori', function() {
             this.ienori = this.player2.findCardByName('daidoji-ienori');
             this.chagatai = this.player1.findCardByName('moto-chagatai');
 
-            this.yoshi.honor();
-            this.ienori.dishonor();
+            this.ienori.honor();
 
             this.noMoreActions();
             this.initiateConflict({
@@ -27,24 +26,28 @@ describe('Daidoji Ienori', function() {
             });
         });
 
-        it('should set to 3/3', function() {
+        it('should set to 3/3 if honored', function() {
             this.player2.clickCard(this.ienori);
             expect(this.player2).toBeAbleToSelect(this.chagatai);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
             expect(this.player2).toBeAbleToSelect(this.ienori);
-            expect(this.player2).toBeAbleToSelect(this.yoshi);
             this.player2.clickCard(this.chagatai);
-            expect(this.player2).not.toBeAbleToSelect(this.chagatai);
-            expect(this.player2).not.toBeAbleToSelect(this.ienori);
-            expect(this.player2).toBeAbleToSelect(this.yoshi);
-
-            this.player2.clickCard(this.yoshi);
             expect(this.chagatai.getMilitarySkill()).toBe(3);
             expect(this.chagatai.getPoliticalSkill()).toBe(3);
 
-            expect(this.yoshi.getMilitarySkill()).toBe(2);
-            expect(this.yoshi.getPoliticalSkill()).toBe(6);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ienori to set the skills of Moto Chagatai to 3military/3political');
+        });
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ienori, discarding a status token to set the skills of Moto Chagatai to 3military/3political');
+        it('should not work if neutral or dishonored', function() {
+            this.ienori.dishonor();
+            this.game.checkGameState(true);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.ienori);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.ienori.dishonor();
+            this.game.checkGameState(true);
+            this.player2.clickCard(this.ienori);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
     });
 });
