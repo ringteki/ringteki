@@ -7,16 +7,13 @@ class FloatingFortress extends DrawCard {
         this.action({
             title: 'Rebuild a holding',
             condition: context => context.player.isDefendingPlayer(),
-            cost: AbilityDsl.costs.discardCard({
-                location: Locations.Hand,
-                targets: true
-            }),
-            max: AbilityDsl.limit.perRound(1),
+            cost: AbilityDsl.costs.payFate(1),
+            max: AbilityDsl.limit.perRound(3),
             target: {
                 cardType: CardTypes.Holding,
                 controller: Players.Self,
                 location: Locations.DynastyDiscardPile,
-                cardCondition: card => card.isFaction('crab'),
+                cardCondition: card => card.isFaction('crab') && card.name !== 'Floating Fortress',
                 gameAction: AbilityDsl.actions.selectCard(context => ({
                     activePromptTitle: 'Choose an attacked province',
                     hidePromptIfSingleCard: true,

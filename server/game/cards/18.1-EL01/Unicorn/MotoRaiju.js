@@ -13,18 +13,18 @@ class MotoRaiju extends DrawCard {
                     choices: {
                         'Military Bonus': AbilityDsl.actions.cardLastingEffect(context => ({
                             target: context.source,
-                            effect: AbilityDsl.effects.modifyMilitarySkill(context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince))
+                            effect: AbilityDsl.effects.modifyMilitarySkill(Math.min(3, context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince)))
                         })),
                         'Political Bonus': AbilityDsl.actions.cardLastingEffect(context => ({
                             target: context.source,
-                            effect: AbilityDsl.effects.modifyPoliticalSkill(context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince))
+                            effect: AbilityDsl.effects.modifyPoliticalSkill(Math.min(3, context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince)))
                         }))
                     }
                 }
             },
             effect: 'give itself +{1}{2} until the end of the conflict',
             effectArgs: context => [
-                context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince),
+                Math.min(3, context.player.getNumberOfOpponentsFaceupProvinces(province => province.location !== Locations.StrongholdProvince)),
                 context.selects.select.choice === 'Military Bonus' ? 'military' : 'political'
             ]
         });

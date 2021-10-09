@@ -26,10 +26,6 @@ class ScoutsSteed extends DrawCard {
             myControl: true
         });
 
-        this.whileAttached({
-            effect: AbilityDsl.effects.addTrait('cavalry')
-        });
-
         this.reaction({
             title: 'Pick a character to be able to play',
             when: {
