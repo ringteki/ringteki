@@ -5,7 +5,7 @@ const SimpleStep = require('./simplestep.js');
 const Conflict = require('../conflict.js');
 const ActionWindow = require('./actionwindow.js');
 const GameActions = require('../GameActions/GameActions');
-const { Phases } = require('../Constants');
+const { Phases, EffectNames } = require('../Constants');
 
 /*
 III Conflict Phase
@@ -48,8 +48,10 @@ class ConflictPhase extends Phase {
             this.currentPlayer = this.currentPlayer.opponent;
         }
         if(this.currentPlayer.getConflictOpportunities() > 0) {
-            if(GameActions.initiateConflict().canAffect(this.currentPlayer, this.game.getFrameworkContext(this.currentPlayer))) {
-                GameActions.initiateConflict().resolve(this.currentPlayer, this.game.getFrameworkContext(this.currentPlayer));
+            const forced = this.currentPlayer.mostRecentEffect(EffectNames.ForceConflictDeclarationType);
+            const props = { forcedDeclaredType: forced };
+            if(GameActions.initiateConflict(props).canAffect(this.currentPlayer, this.game.getFrameworkContext(this.currentPlayer))) {
+                GameActions.initiateConflict(props).resolve(this.currentPlayer, this.game.getFrameworkContext(this.currentPlayer));
             } else {
                 var conflict = new Conflict(this.game, this.currentPlayer, this.currentPlayer.opponent);
                 conflict.passConflict('{0} passes their conflict opportunity as none of their characters can be declared as an attacker');

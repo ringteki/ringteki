@@ -27,9 +27,9 @@ describe('Scouts Steed', function() {
             this.shamefulDisplay2 = this.player2.provinces['province 2'].provinceCard;
         });
 
-        it('should give cavalry and trigger after attacking', function() {
+        it('should not give cavalry and trigger after attacking', function() {
             this.noMoreActions();
-            expect(this.toshimoko.hasTrait('cavalry')).toBe(true);
+            expect(this.toshimoko.hasTrait('cavalry')).toBe(false);
             this.initiateConflict({
                 attackers: [this.toshimoko]
             });

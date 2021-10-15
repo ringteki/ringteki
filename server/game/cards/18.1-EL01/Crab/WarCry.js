@@ -1,37 +1,41 @@
 const DrawCard = require('../../../drawcard.js');
-const { Players, CardTypes, EffectNames, Durations } = require('../../../Constants');
-const AbilityDsl = require('../../../abilitydsl');
+const { CardTypes, Locations, ConflictTypes } = require('../../../Constants');
+const AbilityDsl = require('../../../abilitydsl.js');
 
 class WarCry extends DrawCard {
     setupCardAbilities() {
-        this.action({
-            title: 'Double a character\'s military skill',
-            condition: context => context.game.isDuringConflict(),
-            max: AbilityDsl.limit.perConflict(1),
-            target: {
-                cardType: CardTypes.Character,
-                controller: Players.Self,
-                cardCondition: card => card.isParticipating() && card.hasTrait('berserker'),
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.cardLastingEffect(context => ({
-                        effect: AbilityDsl.effects.modifyMilitarySkill(context.target.getMilitarySkillExcludingModifiers([EffectNames.AttachmentMilitarySkillModifier, EffectNames.AttachmentPoliticalSkillModifier]))
-                    })),
-                    AbilityDsl.actions.cardLastingEffect(context => ({
-                        duration: Durations.UntilEndOfPhase,
-                        effect: AbilityDsl.effects.delayedEffect({
-                            when: {
-                                onConflictFinished: () => true
-                            },
-                            message: '{1} is sacrificed due to {0}\'s delayed effect',
-                            messageArgs: [context.source, context.target],
-                            gameAction: AbilityDsl.actions.sacrifice()
-                        })
-                    }))
-                ])
+        this.reaction({
+            title: 'Break the attacked province',
+            when: {
+                afterConflict: (event, context) => event.conflict.winner === context.player
+                    && this.areAllAttackersBerserker(event.conflict)
+                    && event.conflict.attackingPlayer === context.player
+                    && event.conflict.conflictType === ConflictTypes.Military
             },
-            effect: 'give {0} +{1}{2} and sacrifice it at the end of the conflict',
-            effectArgs: context => [context.target.getMilitarySkillExcludingModifiers([EffectNames.AttachmentMilitarySkillModifier, EffectNames.AttachmentPoliticalSkillModifier]), 'military']
+            effect: '{1}',
+            effectArgs: context => this.isConflictNotAtStronghold(context) ? ['break an attacked province'] : ['draw a card'],
+            gameAction: AbilityDsl.actions.ifAble(context => ({
+                ifAbleAction: AbilityDsl.actions.selectCard(() => ({
+                    activePromptTitle: 'Choose an attacked province',
+                    hidePromptIfSingleCard: true,
+                    cardType: CardTypes.Province,
+                    location: Locations.Provinces,
+                    cardCondition: card => card.isConflictProvince() && card.location !== Locations.StrongholdProvince,
+                    message: '{0} breaks {1}',
+                    messageArgs: cards => [context.player, cards],
+                    gameAction: AbilityDsl.actions.break()
+                })),
+                otherwiseAction: AbilityDsl.actions.draw({ target: context.player, amount: 1 })
+            }))
         });
+    }
+
+    isConflictNotAtStronghold(context) {
+        return context.game.currentConflict.getConflictProvinces().some(a => a.location !== Locations.StrongholdProvince);
+    }
+
+    areAllAttackersBerserker(conflict) {
+        return conflict.attackers.every(a => a.hasTrait('berserker'));
     }
 }
 

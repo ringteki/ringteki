@@ -40,20 +40,20 @@ describe('Lucky Coin', function() {
             expect(this.kuwanan.getPoliticalSkill()).toBe(4);
         });
 
-        it('should stop dishonor status losing honor on leaving play', function() {
-            let honor = this.player1.honor;
+        // it('should stop dishonor status losing honor on leaving play', function() {
+        //     let honor = this.player1.honor;
 
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger],
-                defenders: []
-            });
-            this.player2.clickCard(this.sac);
-            this.player2.clickCard(this.kuwanan);
-            this.player2.clickCard(this.harrier);
+        //     this.noMoreActions();
+        //     this.initiateConflict({
+        //         attackers: [this.challenger],
+        //         defenders: []
+        //     });
+        //     this.player2.clickCard(this.sac);
+        //     this.player2.clickCard(this.kuwanan);
+        //     this.player2.clickCard(this.harrier);
 
-            expect(this.kuwanan.location).toBe('dynasty discard pile');
-            expect(this.player1.honor).toBe(honor);
-        });
+        //     expect(this.kuwanan.location).toBe('dynasty discard pile');
+        //     expect(this.player1.honor).toBe(honor);
+        // });
     });
 });

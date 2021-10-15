@@ -25,13 +25,14 @@ describe('Moto Raiju', function() {
             this.p41 = this.player1.findCardByName('shameful-display', 'province 4');
         });
 
-        it('should get a bonus equal to the number of faceup provinces your opponent controls', function() {
+        it('should get a bonus equal to the number of faceup provinces your opponent controls to a max of 3', function() {
             const baseMil = this.raiju.getMilitarySkill();
             const basePol = this.raiju.getPoliticalSkill();
 
             this.p1.facedown = false;
             this.p2.facedown = false;
             this.p3.facedown = false;
+            this.p4.facedown = false;
             this.pStronghold.facedown = false;
 
             this.p11.facedown = false;

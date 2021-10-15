@@ -766,6 +766,20 @@ class DrawCard extends BaseCard {
                 }
             }
         }
+
+        if(this.controller.anyEffect(EffectNames.LimitLegalAttackers)) {
+            const checks = this.controller.getEffects(EffectNames.LimitLegalAttackers);
+            let valid = true;
+            checks.forEach(check => {
+                if(typeof check === 'function') {
+                    valid = valid && check(this);
+                }
+            });
+            if(!valid) {
+                return false;
+            }
+        }
+
         return this.checkRestrictions('declareAsAttacker', this.game.getFrameworkContext()) &&
             this.canParticipateAsAttacker(conflictType) &&
             this.location === Locations.PlayArea && !this.bowed;

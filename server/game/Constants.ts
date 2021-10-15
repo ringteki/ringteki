@@ -112,6 +112,7 @@ export enum EffectNames {
     SetBaseProvinceStrength = 'setBaseProvinceStrength',
     SetConflictDeclarationType = 'setConflictDeclarationType',
     ProvideConflictDeclarationType = 'provideConflictDeclarationType',
+    ForceConflictDeclarationType = 'forceConflictDeclarationType',
     SetConflictTotalSkill = 'setConflictTotalSkill',
     SetDash = 'setDash',
     SetGlory = 'setGlory',
@@ -172,7 +173,8 @@ export enum EffectNames {
     ConsideredLessHonorable = 'consideredLessHonorable',
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
-    ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens'
+    ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
+    LimitLegalAttackers = 'limitLegalAttackers'
 };
 
 export enum Durations {

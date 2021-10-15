@@ -1,52 +1,83 @@
-describe('Ramshackle Facade', function() {
+describe('War Cry', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['hida-yakamo', 'togashi-initiate'],
-                    hand: ['war-cry', 'fine-katana', 'a-perfect-cut']
+                    inPlay: ['silent-skirmisher', 'togashi-initiate', 'doji-whisperer'],
+                    hand: ['war-cry', 'suffer-the-consequences']
                 },
                 player2: {
-                    inPlay: ['vengeful-berserker']
+                    inPlay: ['hida-yakamo']
                 }
             });
 
-            this.yakamo = this.player1.findCardByName('hida-yakamo');
+            this.yakamo = this.player2.findCardByName('hida-yakamo');
             this.initiate = this.player1.findCardByName('togashi-initiate');
-            this.vengeful = this.player2.findCardByName('vengeful-berserker');
+            this.skirmisher = this.player1.findCardByName('silent-skirmisher');
+            this.whisperer = this.player1.findCardByName('doji-whisperer');
 
             this.warcry = this.player1.findCardByName('war-cry');
-            this.katana = this.player1.findCardByName('fine-katana');
-            this.perfectCut = this.player1.findCardByName('a-perfect-cut');
-
-            this.player1.playAttachment(this.katana, this.yakamo);
+            this.suffer = this.player1.findCardByName('suffer-the-consequences');
+            this.sd = this.player2.findCardByName('shameful-display', 'province 1');
+            this.sd2 = this.player2.findCardByName('shameful-display', 'province 2');
+            this.sd3 = this.player2.findCardByName('shameful-display', 'province 3');
+            this.sd4 = this.player2.findCardByName('shameful-display', 'province 4');
+            this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('should double skill ignoring attachments and sac at the end of the conflict', function() {
+        it('should break a province after you win a military conflict with berserkers', function() {
+            this.noMoreActions();
+            let hand = this.player1.hand.length;
+            this.initiateConflict({
+                attackers: [this.skirmisher],
+                defenders: [],
+                type: 'military',
+                province: this.sd
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.warcry);
+            this.player1.clickCard(this.warcry);
+            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to break an attacked province');
+            expect(this.sd.isBroken).toBe(true);
+            expect(this.player1.hand.length).toBe(hand - 1);
+        });
+
+        it('should not trigger after you win a military conflict with a non-berserker', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.yakamo, this.initiate],
-                defenders: [this.vengeful]
+                attackers: [this.skirmisher, this.whisperer],
+                defenders: [],
+                type: 'military',
+                province: this.sd
             });
-            this.player2.pass();
-            this.player1.clickCard(this.perfectCut);
-            this.player1.clickCard(this.yakamo);
-            this.player2.pass();
-
-            let mil = this.yakamo.getMilitarySkill();
-            this.player1.clickCard(this.warcry);
-            expect(this.player1).toBeAbleToSelect(this.yakamo);
-            expect(this.player1).not.toBeAbleToSelect(this.initiate);
-            expect(this.player1).not.toBeAbleToSelect(this.vengeful);
-            this.player1.clickCard(this.yakamo);
-            expect(this.yakamo.getMilitarySkill()).toBe(mil * 2 - 2);
-            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to give Hida Yakamo +6military and sacrifice it at the end of the conflict');
             this.noMoreActions();
-            this.player1.clickPrompt('No');
-            this.player1.clickPrompt('Don\'t Resolve');
-            expect(this.yakamo.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).toContain('Hida Yakamo is sacrificed due to War Cry\'s delayed effect');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+        });
+
+        it('should draw at Stronghold', function() {
+            this.sd.isBroken = true;
+            this.sd2.isBroken = true;
+            this.sd3.isBroken = true;
+            this.sd4.isBroken = true;
+            this.game.checkGameState(true);
+
+            this.noMoreActions();
+            let hand = this.player1.hand.length;
+            this.initiateConflict({
+                attackers: [this.skirmisher],
+                defenders: [],
+                type: 'military',
+                province: this.sd5
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.warcry);
+            this.player1.clickCard(this.warcry);
+            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to draw a card');
+            expect(this.sd5.isBroken).toBe(false);
+            expect(this.player1.hand.length).toBe(hand);
         });
     });
 });

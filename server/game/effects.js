@@ -229,6 +229,7 @@ const Effects = {
     }),
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
     provideConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ProvideConflictDeclarationType, type),
+    forceConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ForceConflictDeclarationType, type),
     setMaxConflicts: (amount) => EffectBuilder.player.static(EffectNames.SetMaxConflicts, amount),
     setConflictTotalSkill: (value) => EffectBuilder.player.static(EffectNames.SetConflictTotalSkill, value),
     showTopConflictCard: (players = Players.Any) => EffectBuilder.player.static(EffectNames.ShowTopConflictCard, players),
@@ -242,6 +243,7 @@ const Effects = {
     consideredLessHonorable: () => EffectBuilder.player.static(EffectNames.ConsideredLessHonorable),
     customFatePhaseFateRemoval: (refillFunc) => EffectBuilder.player.static(EffectNames.CustomFatePhaseFateRemoval, refillFunc), //refillFunc: (Player, numFate) => { }
     changeConflictSkillFunctionPlayer: (func) => EffectBuilder.player.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks
+    limitLegalAttackers: (matchFunc) => EffectBuilder.player.static(EffectNames.LimitLegalAttackers, matchFunc), //matchFunc: (card) => bool
     // Conflict effects
     charactersCannot: (properties) => EffectBuilder.conflict.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ restricts: 'characters', type: properties.cannot || properties }, properties))),
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),

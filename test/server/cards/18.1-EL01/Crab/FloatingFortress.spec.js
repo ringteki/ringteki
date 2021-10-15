@@ -1,4 +1,4 @@
-describe('Ramshackle Facade', function() {
+describe('Floating Fortress', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -32,18 +32,17 @@ describe('Ramshackle Facade', function() {
                 attackers: [this.diplomat],
                 defenders: [this.brash]
             });
+            let fate = this.player2.fate;
             this.player2.clickCard(this.fortress);
             expect(this.player2).toBeAbleToSelect(this.oil);
             expect(this.player2).not.toBeAbleToSelect(this.storehouse);
             this.player2.clickCard(this.oil);
-            expect(this.player2).toHavePrompt('Select card to discard');
-            expect(this.player2).toBeAbleToSelect(this.fan);
-            expect(this.player2).toBeAbleToSelect(this.katana);
             this.player2.clickCard(this.katana);
-            expect(this.getChatLogs(10)).toContain('player2 uses Floating Fortress, discarding Fine Katana to put Fire and Oil into a province');
+            expect(this.getChatLogs(10)).toContain('player2 uses Floating Fortress, spending 1 fate to put Fire and Oil into a province');
             expect(this.getChatLogs(10)).toContain('player2 places Fire and Oil in Shameful Display');
             expect(this.oil.location).toBe('province 1');
             expect(this.oil.facedown).toBe(false);
+            expect(this.player2.fate).toBe(fate - 1);
 
             this.player1.pass();
             this.player2.clickCard(this.oil);

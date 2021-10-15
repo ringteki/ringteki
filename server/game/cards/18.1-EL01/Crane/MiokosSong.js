@@ -1,11 +1,12 @@
 const StrongholdCard = require('../../../strongholdcard.js');
-const { CardTypes, Durations } = require('../../../Constants');
+const { CardTypes, Durations, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class MiokosSong extends StrongholdCard {
     setupCardAbilities() {
         this.action({
             title: 'Gain a fate',
+            phase: Phases.Conflict,
             cost: [
                 AbilityDsl.costs.bowSelf(),
                 AbilityDsl.costs.dishonor({ cardCondition: card => card.type === CardTypes.Character })

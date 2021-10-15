@@ -337,6 +337,7 @@ class Player extends GameObject {
 
     getConflictOpportunities() {
         const setConflictDeclarationType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        const forceConflictDeclarationType = this.mostRecentEffect(EffectNames.ForceConflictDeclarationType);
         const provideConflictDeclarationType = this.mostRecentEffect(EffectNames.ProvideConflictDeclarationType);
         const maxConflicts = this.mostRecentEffect(EffectNames.SetMaxConflicts);
         const skirmishModeRRGLimit = this.game.gameMode === GameModes.Skirmish ? 1 : 0;
@@ -346,6 +347,12 @@ class Player extends GameObject {
 
         if(provideConflictDeclarationType) {
             return this.getRemainingConflictOpportunitiesForType(provideConflictDeclarationType)
+                - this.declaredConflictOpportunities[ConflictTypes.Passed]
+                - this.declaredConflictOpportunities[ConflictTypes.Forced];
+        }
+
+        if(forceConflictDeclarationType) {
+            return this.getRemainingConflictOpportunitiesForType(forceConflictDeclarationType)
                 - this.declaredConflictOpportunities[ConflictTypes.Passed]
                 - this.declaredConflictOpportunities[ConflictTypes.Forced];
         }
@@ -395,6 +402,7 @@ class Player extends GameObject {
 
     getMaxConflictOpportunitiesForPlayerByType(type) {
         let setConflictType = this.mostRecentEffect(EffectNames.SetConflictDeclarationType);
+        let forceConflictType = this.mostRecentEffect(EffectNames.ForceConflictDeclarationType);
         const provideConflictDeclarationType = this.mostRecentEffect(EffectNames.ProvideConflictDeclarationType);
         const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
         const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
@@ -402,11 +410,13 @@ class Player extends GameObject {
         if(provideConflictDeclarationType && setConflictType !== provideConflictDeclarationType) {
             setConflictType = undefined;
         }
+        if(provideConflictDeclarationType && forceConflictType !== provideConflictDeclarationType) {
+            forceConflictType = undefined;
+        }
 
         if(this.game.gameMode === GameModes.Skirmish) {
             baselineAvailableConflicts = 1;
         }
-
 
         if(setConflictType && type === setConflictType) {
             let declaredConflictsOfOtherType = 0;
@@ -417,6 +427,17 @@ class Player extends GameObject {
             }
             return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
         } else if(setConflictType && type !== setConflictType) {
+            return 0;
+        }
+        if(forceConflictType && type === forceConflictType) {
+            let declaredConflictsOfOtherType = 0;
+            if(forceConflictType === ConflictTypes.Military) {
+                declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Political];
+            } else {
+                declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Military];
+            }
+            return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
+        } else if(forceConflictType && type !== forceConflictType) {
             return 0;
         }
         if(provideConflictDeclarationType) {
