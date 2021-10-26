@@ -1,4 +1,4 @@
-const { CardTypes, Players, Elements, TargetModes, Locations } = require('../../../Constants');
+const { CardTypes, Players, Elements, TargetModes, Locations, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 const ProvinceCard = require('../../../provincecard.js');
 
@@ -85,8 +85,31 @@ class Maelstrom extends ProvinceCard {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
                 cardCondition: (card, context) => context.costs.maelstromCostPaid ? true : card.controller === context.player,
-                gameAction: AbilityDsl.actions.moveToConflict()
-            }
+                gameAction: AbilityDsl.actions.multipleContext(context => {
+                    const target = context.target;
+                    return ({
+                        gameActions: [
+                            AbilityDsl.actions.moveToConflict(),
+                            AbilityDsl.actions.cardLastingEffect({
+                                target: target,
+                                duration: Durations.UntilEndOfPhase,
+                                effect: AbilityDsl.effects.delayedEffect({
+                                    when: {
+                                        afterConflict: (event, context) => event.conflict.winner === target.controller &&
+                                                                            target.isParticipating() &&
+                                                                            target.controller === context.player
+                                    },
+                                    message: '{0} is honored due to {1}\'s effect',
+                                    messageArgs: [target, context.source],
+                                    gameAction: AbilityDsl.actions.honor()
+                                })
+                            })
+                        ]
+                    });
+                })
+            },
+            effect: 'move {0} into the conflict{1}',
+            effectArgs: context => context.target.controller === context.player ? ['. It will be honored if it wins the conflict'] : ['']
         });
     }
 

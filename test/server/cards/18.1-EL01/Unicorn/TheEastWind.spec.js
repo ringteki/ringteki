@@ -32,9 +32,10 @@ describe('The East Wind', function() {
             this.vassalFields = this.player1.findCardByName('vassal-fields');
             this.kuroiMori = this.player1.findCardByName('kuroi-mori');
             this.rallyToTheCause = this.player1.findCardByName('rally-to-the-cause');
+            this.p1SH = this.player1.findCardByName('shameful-display', 'stronghold province');
 
             this.riotInTheStreets = this.player2.findCardByName('riot-in-the-streets');
-            // this.shamefulDisplay = this.player2.findCardByName('shameful-display');
+            this.p2SH = this.player2.findCardByName('shameful-display', 'stronghold province');
             this.alongTheRiverOfGold = this.player2.findCardByName('along-the-river-of-gold');
             this.frostbittenCrossing = this.player2.findCardByName('frostbitten-crossing');
             this.brothersGiftDojo = this.player2.findCardByName('brother-s-gift-dojo');
@@ -48,6 +49,9 @@ describe('The East Wind', function() {
             this.alongTheRiverOfGold.facedown = false;
             this.frostbittenCrossing.facedown = false;
             this.brothersGiftDojo.facedown = false;
+
+            this.p1SH.facedown = false;
+            this.p2SH.facedown = false;
 
             this.player1.playAttachment(this.katana, this.p1Keeper);
             this.noMoreActions();
@@ -73,6 +77,37 @@ describe('The East Wind', function() {
             expect(this.player1).toBeAbleToSelect(this.alongTheRiverOfGold);
             expect(this.player1).not.toBeAbleToSelect(this.frostbittenCrossing);
             expect(this.player1).toBeAbleToSelect(this.brothersGiftDojo);
+
+            expect(this.player1).not.toBeAbleToSelect(this.p1SH);
+            expect(this.player1).not.toBeAbleToSelect(this.p2SH);
+        });
+
+        it('should allow selecting a SH province if you have 3 broken provinces', function() {
+            this.challenger.fate = 10;
+
+            this.meditationsOnTheTao.isBroken = true;
+            this.vassalFields.isBroken = true;
+
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.challenger],
+                defenders: [this.p2Keeper]
+            });
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.plains);
+            expect(this.player1).not.toBeAbleToSelect(this.meditationsOnTheTao);
+            expect(this.player1).not.toBeAbleToSelect(this.vassalFields);
+            expect(this.player1).not.toBeAbleToSelect(this.kuroiMori);
+            expect(this.player1).not.toBeAbleToSelect(this.rallyToTheCause);
+            expect(this.player1).not.toBeAbleToSelect(this.riotInTheStreets);
+            expect(this.player1).toBeAbleToSelect(this.alongTheRiverOfGold);
+            expect(this.player1).not.toBeAbleToSelect(this.frostbittenCrossing);
+            expect(this.player1).toBeAbleToSelect(this.brothersGiftDojo);
+
+            expect(this.player1).toBeAbleToSelect(this.p1SH);
+            expect(this.player1).not.toBeAbleToSelect(this.p2SH);
         });
 
         it('Vassal Fields (province references opponent)', function() {
@@ -140,7 +175,7 @@ describe('The East Wind', function() {
             expect(this.getChatLogs(5)).toContain('player1 uses The East Wind, bowing The East Wind to resolve Vassal Fields\'s Make opponent lose 1 fate ability');
         });
 
-        it('should not work not during a conflict', function() {
+        it('should not work outside of a conflict', function() {
             this.player1.passConflict();
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.plains);

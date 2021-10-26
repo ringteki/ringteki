@@ -53,12 +53,12 @@ describe('Maelstrom', function() {
             expect(this.player2).not.toBeAbleToSelect(this.chagatai);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.rider);
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
 
             expect(this.hotaru.isParticipating()).toBe(false);
             this.player2.clickCard(this.hotaru);
             expect(this.hotaru.isParticipating()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 uses Maelstrom to move Doji Hotaru into the conflict');
+            expect(this.getChatLogs(5)).toContain('player2 uses Maelstrom to move Doji Hotaru into the conflict. It will be honored if it wins the conflict');
         });
 
         it('if you discard a card should let you move a character anyone controls to the conflict', function() {
@@ -76,10 +76,10 @@ describe('Maelstrom', function() {
 
             this.player2.clickCard(this.assassination);
 
-            expect(this.player2).not.toBeAbleToSelect(this.chagatai);
+            expect(this.player2).toBeAbleToSelect(this.chagatai);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).toBeAbleToSelect(this.rider);
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
 
             expect(this.rider.isParticipating()).toBe(false);
             this.player2.clickCard(this.rider);
@@ -103,12 +103,71 @@ describe('Maelstrom', function() {
             expect(this.player2).not.toBeAbleToSelect(this.chagatai);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.rider);
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
 
             expect(this.hotaru.isParticipating()).toBe(false);
             this.player2.clickCard(this.hotaru);
             expect(this.hotaru.isParticipating()).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 uses Maelstrom to move Doji Hotaru into the conflict');
+            expect(this.getChatLogs(5)).toContain('player2 uses Maelstrom to move Doji Hotaru into the conflict. It will be honored if it wins the conflict');
+        });
+
+        it('should honor if you win and you control the character', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.chagatai],
+                defenders: [this.yoshi],
+                province: this.province
+            });
+
+            this.player2.clickCard(this.province);
+            this.player2.clickPrompt('No');
+            this.player2.clickCard(this.hotaru);
+            expect(this.getChatLogs(5)).toContain('player2 uses Maelstrom to move Doji Hotaru into the conflict. It will be honored if it wins the conflict');
+            expect(this.hotaru.isHonored).toBe(false);
+            this.chagatai.bow();
+            this.noMoreActions();
+            expect(this.hotaru.isHonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('Doji Hotaru is honored due to Maelstrom\'s effect');
+        });
+
+        it('should not honor if you win and you don\'t control the target', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.chagatai],
+                defenders: [this.yoshi],
+                province: this.province
+            });
+
+            this.player2.clickCard(this.province);
+            this.player2.clickPrompt('Yes');
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.rider);
+
+            this.chagatai.bow();
+            this.rider.bow();
+            this.noMoreActions();
+            expect(this.rider.isHonored).toBe(false);
+            expect(this.getChatLogs(5)).not.toContain('Border Rider is honored due to Maelstrom\'s effect');
+        });
+
+        it('should not honor if you lose and you don\'t control the target', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.chagatai],
+                defenders: [this.yoshi],
+                province: this.province
+            });
+
+            this.player2.clickCard(this.province);
+            this.player2.clickPrompt('Yes');
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.rider);
+
+            this.noMoreActions();
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.rider.isHonored).toBe(false);
+            expect(this.getChatLogs(5)).not.toContain('Border Rider is honored due to Maelstrom\'s effect');
         });
     });
 });

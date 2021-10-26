@@ -22,6 +22,10 @@ describe('Eloquent Advocate', function() {
 
             this.borderRider = this.player1.findCardByName('border-rider');
             this.challenge = this.player1.findCardByName('challenge-on-the-fields');
+
+            this.player2.reduceDeckToNumber('conflict deck', 0);
+            this.player2.moveCard(this.policyDebate, 'conflict deck');
+            this.player2.moveCard(this.fan, 'conflict deck');
         });
 
         it('should react to winning a pol conflict', function() {
@@ -38,8 +42,16 @@ describe('Eloquent Advocate', function() {
             expect(this.player2).toBeAbleToSelect(this.advocate);
             this.player2.clickCard(this.advocate);
 
+            expect(this.player2).toHavePrompt('Choose a card to put in your hand');
+            expect(this.player2).toHavePromptButton('Policy Debate');
+            expect(this.player2).toHavePromptButton('Ornate Fan');
+            expect(this.policyDebate.location).toBe('conflict deck');
+            this.player2.clickPrompt('Policy Debate');
+            expect(this.policyDebate.location).toBe('hand');
             expect(this.player2.hand.length).toBe(hand + 1);
-            expect(this.getChatLogs(5)).toContain('player2 uses Eloquent Advocate to draw 1 card');
+            expect(this.getChatLogs(5)).toContain('player2 uses Eloquent Advocate to look at the top two cards of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player2 puts a card in their hand');
+            expect(this.getChatLogs(5)).toContain('player2 puts a card on the bottom of their conflict deck');
         });
 
         it('should not react to losing a pol conflict', function() {

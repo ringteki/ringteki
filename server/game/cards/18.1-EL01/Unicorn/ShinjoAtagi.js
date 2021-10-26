@@ -5,8 +5,11 @@ const { CardTypes, Players, Locations } = require('../../../Constants.js');
 class ShinjoAtagi extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.source.controller.getNumberOfFacedownProvinces() === 0,
-            effect: AbilityDsl.effects.modifyBothSkills(1)
+            condition: context => context.player === context.source.controller && context.source.controller.getNumberOfFacedownProvinces() === 0,
+            effect: [
+                AbilityDsl.effects.modifyMilitarySkill(2),
+                AbilityDsl.effects.modifyPoliticalSkill(1)
+            ]
         });
 
         this.action({
