@@ -15,7 +15,8 @@ class PlayCharacterAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty && context.game.gameMode !== GameModes.Emerald)) {
+        const frameworkAllowsConflictCharactersDuringDynasty = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian 
+        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty && !frameworkAllowsConflictCharactersDuringDynasty)) {
             return 'phase';
         }
         if(!ignoredRequirements.includes('location') && !context.player.isCardInPlayableLocation(context.source, PlayTypes.PlayFromHand)) {

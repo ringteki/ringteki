@@ -15,7 +15,8 @@ class PlayAttachmentAction extends BaseAction {
     }
 
     meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty && context.game.gameMode !== GameModes.Emerald)) {
+        const frameworkAllowsAttachmentsDuringDynasty = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian 
+        if(!ignoredRequirements.includes('phase') && (context.game.currentPhase === Phases.Dynasty && !frameworkAllowsAttachmentsDuringDynasty)) {
             return 'phase';
         }
         if(!ignoredRequirements.includes('location') && !context.player.isCardInPlayableLocation(context.source, context.playType)) {
