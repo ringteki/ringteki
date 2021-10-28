@@ -89,7 +89,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
         if(!replacedCharacter) {
             return;
         }
-        const frameworkKeepsDisguisedInCurrentLocation = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian; 
+        const frameworkKeepsDisguisedInCurrentLocation = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian;
         const conflictOnly = this.intoConflictOnly || (frameworkKeepsDisguisedInCurrentLocation && replacedCharacter.isParticipating());
 
         let intoConflict = conflictOnly;
