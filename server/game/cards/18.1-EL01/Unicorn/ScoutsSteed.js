@@ -29,9 +29,9 @@ class ScoutsSteed extends DrawCard {
         this.reaction({
             title: 'Pick a character to be able to play',
             when: {
-                onConflictDeclared: (event, context) => context.source.parent && context.source.parent.isParticipating(),
-                onDefendersDeclared: (event, context) => context.source.parent && context.source.parent.isParticipating(),
-                onMoveToConflict: (event, context) => context.source.parent && context.source.parent.isParticipating()
+                onConflictDeclared: (event, context) => context.source.parent && event.attackers.includes(context.source.parent),
+                onDefendersDeclared: (event, context) => context.source.parent && event.defenders.includes(context.source.parent),
+                onMoveToConflict: (event, context) => context.source.parent && event.card === context.source.parent
             },
             target: {
                 cardType: CardTypes.Character,
