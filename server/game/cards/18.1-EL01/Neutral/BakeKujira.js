@@ -5,31 +5,38 @@ const { Locations } = require('../../../Constants');
 
 class BakeKujira extends DrawCard {
     setupCardAbilities() {
-        // Legendary X
-        this.persistentEffect({
-            location: Locations.Any,
-            targetLocation: Locations.Any,
-            effect: [
-                AbilityDsl.effects.playerCannot({
-                    cannot: 'placeFateWhenPlayingCharacterFromProvince',
-                    restricts: 'source'
-                }),
-                AbilityDsl.effects.cardCannot({
-                    cannot: 'putIntoPlay',
-                    restricts: 'cardEffects'
-                }),
-                AbilityDsl.effects.cardCannot({
-                    cannot: 'placeFate'
-                }),
-                AbilityDsl.effects.cardCannot({
-                    cannot: 'preventedFromLeavingPlay'
-                }),
-                AbilityDsl.effects.legendaryFate(1)
-            ]
-        });
-
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register(['onCardLeavesPlay']);
+
+        this.legendary(1);
+        // Provided for reference
+        // legendary(fate): void {
+        //     this.persistentEffect({
+        //         location: Locations.Any,
+        //         targetLocation: Locations.Any,
+        //         effect: [
+        //             AbilityDsl.effects.playerCannot({
+        //                 cannot: 'placeFateWhenPlayingCharacterFromProvince',
+        //                 restricts: 'source'
+        //             }),
+        //             AbilityDsl.effects.cardCannot({
+        //                 cannot: 'putIntoPlay',
+        //                 restricts: 'cardEffects'
+        //             }),
+        //             AbilityDsl.effects.cardCannot({
+        //                 cannot: 'placeFate'
+        //             }),
+        //             AbilityDsl.effects.cardCannot({
+        //                 cannot: 'preventedFromLeavingPlay'
+        //             }),
+        //             AbilityDsl.effects.cardCannot({
+        //                 cannot: 'enterPlay',
+        //                 restricts: 'nonDynastyPhase'
+        //             }),
+        //             AbilityDsl.effects.legendaryFate(fate)
+        //         ]
+        //     });
+        // }
 
         this.persistentEffect({
             effect: AbilityDsl.effects.modifyMilitarySkill(card => 2 * this.getSkillBonus(card))
@@ -49,6 +56,7 @@ class BakeKujira extends DrawCard {
                 activePromptTitle: 'Choose a character',
                 cardCondition: (card, context) => card.isParticipating() && card !== context.source,
                 gameAction: AbilityDsl.actions.sequential([
+                    AbilityDsl.actions.discardFromPlay(context => ({ target: context.target.attachments.toArray() })),
                     AbilityDsl.actions.discardFromPlay(),
                     AbilityDsl.actions.handler({
                         handler: context => {

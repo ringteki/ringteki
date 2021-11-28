@@ -323,6 +323,34 @@ class BaseCard extends EffectSource {
         this.persistentEffect(properties);
     }
 
+    legendary(fate): void {
+        this.persistentEffect({
+            location: Locations.Any,
+            targetLocation: Locations.Any,
+            effect: [
+                AbilityDsl.effects.playerCannot({
+                    cannot: 'placeFateWhenPlayingCharacterFromProvince',
+                    restricts: 'source'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'putIntoPlay',
+                    restricts: 'cardEffects'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'placeFate'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'preventedFromLeavingPlay'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'enterPlay',
+                    restricts: 'nonDynastyPhase'
+                }),
+                AbilityDsl.effects.legendaryFate(fate)
+            ]
+        });
+    }
+
     isDire() : boolean {
         return false;
     }

@@ -9,8 +9,8 @@ describe('Bake Kujira', function() {
                     dynastyDiscard: ['funeral-pyre', 'iron-mine']
                 },
                 player2: {
-                    inPlay: ['doji-kuwanan', 'doji-fumiki'],
-                    hand: ['way-of-the-scorpion', 'charge', 'forebearer-s-echoes'],
+                    inPlay: ['doji-kuwanan', 'doji-fumiki', 'daidoji-uji'],
+                    hand: ['way-of-the-scorpion', 'charge', 'forebearer-s-echoes', 'reprieve'],
                     dynastyDiscard: ['bake-kujira', 'doji-challenger']
                 }
             });
@@ -32,6 +32,8 @@ describe('Bake Kujira', function() {
             this.echoes = this.player2.findCardByName('forebearer-s-echoes');
 
             this.whale2 = this.player2.findCardByName('bake-kujira');
+            this.uji = this.player2.findCardByName('daidoji-uji');
+            this.reprieve = this.player2.findCardByName('reprieve');
 
             this.diplomat.fate = 5;
             this.player1.playAttachment(this.command, this.diplomat);
@@ -67,6 +69,15 @@ describe('Bake Kujira', function() {
             this.player2.clickCard(this.charge);
             expect(this.player2).toBeAbleToSelect(this.challenger);
             expect(this.player2).not.toBeAbleToSelect(this.whale2);
+
+            this.player2.clickPrompt('Cancel');
+
+            this.uji.honor();
+            this.game.checkGameState(true);
+            this.player2.clickCard(this.whale2);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.challenger);
+            expect(this.player2).toHavePrompt('Choose additional fate');
         });
 
         it('should eat people and put them on the bottom of the right deck when it leaves - dynasty', function() {
@@ -120,6 +131,20 @@ describe('Bake Kujira', function() {
             this.player1.clickCard(this.whale);
             expect(this.fumiki.location).toBe('conflict deck');
             expect(this.getChatLogs(5)).toContain('Doji Fumiki is put on the bottom of the deck due to Bake-Kujira leaving play');
+        });
+
+        it('should not allow reprieve to save the target', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whale],
+                defenders: [this.kuwanan]
+            });
+
+            this.player2.playAttachment(this.reprieve, this.kuwanan);
+            this.player1.clickCard(this.whale);
+            this.player1.clickCard(this.kuwanan);
+            expect(this.kuwanan.location).toBe(this.whale.uuid);
+            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Kuwanan whole!');
         });
 
         it('should not be able to be saved', function() {
