@@ -150,6 +150,7 @@ export enum EffectNames {
     ShowTopDynastyCard = 'showTopDynastyCard',
     ContributeToConflict = 'contribute',
     CanContributeWhileBowed = 'canContributeWhileBowed',
+    CanContributeGloryWhileBowed = 'canContributeGloryWhileBowed',
     ChangeConflictSkillFunction = 'skillFunction',
     ModifyConflictElementsToResolve = 'modifyConflictElementsToResolve',
     RestrictNumberOfDefenders = 'restrictNumberOfDefenders',

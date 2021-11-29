@@ -6,6 +6,7 @@ class DeployedGarrison extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Sacrifice a holding to put this character into play',
+            condition: context => context.game.isDuringConflict(),
             location: Locations.DynastyDiscardPile,
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Holding

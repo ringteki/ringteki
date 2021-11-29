@@ -10,7 +10,7 @@ class TogashiTsurumi extends DrawCard {
         this.eventRegistrar.register(['onCardLeavesPlay', 'onRoundEnded']);
 
         this.action({
-            title: 'Place a kiho underneath self',
+            title: 'Place a card underneath self',
             cost: AbilityDsl.costs.payFate(),
             limit: AbilityDsl.limit.unlimitedPerConflict(),
             effect: 'place a card from their hand beneath {1}{2}',

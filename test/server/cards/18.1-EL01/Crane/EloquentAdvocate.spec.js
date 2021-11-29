@@ -42,7 +42,7 @@ describe('Eloquent Advocate', function() {
             expect(this.player2).toBeAbleToSelect(this.advocate);
             this.player2.clickCard(this.advocate);
 
-            expect(this.player2).toHavePrompt('Choose a card to put in your hand');
+            expect(this.player2).toHavePrompt('Select a card');
             expect(this.player2).toHavePromptButton('Policy Debate');
             expect(this.player2).toHavePromptButton('Ornate Fan');
             expect(this.policyDebate.location).toBe('conflict deck');
@@ -50,8 +50,8 @@ describe('Eloquent Advocate', function() {
             expect(this.policyDebate.location).toBe('hand');
             expect(this.player2.hand.length).toBe(hand + 1);
             expect(this.getChatLogs(5)).toContain('player2 uses Eloquent Advocate to look at the top two cards of their conflict deck');
-            expect(this.getChatLogs(5)).toContain('player2 puts a card in their hand');
-            expect(this.getChatLogs(5)).toContain('player2 puts a card on the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player2 takes 1 card');
+            expect(this.getChatLogs(5)).toContain('player2 puts 1 card on the bottom of their conflict deck');
         });
 
         it('should not react to losing a pol conflict', function() {

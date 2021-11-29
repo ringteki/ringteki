@@ -5,7 +5,7 @@ const { CardTypes, Players } = require('../../../Constants.js');
 class YogoTadashi extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Draw a card',
+            title: 'Prevent a character from being targeted by events',
             when: {
                 onConflictDeclared: (event, context) => event.attackers.includes(context.source),
                 onDefendersDeclared: (event, context) => event.defenders.includes(context.source),

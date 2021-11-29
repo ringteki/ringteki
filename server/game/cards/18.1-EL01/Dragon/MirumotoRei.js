@@ -5,7 +5,7 @@ const { CardTypes, Players, Durations, EffectNames } = require('../../../Constan
 class MirumotoRei extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Give weapons ancestral',
+            title: 'Give a skill bonus based on attachments',
             condition: context => context.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,

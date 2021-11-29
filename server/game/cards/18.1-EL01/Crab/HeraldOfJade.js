@@ -5,7 +5,7 @@ const AbilityDsl = require('../../../abilitydsl');
 class HeraldOfJade extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Discard a status token',
+            title: 'Discard a status token and gain 1 honor',
             when: {
                 onCharacterEntersPlay: (event, context) => event.card === context.source
             },

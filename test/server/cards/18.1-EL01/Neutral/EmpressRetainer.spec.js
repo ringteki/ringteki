@@ -4,13 +4,13 @@ describe('Empress\'s Retainer', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['empress-s-retainer']
+                    inPlay: ['empress-retainer']
                 },
                 player2: {
                 }
             });
 
-            this.retainer = this.player1.findCardByName('empress-s-retainer');
+            this.retainer = this.player1.findCardByName('empress-retainer');
         });
 
         it('should let you toss favor to move home (p1)', function() {
@@ -26,7 +26,7 @@ describe('Empress\'s Retainer', function() {
             this.player2.pass();
             this.player1.clickCard(this.retainer);
             expect(this.retainer.isParticipating()).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 uses Empress\'s Retainer, discarding the Imperial Favor to send Empress\'s Retainer home');
+            expect(this.getChatLogs(5)).toContain('player1 uses Empress\' Retainer, discarding the Imperial Favor to send Empress\' Retainer home');
         });
 
         it('should let you toss favor to move home (p2)', function() {
@@ -39,7 +39,7 @@ describe('Empress\'s Retainer', function() {
             });
             this.player2.clickCard(this.retainer);
             expect(this.retainer.isParticipating()).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 uses Empress\'s Retainer, discarding the Imperial Favor to send Empress\'s Retainer home');
+            expect(this.getChatLogs(5)).toContain('player2 uses Empress\' Retainer, discarding the Imperial Favor to send Empress\' Retainer home');
         });
     });
 });

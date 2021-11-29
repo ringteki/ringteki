@@ -2,6 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 const EventRegistrar = require('../../../eventregistrar');
 const { Locations } = require('../../../Constants');
+const { Helpers } = require('../../../Utils/helpers');
 
 class BakeKujira extends DrawCard {
     setupCardAbilities() {
@@ -90,7 +91,7 @@ class BakeKujira extends DrawCard {
         if(event.card === this) {
             const cardsToMove = this.controller.getSourceList(this.uuid).map(a => a);
             if(cardsToMove.length > 0) {
-                this.shuffleArray(cardsToMove);
+                Helpers.shuffleArray(cardsToMove);
                 cardsToMove.forEach(c => {
                     const location = c.isConflict ? Locations.ConflictDeck : Locations.DynastyDeck;
                     c.owner.moveCard(c, location, { bottom: true });

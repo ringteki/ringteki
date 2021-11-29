@@ -10,30 +10,16 @@ class ShiroGisu extends StrongholdCard {
             condition: context => this.getCharactersWithoutFate(context) && context.player.conflictDeck.size() > 0,
             effect: 'look at the top {1} cards of their conflict deck',
             effectArgs: context => this.getCharactersWithoutFate(context),
-            handler: context => {
-                if(context.player.conflictDeck.size() === 0) {
-                    return;
-                }
-                const numCards = this.getCharactersWithoutFate(context);
-                const cards = context.player.conflictDeck.first(numCards);
-                this.game.promptWithHandlerMenu(context.player, {
-                    activePromptTitle: 'Choose a card to put in your hand',
-                    context: context,
-                    cards: context.player.conflictDeck.first(numCards),
-                    cardHandler: card => {
-                        this.game.addMessage('{0} puts a card in their hand', context.player);
-                        context.player.moveCard(card, Locations.Hand);
-                        const cardsToMove = cards.filter(a => a !== card);
-                        if(cardsToMove.length > 0) {
-                            this.shuffleArray(cardsToMove);
-                            cardsToMove.forEach(c => {
-                                context.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
-                            });
-                            context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', context.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
-                        }
-                    }
-                });
-            }
+            gameAction: AbilityDsl.actions.deckSearch({
+                amount: context => this.getCharactersWithoutFate(context),
+                activePromptTitle: 'Choose a card to put in your hand',
+                gameAction: AbilityDsl.actions.moveCard({
+                    destination: Locations.Hand
+                }),
+                shuffle: false,
+                reveal: false,
+                placeOnBottomInRandomOrder: true
+            })
         });
     }
 

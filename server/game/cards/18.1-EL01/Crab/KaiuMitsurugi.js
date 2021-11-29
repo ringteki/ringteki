@@ -12,7 +12,7 @@ class KaiuMitsurugi extends DrawCard {
         });
 
         this.action({
-            title: 'Draw a card and gain an fate',
+            title: 'Draw a card and gain a fate',
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Holding
             }),

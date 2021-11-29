@@ -5,7 +5,7 @@ const { CardTypes, Players } = require('../../../Constants');
 class DaidojiIenori extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Set a participating character to 1/1',
+            title: 'Set a participating character to 3/3',
             condition: (context) => context.source.isParticipating() && context.source.isHonored,
             target: {
                 cardType: CardTypes.Character,

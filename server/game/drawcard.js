@@ -634,7 +634,9 @@ class DrawCard extends BaseCard {
     }
 
     getContributionToImperialFavor() {
-        return !this.bowed ? this.glory : 0;
+        const canConributeWhileBowed = this.anyEffect(EffectNames.CanContributeGloryWhileBowed);
+        const contributesGlory = canConributeWhileBowed || !this.bowed;
+        return contributesGlory ? this.glory : 0;
     }
 
     modifyFate(amount) {

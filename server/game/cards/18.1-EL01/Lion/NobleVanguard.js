@@ -8,7 +8,7 @@ class NobleVanguard extends DrawCard {
         const DummyAttachment = new Soldier(this);
 
         this.reaction({
-            title: 'Place a fate on a character',
+            title: 'Attach a follower to a character',
             when: {
                 onCharacterEntersPlay: (event, context) => {
                     return event.card === context.source && context.player.conflictDeck.size() > 0;

@@ -13,5 +13,5 @@ class EmpressRetainer extends DrawCard {
     }
 }
 
-EmpressRetainer.id = 'empress-s-retainer';
+EmpressRetainer.id = 'empress-retainer';
 module.exports = EmpressRetainer;
