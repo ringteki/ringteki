@@ -12,7 +12,7 @@ class ConsumedByFiveFiresReprint extends DrawCard {
                 cardType: CardTypes.Character,
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.removeFate({
-                        amount: 2
+                        amount: 5
                     }),
                     AbilityDsl.actions.cardLastingEffect({
                         duration: Durations.UntilEndOfRound,
@@ -22,7 +22,7 @@ class ConsumedByFiveFiresReprint extends DrawCard {
                             }),
                             AbilityDsl.effects.cardCannot({
                                 cannot: 'preventedFromLeavingPlay'
-                            }),
+                            })
                         ]
                     })
                 ])

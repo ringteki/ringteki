@@ -6,7 +6,7 @@ class MarkOfShameReprint extends DrawCard {
         this.action({
             title: 'Dishonor attached character',
             cost: AbilityDsl.costs.payFate(1),
-            gameAction: AbilityDsl.actions.dishonor(context => ({ target: context.source.parent })),
+            gameAction: AbilityDsl.actions.dishonor(context => ({ target: context.source.parent }))
         });
     }
 }

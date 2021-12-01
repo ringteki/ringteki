@@ -25,11 +25,11 @@ class SwellOfSeafoamReprint extends DrawCard {
                             }))
                         ]
                     });
-                    if (this.isKihoPlayed(context)) {
-                        actions.gameActions = [...actions.gameActions, ...promptActions]
+                    if(this.isKihoPlayed(context)) {
+                        actions.gameActions = [...actions.gameActions, ...promptActions];
                     }
                     return actions;
-                }),
+                })
             },
             effect: '{1}prevent {0} from bowing at the end of the conflict',
             effectArgs: (context) => [this.isKihoPlayed(context) ? 'discard any number of status tokens from and ' : '']

@@ -1,3 +1,4 @@
+const CARD_UNDER_TEST = 'bayushi-shoj-2';
 describe('Bayushi Shoju 2', function() {
     integration(function() {
         describe('Bayushi Shoju 2\'s triggered ability', function() {
@@ -6,14 +7,14 @@ describe('Bayushi Shoju 2', function() {
                     phase: 'draw',
                     player1: {
                         honor: 10,
-                        inPlay: ['bayushi-shoju-2']
+                        inPlay: [CARD_UNDER_TEST]
                     },
                     player2: {
                         honor: 10
                     }
                 });
 
-                this.bayushiShoju = this.player1.findCardByName('bayushi-shoju-2');
+                this.bayushiShoju = this.player1.findCardByName(CARD_UNDER_TEST);
 
                 // select bid for both players
                 this.player1.clickPrompt('1');
@@ -35,7 +36,7 @@ describe('Bayushi Shoju 2', function() {
                 expect(this.player1.hand.length).toBe(p1Hand + 2);
                 expect(this.player2.hand.length).toBe(p2Hand + 2);
 
-                expect(this.getChatLogs(1)).toContain('player1 uses Bayushi Shoju to have each player loses an honor and draw two cards');
+                expect(this.getChatLogs(1)).toContain('player1 uses Bayushi Shoj-2 to have each player lose an honor and draw two cards');
             });
 
             it('should let player 1 win if both are at 1 honor', function() {
@@ -60,107 +61,28 @@ describe('Bayushi Shoju 2', function() {
             });
         });
 
-        describe('Bayushi Shoju 2\'s constant ability (gaining favor)', function() {
+        describe('Bayushi Shoju 2\'s constant ability (glory count)', function() {
             beforeEach(function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-shoju-2', 'eager-scout', 'hantei-xxxviii'],
-                        hand: ['way-of-the-crab']
+                        inPlay: [CARD_UNDER_TEST],
+                        hand: ['severed-from-the-stream']
                     },
                     player2: {
-                        inPlay: ['fawning-diplomat']
+                        inPlay: ['doji-diplomat']
                     }
                 });
 
-                this.bayushiShoju = this.player1.findCardByName('bayushi-shoju-2');
-                this.diplomat = this.player2.findCardByName('fawning-diplomat');
-                this.scout = this.player1.findCardByName('eager-scout');
-                this.hantei = this.player1.findCardByName('hantei-xxxviii');
-                this.wayOfTheCrab = this.player1.findCardByName('way-of-the-crab');
-                this.player1.player.imperialFavor = 'military';
-                this.game.checkGameState(true); //lock in the favor
+                this.bayushiShoju = this.player1.findCardByName(CARD_UNDER_TEST);
+                this.diplomat = this.player2.findCardByName('doji-diplomat');
+                this.stream = this.player1.findCardByName('severed-from-the-stream');
+                this.bayushiShoju.bowed = true;
             });
 
-            it('should prevent your opponent from keeping the favor', function() {
-                expect(this.player1.player.imperialFavor).toBe('military');
-                expect(this.player2.player.imperialFavor).toBe('');
-
-                this.player1.clickCard(this.wayOfTheCrab);
-                this.player1.clickCard(this.scout);
-                this.player2.clickCard(this.diplomat);
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                this.player2.clickCard(this.diplomat);
-                this.player2.clickPrompt('Military');
-                expect(this.getChatLogs(2)).toContain('player2 claims the Emperor\'s military favor!');
-                expect(this.getChatLogs(1)).toContain('The imperial favor is discarded as player2 cannot have it');
-
-                expect(this.player1.player.imperialFavor).toBe('');
-                expect(this.player2.player.imperialFavor).toBe('');
-            });
-
-            it('should not discard Hantei', function() {
-                expect(this.player1.player.imperialFavor).toBe('military');
-                expect(this.player2.player.imperialFavor).toBe('');
-
-                this.player1.clickCard(this.wayOfTheCrab);
-                this.player1.clickCard(this.scout);
-                this.player2.clickCard(this.diplomat);
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                this.player2.clickCard(this.diplomat);
-                this.player2.clickPrompt('Military');
-                expect(this.getChatLogs(2)).toContain('player2 claims the Emperor\'s military favor!');
-                expect(this.getChatLogs(1)).toContain('The imperial favor is discarded as player2 cannot have it');
-
-                expect(this.player1.player.imperialFavor).toBe('');
-                expect(this.player2.player.imperialFavor).toBe('');
-                expect(this.hantei.location).toBe('play area');
-            });
-        });
-
-        describe('Bayushi Shoju 2\'s constant ability (having favor before buying shoju)', function() {
-            beforeEach(function() {
-                this.setupTest({
-                    phase: 'dynasty',
-                    player1: {
-                        dynastyDeck: ['bayushi-shoju-2']
-                    },
-                    player2: {
-                    }
-                });
-
-                this.bayushiShoju = this.player1.findCardByName('bayushi-shoju-2');
-                this.player1.placeCardInProvince(this.bayushiShoju, 'province 1');
-            });
-
-            it('should prevent your opponent from keeping the favor', function() {
-                this.player2.player.imperialFavor = 'military';
-                this.game.checkGameState(true); //lock in the favor
-                expect(this.player1.player.imperialFavor).toBe('');
-                expect(this.player2.player.imperialFavor).toBe('military');
-
-                this.player1.clickCard(this.bayushiShoju);
-                this.player1.clickPrompt('0');
-
-                expect(this.getChatLogs(1)).toContain('The imperial favor is discarded as player2 cannot have it');
-
-                expect(this.player1.player.imperialFavor).toBe('');
-                expect(this.player2.player.imperialFavor).toBe('');
-            });
-
-            it('should let you keep the favor', function() {
-                this.player1.player.imperialFavor = 'military';
-                this.game.checkGameState(true); //lock in the favor
-                expect(this.player1.player.imperialFavor).toBe('military');
-                expect(this.player2.player.imperialFavor).toBe('');
-
-                this.player1.clickCard(this.bayushiShoju);
-                this.player1.clickPrompt('0');
-
-                expect(this.getChatLogs(1)).not.toContain('The imperial favor is discarded as player1 cannot have it');
-
-                expect(this.player1.player.imperialFavor).toBe('military');
-                expect(this.player2.player.imperialFavor).toBe('');
+            it('should contribute glory while bowed', function() {
+                this.player1.clickCard(this.stream);
+                expect(this.getChatLogs(5)).toContain('player1 wins the glory count 3 vs 1');
             });
         });
     });

@@ -38,7 +38,7 @@ describe('Yasuki Kiyoko', function() {
                 attackers: [this.kiyoko],
                 defenders: []
             });
-            let fate = this.player1.fate
+            let fate = this.player1.fate;
             this.player2.pass();
             this.player1.clickCard(this.funeralPyre);
             this.player1.clickCard('eager-scout');

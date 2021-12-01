@@ -89,7 +89,7 @@ const Costs = {
     /**
     * Cost that requires removing a card selected by the player from the game.
     */
-    removeSelfFromGame: () => new GameActionCost(GameActions.removeFromGame()),
+    removeSelfFromGame: properties => new GameActionCost(GameActions.removeFromGame(properties)),
     /**
      * Cost that will dishonor the character that initiated the ability
      */

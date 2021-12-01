@@ -1,74 +1,62 @@
-describe('Yuta', function() {
+describe('Utaku Tetsuko Reprint', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     honor: 10,
-                    inPlay: ['border-rider'],
-                    hand: ['challenge-on-the-fields']
+                    inPlay: ['definitely-not-tetsuko'],
+                    hand: ['ornate-fan']
                 },
                 player2: {
                     honor: 10,
-                    inPlay: ['yuta', 'kakita-yoshi'],
-                    hand: ['policy-debate', 'ornate-fan']
+                    inPlay: ['definitely-not-tetsuko'],
+                    hand: ['fine-katana', 'seal-of-the-crane', 'seal-of-the-lion']
                 }
             });
 
-            this.yoshi = this.player2.findCardByName('kakita-yoshi');
-            this.yuta = this.player2.findCardByName('yuta');
-            this.policyDebate = this.player2.findCardByName('policy-debate');
-            this.fan = this.player2.findCardByName('ornate-fan');
+            this.tetsuko1 = this.player1.findCardByName('definitely-not-tetsuko');
+            this.tetsuko2 = this.player2.findCardByName('definitely-not-tetsuko');
+            this.fan = this.player1.findCardByName('ornate-fan');
 
-            this.borderRider = this.player1.findCardByName('border-rider');
-            this.challenge = this.player1.findCardByName('challenge-on-the-fields');
+            this.katana = this.player2.findCardByName('fine-katana');
+            this.seal1 = this.player2.findCardByName('seal-of-the-crane');
+            this.seal2 = this.player2.findCardByName('seal-of-the-lion');
         });
 
-        it('should not react to winning a conflict on defense', function() {
+        it('should react to cards being played on attack', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.borderRider],
-                defenders: [this.yuta]
-            });
-
-            this.noMoreActions();
-            expect(this.player2).not.toHavePrompt('Triggered Abilities');
-        });
-
-        it('should react to winning an attack', function() {
-            this.noMoreActions();
-            this.player1.passConflict();
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yuta],
-                defenders: [this.borderRider]
+                attackers: [this.tetsuko1],
+                defenders: [this.tetsuko2]
             });
 
             let p1Fate = this.player1.fate;
             let p2Fate = this.player2.fate;
 
-            this.noMoreActions();
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.yuta);
-            this.player2.clickCard(this.yuta);
-
-            expect(this.player1.fate).toBe(p1Fate - 1);
-            expect(this.player2.fate).toBe(p2Fate + 1);
-            expect(this.getChatLogs(5)).toContain('player2 uses Yuta to take 1 fate from player1');
-        });
-
-        it('should not react to losing on attack a mil conflict', function() {
-            this.noMoreActions();
-            this.player1.passConflict();
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yuta],
-                defenders: [this.borderRider]
-            });
-
-            this.yuta.bow();
-            this.noMoreActions();
+            this.player2.playAttachment(this.katana, this.tetsuko2);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.tetsuko1);
+            this.player1.clickCard(this.tetsuko1);
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player1.fate).toBe(p1Fate + 1);
+            expect(this.player2.fate).toBe(p2Fate - 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses Definitely Not Tetsuko to take 1 fate from player2');
+
+            this.player1.playAttachment(this.fan, this.tetsuko1);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+
+            this.player2.playAttachment(this.seal1, this.tetsuko2);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.tetsuko1);
+            this.player1.clickCard(this.tetsuko1);
+            expect(this.player1.fate).toBe(p1Fate + 2);
+            expect(this.player2.fate).toBe(p2Fate - 2);
+
+            this.player1.pass();
+            this.player2.playAttachment(this.seal2, this.tetsuko2);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

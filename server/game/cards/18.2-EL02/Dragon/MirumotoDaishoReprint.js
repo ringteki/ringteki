@@ -16,4 +16,4 @@ class MirumotoDaishoReprint extends DrawCard {
 
 MirumotoDaishoReprint.id = 'mirumoto-katana';
 
-module.exports = MirumotoDaishoReprint  ;
+module.exports = MirumotoDaishoReprint ;

@@ -281,7 +281,7 @@ describe('The Wealth of the Crane', function() {
                 this.player1.clickPrompt('Moto Chagatai');
                 this.player1.clickCard(this.p3);
                 this.player1.clickPrompt('Kakita Toshimoko');
-                this.player1.clickCard(this.p4);    
+                this.player1.clickCard(this.p4);
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Action Window');
                 this.player1.clickCard(this.wealth2);

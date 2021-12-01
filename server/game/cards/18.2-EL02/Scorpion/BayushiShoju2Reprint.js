@@ -13,7 +13,7 @@ class BayushiShoju2Reprint extends DrawCard {
             when: {
                 onPhaseStarted: event => event.phase === Phases.Conflict
             },
-            effect: 'have each player loses an honor and draw two cards',
+            effect: 'have each player lose an honor and draw two cards',
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.loseHonor(context => ({
                     target: context.game.getPlayers()

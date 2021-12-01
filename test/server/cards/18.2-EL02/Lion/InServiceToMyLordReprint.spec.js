@@ -1,4 +1,4 @@
-CARD_UNDER_TEST = 'how-to-serve-my-lord';
+const CARD_UNDER_TEST = 'how-to-serve-my-lord';
 describe('In Service to My Lord Reprint', function() {
     integration(function() {
         describe('In Service to My Lord\'s ability', function() {

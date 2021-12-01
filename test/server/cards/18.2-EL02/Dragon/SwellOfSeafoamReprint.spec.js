@@ -125,7 +125,7 @@ describe('Swell of Seafoam Reprint', function() {
             expect(this.player1).toHavePromptButton('Yes');
             expect(this.player1).toHavePromptButton('No');
             this.player1.clickPrompt('Yes');
-            expect(this.getChatLogs(5)).toContain('player1 plays See the Foam, Be the Foam to discard any number of status tokens from and prevent Togashi Initiate from bowing at the end of the conflict')
+            expect(this.getChatLogs(5)).toContain('player1 plays See the Foam, Be the Foam to discard any number of status tokens from and prevent Togashi Initiate from bowing at the end of the conflict');
             expect(this.getChatLogs(5)).toContain('player1 chooses to discard Dishonored Token from Togashi Initiate');
             expect(this.initiate.isDishonored).toBe(false);
             expect(this.initiate.isHonored).toBe(false);

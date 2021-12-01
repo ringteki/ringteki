@@ -1,4 +1,5 @@
-describe('Embrace the Void', function() {
+const CARD_UNDER_TEST = 'void-hug';
+describe('Embrace the Void Reprint', function() {
     integration(function() {
         describe('Embrace the Void/Karmic Twist interaction', function() {
             beforeEach(function() {
@@ -7,17 +8,17 @@ describe('Embrace the Void', function() {
                     player1: {
                         fate: 1,
                         inPlay: ['miya-mystic', 'seppun-guardsman'],
-                        hand: ['embrace-the-void', 'karmic-twist']
+                        hand: [CARD_UNDER_TEST, 'karmic-twist']
                     }
                 });
                 this.miyaMystic = this.player1.findCardByName('miya-mystic');
                 this.miyaMystic.fate = 2;
-                this.embraceTheVoid = this.player1.playAttachment('embrace-the-void', this.miyaMystic);
+                this.embraceTheVoid = this.player1.playAttachment(CARD_UNDER_TEST, this.miyaMystic);
                 this.player2.pass();
                 this.karmicTwist = this.player1.clickCard('karmic-twist');
             });
 
-            it('should give the fate to the player, not transfer it', function() {
+            it('should not cancel the effect, and then give the player 1 fate', function() {
                 expect(this.player1).toHavePrompt('Karmic Twist');
                 this.player1.clickCard(this.miyaMystic);
                 expect(this.player1).toHavePrompt('Karmic Twist');
@@ -25,10 +26,11 @@ describe('Embrace the Void', function() {
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.embraceTheVoid);
                 this.player1.clickCard(this.embraceTheVoid);
-                expect(this.player1.fate).toBe(2);
+                expect(this.player1.fate).toBe(1);
                 expect(this.miyaMystic.fate).toBe(0);
-                expect(this.seppunGuardsman.fate).toBe(0);
+                expect(this.seppunGuardsman.fate).toBe(2);
                 expect(this.karmicTwist.location).toBe('conflict discard pile');
+                expect(this.getChatLogs(5)).toContain('player1 uses Void Hug to gain 1 fate');
             });
         });
 
@@ -39,7 +41,7 @@ describe('Embrace the Void', function() {
                     player1: {
                         fate: 1,
                         inPlay: ['prodigy-of-the-waves'],
-                        hand: ['embrace-the-void']
+                        hand: [CARD_UNDER_TEST]
                     },
                     player2: {
                         provinces: ['feast-or-famine'],
@@ -48,7 +50,7 @@ describe('Embrace the Void', function() {
                 });
                 this.prodigyOfTheWaves = this.player1.findCardByName('prodigy-of-the-waves');
                 this.prodigyOfTheWaves.fate = 2;
-                this.embraceTheVoid = this.player1.findCardByName('embrace-the-void');
+                this.embraceTheVoid = this.player1.findCardByName(CARD_UNDER_TEST);
 
                 this.adeptOfTheWaves = this.player2.findCardByName('adept-of-the-waves');
                 this.feastOrFamine = this.player2.findCardByName('feast-or-famine');
@@ -64,7 +66,7 @@ describe('Embrace the Void', function() {
                 this.player1.pass();
             });
 
-            it('should give the fate to the player, not transfer it', function() {
+            it('should gain a fate', function() {
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 expect(this.player2).toBeAbleToSelect(this.feastOrFamine);
                 this.player2.clickCard(this.feastOrFamine);
@@ -79,7 +81,7 @@ describe('Embrace the Void', function() {
                 this.player1.clickCard(this.embraceTheVoid);
                 expect(this.player1.fate).toBe(2);
                 expect(this.prodigyOfTheWaves.fate).toBe(1);
-                expect(this.adeptOfTheWaves.fate).toBe(0);
+                expect(this.adeptOfTheWaves.fate).toBe(1);
             });
         });
 
@@ -90,7 +92,7 @@ describe('Embrace the Void', function() {
                     player1: {
                         fate:1,
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['embrace-the-void']
+                        hand: [CARD_UNDER_TEST]
                     },
                     player2: {
                         hand: ['assassination']
@@ -98,7 +100,7 @@ describe('Embrace the Void', function() {
                 });
                 this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
                 this.adeptOfTheWaves.fate = 3;
-                this.embraceTheVoid = this.player1.playAttachment('embrace-the-void', this.adeptOfTheWaves);
+                this.embraceTheVoid = this.player1.playAttachment(CARD_UNDER_TEST, this.adeptOfTheWaves);
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves],
@@ -112,7 +114,7 @@ describe('Embrace the Void', function() {
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.embraceTheVoid);
                 this.player1.clickCard(this.embraceTheVoid);
-                expect(this.player1.fate).toBe(4);
+                expect(this.player1.fate).toBe(2);
                 expect(this.adeptOfTheWaves.location).toBe('dynasty discard pile');
                 expect(this.embraceTheVoid.location).toBe('conflict discard pile');
                 expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -130,7 +132,7 @@ describe('Embrace the Void', function() {
                     },
                     player2: {
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['embrace-the-void']
+                        hand: [CARD_UNDER_TEST]
                     }
                 });
                 this.legion = this.player1.findCardByName('a-legion-of-one');
@@ -148,13 +150,13 @@ describe('Embrace the Void', function() {
                 this.polStat = this.adept.getMilitarySkill();
                 this.fateStat = this.adept.fate;
                 this.player2Fate = this.player2.fate;
-                this.player2.playAttachment('embrace-the-void', this.adept);
+                this.player2.playAttachment(CARD_UNDER_TEST, this.adept);
                 this.player1.clickCard(this.legion);
                 this.player1.clickCard(this.adept);
                 this.player1.clickPrompt('Remove 1 fate to resolve this ability again');
                 expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect('embrace-the-void');
-                this.player2.clickCard('embrace-the-void');
+                expect(this.player2).toBeAbleToSelect(CARD_UNDER_TEST);
+                this.player2.clickCard(CARD_UNDER_TEST);
                 expect(this.adept.fate).toBe(this.fateStat - 1);
                 expect(this.player2.fate).toBe(this.player2Fate + 1);
                 expect(this.player1).toHavePrompt('Choose a character');
@@ -178,7 +180,7 @@ describe('Embrace the Void', function() {
                     player2: {
                         fate: 1,
                         inPlay: ['adept-of-the-waves'],
-                        hand: ['embrace-the-void']
+                        hand: [CARD_UNDER_TEST]
                     }
                 });
                 this.ronin = this.player1.findCardByName('wandering-ronin');
@@ -188,7 +190,7 @@ describe('Embrace the Void', function() {
                 this.shinjo.bowed = true;
                 this.game.checkGameState(true);
                 this.player1.pass();
-                this.embrace = this.player2.playAttachment('embrace-the-void', this.shinjo);
+                this.embrace = this.player2.playAttachment(CARD_UNDER_TEST, this.shinjo);
             });
 
             it('should not cancel the effects of the event', function() {
@@ -196,8 +198,8 @@ describe('Embrace the Void', function() {
                 this.player1.clickCard('i-am-ready');
                 this.player1.clickCard(this.shinjo);
                 expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect('embrace-the-void');
-                this.player2.clickCard('embrace-the-void');
+                expect(this.player2).toBeAbleToSelect(CARD_UNDER_TEST);
+                this.player2.clickCard(CARD_UNDER_TEST);
                 expect(this.shinjo.bowed).toBe(false);
                 expect(this.shinjo.fate).toBe(this.fateStat - 1);
                 expect(this.player2.fate).toBe(2);

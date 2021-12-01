@@ -4,7 +4,7 @@ const AbilityDsl = require('../../../abilitydsl.js');
 class UtakuTetsukoReprint extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Force opponent to lose 1 honor',
+            title: 'Take 1 fate from opponent',
             limit: AbilityDsl.limit.perConflict(2),
             when: {
                 onCardPlayed: (event, context) => context.player.opponent && event.player === context.player.opponent && context.source.isAttacking() &&
