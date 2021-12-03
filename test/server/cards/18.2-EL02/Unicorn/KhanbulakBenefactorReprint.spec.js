@@ -184,6 +184,25 @@ describe('Khanbulak Benefactor Reprint', function() {
                 this.player1.clickCard(this.khanbulak2);
                 expect(this.player1.fate).toBe(fate - 2); //2 fate reduction
             });
+
+            it('should work with disguised', function() {
+                const fate = this.player1.fate;
+
+                this.initiateConflict({
+                    attackers: [this.khanbulak],
+                    defenders: [],
+                    type: 'military'
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.kyora);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.khanbulak);
+                this.player1.clickCard(this.khanbulak);
+                this.player1.clickCard(this.rider);
+                expect(this.player1.fate).toBe(fate - 1);
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+            });
         });
     });
 });

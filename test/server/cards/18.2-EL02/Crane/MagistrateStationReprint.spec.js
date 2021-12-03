@@ -139,6 +139,7 @@ describe('Magistrate Station Reprint', function() {
 
         it('should work on conflict resolution', function() {
             this.hotaru.honor();
+            this.brawler.honor();
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -150,6 +151,9 @@ describe('Magistrate Station Reprint', function() {
             this.player1.clickPrompt('Don\'t Resolve');
             expect(this.player1).toBeAbleToSelect(this.station);
             this.player1.clickCard(this.station);
+            expect(this.player1).toBeAbleToSelect(this.hotaru);
+            expect(this.player1).toBeAbleToSelect(this.brawler);
+            this.player1.clickCard(this.hotaru);
             expect(this.hotaru.bowed).toBe(false);
             expect(this.player1).toHavePrompt('Action Window');
         });
