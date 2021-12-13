@@ -17,7 +17,8 @@ class Soldier extends DrawCard {
             text: '',
             type: CardTypes.Attachment,
             traits: ['follower'],
-            is_unique: false
+            is_unique: false,
+            attachment_allow_duplicates: true
         });
         this.facedownCard = facedownCard;
     }

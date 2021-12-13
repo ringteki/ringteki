@@ -36,6 +36,7 @@ class DrawCard extends BaseCard {
         this.covert = false;
         this.isConflict = cardData.side === 'conflict';
         this.isDynasty = cardData.side === 'dynasty';
+        this.allowDuplicatesOfAttachment = !!cardData.attachment_allow_duplicates;
 
         this.menu = _([
             { command: 'bow', text: 'Bow/Ready' },
@@ -832,7 +833,7 @@ class DrawCard extends BaseCard {
 
     allowAttachment(attachment) {
         if(this.game.gameMode === GameModes.Emerald && this.type === CardTypes.Character) {
-            if(this.attachments.some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
+            if(this.attachments.filter(a => !a.allowDuplicatesOfAttachment).some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
                 return false;
             }
         }
