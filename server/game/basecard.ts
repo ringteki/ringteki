@@ -730,7 +730,7 @@ class BaseCard extends EffectSource {
 
         if(this.game.gameMode === GameModes.Emerald) {
             for(const card of allAttachments) {
-                const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id && attachment.controller === card.controller);
+                const matchingAttachments = this.attachments.filter(attachment => !attachment.allowDuplicatesOfAttachment && attachment.id === card.id && attachment.controller === card.controller);
                 illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -1));
             }    
         }
