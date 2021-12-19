@@ -80,7 +80,7 @@ describe('Bake Kujira', function() {
             expect(this.player2).toHavePrompt('Choose additional fate');
         });
 
-        it('should eat people and put them on the bottom of the right deck when it leaves - dynasty', function() {
+        it('should eat people and remove from the game when it leaves - dynasty', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whale],
@@ -104,11 +104,11 @@ describe('Bake Kujira', function() {
             this.player2.pass();
             this.player1.clickCard(this.pyre);
             this.player1.clickCard(this.whale);
-            expect(this.kuwanan.location).toBe('dynasty deck');
-            expect(this.getChatLogs(5)).toContain('Doji Kuwanan is put on the bottom of the deck due to Bake-Kujira leaving play');
+            expect(this.kuwanan.location).toBe('removed from game');
+            expect(this.getChatLogs(5)).toContain('Doji Kuwanan is removed from the game due to Bake-Kujira leaving play');
         });
 
-        it('should eat people and put them on the bottom of the right deck when it leaves - conflict', function() {
+        it('should eat people and remove them from the game when it leaves - conflict', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whale],
@@ -129,8 +129,8 @@ describe('Bake Kujira', function() {
             this.player2.pass();
             this.player1.clickCard(this.pyre);
             this.player1.clickCard(this.whale);
-            expect(this.fumiki.location).toBe('conflict deck');
-            expect(this.getChatLogs(5)).toContain('Doji Fumiki is put on the bottom of the deck due to Bake-Kujira leaving play');
+            expect(this.fumiki.location).toBe('removed from game');
+            expect(this.getChatLogs(5)).toContain('Doji Fumiki is removed from the game due to Bake-Kujira leaving play');
         });
 
         it('should not allow reprieve to save the target', function() {

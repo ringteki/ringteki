@@ -25,8 +25,6 @@ class FloatingFortress extends DrawCard {
                         context.targets.destination = card;
                         return ({ destination: card.location });
                     },
-                    message: '{0} places {1} in {2}',
-                    messageArgs: () => [context.player, context.target, context.targets.destination],
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.moveCard({
                             target: context.target,
@@ -47,7 +45,7 @@ class FloatingFortress extends DrawCard {
                     ])
                 }))
             },
-            effect: 'put {0} into a province'
+            effect: 'put {0} into an attacked province'
         });
     }
 }

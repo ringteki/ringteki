@@ -38,8 +38,7 @@ describe('Floating Fortress', function() {
             expect(this.player2).not.toBeAbleToSelect(this.storehouse);
             this.player2.clickCard(this.oil);
             this.player2.clickCard(this.katana);
-            expect(this.getChatLogs(10)).toContain('player2 uses Floating Fortress, spending 1 fate to put Fire and Oil into a province');
-            expect(this.getChatLogs(10)).toContain('player2 places Fire and Oil in Shameful Display');
+            expect(this.getChatLogs(10)).toContain('player2 uses Floating Fortress, spending 1 fate to put Fire and Oil into an attacked province');
             expect(this.oil.location).toBe('province 1');
             expect(this.oil.facedown).toBe(false);
             expect(this.player2.fate).toBe(fate - 1);
