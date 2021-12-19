@@ -1,19 +1,23 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Durations } = require('../../../Constants');
+const { CardTypes, Durations, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class ConsumedByFiveFiresReprint extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Burn a character',
-            condition: context => context.player.cardsInPlay.any(card => card.hasTrait('shugenja')),
-            effect: 'burn {0}, removing 5 fate and preventing it from staying in play this round!',
+            phase: Phases.Conflict,
+            condition: context => !context.game.isDuringConflict(),
+            effect: 'burn {0}, discarding all attachments and fate from it and preventing it from staying in play this round!',
             target: {
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.removeFate({
-                        amount: 5
-                    }),
+                gameAction: AbilityDsl.actions.sequential([
+                    AbilityDsl.actions.discardFromPlay(context => ({
+                        target: context.target.attachments.toArray()
+                    })),
+                    AbilityDsl.actions.removeFate(context => ({
+                        amount: context.target.getFate(),
+                    })),
                     AbilityDsl.actions.cardLastingEffect({
                         duration: Durations.UntilEndOfRound,
                         effect: [

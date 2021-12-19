@@ -9,6 +9,7 @@ class KhanbulakBenefactorReprint extends DrawCard {
     setupCardAbilities() {
         this.interrupt({
             title: 'Reduce cost of next event',
+            limit: AbilityDsl.limit.perRound(2),
             when: {
                 onAbilityResolverInitiated: (event, context) => {
                     //might be able to remove the source.type check at some point

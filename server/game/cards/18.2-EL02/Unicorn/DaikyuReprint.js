@@ -6,7 +6,7 @@ class DaikyuReprint extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
             condition: context => context.source.parent && context.source.controller.firstPlayer,
-            effect: AbilityDsl.effects.modifyMilitarySkill(2)
+            effect: AbilityDsl.effects.modifyMilitarySkill(1)
         });
 
         this.whileAttached({
@@ -14,7 +14,6 @@ class DaikyuReprint extends DrawCard {
                 title: 'Bow a character',
                 when: {
                     onMoveToConflict: (event, context) => event.card.type === CardTypes.Character && event.card.isParticipating() &&
-                        event.card.controller === context.player &&
                         context.source.isParticipating() && context.game.isDuringConflict('military')
                 },
                 target: {

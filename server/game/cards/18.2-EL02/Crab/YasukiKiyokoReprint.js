@@ -10,7 +10,7 @@ class YasukiKiyoko extends DrawCard {
                 onCardLeavesPlay: (event, context) => context.source.isParticipating() && event.cardStateWhenLeftPlay.controller === context.player &&
                                            event.cardStateWhenLeftPlay.type === CardTypes.Character
             },
-            limit: AbilityDsl.limit.perConflict(1),
+            limit: AbilityDsl.limit.perRound(2),
             target: {
                 mode: TargetModes.Select,
                 choices: {

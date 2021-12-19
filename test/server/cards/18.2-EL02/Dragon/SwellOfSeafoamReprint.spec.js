@@ -25,7 +25,8 @@ describe('Swell of Seafoam Reprint', function() {
             this.hurricane2 = this.player2.findCardByName('hurricane-punch');
         });
 
-        it('should allow selecting a participating monk', function() {
+        it('should allow selecting a participating monk with 1 or more status tokens', function() {
+            this.initiate.taint();
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.initiate, this.challenger],
@@ -36,12 +37,14 @@ describe('Swell of Seafoam Reprint', function() {
             this.player2.pass();
             this.player1.clickCard(this.swell);
             expect(this.player1).toBeAbleToSelect(this.initiate);
-            expect(this.player1).toBeAbleToSelect(this.kazue);
+            expect(this.player1).not.toBeAbleToSelect(this.kazue);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
             expect(this.player1).not.toBeAbleToSelect(this.mitsu);
         });
-
-        it('should prevent bowing at the end of the conflict', function() {
+        
+        it('should discard all status tokens', function() {
+            this.initiate.dishonor();
+            this.initiate.taint();
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.initiate, this.challenger],
@@ -50,34 +53,67 @@ describe('Swell of Seafoam Reprint', function() {
             });
 
             this.player2.pass();
+            expect(this.initiate.isTainted).toBe(true);
+            expect(this.initiate.isDishonored).toBe(true);
             this.player1.clickCard(this.swell);
             this.player1.clickCard(this.initiate);
+            expect(this.getChatLogs(5)).toContain('player1 plays See the Foam, Be the Foam to discard all status tokens from Togashi Initiate');
+            expect(this.initiate.isTainted).toBe(false);
+            expect(this.initiate.isDishonored).toBe(false);
+            expect(this.initiate.isHonored).toBe(false);
+        });
 
-            expect(this.getChatLogs(3)).toContain('player1 plays See the Foam, Be the Foam to prevent Togashi Initiate from bowing at the end of the conflict');
+        it('should not prevent bowing at the end of the conflict without an additional kiho', function() {
+            this.initiate.honor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.initiate],
+                defenders: [this.kuwanan],
+                type: 'military'
+            });
+
+            this.player2.pass();
+            expect(this.initiate.isHonored).toBe(true);
+            this.player1.clickCard(this.swell);
+            this.player1.clickCard(this.initiate);
+            expect(this.initiate.isHonored).toBe(false);
+
+            this.noMoreActions();
+            expect(this.initiate.bowed).toBe(true);
+            expect(this.kuwanan.bowed).toBe(true);
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
+        it('should prevent bowing at the end of the conflict', function() {
+            this.initiate.honor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.initiate],
+                defenders: [this.kuwanan],
+                type: 'military'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.hurricane);
+            this.player1.clickCard(this.initiate);
+            this.player2.pass();
+            expect(this.initiate.isHonored).toBe(true);
+            this.player1.clickCard(this.swell);
+            this.player1.clickCard(this.initiate);
+            expect(this.initiate.isHonored).toBe(false);
+
+            expect(this.getChatLogs(3)).toContain('player1 plays See the Foam, Be the Foam to discard all status tokens from Togashi Initiate and prevent them from bowing at the end of the conflict');
             this.noMoreActions();
             expect(this.initiate.bowed).toBe(false);
             expect(this.kuwanan.bowed).toBe(true);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not discard status tokens if no kiho has been played', function() {
+        it('should not prevent bowing if only opponent has played a kiho', function() {
+            this.initiate.honor();
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.initiate, this.challenger],
-                defenders: [this.kuwanan],
-                type: 'military'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.swell);
-            this.player1.clickCard(this.initiate);
-            expect(this.initiate.isHonored).toBe(false);
-        });
-
-        it('should not discard status tokens if only opponent has played a kiho', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate, this.challenger],
+                attackers: [this.initiate],
                 defenders: [this.kuwanan, this.kazue],
                 type: 'military'
             });
@@ -86,13 +122,16 @@ describe('Swell of Seafoam Reprint', function() {
             this.player2.clickCard(this.kazue);
             this.player1.clickCard(this.swell);
             this.player1.clickCard(this.initiate);
-            expect(this.initiate.isHonored).toBe(false);
+            this.noMoreActions();
+            expect(this.initiate.bowed).toBe(true);
+            expect(this.kuwanan.bowed).toBe(true);
         });
 
         it('should not discard status tokens if a non-kiho has been played', function() {
+            this.initiate.honor();
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.initiate, this.challenger],
+                attackers: [this.initiate],
                 defenders: [this.kuwanan],
                 type: 'military'
             });
@@ -104,31 +143,9 @@ describe('Swell of Seafoam Reprint', function() {
             this.player1.clickCard(this.swell);
             this.player1.clickCard(this.initiate);
             expect(this.initiate.isHonored).toBe(false);
-        });
-
-        it('should discard status tokens if a kiho has been played - dishonored', function() {
-            this.initiate.dishonor();
             this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate, this.challenger],
-                defenders: [this.kuwanan],
-                type: 'military'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.hurricane);
-            this.player1.clickCard(this.initiate);
-            this.player2.pass();
-            this.player1.clickCard(this.swell);
-            this.player1.clickCard(this.initiate);
-            expect(this.player1).toHavePrompt('Do you wish to discard Dishonored Token?');
-            expect(this.player1).toHavePromptButton('Yes');
-            expect(this.player1).toHavePromptButton('No');
-            this.player1.clickPrompt('Yes');
-            expect(this.getChatLogs(5)).toContain('player1 plays See the Foam, Be the Foam to discard any number of status tokens from and prevent Togashi Initiate from bowing at the end of the conflict');
-            expect(this.getChatLogs(5)).toContain('player1 chooses to discard Dishonored Token from Togashi Initiate');
-            expect(this.initiate.isDishonored).toBe(false);
-            expect(this.initiate.isHonored).toBe(false);
+            expect(this.initiate.bowed).toBe(true);
+            expect(this.kuwanan.bowed).toBe(true);
         });
     });
 });

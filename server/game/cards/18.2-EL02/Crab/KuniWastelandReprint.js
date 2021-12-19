@@ -9,15 +9,14 @@ class KuniWastelandReprint extends ProvinceCard {
             when: {
                 onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
-            effect: 'blank {0} until the end of the conflict',
-            target: {
-                cardType: CardTypes.Character,
-                cardCondition: card => card.type === CardTypes.Character && card.isAttacking(),
-                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
-                    effect: AbilityDsl.effects.blank(),
-                    duration: Durations.UntilEndOfConflict
-                }))
-            }
+            effect: 'prevent attacking characters from triggering abilities until the end of the conflict',
+            gameAction: AbilityDsl.actions.conflictLastingEffect({
+                duration: Durations.UntilEndOfConflict,
+                effect: AbilityDsl.effects.charactersCannot({
+                    cannot: 'triggerAbilities',
+                    restricts: 'attackingCharacters'
+                })
+            }),
         });
     }
 }

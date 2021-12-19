@@ -16,23 +16,18 @@ class SwellOfSeafoamReprint extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
                 cardCondition: card => card.isParticipating() && card.hasTrait('monk'),
-                gameAction: AbilityDsl.actions.multipleContext(context => {
-                    const promptActions = this.getStatusTokenPrompts(context);
-                    let actions = ({
-                        gameActions: [
-                            AbilityDsl.actions.cardLastingEffect(({
-                                effect: AbilityDsl.effects.doesNotBow()
-                            }))
-                        ]
-                    });
-                    if(this.isKihoPlayed(context)) {
-                        actions.gameActions = [...actions.gameActions, ...promptActions];
-                    }
-                    return actions;
-                })
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.discardStatusToken(context => ({
+                        target: context.target.statusTokens
+                    })),
+                    AbilityDsl.actions.cardLastingEffect(context => ({
+                        effect: AbilityDsl.effects.doesNotBow(),
+                        target: this.isKihoPlayed(context) ? context.target : []
+                    }))
+                ])
             },
-            effect: '{1}prevent {0} from bowing at the end of the conflict',
-            effectArgs: (context) => [this.isKihoPlayed(context) ? 'discard any number of status tokens from and ' : '']
+            effect: 'discard all status tokens from {0}{1}',
+            effectArgs: (context) => [this.isKihoPlayed(context) ? ' and prevent them from bowing at the end of the conflict' : '']
         });
     }
 

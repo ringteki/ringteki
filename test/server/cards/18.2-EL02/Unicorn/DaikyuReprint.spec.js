@@ -28,12 +28,12 @@ describe('Daikyu Reprint', function() {
             this.player2.playAttachment(this.mount, this.whisperer);
         });
 
-        it('should give +2 mil when first player', function() {
+        it('should give +2 mil when first player and +1 when 2nd', function() {
             expect(this.hotaru.getMilitarySkill()).toBe(3 + 2);
-            expect(this.toturi.getMilitarySkill()).toBe(6 + 0);
+            expect(this.toturi.getMilitarySkill()).toBe(6 + 1);
         });
 
-        it('should react when a character you control moves in', function() {
+        it('should react when a character moves in', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.hotaru, this.initiate],
@@ -43,14 +43,22 @@ describe('Daikyu Reprint', function() {
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.mount);
 
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.hotaru);
+            this.player1.clickCard(this.hotaru);
+            expect(this.player1).not.toBeAbleToSelect(this.hotaru);
+            expect(this.player1).not.toBeAbleToSelect(this.toturi);
+            expect(this.player1).toBeAbleToSelect(this.initiate);
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.bowed).toBe(true);
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.toturi);
             this.player2.clickCard(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.initiate);
-            expect(this.player2).toBeAbleToSelect(this.whisperer);
+            expect(this.player2).not.toBeAbleToSelect(this.whisperer);
             this.player2.clickCard(this.hotaru);
             expect(this.hotaru.bowed).toBe(true);
         });

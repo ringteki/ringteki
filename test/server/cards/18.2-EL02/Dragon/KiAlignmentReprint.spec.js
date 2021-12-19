@@ -80,7 +80,7 @@ describe('Ki Alignment Reprint', function() {
 
             expect(this.getChatLogs(5)).toContain('player1 plays Ki Realignment to look at the top eight cards of their deck for up to two kihos');
             expect(this.getChatLogs(5)).toContain('player1 takes Hurricane Punch and Void Fist');
-            expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player1 puts 6 cards on the bottom of their conflict deck');
         });
 
         it('should be max 1 per round', function() {

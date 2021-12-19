@@ -1,16 +1,29 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
+const { Durations, CardTypes } = require('../../../Constants.js');
 
 class UtakuTetsukoReprint extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Take 1 fate from opponent',
-            limit: AbilityDsl.limit.perConflict(2),
-            when: {
-                onCardPlayed: (event, context) => context.player.opponent && event.player === context.player.opponent && context.source.isAttacking() &&
-                    context.player.opponent.fate > 0
-            },
-            gameAction: AbilityDsl.actions.takeFate()
+        this.action({
+            title: 'Prevent your next event from being cancelled',
+            condition: context => context.source.isAttacking(),
+            effect: 'take an additional action and prevent their next event this conflict from being cancelled',
+            gameAction: AbilityDsl.actions.multiple([
+                AbilityDsl.actions.playerLastingEffect(context => ({
+                    duration: Durations.Custom,
+                    until: {
+                        onCardPlayed: event => event.card.type === CardTypes.Event && event.player === context.player,
+                        onConflictFinished: () => true,
+                    },
+                    targetController: context.player,
+                    effect: AbilityDsl.effects.eventsCannotBeCancelled()
+                })),
+                AbilityDsl.actions.playerLastingEffect(context => ({
+                    targetController: context.player,
+                    duration: Durations.UntilPassPriority,
+                    effect: AbilityDsl.effects.additionalAction()
+                }))
+            ])
         });
     }
 }

@@ -92,7 +92,7 @@ describe('In Service to My Lord Reprint', function() {
                 expect(this.service.location).toBe('conflict discard pile');
             });
 
-            it('should be playable from discard and remove from game', function() {
+            it('should be playable from discard, cost 1 fate, and remove from game', function() {
                 this.player1.playAttachment(this.sharpenTheMind, this.brashSamurai);
                 this.noMoreActions();
 
@@ -107,6 +107,7 @@ describe('In Service to My Lord Reprint', function() {
                 this.player1.clickCard(this.sharpenTheMind);
                 this.player1.clickCard(this.service);
                 this.player2.pass();
+                let fate = this.player1.fate;
                 this.player1.clickCard(this.service);
                 this.player1.clickCard(this.daidojiUji);
                 this.player1.clickCard(this.brashSamurai);
@@ -114,6 +115,7 @@ describe('In Service to My Lord Reprint', function() {
                 expect(this.daidojiUji.bowed).toBe(false);
                 expect(this.brashSamurai.bowed).toBe(true);
                 expect(this.service.location).toBe('removed from game');
+                expect(this.player1.fate).toBe(fate - 1);
             });
 
             it('same copy should be playable from discard if cancelled from hand', function() {
@@ -328,12 +330,12 @@ describe('In Service to My Lord Reprint', function() {
                     attackers: [this.tetsuko],
                     defenders: [this.dojiChallenger]
                 });
-
+                let fate = this.player2.fate;
                 this.player2.clickCard(this.service);
                 this.player2.clickCard(this.hotaru);
                 this.player2.clickCard(this.dojiChallenger);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                expect(this.player2.fate).toBe(30);
+                expect(this.player2.fate).toBe(fate - 1);
             });
 
             it('Toturi2 - should be playable from discard', function() {

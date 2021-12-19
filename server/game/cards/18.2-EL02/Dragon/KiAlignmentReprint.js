@@ -17,6 +17,8 @@ class KiAlignmentReprint extends DrawCard {
                 amount: 8,
                 numCards: 2,
                 uniqueNames: true,
+                shuffle: false,
+                placeOnBottomInRandomOrder: true,
                 cardCondition: card => card.hasTrait('kiho'),
                 gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand

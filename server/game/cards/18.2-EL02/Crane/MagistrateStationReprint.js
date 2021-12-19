@@ -15,6 +15,10 @@ class MagistrateStationReprint extends ProvinceCard {
             gameAction: AbilityDsl.actions.cancel()
         });
     }
+
+    cannotBeStrongholdProvince() {
+        return true;
+    }
 }
 
 MagistrateStationReprint.id = 'magistrate-outpost';
