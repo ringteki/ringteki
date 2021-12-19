@@ -1,6 +1,6 @@
 const ProvinceCard = require('../../../provincecard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Durations } = require('../../../Constants');
+const { Durations } = require('../../../Constants');
 
 class KuniWastelandReprint extends ProvinceCard {
     setupCardAbilities() {
@@ -16,7 +16,7 @@ class KuniWastelandReprint extends ProvinceCard {
                     cannot: 'triggerAbilities',
                     restricts: 'attackingCharacters'
                 })
-            }),
+            })
         });
     }
 }

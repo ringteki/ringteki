@@ -41,7 +41,7 @@ describe('Swell of Seafoam Reprint', function() {
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
             expect(this.player1).not.toBeAbleToSelect(this.mitsu);
         });
-        
+
         it('should discard all status tokens', function() {
             this.initiate.dishonor();
             this.initiate.taint();

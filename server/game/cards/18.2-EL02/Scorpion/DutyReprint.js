@@ -7,10 +7,18 @@ class DutyReprint extends DrawCard {
         this.wouldInterrupt({
             title: 'Cancel honor loss',
             when: {
-                onModifyHonor: (event, context) => context.game.currentPhase !== Phases.Draw &&
-                    event.player === context.player && -event.amount >= context.player.honor && event.context.stage === Stages.Effect,
-                onTransferHonor: (event, context) => context.game.currentPhase !== Phases.Draw &&
-                    event.player === context.player && event.amount >= context.player.honor && event.context.stage === Stages.Effect
+                onModifyHonor: (event, context) => {
+                    if(context.game.currentPhase === Phases.Draw) {
+                        return false;
+                    }
+                    return event.player === context.player && -event.amount >= context.player.honor && event.context.stage === Stages.Effect;
+                },
+                onTransferHonor: (event, context) => {
+                    if(context.game.currentPhase === Phases.Draw) {
+                        return false;
+                    }
+                    return event.player === context.player && event.amount >= context.player.honor && event.context.stage === Stages.Effect;
+                }
             },
             cannotBeMirrored: true,
             effect: 'cancel their honor loss, then gain 1 honor',

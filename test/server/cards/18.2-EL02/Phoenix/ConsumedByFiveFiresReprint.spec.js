@@ -25,7 +25,7 @@ describe('Consumed by Five Fires Reprint', function() {
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.command = this.player2.findCardByName('command-the-tributary');
             this.reprieve = this.player2.findCardByName('reprieve');
-            
+
             this.katana = this.player1.findCardByName('fine-katana');
             this.fan = this.player2.findCardByName('ornate-fan');
 

@@ -1,13 +1,9 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const EventRegistrar = require('../../../eventregistrar');
 const { Locations, Players, PlayTypes, TargetModes, Decks } = require('../../../Constants');
 
-class DaidojiUji2 extends DrawCard {
+class DaidojiUji2Reprint extends DrawCard {
     setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onCardLeavesPlay']);
-
         this.reaction({
             title: 'Search your conflict deck',
             when: { onCharacterEntersPlay: (event, context) => event.card === context.source },
@@ -42,7 +38,7 @@ class DaidojiUji2 extends DrawCard {
         });
 
         this.persistentEffect({
-            condition: context => context.source.isHonored,
+            condition: context => context.source.isHonored || context.source.isDishonored,
             location: Locations.PlayArea,
             targetLocation: this.uuid,
             targetController: Players.Self,
@@ -57,20 +53,8 @@ class DaidojiUji2 extends DrawCard {
             ]
         });
     }
-
-    onCardLeavesPlay(event) {
-        if(event.card === this) {
-            const cards = this.controller.getSourceList(this.uuid).map(a => a);
-            cards.forEach(card => {
-                this.controller.moveCard(card, Locations.RemovedFromGame);
-            });
-            if(cards.length > 0) {
-                this.game.addMessage('{0} {1} removed from the game due to {2} leaving play', cards, cards.length === 1 ? 'is' : 'are', this);
-            }
-        }
-    }
 }
 
-DaidojiUji2.id = 'daidoji-uji-2';
+DaidojiUji2Reprint.id = 'daidoji-two-ji';
 
-module.exports = DaidojiUji2;
+module.exports = DaidojiUji2Reprint;

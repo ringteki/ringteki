@@ -16,7 +16,7 @@ class ConsumedByFiveFiresReprint extends DrawCard {
                         target: context.target.attachments.toArray()
                     })),
                     AbilityDsl.actions.removeFate(context => ({
-                        amount: context.target.getFate(),
+                        amount: context.target.getFate()
                     })),
                     AbilityDsl.actions.cardLastingEffect({
                         duration: Durations.UntilEndOfRound,

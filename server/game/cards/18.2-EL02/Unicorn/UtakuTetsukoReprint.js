@@ -13,7 +13,7 @@ class UtakuTetsukoReprint extends DrawCard {
                     duration: Durations.Custom,
                     until: {
                         onCardPlayed: event => event.card.type === CardTypes.Event && event.player === context.player,
-                        onConflictFinished: () => true,
+                        onConflictFinished: () => true
                     },
                     targetController: context.player,
                     effect: AbilityDsl.effects.eventsCannotBeCancelled()
