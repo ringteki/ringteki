@@ -1,14 +1,9 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const EventRegistrar = require('../../../eventregistrar');
 const { Locations } = require('../../../Constants');
-const { Helpers } = require('../../../Utils/helpers');
 
 class BakeKujira extends DrawCard {
     setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onCardLeavesPlay']);
-
         this.legendary(1);
         // Provided for reference
         // legendary(fate): void {
@@ -85,20 +80,6 @@ class BakeKujira extends DrawCard {
 
     getSkillBonus(card) {
         return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length;
-    }
-
-    onCardLeavesPlay(event) {
-        if(event.card === this) {
-            const cardsToMove = this.controller.getSourceList(this.uuid).map(a => a);
-            if(cardsToMove.length > 0) {
-                Helpers.shuffleArray(cardsToMove);
-                cardsToMove.forEach(c => {
-                    const location = c.isConflict ? Locations.ConflictDeck : Locations.DynastyDeck;
-                    c.owner.moveCard(c, location, { bottom: true });
-                });
-                this.game.addMessage('{0} {1} put on the bottom of the deck due to {2} leaving play', cardsToMove, cardsToMove.length === 1 ? 'is' : 'are', this);
-            }
-        }
     }
 }
 

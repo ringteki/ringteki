@@ -1,13 +1,9 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const EventRegistrar = require('../../../eventregistrar');
 const { Locations, Players } = require('../../../Constants');
 
 class Stowaway extends DrawCard {
     setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onCardLeavesPlay']);
-
         this.action({
             title: 'Place a card underneath self',
             limit: AbilityDsl.limit.perConflict(1),
@@ -45,18 +41,6 @@ class Stowaway extends DrawCard {
 
     getSkillBonus(card) {
         return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length;
-    }
-
-    onCardLeavesPlay(event) {
-        if(event.card === this) {
-            const cards = this.controller.getSourceList(this.uuid).map(a => a);
-            cards.forEach(card => {
-                this.controller.moveCard(card, Locations.RemovedFromGame);
-            });
-            if(cards.length > 0) {
-                this.game.addMessage('{0} {1} removed from the game due to {2} leaving play', cards, cards.length === 1 ? 'is' : 'are', this);
-            }
-        }
     }
 }
 

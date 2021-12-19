@@ -680,6 +680,15 @@ class DrawCard extends BaseCard {
             this.parent = null;
         }
 
+        // Remove any cards underneath from the game
+        const cardsUnderneath = this.controller.getSourceList(this.uuid).map(a => a);
+        if(cardsUnderneath.length > 0) {
+            cardsUnderneath.forEach(card => {
+                this.controller.moveCard(card, Locations.RemovedFromGame);
+            });
+            this.game.addMessage('{0} {1} removed from the game due to {2} leaving play', cardsUnderneath, cardsUnderneath.length === 1 ? 'is' : 'are', this);
+        }
+
         const cacheParticipating = this.isParticipating();
 
         if(this.isParticipating()) {

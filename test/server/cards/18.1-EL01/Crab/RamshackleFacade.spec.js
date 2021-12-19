@@ -49,7 +49,7 @@ describe('Ramshackle Facade', function() {
             this.player1.clickCard(this.challenger);
             this.player1.clickCard(this.tower);
             expect(this.challenger.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Ramshackle Facade, sacrificing Seventh Tower to bow Doji Challenger');
+            expect(this.getChatLogs(5)).toContain('player1 plays Ramshackle Façade, sacrificing Seventh Tower to bow Doji Challenger');
         });
     });
 });
