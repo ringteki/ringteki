@@ -1,6 +1,6 @@
 const EffectValue = require('./EffectValue');
 
-const { AbilityTypes, CardTypes } = require('../Constants');
+const { AbilityTypes, CardTypes, Phases } = require('../Constants');
 
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
@@ -28,6 +28,8 @@ const checkRestrictions = {
     eventsWithSameClan: (context, effect, card) =>
         context.source.type === CardTypes.Event &&
         context.source.getPrintedFaction() !== 'neutral' && card.isFaction(context.source.getPrintedFaction()),
+    nonMonstrousEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('monstrous'),
+    nonDynastyPhase: context => context.game.phase !== Phases.Dynasty,
     nonSpellEvents: context => context.source.type === CardTypes.Event && !context.source.hasTrait('spell'),
     opponentsAttachments: (context, effect) =>
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Attachment,

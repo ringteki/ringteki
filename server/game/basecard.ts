@@ -323,6 +323,34 @@ class BaseCard extends EffectSource {
         this.persistentEffect(properties);
     }
 
+    legendary(fate): void {
+        this.persistentEffect({
+            location: Locations.Any,
+            targetLocation: Locations.Any,
+            effect: [
+                AbilityDsl.effects.playerCannot({
+                    cannot: 'placeFateWhenPlayingCharacterFromProvince',
+                    restricts: 'source'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'putIntoPlay',
+                    restricts: 'cardEffects'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'placeFate'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'preventedFromLeavingPlay'
+                }),
+                AbilityDsl.effects.cardCannot({
+                    cannot: 'enterPlay',
+                    restricts: 'nonDynastyPhase'
+                }),
+                AbilityDsl.effects.legendaryFate(fate)
+            ]
+        });
+    }
+
     isDire() : boolean {
         return false;
     }
@@ -638,7 +666,7 @@ class BaseCard extends EffectSource {
         var potentialKeywords = [];
         _.each(lines, line => {
             line = line.slice(0, -1);
-            _.each(line.split('. '), k => potentialKeywords.push(k));
+            _.each(line.split('.'), k => potentialKeywords.push(k.trim()));
         });
 
         this.printedKeywords = [];
@@ -703,7 +731,7 @@ class BaseCard extends EffectSource {
         const frameworkLimitsAttachmentsWithRepeatedNames = this.game.gameMode === GameModes.Emerald || this.game.gameMode === GameModes.Obsidian;
         if(frameworkLimitsAttachmentsWithRepeatedNames) {
             for(const card of allAttachments) {
-                const matchingAttachments = this.attachments.filter(attachment => attachment.id === card.id && attachment.controller === card.controller);
+                const matchingAttachments = this.attachments.filter(attachment => !attachment.allowDuplicatesOfAttachment && attachment.id === card.id && attachment.controller === card.controller);
                 illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -1));
             }    
         }

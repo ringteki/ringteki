@@ -1,5 +1,5 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl.js');
+const DrawCard = require('../../../drawcard.js');
+const AbilityDsl = require('../../../abilitydsl.js');
 
 const ayubunePilotCaptureParentCost = function() {
     return {

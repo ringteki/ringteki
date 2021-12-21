@@ -94,3 +94,43 @@ describe('Attachments - Emerald', function() {
         });
     });
 });
+
+describe('Attachments - Emerald Solider Token', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['doji-challenger', 'spiritcaller-prodigy'],
+                    stronghold: ['pride'],
+                    dynastyDiscard: ['noble-vanguard']
+                },
+                gameMode: GameModes.Emerald
+            });
+
+            this.challenger = this.player1.findCardByName('doji-challenger');
+
+            this.pride = this.player1.findCardByName('pride');
+            this.spiritcaller = this.player1.findCardByName('spiritcaller-prodigy');
+            this.vanguard = this.player1.findCardByName('noble-vanguard');
+        });
+
+        it('should let you attach two soldiers to the same character', function() {
+            this.player1.clickCard(this.pride);
+            this.player1.clickCard(this.challenger);
+            this.player2.pass();
+            this.player1.clickCard(this.spiritcaller);
+            this.player1.clickCard(this.vanguard);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.vanguard);
+            expect(this.player1).toBeAbleToSelect(this.vanguard);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            this.player1.clickCard(this.challenger);
+
+            const attachments = this.challenger.attachments.toArray();
+            expect(attachments.length).toBe(2);
+            expect(attachments[0].id).toBe('soldier');
+            expect(attachments[1].id).toBe('soldier');
+        });
+    });
+});

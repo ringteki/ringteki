@@ -27,7 +27,7 @@ describe('Alibi Artist', function() {
                 it('should not trigger', function () {
                     this.player1.honor = 4;
                     this.player1.clickCard('alibi-artist');
-                    expect(this.player1).not.toHavePrompt('Choose a card to put in your hand');
+                    expect(this.player1).not.toHavePrompt('Select a card');
                 });
             });
 
@@ -40,19 +40,19 @@ describe('Alibi Artist', function() {
 
                 it('should show 1 card only and a \'Take Nothing\' option', function() {
                     this.player1.clickCard('alibi-artist');
-                    expect(this.player1).toHavePrompt('Choose a card to put in your hand');
+                    expect(this.player1).toHavePrompt('Select a card');
                     expect(this.player1).toHavePromptButton('Reprieve');
-                    expect(this.player1).toHavePromptButton('Take Nothing');
+                    expect(this.player1).toHavePromptButton('Take nothing');
                 });
 
                 it('should leave the card in the deck if the \'Take Nothing\' option is chosen', function() {
                     let handSize = this.player1.player.hand.size();
                     this.player1.clickCard('alibi-artist');
-                    this.player1.clickPrompt('Take Nothing');
+                    this.player1.clickPrompt('Take nothing');
                     expect(this.player1.conflictDeck.length).toBe(1);
                     expect(this.player1.player.hand.size()).toBe(handSize);
-                    expect(this.getChatLogs(2)).not.toContain('player1 puts a card in their hand');
-                    expect(this.getChatLogs(1)).toContain('player1 puts a card on the bottom of their conflict deck');
+                    expect(this.getChatLogs(2)).not.toContain('player1 takes 1 card');
+                    expect(this.getChatLogs(1)).toContain('player1 puts 1 card on the bottom of their conflict deck');
                 });
 
                 it('should put the card in hand if chosen', function() {
@@ -60,8 +60,8 @@ describe('Alibi Artist', function() {
                     this.player1.clickPrompt('Reprieve');
                     expect(this.player1.conflictDeck.length).toBe(0);
                     expect(this.reprieve.location).toBe('hand');
-                    expect(this.getChatLogs(2)).toContain('player1 puts a card in their hand');
-                    expect(this.getChatLogs(1)).not.toContain('player1 puts a card on the bottom of their conflict deck');
+                    expect(this.getChatLogs(2)).toContain('player1 takes 1 card');
+                    expect(this.getChatLogs(1)).not.toContain('player1 puts 1 card on the bottom of their conflict deck');
                 });
             });
 
@@ -75,7 +75,7 @@ describe('Alibi Artist', function() {
 
                 it('should show both cards', function() {
                     this.player1.clickCard('alibi-artist');
-                    expect(this.player1).toHavePrompt('Choose a card to put in your hand');
+                    expect(this.player1).toHavePrompt('Select a card');
                     expect(this.player1).toHavePromptButton('Reprieve');
                     expect(this.player1).toHavePromptButton('Ornate Fan');
                 });
@@ -91,7 +91,7 @@ describe('Alibi Artist', function() {
             it('should only work at 6 honor or less', function() {
                 this.player1.honor = 7;
                 this.player1.clickCard('alibi-artist');
-                expect(this.player1).not.toHavePrompt('Choose a card to put in your hand');
+                expect(this.player1).not.toHavePrompt('Select a card');
             });
 
             it('should work at 6 or less honor and correctly put cards in hand and at bottom of conflict deck', function() {
@@ -99,13 +99,13 @@ describe('Alibi Artist', function() {
                 this.player1.moveCard(this.reprieve, 'conflict deck');
                 this.player1.moveCard(this.fan, 'conflict deck');
                 this.player1.clickCard('alibi-artist');
-                expect(this.player1).toHavePrompt('Choose a card to put in your hand');
+                expect(this.player1).toHavePrompt('Select a card');
                 expect(this.player1).not.toHavePromptButton('Take Nothing');
                 this.player1.clickPrompt('Ornate Fan');
                 expect(this.fan.location).toBe('hand');
                 expect(this.player1.player.conflictDeck.last()).toBe(this.reprieve);
-                expect(this.getChatLogs(2)).toContain('player1 puts a card in their hand');
-                expect(this.getChatLogs(1)).toContain('player1 puts a card on the bottom of their conflict deck');
+                expect(this.getChatLogs(2)).toContain('player1 takes 1 card');
+                expect(this.getChatLogs(1)).toContain('player1 puts 1 card on the bottom of their conflict deck');
             });
         });
     });

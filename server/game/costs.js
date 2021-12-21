@@ -87,6 +87,10 @@ const Costs = {
     */
     removeFromGame: properties => getSelectCost(GameActions.removeFromGame(), properties, 'Select card to remove from game'),
     /**
+    * Cost that requires removing a card selected by the player from the game.
+    */
+    removeSelfFromGame: () => new GameActionCost(GameActions.removeFromGame()),
+    /**
      * Cost that will dishonor the character that initiated the ability
      */
     dishonorSelf: () => new GameActionCost(GameActions.dishonor()),
@@ -101,6 +105,11 @@ const Costs = {
      * Cost that requires tainting a card to be selected by the player
     */
     taint: properties => getSelectCost(GameActions.taint(), properties, 'Select card to taint'),
+    /**
+     * Cost that requires tainting yourself
+    */
+    taintSelf: () => new GameActionCost(GameActions.taint()),
+
     discardStatusToken: properties => new MetaActionCost(
         GameActions.selectCard(
             Object.assign({ gameAction: GameActions.discardStatusToken(), subActionProperties: card => ({ target: card.getStatusToken(CharacterStatus.Honored) }) }, properties)
