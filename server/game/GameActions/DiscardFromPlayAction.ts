@@ -27,6 +27,9 @@ export class DiscardFromPlayAction extends CardGameAction {
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
         if(card.type === CardTypes.Holding) {
+            if(this.name === 'sacrifice' && card.facedown) {
+                return false;
+            }
             if(!card.location.includes('province')) {
                 return false;
             }

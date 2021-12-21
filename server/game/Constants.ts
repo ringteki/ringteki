@@ -84,6 +84,7 @@ export enum EffectNames {
     HonorStatusReverseModifySkill = 'honorStatusReverseModifySkill',
     IncreaseLimitOnAbilities = 'increaseLimitOnAbilities',
     IncreaseLimitOnPrintedAbilities = 'IncreaseLimitOnPrintedAbilities',
+    LegendaryFate = 'legendaryFate',
     LoseKeyword = 'loseKeyword',
     ModifyBaseMilitarySkillMultiplier = 'modifyBaseMilitarySkillMultiplier',
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
@@ -102,6 +103,7 @@ export enum EffectNames {
     ModifyRestrictedAttachmentAmount = 'modifyRestrictedAttachmentAmount',
     MustBeChosen = 'mustBeChosen',
     MustBeDeclaredAsAttacker = 'mustBeDeclaredAsAttacker',
+    MustBeDeclaredAsAttackerIfType = 'mustBeDeclaredAsAttackerifType',
     MustBeDeclaredAsDefender = 'mustBeDeclaredAsDefender',
     SetApparentFate = 'setApparentFate',
     SetBaseDash = 'setBaseDash',
@@ -109,6 +111,8 @@ export enum EffectNames {
     SetBasePoliticalSkill = 'setBasePoliticalSkill',
     SetBaseProvinceStrength = 'setBaseProvinceStrength',
     SetConflictDeclarationType = 'setConflictDeclarationType',
+    ProvideConflictDeclarationType = 'provideConflictDeclarationType',
+    ForceConflictDeclarationType = 'forceConflictDeclarationType',
     SetConflictTotalSkill = 'setConflictTotalSkill',
     SetDash = 'setDash',
     SetGlory = 'setGlory',
@@ -146,6 +150,7 @@ export enum EffectNames {
     ShowTopDynastyCard = 'showTopDynastyCard',
     ContributeToConflict = 'contribute',
     CanContributeWhileBowed = 'canContributeWhileBowed',
+    CanContributeGloryWhileBowed = 'canContributeGloryWhileBowed',
     ChangeConflictSkillFunction = 'skillFunction',
     ModifyConflictElementsToResolve = 'modifyConflictElementsToResolve',
     RestrictNumberOfDefenders = 'restrictNumberOfDefenders',
@@ -167,7 +172,10 @@ export enum EffectNames {
     ReplacePrintedElement = 'replacePrintedElement',
     ProvinceCannotHaveSkillIncreased = 'provinceCannotHaveSkillIncreased',
     ConsideredLessHonorable = 'consideredLessHonorable',
-    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval'
+    CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
+    WinDuel = 'winDuel',
+    ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
+    LimitLegalAttackers = 'limitLegalAttackers'
 };
 
 export enum Durations {
@@ -289,6 +297,7 @@ export enum EventNames {
     OnCardPlayed = 'onCardPlayed',
     OnDeckShuffled = 'onDeckShuffled',
     AfterDuel = 'afterDuel',
+    OnDuelStarted = 'onDuelStarted',
     OnDuelResolution = 'onDuelResolution',
     OnDuelFinished = 'onDuelFinished',
     OnDynastyCardTurnedFaceup = 'onDynastyCardTurnedFaceup',

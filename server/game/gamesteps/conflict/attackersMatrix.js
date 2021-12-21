@@ -101,10 +101,15 @@ class AttackersMatrix {
     }
 
     getForcedAttackers(ring, conflictType, province) {
-        if(this.requiredNumberOfAttackers <= 0) {
+        const optional = this.getOptionallyForcedAttackersByDeclarationRequirement(ring, conflictType, province);
+        const optionalNumberOfAttackers = optional.length;
+        if(this.requiredNumberOfAttackers + optionalNumberOfAttackers <= 0) {
             return this.getForcedAttackersByDeclarationAmountRequirement(ring, conflictType, province);
         }
-        return this.getForcedAttackersByDeclarationRequirement(ring, conflictType, province);
+
+        const normalForced = this.getForcedAttackersByDeclarationRequirement(ring, conflictType, province);
+        const combined = [...optional, ...normalForced];
+        return combined;
     }
 
     //Internal use only
@@ -133,6 +138,15 @@ class AttackersMatrix {
     }
 
     //Internal use only
+    getOptionallyForcedAttackersByDeclarationRequirement(ring, conflictType, province) {
+        if(!this.player.hasLegalConflictDeclaration({ type: conflictType, ring: ring, province: province })) {
+            return [];
+        }
+        return this.characters.filter(card =>
+            card.canDeclareAsAttacker(conflictType, ring, province) &&
+            card.getEffects(EffectNames.MustBeDeclaredAsAttackerIfType).some(effect => effect === 'both' || effect === conflictType));
+    }
+
     getForcedAttackersByDeclarationRequirement(ring, conflictType, province) {
         if(!this.player.hasLegalConflictDeclaration({ type: conflictType, ring: ring, province: province })) {
             return [];

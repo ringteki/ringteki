@@ -362,6 +362,10 @@ class Conflict extends GameObject {
         return cards.reduce((sum, card) => {
             let canContributeWhileBowed = card.anyEffect(EffectNames.CanContributeWhileBowed);
             let cannotContribute = card.bowed && !canContributeWhileBowed;
+            let playerSkillFunction = card.controller.mostRecentEffect(EffectNames.ChangeConflictSkillFunction);
+            if(playerSkillFunction) {
+                skillFunction = playerSkillFunction;
+            }
             if(!cannotContribute) {
                 cannotContribute = cannotContributeFunctions.some(func => func(card));
             }

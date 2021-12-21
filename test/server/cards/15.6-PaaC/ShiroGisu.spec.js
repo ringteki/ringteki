@@ -74,7 +74,7 @@ describe('Shiro Gisu', function() {
             expect(katanaBottom).toBe(true);
 
             expect(this.getChatLogs(5)).toContain('player1 uses Shiro Gisu, bowing Shiro Gisu to look at the top 3 cards of their conflict deck');
-            expect(this.getChatLogs(5)).toContain('player1 puts a card in their hand');
+            expect(this.getChatLogs(5)).toContain('player1 takes 1 card');
             expect(this.getChatLogs(5)).toContain('player1 puts 2 cards on the bottom of their conflict deck');
         });
     });

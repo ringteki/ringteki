@@ -4,6 +4,7 @@ import { Locations, EventNames, TargetModes, Decks } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import Player = require('../player');
+import { Helpers } from '../Utils/helpers';
 
 export interface DeckSearchProperties extends PlayerActionProperties {
     targetMode?: TargetModes;
@@ -18,6 +19,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     message?: string;
     uniqueNames?: boolean;
     player?: Player;
+    placeOnBottomInRandomOrder?: boolean;
     messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
@@ -36,6 +38,7 @@ export class DeckSearchAction extends PlayerAction {
         shuffle: true,
         reveal: true,
         uniqueNames: false,
+        placeOnBottomInRandomOrder: false,
         cardCondition: () => true
     };
 
@@ -60,8 +63,11 @@ export class DeckSearchAction extends PlayerAction {
         return shuffle;
     }
 
-    hasLegalTarget(): boolean {
-        return true;
+    hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
+        const properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
+        const amount = this.getAmount(properties.amount, context);
+        const player = context.player;
+        return amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
     }
 
     getProperties(context: AbilityContext, additionalProperties = {}): DeckSearchProperties {
@@ -153,7 +159,7 @@ export class DeckSearchAction extends PlayerAction {
             },
             choices: canCancel ? (selectedCards.length > 0 ? ['Done'] : ['Take nothing']) : ([]),
             handlers: [() => {
-                this.handleDone(properties, context, event, selectedCards);
+                this.handleDone(properties, context, event, selectedCards, cards);
             }],
             cardHandler: card => {
                 selectedCards = selectedCards.concat(card);
@@ -164,13 +170,13 @@ export class DeckSearchAction extends PlayerAction {
                     this.selectCard(event, additionalProperties, cards, selectedCards);
                 }
                 else {
-                    this.handleDone(properties, context, event, selectedCards);
+                    this.handleDone(properties, context, event, selectedCards, cards);
                 }
             }
         });
     }
 
-    handleDone(properties : DeckSearchProperties, context, event, selectedCards) {
+    handleDone(properties : DeckSearchProperties, context, event, selectedCards, allCards) {
         event.selectedCards = selectedCards;
         if (properties.selectedCardsHandler == null) {
             this.defaultHandleDone(properties, context, event, selectedCards);
@@ -185,6 +191,17 @@ export class DeckSearchAction extends PlayerAction {
             } else if (properties.deck === Decks.DynastyDeck) {
                 event.player.shuffleDynastyDeck();
             }
+        } else if (properties.placeOnBottomInRandomOrder) {
+            let cardsToMove = [...allCards];
+            selectedCards.forEach(card => cardsToMove = cardsToMove.filter(a => a !== card));
+            if(cardsToMove.length > 0) {
+                Helpers.shuffleArray(cardsToMove);
+                cardsToMove.forEach(c => {
+                    context.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
+                });
+                context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', context.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
+            }
+
         }
     }
 
