@@ -841,7 +841,8 @@ class DrawCard extends BaseCard {
     }
 
     allowAttachment(attachment) {
-        if(this.game.gameMode === GameModes.Emerald && this.type === CardTypes.Character) {
+        const frameworkLimitsAttachmentsWithRepeatedNames = this.game.gameMode === GameModes.Emerald || this.game.gameMode === GameModes.Obsidian;
+        if(frameworkLimitsAttachmentsWithRepeatedNames && this.type === CardTypes.Character) {
             if(this.attachments.filter(a => !a.allowDuplicatesOfAttachment).some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
                 return false;
             }

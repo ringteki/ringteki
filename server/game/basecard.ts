@@ -728,7 +728,8 @@ class BaseCard extends EffectSource {
             illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -limit));
         }
 
-        if(this.game.gameMode === GameModes.Emerald) {
+        const frameworkLimitsAttachmentsWithRepeatedNames = this.game.gameMode === GameModes.Emerald || this.game.gameMode === GameModes.Obsidian;
+        if(frameworkLimitsAttachmentsWithRepeatedNames) {
             for(const card of allAttachments) {
                 const matchingAttachments = this.attachments.filter(attachment => !attachment.allowDuplicatesOfAttachment && attachment.id === card.id && attachment.controller === card.controller);
                 illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -1));
