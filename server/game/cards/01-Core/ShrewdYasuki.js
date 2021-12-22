@@ -1,5 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const { Locations, CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class ShrewdYasuki extends DrawCard {
     setupCardAbilities() {
@@ -8,23 +9,15 @@ class ShrewdYasuki extends DrawCard {
             condition: context => context.player.conflictDeck.size() > 0 && context.source.isParticipating() &&
                                   this.game.allCards.some(card => card.type === CardTypes.Holding && card.location.includes('province') && card.isFaceup()),
             effect: 'look at the top two cards of their conflict deck',
-            handler: context => {
-                if(context.player.conflictDeck.size() === 0) {
-                    return;
-                }
-                this.game.promptWithHandlerMenu(context.player, {
-                    activePromptTitle: 'Choose a card to put in your hand',
-                    context: context,
-                    cards: context.player.conflictDeck.first(2),
-                    cardHandler: card => {
-                        this.game.addMessage('{0} takes one card to their hand and puts the other on the bottom of their deck', context.player);
-                        context.player.moveCard(card, Locations.Hand);
-                        if(context.player.conflictDeck.size() > 0) {
-                            this.game.queueSimpleStep(() => context.player.moveCard(context.player.conflictDeck.first(), Locations.ConflictDeck, { bottom: true }));
-                        }
-                    }
-                });
-            }
+            gameAction: AbilityDsl.actions.deckSearch({
+                amount: 2,
+                gameAction: AbilityDsl.actions.moveCard({
+                    destination: Locations.Hand
+                }),
+                shuffle: false,
+                reveal: false,
+                placeOnBottomInRandomOrder: true
+            })
         });
     }
 }

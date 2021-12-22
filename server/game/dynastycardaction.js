@@ -31,13 +31,20 @@ class DynastyCardAction extends BaseAction {
 
     displayMessage(context) {
         context.game.addMessage('{0} plays {1} with {2} additional fate', context.player, context.source, context.chooseFate);
-        context.source.getRawEffects().filter(effect => effect.type === EffectNames.GainExtraFateWhenPlayed).map(effect =>
-            context.game.addMessage('{0} enters play with {1} additional fate due to {2}', context.source, effect.value.value, effect.context.source)
-        );
+        if(context.source.checkRestrictions('placeFate', context)) {
+            context.source.getRawEffects().filter(effect => effect.type === EffectNames.GainExtraFateWhenPlayed).map(effect =>
+                context.game.addMessage('{0} enters play with {1} additional fate due to {2}', context.source, effect.value.value, effect.context.source)
+            );
+        }
     }
 
     executeHandler(context) {
-        const extraFate = context.source.sumEffects(EffectNames.GainExtraFateWhenPlayed);
+        let extraFate = context.source.sumEffects(EffectNames.GainExtraFateWhenPlayed);
+        let legendaryFate = context.source.sumEffects(EffectNames.LegendaryFate);
+        if(!context.source.checkRestrictions('placeFate', context)) {
+            extraFate = 0;
+        }
+        extraFate = extraFate + legendaryFate;
         const status = context.source.getEffects(EffectNames.EntersPlayWithStatus)[0] || '';
         let enterPlayEvent = GameActions.putIntoPlay({ fate: context.chooseFate + extraFate, status }).getEvent(context.source, context);
         let cardPlayedEvent = context.game.getEvent(EventNames.OnCardPlayed, {

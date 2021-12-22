@@ -1,6 +1,6 @@
 const _ = require('underscore');
 const GameModes = require('../GameModes');
-const { Locations, DuelTypes } = require('./Constants');
+const { Locations, DuelTypes, EffectNames } = require('./Constants');
 
 const DuelParticipants = Object.freeze({
     Challenger: 'challenger',
@@ -120,28 +120,35 @@ class Duel {
     determineResult() {
         let challengerTotal = this.getChallengerStatisticTotal();
         let targetTotal = this.getTargetStatisticTotal();
-        if(challengerTotal === '-') {
-            if(targetTotal !== '-' && targetTotal > 0) {
-                // Challenger dead, target alive
-                this.setWinner(DuelParticipants.Target);
-            }
-            // Both dead
-        } else if(targetTotal === '-') {
-            // Challenger alive, target dead
-            if(challengerTotal > 0) {
-                this.setWinner(DuelParticipants.Challenger);
-            }
-        } else {
-            [challengerTotal, targetTotal] = this.getTotals(challengerTotal, targetTotal);
+        let challengerWins = this.challenger.mostRecentEffect(EffectNames.WinDuel) === this;
 
-            if(challengerTotal > targetTotal) {
-                // Both alive, challenger wins
-                this.setWinner(DuelParticipants.Challenger);
-                this.setLoser(DuelParticipants.Target);
-            } else if(challengerTotal < targetTotal) {
-                // Both alive, target wins
-                this.setWinner(DuelParticipants.Target);
-                this.setLoser(DuelParticipants.Challenger);
+        if(challengerWins) {
+            this.setWinner(DuelParticipants.Challenger);
+            this.setLoser(DuelParticipants.Target);
+        } else {
+            if(challengerTotal === '-') {
+                if(targetTotal !== '-' && targetTotal > 0) {
+                    // Challenger dead, target alive
+                    this.setWinner(DuelParticipants.Target);
+                }
+                // Both dead
+            } else if(targetTotal === '-') {
+                // Challenger alive, target dead
+                if(challengerTotal > 0) {
+                    this.setWinner(DuelParticipants.Challenger);
+                }
+            } else {
+                [challengerTotal, targetTotal] = this.getTotals(challengerTotal, targetTotal);
+
+                if(challengerTotal > targetTotal) {
+                    // Both alive, challenger wins
+                    this.setWinner(DuelParticipants.Challenger);
+                    this.setLoser(DuelParticipants.Target);
+                } else if(challengerTotal < targetTotal) {
+                    // Both alive, target wins
+                    this.setWinner(DuelParticipants.Target);
+                    this.setLoser(DuelParticipants.Challenger);
+                }
             }
         }
         if(Array.isArray(this.loser)) {

@@ -24,6 +24,9 @@ class DuplicateUniqueAction extends BaseAction {
         if(!this.card.anotherUniqueInPlayControlledBy(context.player)) {
             return 'unique';
         }
+        if(!this.card.checkRestrictions('placeFate', context)) {
+            return 'restriction';
+        }
         return super.meetsRequirements(context);
     }
 

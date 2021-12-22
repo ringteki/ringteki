@@ -276,8 +276,12 @@ class Game extends EventEmitter {
         return array;
     }
 
-    createToken(card) {
-        let token = new SpiritOfTheRiver(card);
+    createToken(card, token = undefined) {
+        if(!token) {
+            token = new SpiritOfTheRiver(card);
+        } else {
+            token = new token(card);
+        }
         this.allCards.push(token);
         return token;
     }

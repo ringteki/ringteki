@@ -36,6 +36,7 @@ class DrawCard extends BaseCard {
         this.covert = false;
         this.isConflict = cardData.side === 'conflict';
         this.isDynasty = cardData.side === 'dynasty';
+        this.allowDuplicatesOfAttachment = !!cardData.attachment_allow_duplicates;
 
         this.menu = _([
             { command: 'bow', text: 'Bow/Ready' },
@@ -51,6 +52,10 @@ class DrawCard extends BaseCard {
         if(cardData.type === CardTypes.Character) {
             this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new PrideAbility(this.game, this));
+            this.abilities.reactions.push(new SincerityAbility(this.game, this));
+        }
+        if(cardData.type === CardTypes.Attachment) {
+            this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
         }
         if(this.isDynasty) {
@@ -383,7 +388,11 @@ class DrawCard extends BaseCard {
     adjustHonorStatusModifiers(modifiers) {
         // This is Yojiro's ability
         let doesNotModifyEffects = this.getRawEffects().filter(effect => effect.type === EffectNames.HonorStatusDoesNotModifySkill);
-        if(doesNotModifyEffects.length > 0) {
+        let doesNotModifyConflictEffects = false;
+        if(this.game.currentConflict && this.isParticipating()) {
+            doesNotModifyConflictEffects = this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens);
+        }
+        if(doesNotModifyEffects.length > 0 || doesNotModifyConflictEffects) {
             modifiers.forEach(modifier => {
                 if(modifier.type === 'token' && modifier.amount !== 0) {
                     modifier.amount = 0;
@@ -626,7 +635,9 @@ class DrawCard extends BaseCard {
     }
 
     getContributionToImperialFavor() {
-        return !this.bowed ? this.glory : 0;
+        const canConributeWhileBowed = this.anyEffect(EffectNames.CanContributeGloryWhileBowed);
+        const contributesGlory = canConributeWhileBowed || !this.bowed;
+        return contributesGlory ? this.glory : 0;
     }
 
     modifyFate(amount) {
@@ -669,11 +680,29 @@ class DrawCard extends BaseCard {
             this.parent = null;
         }
 
+        // Remove any cards underneath from the game
+        const cardsUnderneath = this.controller.getSourceList(this.uuid).map(a => a);
+        if(cardsUnderneath.length > 0) {
+            cardsUnderneath.forEach(card => {
+                this.controller.moveCard(card, Locations.RemovedFromGame);
+            });
+            this.game.addMessage('{0} {1} removed from the game due to {2} leaving play', cardsUnderneath, cardsUnderneath.length === 1 ? 'is' : 'are', this);
+        }
+
+        const cacheParticipating = this.isParticipating();
+
         if(this.isParticipating()) {
             this.game.currentConflict.removeFromConflict(this);
         }
 
-        if(this.isDishonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
+        let honorStatusDoesNotAffectLeavePlayEffects = this.anyEffect(EffectNames.HonorStatusDoesNotModifySkill);
+        let honorStatusDoesNotAffectLeavePlayConflictEffects = false;
+        if(this.game.currentConflict) {
+            honorStatusDoesNotAffectLeavePlayConflictEffects = cacheParticipating && this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens);
+        }
+        const ignoreHonorStatus = honorStatusDoesNotAffectLeavePlayEffects || honorStatusDoesNotAffectLeavePlayConflictEffects;
+
+        if(this.isDishonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorLossAction = this.game.actions.loseHonor();
 
@@ -681,7 +710,7 @@ class DrawCard extends BaseCard {
                 this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
             }
             this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
-        } else if(this.isHonored && !this.anyEffect(EffectNames.HonorStatusDoesNotAffectLeavePlay)) {
+        } else if(this.isHonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorGainAction = this.game.actions.gainHonor();
             if(honorGainAction.canAffect(this.controller, frameworkContext)) {
@@ -749,6 +778,20 @@ class DrawCard extends BaseCard {
                 }
             }
         }
+
+        if(this.controller.anyEffect(EffectNames.LimitLegalAttackers)) {
+            const checks = this.controller.getEffects(EffectNames.LimitLegalAttackers);
+            let valid = true;
+            checks.forEach(check => {
+                if(typeof check === 'function') {
+                    valid = valid && check(this);
+                }
+            });
+            if(!valid) {
+                return false;
+            }
+        }
+
         return this.checkRestrictions('declareAsAttacker', this.game.getFrameworkContext()) &&
             this.canParticipateAsAttacker(conflictType) &&
             this.location === Locations.PlayArea && !this.bowed;
@@ -800,7 +843,7 @@ class DrawCard extends BaseCard {
     allowAttachment(attachment) {
         const frameworkLimitsAttachmentsWithRepeatedNames = this.game.gameMode === GameModes.Emerald || this.game.gameMode === GameModes.Obsidian;
         if(frameworkLimitsAttachmentsWithRepeatedNames && this.type === CardTypes.Character) {
-            if(this.attachments.some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
+            if(this.attachments.filter(a => !a.allowDuplicatesOfAttachment).some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
                 return false;
             }
         }

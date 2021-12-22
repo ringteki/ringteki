@@ -1,9 +1,10 @@
 const DrawCard = require('../../drawcard.js');
 const _ = require('underscore');
 const { CardTypes } = require('../../Constants');
+const AbilityDsl = require('../../abilitydsl');
 
 class ForceOfTheRiver extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.attachmentConditions({
             myControl: true,
             trait: 'shugenja'
@@ -20,7 +21,7 @@ class ForceOfTheRiver extends DrawCard {
                 facedown: false,
                 type: CardTypes.Character
             },
-            gameAction: ability.actions.createToken(context => ({
+            gameAction: AbilityDsl.actions.createToken(context => ({
                 target: _.flatten(context.game.getProvinceArray().map(
                     location => context.player.getDynastyCardsInProvince(location))).filter(
                     card => card.isFacedown())

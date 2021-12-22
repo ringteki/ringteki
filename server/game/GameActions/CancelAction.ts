@@ -1,6 +1,6 @@
 import { GameAction, GameActionProperties } from './GameAction';
 import TriggeredAbilityContext = require('../TriggeredAbilityContext');
-import { CardTypes } from '../Constants'
+import { CardTypes, EventNames } from '../Constants'
 
 export interface CancelActionProperties extends GameActionProperties {
     replacementGameAction?: GameAction;
@@ -30,6 +30,9 @@ export class CancelAction extends GameAction {
         let { replacementGameAction } = this.getProperties(context);
         let cannotBeCancelled = context.event.cannotBeCancelled;
         if (context.event.card && typeof(context.event.card.getType) === 'function' && context.event.card.getType() === CardTypes.Event && context.event.card.owner && context.event.card.owner.eventsCannotBeCancelled()) {
+            cannotBeCancelled = true;
+        }
+        if (context.event.card && !context.event.card.checkRestrictions('preventedFromLeavingPlay', context.event.name === EventNames.OnCardLeavesPlay)) {
             cannotBeCancelled = true;
         }
 
