@@ -1543,6 +1543,10 @@ class Player extends GameObject {
         this.game.openSimultaneousEffectWindow(effects.map(context => ({ title: context.ability.title, handler: () => this.game.resolveAbility(context) })));
     }
 
+    isKihoPlayedThisConflict(context, cardBeingPlayed) {
+        return context.game.currentConflict.getNumberOfCardsPlayed(this, card => (card.hasTrait('kiho') && card.uuid !== cardBeingPlayed.uuid)) > 0;
+    }
+
     getStats() {
         return {
             fate: this.fate,
