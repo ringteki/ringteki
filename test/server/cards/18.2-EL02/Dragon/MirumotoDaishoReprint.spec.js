@@ -42,5 +42,32 @@ describe('Mirumoto Daisho Reprint', function() {
             expect(this.player2).not.toHavePromptButton('4');
             expect(this.player2).not.toHavePromptButton('5');
         });
+
+        it('should let you reduce honor transfer', function() {
+            this.player1.clickCard(this.mirumotoDaisho);
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.mirumotoRaitsugu],
+                defenders: [this.dojiWhisperer]
+            });
+            let honor = this.player1.honor;
+            let honor2 = this.player2.honor;
+
+            this.player2.pass();
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.dojiWhisperer);
+            this.player1.clickPrompt('3');
+            this.player2.clickPrompt('1');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.mirumotoDaisho);
+            this.player1.clickCard(this.mirumotoDaisho);
+
+            expect(this.player1.honor).toBe(honor - 1);
+            expect(this.player2.honor).toBe(honor2 + 1);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Mirumoto Katana to give 1 fewer honor');
+        });
     });
 });

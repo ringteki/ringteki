@@ -1,24 +1,16 @@
 const DrawCard = require('../../../drawcard.js');
-const { Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class IkomaTsanuri2Reprint extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Put a character into play',
+        this.wouldInterrupt({
+            title: 'Cancel conflict province ability',
             when: {
-                onConflictDeclared: (event, context) => event.attackers.includes(context.source)
+                onInitiateAbilityEffects: (event, context) => context.source.isAttacking() && event.card.isConflictProvince()
             },
-            effect: 'prevent {1} from triggering province abilities on the attacked province this conflict',
-            effectArgs: context => [context.player.opponent],
-            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
-                targetController: context.player.opponent,
-                duration: Durations.UntilEndOfConflict,
-                effect: AbilityDsl.effects.playerCannot({
-                    cannot: 'triggerAbilities',
-                    restricts: 'attackedProvinceNonForced'
-                })
-            }))
+            effect: 'cancel the effects of {1}\'s ability',
+            effectArgs: context => context.event.card,
+            gameAction: AbilityDsl.actions.cancel()
         });
     }
 }

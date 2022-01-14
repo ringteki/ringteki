@@ -6,13 +6,7 @@ class InServiceToMyLordReprint extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             location: Locations.ConflictDiscardPile,
-            effect: [
-                AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other),
-                AbilityDsl.effects.increaseCost({
-                    amount: 1,
-                    match: (card, source) => card === source
-                })
-            ]
+            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
         });
         this.action({
             title: 'Ready a character',

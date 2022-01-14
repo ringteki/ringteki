@@ -9,7 +9,7 @@ describe('Daikyu Reprint', function() {
                 },
                 player2: {
                     inPlay: ['akodo-toturi', 'doji-whisperer'],
-                    hand: ['live-free-or-daikyu', 'favored-mount']
+                    hand: ['live-free-or-daikyu', 'favored-mount', 'way-of-the-open-hand']
                 }
             });
 
@@ -21,6 +21,7 @@ describe('Daikyu Reprint', function() {
             this.daikyu1 = this.player1.findCardByName('live-free-or-daikyu');
             this.daikyu2 = this.player2.findCardByName('live-free-or-daikyu');
             this.mount = this.player2.findCardByName('favored-mount');
+            this.hand = this.player2.findCardByName('way-of-the-open-hand');
 
             this.player1.playAttachment(this.daikyu1, this.hotaru);
             this.player2.playAttachment(this.daikyu2, this.toturi);
@@ -61,6 +62,29 @@ describe('Daikyu Reprint', function() {
             expect(this.player2).not.toBeAbleToSelect(this.whisperer);
             this.player2.clickCard(this.hotaru);
             expect(this.hotaru.bowed).toBe(true);
+        });
+
+        it('should react when a character moves out', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.hotaru, this.initiate],
+                defenders: [this.toturi, this.whisperer],
+                type: 'military'
+            });
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.hand);
+            this.player2.clickCard(this.hotaru);
+
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.toturi);
+            this.player2.clickCard(this.toturi);
+            expect(this.player2).not.toBeAbleToSelect(this.hotaru);
+            expect(this.player2).not.toBeAbleToSelect(this.toturi);
+            expect(this.player2).toBeAbleToSelect(this.initiate);
+            expect(this.player2).toBeAbleToSelect(this.whisperer);
+            this.player2.clickCard(this.initiate);
+            expect(this.initiate.bowed).toBe(true);
         });
 
         it('should not react in pol', function() {

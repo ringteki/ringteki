@@ -1,39 +1,23 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { Locations, Players, PlayTypes, TargetModes, Decks } = require('../../../Constants');
+const { Locations, Players, PlayTypes } = require('../../../Constants');
 
 class DaidojiUji2Reprint extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
+        this.action({
             title: 'Search your conflict deck',
-            when: { onCharacterEntersPlay: (event, context) => event.card === context.source },
             gameAction: AbilityDsl.actions.deckSearch({
-                targetMode: TargetModes.UpTo,
-                numCards: 4,
-                amount: 8,
-                deck: Decks.ConflictDeck,
+                amount: 4,
                 reveal: false,
-                selectedCardsHandler: (context, event, cards) => {
-                    if(cards.length > 0) {
-                        this.game.addMessage('{0} selects {1} cards', event.player, cards.length);
-                        cards.forEach(card => {
-                            context.player.moveCard(card, this.uuid);
-                            card.controller = context.source.controller;
-                            card.facedown = false;
-                            card.lastingEffect(() => ({
-                                until: {
-                                    onCardMoved: event => event.card === card && event.originalLocation === this.uuid
-                                },
-                                match: card,
-                                effect: [
-                                    AbilityDsl.effects.hideWhenFaceUp()
-                                ]
-                            }));
-                        });
-                    } else {
-                        this.game.addMessage('{0} selects no cards', event.player);
-                    }
-                }
+                placeOnBottomInRandomOrder: true,
+                shuffle: false,
+                message: '{0} puts a card underneath {1}',
+                messageArgs: context => {
+                    return [context.player, context.source];
+                },
+                gameAction: AbilityDsl.actions.placeCardUnderneath({
+                    destination: this
+                })
             })
         });
 

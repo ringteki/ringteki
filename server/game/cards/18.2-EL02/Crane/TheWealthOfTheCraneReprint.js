@@ -21,11 +21,10 @@ class TheWealthOfTheCraneReprint extends DrawCard {
 
         this.action({
             title: 'Look at your dynasty deck',
-            effect: 'look at the top ten cards of their dynasty deck',
+            effect: 'look at the top eight cards of their dynasty deck',
             condition: context => context.player.dynastyDeck.size() > 0,
-            max: AbilityDsl.limit.perPhase(1),
             handler: context => {
-                this.cards = context.player.dynastyDeck.first(10);
+                this.cards = context.player.dynastyDeck.first(8);
                 this.cards = this.cards.filter(a => a.type === CardTypes.Character);
                 this.chosenProvinces = [];
 

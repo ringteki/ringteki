@@ -47,6 +47,7 @@ import { MoveToConflictAction, MoveToConflictProperties } from './MoveToConflict
 import { MoveTokenAction, MoveTokenProperties } from './MoveTokenAction';
 import { MultipleGameAction } from './MultipleGameAction';
 import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
+import { PlaceCardUnderneathAction, PlaceCardUnderneathProperties } from './PlaceCardUnderneathAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
@@ -135,6 +136,7 @@ const GameActions = {
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
     gainStatusToken: (propertyFactory: GainStatusTokenProperties | ((context: TriggeredAbilityContext) => GainStatusTokenProperties) = {}) => new GainStatusTokenAction(propertyFactory),
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
+    placeCardUnderneath: (propertyFactory: PlaceCardUnderneathProperties | ((context: TriggeredAbilityContext) => PlaceCardUnderneathProperties)) => new PlaceCardUnderneathAction(propertyFactory), // destination, hideWhenFaceup = true
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     chosenReturnToDeck: (propertyFactory: ChosenReturnToDeckProperties | ((context: TriggeredAbilityContext) => ChosenReturnToDeckProperties) = {}) => new ChosenReturnToDeckAction(propertyFactory), // amount = 1

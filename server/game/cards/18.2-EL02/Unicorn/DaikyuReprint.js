@@ -14,6 +14,8 @@ class DaikyuReprint extends DrawCard {
                 title: 'Bow a character',
                 when: {
                     onMoveToConflict: (event, context) => event.card.type === CardTypes.Character && event.card.isParticipating() &&
+                        context.source.isParticipating() && context.game.isDuringConflict('military'),
+                    onSendHome: (event, context) => event.card.type === CardTypes.Character && !event.card.isParticipating() &&
                         context.source.isParticipating() && context.game.isDuringConflict('military')
                 },
                 target: {
