@@ -1,7 +1,7 @@
 const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 const AllPlayerPrompt = require('./allplayerprompt.js');
 const GameActions = require('../GameActions/GameActions');
-const { EventNames } = require('../Constants');
+const { EventNames, EffectNames } = require('../Constants');
 const GameModes = require('../../GameModes.js');
 
 class HonorBidPrompt extends AllPlayerPrompt {
@@ -48,16 +48,20 @@ class HonorBidPrompt extends AllPlayerPrompt {
             return;
         }
         let difference = firstPlayer.honorBid - firstPlayer.opponent.honorBid;
-
-        if(difference > 0) {
-            let [, amountToTransfer] = CalculateHonorLimit(firstPlayer.opponent, context.game.roundNumber, context.game.currentPhase, Math.abs(difference));
-            this.game.addMessage('{0} gives {1} {2} honor', firstPlayer, firstPlayer.opponent, amountToTransfer);
-            GameActions.takeHonor({ amount: amountToTransfer, afterBid: true }).resolve(firstPlayer, context);
-        } else if(difference < 0) {
-            let [, amountToTransfer] = CalculateHonorLimit(firstPlayer, context.game.roundNumber, context.game.currentPhase, Math.abs(difference));
-            this.game.addMessage('{0} gives {1} {2} honor', firstPlayer.opponent, firstPlayer, amountToTransfer);
-            GameActions.takeHonor({ amount: amountToTransfer, afterBid: true }).resolve(firstPlayer.opponent, context);
+        if(difference === 0) {
+            return;
         }
+        let amount = Math.abs(difference);
+        let givingPlayer = difference > 0 ? firstPlayer : firstPlayer.opponent;
+        let receivingPlayer = givingPlayer.opponent;
+
+        const modifyGivenAmount = givingPlayer.getEffects(EffectNames.ModifyHonorTransferGiven).reduce((a, b) => a + b, 0);
+        const modifyReceivedAmount = receivingPlayer.getEffects(EffectNames.ModifyHonorTransferReceived).reduce((a, b) => a + b, 0);
+        amount = amount + modifyGivenAmount + modifyReceivedAmount;
+
+        var [, amountToTransfer] = CalculateHonorLimit(receivingPlayer, context.game.roundNumber, context.game.currentPhase, amount);
+        this.game.addMessage('{0} gives {1} {2} honor', givingPlayer, receivingPlayer, amountToTransfer);
+        GameActions.takeHonor({ amount: Math.abs(difference), afterBid: true }).resolve(givingPlayer, context);
     }
 
 

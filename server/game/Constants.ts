@@ -175,7 +175,9 @@ export enum EffectNames {
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
-    LimitLegalAttackers = 'limitLegalAttackers'
+    LimitLegalAttackers = 'limitLegalAttackers',
+    ModifyHonorTransferGiven = "modifyHonorTransferGiven",
+    ModifyHonorTransferReceived = "modifyHonorTransferReceived",
 };
 
 export enum Durations {

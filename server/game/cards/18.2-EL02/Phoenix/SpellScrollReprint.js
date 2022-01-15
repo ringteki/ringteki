@@ -11,6 +11,7 @@ class SpellScrollReprint extends DrawCard {
 
         this.reaction({
             title: 'Ready attached character',
+            max: AbilityDsl.limit.perRound(1),
             when: {
                 onCardAttached: (event, context) => event.card === context.source && event.originalLocation !== Locations.PlayArea
             },

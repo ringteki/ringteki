@@ -59,15 +59,57 @@ describe('Mirumoto Daisho Reprint', function() {
             this.player1.clickCard(this.dojiWhisperer);
             this.player1.clickPrompt('3');
             this.player2.clickPrompt('1');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.mirumotoDaisho);
-            this.player1.clickCard(this.mirumotoDaisho);
-
             expect(this.player1.honor).toBe(honor - 1);
             expect(this.player2.honor).toBe(honor2 + 1);
+
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(10)).toContain('player1 gives player2 1 honor');
+        });
+
+        it('should let you reduce honor transfer to 0', function() {
+            this.player1.clickCard(this.mirumotoDaisho);
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.mirumotoRaitsugu],
+                defenders: [this.dojiWhisperer]
+            });
+            let honor = this.player1.honor;
+            let honor2 = this.player2.honor;
+
+            this.player2.pass();
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.dojiWhisperer);
+            this.player1.clickPrompt('2');
+            this.player2.clickPrompt('1');
+            expect(this.player1.honor).toBe(honor);
+            expect(this.player2.honor).toBe(honor2);
             expect(this.player2).toHavePrompt('Conflict Action Window');
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Mirumoto Katana to give 1 fewer honor');
+            expect(this.getChatLogs(10)).toContain('player1 gives player2 0 honor');
+        });
+
+        it('should not reduce gains', function() {
+            this.player1.clickCard(this.mirumotoDaisho);
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.mirumotoRaitsugu],
+                defenders: [this.dojiWhisperer]
+            });
+            let honor = this.player1.honor;
+            let honor2 = this.player2.honor;
+
+            this.player2.pass();
+            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.dojiWhisperer);
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('3');
+            expect(this.player1.honor).toBe(honor + 2);
+            expect(this.player2.honor).toBe(honor2 - 2);
+
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.getChatLogs(10)).toContain('player2 gives player1 2 honor');
         });
     });
 });

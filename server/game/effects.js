@@ -208,6 +208,8 @@ const Effects = {
         }
     }),
     limitHonorGainPerPhase: (amount) => EffectBuilder.player.static(EffectNames.LimitHonorGainPerPhase, amount),
+    modifyHonorTransferGiven: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferGiven, amount),
+    modifyHonorTransferReceived: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferReceived, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
     changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),

@@ -7,7 +7,7 @@ class JurojinsSwear extends DrawCard {
         this.forcedInterrupt({
             title: 'Discard fate and characters',
             when: {
-                onPhaseStarted: (event, context) => event.phase === Phases.Fate && !context.source.parent.bowed
+                onPhaseStarted: (event, context) => event.phase === Phases.Fate && !context.source.parent.bowed && context.source.parent.getFate() > 0
             },
             effect: 'discard all characters without fate and remove 1 fate from each character with fate',
             gameAction: AbilityDsl.actions.multiple([
