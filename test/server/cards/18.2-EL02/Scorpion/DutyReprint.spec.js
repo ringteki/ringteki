@@ -2,7 +2,7 @@ describe('Duty Reprint', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
-                phase: 'draw',
+                phase: 'dynasty',
                 player1: {
                     honor: 3,
                     inPlay: ['soshi-illusionist'],
@@ -25,17 +25,15 @@ describe('Duty Reprint', function() {
         });
 
         it('should not trigger when losing due to draw bids', function() {
+            this.advancePhases('draw');
             this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.duty);
             expect(this.player1).toHavePrompt('Game Won');
         });
 
         it('should not trigger when losing due paying a cost', function() {
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
-            this.noMoreActions();
+            this.advancePhases('conflict');
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -49,15 +47,13 @@ describe('Duty Reprint', function() {
         });
 
         it('should trigger when losing due to running out of dynasty cards and remove self from game', function() {
+            this.advancePhases('conflict');
             this.player1.player.dynastyDeck.each(card => {
                 this.player1.player.moveCard(card, 'dynasty discard pile');
             });
             this.imperialStorehouse.facedown = true;
             this.favorableGround.facedown = true;
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
             this.forceOfTheRiver = this.player1.playAttachment('force-of-the-river', this.soshiIllusionist);
-            this.noMoreActions();
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -78,9 +74,7 @@ describe('Duty Reprint', function() {
         });
 
         it('should trigger when losing due to running out of conflict cards', function() {
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
-            this.noMoreActions();
+            this.advancePhases('conflict');
             this.player1.player.conflictDeck.each(card => {
                 this.player1.player.moveCard(card, 'conflict discard pile');
             });
@@ -94,11 +88,9 @@ describe('Duty Reprint', function() {
         });
 
         it('should trigger when losing due to dishonored character leaving play', function() {
+            this.advancePhases('conflict');
             this.soshiIllusionist.dishonor();
             this.player1.honor = 1;
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
-            this.noMoreActions();
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -116,10 +108,8 @@ describe('Duty Reprint', function() {
         });
 
         it('should trigger when Banzai is kicked, but not allow the second resolution', function() {
+            this.advancePhases('conflict');
             this.player1.honor = 1;
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('1');
-            this.noMoreActions();
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -137,16 +127,6 @@ describe('Duty Reprint', function() {
             expect(this.player2.honor).toBe(11);
             expect(this.player2).toHavePrompt('Conflict Action Window');
             expect(this.soshiIllusionist.militarySkill).toBe(3);
-        });
-
-        it('should not trigger when its the last card in the deck and 5 cards are drawn', function() {
-            this.player1.player.conflictDeck.each(card => {
-                this.player1.player.moveCard(card, 'conflict discard pile');
-            });
-            this.player1.moveCard(this.duty, 'conflict deck');
-            this.player1.clickPrompt('5');
-            this.player2.clickPrompt('5');
-            expect(this.player1).toHavePrompt('Game Won');
         });
     });
 });
