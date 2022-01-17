@@ -41,7 +41,7 @@ Check out the [About page](https://jigoku.online/about)  of a Ringteki live depl
 
 #### Required Software
 * Git
-* Node.js 8
+* Node.js v12.14.0
 * MongoDB
 * ZeroMQ Libraries
 * TypeScript
