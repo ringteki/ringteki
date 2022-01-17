@@ -22,7 +22,8 @@ class LayOfTheLand extends DrawCard {
                     });
                 })
             },
-            effect: 'reveal and disard any number of status tokens from {0}'
+            effect: 'reveal and disard any number of status tokens from {1}',
+            effectArgs: context => [context.target.facedown ? context.target.location : context.target]
         });
     }
 
