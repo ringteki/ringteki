@@ -38,7 +38,12 @@ export class ClaimRingAction extends RingAction {
             ring.removeFate();
             context.game.raiseEvent(EventNames.OnMoveFate, { fate: fate, origin: ring, context: context, recipient: context.player });
         }
-        context.game.raiseEvent(EventNames.OnClaimRing, { player: context.player, conflict: context.conflict, ring:ring }, () => ring.claimRing(context.player));
+        event.player = context.player;
+        event.conflict = context.conflict;
+        event.ring = ring;
+        ring.claimRing(context.player);
+
+        // context.game.raiseEvent(EventNames.OnClaimRing, { player: context.player, conflict: context.conflict, ring:ring }, () => ring.claimRing(context.player));
     }
 }
 
