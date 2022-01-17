@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 
 class AkodoKaede extends DrawCard {
     setupCardAbilities() {
@@ -13,7 +13,7 @@ class AkodoKaede extends DrawCard {
         this.wouldInterrupt({
             title: 'Prevent a character from leaving play',
             when: {
-                onCardLeavesPlay: (event, context) => event.card.type === CardTypes.Character && event.card !== context.source
+                onCardLeavesPlay: (event, context) => event.card.type === CardTypes.Character && event.card !== context.source && event.card.location === Locations.PlayArea
             },
             effect: 'prevent {1} from leaving play',
             effectArgs: context => context.event.card,

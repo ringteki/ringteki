@@ -6,7 +6,6 @@ class SmugglersCove extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'Moves a character to or from a conflict at this province',
-            condition: context => context.source.isConflictProvince(),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,

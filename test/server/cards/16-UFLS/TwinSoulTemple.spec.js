@@ -10,7 +10,7 @@ describe('Twin Soul Temple', function() {
                     stronghold: ['twin-soul-temple']
                 },
                 player2: {
-                    inPlay: ['prodigy-of-the-waves', 'doji-challenger', 'sadane-student'],
+                    inPlay: ['prodigy-of-the-waves', 'doji-challenger', 'sadane-student', 'togashi-yokuni'],
                     stronghold: ['twin-soul-temple']
                 }
             });
@@ -35,6 +35,7 @@ describe('Twin Soul Temple', function() {
             this.prodigy = this.player2.findCardByName('prodigy-of-the-waves');
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.student = this.player2.findCardByName('sadane-student');
+            this.yokuni = this.player2.findCardByName('togashi-yokuni');
 
             this.garden.facedown = true;
             this.pilgrimage.facedown = false;
@@ -183,6 +184,46 @@ describe('Twin Soul Temple', function() {
             expect(this.game.rings.fire.fate).toBe(fireFate);
             expect(this.game.rings.void.fate).toBe(voidFate + 1);
             expect(this.challenger.isHonored).toBe(true);
+        });
+
+        it('Yokuni (copying Master Alchemist)', function() {
+            this.player1.clickCard(this.twinSoul1);
+            this.player1.clickCard(this.alchemist);
+            this.player1.clickPrompt('Void');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                ring: 'air',
+                attackers: [this.alchemist],
+                defenders: [this.challenger]
+            });
+
+            this.player2.clickCard(this.yokuni);
+            this.player2.clickCard(this.alchemist);
+            let fireFate = this.game.rings.fire.fate;
+            let voidFate = this.game.rings.void.fate;
+            this.player1.clickCard(this.alchemist);
+            this.player1.clickPrompt('Pay costs first');
+            expect(this.player1).not.toBeAbleToSelectRing('fire');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            this.player1.clickRing('void');
+            this.player1.clickCard(this.challenger);
+            this.player1.clickPrompt('Honor this character');
+            expect(this.game.rings.fire.fate).toBe(fireFate);
+            expect(this.game.rings.void.fate).toBe(voidFate + 1);
+            expect(this.challenger.isHonored).toBe(true);
+
+            this.player2.clickCard(this.yokuni);
+            this.player2.clickPrompt('Pay costs first');
+            expect(this.player2).not.toBeAbleToSelectRing('fire');
+            expect(this.player2).toBeAbleToSelectRing('void');
+            this.player2.clickRing('void');
+            this.player2.clickCard(this.yokuni);
+            this.player2.clickPrompt('Honor this character');
+            expect(this.game.rings.fire.fate).toBe(fireFate);
+            expect(this.game.rings.void.fate).toBe(voidFate + 2);
+            expect(this.yokuni.isHonored).toBe(true);
         });
 
         it('should prompt you to pick which element if there are two - province and effect', function() {

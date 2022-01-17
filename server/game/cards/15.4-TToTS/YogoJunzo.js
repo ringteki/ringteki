@@ -29,7 +29,7 @@ class YogoJunzo extends DrawCard {
                         if(displayMessage) {
                             this.game.addMessage('{0} chooses to move {1} fate from {2} to {3}\'s pool', context.player, choice, context.target, context.player);
                         }
-                        return { target: context.target, amount: parseInt(choice), recipient:context.target.owner };
+                        return { target: context.target, amount: parseInt(choice), recipient:context.target.controller };
                     },
                     gameAction: AbilityDsl.actions.removeFate()
                 }))

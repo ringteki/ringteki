@@ -6,10 +6,14 @@ describe('Asako Reina', function () {
                 player1: {
                     inPlay: ['asako-reina', 'seeker-of-knowledge'],
                     hand: ['know-the-world']
+                },
+                player2: {
+                    inPlay: ['togashi-yokuni']
                 }
             });
             this.seeker = this.player1.findCardByName('seeker-of-knowledge');
             this.asakoReina = this.player1.findCardByName('asako-reina');
+            this.yokuni = this.player2.findCardByName('togashi-yokuni');
             this.seeker.bow();
             this.asakoReina.bow();
         });
@@ -97,6 +101,36 @@ describe('Asako Reina', function () {
             expect(this.seeker.bowed).toBe(false);
 
             expect(this.getChatLogs(10)).toContain('player1 uses Asako Reina to gain 1 honor, draw 1 card, gain 1 fate, honor a character and ready a character');
+        });
+
+        it('bug report - yokuni', function () {
+            this.game.rings.void.claimRing(this.player2.player);
+            this.game.rings.air.claimRing(this.player2.player);
+            this.game.rings.earth.claimRing(this.player2.player);
+            this.game.rings.water.claimRing(this.player2.player);
+            this.game.rings.fire.claimRing(this.player2.player);
+            this.game.checkGameState(true);
+
+            this.player1.pass();
+            this.player2.clickCard(this.yokuni);
+            this.player2.clickCard(this.asakoReina);
+            this.player1.pass();
+
+            let fate = this.player2.fate;
+            let handsize = this.player2.hand.length;
+            let honor = this.player2.honor;
+            this.player2.clickCard(this.yokuni);
+            expect(this.player2).toBeAbleToSelect(this.seeker);
+            this.player2.clickCard(this.seeker);
+            expect(this.player2).toBeAbleToSelect(this.seeker);
+            this.player2.clickCard(this.seeker);
+            expect(this.player2.hand.length).toBe(handsize + 1);
+            expect(this.player2.honor).toBe(honor + 1);
+            expect(this.player2.fate).toBe(fate + 1);
+            expect(this.seeker.isHonored).toBe(true);
+            expect(this.seeker.bowed).toBe(false);
+
+            expect(this.getChatLogs(10)).toContain('player2 uses Togashi Yokuni\'s gained ability from Asako Reina to gain 1 honor, draw 1 card, gain 1 fate, honor a character and ready a character');
         });
     });
 });
