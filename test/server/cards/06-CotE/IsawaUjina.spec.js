@@ -6,7 +6,7 @@ describe('Isawa Ujina', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['isawa-ujina', 'adept-of-the-waves', 'fushicho', 'isawa-kaede'],
-                        hand: ['know-the-world', 'know-the-world']
+                        hand: ['know-the-world', 'know-the-world', 'commune-with-the-spirits']
                     },
                     player2: {
                         inPlay: ['callow-delegate', 'doji-challenger', 'doji-hotaru']
@@ -19,6 +19,7 @@ describe('Isawa Ujina', function() {
                 this.knowTheWorld1 = knowTheWorlds[0];
                 this.knowTheWorld2 = knowTheWorlds[1];
                 this.isawaKaede = this.player1.findCardByName('isawa-kaede');
+                this.commune = this.player1.findCardByName('commune-with-the-spirits');
 
                 this.callowDelegate = this.player2.findCardByName('callow-delegate');
                 this.dojiChallenger = this.player2.findCardByName('doji-challenger');
@@ -67,6 +68,17 @@ describe('Isawa Ujina', function() {
                 expect(this.player1).toBeAbleToSelectRing('void');
                 this.player1.clickPrompt('Don\'t Resolve the Conflict Ring');
                 expect(this.player1).toHavePrompt('Isawa Ujina');
+            });
+
+            it('should only trigger once when void ring claimed by other means', function() {
+                this.dojiChallenger.fate = 0;
+                this.dojiHotaru.fate = 0;
+                this.player1.clickCard(this.commune);
+                this.player1.clickRing('void');
+                expect(this.player1).toHavePrompt('Isawa Ujina');
+                this.player1.clickCard(this.dojiChallenger);
+                expect(this.player1).not.toHavePrompt('Isawa Ujina');
+                expect(this.player2).toHavePrompt('Action Window');
             });
 
             describe('when triggered', function() {

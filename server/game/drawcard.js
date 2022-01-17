@@ -162,6 +162,7 @@ class DrawCard extends BaseCard {
         clone.fate = this.fate;
         clone.inConflict = this.inConflict;
         clone.traits = this.getTraits();
+        clone.uuid = this.uuid;
         return clone;
     }
 

@@ -26,6 +26,7 @@ The card class should have its `id` property set to the unique card identifier f
 
 ```javascript
 const DrawCard = require('../../drawcard.js');
+const AbilityDsl = require('../../abilitydsl.js');
 
 class CloudTheMind extends DrawCard {
     // Card definition
@@ -38,11 +39,11 @@ module.exports = CloudTheMind;
 
 #### 3. Override the `setupCardAbilities` method.
 
-Persistent effects, actions, and triggered abilities should be defined in the `setupCardAbilities` method. This method passes in an `ability` parameter that gives you access to effect implementations and ability limits. See below for more documentation.
+Persistent effects, actions, and triggered abilities should be defined in the `setupCardAbilities` method. Use the AbilityDsl import to get access to tools to help with  implementations. See below for more documentation.
 
 ```javascript
 class CloudTheMind extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         // Declare persistent effects, reactions and interrupts here.
     }
 }
@@ -50,7 +51,7 @@ class CloudTheMind extends DrawCard {
 
 ### Keywords
 
-Keywords are automatically parsed from the card text. It isn't necessary to explicitly implement them unless they are provided by a conditional persistent effect.
+Most Keywords are automatically parsed from the card text. It isn't necessary to explicitly implement them unless they are provided by a conditional persistent effect.
 
 ### Static bonuses from attachments
 
@@ -70,7 +71,7 @@ The effect declaration (for card and ring effects) takes a `match` property. In 
 // Each honored Crane character you control gains Sincerity.
 this.persistentEffect({
     match: card => card.getType() === 'character' && card.isHonored && card.isFaction('crane'),
-    effect: ability.effects.addKeyword('sincerity')
+    effect: AbilityDsl.effects.addKeyword('sincerity')
 });
 ```
 
@@ -81,7 +82,7 @@ In some cases, an effect should be applied to a specific card. While you could w
 this.persistentEffect({
     condition: () => this.isDefending(),
     match: this,
-    effect: ability.effects.modifyPoliticalSkill(3)
+    effect: AbilityDsl.effects.modifyPoliticalSkill(3)
 });
 ```
 
@@ -96,7 +97,7 @@ this.persistentEffect({
     condition: () => this.isParticipating(),
     match: card => card.getType() === 'character' && card.isParticipating() && 
                    card.isFaction('lion') && card !== this,
-    effect: ability.effects.modifyMilitarySkill(1)
+    effect: AbilityDsl.effects.modifyMilitarySkill(1)
 });
 ```
 
@@ -112,7 +113,7 @@ this.persistentEffect({
     condition: () => this.isAttacking(),
     match: card => card.isDefending(),
     targetController: 'opponent',
-    effect: ability.effects.modifyMilitarySkill(-1)
+    effect: AbilityDsl.effects.modifyMilitarySkill(-1)
 });
 ```
 
@@ -124,7 +125,7 @@ this.persistentEffect({
     condition: () => this.isParticipating(),
     targetController: 'any',
     match: card => card.getType() === 'character' && card.location === 'play area',
-    effect: ability.effects.cardCannot('becomeDishonored')
+    effect: AbilityDsl.effects.cardCannot('becomeDishonored')
 });
 ```
 
@@ -136,7 +137,7 @@ A few cards provide skill bonuses based on game state. For example, [Beastmaster
 // This character has +2[military] for each ring in each opponent's claimed ring pool.
 this.persistentEffect({
     match: this,
-    effect: ability.effects.modifyMilitarySkill(() => this.getTwiceOpponentsClaimedRings())
+    effect: AbilityDsl.effects.modifyMilitarySkill(() => this.getTwiceOpponentsClaimedRings())
 }
 ```
 
@@ -147,7 +148,7 @@ A `whileAttached` method is provided to define persistent effects that are appli
 ```javascript
 // Attached character gains Pride.
 this.whileAttached({
-    effect: ability.effects.addKeyword('pride')
+    effect: AbilityDsl.effects.addKeyword('pride')
 });
 ```
 
@@ -156,7 +157,7 @@ If the effect has an additional requirement, an optional `match` function can be
 // If attached character is unicorn, they gain +1M.
 this.whileAttached({
     match: card => card.isFaction('unicorn'),
-    effect: ability.effects.modifyMilitarySkill(1)
+    effect: AbilityDsl.effects.modifyMilitarySkill(1)
 });
 ```
 
@@ -169,8 +170,8 @@ this.persistentEffect({
     condition: () => this.isLessHonorableThanOpponent(),
     match: this,
     effect: [
-        ability.effects.modifyMilitarySkill(1),
-        ability.effects.modifyPoliticalSkill(1)
+        AbilityDsl.effects.modifyMilitarySkill(1),
+        AbilityDsl.effects.modifyPoliticalSkill(1)
     ]
 });
 ```
@@ -185,7 +186,7 @@ this.persistentEffect({
     // Explicitly target the effect to cards in hand.
     targetLocation: 'hand',
     match: card => card.hasTrait('Direwolf'),
-    effect: ability.effects.gainAmbush()
+    effect: AbilityDsl.effects.gainAmbush()
 });
 ```
 
@@ -197,7 +198,7 @@ this.persistentEffect({
     match: this,
     targetLocation: 'province',
     condition: () => this.game.isDuringConflict('political'),
-    effect: ability.effects.modifyProvinceStrength(5)
+    effect: AbilityDsl.effects.modifyProvinceStrength(5)
 });
 ```
 
@@ -210,7 +211,7 @@ Certain cards provide bonuses or restrictions on the player itself instead of on
 this.persistentEffect({
     condition: () => this.isParticipating(),
     targetController: 'opponent',
-    effect: ability.effects.playerCannot(context => context.source.type === 'event')
+    effect: AbilityDsl.effects.playerCannot(context => context.source.type === 'event')
 });
 ```
 
@@ -224,10 +225,10 @@ When declaring an action, use the `action` method and provide it with a `title` 
 
 ```javascript
 class BorderRider extends DrawCard {
-    setupCardAbilities(ability) {
+    setupCardAbilities() {
         this.action({
             title: 'Ready this character',
-            gameAction: ability.actions.ready()
+            gameAction: AbilityDsl.actions.ready()
         });
     }
 }
@@ -288,7 +289,7 @@ For a full list of costs, look at `/server/game/costs.js`.
 this.action({
     title: 'Give a character +0/+3',
     // This card must be bowed as a cost for the action.
-    cost: ability.costs.bowSelf(),
+    cost: AbilityDsl.costs.bowSelf(),
     // ...
 });
 ```
@@ -300,8 +301,8 @@ this.action({
     title: 'Give all non-unique participating characters -2/-0',
     // This card must be bowed AND sacrificed as a cost for the action.
     cost: [
-        ability.costs.bowSelf(),
-        ability.costs.sacrificeSelf()
+        AbilityDsl.costs.bowSelf(),
+        AbilityDsl.costs.sacrificeSelf()
     ],
     // ...
 });
@@ -329,7 +330,7 @@ this.action({
     title: 'Sacrifice to discard an attachment'
     target: {
         cardType: 'attachment',
-        gameAction: ability.actions.discardFromPlay()
+        gameAction: AbilityDsl.actions.discardFromPlay()
     },
     // ...
 });
@@ -349,13 +350,13 @@ this.action({
             cardType: 'character',
             controller: 'self',
             cardCondition: card => !card.bowed && card.getCost() <= 2,
-            gameAction: ability.actions.moveToConflict()
+            gameAction: AbilityDsl.actions.moveToConflict()
         },
         oppChar: {
             cardType: 'character',
             controller: 'opponent',
             cardCondition: card => !card.bowed && card.getCost() <= 2,
-            gameAction: ability.actions.moveToConflict()                    
+            gameAction: AbilityDsl.actions.moveToConflict()                    
         }
     }
 });
@@ -414,8 +415,8 @@ this.action({
         player: 'self',
         mode: 'select',
         choices: {
-            'Take 1 fate': ability.actions.takeFate(),
-            'Take 1 honor': ability.actions.takeHonor()
+            'Take 1 fate': AbilityDsl.actions.takeFate(),
+            'Take 1 honor': AbilityDsl.actions.takeHonor()
         }
     }
 });
@@ -433,8 +434,8 @@ Actions (and other triggered abilities) often use game actions.  Available game 
 // Action: During a conflict, bow this attachment – move attached character to the conflict.
 this.action({
     title: 'Move this character into the conflict',
-    cost: ability.costs.bowSelf(),
-    gameAction: ability.actions.moveToConflict(context => ({ target: context.source.parent }))
+    cost: AbilityDsl.costs.bowSelf(),
+    gameAction: AbilityDsl.actions.moveToConflict(context => ({ target: context.source.parent }))
 });
 ```
 
@@ -443,7 +444,7 @@ this.action({
 this.reaction({
     title: 'Steal a fate',
     // reaction condition code
-    gameAction: ability.actions.placeFate(context => ({ origin: context.player.opponent }))
+    gameAction: AbilityDsl.actions.placeFate(context => ({ origin: context.player.opponent }))
 });
 ```
 
@@ -457,7 +458,7 @@ this.action({
     title: 'Return court mask to hand',
     effect: 'return {0} to hand, dishonoring {1}',
     effectArgs: context => context.source.parent,
-    gameAction: [ability.actions.returnToHand(), ability.actions.dishonor(context => ({ target: context.source.parent }))]
+    gameAction: [AbilityDsl.actions.returnToHand(), AbilityDsl.actions.dishonor(context => ({ target: context.source.parent }))]
 });
 ```
 
@@ -469,8 +470,8 @@ this.action({
     target: {
         cardType: 'character',
         cardCondition: (card, context) => card.isParticipating() && card !== context.source,
-        gameAction: ability.actions.cardLastingEffect(context => ({
-            effect: ability.effects.modifyBothSkills(2 * context.player.getNumberOfHoldingsInPlay())
+        gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+            effect: AbilityDsl.effects.modifyBothSkills(2 * context.player.getNumberOfHoldingsInPlay())
         }))
     },
     effect: 'give {0} +{1}{2}/+{1}{3}',
@@ -488,13 +489,13 @@ Unlike persistent effects, lasting effects are typically applied during an actio
 this.action({
     title: 'Give a character +0/+3',
     condition: () => this.game.isDuringConflict(),
-    cost: ability.costs.bowSelf(),
+    cost: AbilityDsl.costs.bowSelf(),
     target: {
         cardType: 'character',
         cardCondition: (card, context) => card !== context.source && card.isFaction('crane'),
-        gameAction: ability.actions.cardLastingEffect(() => ({
+        gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
             duration: 'untilEndOfConflict',
-            effect: ability.effects.modifyPoliticalSkill(3)
+            effect: AbilityDsl.effects.modifyPoliticalSkill(3)
         }))
     },
     effect: 'give {0} +3{1} skill',
@@ -509,9 +510,9 @@ To apply an effect to last until the end of the current phase, use `untilEndOfPh
 this.action({
     title: 'Reduce cost of next event by 1',
     effect: 'reduce the cost of their next event by 1',
-    gameAction: ability.actions.playerLastingEffect({
+    gameAction: AbilityDsl.actions.playerLastingEffect({
         duration: 'untilEndOfPhase',
-        effect: ability.effects.reduceNextPlayedCardCost(1, card => card.type === 'event')
+        effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, card => card.type === 'event')
     })
 });
 ```
@@ -525,10 +526,10 @@ this.action({
         cardType: 'holding',
         location: 'province',
         controller: 'self',
-        gameAction: ability.actions.cardLastingEffect({
+        gameAction: AbilityDsl.actions.cardLastingEffect({
             duration: 'untilEndOfPhase',
             targetLocation: 'province',
-            effect: ability.effects.increaseLimitOnAbilities()
+            effect: AbilityDsl.effects.increaseLimitOnAbilities()
         })
     },
     effect: 'add an additional use to each of {0}\'s abilities'
@@ -542,11 +543,11 @@ Some actions are limited to a specific phase by their card text. You can pass an
 ```javascript
 this.action({
     title: 'Sacrifice to discard an attachment',
-    cost: ability.costs.sacrificeSelf(),
+    cost: AbilityDsl.costs.sacrificeSelf(),
     phase: 'conflict',
     target: {
         cardType: 'attachment',
-        gameAction: ability.actions.discardFromPlay()
+        gameAction: AbilityDsl.actions.discardFromPlay()
     }
 });
 ```
@@ -558,7 +559,7 @@ Some actions have text limiting the number of times they may be used in a given 
 ```javascript
 this.action({
     title: 'Remove 1 fate',
-    limit: ability.limit.perConflict(2),
+    limit: AbilityDsl.limit.perConflict(2),
     // ...
 });
 ```
@@ -589,7 +590,7 @@ this.reaction({
     when: {
     	onCharacterEntersPlay: (event, context) => event.card === context.source
     },
-    gameAction: ability.actions.honor()
+    gameAction: AbilityDsl.actions.honor()
 });
 ```
 
@@ -602,7 +603,7 @@ this.reaction({
         onCharacterEntersPlay: (event, context) => event.card === context.source && context.source.fate > 0,
         onMoveFate: (event, context) => event.recipient === context.source && event.fate > 0
     },
-    gameAction: ability.actions.gainHonor()
+    gameAction: AbilityDsl.actions.gainHonor()
 });
 ```
 
@@ -620,11 +621,11 @@ this.forcedReaction({
                                             context.player.honor >= context.player.opponent.honor + 5
     },
     effect: 'stop him being discarded or losing fate in this phase',
-    gameAction: ability.actions.cardLastingEffect({
+    gameAction: AbilityDsl.actions.cardLastingEffect({
         duration: 'untilEndOfPhase',    
         effect: [
-            ability.effects.cardCannot('removeFate'),
-            ability.effects.cardCannot('discardFromPlay')
+            AbilityDsl.effects.cardCannot('removeFate'),
+            AbilityDsl.effects.cardCannot('discardFromPlay')
         ]
     })
 });
@@ -640,7 +641,7 @@ this.forcedInterrupt({
     /// ...
     effect: '{1} draws a card due to {0}\'s Sincerity',
     effectArgs: context => context.player,
-    gameAction: ability.actions.draw()
+    gameAction: AbilityDsl.actions.draw()
 });
 ```
 
@@ -655,7 +656,7 @@ this.wouldInterrupt({
     when: {
         onInitiateAbilityEffects: event => event.card.type === 'event'
     },
-    cost: ability.costs.dishonor(card => card.hasTrait('courtier')),
+    cost: AbilityDsl.costs.dishonor(card => card.hasTrait('courtier')),
     effect: 'cancel {1}',
     effectArgs: context => context.event.card,
     handler: context => context.cancel()
@@ -672,7 +673,7 @@ this.reaction({
 		afterConflict: (event, context) => context.conflict.loser === context.player && context.conflict.conflictType === 'military'
 	},
     location: 'hand',
-    gameAction: ability.actions.putIntoPlay()
+    gameAction: AbilityDsl.actions.putIntoPlay()
 })
 ```
 
@@ -680,11 +681,11 @@ this.reaction({
 
 Actions, reactions, and interrupts can have limits on how many times they may be used within a certain period. These limits can be set by setting the `limit` property on the ability. The `ability` object has a limit helper with methods for the different periods.
 
-To limit an ability per conflict, use `ability.limit.perConflict(x)`.
+To limit an ability per conflict, use `AbilityDsl.limit.perConflict(x)`.
 
-To limit an ability per phase, use `ability.limit.perPhase(x)`.
+To limit an ability per phase, use `AbilityDsl.limit.perPhase(x)`.
 
-To limit an ability per round, use `ability.limit.perRound(x)`.
+To limit an ability per round, use `AbilityDsl.limit.perRound(x)`.
 
 In each case, `x` should be the number of times the ability is allowed to be used.
 

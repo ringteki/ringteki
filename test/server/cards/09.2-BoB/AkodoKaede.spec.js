@@ -9,7 +9,8 @@ describe('Akodo Kaede', function() {
                         hand: ['assassination']
                     },
                     player2: {
-                        inPlay: ['bayushi-aramoro', 'shrine-maiden'],
+                        inPlay: ['bayushi-aramoro', 'shrine-maiden', 'isawa-tadaka-2'],
+                        dynastyDiscard: ['solemn-scholar'],
                         hand: ['fiery-madness', 'i-can-swim']
                     }
                 });
@@ -19,6 +20,8 @@ describe('Akodo Kaede', function() {
                 this.kaede = this.player1.findCardByName('akodo-kaede');
                 this.kaede.fate = 1;
                 this.bayushiAramoro = this.player2.findCardByName('bayushi-aramoro');
+                this.tadaka = this.player2.findCardByName('isawa-tadaka-2');
+                this.scholar = this.player2.findCardByName('solemn-scholar');
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -59,6 +62,15 @@ describe('Akodo Kaede', function() {
                 this.player2.clickCard(this.kaede);
                 expect(this.player1).not.toBeAbleToSelect(this.kaede);
                 expect(this.kaede.location).toBe('dynasty discard pile');
+            });
+
+            it('should not prompt you if card is already out of play', function() {
+                this.player2.clickCard(this.tadaka);
+                this.player2.clickCard(this.scholar);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).not.toBeAbleToSelect(this.kaede);
+                this.player2.clickPrompt('Assassination');
+                expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
             it('should make her immune to ring effects', function() {

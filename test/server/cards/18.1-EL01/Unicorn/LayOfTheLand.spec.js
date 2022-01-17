@@ -48,7 +48,7 @@ describe('Lay of the Land', function() {
 
             this.player1.clickCard(this.brushfires);
             expect(this.brushfires.facedown).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from Brushfires');
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from province 1');
         });
 
         it('status tokens', function() {
@@ -77,7 +77,7 @@ describe('Lay of the Land', function() {
             expect(this.brushfires.isTainted).toBe(false);
             expect(this.brushfires.facedown).toBe(false);
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from Brushfires');
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal and disard any number of status tokens from province 1');
             expect(this.getChatLogs(4)).toContain('player1 chooses to discard Dishonored Token from Brushfires');
             expect(this.getChatLogs(3)).toContain('player1 chooses to discard Tainted Token from Brushfires');
         });
