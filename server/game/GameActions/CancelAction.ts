@@ -32,7 +32,7 @@ export class CancelAction extends GameAction {
         if (context.event.card && typeof(context.event.card.getType) === 'function' && context.event.card.getType() === CardTypes.Event && context.event.card.owner && context.event.card.owner.eventsCannotBeCancelled()) {
             cannotBeCancelled = true;
         }
-        if (context.event.card && !context.event.card.checkRestrictions('preventedFromLeavingPlay', context.event.name === EventNames.OnCardLeavesPlay)) {
+        if (context.event.name === EventNames.OnCardLeavesPlay && context.event.card && !context.event.card.checkRestrictions('preventedFromLeavingPlay')) {
             cannotBeCancelled = true;
         }
 

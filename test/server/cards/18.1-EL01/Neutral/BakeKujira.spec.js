@@ -1,3 +1,5 @@
+const AbilityDsl = require('../../../../../build/server/game/abilitydsl');
+
 describe('Bake Kujira', function() {
     integration(function() {
         beforeEach(function() {
@@ -10,7 +12,8 @@ describe('Bake Kujira', function() {
                 },
                 player2: {
                     inPlay: ['doji-kuwanan', 'doji-fumiki', 'daidoji-uji'],
-                    hand: ['way-of-the-scorpion', 'charge', 'forebearer-s-echoes', 'reprieve'],
+                    hand: ['way-of-the-scorpion', 'charge', 'forebearer-s-echoes', 'reprieve', 'fine-katana'],
+                    conflictDiscard: ['mushin-no-shin'],
                     dynastyDiscard: ['bake-kujira', 'doji-challenger']
                 }
             });
@@ -34,6 +37,8 @@ describe('Bake Kujira', function() {
             this.whale2 = this.player2.findCardByName('bake-kujira');
             this.uji = this.player2.findCardByName('daidoji-uji');
             this.reprieve = this.player2.findCardByName('reprieve');
+            this.mushin = this.player2.findCardByName('mushin-no-shin');
+            this.katana = this.player2.findCardByName('fine-katana');
 
             this.diplomat.fate = 5;
             this.player1.playAttachment(this.command, this.diplomat);
@@ -151,21 +156,26 @@ describe('Bake Kujira', function() {
             this.player2.moveCard(this.whale2, 'play area');
             this.player1.placeCardInProvince(this.mine, 'province 2');
 
+            this.fumiki.action({
+                title: 'Discard a character',
+                target: {
+                    gameAction: AbilityDsl.actions.discardFromPlay()
+                }
+            });
+
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whale],
-                defenders: [this.kuwanan, this.whale2]
+                defenders: [this.kuwanan, this.whale2, this.fumiki]
             });
 
-            let mil = this.whale2.getMilitarySkill();
-
-            this.player2.clickCard(this.whale2);
+            this.player2.clickCard(this.fumiki);
             this.player2.clickCard(this.whale);
 
-            expect(this.whale2.getMilitarySkill()).toBe(mil + 2);
-            expect(this.whale.location).toBe(this.whale2.uuid);
+            expect(this.whale.location).toBe('dynasty discard pile');
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Bake-Kujira to swallow Bake-Kujira whole!');
+            expect(this.getChatLogs(5)).toContain('player2 uses Doji Fumiki to discard Bake-Kujira');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
         it('should not be able to be saved - testing setup', function() {
@@ -194,6 +204,27 @@ describe('Bake Kujira', function() {
 
             this.player1.clickCard(this.whisperer);
             expect(this.whisperer.fate).toBe(1);
+        });
+
+        it('bug report - mushin', function() {
+            this.player2.moveCard(this.mushin, 'hand');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whale],
+                defenders: [this.kuwanan]
+            });
+
+            this.player2.playAttachment(this.reprieve, this.kuwanan);
+            this.player1.pass();
+            this.player2.playAttachment(this.katana, this.kuwanan);
+            this.player1.clickCard(this.whale);
+            this.player1.clickCard(this.kuwanan);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.mushin);
+            this.player2.clickCard(this.mushin);
+            expect(this.kuwanan.location).toBe('play area');
+            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Kuwanan whole!');
+            expect(this.getChatLogs(5)).toContain('player2 plays Mushin no Shin to cancel the effects of Bake-Kujira');
         });
     });
 });

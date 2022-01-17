@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { Phases, CardTypes } = require('../../Constants');
+const { Phases, CardTypes, Locations } = require('../../Constants');
 
 class YasukiTaka extends DrawCard {
     setupCardAbilities(ability) {
@@ -7,7 +7,7 @@ class YasukiTaka extends DrawCard {
             title: 'Gain fate',
             when: {
                 onCardLeavesPlay: event => this.game.currentPhase === Phases.Conflict && event.cardStateWhenLeftPlay.isFaction('crab') > 0 &&
-                                           event.cardStateWhenLeftPlay.type === CardTypes.Character
+                                           event.cardStateWhenLeftPlay.type === CardTypes.Character && event.cardStateWhenLeftPlay.location === Locations.PlayArea
             },
             limit: ability.limit.perPhase(Infinity),
             gameAction: ability.actions.gainFate()

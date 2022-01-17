@@ -89,7 +89,7 @@ class BackAlleyHideaway extends DrawCard {
             title: 'Place character in Hideaway',
             when: {
                 onCardLeavesPlay: (event, context) => event.card.isFaction('scorpion') && event.card.type === CardTypes.Character &&
-                                                      event.card.controller === context.player
+                                                      event.card.controller === context.player && event.card.location === Locations.PlayArea
             },
             effect: 'move {1} into hiding',
             effectArgs: context => context.event.card,

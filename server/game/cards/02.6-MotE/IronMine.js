@@ -1,5 +1,5 @@
 const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Locations } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 
 class IronMine extends DrawCard {
@@ -7,7 +7,7 @@ class IronMine extends DrawCard {
         this.wouldInterrupt({
             title: 'Prevent a character from leaving play',
             when: {
-                onCardLeavesPlay: (event, context) => event.card.controller === context.player && event.card.type === CardTypes.Character
+                onCardLeavesPlay: (event, context) => event.card.controller === context.player && event.card.type === CardTypes.Character && event.card.location === Locations.PlayArea
             },
             effect: 'prevent {1} from leaving play',
             effectArgs: context => context.event.card,
