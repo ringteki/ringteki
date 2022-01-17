@@ -42,8 +42,6 @@ export class ClaimRingAction extends RingAction {
         event.conflict = context.conflict;
         event.ring = ring;
         ring.claimRing(context.player);
-
-        // context.game.raiseEvent(EventNames.OnClaimRing, { player: context.player, conflict: context.conflict, ring:ring }, () => ring.claimRing(context.player));
     }
 }
 
