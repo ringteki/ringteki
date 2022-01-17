@@ -46,19 +46,21 @@ Check out the [About page](https://jigoku.online/about)  of a Ringteki live depl
 * ZeroMQ Libraries
 * TypeScript
 
+Order of commands to get your own gamenode running:
 ```
 Clone the repository
-git submodule init
-git submodule update
 npm install # See https://github.com/JustinTulloss/zeromq.node/issues/283 for zmq errors on OS X
-tsc
 mkdir build/server/logs
 node server/scripts/fetchdata.js
-node .
+tsc
 node build/server/gamenode
 ```
 
-There are two exectuable components and you'll need to configure/run both to run a local server.  First is the lobby server and then there are game nodes. The default configurations assume you are running mongo locally on the default port. If you need to change any configurations, edit `config/default.json5` or create a `config/local.json5` configuration that overrides any desired settings.   
+`node server/scripts/fetchdata.js` needs to be run whenever there is new card data (either new cards or updated cards).
+`tsc` is the typescript compiler, and needs to be run before you can run the gamenode.
+`node build/server/gamenode` is what actually starts the gamenode and needs to be run if you want to run it locally.
+
+The default configurations assume you are running mongo locally on the default port. If you need to change any configurations, edit `config/default.json5` or create a `config/local.json5` configuration that overrides any desired settings.   
 
 For production:
 
