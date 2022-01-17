@@ -57,8 +57,11 @@ node build/server/gamenode
 ```
 
 `node server/scripts/fetchdata.js` needs to be run whenever there is new card data (either new cards or updated cards).
+
 `tsc` is the typescript compiler, and needs to be run before you can run the gamenode.
+
 `node build/server/gamenode` is what actually starts the gamenode and needs to be run if you want to run it locally.
+
 
 The default configurations assume you are running mongo locally on the default port. If you need to change any configurations, edit `config/default.json5` or create a `config/local.json5` configuration that overrides any desired settings.   
 
