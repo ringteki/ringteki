@@ -5,17 +5,23 @@ const { Durations } = require('../../../Constants');
 class KuniWastelandReprint extends ProvinceCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Blank a character',
+            title: 'Prevent opponent from triggering character abilities',
             when: {
                 onConflictDeclared: (event, context) => event.conflict.declaredProvince === context.source
             },
-            effect: 'prevent attacking characters from triggering abilities until the end of the conflict',
+            effect: 'prevent {1} from triggering character abilities this conflict',
+            effectArgs: context => [context.player.opponent],
             gameAction: AbilityDsl.actions.conflictLastingEffect({
                 duration: Durations.UntilEndOfConflict,
-                effect: AbilityDsl.effects.charactersCannot({
+                effect: [AbilityDsl.effects.charactersCannot({
                     cannot: 'triggerAbilities',
-                    restricts: 'attackingCharacters'
+                    restricts: 'opponentsCharacters'
+                }),
+                AbilityDsl.effects.charactersCannot({
+                    cannot: 'initiateKeywords',
+                    restricts: 'opponentsCharacters'
                 })
+                ]
             })
         });
     }

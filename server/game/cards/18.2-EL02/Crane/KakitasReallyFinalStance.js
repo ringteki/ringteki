@@ -10,6 +10,7 @@ class KakitasReallyFinalStance extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
+                cardCondition: card => card.isFaction('crane') || card.hasTrait('duelist'),
                 gameAction: AbilityDsl.actions.multipleContext(context => {
                     let alone = context.target.isParticipatingFor(context.player) &&
                         this.game.currentConflict.getNumberOfParticipantsFor(context.player) === 1;

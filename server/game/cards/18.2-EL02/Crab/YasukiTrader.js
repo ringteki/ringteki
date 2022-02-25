@@ -1,8 +1,8 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, TargetModes } = require('../../../Constants');
+const { CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class YasukiKiyoko extends DrawCard {
+class YasukiKTrader extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Gain fate or draw a card',
@@ -10,18 +10,15 @@ class YasukiKiyoko extends DrawCard {
                 onCardLeavesPlay: (event, context) => context.source.isParticipating() && event.cardStateWhenLeftPlay.controller === context.player &&
                                            event.cardStateWhenLeftPlay.type === CardTypes.Character
             },
-            limit: AbilityDsl.limit.perRound(2),
-            target: {
-                mode: TargetModes.Select,
-                choices: {
-                    'Gain 1 fate': AbilityDsl.actions.gainFate(),
-                    'Draw 1 card': AbilityDsl.actions.draw()
-                }
-            }
+            effect: 'gain 1 fate and draw 1 card',
+            gameAction: AbilityDsl.actions.multiple([
+                AbilityDsl.actions.gainFate(context => ({ target: context.player})),
+                AbilityDsl.actions.draw(context => ({ target: context.player}))
+            ])
         });
     }
 }
 
-YasukiKiyoko.id = 'yasuki-kiyoko';
+YasukiKTrader.id = 'yasuki-trader';
 
-module.exports = YasukiKiyoko;
+module.exports = YasukiKTrader;

@@ -4,7 +4,7 @@ describe('Kuni Wasteland Reprint', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger','isawa-ujina','kaiu-envoy','iuchi-shahai','miwaku-kabe-guard'],
+                    inPlay: ['doji-challenger','isawa-ujina','kaiu-envoy','iuchi-shahai','miwaku-kabe-guard','acolyte-of-koyane'],
                     hand: ['duelist-training', 'hawk-tattoo']
                 },
                 player2: {
@@ -13,6 +13,7 @@ describe('Kuni Wasteland Reprint', function() {
                     provinces: ['kuni-island']
                 }
             });
+            this.koyane = this.player1.findCardByName('acolyte-of-koyane');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.ujina = this.player1.findCardByName('isawa-ujina');
             this.envoy = this.player1.findCardByName('kaiu-envoy');
@@ -36,7 +37,7 @@ describe('Kuni Wasteland Reprint', function() {
             expect(this.player2).toHavePrompt('Triggered Abilities');
             expect(this.player2).toBeAbleToSelect(this.wasteland);
             this.player2.clickCard(this.wasteland);
-            expect(this.getChatLogs(5)).toContain('player2 uses Kuni Island to prevent attacking characters from triggering abilities until the end of the conflict');
+            expect(this.getChatLogs(5)).toContain('player2 uses Kuni Island to prevent player1 from triggering character abilities this conflict');
             this.player2.clickPrompt('Done');
             this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -59,6 +60,65 @@ describe('Kuni Wasteland Reprint', function() {
             this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should stop sincerity and courtesy in conflict', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.envoy],
+                province: this.wasteland
+            });
+            let cards = this.player1.hand.length;
+            let fate = this.player1.fate;
+
+            this.player2.clickCard(this.wasteland);
+            this.player2.clickCard(this.sotorii);
+            this.player2.clickPrompt('Done');
+
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.envoy);
+            expect(this.envoy.location).toBe('dynasty discard pile');
+            expect(this.player1.hand.length).toBe(cards);
+            expect(this.player1.fate).toBe(fate);
+        });
+
+        it('should stop sincerity and courtesy at home', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.ujina],
+                province: this.wasteland
+            });
+            let cards = this.player1.hand.length;
+            let fate = this.player1.fate;
+
+            this.player2.clickCard(this.wasteland);
+            this.player2.clickCard(this.sotorii);
+            this.player2.clickPrompt('Done');
+
+            this.player2.clickCard(this.assassination);
+            this.player2.clickCard(this.envoy);
+            expect(this.envoy.location).toBe('dynasty discard pile');
+            expect(this.player1.hand.length).toBe(cards);
+            expect(this.player1.fate).toBe(fate);
+        });
+
+        it('should stop abilities at home', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.ujina],
+                province: this.wasteland
+            });
+            this.player2.clickCard(this.wasteland);
+            this.player2.clickCard(this.sotorii);
+            this.player2.clickPrompt('Done');
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.koyane);
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
@@ -117,6 +177,5 @@ describe('Kuni Wasteland Reprint', function() {
             this.player2.clickCard(this.sotorii);
             expect(this.sotorii.glory).toBe(glory + 3);
         });
-
     });
 });

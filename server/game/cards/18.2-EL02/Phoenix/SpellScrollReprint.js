@@ -17,7 +17,7 @@ class SpellScrollReprint extends DrawCard {
             },
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 4,
-                cardCondition: card => card.hasTrait('spell'),
+                cardCondition: card => card.hasTrait('spell') || card.hasTrait('kiho'),
                 placeOnBottomInRandomOrder: true,
                 shuffle: false,
                 gameAction: AbilityDsl.actions.moveCard({

@@ -6,6 +6,7 @@ class DaidojiUji2Reprint extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Search your conflict deck',
+            condition: context => context.game.isDuringConflict(),
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 4,
                 reveal: false,
@@ -22,7 +23,6 @@ class DaidojiUji2Reprint extends DrawCard {
         });
 
         this.persistentEffect({
-            condition: context => context.source.isHonored || context.source.isDishonored,
             location: Locations.PlayArea,
             targetLocation: this.uuid,
             targetController: Players.Self,

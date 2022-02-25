@@ -47,6 +47,7 @@ const checkRestrictions = {
         context.player === getApplyingPlayer(effect).opponent && context.ability.isTriggeredAbility(),
     opponentsCardAbilities: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isCardAbility(),
+    opponentsCharacters: (context, effect) => context.source.type === CardTypes.Character && context.source.controller === getApplyingPlayer(effect).opponent,
     provinces: context => context.source.type === CardTypes.Province,
     reactions: context => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,
