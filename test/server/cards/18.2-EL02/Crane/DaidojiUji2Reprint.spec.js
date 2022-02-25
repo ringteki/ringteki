@@ -62,23 +62,10 @@ describe('Daidoji Uji 2 Reprint', function() {
                 expect(this.getChatLogs(5)).toContain('player1 puts a card underneath Daidōji Two-ji');
             });
 
-            it('should not allow you to play cards from under Uji if he\'s not honored', function() {
+            it('should allow you to play cards from under Uji', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Fine Katana');
-                this.player2.pass();
-                expect(this.player1).toHavePrompt('Conflict Action Window');
-                this.player1.clickCard(this.katana);
-                expect(this.player1).toHavePrompt('Conflict Action Window');
-            });
-
-            it('should allow you to play cards from under Uji if he\'s honored', function() {
-                this.player2.pass();
-                this.player1.clickCard(this.uji);
-                this.player1.clickPrompt('Fine Katana');
-                this.player2.pass();
-                this.player1.clickCard(this.way);
-                this.player1.clickCard(this.uji);
                 this.player2.pass();
                 expect(this.player1.player.additionalPiles[this.uji.uuid].cards).toContain(this.katana);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -89,33 +76,11 @@ describe('Daidoji Uji 2 Reprint', function() {
                 expect(this.player1.player.additionalPiles[this.uji.uuid].cards).not.toContain(this.katana);
             });
 
-            it('should allow you to play cards from under Uji if he\'s dishonored', function() {
-                this.player2.pass();
-                this.player1.clickCard(this.uji);
-                this.player1.clickPrompt('Fine Katana');
-
-                this.player2.clickCard(this.mos);
-                this.player2.clickCard(this.uji);
-                this.player2.clickCard(this.mos);
-                expect(this.uji.isDishonored).toBe(true);
-                expect(this.player1.player.additionalPiles[this.uji.uuid].cards).toContain(this.katana);
-                expect(this.player1).toHavePrompt('Conflict Action Window');
-                this.player1.clickCard(this.katana);
-                expect(this.player1).toHavePrompt('Fine Katana');
-                this.player1.clickCard(this.uji);
-                expect(this.uji.attachments.toArray()).toContain(this.katana);
-                expect(this.player1.player.additionalPiles[this.uji.uuid].cards).not.toContain(this.katana);
-            });
-
-            it('should allow you to play cards from under Uji if he\'s honored - reactions', function() {
+            it('should allow you to play cards from under Uji - reactions', function() {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Ready for Battle');
-
-                this.player2.pass();
-                this.player1.clickCard(this.way);
-                this.player1.clickCard(this.uji);
                 this.player2.clickCard(this.scholar);
                 this.player2.clickCard(this.uji);
                 expect(this.uji.bowed).toBe(true);
@@ -126,7 +91,7 @@ describe('Daidoji Uji 2 Reprint', function() {
                 expect(this.getChatLogs(10)).toContain('player1 plays Ready for Battle from their cards set aside by Daidōji Two-ji');
             });
 
-            it('should allow you to play cards from under Uji if he\'s honored - interrupts', function() {
+            it('should allow you to play cards from under Uji - interrupts', function() {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
@@ -149,11 +114,10 @@ describe('Daidoji Uji 2 Reprint', function() {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Voice of Honor');
-                this.player2.pass();
+                this.player2.playAttachment(this.cloud, this.uji);
                 this.player1.clickCard(this.way);
                 this.player1.clickCard(this.uji);
-                this.player2.playAttachment(this.cloud, this.uji);
-                this.player1.pass();
+                expect(this.uji.attachments.toArray()).toContain(this.cloud);
                 this.player2.clickCard(this.fury);
                 this.player2.clickCard(this.uji);
                 expect(this.uji.bowed).toBe(true);
@@ -198,6 +162,16 @@ describe('Daidoji Uji 2 Reprint', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.katana);
                 expect(this.player2).not.toHavePrompt('Fine Katana');
+            });
+
+            it('should not work outside of a conflict', function() {
+                this.noMoreActions();
+                this.player1.clickPrompt('No');
+                this.player1.clickPrompt('Don\'t resolve');
+
+                expect(this.player1).toHavePrompt('Action Window');
+                this.player1.clickCard(this.uji);
+                expect(this.player1).toHavePrompt('Action Window');
             });
         });
     });

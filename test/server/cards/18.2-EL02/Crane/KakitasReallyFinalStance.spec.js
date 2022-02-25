@@ -4,13 +4,11 @@ describe('Kakitas Really Final Stance', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    honor:10,
                     inPlay: ['vice-proprietor'],
                     hand: ['a-new-name']
                 },
                 player2: {
-                    honor:14,
-                    inPlay: ['kakita-yoshi', 'doji-challenger'],
+                    inPlay: ['kakita-yoshi', 'doji-challenger', 'hantei-sotorii', 'mirumoto-raitsugu'],
                     hand: ['kakita-s-really-really-final-stance']
                 }
             });
@@ -18,6 +16,8 @@ describe('Kakitas Really Final Stance', function() {
             this.vice = this.player1.findCardByName('vice-proprietor');
             this.yoshi = this.player2.findCardByName('kakita-yoshi');
             this.challenger = this.player2.findCardByName('doji-challenger');
+            this.sotorii = this.player2.findCardByName('hantei-sotorii');
+            this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
             this.stance = this.player2.findCardByName('kakita-s-really-really-final-stance');
         });
 
@@ -33,6 +33,22 @@ describe('Kakitas Really Final Stance', function() {
             this.player2.clickCard(this.stance);
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
+
+        it('should target crane or duelist', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.vice],
+                defenders: [this.yoshi, this.challenger, this.sotorii, this.raitsugu],
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.stance);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            expect(this.player2).not.toBeAbleToSelect(this.sotorii);
+            expect(this.player2).toBeAbleToSelect(this.raitsugu);
+        });
+
 
         it('should prevent bowing at the end of the conflict', function() {
             this.noMoreActions();

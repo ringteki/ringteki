@@ -6,7 +6,7 @@ class Stowaway extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Place a card underneath self',
-            limit: AbilityDsl.limit.perConflict(1),
+            limit: AbilityDsl.limit.perRound(2),
             effect: 'place {0} beneath {1}',
             condition: context => context.source.isParticipating(),
             effectArgs: context => [context.source],
@@ -40,7 +40,7 @@ class Stowaway extends DrawCard {
     }
 
     getSkillBonus(card) {
-        return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length;
+        return Math.min(3, card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length);
     }
 }
 
