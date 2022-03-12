@@ -49,7 +49,7 @@ describe('Grasp of Land', function() {
             this.player1.playAttachment(this.grasp2, this.mystic);
         });
 
-        it('should trigger at the start of a conflict', function() {
+        it('should trigger when attached character is declared as an attacker', function() {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -58,7 +58,33 @@ describe('Grasp of Land', function() {
             });
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.grasp);
-            expect(this.player1).not.toBeAbleToSelect(this.beastmaster);
+            expect(this.player1).toBeAbleToSelect(this.beastmaster);
+        });
+
+        it('should not trigger when attached character is not declared as an attacker', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.beastmaster],
+                province: this.meido
+            });
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.grasp);
+            expect(this.player1).toBeAbleToSelect(this.beastmaster);
+        });
+
+        it('should trigger when attached character is declared as a defender', function() {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.spiritcaller],
+                defenders: [this.ujiaki]
+            });
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.grasp);
+            expect(this.player1).not.toBeAbleToSelect(this.grasp2);
         });
 
         it('should cost 1 fate if not attached to a shugenja', function() {
@@ -69,11 +95,8 @@ describe('Grasp of Land', function() {
                 province: this.meido
             });
             let fate = this.player1.fate;
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.grasp);
-            expect(this.player1).toBeAbleToSelect(this.grasp2);
             this.player1.clickCard(this.grasp);
-            expect(this.getChatLogs(5)).toContain('player1 uses Grasp of Land, spending 1 fate to prevent characters from entering play this conflict');
+            expect(this.getChatLogs(5)).toContain('player1 uses Grasp of Land, bowing Grasp of Land and spending 1 fate to prevent characters from entering play this conflict');
             expect(this.player1.fate).toBe(fate - 1);
         });
 
@@ -81,12 +104,12 @@ describe('Grasp of Land', function() {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
-                attackers: [this.ujiaki, this.beastmaster],
+                attackers: [this.ujiaki, this.mystic],
                 province: this.meido
             });
             let fate = this.player1.fate;
             this.player1.clickCard(this.grasp2);
-            expect(this.getChatLogs(5)).toContain('player1 uses Grasp of Land to prevent characters from entering play this conflict');
+            expect(this.getChatLogs(5)).toContain('player1 uses Grasp of Land, bowing Grasp of Land to prevent characters from entering play this conflict');
             expect(this.player1.fate).toBe(fate);
         });
 

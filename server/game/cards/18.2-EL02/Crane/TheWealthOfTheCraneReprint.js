@@ -1,97 +1,33 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { Players, Locations, CardTypes } = require('../../../Constants');
-const GameModes = require('../../../../GameModes.js');
+const { Players, Locations, CardTypes, TargetModes, Decks } = require('../../../Constants');
 
 class TheWealthOfTheCraneReprint extends DrawCard {
-    cards = [];
-    chosenProvinces = [];
-
     setupCardAbilities() {
-        this.persistentEffect({
-            location: Locations.Any,
-            targetController: Players.Any,
-            effect: AbilityDsl.effects.reduceCost({
-                amount: (card, player) => {
-                    return player.getNumberOfFaceupProvinces();
-                },
-                match: (card, source) => card === source
-            })
-        });
-
         this.action({
             title: 'Look at your dynasty deck',
-            effect: 'look at the top eight cards of their dynasty deck',
             condition: context => context.player.dynastyDeck.size() > 0,
-            handler: context => {
-                this.cards = context.player.dynastyDeck.first(8);
-                this.cards = this.cards.filter(a => a.type === CardTypes.Character);
-                this.chosenProvinces = [];
-
-                this.wealthSelectPrompt(context);
-            }
-        });
-    }
-
-    wealthSelectPrompt(context) {
-        if(!this.cards || this.cards.length <= 0 || !this.hasRemainingTarget()) {
-            context.player.shuffleDynastyDeck();
-            return;
-        }
-
-        let cardHandler = currentCard => {
-            this.game.promptForSelect(context.player, {
-                activePromptTitle: 'Choose a province for ' + currentCard.name,
-                context: context,
+            target: {
+                cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(card),
-                onSelect: (player, card) => {
-                    this.game.addMessage('{0} puts {1} into {2}', context.player, currentCard, card.isFacedown() ? 'a facedown province' : card.name);
-                    this.chosenProvinces.push(card);
-                    context.player.moveCard(currentCard, card.location);
-                    currentCard.facedown = false;
-                    this.cards = this.cards.filter(a => a !== currentCard);
-
-                    if(this.cards && this.cards.length > 0 && this.hasRemainingTarget()) {
-                        this.game.promptWithHandlerMenu(context.player, {
-                            activePromptTitle: 'Select a card to place in a province',
-                            context: context,
-                            cards: this.cards,
-                            cardHandler: cardHandler,
-                            handlers: [],
-                            choices: []
-                        });
-                    } else {
-                        context.player.shuffleDynastyDeck();
-                    }
-
-                    return true;
-                }
-            });
-        };
-
-        this.game.promptWithHandlerMenu(context.player, {
-            activePromptTitle: 'Select a card to place in a province',
-            context: context,
-            cards: this.cards,
-            cardHandler: cardHandler,
-            handlers: [],
-            choices: []
+                cardCondition: card => card.location !== 'stronghold province',
+                gameAction: AbilityDsl.actions.deckSearch({
+                    targetMode: TargetModes.UpTo,
+                    numCards: 1,
+                    amount: 8,
+                    activePromptTitle: 'Choose a character to put in your province',
+                    cardCondition: card => card.type === CardTypes.Character && !card.isUnique(),
+                    deck: Decks.DynastyDeck,
+                    gameAction: AbilityDsl.actions.moveCard(context => ({
+                        destination: context.target.location,
+                        faceup: true
+                    }))
+                })
+            },
+            effect: 'put a dynasty character into {1}',
+            effectArgs: context => [context.target.facedown ? context.target.location : context.target]
         });
-    }
-
-    isProvinceValidTarget(province) {
-        return province.location !== Locations.StrongholdProvince && !this.chosenProvinces.some(a => a === province);
-    }
-
-    hasRemainingTarget() {
-        let baseLocations = [Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree];
-        if(this.game.gameMode !== GameModes.Skirmish) {
-            baseLocations.push(Locations.ProvinceFour);
-        }
-
-        return this.chosenProvinces.length < baseLocations.length;
     }
 }
 

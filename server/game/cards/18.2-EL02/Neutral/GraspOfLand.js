@@ -40,12 +40,14 @@ const graspOfLandCost = function () {
 
 class GraspOfLand extends DrawCard {
     setupCardAbilities() {
-        this.wouldInterrupt({
+        this.reaction({
             title: 'Prevent characters from entering play',
             effect: 'prevent characters from entering play this conflict',
-            cost: graspOfLandCost(),
+            cost: [AbilityDsl.costs.bowSelf(), graspOfLandCost()],
             when: {
-                onConflictDeclaredBeforeProvinceReveal: () => true
+                onConflictDeclared: (event, context) => context.source.parent && event.attackers.includes(context.source.parent),
+                onDefendersDeclared: (event, context) => context.source.parent && event.defenders.includes(context.source.parent),
+                onMoveToConflict: (event, context) => context.source.parent && event.card === context.source.parent
             },
             max: AbilityDsl.limit.perRound(1),
             gameAction: AbilityDsl.actions.conflictLastingEffect(() => ({
