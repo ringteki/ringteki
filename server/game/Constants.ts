@@ -327,6 +327,7 @@ export enum EventNames {
     OnPassActionPhasePriority = 'onPassActionPhasePriority',
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
+    OnFlipFavor = 'onFlipFavor',
     OnConflictMoved = 'onConflictMoved',
     OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     OnTheCrashingWave = 'onTheCrashingWave',

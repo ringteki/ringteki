@@ -4,53 +4,37 @@ const { CardTypes, Players, Locations } = require('../../../Constants.js');
 
 class ShinjoAtagi extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            condition: context => context.player === context.source.controller && context.source.controller.getNumberOfFacedownProvinces() === 0,
-            effect: [
-                AbilityDsl.effects.modifyMilitarySkill(2),
-                AbilityDsl.effects.modifyPoliticalSkill(1)
-            ]
-        });
-
         this.action({
-            title: 'Bow a character',
-            condition: context => context.source.isParticipating(),
-            targets: {
-                character: {
-                    activePromptTitle: 'Choose a character to bow',
-                    cardType: CardTypes.Character,
-                    controller: Players.Opponent,
-                    location: Locations.PlayArea,
-                    cardCondition: (card, context) => card.isParticipating() && card.allowGameAction('bow', context)
-                },
-                province: {
-                    activePromptTitle: 'Choose a province to reveal',
+            title: 'Set a participating character\'s skills',
+            condition: (context) => context.source.isParticipating(),
+            target: {
+                cardType: CardTypes.Character,
+                controller: Players.Any,
+                cardCondition: card => card.isParticipating(),
+                gameAction: AbilityDsl.actions.selectCard(context => ({
+                    activePromptTitle: 'Choose an attacked province',
+                    hidePromptIfSingleCard: true,
                     cardType: CardTypes.Province,
-                    controller: Players.Self,
                     location: Locations.Provinces,
-                    cardCondition: (card, context) => card.isFacedown() && card.allowGameAction('reveal', context)
-                }
-            },
-            gameAction: AbilityDsl.actions.conditional({
-                condition: context => context.targets.character.getMilitarySkill() <= context.targets.province.getStrength(),
-                trueGameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.bow(context => ({
-                        target: context.targets.character
-                    })),
-                    AbilityDsl.actions.reveal(context => ({
-                        target: context.targets.province
-                    }))
-                ]),
-                falseGameAction: AbilityDsl.actions.reveal(context => ({
-                    target: context.targets.province
+                    message: '{4} sets the skills of {0} to {3}{1}/{3}{2}',
+                    messageArgs: card => [context.target, 'military', 'political', card.getStrength(), context.source],
+                    cardCondition: card => card.isConflictProvince(),
+                    subActionProperties: card => {
+                        context.targets.province = card;
+                        return ({
+                            target: context.target,
+                            effect: [
+                                AbilityDsl.effects.setMilitarySkill(card.getStrength()),
+                                AbilityDsl.effects.setPoliticalSkill(card.getStrength())
+                            ]
+                        });
+                    },
+                    gameAction: AbilityDsl.actions.cardLastingEffect({
+
+                    })
                 }))
-            }),
-            effect: 'reveal {1} and {2}bow {3}',
-            effectArgs: context => [
-                context.targets.province,
-                context.targets.character.getMilitarySkill() <= context.targets.province.getStrength() ? '' : 'fail to ',
-                context.targets.character
-            ]
+            },
+            effect: 'set the skills of {0} to the strength of an attacked province'
         });
     }
 }
