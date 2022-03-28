@@ -5,6 +5,7 @@ import DrawCard = require('../drawcard');
 import Event = require('../Events/Event');
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import { Locations, PlayTypes, Stages }  from '../Constants';
+import BaseAction = require('../BaseAction');
 
 class PlayCardResolver extends AbilityResolver {
     playGameAction: PlayCardAction;
@@ -93,6 +94,8 @@ export interface PlayCardProperties extends CardActionProperties {
     ignoreFateCost?: boolean;
     source?: any;
     allowReactions?: boolean;
+    ignoredRequirements?: string[];
+    playAction?: BaseAction;
 }
 
 export class PlayCardAction extends CardGameAction {
@@ -105,6 +108,8 @@ export class PlayCardAction extends CardGameAction {
         payCosts: true,
         ignoreFateCost: false,
         allowReactions: false,
+        ignoredRequirements: [],
+        playAction: undefined,
         source: null
     };
     constructor(properties: ((context: AbilityContext) => PlayCardProperties) | PlayCardProperties) {
@@ -130,7 +135,7 @@ export class PlayCardAction extends CardGameAction {
         let legalAbilities = legalActions.concat(legalReactions);
 
         return legalAbilities.filter(ability => {
-            const ignoredRequirements = ['location', 'player'];
+            const ignoredRequirements = ['location', 'player', ...properties.ignoredRequirements];
             if(!properties.payCosts) {
                 ignoredRequirements.push('cost');
             }
@@ -143,6 +148,9 @@ export class PlayCardAction extends CardGameAction {
     }
 
     getLegalActions(card: DrawCard, context: AbilityContext, properties: PlayCardProperties) {
+        if (properties.playAction) {
+            return [properties.playAction];
+        }
         return card.getPlayActions();
     }
 

@@ -1,24 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { CardTypes, Players, Locations, PlayTypes, Durations } = require('../../../Constants');
-const PlayCharacterAction = require('../../../playcharacteraction');
-
-class ScoutsSteedPlayAction extends PlayCharacterAction {
-    constructor(card) {
-        super(card, true);
-    }
-
-    createContext(player = this.card.controller) {
-        const context = super.createContext(player);
-        context.playType = PlayTypes.PlayFromHand;
-        return context;
-    }
-
-    meetsRequirements(context, ignoredRequirements = []) {
-        let newIgnoredRequirements = ignoredRequirements.includes('location') ? ignoredRequirements : ignoredRequirements.concat('location');
-        return super.meetsRequirements(context, newIgnoredRequirements);
-    }
-}
+const { CardTypes, Players, Locations, PlayTypes } = require('../../../Constants');
+const PlayDynastyAsConflictCharacterAction = require('../../../playdynastycharacterasconflictaction');
 
 class ScoutsSteed extends DrawCard {
     setupCardAbilities() {
@@ -37,19 +20,14 @@ class ScoutsSteed extends DrawCard {
                 cardType: CardTypes.Character,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect(context => ({
-                        target: context.target,
-                        effect: AbilityDsl.effects.gainPlayAction(ScoutsSteedPlayAction),
-                        duration: Durations.UntilPassPriority,
-                        targetLocation: Locations.Provinces
-                    })),
-                    AbilityDsl.actions.playCard(context => ({
-                        target: context.target,
-                        source: this,
-                        resetOnCancel: false
-                    }))
-                ])
+                gameAction: AbilityDsl.actions.playCard(context => ({
+                    target: context.target,
+                    source: this,
+                    resetOnCancel: false,
+                    playType: PlayTypes.PlayFromHand,
+                    playAction: context.target ? new PlayDynastyAsConflictCharacterAction(context.target, true) : undefined,
+                    ignoredRequirements: ['phase']
+                }))
             },
             effect: 'play {0} into the conflict'
         });
