@@ -11,7 +11,7 @@ class ThereAreNoSecrets extends DrawCard {
                 onMoveFate: (event, context) => context.source.parent && event.origin === context.source.parent && event.fate > 0
             },
             gameAction: AbilityDsl.actions.gainFate(context => ({
-                target: context.source.controller
+                target: context.player
             }))
         });
     }

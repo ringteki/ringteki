@@ -109,7 +109,7 @@ describe('Expert Bartering', function() {
             expect(this.cloud.controller).toBe(this.player1.player);
             expect(this.expert.controller).toBe(this.player1.player);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to switch it with Cloud the Mind');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to switch Expert Bartering with Cloud the Mind');
         });
 
         it('should switch control', function() {
@@ -123,7 +123,7 @@ describe('Expert Bartering', function() {
             expect(this.fan.controller).toBe(this.player1.player);
             expect(this.expert.controller).toBe(this.player2.player);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Ornate Fan');
         });
 
         it('should switch control on a attachment that must be attached to a character you control', function() {
@@ -137,7 +137,7 @@ describe('Expert Bartering', function() {
             expect(this.courtMask.controller).toBe(this.player1.player);
             expect(this.expert.controller).toBe(this.player2.player);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Court Mask');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Court Mask');
         });
 
         it('should discard newly illegal attachments', function() {
@@ -146,7 +146,7 @@ describe('Expert Bartering', function() {
 
             this.player1.clickCard(this.river);
             expect(this.river.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to switch it with Force of the River');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to switch Expert Bartering with Force of the River');
         });
 
         it('should not prompt you to spend a fate if you do not have a fate', function() {
@@ -189,7 +189,7 @@ describe('Expert Bartering', function() {
             expect(this.fan.controller).toBe(this.player1.player);
             expect(this.expert.controller).toBe(this.player2.player);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Ornate Fan');
 
             this.player2.clickCard(this.expert);
             this.player2.clickPrompt('Yes');
@@ -201,7 +201,7 @@ describe('Expert Bartering', function() {
             expect(this.fan.controller).toBe(this.player2.player);
             expect(this.expert.controller).toBe(this.player1.player);
 
-            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Ornate Fan');
         });
 
         it('should not allow the same player to use it twice in the same turn', function() {
@@ -215,7 +215,7 @@ describe('Expert Bartering', function() {
             expect(this.fan.controller).toBe(this.player1.player);
             expect(this.expert.controller).toBe(this.player2.player);
 
-            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+            expect(this.getChatLogs(1)).toContain('player1 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Ornate Fan');
 
             this.player2.clickCard(this.expert);
             this.player2.clickPrompt('Yes');
@@ -227,7 +227,7 @@ describe('Expert Bartering', function() {
             expect(this.fan.controller).toBe(this.player2.player);
             expect(this.expert.controller).toBe(this.player1.player);
 
-            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering to spend a fate and switch it with Ornate Fan');
+            expect(this.getChatLogs(1)).toContain('player2 uses Expert Bartering, paying 1 fate to switch Expert Bartering with Ornate Fan');
 
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.expert);

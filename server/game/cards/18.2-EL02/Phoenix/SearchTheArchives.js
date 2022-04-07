@@ -4,14 +4,8 @@ const { Locations } = require('../../../Constants.js');
 
 class SearchTheArchives extends DrawCard {
     setupCardAbilities() {
-        this.attachmentConditions({
-            myControl: true,
-            trait: ['shugenja', 'scholar']
-        });
-
         this.reaction({
-            title: 'Ready attached character',
-            max: AbilityDsl.limit.perRound(1),
+            title: 'Search your deck for a card',
             when: {
                 onCardAttached: (event, context) => event.card === context.source && event.originalLocation !== Locations.PlayArea
             },

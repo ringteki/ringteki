@@ -10,7 +10,10 @@ class NoBreathWasted extends DrawCard {
             target: {
                 activePromptTitle: 'Choose a character to ready',
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.ready()
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.ready(),
+                    AbilityDsl.actions.honor(context => ({ target: context.target.controller !== context.player ? context.target : [] }))
+                ])
             }
         });
     }

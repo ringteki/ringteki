@@ -26,12 +26,13 @@ describe('Shinjo Atagi', function() {
             this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('should set a participating characters skill to the province strength', function() {
+        it('should set a participating characters skill to the province strength matching conflict type (mil)', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.chagatai, this.rider],
                 defenders: [this.shinjo, this.yoshi],
-                province: this.garden
+                province: this.garden,
+                type: 'military'
             });
 
             this.player2.clickCard(this.shinjo);
@@ -42,9 +43,31 @@ describe('Shinjo Atagi', function() {
             expect(this.player2).not.toBeAbleToSelect(this.whisperer);
             this.player2.clickCard(this.rider);
             expect(this.rider.getMilitarySkill()).toBe(4);
+            expect(this.rider.getPoliticalSkill()).toBe(1);
+            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to set the military skill of Border Rider to the printed strength of an attacked province');
+            expect(this.getChatLogs(5)).toContain('Shinjo Atagi sets the military skill of Border Rider to 4military');
+        });
+
+        it('should set a participating characters skill to the province strength matching conflict type (pol)', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.chagatai, this.rider],
+                defenders: [this.shinjo, this.yoshi],
+                province: this.garden,
+                type: 'political'
+            });
+
+            this.player2.clickCard(this.shinjo);
+            expect(this.player2).toBeAbleToSelect(this.shinjo);
+            expect(this.player2).toBeAbleToSelect(this.chagatai);
+            expect(this.player2).toBeAbleToSelect(this.rider);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
+            expect(this.player2).not.toBeAbleToSelect(this.whisperer);
+            this.player2.clickCard(this.rider);
+            expect(this.rider.getMilitarySkill()).toBe(2);
             expect(this.rider.getPoliticalSkill()).toBe(4);
-            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to set the skills of Border Rider to the strength of an attacked province');
-            expect(this.getChatLogs(5)).toContain('Shinjo Atagi sets the skills of Border Rider to 4military/4political');
+            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to set the political skill of Border Rider to the printed strength of an attacked province');
+            expect(this.getChatLogs(5)).toContain('Shinjo Atagi sets the political skill of Border Rider to 4political');
         });
     });
 });

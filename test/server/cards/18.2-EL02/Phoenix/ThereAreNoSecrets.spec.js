@@ -1,4 +1,4 @@
-describe('There are no Secrets', function() {
+describe('There Are No Secrets', function() {
     integration(function() {
         describe('Embrace the Void/Karmic Twist interaction', function() {
             beforeEach(function() {
@@ -29,7 +29,7 @@ describe('There are no Secrets', function() {
                 expect(this.miyaMystic.fate).toBe(0);
                 expect(this.seppunGuardsman.fate).toBe(2);
                 expect(this.karmicTwist.location).toBe('conflict discard pile');
-                expect(this.getChatLogs(5)).toContain('player1 uses There are no Secrets to gain 1 fate');
+                expect(this.getChatLogs(5)).toContain('player1 uses There Are No Secrets to gain 1 fate');
             });
         });
 

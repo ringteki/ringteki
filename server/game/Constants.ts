@@ -271,6 +271,7 @@ export enum EventNames {
     OnReturnRingtoPlay = 'onRemoveRingFromPlay',
     OnReturnHome = 'onReturnHome',
     OnParticipantsReturnHome = 'onParticipantsReturnHome',
+    OnConflictStarted = 'onConflictStarted',
     OnConflictFinished = 'onConflictFinished',
     OnConflictPass = 'onConflictPass',
     OnFavorGloryTied = 'onFavorGloryTied',

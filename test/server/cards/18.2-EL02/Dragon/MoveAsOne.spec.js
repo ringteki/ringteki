@@ -35,12 +35,12 @@ describe('Move as One', function() {
             expect(this.player1).toBeAbleToSelect(this.alignment);
         });
 
-        it('should prompt you to pick two kihos', function() {
+        it('should prompt you to pick a kihos', function() {
             this.initiateConflict({
                 attackers: [this.ancientMaster]
             });
             this.player1.clickCard(this.alignment);
-            expect(this.player1).toHavePrompt('Select up to 2 cards to reveal');
+            expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Void Fist');
             expect(this.player1).toHavePromptButton('Hurricane Punch (2)');
             expect(this.player1).toHavePromptButton('Move as One');
@@ -51,14 +51,13 @@ describe('Move as One', function() {
             expect(this.player1).toHavePromptButton('Take nothing');
         });
 
-        it('should prompt you to pick two kihos with different names and add them to your hand', function() {
+        it('should add it to your hand', function() {
             let hand = this.player1.hand.length;
 
             this.initiateConflict({
                 attackers: [this.ancientMaster]
             });
             this.player1.clickCard(this.alignment);
-            expect(this.player1).toHavePrompt('Select up to 2 cards to reveal');
             expect(this.player1).toHavePromptButton('Void Fist');
             expect(this.player1).toHavePromptButton('Hurricane Punch (2)');
             expect(this.player1).toHavePromptButton('Move as One');
@@ -68,19 +67,14 @@ describe('Move as One', function() {
             expect(this.player1).toHaveDisabledPromptButton('Centipede Tattoo');
             expect(this.player1).toHavePromptButton('Take nothing');
 
-            this.player1.clickPrompt('Hurricane Punch (2)');
-
-            expect(this.player1).toHavePromptButton('Void Fist');
-            expect(this.player1).toHaveDisabledPromptButton('Hurricane Punch');
             this.player1.clickPrompt('Void Fist');
 
-            expect(this.player1.hand.length).toBe(hand + 1); //-1 Ki Alignment, +2 found cards
+            expect(this.player1.hand.length).toBe(hand); //-1 Ki Alignment, +2 found cards
             expect(this.voidFist.location).toBe('hand');
-            expect(this.HP1.location === 'hand' || this.HP2.location === 'hand').toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Move as One to look at the top eight cards of their deck for up to two kihos');
-            expect(this.getChatLogs(5)).toContain('player1 takes Hurricane Punch and Void Fist');
-            expect(this.getChatLogs(5)).toContain('player1 puts 6 cards on the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player1 plays Move as One to look at the top eight cards of their deck for a kiho');
+            expect(this.getChatLogs(5)).toContain('player1 takes Void Fist');
+            expect(this.getChatLogs(5)).toContain('player1 puts 7 cards on the bottom of their conflict deck');
         });
 
         it('should be max 1 per round', function() {
@@ -88,7 +82,7 @@ describe('Move as One', function() {
                 attackers: [this.ancientMaster]
             });
             this.player1.clickCard(this.alignment);
-            expect(this.player1).toHavePrompt('Select up to 2 cards to reveal');
+            expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Void Fist');
             expect(this.player1).toHavePromptButton('Hurricane Punch (2)');
             expect(this.player1).toHavePromptButton('Move as One');
@@ -99,8 +93,6 @@ describe('Move as One', function() {
             expect(this.player1).toHavePromptButton('Take nothing');
 
             this.player1.clickPrompt('Hurricane Punch (2)');
-            this.player1.clickPrompt('Move as One');
-
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });
 

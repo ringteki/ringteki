@@ -16,17 +16,20 @@ class ShinjoAtagi extends DrawCard {
                     hidePromptIfSingleCard: true,
                     cardType: CardTypes.Province,
                     location: Locations.Provinces,
-                    message: '{4} sets the skills of {0} to {3}{1}/{3}{2}',
-                    messageArgs: card => [context.target, 'military', 'political', card.getStrength(), context.source],
+                    message: '{3} sets the {1} skill of {0} to {2}{1}',
+                    messageArgs: card => [context.target, context.game.currentConflict.conflictType, card.printedStrength, context.source],
                     cardCondition: card => card.isConflictProvince(),
                     subActionProperties: card => {
                         context.targets.province = card;
+                        const effect = [];
+                        if (context.game.currentConflict.conflictType === 'military') {
+                            effect.push(AbilityDsl.effects.setMilitarySkill(card.printedStrength));
+                        } else {
+                            effect.push(AbilityDsl.effects.setPoliticalSkill(card.printedStrength));
+                        }
                         return ({
                             target: context.target,
-                            effect: [
-                                AbilityDsl.effects.setMilitarySkill(card.getStrength()),
-                                AbilityDsl.effects.setPoliticalSkill(card.getStrength())
-                            ]
+                            effect: effect
                         });
                     },
                     gameAction: AbilityDsl.actions.cardLastingEffect({
@@ -34,7 +37,8 @@ class ShinjoAtagi extends DrawCard {
                     })
                 }))
             },
-            effect: 'set the skills of {0} to the strength of an attacked province'
+            effect: 'set the {1} skill of {0} to the printed strength of an attacked province',
+            effectArgs: context => [context.game.currentConflict.conflictType]
         });
     }
 }

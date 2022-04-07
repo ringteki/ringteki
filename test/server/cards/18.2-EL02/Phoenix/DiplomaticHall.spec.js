@@ -40,9 +40,33 @@ describe('Diplomatic Hall', function() {
             });
             this.player2.pass();
             let hand = this.player1.hand.length;
+            let hand2 = this.player2.hand.length;
             this.player1.clickCard(this.hall);
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player1');
             expect(this.player1.hand.length).toBe(hand + 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Diplomatic Hall to draw 1 card');
+            expect(this.player2.hand.length).toBe(hand2);
+            expect(this.getChatLogs(5)).toContain('player1 uses Diplomatic Hall to have player1 draw a card');
+        });
+
+        it('should draw during a pol conflict - opponent', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.scout],
+                defenders: []
+            });
+            this.player2.pass();
+            let hand = this.player1.hand.length;
+            let hand2 = this.player2.hand.length;
+            this.player1.clickCard(this.hall);
+            expect(this.player1).toHavePromptButton('player1');
+            expect(this.player1).toHavePromptButton('player2');
+            this.player1.clickPrompt('player2');
+            expect(this.player1.hand.length).toBe(hand);
+            expect(this.player2.hand.length).toBe(hand2 + 1);
+            expect(this.getChatLogs(5)).toContain('player1 uses Diplomatic Hall to have player2 draw a card');
         });
 
         it('should not draw during a mil conflict', function() {

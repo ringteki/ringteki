@@ -9,6 +9,7 @@ class BaseCardSelector {
         this.location = this.buildLocation(properties.location);
         this.controller = properties.controller || Players.Any;
         this.checkTarget = !!properties.targets;
+        this.sameDiscardPile = !!properties.sameDiscardPile;
 
         if(!Array.isArray(properties.cardType)) {
             this.cardType = [properties.cardType];
@@ -88,6 +89,10 @@ class BaseCardSelector {
 
         if(!card) {
             return false;
+        }
+
+        if (this.sameDiscardPile && selectedCards.length > 0) {
+            return card.location === selectedCards[0].location && card.owner === selectedCards[0].owner;
         }
 
         if(this.checkTarget && !card.canBeTargeted(context, selectedCards)) {

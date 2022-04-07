@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 
-class LadyLuck extends DrawCard {
+class SakeHouseInformant extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: context => this.getFavorSide(context) === 'military',
@@ -27,6 +27,6 @@ class LadyLuck extends DrawCard {
     }
 }
 
-LadyLuck.id = 'lady-luck';
+SakeHouseInformant.id = 'sake-house-informant';
 
-module.exports = LadyLuck;
+module.exports = SakeHouseInformant;

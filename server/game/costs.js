@@ -511,6 +511,15 @@ const Costs = {
             canPay: function () {
                 return true;
             },
+            getActionName(context) { // eslint-disable-line no-unused-vars
+                return 'optionalFateCost';
+            },
+            getCostMessage: (context) => {
+                if(context.costs.optionalFateCost === 0) {
+                    return undefined;
+                }
+                return ['paying {1} fate', [amount]];
+            },
             resolve: function (context, result) {
                 let fateAvailable = true;
                 if(context.player.fate < amount) {

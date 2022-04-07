@@ -26,14 +26,14 @@ class ChildOfSaltlessWater extends DrawCard {
                 cardCondition: card => card.isConflictProvince()
             },
             effect: 'put {1} into play and set it to {2}{3}',
-            effectArgs: context => [context.source, context.target.baseStrength, 'military'],
+            effectArgs: context => [context.source, context.target.printedStrength, 'military'],
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.putIntoConflict(context => ({
                     target: context.source
                 })),
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.source,
-                    effect: AbilityDsl.effects.setMilitarySkill(context.target.baseStrength)
+                    effect: AbilityDsl.effects.setMilitarySkill(context.target.printedStrength)
                 }))
             ])
         });

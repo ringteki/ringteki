@@ -4,94 +4,186 @@ describe('Crane Industry', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    fate: 30,
-                    dynastyDiscard: ['doji-whisperer', 'kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai', 'favorable-ground',
-                        'imperial-storehouse', 'iron-mine', 'a-season-of-war', 'dispatch-to-nowhere', 'aranat'],
-                    provinces: ['manicured-garden', 'endless-plains', 'fertile-fields', 'magistrate-station'],
-                    hand: ['crane-industry', 'crane-industry']
+                    inPlay: ['doji-challenger'],
+                    hand: ['crane-industry', 'admit-defeat', 'i-can-swim', 'way-of-the-scorpion'],
+                },
+                player2: {
+                    inPlay: ['doji-whisperer'],
+                    hand: ['a-fate-worse-than-death']
                 }
             });
 
-            this.player1.player.promptedActionWindows.fate = true;
-            this.player2.player.promptedActionWindows.fate = true;
+            this.challenger = this.player1.findCardByName('doji-challenger');
+            this.industry = this.player1.findCardByName('crane-industry');
+            this.defeat = this.player1.findCardByName('admit-defeat');
+            this.swim = this.player1.findCardByName('i-can-swim');
+            this.scorpion = this.player1.findCardByName('way-of-the-scorpion');
 
-            this.player1.reduceDeckToNumber('dynasty deck', 0);
-
-            this.wealth = this.player1.filterCardsByName('crane-industry')[0];
-            this.wealth2 = this.player1.filterCardsByName('crane-industry')[1];
-
-            this.aranat = this.player1.moveCard('aranat', 'dynasty deck');
-            this.yoshi = this.player1.moveCard('kakita-yoshi', 'dynasty deck');
-            this.toshimoko = this.player1.moveCard('kakita-toshimoko', 'dynasty deck');
-            this.kageyu = this.player1.moveCard('daidoji-kageyu', 'dynasty deck');
-            this.chagatai = this.player1.moveCard('moto-chagatai', 'dynasty deck');
-
-            this.favorable = this.player1.moveCard('favorable-ground', 'dynasty deck');
-            this.storehouse = this.player1.moveCard('imperial-storehouse', 'dynasty deck');
-            this.mine = this.player1.moveCard('iron-mine', 'dynasty deck');
-            this.season = this.player1.moveCard('a-season-of-war', 'dynasty deck');
-            this.dispatch = this.player1.moveCard('dispatch-to-nowhere', 'dynasty deck');
-            this.dojiWhisperer = this.player1.moveCard('doji-whisperer', 'dynasty deck');
-
-            this.p1 = this.player1.findCardByName('manicured-garden');
-            this.p2 = this.player1.findCardByName('endless-plains');
-            this.p3 = this.player1.findCardByName('fertile-fields');
-            this.p4 = this.player1.findCardByName('magistrate-station');
-            this.pStronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
-
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.afwtd = this.player2.findCardByName('a-fate-worse-than-death');
         });
 
-        it('should prompt you to choose a non-SH province you control', function() {
-            this.player1.clickCard(this.wealth);
-            expect(this.player1).toHavePrompt('Choose a province');
-            expect(this.player1).toBeAbleToSelect(this.p1);
-            expect(this.player1).toBeAbleToSelect(this.p2);
-            expect(this.player1).toBeAbleToSelect(this.p3);
-            expect(this.player1).toBeAbleToSelect(this.p4);
-            expect(this.player1).not.toBeAbleToSelect(this.pStronghold);
+        it('should react to the conflict starting', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.industry);
         });
 
-        it('should let you choose a non-unique character from the top 8 cards of your deck', function() {
-            this.player1.clickCard(this.wealth);
-            this.player1.clickCard(this.p1);
-            expect(this.player1).toHavePrompt('Choose a character to put in your province');
-            expect(this.player1).toHavePromptButton('Doji Whisperer');
-            expect(this.player1).not.toHavePromptButton('Kakita Yoshi');
-            expect(this.player1).not.toHavePromptButton('Kakita Toshimoko');
-            expect(this.player1).not.toHavePromptButton('Daidoji Kageyu');
-            expect(this.player1).not.toHavePromptButton('Moto Chagatai');
-            expect(this.player1).not.toHavePromptButton('Favorable Ground');
-            expect(this.player1).not.toHavePromptButton('Imperial Storehouse');
-            expect(this.player1).not.toHavePromptButton('Iron Mine');
-            expect(this.player1).not.toHavePromptButton('A Season of War');
-            expect(this.player1).not.toHavePromptButton('Dispatch to Nowhere');
-            expect(this.player1).not.toHavePromptButton('Aranat');
-            expect(this.player1).not.toHavePromptButton('Cancel');
-            expect(this.player1).toHavePromptButton('Take nothing');
+        it('should prompt you to pay a fate and an honor', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            this.player1.clickCard(this.industry);
+            expect(this.player1).toHavePrompt('Spend 1 fate?');
+            expect(this.player1).toHavePromptButton('Yes');
+            expect(this.player1).toHavePromptButton('No');
+
+            this.player1.clickPrompt('Yes');
+            expect(this.player1).toHavePrompt('Give your opponent 1 honor to draw a card?');
+            expect(this.player1).toHavePromptButton('Yes');
+            expect(this.player1).toHavePromptButton('No');
         });
 
-        it('should put the chosen card in the province faceup (facedown province)', function() {
-            this.player1.clickCard(this.wealth);
-            this.player1.clickCard(this.p1);
-            this.player1.clickPrompt('Doji Whisperer');
-            expect(this.getChatLogs(5)).toContain('player1 plays Crane Industry to put a dynasty character into province 1');
-            expect(this.getChatLogs(5)).toContain('player1 takes Doji Whisperer');
-            expect(this.getChatLogs(5)).toContain('player1 is shuffling their dynasty deck');
-            expect(this.dojiWhisperer.location).toBe('province 1');
-            expect(this.dojiWhisperer.facedown).toBe(false);
+        it('should draw if you pay an honor', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            let honor = this.player1.honor;
+            let honor2 = this.player2.honor;
+            let hand = this.player1.hand.length;
+
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('Yes');
+            expect(this.player1.honor).toBe(honor - 1);
+            expect(this.player2.honor).toBe(honor2 + 1);
+            expect(this.player1.hand.length).toBe(hand);
+
+            expect(this.getChatLogs(5)).toContain('player1 chooses to give player2 an honor and draw a card');
         });
 
-        it('should put the chosen card in the province faceup (faceup province)', function() {
-            this.p1.facedown = false;
-            this.game.checkGameState(true);
-            this.player1.clickCard(this.wealth);
-            this.player1.clickCard(this.p1);
-            this.player1.clickPrompt('Doji Whisperer');
-            expect(this.getChatLogs(5)).toContain('player1 plays Crane Industry to put a dynasty character into Manicured Garden');
-            expect(this.getChatLogs(5)).toContain('player1 takes Doji Whisperer');
-            expect(this.getChatLogs(5)).toContain('player1 is shuffling their dynasty deck');
-            expect(this.dojiWhisperer.location).toBe('province 1');
-            expect(this.dojiWhisperer.facedown).toBe(false);
+        it('should not draw if you don\'t pay an honor', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            let honor = this.player1.honor;
+            let honor2 = this.player2.honor;
+            let hand = this.player1.hand.length;
+
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('No');
+            expect(this.player1.honor).toBe(honor);
+            expect(this.player2.honor).toBe(honor2);
+            expect(this.player1.hand.length).toBe(hand - 1);
+
+            expect(this.getChatLogs(5)).toContain('player1 chooses not to give player2 an honor and draw a card');
+        });
+
+        it('should reduce costs for both players if you don\'t pay a fate', function() {
+            this.player1.player.showBid = 5;
+            this.player2.player.showBid = 1;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('No');
+            expect(this.getChatLogs(5)).toContain('player1 plays Crane Industry to reduce the cost of events each player plays this conflict by 1');
+
+            let fate = this.player2.fate;
+            this.player2.clickCard(this.afwtd);
+            this.player2.clickCard(this.challenger);
+            expect(this.player2.fate).toBe(fate - 3);
+
+            fate = this.player1.fate;
+            this.player1.clickCard(this.scorpion);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate);
+            this.player2.pass();
+            this.player1.clickCard(this.defeat);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate);
+            this.player2.pass();
+            this.player1.clickCard(this.swim);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate - 1);
+        });
+
+        it('should only reduce costs for you players if you pay a fate', function() {
+            this.player1.player.showBid = 5;
+            this.player2.player.showBid = 1;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('No');
+            expect(this.getChatLogs(5)).toContain('player1 plays Crane Industry, paying 1 fate to reduce the cost of events they play this conflict by 1');
+
+            let fate = this.player2.fate;
+            this.player2.clickCard(this.afwtd);
+            this.player2.clickCard(this.challenger);
+            expect(this.player2.fate).toBe(fate - 4);
+
+            fate = this.player1.fate;
+            this.player1.clickCard(this.scorpion);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate);
+            this.player2.pass();
+            this.player1.clickCard(this.defeat);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate);
+            this.player2.pass();
+            this.player1.clickCard(this.swim);
+            this.player1.clickCard(this.whisperer);
+            expect(this.player1.fate).toBe(fate - 1);
+        });
+
+        it('should cost 1 as attacker', function() {
+            let fate = this.player1.fate;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.whisperer],
+            });
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('No');
+
+            expect(this.player1.fate).toBe(fate - 1);
+        });
+
+        it('should cost 0 as defender', function() {
+            let fate = this.player1.fate;
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whisperer],
+                defenders: [this.challenger],
+            });
+            this.player1.clickCard(this.industry);
+            this.player1.clickPrompt('No');
+            this.player1.clickPrompt('No');
+
+            expect(this.player1.fate).toBe(fate);
         });
     });
 });

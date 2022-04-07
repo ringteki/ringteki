@@ -1,10 +1,10 @@
-describe('Lady Luck', function() {
+describe('Sake House Informant', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['lady-luck', 'shosuro-sadako', 'bayushi-aramoro'],
+                    inPlay: ['sake-house-informant', 'shosuro-sadako', 'bayushi-aramoro'],
                     hand: ['adept-of-shadows']
                 },
                 player2: {
