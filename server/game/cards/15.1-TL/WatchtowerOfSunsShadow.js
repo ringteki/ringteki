@@ -21,11 +21,11 @@ class WatchtowerOfSunsShadow extends DrawCard {
         });
 
         this.forcedInterrupt({
-            title: 'Lose 2 honor',
+            title: 'Lose 2 fate',
             when: {
                 onBreakProvince: (event, context) => event.card.controller === context.player && event.card.location === context.source.location
             },
-            gameAction: AbilityDsl.actions.loseHonor(context => ({
+            gameAction: AbilityDsl.actions.loseFate(context => ({
                 amount: 2,
                 target: context.player
             }))

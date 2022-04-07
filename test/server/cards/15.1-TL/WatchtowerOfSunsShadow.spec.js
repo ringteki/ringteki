@@ -212,13 +212,13 @@ describe('Watchtower of Suns Shadow', function() {
                 province: this.p1
             });
 
-            let honor = this.player2.honor;
+            let fate = this.player2.fate;
 
             this.kisada.bowed = true;
             this.noMoreActions();
 
-            expect(this.player2.honor).toBe(honor - 2);
-            expect(this.getChatLogs(5)).toContain('player2 uses Watchtower of Sun\'s Shadow to make player2 lose 2 honor');
+            expect(this.player2.fate).toBe(fate - 2);
+            expect(this.getChatLogs(5)).toContain('player2 uses Watchtower of Sun\'s Shadow to make player2 lose 2 fate');
         });
     });
 });
