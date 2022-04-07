@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Locations, TargetModes, Players } = require('../../../Constants');
+const { Locations, TargetModes, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 const bootleggerCost = function () {
@@ -77,7 +77,7 @@ class MantisBootlegger extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     targetController: context.player,
                     until: {
-                        onConflictFinished: () => true,
+                        onConflictFinished: () => true
                     },
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {
@@ -93,7 +93,7 @@ class MantisBootlegger extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect(context => ({
                     targetController: context.player.opponent,
                     until: {
-                        onConflictFinished: () => true,
+                        onConflictFinished: () => true
                     },
                     effect: AbilityDsl.effects.playerDelayedEffect({
                         when: {

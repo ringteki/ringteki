@@ -5,7 +5,7 @@ describe('Dragonfly Mediator', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['dragonfly-mediator'],
-                    hand: ['i-can-swim', 'way-of-the-scorpion'],
+                    hand: ['i-can-swim', 'way-of-the-scorpion']
                 },
                 player2: {
                     hand: ['a-fate-worse-than-death', 'way-of-the-crane']

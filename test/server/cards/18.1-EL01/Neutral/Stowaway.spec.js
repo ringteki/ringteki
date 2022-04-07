@@ -84,7 +84,7 @@ describe('Stowaway', function() {
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.stowaway],
+                attackers: [this.stowaway]
             });
 
             expect(this.player1).toHavePrompt('Triggered Abilities');

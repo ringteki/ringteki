@@ -15,16 +15,16 @@ class SurgingWave extends DrawCard {
                     let kihoPlayed = context.player.isKihoPlayedThisConflict(context, this);
                     let gameActions = [];
                     gameActions.push(AbilityDsl.actions.cardLastingEffect(context => ({
-                            duration: Durations.UntilEndOfPhase,
-                            effect: AbilityDsl.effects.delayedEffect({
-                                when : {
-                                    onConflictFinished: () => true
-                                },
-                                message: '{0} {3} removed from {1} due to the delayed effect of {2}',
-                                messageArgs: [context.target.statusTokens, context.target, context.source, context.target.statusTokens.length > 1 ? 'are' : 'is'],
-                                gameAction: AbilityDsl.actions.discardStatusToken(() => ({ target: context.target.statusTokens }))
-                            })
-                        }))
+                        duration: Durations.UntilEndOfPhase,
+                        effect: AbilityDsl.effects.delayedEffect({
+                            when : {
+                                onConflictFinished: () => true
+                            },
+                            message: '{0} {3} removed from {1} due to the delayed effect of {2}',
+                            messageArgs: [context.target.statusTokens, context.target, context.source, context.target.statusTokens.length > 1 ? 'are' : 'is'],
+                            gameAction: AbilityDsl.actions.discardStatusToken(() => ({ target: context.target.statusTokens }))
+                        })
+                    }))
                     );
                     if(kihoPlayed) {
                         gameActions.push(AbilityDsl.actions.menuPrompt(context => ({

@@ -172,7 +172,6 @@ describe('Surging Wave', function() {
             });
 
             this.player2.pass();
-            let fate = this.player1.fate;
             this.player1.clickCard(this.hurricane);
             this.player1.clickCard(this.initiate);
             this.player2.pass();

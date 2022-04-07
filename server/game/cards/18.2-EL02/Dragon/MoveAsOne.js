@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { TargetModes, Locations } = require('../../../Constants');
+const { Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class MoveAsOne extends DrawCard {

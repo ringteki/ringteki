@@ -22,7 +22,7 @@ class ShinjoAtagi extends DrawCard {
                     subActionProperties: card => {
                         context.targets.province = card;
                         const effect = [];
-                        if (context.game.currentConflict.conflictType === 'military') {
+                        if(context.game.currentConflict.conflictType === 'military') {
                             effect.push(AbilityDsl.effects.setMilitarySkill(card.printedStrength));
                         } else {
                             effect.push(AbilityDsl.effects.setPoliticalSkill(card.printedStrength));

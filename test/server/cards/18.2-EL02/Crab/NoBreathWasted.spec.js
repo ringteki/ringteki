@@ -31,11 +31,13 @@ describe('No Breath Wasted', function() {
         });
 
         it('should be illegal when there are no legal targets', function() {
+            this.challenger.honor();
             this.player1.clickCard(this.commonCause);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
         it('should display a message if the only legal target is sacrificed', function() {
+            this.challenger.honor();
             this.steadfastWitchHunter.bowed = true;
             this.player1.clickCard(this.commonCause);
             expect(this.player1).toHavePrompt('No Breath Wasted');

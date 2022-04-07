@@ -28,15 +28,15 @@ class CraneIndustry extends DrawCard {
                         match: card => card.type === CardTypes.Event
                     })
                 })));
-                if (context.player.opponent) {
-                    if (context.costs.optionalFateCost === 0) {
+                if(context.player.opponent) {
+                    if(context.costs.optionalFateCost === 0) {
                         gameActions.push(AbilityDsl.actions.playerLastingEffect(context => ({
                             targetController: context.player.opponent,
                             effect: AbilityDsl.effects.reduceCost({
                                 amount: 1,
                                 match: card => card.type === CardTypes.Event
                             })
-                        })));    
+                        })));
                     }
                     gameActions.push(AbilityDsl.actions.menuPrompt(context => ({
                         activePromptTitle: 'Give your opponent 1 honor to draw a card?',
@@ -58,7 +58,7 @@ class CraneIndustry extends DrawCard {
                     gameActions: gameActions
                 });
             })
-        });;
+        });
     }
 }
 

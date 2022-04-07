@@ -5,7 +5,7 @@ describe('Crane Industry', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-challenger'],
-                    hand: ['crane-industry', 'admit-defeat', 'i-can-swim', 'way-of-the-scorpion'],
+                    hand: ['crane-industry', 'admit-defeat', 'i-can-swim', 'way-of-the-scorpion']
                 },
                 player2: {
                     inPlay: ['doji-whisperer'],
@@ -27,7 +27,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.industry);
@@ -37,7 +37,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player1.clickCard(this.industry);
             expect(this.player1).toHavePrompt('Spend 1 fate?');
@@ -54,7 +54,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             let honor = this.player1.honor;
             let honor2 = this.player2.honor;
@@ -74,7 +74,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             let honor = this.player1.honor;
             let honor2 = this.player2.honor;
@@ -97,7 +97,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player1.clickCard(this.industry);
             this.player1.clickPrompt('No');
@@ -130,7 +130,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player1.clickCard(this.industry);
             this.player1.clickPrompt('Yes');
@@ -161,7 +161,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player1.clickCard(this.industry);
             this.player1.clickPrompt('No');
@@ -177,7 +177,7 @@ describe('Crane Industry', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer],
-                defenders: [this.challenger],
+                defenders: [this.challenger]
             });
             this.player1.clickCard(this.industry);
             this.player1.clickPrompt('No');

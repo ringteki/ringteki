@@ -91,7 +91,7 @@ class BaseCardSelector {
             return false;
         }
 
-        if (this.sameDiscardPile && selectedCards.length > 0) {
+        if(this.sameDiscardPile && selectedCards.length > 0) {
             return card.location === selectedCards[0].location && card.owner === selectedCards[0].owner;
         }
 

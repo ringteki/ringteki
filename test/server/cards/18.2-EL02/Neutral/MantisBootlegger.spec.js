@@ -5,7 +5,7 @@ describe('Mantis Bootlegger', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['mantis-bootlegger'],
-                    hand: ['i-can-swim', 'way-of-the-scorpion'],
+                    hand: ['i-can-swim', 'way-of-the-scorpion']
                 },
                 player2: {
                     inPlay: ['mantis-bootlegger'],
@@ -25,7 +25,7 @@ describe('Mantis Bootlegger', function() {
         it('should react to declaring as an attacker and prompt you to discard a card and let opponent also discard one', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.bootlegger1],
+                attackers: [this.bootlegger1]
             });
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.bootlegger1);
@@ -44,7 +44,7 @@ describe('Mantis Bootlegger', function() {
         it('should react to declaring as a defender', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.bootlegger1],
+                attackers: [this.bootlegger1]
             });
             this.player1.clickCard(this.bootlegger1);
             this.player1.clickCard(this.scorpion);
@@ -72,7 +72,7 @@ describe('Mantis Bootlegger', function() {
         it('should give the winner all the fate - player1', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.bootlegger1],
+                attackers: [this.bootlegger1]
             });
             this.player1.clickCard(this.bootlegger1);
             this.player1.clickCard(this.scorpion);
@@ -100,7 +100,7 @@ describe('Mantis Bootlegger', function() {
         it('should give the winner all the fate - player1', function() {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.bootlegger1],
+                attackers: [this.bootlegger1]
             });
             this.player1.clickCard(this.bootlegger1);
             this.player1.clickCard(this.scorpion);

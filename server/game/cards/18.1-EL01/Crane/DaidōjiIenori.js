@@ -16,7 +16,7 @@ class DaidojiIenori extends DrawCard {
                         AbilityDsl.effects.setMilitarySkill(3),
                         AbilityDsl.effects.setPoliticalSkill(3)
                     ];
-                    if (context.source.isHonored) {
+                    if(context.source.isHonored) {
                         effect.push(AbilityDsl.effects.cardCannot('receiveDishonorToken'));
                         effect.push(AbilityDsl.effects.cardCannot('receiveHonorToken'));
                     }
