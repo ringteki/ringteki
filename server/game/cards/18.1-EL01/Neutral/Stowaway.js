@@ -40,7 +40,7 @@ class Stowaway extends DrawCard {
     }
 
     getSkillBonus(card) {
-        return Math.min(3, card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length);
+        return Math.min(2, card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length);
     }
 }
 

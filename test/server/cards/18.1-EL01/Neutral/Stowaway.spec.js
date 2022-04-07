@@ -55,7 +55,7 @@ describe('Stowaway', function() {
             expect(this.getChatLogs(5)).toContain('Imperial Storehouse is removed from the game due to Stowaway leaving play');
         });
 
-        it('should max out at +3', function() {
+        it('should max out at +2', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.stowaway],
@@ -74,11 +74,11 @@ describe('Stowaway', function() {
             this.player2.clickCard(this.orders2);
             this.player2.clickCard(this.stowaway);
             this.player1.clickCard(this.letGo);
-            expect(this.stowaway.getMilitarySkill()).toBe(mil + 3);
+            expect(this.stowaway.getMilitarySkill()).toBe(mil + 2);
             this.player1.clickCard(this.orders1);
             this.player1.clickCard(this.stowaway);
             this.player1.clickCard(this.mine);
-            expect(this.stowaway.getMilitarySkill()).toBe(mil + 3);
+            expect(this.stowaway.getMilitarySkill()).toBe(mil + 2);
             expect(this.storehouse.location).toBe(this.stowaway.uuid);
             expect(this.fan.location).toBe(this.stowaway.uuid);
             expect(this.letGo.location).toBe(this.stowaway.uuid);

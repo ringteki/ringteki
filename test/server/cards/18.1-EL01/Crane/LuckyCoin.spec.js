@@ -41,18 +41,6 @@ describe('Lucky Coin', function() {
             expect(this.kuwanan.getPoliticalSkill()).toBe(4);
         });
 
-        it('should discard the status token if a Courtier', function() {
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Action Window');
-            this.player1.clickCard(this.coin);
-            expect(this.player1).toHavePrompt('Action Window');
-            this.player1.playAttachment(this.ann, this.kuwanan);
-            this.player2.pass();
-            this.player1.clickCard(this.coin);
-            expect(this.kuwanan.isDishonored).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 uses Lucky Coin to discard Doji Kuwanan\'s status token');
-        });
-
         // it('should stop dishonor status losing honor on leaving play', function() {
         //     let honor = this.player1.honor;
 

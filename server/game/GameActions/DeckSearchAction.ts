@@ -1,6 +1,6 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import { GameAction } from './GameAction';
-import { Locations, EventNames, TargetModes, Decks } from '../Constants';
+import { Locations, EventNames, TargetModes, Decks, Players } from '../Constants';
 import AbilityContext = require('../AbilityContext');
 import DrawCard = require('../drawcard');
 import Player = require('../player');
@@ -19,6 +19,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     message?: string;
     uniqueNames?: boolean;
     player?: Player;
+    choosingPlayer?: Player;
     placeOnBottomInRandomOrder?: boolean;
     messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
@@ -66,7 +67,7 @@ export class DeckSearchAction extends PlayerAction {
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
         const properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
         const amount = this.getAmount(properties.amount, context);
-        const player = context.player;
+        const player = properties.player || context.player;
         return amount !== 0 && this.getDeck(player, properties).size() > 0 && super.canAffect(player, context);
     }
 
@@ -126,6 +127,7 @@ export class DeckSearchAction extends PlayerAction {
         let properties = this.getProperties(context, additionalProperties) as DeckSearchProperties;
         let canCancel = properties.targetMode !== TargetModes.Exactly;
         let selectAmount = 1;
+        let choosingPlayer = properties.choosingPlayer || event.player;
 
         if (properties.targetMode === TargetModes.UpTo || properties.targetMode === TargetModes.UpToVariable)
             selectAmount = this.getNumCards(properties.numCards, context);
@@ -148,7 +150,7 @@ export class DeckSearchAction extends PlayerAction {
             cards.sort(card => card.name)
         }
 
-        context.game.promptWithHandlerMenu(player, {
+        context.game.promptWithHandlerMenu(choosingPlayer, {
             activePromptTitle: title,
             context: context,
             cards: cards,
@@ -197,9 +199,9 @@ export class DeckSearchAction extends PlayerAction {
             if(cardsToMove.length > 0) {
                 Helpers.shuffleArray(cardsToMove);
                 cardsToMove.forEach(c => {
-                    context.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
+                    event.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
                 });
-                context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', context.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
+                context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', event.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
             }
 
         }
@@ -214,6 +216,8 @@ export class DeckSearchAction extends PlayerAction {
     }
 
     defaultHandleDone(properties : DeckSearchProperties, context, event, selectedCards) {
+        let choosingPlayer = properties.choosingPlayer || event.player;
+
         if (properties.message) {
             let args = [];
             if (properties.messageArgs) {
@@ -223,13 +227,13 @@ export class DeckSearchAction extends PlayerAction {
         } else {
             if (selectedCards.length > 0) {
                 if (properties.reveal) {
-                    context.game.addMessage('{0} takes {1}', event.player, selectedCards);
+                    context.game.addMessage('{0} takes {1}', choosingPlayer, selectedCards);
                 }
                 else {
-                    context.game.addMessage('{0} takes {1} {2}', event.player, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
+                    context.game.addMessage('{0} takes {1} {2}', choosingPlayer, selectedCards.length, selectedCards.length > 1 ? 'cards' : 'card');
                 }    
             } else {
-                context.game.addMessage('{0} takes nothing', event.player);
+                context.game.addMessage('{0} takes nothing', choosingPlayer);
             }
         }
         let { gameAction } = this.getProperties(event.context);

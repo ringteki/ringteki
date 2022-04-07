@@ -26,7 +26,7 @@ describe('Shinjo Atagi', function() {
             this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('should prompt you to choose a character and a facedown province', function() {
+        it('should set a participating characters skill to the province strength', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.chagatai, this.rider],
@@ -35,66 +35,16 @@ describe('Shinjo Atagi', function() {
             });
 
             this.player2.clickCard(this.shinjo);
-            expect(this.player2).toHavePrompt('Choose a character to bow');
+            expect(this.player2).toBeAbleToSelect(this.shinjo);
             expect(this.player2).toBeAbleToSelect(this.chagatai);
-            expect(this.player2).not.toBeAbleToSelect(this.shinjo);
             expect(this.player2).toBeAbleToSelect(this.rider);
-            expect(this.player2).not.toBeAbleToSelect(this.yoshi);
+            expect(this.player2).toBeAbleToSelect(this.yoshi);
             expect(this.player2).not.toBeAbleToSelect(this.whisperer);
-
             this.player2.clickCard(this.rider);
-            expect(this.player2).toHavePrompt('Choose a province to reveal');
-            expect(this.player2).toBeAbleToSelect(this.pilgrimage);
-            expect(this.player2).not.toBeAbleToSelect(this.garden);
-
-            this.player2.clickCard(this.pilgrimage);
-            expect(this.rider.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to reveal Pilgrimage and bow Border Rider');
-        });
-
-        it('should prompt you to choose a character and a facedown province - no bow', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.chagatai, this.rider],
-                defenders: [this.shinjo, this.yoshi],
-                province: this.garden
-            });
-
-            this.player2.clickCard(this.shinjo);
-            this.player2.clickCard(this.chagatai);
-            this.player2.clickCard(this.pilgrimage);
-            expect(this.chagatai.bowed).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to reveal Pilgrimage and fail to bow Moto Chagatai');
-        });
-
-        it('should get +2/+2 if you have no facedown provinces', function() {
-            const mil = this.shinjo.getMilitarySkill();
-            const pol = this.shinjo.getPoliticalSkill();
-
-            this.garden.facedown = false;
-            this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
-
-            this.pilgrimage.facedown = false;
-            this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
-
-            this.sd3.facedown = false;
-            this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
-
-            this.sd4.facedown = false;
-            this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol);
-
-            this.sd5.facedown = false;
-            this.game.checkGameState(true);
-            expect(this.shinjo.getMilitarySkill()).toBe(mil + 2);
-            expect(this.shinjo.getPoliticalSkill()).toBe(pol + 1);
+            expect(this.rider.getMilitarySkill()).toBe(4);
+            expect(this.rider.getPoliticalSkill()).toBe(4);
+            expect(this.getChatLogs(5)).toContain('player2 uses Shinjo Atagi to set the skills of Border Rider to the strength of an attacked province');
+            expect(this.getChatLogs(5)).toContain('Shinjo Atagi sets the skills of Border Rider to 4military/4political');
         });
     });
 });
