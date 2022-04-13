@@ -11,7 +11,7 @@ describe('Sand Road Merchant', function() {
                 player2: {
                     honor: 10,
                     inPlay: ['eloquent-advocate', 'kakita-yoshi'],
-                    hand: ['policy-debate', 'ornate-fan']
+                    hand: ['policy-debate', 'ornate-fan', 'fine-katana']
                 }
             });
 
@@ -20,6 +20,7 @@ describe('Sand Road Merchant', function() {
             this.advocate = this.player2.findCardByName('eloquent-advocate');
             this.policyDebate = this.player2.findCardByName('policy-debate');
             this.fan = this.player2.findCardByName('ornate-fan');
+            this.katana = this.player2.findCardByName('fine-katana');
 
             this.borderRider = this.player1.findCardByName('border-rider');
             this.challenge = this.player1.findCardByName('challenge-on-the-fields');
@@ -27,6 +28,7 @@ describe('Sand Road Merchant', function() {
             this.player2.reduceDeckToNumber('conflict deck', 0);
             this.player2.moveCard(this.policyDebate, 'conflict deck');
             this.player2.moveCard(this.fan, 'conflict deck');
+            this.player2.moveCard(this.katana, 'conflict deck');
         });
 
         it('should react to declaring as an attacker and take a card', function() {
@@ -43,14 +45,21 @@ describe('Sand Road Merchant', function() {
             expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Policy Debate');
             expect(this.player1).toHavePromptButton('Ornate Fan');
+            expect(this.player1).toHavePromptButton('Fine Katana');
             expect(this.policyDebate.location).toBe('conflict deck');
             this.player1.clickPrompt('Policy Debate');
             expect(this.policyDebate.location).toBe(this.merchant.uuid);
-            expect(this.player1.player.conflictDeck.last()).not.toBe(this.fan);
-            expect(this.player2.player.conflictDeck.last()).toBe(this.fan);
-            expect(this.getChatLogs(5)).toContain('player1 uses Sand Road Merchant to look at the top two cards of their opponent\'s conflict deck');
+            let fanLast1 = this.player1.player.conflictDeck.last() === this.fan;
+            let katanaLast1 = this.player1.player.conflictDeck.last() === this.katana;
+
+            let fanLast2 = this.player2.player.conflictDeck.last() === this.fan;
+            let katanaLast2 = this.player2.player.conflictDeck.last() === this.katana;
+
+            expect(fanLast1 || katanaLast1).toBe(false);
+            expect(fanLast2 || katanaLast2).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player1 uses Sand Road Merchant to look at the top three cards of their opponent\'s conflict deck');
             expect(this.getChatLogs(5)).toContain('player1 takes Policy Debate');
-            expect(this.getChatLogs(5)).toContain('player2 puts 1 card on the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player2 puts 2 cards on the bottom of their conflict deck');
 
             this.player2.clickCard(this.yoshi);
             this.player2.clickPrompt('Done');

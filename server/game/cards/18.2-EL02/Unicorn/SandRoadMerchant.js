@@ -5,14 +5,14 @@ const { Locations, Players, PlayTypes } = require('../../../Constants');
 class SandRoadMerchant extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Look at top 2 cards of your opponent\'s conflict deck',
-            effect: 'look at the top two cards of their opponent\'s conflict deck',
+            title: 'Look at your opponent\'s conflict deck',
+            effect: 'look at the top three cards of their opponent\'s conflict deck',
             when: {
                 onConflictDeclared: (event, context) => event.attackers.includes(context.source),
                 onDefendersDeclared: (event, context) => event.defenders.includes(context.source)
             },
             gameAction: AbilityDsl.actions.deckSearch(context => ({
-                amount: 2,
+                amount: 3,
                 player: context.player.opponent,
                 choosingPlayer: context.player,
                 gameAction: AbilityDsl.actions.placeCardUnderneath({

@@ -23,6 +23,7 @@ export interface DeckSearchProperties extends PlayerActionProperties {
     placeOnBottomInRandomOrder?: boolean;
     messageArgs?: (context: AbilityContext, cards) => any | any[];
     selectedCardsHandler?: (context, event, cards) => void;
+    remainingCardsHandler?: (context, event, cards) => void;
     cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
 }
 
@@ -36,6 +37,7 @@ export class DeckSearchAction extends PlayerAction {
         targetMode: TargetModes.Single,
         deck: Decks.ConflictDeck,
         selectedCardsHandler: null,
+        remainingCardsHandler: null,
         shuffle: true,
         reveal: true,
         uniqueNames: false,
@@ -180,30 +182,35 @@ export class DeckSearchAction extends PlayerAction {
 
     handleDone(properties : DeckSearchProperties, context, event, selectedCards, allCards) {
         event.selectedCards = selectedCards;
-        if (properties.selectedCardsHandler == null) {
+        if (properties.selectedCardsHandler === null) {
             this.defaultHandleDone(properties, context, event, selectedCards);
         }
         else {
             properties.selectedCardsHandler(context, event, selectedCards);
         }
 
-        if (this.getShuffle(properties.shuffle, context)) {
-            if (properties.deck === Decks.ConflictDeck) {
-                event.player.shuffleConflictDeck();
-            } else if (properties.deck === Decks.DynastyDeck) {
-                event.player.shuffleDynastyDeck();
+        if (properties.remainingCardsHandler === null) {
+            if (this.getShuffle(properties.shuffle, context)) {
+                if (properties.deck === Decks.ConflictDeck) {
+                    event.player.shuffleConflictDeck();
+                } else if (properties.deck === Decks.DynastyDeck) {
+                    event.player.shuffleDynastyDeck();
+                }
+            } else if (properties.placeOnBottomInRandomOrder) {
+                let cardsToMove = [...allCards];
+                selectedCards.forEach(card => cardsToMove = cardsToMove.filter(a => a !== card));
+                if(cardsToMove.length > 0) {
+                    Helpers.shuffleArray(cardsToMove);
+                    cardsToMove.forEach(c => {
+                        event.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
+                    });
+                    context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', event.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
+                }
             }
-        } else if (properties.placeOnBottomInRandomOrder) {
+        } else {
             let cardsToMove = [...allCards];
             selectedCards.forEach(card => cardsToMove = cardsToMove.filter(a => a !== card));
-            if(cardsToMove.length > 0) {
-                Helpers.shuffleArray(cardsToMove);
-                cardsToMove.forEach(c => {
-                    event.player.moveCard(c, Locations.ConflictDeck, { bottom: true });
-                });
-                context.game.addMessage('{0} puts {1} card{2} on the bottom of their conflict deck', event.player, cardsToMove.length, cardsToMove.length > 1 ? 's' : '');
-            }
-
+            properties.remainingCardsHandler(context, event, cardsToMove);
         }
     }
 

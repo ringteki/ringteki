@@ -4,127 +4,110 @@ describe('Mantis Bootlegger', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['mantis-bootlegger'],
-                    hand: ['i-can-swim', 'way-of-the-scorpion']
+                    inPlay: ['togashi-mitsu', 'kakita-yoshi', 'mantis-bootlegger'],
+                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade', 'tattooed-wanderer']
                 },
                 player2: {
-                    inPlay: ['mantis-bootlegger'],
-                    hand: ['a-fate-worse-than-death', 'way-of-the-crane']
+                    inPlay: ['togashi-initiate'],
+                    hand: ['fine-katana', 'ornate-fan', 'kakita-blade']
                 }
             });
 
-            this.bootlegger1 = this.player1.findCardByName('mantis-bootlegger');
-            this.swim = this.player1.findCardByName('i-can-swim');
-            this.scorpion = this.player1.findCardByName('way-of-the-scorpion');
+            this.mitsu = this.player1.findCardByName('togashi-mitsu');
+            this.yoshi = this.player1.findCardByName('kakita-yoshi');
+            this.katana = this.player1.findCardByName('fine-katana');
+            this.fan = this.player1.findCardByName('ornate-fan');
+            this.blade = this.player1.findCardByName('kakita-blade');
+            this.honored = this.player1.findCardByName('honored-blade');
+            this.wanderer = this.player1.findCardByName('tattooed-wanderer');
+            this.bootlegger = this.player1.findCardByName('mantis-bootlegger');
 
-            this.bootlegger2 = this.player2.findCardByName('mantis-bootlegger');
-            this.afwtd = this.player2.findCardByName('a-fate-worse-than-death');
-            this.crane = this.player2.findCardByName('way-of-the-crane');
+            this.initiate = this.player2.findCardByName('togashi-initiate');
+            this.katana2 = this.player2.findCardByName('fine-katana');
+            this.fan2 = this.player2.findCardByName('ornate-fan');
+            this.blade2 = this.player2.findCardByName('kakita-blade');
         });
 
-        it('should react to declaring as an attacker and prompt you to discard a card and let opponent also discard one', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.bootlegger1]
-            });
+        it('should reduce the cost to play an attachment on a character you control', function() {
+            let fate = this.player1.fate;
+            let honor = this.player1.honor;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.mitsu);
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.bootlegger1);
-            this.player1.clickCard(this.bootlegger1);
-            this.player1.clickCard(this.scorpion);
-            expect(this.player2).toHavePrompt('Discard a card?');
-            expect(this.player2).toHavePromptButton('Yes');
-            expect(this.player2).toHavePromptButton('No');
-            this.player2.clickPrompt('Yes');
-            this.player2.clickCard(this.crane);
+            expect(this.player1).toBeAbleToSelect(this.bootlegger);
+            this.player1.clickCard(this.bootlegger);
 
-            expect(this.getChatLogs(8)).toContain('player2 chooses to discard Way of the Crane');
-            expect(this.getChatLogs(8)).toContain('player1 uses Mantis Bootlegger, discarding Way of the Scorpion to give the winner of the conflict 2 fate');
-        });
-
-        it('should react to declaring as a defender', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.bootlegger1]
-            });
-            this.player1.clickCard(this.bootlegger1);
-            this.player1.clickCard(this.scorpion);
-            expect(this.player2).toHavePrompt('Discard a card?');
-            expect(this.player2).toHavePromptButton('Yes');
-            expect(this.player2).toHavePromptButton('No');
-            this.player2.clickPrompt('Yes');
-            this.player2.clickCard(this.crane);
-
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickPrompt('Done');
-
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.bootlegger2);
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickCard(this.afwtd);
-            expect(this.player1).toHavePrompt('Discard a card?');
-            expect(this.player1).toHavePromptButton('Yes');
-            expect(this.player1).toHavePromptButton('No');
-            this.player1.clickPrompt('No');
-
-            expect(this.getChatLogs(8)).toContain('player2 uses Mantis Bootlegger, discarding A Fate Worse Than Death to give the winner of the conflict 1 fate');
-        });
-
-        it('should give the winner all the fate - player1', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.bootlegger1]
-            });
-            this.player1.clickCard(this.bootlegger1);
-            this.player1.clickCard(this.scorpion);
-            this.player2.clickPrompt('Yes');
-            this.player2.clickCard(this.crane);
-
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickPrompt('Done');
-
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickCard(this.afwtd);
-            this.player1.clickPrompt('No');
-
-            let fate = this.player1.fate;
-            let fate2 = this.player2.fate;
-
-            this.noMoreActions();
-            expect(this.player1.fate).toBe(fate + 3);
-            expect(this.player2.fate).toBe(fate2);
-
-            expect(this.getChatLogs(8)).toContain('player1 gains 2 fate due to the effect of Mantis Bootlegger');
-            expect(this.getChatLogs(8)).toContain('player1 gains 1 fate due to the effect of Mantis Bootlegger');
-        });
-
-        it('should give the winner all the fate - player1', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.bootlegger1]
-            });
-            this.player1.clickCard(this.bootlegger1);
-            this.player1.clickCard(this.scorpion);
-            this.player2.clickPrompt('Yes');
-            this.player2.clickCard(this.crane);
-
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickPrompt('Done');
-
-            this.player2.clickCard(this.bootlegger2);
-            this.player2.clickCard(this.afwtd);
-            this.player1.clickPrompt('No');
-
-            let fate = this.player1.fate;
-            let fate2 = this.player2.fate;
-
-            this.bootlegger1.bow();
-
-            this.noMoreActions();
             expect(this.player1.fate).toBe(fate);
-            expect(this.player2.fate).toBe(fate2 + 3);
+            expect(this.player1.honor).toBe(honor - 1);
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade);
 
-            expect(this.getChatLogs(8)).toContain('player2 gains 2 fate due to the effect of Mantis Bootlegger');
-            expect(this.getChatLogs(8)).toContain('player2 gains 1 fate due to the effect of Mantis Bootlegger');
+            expect(this.getChatLogs(5)).toContain('player1 uses Mantis Bootlegger, losing 1 honor to reduce the cost of their next attachment by 1');
+        });
+
+        it('should reduce the cost to play an attachment on a character you don\'t control', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.initiate);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.bootlegger);
+            this.player1.clickCard(this.bootlegger);
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.initiate.attachments.toArray()).toContain(this.blade);
+        });
+
+        it('should not trigger if attachment is played by opponent', function() {
+            this.player1.pass();
+            this.player2.clickCard(this.blade2);
+            this.player2.clickCard(this.mitsu);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade2);
+        });
+
+        it('should not trigger if character has an attachment', function() {
+            this.player1.pass();
+            this.player2.clickCard(this.blade2);
+            this.player2.clickCard(this.mitsu);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade2);
+
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.mitsu.attachments.toArray()).toContain(this.blade);
+        });
+
+        it('should work twice per round but not 3 times per round', function() {
+            let fate = this.player1.fate;
+            this.player1.clickCard(this.wanderer);
+            this.player1.clickPrompt('Play Tattooed Wanderer as an attachment');
+            this.player1.clickCard(this.mitsu);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.bootlegger);
+            this.player1.clickCard(this.bootlegger);
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.mitsu.attachments.toArray()).toContain(this.wanderer);
+
+            this.player2.pass();
+            this.player1.clickCard(this.blade);
+            this.player1.clickCard(this.initiate);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.bootlegger);
+            this.player1.clickCard(this.bootlegger);
+
+            expect(this.player1.fate).toBe(fate);
+            expect(this.initiate.attachments.toArray()).toContain(this.blade);
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.honored);
+            this.player1.clickCard(this.yoshi);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.bootlegger);
+
+            expect(this.player1.fate).toBe(fate - 1);
+            expect(this.yoshi.attachments.toArray()).toContain(this.honored);
         });
     });
 });

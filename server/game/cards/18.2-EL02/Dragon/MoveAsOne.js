@@ -6,7 +6,7 @@ class MoveAsOne extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Search for kihos',
-            max: AbilityDsl.limit.perRound(1),
+            max: AbilityDsl.limit.perConflict(1),
             when: {
                 onConflictDeclared: (event, context) => event.conflict.attackingPlayer === context.player && event.attackers.some(card => card.hasTrait('monk')),
                 onDefendersDeclared: (event, context) => event.conflict.defendingPlayer === context.player && event.defenders.some(card => card.hasTrait('monk'))

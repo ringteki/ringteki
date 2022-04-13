@@ -1,27 +1,35 @@
 const DrawCard = require('../../../drawcard.js');
-const { Locations, Players } = require('../../../Constants');
+const { Locations, Players, TargetModes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class DragonflyMediator extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Have each player reveal a card',
+            title: 'Have each player reveal cards from their hand',
             targets: {
                 myCard: {
                     activePromptTitle: 'Choose a card to reveal',
                     location: Locations.Hand,
                     controller: Players.Self,
-                    gameAction: AbilityDsl.actions.reveal({ chatMessage: true })
+                    gameAction: AbilityDsl.actions.lookAt(context => ({
+                        message: '{0} sees {1} from {2}',
+                        messageArgs: cards => [context.source, cards, context.player]
+                    }))
                 },
                 oppCard: {
-                    activePromptTitle: 'Choose a card to reveal',
+                    activePromptTitle: 'Choose two cards to reveal',
+                    mode: TargetModes.ExactlyVariable,
+                    numCardsFunc: context => Math.min(2, context.player.opponent.hand.size()),
                     player: Players.Opponent,
                     location: Locations.Hand,
                     controller: Players.Opponent,
-                    gameAction: AbilityDsl.actions.reveal(context => ({ chatMessage: true, player: context.player.opponent }))
+                    gameAction: AbilityDsl.actions.lookAt(context => ({
+                        message: '{0} sees {1} from {2}',
+                        messageArgs: cards => [context.source, cards, context.player.opponent]
+                    }))
                 }
             },
-            effect: 'have each player reveal a card from their hand'
+            effect: 'have each player reveal cards from their hand'
         });
     }
 }

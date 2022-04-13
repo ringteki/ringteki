@@ -28,18 +28,20 @@ describe('Dragonfly Mediator', function() {
 
             this.player1.clickCard(this.swim);
 
-            expect(this.getChatLogs(8)).not.toContain('player1 uses Dragonfly Mediator to have each player reveal a card from their hand');
-            expect(this.getChatLogs(8)).not.toContain('player1 reveals I Can Swim due to Dragonfly Mediator');
+            expect(this.getChatLogs(8)).not.toContain('player1 uses Dragonfly Mediator to have each player reveal cards from their hand');
+            expect(this.getChatLogs(8)).not.toContain('Dragonfly Mediator sees I Can Swim from player1');
 
-            expect(this.player2).toHavePrompt('Choose a card to reveal');
+            expect(this.player2).toHavePrompt('Choose two cards to reveal');
             expect(this.player2).toBeAbleToSelect(this.afwtd);
             expect(this.player2).toBeAbleToSelect(this.crane);
 
             this.player2.clickCard(this.crane);
+            this.player2.clickCard(this.afwtd);
+            this.player2.clickPrompt('Done');
 
-            expect(this.getChatLogs(8)).toContain('player1 uses Dragonfly Mediator to have each player reveal a card from their hand');
-            expect(this.getChatLogs(8)).toContain('player1 reveals I Can Swim due to Dragonfly Mediator');
-            expect(this.getChatLogs(8)).toContain('player2 reveals Way of the Crane due to Dragonfly Mediator');
+            expect(this.getChatLogs(8)).toContain('player1 uses Dragonfly Mediator to have each player reveal cards from their hand');
+            expect(this.getChatLogs(8)).toContain('Dragonfly Mediator sees I Can Swim from player1');
+            expect(this.getChatLogs(8)).toContain('Dragonfly Mediator sees Way of the Crane and A Fate Worse Than Death from player2');
         });
     });
 });
