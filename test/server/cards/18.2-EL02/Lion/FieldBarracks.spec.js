@@ -269,5 +269,70 @@ describe('Field Barracks', function() {
             expect(this.getChatLogs(10)).toContain('player1 chooses to play Brash Samurai');
             expect(this.getChatLogs(10)).toContain('player1 plays Brash Samurai with 1 additional fate');
         });
+
+        it('should reveal and let you play the character', function() {
+            expect(this.barracks.facedown).toBe(true);
+            this.player1.clickCard(this.stagingGround);
+            this.player1.clickCard(this.barracks);
+            this.player1.clickPrompt('Done');
+            expect(this.barracks.facedown).toBe(false);
+            expect(this.player1).toHavePrompt('triggered abilities');
+            expect(this.player1).toBeAbleToSelect(this.barracks);
+            this.player1.clickCard(this.barracks);
+
+            expect(this.p1.attachments.size()).toBe(1);
+            expect(this.barracks.getType()).toBe('attachment');
+
+            this.player1.moveCard(this.brash, 'province 1');
+            this.brash.facedown = true;
+
+            this.player2.pass();
+            this.player1.clickCard(this.barracks);
+            expect(this.player1).toBeAbleToSelect(this.brash);
+            expect(this.player1).not.toBeAbleToSelect(this.stagingGround);
+
+            this.player1.clickCard(this.brash);
+            expect(this.player1).toHavePromptButton('Play this card');
+            expect(this.player1).toHavePromptButton('Discard and refill faceup');
+
+            let fate = this.player1.fate;
+            this.player1.clickPrompt('Play this card');
+            expect(this.player1).toHavePromptButton('0');
+            expect(this.player1).toHavePromptButton('1');
+            this.player1.clickPrompt('1');
+            expect(this.brash.location).toBe('play area');
+            expect(this.brash.fate).toBe(1);
+            expect(this.player1.fate).toBe(fate - 3);
+            expect(this.getChatLogs(10)).toContain('player1 uses Field Barracks to reveal a facedown card and play or discard it');
+            expect(this.getChatLogs(10)).toContain('player1 chooses to play Brash Samurai');
+            expect(this.getChatLogs(10)).toContain('player1 plays Brash Samurai with 1 additional fate');
+        });
+
+        it('should not let you play a holding', function() {
+            expect(this.barracks.facedown).toBe(true);
+            this.player1.clickCard(this.stagingGround);
+            this.player1.clickCard(this.barracks);
+            this.player1.clickPrompt('Done');
+            expect(this.barracks.facedown).toBe(false);
+            expect(this.player1).toHavePrompt('triggered abilities');
+            expect(this.player1).toBeAbleToSelect(this.barracks);
+            this.player1.clickCard(this.barracks);
+
+            expect(this.p1.attachments.size()).toBe(1);
+            expect(this.barracks.getType()).toBe('attachment');
+
+            this.player1.moveCard(this.fg, 'province 1');
+            this.fg.facedown = true;
+
+            this.player2.pass();
+            this.player1.clickCard(this.barracks);
+            expect(this.player1).toBeAbleToSelect(this.fg);
+            expect(this.player1).not.toBeAbleToSelect(this.stagingGround);
+
+            this.player1.clickCard(this.fg);
+            expect(this.getChatLogs(10)).toContain('player1 uses Field Barracks to reveal a facedown card and play or discard it');
+            expect(this.player1).not.toHavePromptButton('Play this card');
+            expect(this.player1).toHavePromptButton('Discard and refill faceup');
+        });
     });
 });

@@ -18,7 +18,7 @@ class ChildOfSaltlessWater extends DrawCard {
         this.action({
             title: 'Put into play',
             cost: AbilityDsl.costs.payFate(1),
-            condition: context => context.game.isDuringConflict('military'),
+            condition: context => context.game.isDuringConflict(),
             location: Locations.Hand,
             target: {
                 location: Locations.Provinces,

@@ -7,6 +7,7 @@ class ThereAreNoSecrets extends DrawCard {
         this.wouldInterrupt({
             title: 'Gain 1 fate',
             limit: AbilityDsl.limit.perRound(2),
+            max: AbilityDsl.limit.perRound(3),
             when: {
                 onMoveFate: (event, context) => context.source.parent && event.origin === context.source.parent && event.fate > 0
             },

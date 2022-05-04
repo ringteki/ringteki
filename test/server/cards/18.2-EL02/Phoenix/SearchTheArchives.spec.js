@@ -35,7 +35,7 @@ describe('Search the Archives', function () {
             this.player1.moveCard(this.censure, 'conflict deck');
         });
 
-        it('should let you pick a spell or kiho card from your deck and add it to your hand', function () {
+        it('should let you pick a spell or kiho card from your deck', function () {
             this.player1.playAttachment(this.scroll1, this.atsuko);
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.scroll1);
@@ -48,94 +48,23 @@ describe('Search the Archives', function () {
             expect(this.dop.location).toBe('hand');
             expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
             expect(this.getChatLogs(5)).toContain('player1 takes Display of Power');
+            expect(this.getChatLogs(5)).toContain('player1 puts 3 cards on the bottom of their conflict deck');
         });
 
-        it('should let you order the other cards', function () {
-            this.player1.playAttachment(this.scroll1, this.atsuko);
+        it('should let you pick anything if attached character is a scholar', function () {
+            this.player1.playAttachment(this.scroll1, this.scholar);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.scroll1);
             this.player1.clickCard(this.scroll1);
-            expect(this.player1).toHaveDisabledPromptButton('Isawa Tadaka');
-            expect(this.player1).toHavePromptButton('Hurricane Punch');
-            expect(this.player1).toHavePromptButton('Display of Power');
-            expect(this.player1).toHaveDisabledPromptButton('Censure');
-            this.player1.clickPrompt('Display of Power');
-            expect(this.dop.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
-            expect(this.getChatLogs(5)).toContain('player1 takes Display of Power');
-
-            expect(this.player1).toHavePrompt('Select a card to place');
             expect(this.player1).toHavePromptButton('Isawa Tadaka');
             expect(this.player1).toHavePromptButton('Hurricane Punch');
-            expect(this.player1).not.toHavePromptButton('Display of Power');
-            expect(this.player1).toHavePromptButton('Censure');
-
-            this.player1.clickPrompt('Isawa Tadaka');
-            expect(this.player1).toHavePrompt('Place this card on the top or bottom of your deck?');
-            expect(this.player1).toHavePromptButton('Top');
-            expect(this.player1).toHavePromptButton('Bottom');
-            this.player1.clickPrompt('Top');
-            expect(this.getChatLogs(5)).toContain('player1 puts a card on the top of their deck');
-
-            expect(this.player1).toHavePrompt('Select a card to place');
-            expect(this.player1).not.toHavePromptButton('Isawa Tadaka');
-            expect(this.player1).toHavePromptButton('Hurricane Punch');
-            expect(this.player1).not.toHavePromptButton('Display of Power');
-            expect(this.player1).toHavePromptButton('Censure');
-            this.player1.clickPrompt('Censure');
-            expect(this.player1).toHavePrompt('Place this card on the top or bottom of your deck?');
-            expect(this.player1).toHavePromptButton('Top');
-            expect(this.player1).toHavePromptButton('Bottom');
-            this.player1.clickPrompt('Bottom');
-            expect(this.getChatLogs(5)).toContain('player1 puts a card on the bottom of their deck');
-
-            expect(this.player1).toHavePrompt('Select a card to place');
-            expect(this.player1).not.toHavePromptButton('Isawa Tadaka');
-            expect(this.player1).toHavePromptButton('Hurricane Punch');
-            expect(this.player1).not.toHavePromptButton('Display of Power');
-            expect(this.player1).not.toHavePromptButton('Censure');
-            this.player1.clickPrompt('Hurricane Punch');
-            expect(this.player1).toHavePrompt('Place this card on the top or bottom of your deck?');
-            expect(this.player1).toHavePromptButton('Top');
-            expect(this.player1).toHavePromptButton('Bottom');
-            this.player1.clickPrompt('Top');
-            expect(this.getChatLogs(5)).toContain('player1 puts a card on the top of their deck');
-
-            expect(this.player2).toHavePrompt('Action Window');
-
-            expect(this.player1.conflictDeck[0]).toBe(this.punch);
-            expect(this.player1.conflictDeck[1]).toBe(this.tadaka2);
-            expect(this.player1.conflictDeck[this.player1.conflictDeck.length - 1]).toBe(this.censure);
-        });
-
-        it('testing alternate ordering', function () {
-            this.player1.playAttachment(this.scroll1, this.atsuko);
-            this.player1.clickCard(this.scroll1);
-            expect(this.player1).toHaveDisabledPromptButton('Isawa Tadaka');
-            expect(this.player1).toHavePromptButton('Hurricane Punch');
             expect(this.player1).toHavePromptButton('Display of Power');
-            expect(this.player1).toHaveDisabledPromptButton('Censure');
-            this.player1.clickPrompt('Display of Power');
-            expect(this.dop.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
-            expect(this.getChatLogs(5)).toContain('player1 takes Display of Power');
-
-            expect(this.player1).toHavePrompt('Select a card to place');
-            expect(this.player1).toHavePromptButton('Isawa Tadaka');
-            expect(this.player1).toHavePromptButton('Hurricane Punch');
-            expect(this.player1).not.toHavePromptButton('Display of Power');
             expect(this.player1).toHavePromptButton('Censure');
-
-            this.player1.clickPrompt('Hurricane Punch');
-            this.player1.clickPrompt('Bottom');
-            this.player1.clickPrompt('Censure');
-            this.player1.clickPrompt('Top');
             this.player1.clickPrompt('Isawa Tadaka');
-            this.player1.clickPrompt('Top');
-
-            expect(this.player2).toHavePrompt('Action Window');
-
-            expect(this.player1.conflictDeck[0]).toBe(this.tadaka2);
-            expect(this.player1.conflictDeck[1]).toBe(this.censure);
-            expect(this.player1.conflictDeck[this.player1.conflictDeck.length - 1]).toBe(this.punch);
+            expect(this.tadaka2.location).toBe('hand');
+            expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
+            expect(this.getChatLogs(5)).toContain('player1 takes Isawa Tadaka');
+            expect(this.getChatLogs(5)).toContain('player1 puts 3 cards on the bottom of their conflict deck');
         });
     });
 });

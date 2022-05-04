@@ -6,7 +6,9 @@ class MatsuSakura extends DrawCard {
         this.wouldInterrupt({
             title: 'Cancel conflict province ability',
             when: {
-                onInitiateAbilityEffects: (event, context) => context.source.isAttacking() && event.card.isConflictProvince()
+                onInitiateAbilityEffects: (event, context) => context.source.isAttacking() && event.card.isConflictProvince() && event.card.controller &&
+                    event.card.controller.getDynastyCardsInProvince(event.card.location).some(a => a.isFaceup()) //any faceup cards
+
             },
             effect: 'cancel the effects of {1}\'s ability',
             effectArgs: context => context.event.card,

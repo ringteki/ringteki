@@ -14,7 +14,7 @@ class BiasedArbitrator extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 activePromptTitle: 'Choose a character to put into play ',
                 deck: Decks.DynastyDeck,
-                cardCondition: card => card.type === CardTypes.Character && card.printedCost === 1,
+                cardCondition: card => card.type === CardTypes.Character && card.printedCost <= 1,
                 gameAction: AbilityDsl.actions.putIntoPlay()
             })
         });
