@@ -10,6 +10,7 @@ export interface ChooseActionProperties extends GameActionProperties {
     activePromptTitle?: string;
     choices: ChooseGameChoices;
     messages: object;
+    messageArgs?: any[];
     player?: Players;
 }
 
@@ -18,7 +19,8 @@ export class ChooseGameAction extends GameAction {
     defaultProperties: ChooseActionProperties = {
         activePromptTitle: 'Select an action:',
         choices: {},
-        messages: {}
+        messages: {},
+        messageArgs: []
     };
     constructor(properties: ChooseActionProperties | ((context: AbilityContext) => ChooseActionProperties)) {
         super(properties);
@@ -47,7 +49,7 @@ export class ChooseGameAction extends GameAction {
         let player = properties.player === Players.Opponent ? context.player.opponent : context.player;
         let choiceHandler = (choice: string): void => {
             if(properties.messages[choice]) {
-                context.game.addMessage(properties.messages[choice], player, properties.target);
+                context.game.addMessage(properties.messages[choice], player, properties.target, ...properties.messageArgs);
             }
             context.game.queueSimpleStep(() => properties.choices[choice].addEventsToArray(events, context));
         }

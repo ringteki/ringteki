@@ -47,6 +47,7 @@ import { MoveToConflictAction, MoveToConflictProperties } from './MoveToConflict
 import { MoveTokenAction, MoveTokenProperties } from './MoveTokenAction';
 import { MultipleGameAction } from './MultipleGameAction';
 import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
+import { PlaceCardUnderneathAction, PlaceCardUnderneathProperties } from './PlaceCardUnderneathAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
@@ -90,6 +91,7 @@ import { RingActionProperties } from './RingAction';
 import { MoveConflictAction, MoveConflictProperties } from './MoveConflictAction';
 import { RemoveRingFromPlayAction, RemoveRingFromPlayProperties } from './RemoveRingFromPlayAction';
 import { ReturnRingToPlayAction, ReturnRingToPlayProperties } from './ReturnRingToPlayAction';
+import { FlipFavorAction, FlipFavorProperties } from './FlipFavorAction';
 
 const GameActions = {
     // card
@@ -108,6 +110,7 @@ const GameActions = {
     dishonorProvince: (propertyFactory: DishonorProvinceProperties | ((context: TriggeredAbilityContext) => DishonorProvinceProperties) = {}) => new DishonorProvinceAction(propertyFactory),
     duel: (propertyFactory: DuelProperties | ((context: TriggeredAbilityContext) => DuelProperties)) => new DuelAction(propertyFactory), // type, challenger, resolutionHandler, costHandler
     flipDynasty: (propertyFactory: FlipDynastyProperties | ((context: TriggeredAbilityContext) => FlipDynastyProperties) = {}) => new FlipDynastyAction(propertyFactory),
+    flipImperialFavor: (propertyFactory: FlipFavorProperties | ((context: TriggeredAbilityContext) => FlipFavorProperties)) => new FlipFavorAction(propertyFactory),
     honor: (propertyFactory: HonorProperties | ((context: TriggeredAbilityContext) => HonorProperties) = {}) => new HonorAction(propertyFactory),
     lookAt: (propertyFactory: LookAtProperties | ((context: TriggeredAbilityContext) => LookAtProperties) = {}) => new LookAtAction(propertyFactory),
     moveCard: (propertyFactory: MoveCardProperties | ((context: TriggeredAbilityContext) => MoveCardProperties)) => new MoveCardAction(propertyFactory), // destination, switch = false, shuffle = false, faceup = false
@@ -135,6 +138,7 @@ const GameActions = {
     turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
     gainStatusToken: (propertyFactory: GainStatusTokenProperties | ((context: TriggeredAbilityContext) => GainStatusTokenProperties) = {}) => new GainStatusTokenAction(propertyFactory),
     moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
+    placeCardUnderneath: (propertyFactory: PlaceCardUnderneathProperties | ((context: TriggeredAbilityContext) => PlaceCardUnderneathProperties)) => new PlaceCardUnderneathAction(propertyFactory), // destination, hideWhenFaceup = true
     // player actions
     chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
     chosenReturnToDeck: (propertyFactory: ChosenReturnToDeckProperties | ((context: TriggeredAbilityContext) => ChosenReturnToDeckProperties) = {}) => new ChosenReturnToDeckAction(propertyFactory), // amount = 1

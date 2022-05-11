@@ -9,7 +9,9 @@ describe('CardAbility displayMessage', function() {
         this.player = {
             name: 'Player 1',
             getShortSummary: () => this.player,
-            isFacedown: () => false
+            isFacedown: () => false,
+            getEffects: () => [],
+            honorGained: () => 0
         };
         this.cardSpy = jasmine.createSpyObj('card', ['getType', 'getShortSummary', 'isFacedown']);
         this.cardSpy.type = 'event';
@@ -165,6 +167,14 @@ describe('CardAbility displayMessage', function() {
 
                 isFacedown() {
                     return false;
+                }
+
+                getEffects() {
+                    return [];
+                }
+
+                honorGained() {
+                    return 0;
                 }
             }
             this.opponent = new Player('Player 2');

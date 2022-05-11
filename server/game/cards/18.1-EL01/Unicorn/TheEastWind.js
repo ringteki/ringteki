@@ -27,7 +27,7 @@ class TheEastWind extends StrongholdCard {
     isValidTarget(card, context) {
         const baseCase = !card.facedown && !card.isBroken && card.abilities.actions.length > 0;
         const _canTargetStronghold = this.canTargetStronghold(context);
-        const isRow = card.location !== Locations.StrongholdProvince;
+        const isRow = card.location !== Locations.StrongholdProvince && card.controller === context.player;
         const isMyStronghold = card.location === Locations.StrongholdProvince && card.controller === context.player;
 
         return baseCase && (isRow || (_canTargetStronghold && isMyStronghold));

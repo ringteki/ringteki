@@ -45,6 +45,10 @@ class ProvinceCard extends BaseCard {
         return this.getBaseStrength();
     }
 
+    get printedStrength() {
+        return (parseInt(this.cardData.strength) ? parseInt(this.cardData.strength) : 0);
+    }
+
     getBaseStrength() {
         if(this.anyEffect(EffectNames.SetBaseProvinceStrength)) {
             return this.mostRecentEffect(EffectNames.SetBaseProvinceStrength);

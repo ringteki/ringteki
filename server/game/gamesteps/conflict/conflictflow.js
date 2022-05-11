@@ -500,6 +500,7 @@ class ConflictFlow extends BaseStepWithPipeline {
         if(this.conflict.conflictPassed || this.conflict.conflictFailedToInitiate) {
             return;
         }
+        this.game.raiseEvent(EventNames.OnConflictStarted, { conflict: this.conflict });
         this.queueStep(new ConflictActionWindow(this.game, 'Conflict Action Window', this.conflict));
     }
 

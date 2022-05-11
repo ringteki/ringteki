@@ -32,7 +32,7 @@ describe('Spearhead', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should sac an attachment to let you choose a character', function() {
+        it('should bow an attachment to let you choose a character', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -42,7 +42,7 @@ describe('Spearhead', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.cho);
-            expect(this.player1).toHavePrompt('Select card to sacrifice');
+            expect(this.player1).toHavePrompt('Select card to bow');
             expect(this.player1).toBeAbleToSelect(this.pilot);
             expect(this.player1).not.toBeAbleToSelect(this.ann);
             this.player1.clickCard(this.pilot);
@@ -91,7 +91,7 @@ describe('Spearhead', function() {
             this.player2.clickCard(this.blade);
 
             expect(this.blade.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, sacrificing Ayubune Pilot to discard an attachment on Doji Challenger');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to discard an attachment on Doji Challenger');
             expect(this.getChatLogs(5)).toContain('player2 discards Kakita Blade');
         });
 
@@ -110,7 +110,7 @@ describe('Spearhead', function() {
 
             this.player2.clickPrompt('Bow this character');
             expect(this.challenger.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, sacrificing Ayubune Pilot to bow Doji Challenger');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to bow Doji Challenger');
         });
 
         it('should bow if chosen character has no attachments', function() {
@@ -126,7 +126,7 @@ describe('Spearhead', function() {
             this.player1.clickCard(this.pilot);
             this.player1.clickCard(this.dojiWhisperer);
             expect(this.dojiWhisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, sacrificing Ayubune Pilot to bow Doji Whisperer');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to bow Doji Whisperer');
         });
 
         it('choice - discard (self)', function() {
@@ -152,7 +152,7 @@ describe('Spearhead', function() {
             this.player1.clickCard(this.ann);
 
             expect(this.ann.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, sacrificing Ayubune Pilot to discard an attachment on Akodo Cho');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to discard an attachment on Akodo Cho');
             expect(this.getChatLogs(5)).toContain('player1 discards A New Name');
         });
     });

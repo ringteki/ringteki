@@ -31,8 +31,8 @@ class ExpertBartering extends DrawCard {
                 }))
             ]),
             cannotTargetFirst: true,
-            effect: '{1}switch it with {2}',
-            effectArgs: context => [context.costs.optionalFateCost > 0 ? 'spend a fate and ' : '', context.target]
+            effect: 'switch {1} with {2}',
+            effectArgs: context => [context.source, context.target]
         });
     }
 }
