@@ -25,34 +25,38 @@ class FieldBarracks extends DrawCard {
                         AbilityDsl.effects.changeType(CardTypes.Attachment),
                         AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
                             title: 'Play a character or discard a card',
-                            effect: 'play or discard {0}',
+                            effect: '{1}play or discard {2}',
+                            effectArgs: context => context.target.facedown ? ['reveal a facedown card and ', 'it'] : ['', context.target],
                             condition: context => context.source.parent,
                             target: {
                                 cardType: [CardTypes.Character, CardTypes.Event, CardTypes.Holding],
                                 location: Locations.Provinces,
                                 controller: Players.Self,
-                                cardCondition: (card, context) => card.isFaceup() && card.location === context.source.parent.location,
-                                gameAction: AbilityDsl.actions.chooseAction({
-                                    messages: {
-                                        'Discard and refill faceup': '{0} chooses to discard {1} and refill the province faceup',
-                                        'Play this card': '{0} chooses to play {1}'
-                                    },
-                                    choices: {
-                                        'Discard and refill faceup': AbilityDsl.actions.multiple([
-                                            AbilityDsl.actions.moveCard({ destination: Locations.DynastyDiscardPile }),
-                                            AbilityDsl.actions.refillFaceup(context => ({
-                                                target: context.player,
-                                                location: context.source.parent.location
-                                            }))
-                                        ]),
-                                        'Play this card': AbilityDsl.actions.playCard({
-                                            source: this,
-                                            playType: PlayTypes.PlayFromHand,
-                                            ignoredRequirements: ['phase'],
-                                            playAction: context.target ? new PlayDynastyAsConflictCharacterAction(context.target, false) : undefined
-                                        })
-                                    }
-                                })
+                                cardCondition: (card, context) => card.location === context.source.parent.location,
+                                gameAction: AbilityDsl.actions.sequential([
+                                    AbilityDsl.actions.reveal(),
+                                    AbilityDsl.actions.chooseAction({
+                                        messages: {
+                                            'Discard and refill faceup': '{0} chooses to discard {1} and refill the province faceup',
+                                            'Play this card': '{0} chooses to play {1}'
+                                        },
+                                        choices: {
+                                            'Discard and refill faceup': AbilityDsl.actions.multiple([
+                                                AbilityDsl.actions.moveCard({ destination: Locations.DynastyDiscardPile }),
+                                                AbilityDsl.actions.refillFaceup(context => ({
+                                                    target: context.player,
+                                                    location: context.source.parent.location
+                                                }))
+                                            ]),
+                                            'Play this card': AbilityDsl.actions.playCard({
+                                                source: this,
+                                                playType: PlayTypes.PlayFromHand,
+                                                ignoredRequirements: ['phase'],
+                                                playAction: context.target ? new PlayDynastyAsConflictCharacterAction(context.target, false) : undefined
+                                            })
+                                        }
+                                    })
+                                ])
                             },
                             then: context => {
                                 if(!context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.hasTrait('commander'))) {

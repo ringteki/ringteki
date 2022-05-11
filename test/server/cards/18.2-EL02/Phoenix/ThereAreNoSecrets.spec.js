@@ -204,5 +204,75 @@ describe('There Are No Secrets', function() {
                 expect(this.player2.fate).toBe(2);
             });
         });
+
+        describe('Limit/Max Test', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        fate: 1,
+                        inPlay: ['iuchi-wayfinder', 'moto-chagatai'],
+                        hand: ['there-are-no-secrets', 'there-are-no-secrets', 'i-am-ready', 'i-am-ready', 'i-am-ready', 'i-am-ready', 'i-am-ready']
+                    }
+                });
+                this.wayfinder = this.player1.findCardByName('iuchi-wayfinder');
+                this.chagatai = this.player1.findCardByName('moto-chagatai');
+                this.wayfinder.fate = 3;
+                this.chagatai.fate = 2;
+                this.secrets1 = this.player1.filterCardsByName('there-are-no-secrets')[0];
+                this.secrets2 = this.player1.filterCardsByName('there-are-no-secrets')[1];
+                this.ready1 = this.player1.filterCardsByName('i-am-ready')[0];
+                this.ready2 = this.player1.filterCardsByName('i-am-ready')[1];
+                this.ready3 = this.player1.filterCardsByName('i-am-ready')[2];
+                this.ready4 = this.player1.filterCardsByName('i-am-ready')[3];
+                this.ready5 = this.player1.filterCardsByName('i-am-ready')[4];
+
+                this.wayfinder.bow();
+                this.chagatai.bow();
+                this.player1.playAttachment(this.secrets1, this.wayfinder);
+                this.player2.pass();
+                this.player1.playAttachment(this.secrets2, this.chagatai);
+                this.player2.pass();
+            });
+
+            it('each should work twice, up to 3 total among all copies', function() {
+                let fate = this.player1.fate;
+                this.player1.clickCard(this.ready1);
+                this.player1.clickCard(this.wayfinder);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.secrets1);
+                this.player1.clickCard(this.secrets1);
+                expect(this.player1.fate).toBe(fate + 1);
+                this.wayfinder.bow();
+                this.player2.pass();
+
+                this.player1.clickCard(this.ready2);
+                this.player1.clickCard(this.wayfinder);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.secrets1);
+                this.player1.clickCard(this.secrets1);
+                expect(this.player1.fate).toBe(fate + 2);
+                this.wayfinder.bow();
+                this.player2.pass();
+
+                this.player1.clickCard(this.ready3);
+                this.player1.clickCard(this.wayfinder);
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                this.player2.pass();
+
+                this.player1.clickCard(this.ready4);
+                this.player1.clickCard(this.chagatai);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.secrets2);
+                this.player1.clickCard(this.secrets2);
+                expect(this.player1.fate).toBe(fate + 3);
+                this.chagatai.bow();
+                this.player2.pass();
+
+                this.player1.clickCard(this.ready5);
+                this.player1.clickCard(this.chagatai);
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            });
+        });
     });
 });

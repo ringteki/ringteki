@@ -48,7 +48,7 @@ describe('Biased Arbitrator', function() {
             expect(this.player1).toBeAbleToSelect(this.arbitrator);
             this.player1.clickCard(this.arbitrator);
 
-            expect(this.player1).not.toHavePromptButton('Eager Scout');
+            expect(this.player1).toHavePromptButton('Eager Scout');
             expect(this.player1).toHavePromptButton('Hida Guardian');
             expect(this.player1).toHavePromptButton('Doji Whisperer');
             expect(this.player1).not.toHavePromptButton('Brash Samurai');

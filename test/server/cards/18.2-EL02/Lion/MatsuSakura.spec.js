@@ -4,61 +4,154 @@ describe('Matsu Sakura', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['countryside-trader', 'matsu-sakura'],
-                    provinces: ['kenson-no-gakka', 'abandoning-honor', 'brother-s-gift-dojo'],
-                    hand: ['cloud-the-mind', 'fine-katana', 'ornate-fan', 'forebearer-s-echoes'],
-                    dynastyDiscard: ['iuchi-farseer']
+                    inPlay: ['doji-kuwanan', 'matsu-sakura'],
+                    hand: ['let-go', 'fine-katana', 'fine-katana', 'fine-katana', 'fine-katana']
                 },
                 player2: {
-                    inPlay: ['countryside-trader', 'cunning-negotiator'],
-                    provinces: ['midnight-revels', 'upholding-authority', 'manicured-garden', 'temple-of-the-dragons'],
-                    dynastyDiscard: ['daidoji-marketplace']
+                    provinces: ['midnight-revels', 'restoration-of-balance', 'manicured-garden', 'magistrate-station'],
+                    dynastyDiscard: ['iron-mine']
                 }
             });
 
-            this.trader = this.player1.findCardByName('countryside-trader');
-            this.kensonNoGakka = this.player1.findCardByName('kenson-no-gakka', 'province 1');
-            this.upholding = this.player2.findCardByName('upholding-authority', 'province 2');
-            this.brothersGiftDojo = this.player1.findCardByName('brother-s-gift-dojo', 'province 3');
+            this.kuwanan = this.player1.findCardByName('doji-kuwanan');
+            this.sakura = this.player1.findCardByName('matsu-sakura');
 
-            this.trader2 = this.player2.findCardByName('countryside-trader');
             this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
-            this.abandoning = this.player1.findCardByName('abandoning-honor', 'province 2');
+            this.restoration = this.player2.findCardByName('restoration-of-balance', 'province 2');
             this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
-            this.templeOfDragons = this.player2.findCardByName('temple-of-the-dragons', 'province 4');
+            this.station = this.player2.findCardByName('magistrate-station', 'province 4');
 
-            this.tsanuri = this.player1.findCardByName('matsu-sakura');
-            this.negotiator = this.player2.findCardByName('cunning-negotiator');
-            this.marketPlace = this.player2.findCardByName('daidoji-marketplace');
-            this.player2.placeCardInProvince(this.marketPlace, 'province 4');
-
-            this.farseer = this.player1.findCardByName('iuchi-farseer');
-            this.echoes = this.player1.findCardByName('forebearer-s-echoes');
-
-            this.revels.facedown = false;
-            this.manicuredGarden.facedown = false;
-            this.templeOfDragons.facedown = true;
-
-            this.trader.fate = 1;
-            this.trader2.fate = 1;
-
-            this.game.checkGameState(true);
+            this.mine = this.player2.findCardByName('iron-mine');
         });
 
-        it('should interrupt reactions', function() {
+        it('should trigger for reactions', function() {
+            this.player2.placeCardInProvince(this.mine, this.revels.location);
+            this.mine.facedown = false;
+
             this.noMoreActions();
 
             this.initiateConflict({
-                attackers: [this.tsanuri],
+                attackers: [this.sakura],
                 type: 'military',
                 province: this.revels
             });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
             this.player2.clickCard(this.revels);
-            this.player2.clickCard(this.negotiator);
+            this.player2.clickCard(this.kuwanan);
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.tsanuri);
-            this.player1.clickCard(this.tsanuri);
-            expect(this.getChatLogs(5)).toContain('player1 uses Matsu Sakura to cancel the effects of Midnight Revels\'s ability');
+            expect(this.player1).toBeAbleToSelect(this.sakura);
+            this.player1.clickCard(this.sakura);
+
+            expect(this.getChatLogs(10)).toContain('player2 uses Midnight Revels to bow Doji Kuwanan');
+            expect(this.getChatLogs(10)).toContain('player1 uses Matsu Sakura to cancel the effects of Midnight Revels\'s ability');
+            expect(this.kuwanan.bowed).toBe(false);
+        });
+
+        it('should not trigger without a faceup card', function() {
+            this.player2.placeCardInProvince(this.mine, this.revels.location);
+            this.mine.facedown = true;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.sakura],
+                type: 'military',
+                province: this.revels
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            this.player2.clickCard(this.revels);
+            this.player2.clickCard(this.kuwanan);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+
+            expect(this.getChatLogs(10)).toContain('player2 uses Midnight Revels to bow Doji Kuwanan');
+            expect(this.kuwanan.bowed).toBe(true);
+        });
+
+        it('should not trigger if not attacking', function() {
+            this.player2.placeCardInProvince(this.mine, this.revels.location);
+            this.mine.facedown = false;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.kuwanan],
+                type: 'military',
+                province: this.revels
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            this.player2.clickCard(this.revels);
+            this.player2.clickCard(this.kuwanan);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+
+            expect(this.getChatLogs(10)).toContain('player2 uses Midnight Revels to bow Doji Kuwanan');
+            expect(this.kuwanan.bowed).toBe(true);
+        });
+
+        it('should not trigger if not attacked province', function() {
+            this.player2.placeCardInProvince(this.mine, this.station.location);
+            this.mine.facedown = false;
+            this.station.facedown = false;
+
+            this.kuwanan.bow();
+            this.kuwanan.honor();
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.sakura],
+                defenders: [],
+                type: 'military',
+                province: this.manicuredGarden
+            });
+
+            expect(this.kuwanan.bowed).toBe(true);
+            this.player2.clickCard(this.station);
+            this.player2.clickCard(this.kuwanan);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.kuwanan.bowed).toBe(false);
+        });
+
+        it('should work with interrupts', function() {
+            this.player2.placeCardInProvince(this.mine, this.restoration.location);
+            this.mine.facedown = false;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.sakura],
+                defenders: [],
+                type: 'military',
+                province: this.restoration
+            });
+
+            this.noMoreActions();
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            this.player2.clickCard(this.restoration);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.sakura);
+            expect(this.getChatLogs(10)).toContain('player1 uses Matsu Sakura to cancel the effects of Restoration of Balance\'s ability');
+        });
+
+        it('should work with actions', function() {
+            this.player2.placeCardInProvince(this.mine, this.manicuredGarden.location);
+            this.mine.facedown = false;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.sakura],
+                defenders: [],
+                type: 'military',
+                province: this.manicuredGarden
+            });
+
+            this.player2.clickCard(this.manicuredGarden);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.sakura);
+            expect(this.getChatLogs(10)).toContain('player1 uses Matsu Sakura to cancel the effects of Manicured Garden\'s ability');
         });
     });
 });
