@@ -1,7 +1,7 @@
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
-import { EventNames } from '../Constants';
+import { EventNames, EffectNames } from '../Constants';
 import { CalculateHonorLimit } from './Shared/HonorLogic';
 
 export interface TransferHonorProperties extends PlayerActionProperties {
@@ -14,19 +14,29 @@ export class TransferHonorAction extends PlayerAction {
     eventName = EventNames.OnTransferHonor;
     defaultProperties: TransferHonorProperties = { amount: 1, afterBid: false };
 
+    getAmountToTransfer(givingPlayer: Player, receivingPlayer: Player, context: AbilityContext, baseAmount: Number) {
+        let amount = baseAmount;
+        const modifyGivenAmount = givingPlayer.getEffects(EffectNames.ModifyHonorTransferGiven).reduce((a, b) => a + b, 0);
+        const modifyReceivedAmount = receivingPlayer.getEffects(EffectNames.ModifyHonorTransferReceived).reduce((a, b) => a + b, 0);
+        amount = amount + modifyGivenAmount + modifyReceivedAmount
+
+        var [_, amountToTransfer] = CalculateHonorLimit(receivingPlayer, context.game.roundNumber, context.game.currentPhase, amount);
+        return amountToTransfer;
+    }
+
     constructor(propertyFactory: TransferHonorProperties | ((context: AbilityContext) => TransferHonorProperties)) {
         super(propertyFactory);
     }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferHonorProperties;
-        var [_, amountToTransfer] = CalculateHonorLimit(context.player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        var amountToTransfer = this.getAmountToTransfer(context.player, context.player.opponent, context, properties.amount);
         return ['giving {1} honor to {2}', [amountToTransfer, context.player.opponent]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferHonorProperties;
-        var [_, amountToTransfer] = CalculateHonorLimit(context.player, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        var amountToTransfer = this.getAmountToTransfer(context.player.opponent, context.player, context, properties.amount);
         return ['take {1} honor from {0}', [context.player.opponent, amountToTransfer]];
     }
 
@@ -38,6 +48,7 @@ export class TransferHonorAction extends PlayerAction {
             return false;
 
         var [hasLimit, amountToTransfer] = CalculateHonorLimit(player.opponent, context.game.roundNumber, context.game.currentPhase, properties.amount);
+        amountToTransfer = this.getAmountToTransfer(player, player.opponent, context, properties.amount);
         if(hasLimit && !amountToTransfer)
             return false;
 
@@ -52,7 +63,7 @@ export class TransferHonorAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        var [_, amountToTransfer] = CalculateHonorLimit(event.player.opponent, event.context.game.roundNumber, event.context.game.currentPhase, event.amount);
+        var amountToTransfer = this.getAmountToTransfer(event.player, event.player.opponent, event.context, event.amount);
 
         if(event.player && event.player.opponent) {
             event.player.modifyHonor(-amountToTransfer);

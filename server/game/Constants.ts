@@ -175,7 +175,9 @@ export enum EffectNames {
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
-    LimitLegalAttackers = 'limitLegalAttackers'
+    LimitLegalAttackers = 'limitLegalAttackers',
+    ModifyHonorTransferGiven = "modifyHonorTransferGiven",
+    ModifyHonorTransferReceived = "modifyHonorTransferReceived",
 };
 
 export enum Durations {
@@ -269,6 +271,7 @@ export enum EventNames {
     OnReturnRingtoPlay = 'onRemoveRingFromPlay',
     OnReturnHome = 'onReturnHome',
     OnParticipantsReturnHome = 'onParticipantsReturnHome',
+    OnConflictStarted = 'onConflictStarted',
     OnConflictFinished = 'onConflictFinished',
     OnConflictPass = 'onConflictPass',
     OnFavorGloryTied = 'onFavorGloryTied',
@@ -325,6 +328,7 @@ export enum EventNames {
     OnPassActionPhasePriority = 'onPassActionPhasePriority',
     OnGloryCount = 'onGloryCount',
     OnClaimFavor = 'onClaimFavor',
+    OnFlipFavor = 'onFlipFavor',
     OnConflictMoved = 'onConflictMoved',
     OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     OnTheCrashingWave = 'onTheCrashingWave',

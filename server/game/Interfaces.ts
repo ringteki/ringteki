@@ -66,6 +66,7 @@ interface BaseTargetCard extends BaseTarget {
 interface TargetCardExactlyUpTo extends BaseTargetCard {
     mode: TargetModes.Exactly | TargetModes.UpTo,
     numCards: number;
+    sameDiscardPile?: boolean;
 };
 
 interface TargetCardExactlyUpToVariable extends BaseTargetCard {

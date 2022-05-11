@@ -114,5 +114,8 @@ export class AttachAction extends CardGameAction {
             event.card.controller = event.context.player.opponent;
             event.card.updateEffectContexts();
         }
+        if (event.card.parent.getType() === CardTypes.Province) {
+            this.checkForRefillProvince(event.card.parent, event, additionalProperties);
+        }
     }
 }

@@ -89,7 +89,7 @@ const Costs = {
     /**
     * Cost that requires removing a card selected by the player from the game.
     */
-    removeSelfFromGame: () => new GameActionCost(GameActions.removeFromGame()),
+    removeSelfFromGame: properties => new GameActionCost(GameActions.removeFromGame(properties)),
     /**
      * Cost that will dishonor the character that initiated the ability
      */
@@ -511,6 +511,15 @@ const Costs = {
             canPay: function () {
                 return true;
             },
+            getActionName(context) { // eslint-disable-line no-unused-vars
+                return 'optionalFateCost';
+            },
+            getCostMessage: (context) => {
+                if(context.costs.optionalFateCost === 0) {
+                    return undefined;
+                }
+                return ['paying {1} fate', [amount]];
+            },
             resolve: function (context, result) {
                 let fateAvailable = true;
                 if(context.player.fate < amount) {
@@ -545,6 +554,55 @@ const Costs = {
             },
             pay: function (context) {
                 context.player.fate -= context.costs.optionalFateCost;
+            },
+            promptsPlayer: true
+        };
+    },
+    optionalGiveFateCost: function (amount) {
+        return {
+            canPay: function () {
+                return true;
+            },
+            resolve: function (context, result) {
+                let fateAvailable = true;
+                if(context.player.fate < amount) {
+                    fateAvailable = false;
+                }
+                if(!context.player.checkRestrictions('spendFate', context)) {
+                    fateAvailable = false;
+                }
+                if(!context.player.opponent || !context.player.opponent.checkRestrictions('gainFate', context)) {
+                    fateAvailable = false;
+                }
+                let choices = [];
+                let handlers = [];
+                context.costs.optionalFateCost = 0;
+
+                if(fateAvailable) {
+                    choices = ['Yes', 'No'];
+                    handlers = [() => context.costs.optionalFateCost = amount, () => context.costs.optionalFateCost = 0];
+                }
+                if(fateAvailable && result.canCancel) {
+                    choices.push('Cancel');
+                    handlers.push(() => {
+                        result.cancelled = true;
+                    });
+                }
+
+                if(choices.length > 0) {
+                    context.game.promptWithHandlerMenu(context.player, {
+                        activePromptTitle: 'Give your opponent ' + amount + ' fate?',
+                        source: context.source,
+                        choices:  choices,
+                        handlers: handlers
+                    });
+                }
+            },
+            pay: function (context) {
+                context.player.fate -= context.costs.optionalFateCost;
+                if(context.player.opponent) {
+                    context.player.opponent.fate += context.costs.optionalFateCost;
+                }
             },
             promptsPlayer: true
         };

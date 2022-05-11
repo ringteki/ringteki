@@ -57,7 +57,7 @@ describe('The East Wind', function() {
             this.noMoreActions();
         });
 
-        it('should allow selecting a province with an action that can be used (participating or not)', function() {
+        it('should allow selecting a province you control with an action that can be used (participating or not)', function() {
             this.challenger.fate = 10;
 
             this.initiateConflict({
@@ -74,9 +74,9 @@ describe('The East Wind', function() {
             expect(this.player1).not.toBeAbleToSelect(this.kuroiMori);
             expect(this.player1).not.toBeAbleToSelect(this.rallyToTheCause);
             expect(this.player1).not.toBeAbleToSelect(this.riotInTheStreets);
-            expect(this.player1).toBeAbleToSelect(this.alongTheRiverOfGold);
+            expect(this.player1).not.toBeAbleToSelect(this.alongTheRiverOfGold);
             expect(this.player1).not.toBeAbleToSelect(this.frostbittenCrossing);
-            expect(this.player1).toBeAbleToSelect(this.brothersGiftDojo);
+            expect(this.player1).not.toBeAbleToSelect(this.brothersGiftDojo);
 
             expect(this.player1).not.toBeAbleToSelect(this.p1SH);
             expect(this.player1).not.toBeAbleToSelect(this.p2SH);
@@ -102,9 +102,9 @@ describe('The East Wind', function() {
             expect(this.player1).not.toBeAbleToSelect(this.kuroiMori);
             expect(this.player1).not.toBeAbleToSelect(this.rallyToTheCause);
             expect(this.player1).not.toBeAbleToSelect(this.riotInTheStreets);
-            expect(this.player1).toBeAbleToSelect(this.alongTheRiverOfGold);
+            expect(this.player1).not.toBeAbleToSelect(this.alongTheRiverOfGold);
             expect(this.player1).not.toBeAbleToSelect(this.frostbittenCrossing);
-            expect(this.player1).toBeAbleToSelect(this.brothersGiftDojo);
+            expect(this.player1).not.toBeAbleToSelect(this.brothersGiftDojo);
 
             expect(this.player1).toBeAbleToSelect(this.p1SH);
             expect(this.player1).not.toBeAbleToSelect(this.p2SH);
