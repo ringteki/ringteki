@@ -1,28 +1,63 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
+const EventRegistrar = require('../../../eventregistrar.js');
+import { CardTypes, EventNames, Players } from '../../../Constants.js';
 
 class KakitasFirstKata extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Ready a character',
-            when: {
-                onCardBowed: (event, context) => event.card.controller === context.player &&
-                    (event.card.isFaction('crane') || event.card.hasTrait('duelist')) && event.card.type === CardTypes.Character &&
-                    (event.context.source.type === 'ring' || event.context.ability.isCardAbility()) &&
-                    context.player.opponent && event.context.player === context.player.opponent
+        this.bowedCharactersThisConflict = [];
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnConflictFinished, EventNames.OnCardBowed]);
+
+        this.action({
+            title: 'Prevent opponent\'s bow and move effects',
+            condition: context => context.game.isDuringConflict(),
+            target: {
+                cardType: CardTypes.Character,
+                controller: Players.Self,
+                cardCondition: card => card.hasTrait('duelist') || card.isFaction('crane'),
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.cardLastingEffect(context => ({
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'sendHome',
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
+                        })
+                    })),
+                    AbilityDsl.actions.cardLastingEffect(context => ({
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'moveToConflict',
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
+                        })
+                    })),
+                    AbilityDsl.actions.cardLastingEffect(context => ({
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'bow',
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
+                        })
+                    })),
+                    AbilityDsl.actions.conditional({
+                        condition: (context) => this.bowedCharactersThisConflict.includes(context.target),
+                        trueGameAction: AbilityDsl.actions.ready(context => ({ target: context.target })),
+                        falseGameAction: AbilityDsl.actions.draw({ amount: 0 })
+                    })
+                ])
             },
-            cannotBeMirrored: true,
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.ready(context => ({ target: context.event.card })),
-                AbilityDsl.actions.discardAtRandom(context => ({
-                    target: context.player.opponent,
-                    amount: context.event.card.glory
-                }))
-            ]),
-            effect: 'ready {1} and make {2} discard {3} card{4} at random',
-            effectArgs: context => [context.event.card, context.player.opponent, context.event.card.glory, context.event.card.glory !== 1 ? 's' : '']
+            effect: '{1}prevent opponents\' actions from bowing or moving {0}',
+            effectArgs: (context) => this.bowedCharactersThisConflict.includes(context.target) ? 'ready and ' : ''
         });
+    }
+
+    onConflictFinished() {
+        this.bowedCharactersThisConflict = [];
+    }
+
+    onCardBowed(event) {
+        if(event.card.type === CardTypes.Character) {
+            this.bowedCharactersThisConflict = this.bowedCharactersThisConflict.concat(event.card);
+        }
     }
 }
 

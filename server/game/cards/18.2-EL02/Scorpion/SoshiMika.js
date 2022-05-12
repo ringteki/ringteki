@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
-class SoshiMiyako extends DrawCard {
+class SoshiMika extends DrawCard {
     setupCardAbilities() {
         this.forcedReaction({
             title: 'After the conflict phase begins',
@@ -30,6 +30,6 @@ class SoshiMiyako extends DrawCard {
     }
 }
 
-SoshiMiyako.id = 'soshi-miyako';
+SoshiMika.id = 'soshi-mika';
 
-module.exports = SoshiMiyako;
+module.exports = SoshiMika;

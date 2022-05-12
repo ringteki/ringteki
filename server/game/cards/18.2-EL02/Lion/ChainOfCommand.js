@@ -1,9 +1,13 @@
-import { Locations, CardTypes, PlayTypes } from '../../../Constants.js';
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
+const EventRegistrar = require('../../../eventregistrar.js');
+import { Locations, CardTypes, PlayTypes, EventNames } from '../../../Constants.js';
 
 class ChainOfCommand extends DrawCard {
     setupCardAbilities() {
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnCardPlayed]);
+
         this.persistentEffect({
             location: Locations.ConflictDiscardPile,
             effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
@@ -18,19 +22,18 @@ class ChainOfCommand extends DrawCard {
                 activePromptTitle: 'Choose a unique character',
                 cardType: CardTypes.Character,
                 cardCondition: card => card.isUnique(),
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.ready(),
-                    AbilityDsl.actions.removeFromGame(context => ({
-                        location: Locations.Any,
-                        target: context.source
-                    }))
-                ])
-            },
-            effect: 'ready {0} and remove {1} from the game',
-            effectArgs: context => [
-                context.source,
-                context.source.owner]
+                gameAction: AbilityDsl.actions.ready()
+            }
         });
+    }
+
+    onCardPlayed(event) {
+        if(event.card === this) {
+            if(this.location !== Locations.RemovedFromGame) {
+                this.game.addMessage('{0} is removed from the game due the effects of {0}', this);
+                this.owner.moveCard(this, Locations.RemovedFromGame);
+            }
+        }
     }
 }
 

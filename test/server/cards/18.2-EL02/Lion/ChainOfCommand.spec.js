@@ -31,11 +31,11 @@ describe('Chain of Command', function() {
                 this.dojiKuwanan.bowed = true;
             });
 
-            it('should bow a non-unique to stand a unique and remove from game (should also allow you to choose an already standing unique)', function() {
+            it('should bow a non-unique to stand a unique and remove from game', function() {
                 this.player1.clickCard(this.service);
                 expect(this.player1).toHavePrompt('Choose a unique character');
                 expect(this.player1).not.toBeAbleToSelect(this.brashSamurai);
-                expect(this.player1).toBeAbleToSelect(this.kakitaToshimoko);
+                expect(this.player1).not.toBeAbleToSelect(this.kakitaToshimoko);
                 expect(this.player1).toBeAbleToSelect(this.daidojiUji);
                 expect(this.player1).not.toBeAbleToSelect(this.dojiChallenger);
                 expect(this.player1).not.toBeAbleToSelect(this.naiveStudent);
@@ -55,25 +55,11 @@ describe('Chain of Command', function() {
                 this.player1.clickCard(this.brashSamurai);
                 expect(this.brashSamurai.bowed).toBe(true);
                 expect(this.daidojiUji.bowed).toBe(false);
-                expect(this.getChatLogs(1)).toContain('player1 plays Chain of Command, bowing Brash Samurai to ready Daidoji Uji and remove Chain of Command from the game');
-                expect(this.service.location).toBe('removed from game');
+                expect(this.getChatLogs(5)).toContain('player1 plays Chain of Command, bowing Brash Samurai to ready Daidoji Uji');
+                expect(this.getChatLogs(5)).toContain('Chain of Command is removed from the game due the effects of Chain of Command');
             });
 
-            it('should remove from game even if you stand no one', function() {
-                this.player1.clickCard(this.service);
-                expect(this.player1).toHavePrompt('Choose a unique character');
-                expect(this.kakitaToshimoko.bowed).toBe(false);
-                this.player1.clickCard(this.kakitaToshimoko);
-                expect(this.player1).toHavePrompt('Select card to bow');
-                expect(this.player1).toBeAbleToSelect(this.brashSamurai);
-                this.player1.clickCard(this.brashSamurai);
-                expect(this.brashSamurai.bowed).toBe(true);
-                expect(this.kakitaToshimoko.bowed).toBe(false);
-                expect(this.getChatLogs(1)).toContain('player1 plays Chain of Command, bowing Brash Samurai to ready Kakita Toshimoko and remove Chain of Command from the game');
-                expect(this.service.location).toBe('removed from game');
-            });
-
-            it('should go to the discard pile if cancelled', function() {
+            it('should remove from the game if cancelled', function() {
                 this.player1.pass();
                 this.player2.clickCard('way-of-the-crane');
                 this.player2.clickCard(this.dojiKuwanan);
@@ -88,7 +74,8 @@ describe('Chain of Command', function() {
                 expect(this.player2).toHavePrompt('Action Window');
                 expect(this.daidojiUji.bowed).toBe(true);
                 expect(this.brashSamurai.bowed).toBe(true);
-                expect(this.service.location).toBe('conflict discard pile');
+                expect(this.service.location).toBe('removed from game');
+                expect(this.getChatLogs(5)).toContain('Chain of Command is removed from the game due the effects of Chain of Command');
             });
 
             it('should be playable from discard and remove from game', function() {
@@ -112,81 +99,6 @@ describe('Chain of Command', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 expect(this.daidojiUji.bowed).toBe(false);
                 expect(this.brashSamurai.bowed).toBe(true);
-                expect(this.service.location).toBe('removed from game');
-            });
-
-            it('same copy should be playable from discard if cancelled from hand', function() {
-                this.noMoreActions();
-                this.dojiChallenger.bowed = false;
-
-                this.initiateConflict({
-                    type: 'military',
-                    attackers: [this.brashSamurai],
-                    defenders: []
-                });
-
-                this.player2.clickCard('way-of-the-crane');
-                this.player2.clickCard(this.dojiKuwanan);
-                expect(this.dojiKuwanan.isHonored).toBe(true);
-
-                this.player1.clickCard(this.service);
-                this.player1.clickCard(this.daidojiUji);
-                this.player1.clickCard(this.brashSamurai);
-
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect('voice-of-honor');
-                this.player2.clickCard('voice-of-honor');
-                expect(this.player2).toHavePrompt('Conflict Action Window');
-
-                expect(this.brashSamurai.bowed).toBe(true);
-                expect(this.daidojiUji.bowed).toBe(true);
-                expect(this.service.location).toBe('conflict discard pile');
-                this.player2.pass();
-
-                this.player1.clickCard(this.service);
-                this.player1.clickCard(this.daidojiUji);
-                this.player1.clickCard(this.dojiChallenger);
-                expect(this.daidojiUji.bowed).toBe(false);
-                expect(this.dojiChallenger.bowed).toBe(true);
-                expect(this.service.location).toBe('removed from game');
-            });
-
-            it('same copy should be playable from discard if cancelled from discard', function() {
-                this.player1.playAttachment(this.sharpenTheMind, this.dojiChallenger);
-                this.noMoreActions();
-
-                this.dojiChallenger.bowed = false;
-
-                this.initiateConflict({
-                    type: 'military',
-                    attackers: [this.brashSamurai],
-                    defenders: []
-                });
-
-                this.player2.pass();
-                this.player1.clickCard(this.sharpenTheMind);
-                this.player1.clickCard(this.service);
-
-                this.player2.clickCard('way-of-the-crane');
-                this.player2.clickCard(this.dojiKuwanan);
-                expect(this.dojiKuwanan.isHonored).toBe(true);
-                this.player1.clickCard(this.service);
-                this.player1.clickCard(this.daidojiUji);
-                this.player1.clickCard(this.brashSamurai);
-
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect('voice-of-honor');
-                this.player2.clickCard('voice-of-honor');
-                expect(this.player2).toHavePrompt('Conflict Action Window');
-                expect(this.brashSamurai.bowed).toBe(true);
-                expect(this.service.location).toBe('conflict discard pile');
-                this.player2.pass();
-
-                this.player1.clickCard(this.service);
-                this.player1.clickCard(this.daidojiUji);
-                this.player1.clickCard(this.dojiChallenger);
-                expect(this.daidojiUji.bowed).toBe(false);
-                expect(this.dojiChallenger.bowed).toBe(true);
                 expect(this.service.location).toBe('removed from game');
             });
         });

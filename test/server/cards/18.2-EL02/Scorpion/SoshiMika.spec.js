@@ -1,4 +1,4 @@
-describe('Soshi Miyako', function() {
+describe('Soshi Mika', function() {
     integration(function() {
         describe('Triggered ability', function() {
             beforeEach(function() {
@@ -6,14 +6,14 @@ describe('Soshi Miyako', function() {
                     phase: 'draw',
                     player1: {
                         honor: 10,
-                        inPlay: ['soshi-miyako']
+                        inPlay: ['soshi-mika']
                     },
                     player2: {
                         honor: 10
                     }
                 });
 
-                this.bayushiShoju = this.player1.findCardByName('soshi-miyako');
+                this.mika = this.player1.findCardByName('soshi-mika');
 
                 // select bid for both players
                 this.player1.clickPrompt('1');
@@ -35,7 +35,7 @@ describe('Soshi Miyako', function() {
                 expect(this.player1.hand.length).toBe(p1Hand + 2);
                 expect(this.player2.hand.length).toBe(p2Hand + 2);
 
-                expect(this.getChatLogs(1)).toContain('player1 uses Soshi Miyako to have each player lose an honor and draw two cards');
+                expect(this.getChatLogs(1)).toContain('player1 uses Soshi Mika to have each player lose an honor and draw two cards');
             });
 
             it('should let player 1 win if both are at 1 honor', function() {
@@ -65,7 +65,7 @@ describe('Soshi Miyako', function() {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['soshi-miyako', 'steward-of-law'],
+                        inPlay: ['soshi-mika', 'steward-of-law'],
                         hand: ['severed-from-the-stream']
                     },
                     player2: {
@@ -73,7 +73,7 @@ describe('Soshi Miyako', function() {
                     }
                 });
 
-                this.miyako = this.player1.findCardByName('soshi-miyako');
+                this.mika = this.player1.findCardByName('soshi-mika');
                 this.steward = this.player1.findCardByName('steward-of-law');
                 this.diplomat = this.player2.findCardByName('doji-diplomat');
                 this.stream = this.player1.findCardByName('severed-from-the-stream');
@@ -89,10 +89,10 @@ describe('Soshi Miyako', function() {
                 });
                 expect(this.game.currentConflict.attackerSkill).toBe(1);
                 this.player2.pass();
-                this.player1.clickCard(this.miyako);
+                this.player1.clickCard(this.mika);
                 expect(this.player1.player.imperialFavor).toBe('military');
                 expect(this.game.currentConflict.attackerSkill).toBe(2);
-                expect(this.getChatLogs(5)).toContain('player1 uses Soshi Miyako to flip the Imperial favor');
+                expect(this.getChatLogs(5)).toContain('player1 uses Soshi Mika to flip the Imperial favor');
             });
 
             it('flip favor (player 2)', function() {
@@ -105,10 +105,10 @@ describe('Soshi Miyako', function() {
                 });
                 expect(this.game.currentConflict.defenderSkill).toBe(0);
                 this.player2.pass();
-                this.player1.clickCard(this.miyako);
+                this.player1.clickCard(this.mika);
                 expect(this.player2.player.imperialFavor).toBe('military');
                 expect(this.game.currentConflict.defenderSkill).toBe(1);
-                expect(this.getChatLogs(5)).toContain('player1 uses Soshi Miyako to flip the Imperial favor');
+                expect(this.getChatLogs(5)).toContain('player1 uses Soshi Mika to flip the Imperial favor');
             });
 
             it('no trigger (no one has favor)', function() {
@@ -120,7 +120,7 @@ describe('Soshi Miyako', function() {
                 });
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                this.player1.clickCard(this.miyako);
+                this.player1.clickCard(this.mika);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
@@ -134,7 +134,7 @@ describe('Soshi Miyako', function() {
                 });
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                this.player1.clickCard(this.miyako);
+                this.player1.clickCard(this.mika);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
         });

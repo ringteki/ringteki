@@ -46,7 +46,53 @@ describe('Funeral', function() {
             expect(this.player1).toHavePrompt('Game Won');
         });
 
+        it('should not trigger when favor not claimed', function() {
+            this.advancePhases('conflict');
+            this.player1.player.dynastyDeck.each(card => {
+                this.player1.player.moveCard(card, 'dynasty discard pile');
+            });
+            this.imperialStorehouse.facedown = true;
+            this.favorableGround.facedown = true;
+            this.forceOfTheRiver = this.player1.playAttachment('force-of-the-river', this.soshiIllusionist);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.soshiIllusionist],
+                defenders: []
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.forceOfTheRiver);
+            expect(this.imperialStorehouse.location).toBe('removed from game');
+            expect(this.favorableGround.location).toBe('removed from game');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Game Won');
+        });
+
+        it('should not trigger when favor military', function() {
+            this.player1.player.imperialFavor = 'military';
+            this.advancePhases('conflict');
+            this.player1.player.dynastyDeck.each(card => {
+                this.player1.player.moveCard(card, 'dynasty discard pile');
+            });
+            this.imperialStorehouse.facedown = true;
+            this.favorableGround.facedown = true;
+            this.forceOfTheRiver = this.player1.playAttachment('force-of-the-river', this.soshiIllusionist);
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.soshiIllusionist],
+                defenders: []
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.forceOfTheRiver);
+            expect(this.imperialStorehouse.location).toBe('removed from game');
+            expect(this.favorableGround.location).toBe('removed from game');
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Game Won');
+        });
+
         it('should trigger when losing due to running out of dynasty cards and remove self from game', function() {
+            this.player2.player.imperialFavor = 'political';
             this.advancePhases('conflict');
             this.player1.player.dynastyDeck.each(card => {
                 this.player1.player.moveCard(card, 'dynasty discard pile');
@@ -71,9 +117,11 @@ describe('Funeral', function() {
             expect(this.player2.honor).toBe(11);
             expect(this.duty.location).toBe('removed from game');
             expect(this.getChatLogs(5)).toContain('player1 plays Funeral to cancel their honor loss, then gain 1 honor');
+            expect(this.getChatLogs(5)).toContain('Funeral is removed from the game due the effects of Funeral');
         });
 
         it('should trigger when losing due to running out of conflict cards', function() {
+            this.player2.player.imperialFavor = 'political';
             this.advancePhases('conflict');
             this.player1.player.conflictDeck.each(card => {
                 this.player1.player.moveCard(card, 'conflict discard pile');
@@ -88,6 +136,7 @@ describe('Funeral', function() {
         });
 
         it('should trigger when losing due to dishonored character leaving play', function() {
+            this.player1.player.imperialFavor = 'political';
             this.advancePhases('conflict');
             this.soshiIllusionist.dishonor();
             this.player1.honor = 1;
@@ -108,6 +157,7 @@ describe('Funeral', function() {
         });
 
         it('should trigger when Banzai is kicked, but not allow the second resolution', function() {
+            this.player1.player.imperialFavor = 'political';
             this.advancePhases('conflict');
             this.player1.honor = 1;
             this.noMoreActions();

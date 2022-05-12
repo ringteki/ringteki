@@ -8,7 +8,7 @@ describe('Dragonfly Mediator', function() {
                     hand: ['i-can-swim', 'way-of-the-scorpion']
                 },
                 player2: {
-                    hand: ['a-fate-worse-than-death', 'way-of-the-crane']
+                    hand: ['a-fate-worse-than-death', 'way-of-the-crane', 'let-go']
                 }
             });
 
@@ -18,6 +18,7 @@ describe('Dragonfly Mediator', function() {
 
             this.afwtd = this.player2.findCardByName('a-fate-worse-than-death');
             this.crane = this.player2.findCardByName('way-of-the-crane');
+            this.letGo = this.player2.findCardByName('let-go');
         });
 
         it('should prompt each player to reveal a card from their hand', function() {
@@ -31,17 +32,19 @@ describe('Dragonfly Mediator', function() {
             expect(this.getChatLogs(8)).not.toContain('player1 uses Dragonfly Mediator to have each player reveal cards from their hand');
             expect(this.getChatLogs(8)).not.toContain('Dragonfly Mediator sees I Can Swim from player1');
 
-            expect(this.player2).toHavePrompt('Choose two cards to reveal');
+            expect(this.player2).toHavePrompt('Choose three cards to reveal');
             expect(this.player2).toBeAbleToSelect(this.afwtd);
             expect(this.player2).toBeAbleToSelect(this.crane);
+            expect(this.player2).toBeAbleToSelect(this.letGo);
 
             this.player2.clickCard(this.crane);
             this.player2.clickCard(this.afwtd);
+            this.player2.clickCard(this.letGo);
             this.player2.clickPrompt('Done');
 
             expect(this.getChatLogs(8)).toContain('player1 uses Dragonfly Mediator to have each player reveal cards from their hand');
             expect(this.getChatLogs(8)).toContain('Dragonfly Mediator sees I Can Swim from player1');
-            expect(this.getChatLogs(8)).toContain('Dragonfly Mediator sees Way of the Crane and A Fate Worse Than Death from player2');
+            expect(this.getChatLogs(8)).toContain('Dragonfly Mediator sees Way of the Crane, A Fate Worse Than Death and Let Go from player2');
         });
     });
 });
