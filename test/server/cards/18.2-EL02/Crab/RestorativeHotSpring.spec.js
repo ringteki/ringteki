@@ -5,7 +5,7 @@ describe('Hot Springs', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['steadfast-witch-hunter', 'vanguard-warrior'],
-                    dynastyDiscard: ['restorative-hot-springs']
+                    dynastyDiscard: ['restorative-hot-spring']
                 },
                 player2: {
                     inPlay: ['doji-challenger'],
@@ -14,7 +14,7 @@ describe('Hot Springs', function() {
             });
             this.steadfastWitchHunter = this.player1.findCardByName('steadfast-witch-hunter');
             this.warrior = this.player1.findCardByName('vanguard-warrior');
-            this.springs = this.player1.findCardByName('restorative-hot-springs');
+            this.springs = this.player1.findCardByName('restorative-hot-spring');
 
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.assassination = this.player2.findCardByName('assassination');
@@ -47,7 +47,7 @@ describe('Hot Springs', function() {
             expect(this.warrior.location).toBe('play area');
             expect(this.springs.location).toBe('removed from game');
             expect(this.player1.fate).toBe(fate - 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Restorative Hot Springs, spending 1 fate to prevent Vanguard Warrior from leaving play, removing itself from the game instead');
+            expect(this.getChatLogs(5)).toContain('player1 uses Restorative Hot Spring, spending 1 fate to prevent Vanguard Warrior from leaving play, removing itself from the game instead');
         });
     });
 });

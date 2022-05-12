@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { CardTypes, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
-class RestorativeHotSprings extends DrawCard {
+class RestorativeHotSpring extends DrawCard {
     setupCardAbilities() {
         this.wouldInterrupt({
             title: 'Prevent a character from leaving play',
@@ -19,6 +19,6 @@ class RestorativeHotSprings extends DrawCard {
     }
 }
 
-RestorativeHotSprings.id = 'restorative-hot-springs';
+RestorativeHotSpring.id = 'restorative-hot-spring';
 
-module.exports = RestorativeHotSprings;
+module.exports = RestorativeHotSpring;
