@@ -22,6 +22,6 @@ class SearchTheArchives extends DrawCard {
     }
 }
 
-SearchTheArchives.id = 'search-the-archives';
+SearchTheArchives.id = 'empty-city-archivist';
 
 module.exports = SearchTheArchives;

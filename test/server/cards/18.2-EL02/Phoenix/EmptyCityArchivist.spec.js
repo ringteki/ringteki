@@ -1,11 +1,11 @@
-describe('Search the Archives', function () {
+describe('Empty City Archivist', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['isawa-atsuko', 'solemn-scholar', 'isawa-tadaka', 'seppun-ishikawa'],
-                    hand: ['search-the-archives', 'search-the-archives', 'search-the-archives'],
+                    hand: ['empty-city-archivist', 'empty-city-archivist', 'empty-city-archivist'],
                     conflictDiscard: ['embrace-the-void', 'hurricane-punch', 'display-of-power', 'way-of-the-scorpion', 'isawa-tadaka-2', 'all-and-nothing', 'censure']
                 },
                 player2: {
@@ -16,9 +16,9 @@ describe('Search the Archives', function () {
             this.atsuko = this.player1.findCardByName('isawa-atsuko');
             this.scholar = this.player1.findCardByName('solemn-scholar');
             this.tadaka = this.player1.findCardByName('isawa-tadaka');
-            this.scroll1 = this.player1.filterCardsByName('search-the-archives')[0];
-            this.scroll2 = this.player1.filterCardsByName('search-the-archives')[1];
-            this.scroll3 = this.player1.filterCardsByName('search-the-archives')[2];
+            this.scroll1 = this.player1.filterCardsByName('empty-city-archivist')[0];
+            this.scroll2 = this.player1.filterCardsByName('empty-city-archivist')[1];
+            this.scroll3 = this.player1.filterCardsByName('empty-city-archivist')[2];
 
             this.etv = this.player1.findCardByName('embrace-the-void');
             this.punch = this.player1.findCardByName('hurricane-punch');
@@ -46,7 +46,7 @@ describe('Search the Archives', function () {
             expect(this.player1).toHaveDisabledPromptButton('Censure');
             this.player1.clickPrompt('Display of Power');
             expect(this.dop.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
+            expect(this.getChatLogs(5)).toContain('player1 uses Empty City Archivist to look at the top 4 cards of their deck');
             expect(this.getChatLogs(5)).toContain('player1 takes Display of Power');
             expect(this.getChatLogs(5)).toContain('player1 puts 3 cards on the bottom of their conflict deck');
         });
@@ -62,7 +62,7 @@ describe('Search the Archives', function () {
             expect(this.player1).toHavePromptButton('Censure');
             this.player1.clickPrompt('Isawa Tadaka');
             expect(this.tadaka2.location).toBe('hand');
-            expect(this.getChatLogs(5)).toContain('player1 uses Search the Archives to look at the top 4 cards of their deck');
+            expect(this.getChatLogs(5)).toContain('player1 uses Empty City Archivist to look at the top 4 cards of their deck');
             expect(this.getChatLogs(5)).toContain('player1 takes Isawa Tadaka');
             expect(this.getChatLogs(5)).toContain('player1 puts 3 cards on the bottom of their conflict deck');
         });
