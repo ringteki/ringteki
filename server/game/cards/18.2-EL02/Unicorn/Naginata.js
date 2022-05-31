@@ -4,6 +4,10 @@ const AbilityDsl = require('../../../abilitydsl');
 
 class Naginata extends DrawCard {
     setupCardAbilities() {
+        this.attachmentConditions({
+            myControl: true
+        });
+
         this.whileAttached({
             condition: context => context.source.parent && context.source.controller.firstPlayer,
             effect: AbilityDsl.effects.modifyMilitarySkill(1)

@@ -21,6 +21,6 @@ class BiasedArbitrator extends DrawCard {
     }
 }
 
-BiasedArbitrator.id = 'biased-arbitrator';
+BiasedArbitrator.id = 'hot-springs-proprietor';
 
 module.exports = BiasedArbitrator;

@@ -1,16 +1,16 @@
-describe('Biased Arbitrator', function() {
+describe('Hot Springs Proprietor', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'dynasty',
                 player1: {
-                    dynastyDiscard: ['biased-arbitrator', 'eager-scout', 'hida-guardian', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general', 'hida-kisada', 'forgotten-library'],
+                    dynastyDiscard: ['hot-springs-proprietor', 'eager-scout', 'hida-guardian', 'doji-whisperer', 'brash-samurai', 'doji-challenger', 'honored-general', 'hida-kisada', 'forgotten-library'],
                     dynastyDeckSize: 4,
                     hand: ['charge']
                 }
             });
 
-            this.arbitrator = this.player1.findCardByName('biased-arbitrator');
+            this.arbitrator = this.player1.findCardByName('hot-springs-proprietor');
             this.eagerScout = this.player1.findCardByName('eager-scout');
             this.hidaGuardian = this.player1.findCardByName('hida-guardian');
             this.dojiWhisperer = this.player1.findCardByName('doji-whisperer');
@@ -61,7 +61,7 @@ describe('Biased Arbitrator', function() {
             this.player1.clickPrompt('Hida Guardian');
             expect(this.hidaGuardian.location).toBe('play area');
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Biased Arbitrator to search their dynasty deck for a character that costs 1 and put it into play');
+            expect(this.getChatLogs(5)).toContain('player1 uses Hot Springs Proprietor to search their dynasty deck for a character that costs 1 and put it into play');
             expect(this.getChatLogs(5)).toContain('player1 is shuffling their dynasty deck');
         });
 
