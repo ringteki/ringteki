@@ -51,6 +51,25 @@ class StoneBreaker extends DrawCard {
                 context.targets.province.isFacedown() ? context.targets.province.location : context.targets.province
             ]
         });
+
+        this.action({
+            title: 'Reduce province strength',
+            condition: context => context.game.isDuringConflict(),
+            gameAction: AbilityDsl.actions.selectCard(context => ({
+                activePromptTitle: 'Choose an attacked province',
+                hidePromptIfSingleCard: true,
+                cardType: CardTypes.Province,
+                location: Locations.Provinces,
+                cardCondition: card => card.isConflictProvince() && card.getStrength() > 0,
+                message: '{0} reduces the strength of {1} by 1',
+                messageArgs: cards => [context.player, cards],
+                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                    targetLocation: Locations.Provinces,
+                    effect: AbilityDsl.effects.modifyProvinceStrength(-1)
+                }))
+            })),
+            effect: 'reduce an attacked province strength by 1'
+        });
     }
 }
 

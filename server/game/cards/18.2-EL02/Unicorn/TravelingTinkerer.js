@@ -5,7 +5,7 @@ const AbilityDsl = require('../../../abilitydsl');
 class TravelingTinkerer extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Sacrifice an attachment to gain fate',
+            title: 'Bow an attachment to gain fate',
             condition: context => context.game.isDuringConflict(),
             cost: AbilityDsl.costs.bow({
                 cardType: CardTypes.Attachment,
