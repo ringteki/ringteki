@@ -1,3 +1,5 @@
+const GameModes = require('../../../../../server/GameModes');
+
 describe('Crafty Tsukumogami', function() {
     integration(function() {
         beforeEach(function() {
@@ -10,7 +12,8 @@ describe('Crafty Tsukumogami', function() {
                 player2: {
                     inPlay: ['doji-whisperer', 'crafty-tsukumogami'],
                     hand: ['a-fate-worse-than-death', 'way-of-the-crane']
-                }
+                },
+                gameMode: GameModes.Emerald
             });
 
             this.crafty = this.player1.filterCardsByName('crafty-tsukumogami')[0];
@@ -108,7 +111,7 @@ describe('Crafty Tsukumogami', function() {
             expect(this.getChatLogs(5)).toContain('player2 discards Way of the Crane');
         });
 
-        it('should not do anything if you already have one attached to a ring', function() {
+        it('should allow selecting a different ring if you already have one attached to a ring', function() {
             this.player1.clickCard(this.crafty);
             this.player1.clickRing('fire');
             expect(this.game.rings['fire'].attachments).toContain(this.crafty);
@@ -119,7 +122,11 @@ describe('Crafty Tsukumogami', function() {
 
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.crafty2);
-            expect(this.player1).toHavePrompt('Action Window');
+            expect(this.player1).toBeAbleToSelectRing('air');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+            expect(this.player1).toBeAbleToSelectRing('water');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            expect(this.player1).not.toBeAbleToSelectRing('fire');
         });
     });
 });

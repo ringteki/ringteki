@@ -7,7 +7,7 @@ class UnderAmaterasusGaze extends BattlefieldAttachment {
         super.setupCardAbilities();
 
         this.persistentEffect({
-            condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince() &&
+            condition: context => context.source.parent && context.game.isDuringConflict() && context.source.parent.isConflictProvince() &&
                 context.player.opponent && context.player.opponent.honor < context.player.honor + 5,
             targetController: Players.Opponent,
             effect: AbilityDsl.effects.increaseCost({
@@ -17,7 +17,7 @@ class UnderAmaterasusGaze extends BattlefieldAttachment {
         });
 
         this.persistentEffect({
-            condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince() &&
+            condition: context => context.source.parent && context.game.isDuringConflict() && context.source.parent.isConflictProvince() &&
                 context.player.opponent && context.player.honor < context.player.opponent.honor + 5,
             targetController: Players.Self,
             effect: AbilityDsl.effects.increaseCost({

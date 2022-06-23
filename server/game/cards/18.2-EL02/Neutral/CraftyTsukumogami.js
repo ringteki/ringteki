@@ -1,16 +1,16 @@
 const DrawCard = require('../../../drawcard.js');
 const { TargetModes, CardTypes, AbilityTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
+const GameModes = require('../../../../GameModes.js');
 
 class CraftyTsukumogami extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Attach to a ring',
-            condition: context => this.checkTriggeringCondition(context),
             target: {
                 mode: TargetModes.Ring,
                 activePromptTitle: 'Choose a ring to attach to',
-                ringCondition: () => true,
+                ringCondition: (ring, context) => this.checkRingCondition(ring, context),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.cardLastingEffect(context => ({
                         canChangeZoneOnce: true,
@@ -41,13 +41,15 @@ class CraftyTsukumogami extends DrawCard {
         });
     }
 
-    checkTriggeringCondition(context) {
-        let ringAttachments = [];
-        Object.values(context.game.rings).forEach(ring => {
-            ringAttachments = [...ringAttachments, ...ring.attachments];
-        });
-
-        return !ringAttachments.some(a => a.name === context.source.name && a.controller === context.player);
+    checkRingCondition(ring, context) {
+        const frameworkLimitsAttachmentsWithRepeatedNames = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian;
+        if(frameworkLimitsAttachmentsWithRepeatedNames) {
+            const attachment = context.source;
+            if(ring.attachments.filter(a => !a.allowDuplicatesOfAttachment).some(a => a.id === attachment.id && a.controller === attachment.controller && a !== attachment)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     canAttach(ring) {

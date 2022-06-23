@@ -14,7 +14,6 @@ class YogoTadashi extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.target,
                     effect: AbilityDsl.effects.cardCannot({

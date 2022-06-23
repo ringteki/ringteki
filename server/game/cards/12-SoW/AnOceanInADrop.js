@@ -6,7 +6,7 @@ class AnOceanInADrop extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Place hand on bottom of deck and draw cards',
-            condition: context => context.source.parent.isParticipating(),
+            condition: context => context.source.parent && context.source.parent.isParticipating(),
             cost: AbilityDsl.costs.sacrificeSelf(),
             target: {
                 mode: TargetModes.Select,

@@ -8,7 +8,7 @@ class JurojinsCurse extends DrawCard {
         this.forcedInterrupt({
             title: 'Resolve a second fate phase',
             when: {
-                onPhaseEnded: (event, context) => event.phase === Phases.Fate && !context.source.parent.bowed
+                onPhaseEnded: (event, context) => context.source.parent && event.phase === Phases.Fate && !context.source.parent.bowed
             },
             effect: 'resolve a second fate phase after this',
             gameAction: AbilityDsl.actions.playerLastingEffect({
