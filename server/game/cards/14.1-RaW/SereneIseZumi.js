@@ -28,7 +28,7 @@ class SereneIseZumi extends DrawCard {
         this.action({
             title: 'Move attached character home',
             printedAbility: false,
-            condition: context => context.game.isDuringConflict() && context.source.type === CardTypes.Attachment && context.source.parent.isParticipating(),
+            condition: context => context.source.parent && context.game.isDuringConflict() && context.source.type === CardTypes.Attachment && context.source.parent.isParticipating(),
             gameAction: AbilityDsl.actions.sendHome(context => ({
                 target: context.source.parent
             }))

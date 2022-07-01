@@ -4,7 +4,7 @@ const AbilityDsl = require('../../abilitydsl.js');
 class ReinforcedPlate extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            condition: context => context.source.parent.isParticipating() && this.game.isDuringConflict('military'),
+            condition: context => context.source.parent && context.source.parent.isParticipating() && this.game.isDuringConflict('military'),
             effect: AbilityDsl.effects.immunity({
                 restricts: 'opponentsEvents'
             })

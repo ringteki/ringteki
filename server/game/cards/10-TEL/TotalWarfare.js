@@ -9,7 +9,7 @@ class TotalWarfare extends BattlefieldAttachment {
         this.forcedReaction({
             title: 'Loser sacrifices a character',
             when: {
-                afterConflict: (event, context) => event.conflict.loser && context.source.parent.isConflictProvince()
+                afterConflict: (event, context) => context.source.parent && event.conflict.loser && context.source.parent.isConflictProvince()
             },
             target: {
                 cardType: CardTypes.Character,

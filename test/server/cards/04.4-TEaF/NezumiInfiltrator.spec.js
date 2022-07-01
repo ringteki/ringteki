@@ -6,11 +6,12 @@ describe('Nezumi Infiltrator', function() {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['third-tower-guard'],
-                        hand: ['nezumi-infiltrator','ride-them-down'],
+                        hand: ['nezumi-infiltrator','ride-them-down','ceaseless-duty'],
                         provinces: ['defend-the-wall']
                     },
                     player2: {
-                        inPlay: ['borderlands-defender']
+                        inPlay: ['borderlands-defender'],
+                        hand: ['assassination']
                     }
                 });
 
@@ -18,9 +19,11 @@ describe('Nezumi Infiltrator', function() {
                 this.nezumi = this.player1.findCardByName('nezumi-infiltrator');
                 this.rtd = this.player1.findCardByName('ride-them-down');
                 this.dtw = this.player1.findCardByName('defend-the-wall');
+                this.ceaseless = this.player1.findCardByName('ceaseless-duty');
 
                 this.bd = this.player2.findCardByName('borderlands-defender');
                 this.sd = this.player2.findCardByName('shameful-display', 'province 1');
+                this.assassination = this.player2.findCardByName('assassination');
             });
 
             it('should not trigger when entering play before a conflict', function() {
@@ -115,6 +118,24 @@ describe('Nezumi Infiltrator', function() {
                 this.player1.clickCard(this.nezumi);
                 expect(this.player1).not.toHavePromptButton('Lower attacked province\'s strength by 1');
                 expect(this.player1).toHavePromptButton('Raise attacked province\'s strength by 1');
+            });
+
+            it('bug report - leaving play', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: ['third-tower-guard'],
+                    defenders: ['borderlands-defender']
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.nezumi);
+                this.player1.clickPrompt('0');
+                this.player1.clickPrompt('Conflict');
+                this.player1.pass();
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.nezumi);
+                this.player1.clickCard(this.ceaseless);
+                expect(this.nezumi.location).toBe('play area');
             });
         });
 
