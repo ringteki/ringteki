@@ -10,7 +10,7 @@ class JadeTetsubo extends DrawCard {
         this.action({
             title: 'Return all fate from a character',
             cost: ability.costs.bowSelf(),
-            condition: context => context.source.parent.isParticipating(),
+            condition: context => context.source.parent && context.source.parent.isParticipating(),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) => card.isParticipating() && card.militarySkill < context.source.parent.militarySkill,

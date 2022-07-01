@@ -18,6 +18,9 @@ export class RemoveFromGameAction extends CardGameAction {
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties): boolean {
         let properties = this.getProperties(context, additionalProperties) as RemoveFromGameProperties;
         if(properties.location) {
+            if(properties.location === Locations.Any) {
+                return true;
+            }
             if(properties.location !== card.location) {
                 return false;
             }

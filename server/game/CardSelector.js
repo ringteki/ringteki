@@ -12,7 +12,8 @@ const defaultProperties = {
     cardCondition: () => true,
     numCardsFunc: () => 1,
     cardType: [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding, CardTypes.Stronghold, CardTypes.Role, CardTypes.Province],
-    multiSelect: false
+    multiSelect: false,
+    sameDiscardPile: false
 };
 
 const ModeToSelector = {

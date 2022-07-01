@@ -7,7 +7,7 @@ class AkodoCho extends DrawCard {
         this.action({
             title: 'Bow a character',
             condition: context => context.source.isParticipating(),
-            cost: AbilityDsl.costs.sacrifice({
+            cost: AbilityDsl.costs.bow({
                 cardType: CardTypes.Attachment,
                 cardCondition: (card, context) => card.parent === context.source && card.hasTrait('follower')
             }),

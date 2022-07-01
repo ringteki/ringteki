@@ -50,13 +50,19 @@ export class AttachToRingAction extends CardGameAction {
     }
 
     eventHandler(event): void {
-        if(event.card.location === Locations.PlayArea) {
+        if(event.card.location === Locations.PlayArea && event.card.parent) {
             event.card.parent.removeAttachment(event.card);
         } else {
             event.card.controller.removeCardFromPile(event.card);
             event.card.new = true;
             event.card.moveTo(Locations.PlayArea);
         }
+        event.card.untaint();
+        event.card.makeOrdinary();
+        event.card.bowed = false;
+        event.card.covert = false;
+        event.card.fate = 0;
+
         event.parent.attachments.push(event.card);
         event.card.parent = event.parent;
         if(event.card.controller !== event.context.player) {

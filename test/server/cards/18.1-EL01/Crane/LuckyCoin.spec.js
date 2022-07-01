@@ -5,7 +5,7 @@ describe('Lucky Coin', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-kuwanan', 'doji-challenger'],
-                    hand: ['lucky-coin']
+                    hand: ['lucky-coin', 'a-new-name']
                 },
                 player2: {
                     inPlay: ['young-harrier'],
@@ -15,6 +15,7 @@ describe('Lucky Coin', function() {
             this.kuwanan = this.player1.findCardByName('doji-kuwanan');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.coin = this.player1.findCardByName('lucky-coin');
+            this.ann = this.player1.findCardByName('a-new-name');
 
             this.harrier = this.player2.findCardByName('young-harrier');
             this.sac = this.player2.findCardByName('noble-sacrifice');

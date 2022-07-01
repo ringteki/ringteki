@@ -21,8 +21,10 @@ class RiddlesOfTheHenshin extends DrawCard {
                         ringCondition: ring => ring.isConsideredClaimed(context.player) && !chosenRings.includes(ring),
                         onMenuCommand: player => {
                             this.game.addMessage('{0} resolves {1}', player, chosenRings);
-                            let event = this.game.actions.resolveRingEffect().getEvent(chosenRings, this.game.getFrameworkContext(player));
-                            this.game.openThenEventWindow(event);
+                            let action = this.game.actions.resolveRingEffect({ target: chosenRings});
+                            let events = [];
+                            action.addEventsToArray(events, this.game.getFrameworkContext(player));
+                            this.game.openThenEventWindow(events);
                             return true;
                         },
                         onSelect: (player, ring) => {

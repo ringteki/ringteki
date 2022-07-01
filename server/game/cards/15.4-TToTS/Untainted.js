@@ -7,7 +7,7 @@ class Untainted extends DrawCard {
         this.reaction({
             title: 'discard status token',
             when: {
-                afterConflict: (event, context) =>
+                afterConflict: (event, context) => context.source.parent &&
                     event.conflict.winner === context.player
                     && context.source.parent.isConflictProvince()
             },

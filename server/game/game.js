@@ -1065,6 +1065,15 @@ class Game extends EventEmitter {
         this.checkGameState(true);
     }
 
+    getFavorSide() {
+        for(const player of this.getPlayers()) {
+            if(player.imperialFavor) {
+                return player.imperialFavor;
+            }
+        }
+        return undefined;
+    }
+
     watch(socketId, user) {
         if(!this.allowSpectators) {
             return false;
