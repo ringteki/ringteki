@@ -23,7 +23,7 @@ describe('Yogo Tadashi', function() {
             this.scorpion = this.player2.findCardByName('way-of-the-scorpion');
         });
 
-        it('should react to being assigned and prompt you to choose a participating character', function() {
+        it('should react to being assigned and prompt you to choose a character', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
@@ -34,7 +34,7 @@ describe('Yogo Tadashi', function() {
             this.player2.clickCard(this.tadashi);
             expect(this.player2).toBeAbleToSelect(this.challenger);
             expect(this.player2).toBeAbleToSelect(this.yoshi);
-            expect(this.player2).not.toBeAbleToSelect(this.rider);
+            expect(this.player2).toBeAbleToSelect(this.rider);
             expect(this.player2).toBeAbleToSelect(this.tadashi);
         });
 

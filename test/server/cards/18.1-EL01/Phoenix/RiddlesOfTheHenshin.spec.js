@@ -58,6 +58,41 @@ describe('Riddles of the Henshin', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
+        it('should resolve if you cancel mid-prompt', function() {
+            this.player1.claimRing('air');
+            this.player1.claimRing('fire');
+            this.player1.claimRing('earth');
+            this.player1.claimRing('void');
+
+            this.player1.clickCard(this.riddles);
+            expect(this.player1).toHavePrompt('Choose a ring to resolve');
+            expect(this.player1).toBeAbleToSelectRing('air');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+            expect(this.player1).toBeAbleToSelectRing('fire');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            expect(this.player1).not.toBeAbleToSelectRing('water');
+
+            this.player1.clickRing('fire');
+
+            expect(this.player1).toBeAbleToSelectRing('air');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+            expect(this.player1).not.toBeAbleToSelectRing('fire');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            expect(this.player1).not.toBeAbleToSelectRing('water');
+            expect(this.player1).toHavePromptButton('Done');
+
+            this.player1.clickPrompt('Done');
+
+            expect(this.player1).toHavePrompt('Fire Ring');
+            this.player1.clickCard(this.brash);
+            this.player1.clickPrompt('Dishonor Brash Samurai');
+            expect(this.getChatLogs(5)).toContain('player1 plays Riddles of the Henshin to resolve ring effects');
+            expect(this.getChatLogs(5)).toContain('player1 resolves Fire Ring');
+            expect(this.getChatLogs(5)).toContain('player1 resolves the fire ring, dishonoring Brash Samurai');
+
+            expect(this.player2).toHavePrompt('Action Window');
+        });
+
         it('should allow ring replacement effects', function() {
             this.player1.claimRing('water');
             this.player1.clickCard(this.riddles);

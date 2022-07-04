@@ -12,7 +12,7 @@ class CallousAshigaru extends DrawCard {
             title: 'Discard cards from provinces',
             when: {
                 onBreakProvince: (event, context) => event.conflict.conflictType === ConflictTypes.Military &&
-                    context.source.parent.isAttacking()
+                    context.source.parent && context.source.parent.isAttacking()
             },
             gameAction: AbilityDsl.actions.discardCard(context => ({
                 target: context.player.opponent ?

@@ -7,7 +7,7 @@ class KyofukisHammer extends DrawCard {
         this.reaction({
             title: 'Discard a card from a province',
             when: {
-                afterConflict: (event, context) => context.source.parent.isParticipating() &&
+                afterConflict: (event, context) => context.source.parent && context.source.parent.isParticipating() &&
                                                     event.conflict.winner === context.source.parent.controller
             },
             limit: AbilityDsl.limit.unlimitedPerConflict(),

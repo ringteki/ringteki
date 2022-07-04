@@ -25,7 +25,7 @@ class PreparedAmbush extends BattlefieldAttachment {
         super.setupCardAbilities();
 
         this.persistentEffect({
-            condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
+            condition: context => context.source.parent && context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
             targetLocation: Locations.Provinces,
             match: card => card.isDynasty && card.isFaceup(),
             effect: AbilityDsl.effects.gainPlayAction(PreparedAmbushPlayAction)

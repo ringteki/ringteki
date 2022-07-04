@@ -8,7 +8,7 @@ class ElegantTessen extends DrawCard {
             title: 'Ready attached character',
             when: {
                 onCardAttached: (event, context) => (
-                    event.card === context.source && context.source.parent.getCost() <= 2 &&
+                    context.source.parent && event.card === context.source && context.source.parent.getCost() <= 2 &&
                     event.originalLocation !== Locations.PlayArea
                 )
             },

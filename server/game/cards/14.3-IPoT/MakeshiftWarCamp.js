@@ -7,7 +7,7 @@ class MakeshiftWarCamp extends BattlefieldAttachment {
         super.setupCardAbilities();
 
         this.persistentEffect({
-            condition: context => context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
+            condition: context => context.source.parent && context.game.isDuringConflict() && context.source.parent.isConflictProvince(),
             targetController: Players.Self,
             match: card => card.isParticipating() && card.type === CardTypes.Character,
             effect: AbilityDsl.effects.modifyMilitarySkill(2)

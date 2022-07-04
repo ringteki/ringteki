@@ -9,7 +9,7 @@ class WickedTetsubo extends DrawCard {
 
         this.action({
             title: 'Set Military or Political skill to 0',
-            condition: context => context.source.parent.isAttacking(),
+            condition: context => context.source.parent && context.source.parent.isAttacking(),
             targets: {
                 character: {
                     activePromptTitle: 'Choose a defending character',

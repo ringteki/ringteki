@@ -373,3 +373,9 @@ export enum ConflictTypes {
 export enum TokenTypes {
     Honor = 'honor'
 };
+
+export enum FavorTypes {
+    Military = 'military',
+    Political = 'political',
+    Both = 'both'
+};
