@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 const { Phases } = require('../../../Constants');
 
-class JurojinsBane extends DrawCard {
+class CripplingCurse extends DrawCard {
     setupCardAbilities() {
         this.forcedInterrupt({
             title: 'Discard fate and characters',
@@ -23,6 +23,6 @@ class JurojinsBane extends DrawCard {
     }
 }
 
-JurojinsBane.id = 'jurojin-s-bane';
+CripplingCurse.id = 'crippling-curse';
 
-module.exports = JurojinsBane;
+module.exports = CripplingCurse;
