@@ -11,7 +11,7 @@ describe('Bake Kujira', function() {
                     dynastyDiscard: ['funeral-pyre', 'iron-mine']
                 },
                 player2: {
-                    inPlay: ['doji-kuwanan', 'doji-fumiki', 'daidoji-uji'],
+                    inPlay: ['doji-kuwanan', 'doji-fumiki', 'daidoji-uji', 'isawa-skycaller'],
                     hand: ['way-of-the-scorpion', 'charge', 'forebearer-s-echoes', 'reprieve', 'fine-katana'],
                     conflictDiscard: ['mushin-no-shin'],
                     dynastyDiscard: ['bake-kujira', 'doji-challenger']
@@ -29,6 +29,7 @@ describe('Bake Kujira', function() {
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
             this.fumiki = this.player2.findCardByName('doji-fumiki');
             this.challenger = this.player2.findCardByName('doji-challenger');
+            this.skycaller = this.player2.findCardByName('isawa-skycaller');
 
             this.scorp = this.player2.findCardByName('way-of-the-scorpion');
             this.charge = this.player2.findCardByName('charge');
@@ -48,7 +49,8 @@ describe('Bake Kujira', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whale],
-                defenders: [this.kuwanan]
+                defenders: [this.kuwanan],
+                ring: 'earth'
             });
 
             this.player2.clickCard(this.scorp);
@@ -78,6 +80,24 @@ describe('Bake Kujira', function() {
             this.player2.clickPrompt('Cancel');
 
             this.uji.honor();
+            this.game.checkGameState(true);
+            this.player2.clickCard(this.whale2);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.challenger);
+            expect(this.player2).toHavePrompt('Choose additional fate');
+        });
+
+        it('bug report - skycaller', function() {
+            this.player2.moveCard(this.uji, 'dynasty discard pile');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whale],
+                defenders: [this.kuwanan],
+                ring: 'air'
+            });
+
+            this.player2.placeCardInProvince(this.whale2, 'province 1');
+            this.player2.placeCardInProvince(this.challenger, 'province 2');
             this.game.checkGameState(true);
             this.player2.clickCard(this.whale2);
             expect(this.player2).toHavePrompt('Conflict Action Window');
