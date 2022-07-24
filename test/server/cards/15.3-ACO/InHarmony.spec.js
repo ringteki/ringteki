@@ -5,7 +5,7 @@ describe('In Harmony', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['miya-mystic', 'bayushi-manipulator'],
-                    hand: ['karmic-twist', 'shadow-steed', 'embrace-the-void', 'in-harmony'],
+                    hand: ['karmic-twist', 'shadow-steed', 'embrace-the-void', 'in-harmony', 'seal-of-the-unicorn', 'i-am-ready'],
                     dynastyDiscard: ['daidoji-kageyu']
                 },
                 player2: {
@@ -22,6 +22,8 @@ describe('In Harmony', function() {
             this.alibi = this.player2.findCardByName('alibi-artist');
             this.assassination = this.player2.findCardByName('assassination');
             this.twist2 = this.player2.findCardByName('karmic-twist');
+            this.unicorn = this.player1.findCardByName('seal-of-the-unicorn');
+            this.ready = this.player1.findCardByName('i-am-ready');
 
             this.miyaMystic.fate = 0;
             this.manipulator.fate = 2;
@@ -134,6 +136,19 @@ describe('In Harmony', function() {
                 this.player1.clickPrompt('1');
                 expect(this.manipulator.fate).toBe(this.manipulatorFate - 1);
             });
+
+            it('costs - should allow you to remove fate as a cost', function() {
+                this.player2.pass();
+                this.player1.clickCard(this.unicorn);
+                this.player1.clickCard(this.manipulator);
+                this.manipulator.bow();
+                this.player2.pass();
+                this.player1.clickCard(this.ready);
+                this.player1.clickCard(this.manipulator);
+                expect(this.manipulator.fate).toBe(this.manipulatorFate - 1);
+                expect(this.manipulator.bowed).toBe(false);
+            });
+
 
             it('framework - should not prevent fate phase', function() {
                 this.player1.togglePromptedActionWindow('fate', true);

@@ -15,6 +15,7 @@ class CraneIndustry extends DrawCard {
             when: {
                 onConflictStarted: () => true
             },
+            max: AbilityDsl.limit.perConflict(1),
             title: 'Reduce the cost to play events',
             cost: AbilityDsl.costs.optionalFateCost(1),
             effect: 'reduce the cost of events {1} play{2} this conflict by 1',

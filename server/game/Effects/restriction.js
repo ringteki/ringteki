@@ -1,6 +1,6 @@
 const EffectValue = require('./EffectValue');
 
-const { AbilityTypes, CardTypes, Phases } = require('../Constants');
+const { AbilityTypes, CardTypes, Phases, Stages } = require('../Constants');
 
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
@@ -17,7 +17,7 @@ const checkRestrictions = {
     attackingCharacters: (context) =>
         context.game.currentConflict && context.source.type === CardTypes.Character && context.source.isAttacking(),
     cardEffects: (context) =>
-        (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
+        (context.ability.isCardAbility() || !context.ability.isCardPlayed()) && context.stage !== Stages.Cost &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
     ringEffects: (context) => context.source.type === 'ring',
     cardAndRingEffects: (context) => checkRestrictions.cardEffects(context) || checkRestrictions.ringEffects(context),
