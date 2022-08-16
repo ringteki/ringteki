@@ -49,7 +49,9 @@ class StoneBreaker extends DrawCard {
             effectArgs: context => [
                 context.targets.cardInProvince.isFacedown() ? 'a facedown card' : context.targets.cardInProvince,
                 context.targets.province.isFacedown() ? context.targets.province.location : context.targets.province
-            ]
+            ],
+            gameAction: AbilityDsl.actions.refillFaceup(context => ({ location: context.cardStateWhenInitiated.location }))
+
         });
 
         this.action({
@@ -61,14 +63,14 @@ class StoneBreaker extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 cardCondition: card => card.isConflictProvince() && card.getStrength() > 0,
-                message: '{0} reduces the strength of {1} by 1',
+                message: '{0} reduces the strength of {1} by 2',
                 messageArgs: cards => [context.player, cards],
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     targetLocation: Locations.Provinces,
-                    effect: AbilityDsl.effects.modifyProvinceStrength(-1)
+                    effect: AbilityDsl.effects.modifyProvinceStrength(-2)
                 }))
             })),
-            effect: 'reduce an attacked province strength by 1'
+            effect: 'reduce an attacked province strength by 2'
         });
     }
 }
