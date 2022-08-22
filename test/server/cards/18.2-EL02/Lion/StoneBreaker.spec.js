@@ -6,7 +6,7 @@ describe('Stone Breaker - Logistics Ability', function() {
                 player1: {
                     hand: ['total-warfare', 'logistics', 'fine-katana'],
                     inPlay: ['bayushi-shoju'],
-                    dynastyDiscard: ['stone-breaker', 'imperial-storehouse', 'favorable-ground', 'kakita-toshimoko', 'dispatch-to-nowhere', 'kakita-yoshi', 'doji-whisperer', 'city-of-lies'],
+                    dynastyDiscard: ['stone-breaker', 'imperial-storehouse', 'favorable-ground', 'kakita-toshimoko', 'dispatch-to-nowhere', 'kakita-yoshi', 'doji-whisperer', 'city-of-lies', 'doji-challenger'],
                     provinces: ['dishonorable-assault'],
                     stronghold: 'kyuden-kakita'
                 },
@@ -33,6 +33,7 @@ describe('Stone Breaker - Logistics Ability', function() {
             this.dispatch = this.player1.findCardByName('dispatch-to-nowhere');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
+            this.challenger = this.player1.findCardByName('doji-challenger');
 
             this.p2 = this.player1.findCardByName('shameful-display', 'province 2');
             this.p3 = this.player1.findCardByName('shameful-display', 'province 3');
@@ -52,6 +53,7 @@ describe('Stone Breaker - Logistics Ability', function() {
             this.player1.moveCard(this.yoshi, 'province 1');
 
             this.player1.reduceDeckToNumber('dynasty deck', 0);
+            this.player1.moveCard(this.challenger, 'dynasty deck');
             this.player1.moveCard(this.whisperer, 'dynasty deck');
 
             this.p4.isBroken = true;
@@ -166,6 +168,23 @@ describe('Stone Breaker - Logistics Ability', function() {
                 this.player1.clickCard(this.assault);
                 expect(this.toshimoko.location).toBe('province 1');
                 expect(this.whisperer.location).toBe('province 3');
+            });
+
+            it('should cause the province stonebreaker was in to refill faceup', function() {
+                this.player1.moveCard(this.yoshi, 'dynasty discard pile');
+                this.player1.moveCard(this.storehouse, 'dynasty discard pile');
+                this.player1.clickCard(this.breaker);
+                expect(this.player1).toHavePrompt('Choose a card');
+                this.player1.clickCard(this.toshimoko);
+                expect(this.toshimoko.location).toBe('province 3');
+                expect(this.whisperer.location).toBe('dynasty deck');
+                expect(this.challenger.location).toBe('dynasty deck');
+                this.player1.clickCard(this.p2);
+                expect(this.toshimoko.location).toBe('province 2');
+                expect(this.whisperer.location).toBe('province 1');
+
+                expect(this.challenger.location).toBe('province 3');
+                expect(this.whisperer.facedown).toBe(false);
             });
 
             it('chat message - facedown card in province, facedown target, battlefield in play', function() {
@@ -350,7 +369,7 @@ describe('Stone Breaker - Strength reduction ability', function() {
             this.player1.player.moveCard(this.breaker, 'province 1');
         });
 
-        it('should reduce the attacked province by 1 strength', function() {
+        it('should reduce the attacked province by 2 strength', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shoju],
@@ -361,9 +380,9 @@ describe('Stone Breaker - Strength reduction ability', function() {
             this.player2.pass();
             this.player1.clickCard(this.breaker);
             this.player1.clickPrompt('Reduce province strength');
-            expect(this.game.currentConflict.conflictProvince.getStrength()).toBe(provinceStrength - 1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Stone Breaker to reduce an attacked province strength by 1');
-            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Shameful Display by 1');
+            expect(this.game.currentConflict.conflictProvince.getStrength()).toBe(provinceStrength - 2);
+            expect(this.getChatLogs(5)).toContain('player1 uses Stone Breaker to reduce an attacked province strength by 2');
+            expect(this.getChatLogs(5)).toContain('player1 reduces the strength of Shameful Display by 2');
         });
     });
 });
