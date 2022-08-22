@@ -49,6 +49,7 @@ class AbilityContext {
     choosingPlayerOverride: Player = null;
     gameActionsResolutionChain: GameAction[] = [];
     playType: PlayTypes;
+    cardStateWhenInitiated: any = null;
 
     constructor(properties: AbilityContextProperties) {
         this.game = properties.game;

@@ -1,65 +1,49 @@
 const DrawCard = require('../../../drawcard.js');
+const EventRegistrar = require('../../../eventregistrar.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { Players, Locations, CardTypes } = require('../../../Constants');
+const { CardTypes } = require('../../../Constants');
 
 class CraneIndustry extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            location: Locations.Any,
-            targetController: Players.Any,
-            match: player => player.isDefendingPlayer(),
-            effect: AbilityDsl.effects.reduceCost({ match: (card, source) => card === source })
-        });
-
+        this.eventsPlayedThisConflict = {};
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register(['onConflictFinished', 'onCardPlayed']);
         this.reaction({
             when: {
                 onConflictStarted: () => true
             },
             max: AbilityDsl.limit.perConflict(1),
             title: 'Reduce the cost to play events',
-            cost: AbilityDsl.costs.optionalFateCost(1),
-            effect: 'reduce the cost of events {1} play{2} this conflict by 1',
-            effectArgs: context => context.costs.optionalFateCost > 0 ? ['they', ''] : ['each player', 's'],
-            gameAction: AbilityDsl.actions.multipleContext(context => {
-                let gameActions = [];
-                gameActions.push(AbilityDsl.actions.playerLastingEffect(context => ({
-                    targetController: context.player,
-                    effect: AbilityDsl.effects.reduceCost({
-                        amount: 1,
-                        match: card => card.type === CardTypes.Event
-                    })
-                })));
-                if(context.player.opponent) {
-                    if(context.costs.optionalFateCost === 0) {
-                        gameActions.push(AbilityDsl.actions.playerLastingEffect(context => ({
-                            targetController: context.player.opponent,
-                            effect: AbilityDsl.effects.reduceCost({
-                                amount: 1,
-                                match: card => card.type === CardTypes.Event
-                            })
-                        })));
-                    }
-                    gameActions.push(AbilityDsl.actions.menuPrompt(context => ({
-                        activePromptTitle: 'Give your opponent 1 honor to draw a card?',
-                        choices: ['Yes', 'No'],
-                        choiceHandler: (choice, displayMessage) => {
-                            if(displayMessage) {
-                                context.game.addMessage('{0} chooses {1}to give {2} an honor and draw a card', context.player, choice === 'No' ? 'not ' : '', context.player.opponent);
-                            }
-                            return { amount: choice === 'Yes' ? 1 : 0 };
-                        },
-                        gameAction: AbilityDsl.actions.joint([
-                            AbilityDsl.actions.takeHonor({ target: context.player }),
-                            AbilityDsl.actions.draw({ target: context.player })
-                        ])
-                    })));
-                }
-
-                return ({
-                    gameActions: gameActions
-                });
-            })
+            effect: 'reduce the cost of the first copy of each event they play this conflict by 1',
+            gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                targetController: context.player,
+                effect: AbilityDsl.effects.reduceCost({
+                    amount: 1,
+                    match: card => card.type === CardTypes.Event && !this.hasEventBeenPlayed(context, card)
+                })
+            }))
         });
+    }
+
+    hasEventBeenPlayed(context, card) {
+        if(!this.eventsPlayedThisConflict[context.player.uuid]) {
+            return false;
+        }
+
+        return this.eventsPlayedThisConflict[context.player.uuid].includes(card.name);
+    }
+
+    onConflictFinished() {
+        this.eventsPlayedThisConflict = {};
+    }
+
+    onCardPlayed(event) {
+        if(event.card.type === CardTypes.Event) {
+            if(!this.eventsPlayedThisConflict[event.context.player.uuid]) {
+                this.eventsPlayedThisConflict[event.context.player.uuid] = [];
+            }
+            this.eventsPlayedThisConflict[event.context.player.uuid].push(event.card.name);
+        }
     }
 }
 
