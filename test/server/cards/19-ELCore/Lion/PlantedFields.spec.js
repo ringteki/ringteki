@@ -4,7 +4,11 @@ describe('Planted Fields', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
+                    inPlay: ['vanguard-warrior'],
                     dynastyDiscard: ['planted-fields']
+                },
+                player2: {
+                    inPlay: ['vanguard-warrior']
                 }
             });
 
@@ -13,9 +17,13 @@ describe('Planted Fields', function() {
             this.player1.placeCardInProvince(this.plantedFields, 'province 1');
 
             this.noMoreActions();
+            this.player1.passConflict();
             this.noMoreActions();
+            this.player2.passConflict();
             this.noMoreActions();
+            this.player1.passConflict();
             this.noMoreActions();
+            this.player2.passConflict();
         });
 
         it('should trigger at the end of the conflict phase if it is in an unbroken province', function() {
