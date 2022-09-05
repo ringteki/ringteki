@@ -82,5 +82,18 @@ describe('Forest of Rustling Whispers', function () {
             expect(this.uji.isHonored).toBe(false);
             expect(this.uji.isDishonored).toBe(false);
         });
+
+        it('should not trigger at a different province', function () {
+            this.forest.facedown = true;
+            this.uji.honor();
+            this.initiateConflict({
+                attackers: [this.diplomat],
+                defenders: [this.uji],
+                province: this.garden
+            });
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.forest);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
     });
 });
