@@ -9,7 +9,7 @@ describe('Fortunes Field', function() {
                     fate: 30,
                     dynastyDiscard: ['kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai'],
                     hand: ['ageless-crone', 'dutiful-assistant', 'watch-commander'],
-                    provinces: ['fortune-s-field', 'manicured-garden'],
+                    provinces: ['fortune-s-field', 'manicured-garden']
                 },
                 gameMode: GameModes.Emerald
             });
