@@ -159,7 +159,7 @@ describe('Chain of Command', function() {
                 this.player2.clickCard(this.hotaru);
                 this.player2.clickCard(this.dojiChallenger);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                expect(this.player2.fate).toBe(28);
+                expect(this.player2.fate).toBe(29);
             });
 
             it('Toturi2 - should not be playable from hand', function() {
@@ -244,7 +244,7 @@ describe('Chain of Command', function() {
                 this.player2.clickCard(this.hotaru);
                 this.player2.clickCard(this.dojiChallenger);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                expect(this.player2.fate).toBe(fate - 1);
+                expect(this.player2.fate).toBe(fate);
             });
 
             it('Toturi2 - should be playable from discard', function() {

@@ -1,18 +1,16 @@
-const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
+const { CardTypes } = require('../../../Constants');
+const AbilityDsl = require('../../../abilitydsl.js');
+const ProvinceCard = require('../../../provincecard.js');
 
-class AsakoDiplomat extends DrawCard {
+class ForestOfRustlingWhispers extends ProvinceCard {
     setupCardAbilities() {
-        this.reaction({
+        this.action({
             title: 'Honor or dishonor a character',
-            when: {
-                afterConflict: (event, context) => event.conflict.winner === context.source.controller &&
-                                                   context.source.isParticipating()
-            },
+            effect: 'honor or dishonor {0}',
             target: {
                 activePromptTitle: 'Choose a character to honor or dishonor',
                 cardType: CardTypes.Character,
+                cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.chooseAction({
                     messages: {
                         'Honor this character': '{0} chooses to honor {1}',
@@ -28,6 +26,6 @@ class AsakoDiplomat extends DrawCard {
     }
 }
 
-AsakoDiplomat.id = 'asako-diplomat';
+ForestOfRustlingWhispers.id = 'forest-of-rustling-whispers';
 
-module.exports = AsakoDiplomat;
+module.exports = ForestOfRustlingWhispers;
