@@ -20,7 +20,8 @@ class PlantedFields extends DrawCard {
                 AbilityDsl.actions.draw(context => ({
                     target: context.player
                 }))
-            ])
+            ]),
+            effect: 'gain 1 fate, gain 1 honor and draw 1 card'
         });
     }
 }
