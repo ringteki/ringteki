@@ -1,4 +1,4 @@
-fdescribe('The Empty City', function() {
+describe('The Empty City', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -53,7 +53,7 @@ fdescribe('The Empty City', function() {
             this.player2.pass();
             this.player1.clickCard(this.shinjoArcher);
             this.player1.clickCard(this.solemnScholar);
-            
+
             expect(this.shinjoArcher.inConflict).toBe(false);
             expect(this.solemnScholar.getMilitarySkill()).toBe(0);
             expect(this.solemnScholar.getPoliticalSkill()).toBe(0);
