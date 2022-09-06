@@ -1,4 +1,4 @@
-fdescribe('The Empty City', function() {
+describe('The Empty City', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
