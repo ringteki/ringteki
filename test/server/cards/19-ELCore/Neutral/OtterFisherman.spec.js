@@ -8,7 +8,7 @@ describe('Precocious Alchemist', function() {
                 },
                 player2: {
                     inPlay: ['solemn-scholar', 'kitsu-motso']
-                },
+                }
             });
 
             this.otterFisherman = this.player1.findCardByName('otter-fisherman');

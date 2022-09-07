@@ -19,12 +19,12 @@ class JadeColoredRocks extends ProvinceCard {
                         amount: 1,
                         target: context.player.opponent
                     })),
-                    'Opponent discards 1 card at random': AbilityDsl.actions.discardAtRandom(context => ({ 
+                    'Opponent discards 1 card at random': AbilityDsl.actions.discardAtRandom(context => ({
                         amount: 1,
                         target: context.player.opponent
                     }))
                 }
-            },
+            }
         });
     }
 }

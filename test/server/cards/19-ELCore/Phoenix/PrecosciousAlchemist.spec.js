@@ -8,7 +8,7 @@ describe('Precocious Alchemist', function() {
                 },
                 player2: {
                     inPlay: ['solemn-scholar', 'kitsu-motso']
-                },
+                }
             });
 
             this.precociousAlchemist = this.player1.findCardByName('precocious-alchemist');

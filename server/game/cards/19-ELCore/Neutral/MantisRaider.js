@@ -9,7 +9,7 @@ class MantisRaider extends DrawCard {
             condition: context => context.game.isDuringConflict(),
             target: {
                 mode: TargetModes.Ring,
-                ringCondition: ring => ring.fate != 0,
+                ringCondition: ring => ring.fate !== 0,
                 activePromptTitle: 'Choose a ring to gain all fate from',
                 gameAction: AbilityDsl.actions.takeFateFromRing()
             }

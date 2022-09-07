@@ -8,7 +8,7 @@ describe('Shinjo Archer', function() {
                 },
                 player2: {
                     inPlay: ['solemn-scholar', 'kitsu-motso']
-                },
+                }
             });
 
             this.shinjoArcher = this.player1.findCardByName('shinjo-archer');
