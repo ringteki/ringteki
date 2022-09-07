@@ -1,4 +1,4 @@
-fdescribe('Kagi Nawa', function () {
+describe('Kagi Nawa', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
