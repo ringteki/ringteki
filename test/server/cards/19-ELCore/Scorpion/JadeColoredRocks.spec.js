@@ -1,4 +1,4 @@
-fdescribe('Jade-Colored Rocks', function() {
+describe('Jade-Colored Rocks', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
