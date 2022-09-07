@@ -1,4 +1,4 @@
-fdescribe('Precocious Alchemist', function() {
+describe('Precocious Alchemist', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
