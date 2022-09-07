@@ -1,4 +1,4 @@
-describe('The Empty City', function() {
+describe('Shinjo Archer', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
