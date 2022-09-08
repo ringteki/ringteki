@@ -1,5 +1,4 @@
 const DrawCard = require('../../../drawcard.js');
-const { TargetModes, CardTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class AncientGolem extends DrawCard {
@@ -14,7 +13,7 @@ class AncientGolem extends DrawCard {
             title: 'Dishonor a character and draw a card',
             anyPlayer: true,
             when: {
-                onCardLeavesPlay: (event, context) => event.card === context.source 
+                onCardLeavesPlay: (event, context) => event.card === context.source
             },
             cost: AbilityDsl.costs.dishonor(),
             gameAction: AbilityDsl.actions.draw()

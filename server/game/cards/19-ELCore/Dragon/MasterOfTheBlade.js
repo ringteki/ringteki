@@ -9,7 +9,7 @@ class MasterOfTheBlade extends DrawCard {
             when: {
                 onCardAttached: (event, context) => {
                     this.attachedWeaponCost = event.card.printedCost;
-                    return event.card.parent === context.source && event.card.printedCost >= 1 && event.card.hasTrait('weapon')
+                    return event.card.parent === context.source && event.card.printedCost >= 1 && event.card.hasTrait('weapon');
                 }
             },
             gameAction: AbilityDsl.actions.deckSearch({

@@ -45,7 +45,7 @@ describe('Ancient Golem', function() {
 
             this.player1.clickCard(this.shinjoArcher);
             expect(this.shinjoArcher.isDishonored).toBe(true);
-            expect(this.player1.hand.length).toBe(initialHandSize+1);
+            expect(this.player1.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(3)).toContain('player1 uses Ancient Golem, dishonoring Shinjo Archer to draw 1 card');
         });
 
@@ -77,7 +77,7 @@ describe('Ancient Golem', function() {
 
             this.player2.clickCard(this.ancientGolem);
             expect(this.shinjoArcher.isDishonored).toBe(true);
-            expect(this.player2.hand.length).toBe(initialHandSize+1);
+            expect(this.player2.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(5)).toContain('player2 uses Ancient Golem, dishonoring Ancient Golem to draw 1 card');
             expect(this.ancientGolem.location).toBe('dynasty discard pile');
         });

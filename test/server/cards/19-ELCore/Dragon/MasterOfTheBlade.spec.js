@@ -1,4 +1,4 @@
-fdescribe('Master of the Blade', function() {
+describe('Master of the Blade', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
