@@ -40,9 +40,9 @@ describe('Mantis Raider', function() {
             expect(this.player1).not.toBeAbleToSelectRing('void');
 
             this.player1.clickRing('air');
-            expect(this.player1.fate).toBe(initialFate+1);
+            expect(this.player1.fate).toBe(initialFate + 1);
             expect(this.game.rings.air.fate).toBe(0);
-            expect(this.getChatLogs(3)).toContain('player1 uses Mantis Raider to take 1 fate from Air Ring')
+            expect(this.getChatLogs(3)).toContain('player1 uses Mantis Raider to take 1 fate from Air Ring');
         });
     });
 });

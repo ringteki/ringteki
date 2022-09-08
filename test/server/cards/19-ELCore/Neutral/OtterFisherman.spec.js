@@ -125,7 +125,7 @@ describe('Precocious Alchemist', function() {
             this.player1.clickCard(this.otterFisherman);
             this.player2.clickPrompt('Opponent gains 1 honor');
 
-            expect(this.player1.honor).toBe(initialHonor+1);
+            expect(this.player1.honor).toBe(initialHonor + 1);
             expect(this.getChatLogs(3)).toContain('player1 uses Otter Fisherman to gain 1 honor');
         });
 
@@ -146,7 +146,7 @@ describe('Precocious Alchemist', function() {
             this.player1.clickCard(this.otterFisherman);
             this.player2.clickPrompt('Opponent gains 1 fate');
 
-            expect(this.player1.fate).toBe(initialFate+1);
+            expect(this.player1.fate).toBe(initialFate + 1);
             expect(this.getChatLogs(3)).toContain('player1 uses Otter Fisherman to gain 1 fate');
         });
 
@@ -167,7 +167,7 @@ describe('Precocious Alchemist', function() {
             this.player1.clickCard(this.otterFisherman);
             this.player2.clickPrompt('Opponent draws 1 card');
 
-            expect(this.player1.hand.length).toBe(initialHandSize+1);
+            expect(this.player1.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(3)).toContain('player1 uses Otter Fisherman to draw 1 card');
         });
     });
