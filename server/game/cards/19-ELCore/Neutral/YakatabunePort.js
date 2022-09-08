@@ -2,7 +2,7 @@ const ProvinceCard = require('../../../provincecard.js');
 
 class YatakabunePort extends ProvinceCard {
     setupCardAbilities() {
-        
+
     }
 }
 

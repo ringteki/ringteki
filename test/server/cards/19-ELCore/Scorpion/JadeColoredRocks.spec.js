@@ -65,7 +65,7 @@ describe('Jade-Colored Rocks', function() {
 
             this.player2.clickCard(this.jadeColoredRocks);
             this.player2.clickPrompt('Opponent loses 1 fate');
-            expect(this.player1.fate).toBe(initialFate-1);
+            expect(this.player1.fate).toBe(initialFate - 1);
         });
 
         it('should remove 1 honor', function() {
@@ -80,7 +80,7 @@ describe('Jade-Colored Rocks', function() {
 
             this.player2.clickCard(this.jadeColoredRocks);
             this.player2.clickPrompt('Opponent loses 1 honor');
-            expect(this.player1.honor).toBe(initialHonor-1);
+            expect(this.player1.honor).toBe(initialHonor - 1);
         });
 
         it('should discard a card at random', function() {

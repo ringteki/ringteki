@@ -19,7 +19,7 @@ class KagiNawa extends DrawCard {
                 gameAction: AbilityDsl.actions.moveToConflict()
             },
             effect: 'hook {0} and drag them into the conflict'
-        })
+        });
     }
 }
 

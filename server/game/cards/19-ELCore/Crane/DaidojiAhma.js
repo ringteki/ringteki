@@ -27,7 +27,7 @@ const ahmaCost = function (ahmaController) {
 class DaidojiAhma extends DrawCard {
     setupCardAbilities() {
         this.reaction({
-            title: 'Honor a character if you have the Imperial Favor',
+            title: 'Increase the cost of a character or holding',
             when: {
                 onPhaseStarted: event => event.phase !== 'setup'
             },

@@ -70,10 +70,10 @@ describe('Precocious Alchemist', function() {
             expect(this.player1).toBeAbleToSelect(this.solemnScholar);
             expect(this.player1).not.toBeAbleToSelect(this.isawaTadaka);
             expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
-            
+
             this.player1.clickCard(this.precociousAlchemist);
             expect(this.precociousAlchemist.hasKeyword('pride')).toBe(true);
-            expect(this.getChatLogs(3)).toContain('player1 uses Precocious Alchemist to give Precocious Alchemist Pride until end of the conflict')
+            expect(this.getChatLogs(3)).toContain('player1 uses Precocious Alchemist to give Precocious Alchemist Pride until end of the conflict');
         });
 
         it('should last until the end of the conflict', function() {
