@@ -1,4 +1,4 @@
-fdescribe('Shore of the Ashen Flames', function() {
+describe('Shore of the Ashen Flames', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -29,7 +29,7 @@ fdescribe('Shore of the Ashen Flames', function() {
 
             this.player2.pass();
             this.player1.pass();
-            expect(this.player1).toHavePrompt('Do you wish to discard Adept of the Waves?')
+            expect(this.player1).toHavePrompt('Do you wish to discard Adept of the Waves?');
         });
 
         it('should trigger if the province is not broken', function() {
