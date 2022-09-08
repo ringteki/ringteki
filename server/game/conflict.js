@@ -434,6 +434,10 @@ class Conflict extends GameObject {
         this.game.raiseEvent(EventNames.OnConflictPass, { conflict: this });
         this.resetCards();
     }
+
+    isBreaking() {
+        return this.conflictProvince && (this.getConflictProvinces().some(p => p.getStrength() - (this.attackerSkill - this.defenderSkill) <= 0))
+    }
 }
 
 module.exports = Conflict;
