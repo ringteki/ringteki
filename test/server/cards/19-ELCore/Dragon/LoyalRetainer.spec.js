@@ -1,4 +1,4 @@
-fdescribe('Loyal Retainer', function() {
+describe('Loyal Retainer', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -31,6 +31,20 @@ fdescribe('Loyal Retainer', function() {
             this.player2.clickCard(this.fineKatana);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
+        });
+
+        it('should cancel the effect targetting the attachment and discard itself', function() {
+            this.player1.clickCard(this.fineKatana);
+            this.player1.clickCard(this.masterOfTheBlade);
+
+            this.player2.clickCard(this.letGo);
+            this.player2.clickCard(this.fineKatana);
+
+            this.player1.clickCard(this.loyalRetainer);
+            expect(this.loyalRetainer.location).toBe('conflict discard pile');
+            expect(this.letGo.location).toBe('conflict discard pile');
+            expect(this.fineKatana.location).toBe('play area');
+            expect(this.getChatLogs(3)).toContain('player1 uses Loyal Retainer, discarding Loyal Retainer to cancel the effects of Let Go');
         });
     });
 });
