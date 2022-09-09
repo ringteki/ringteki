@@ -70,6 +70,10 @@ const Costs = {
      */
     discardCardSpecific: cardFunc => new GameActionCost(GameActions.discardCard(context => ({ target: cardFunc(context) }))),
     /**
+     * Cost that requires discarding itself from hand.
+     */
+     discardSelf: () => new GameActionCost(GameActions.discardCard(context => ({ target: context.source }))),
+    /**
      * Cost that requires discarding a card to be selected by the player.
      */
     discardCard: properties => getSelectCost(GameActions.discardCard(), Object.assign({ location: Locations.Hand, mode: TargetModes.Exactly }, properties),
