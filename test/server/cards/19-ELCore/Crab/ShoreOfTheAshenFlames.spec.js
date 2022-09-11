@@ -7,14 +7,14 @@ describe('Shore of the Ashen Flames', function() {
                     inPlay: ['isawa-tadaka', 'matsu-berserker']
                 },
                 player2: {
-                    provinces: ['a-home-worth-defending']
+                    provinces: ['shore-of-the-ashen-flames']
                 }
             });
 
             this.isawaTadaka = this.player1.findCardByName('isawa-tadaka');
             this.matsuBerserker = this.player1.findCardByName('matsu-berserker');
 
-            this.shoreOfTheAshenFlames = this.player2.findCardByName('a-home-worth-defending', 'province 1');
+            this.shoreOfTheAshenFlames = this.player2.findCardByName('shore-of-the-ashen-flames', 'province 1');
         });
 
         it('should not trigger if the province is broken', function() {

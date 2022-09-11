@@ -13,6 +13,6 @@ class ShoreOfTheAshenFlames extends ProvinceCard {
     }
 }
 
-ShoreOfTheAshenFlames.id = 'a-home-worth-defending';
+ShoreOfTheAshenFlames.id = 'shore-of-the-ashen-flames';
 
 module.exports = ShoreOfTheAshenFlames;
