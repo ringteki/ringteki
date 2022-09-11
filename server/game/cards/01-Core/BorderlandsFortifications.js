@@ -8,7 +8,7 @@ class BorderlandsFortifications extends DrawCard {
             target: {
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => card.isDynasty
+                cardCondition: (card, context) => card.isDynasty && card !== context.source
             },
             effect: 'swap it with {1}',
             effectArgs: context => context.target.isFacedown() ? 'a facedown card' : context.target,

@@ -20,6 +20,7 @@ describe('Matsu Sakura', function() {
             this.restoration = this.player2.findCardByName('restoration-of-balance', 'province 2');
             this.manicuredGarden = this.player2.findCardByName('manicured-garden', 'province 3');
             this.station = this.player2.findCardByName('magistrate-station', 'province 4');
+            this.sd = this.player2.findCardByName('shameful-display', 'stronghold province');
 
             this.mine = this.player2.findCardByName('iron-mine');
         });
@@ -152,6 +153,29 @@ describe('Matsu Sakura', function() {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             this.player1.clickCard(this.sakura);
             expect(this.getChatLogs(10)).toContain('player1 uses Matsu Sakura to cancel the effects of Manicured Garden\'s ability');
+        });
+
+        it('should stop the Stronghold', function() {
+            this.manicuredGarden.isBroken = true;
+            this.revels.isBroken = true;
+            this.restoration.isBroken = true;
+
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.kuwanan, this.sakura],
+                defenders: [],
+                type: 'military',
+                province: this.sd
+            });
+
+            this.player2.clickCard(this.sd);
+            this.player2.clickCard(this.kuwanan);
+            this.player2.clickCard(this.sakura);
+            this.player2.clickPrompt('Done');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.sakura);
+            expect(this.getChatLogs(10)).toContain('player1 uses Matsu Sakura to cancel the effects of Shameful Display\'s ability');
         });
     });
 });
