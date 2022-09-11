@@ -132,7 +132,7 @@ describe('Overrun', function() {
             this.player1.clickCard(this.overrun);
             this.player1.clickCard(this.manicured);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays Overrun to place a dishonor token on province 2, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 plays Overrun to place a dishonored status token on province 2, blanking it');
             expect(this.getChatLogs(10)).toContain('player1 reveals Manicured Garden due to Overrun');
         });
 
@@ -149,7 +149,7 @@ describe('Overrun', function() {
             this.player1.clickCard(this.overrun);
             this.player1.clickCard(this.pilgrimage);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays Overrun to place a dishonor token on Pilgrimage, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 plays Overrun to place a dishonored status token on Pilgrimage, blanking it');
             expect(this.getChatLogs(10)).not.toContain('player1 reveals Pilgrimage due to Overrun');
         });
     });

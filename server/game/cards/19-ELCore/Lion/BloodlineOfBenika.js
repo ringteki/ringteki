@@ -4,6 +4,10 @@ const AbilityDsl = require('../../../abilitydsl');
 
 class BloodlineOfBenika extends DrawCard {
     setupCardAbilities() {
+        this.attachmentConditions({
+            myControl: true
+        });
+
         this.action({
             title: 'Remove a fate from or move home a character',
             cost: AbilityDsl.costs.sacrificeSelf(),

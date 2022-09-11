@@ -18,9 +18,7 @@ class ReturnFromShadows extends DrawCard {
                     AbilityDsl.actions.dishonorProvince(),
                     AbilityDsl.actions.reveal({ chatMessage: true })
                 ])
-            },
-            effect: 'place a dishonor token on {1}, blanking it',
-            effectArgs: context => [context.target.isFacedown() ? context.target.location : context.target]
+            }
         });
     }
 }

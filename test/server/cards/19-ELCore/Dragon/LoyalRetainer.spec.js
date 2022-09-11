@@ -5,7 +5,7 @@ describe('Loyal Retainer', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['master-of-the-blade'],
-                    hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'loyal-retainer'],
+                    hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'loyal-retainer']
                 },
                 player2: {
                     hand: ['let-go', 'disarm']

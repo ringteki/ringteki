@@ -72,7 +72,7 @@ const Costs = {
     /**
      * Cost that requires discarding itself from hand.
      */
-     discardSelf: () => new GameActionCost(GameActions.discardCard(context => ({ target: context.source }))),
+    discardSelf: () => new GameActionCost(GameActions.discardCard(context => ({ target: context.source }))),
     /**
      * Cost that requires discarding a card to be selected by the player.
      */

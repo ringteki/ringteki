@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { TargetModes, CardTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
-class PrecociousAlchemist extends DrawCard {
+class Firebrand extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Grant a character pride',
@@ -21,6 +21,6 @@ class PrecociousAlchemist extends DrawCard {
     }
 }
 
-PrecociousAlchemist.id = 'precocious-alchemist';
+Firebrand.id = 'firebrand';
 
-module.exports = PrecociousAlchemist;
+module.exports = Firebrand;

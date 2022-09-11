@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
 const { CardTypes, Locations } = require('../../../Constants');
 
-class DemonBear extends DrawCard {
+class NaturesWrath extends DrawCard {
     setupCardAbilities() {
         this.forcedReaction({
             title: 'Put this into the conflict',
@@ -29,14 +29,14 @@ class DemonBear extends DrawCard {
                     }))
                 ])
             },
-            effect: 'maul {0}, {2}giving {0} -2{1}',
-            effectArgs: context => ['military', context.target.getMilitarySkill() <= 2 ? 'dishonoring and ' : ''],
+            effect: 'give {0} -2{1}{2}',
+            effectArgs: context => ['military', context.target.getMilitarySkill() <= 2 ? ' and dishonor them' : ''],
             anyPlayer: true,
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
     }
 }
 
-DemonBear.id = 'demon-bear';
+NaturesWrath.id = 'nature-s-wrath';
 
-module.exports = DemonBear;
+module.exports = NaturesWrath;
