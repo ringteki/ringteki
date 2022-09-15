@@ -6,7 +6,7 @@ class FortunesField extends ProvinceCard {
     setupCardAbilities() {
         this.reaction({
             when: {
-                onCardPlayed: (event) => event.card.type === CardTypes.Character
+                onCardPlayed: (event, context) => event.player === context.player && event.card.type === CardTypes.Character
             },
             title: 'Reduce cost of next character or follower by 1',
             effect: 'reduce the cost of their next character or follower this round by 1',

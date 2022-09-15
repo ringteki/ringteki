@@ -7,17 +7,17 @@ class TheEmptyCity extends ProvinceCard {
         this.reaction({
             title: 'Claim a political ring',
             when: {
-                onCardPlayed: (event, context) => event.originalLocation === context.source.location
+                onCardPlayed: (event, context) => event.player === context.player && event.originalLocation === context.source.location
             },
             target: {
                 mode: TargetModes.Ring,
                 activePromptTitle: 'Choose an unclaimed ring',
                 ringCondition: ring => !ring.isClaimed() && !ring.isRemovedFromGame(),
                 gameAction: AbilityDsl.actions.claimRing({
-                    takeFate: false
+                    takeFate: false,
+                    type: 'political'
                 })
-            },
-            effect: 'claim the {0}.'
+            }
         });
     }
 }

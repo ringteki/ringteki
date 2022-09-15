@@ -5,13 +5,13 @@ const ProvinceCard = require('../../../provincecard.js');
 class ObsidianCaves extends ProvinceCard {
     setupCardAbilities() {
         this.action({
-            title: 'Opponent moves a character home',
+            title: 'Attacker moves a character home',
             target: {
                 cardType: CardTypes.Character,
-                controller: Players.Opponent,
-                player: Players.Opponent,
+                controller: context => context.player.isAttackingPlayer() ? Players.Self : Players.Opponent,
+                player: context => context.player.isAttackingPlayer() ? Players.Self : Players.Opponent,
                 activePromptTitle: 'Choose a character to send home',
-                cardCondition: card => card.isParticipating(),
+                cardCondition: card => card.isAttacking(),
                 gameAction: AbilityDsl.actions.sendHome()
             }
         });

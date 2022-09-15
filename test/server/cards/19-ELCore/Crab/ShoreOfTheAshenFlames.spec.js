@@ -7,7 +7,7 @@ describe('Shore of the Ashen Flames', function() {
                     inPlay: ['isawa-tadaka', 'matsu-berserker']
                 },
                 player2: {
-                    provinces: ['shore-of-the-ashen-flames']
+                    provinces: ['shore-of-the-ashen-flames', 'entrenched-position']
                 }
             });
 
@@ -15,6 +15,7 @@ describe('Shore of the Ashen Flames', function() {
             this.matsuBerserker = this.player1.findCardByName('matsu-berserker');
 
             this.shoreOfTheAshenFlames = this.player2.findCardByName('shore-of-the-ashen-flames', 'province 1');
+            this.entrenched = this.player2.findCardByName('entrenched-position');
         });
 
         it('should not trigger if the province is broken', function() {
@@ -62,7 +63,24 @@ describe('Shore of the Ashen Flames', function() {
             this.player1.pass();
             this.player2.clickCard(this.shoreOfTheAshenFlames);
 
-            expect(this.getChatLogs(3)).toContain('player2 uses A Home Worth Defending to resolve Earth Ring');
+            expect(this.getChatLogs(3)).toContain('player2 uses Shore of the Ashen Flames to resolve Earth Ring');
+        });
+
+        it('should not trigger at another province', function() {
+            this.shoreOfTheAshenFlames.facedown = false;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.matsuBerserker],
+                defenders: [],
+                province: this.entrenched,
+                type: 'military',
+                ring: 'earth'
+            });
+
+            this.player2.pass();
+            this.player1.pass();
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
         });
     });
 });

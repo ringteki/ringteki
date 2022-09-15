@@ -54,7 +54,7 @@ describe('The Empty City', function() {
 
             expect(this.game.rings.air.fate).toBe(1);
             expect(this.player1.fate).toBe(initialFate - 2); // -2 from liar without gaining 1 from the ring
-            expect(this.getChatLogs(3)).toContain('player1 uses The Empty City to claim the Air Ring.');
+            expect(this.getChatLogs(3)).toContain('player1 uses The Empty City to claim Air Ring');
         });
     });
 });

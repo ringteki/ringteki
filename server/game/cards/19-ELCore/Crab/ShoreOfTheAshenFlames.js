@@ -6,7 +6,7 @@ class ShoreOfTheAshenFlames extends ProvinceCard {
         this.reaction({
             title: 'Resolve the ring',
             when: {
-                afterConflict: (event) => !event.conflict.isBreaking()
+                afterConflict: (event, context) => !event.conflict.isBreaking() && context.source.isConflictProvince()
             },
             gameAction: AbilityDsl.actions.resolveConflictRing()
         });
