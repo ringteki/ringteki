@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Players, CardTypes, Locations, Durations, PlayTypes } = require('../../../Constants');
+const { Players, CardTypes, Locations, Durations, PlayTypes, Phases } = require('../../../Constants');
 
 const ahmaCost = function (ahmaController) {
     return {
@@ -29,7 +29,8 @@ class DaidojiAhma extends DrawCard {
         this.reaction({
             title: 'Increase the cost of a character or holding',
             when: {
-                onPhaseStarted: event => event.phase !== 'setup'
+                onPhaseStarted: event => event.phase !== Phases.Setup && event.phase !== Phases.Dynasty,
+                onFateCollected: (event, context) => event.player === context.player
             },
             target: {
                 cardType: [CardTypes.Character, CardTypes.Holding],

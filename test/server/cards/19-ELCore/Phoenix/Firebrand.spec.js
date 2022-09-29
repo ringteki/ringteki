@@ -18,82 +18,43 @@ describe('Firebrand', function() {
             this.kitsuMotso = this.player2.findCardByName('kitsu-motso');
         });
 
-        it('should not work outside a conflict', function() {
+        it('should return the fire ring and resolve the fire ring effect', function() {
+            this.player1.claimRing('earth');
+            this.player1.claimRing('fire');
+            this.game.checkGameState(true);
+            this.player1.clickCard(this.firebrand);
+            expect(this.player1).not.toBeAbleToSelectRing('air');
+            expect(this.player1).not.toBeAbleToSelectRing('earth');
+            expect(this.player1).toBeAbleToSelectRing('fire');
+            expect(this.player1).not.toBeAbleToSelectRing('void');
+            expect(this.player1).not.toBeAbleToSelectRing('water');
+            this.player1.clickRing('fire');
+
+            expect(this.player1).toHavePrompt('Fire Ring');
+            expect(this.player1).toHavePrompt('Choose character to honor or dishonor');
+
+            this.player1.clickCard(this.isawaTadaka);
+            this.player1.clickPrompt('Honor Isawa Tadaka');
+            expect(this.isawaTadaka.isHonored).toBe(true);
+
+            expect(this.getChatLogs(5)).toContain('player1 uses Firebrand, returning the Fire Ring to resolve the Fire Ring effect');
+            expect(this.getChatLogs(5)).toContain('player1 resolves the fire ring, honoring Isawa Tadaka');
+        });
+
+        it('should not work if you don\'t have the fire ring claimed', function() {
+            this.player1.claimRing('earth');
+            this.game.checkGameState(true);
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.firebrand);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not be able to trigger in a water conflict', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.firebrand],
-                defenders: [this.solemnScholar],
-                type: 'military',
-                ring: 'water'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.firebrand);
-            expect(this.player1).not.toHavePrompt('Choose a character');
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-        });
-
-        it('should be able to trigger in a fire conflict', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.firebrand],
-                defenders: [this.solemnScholar],
-                type: 'military',
-                ring: 'fire'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.firebrand);
-            expect(this.player1).toHavePrompt('Choose a character');
-            expect(this.player1).not.toHavePrompt('Conflict Action Window');
-        });
-
-        it('should be able to trigger in a fire conflict, choosing a participating character and give them pride', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.firebrand],
-                defenders: [this.solemnScholar],
-                type: 'military',
-                ring: 'fire'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.firebrand);
-
-            expect(this.player1).toBeAbleToSelect(this.firebrand);
-            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
-            expect(this.player1).not.toBeAbleToSelect(this.isawaTadaka);
-            expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
-
-            this.player1.clickCard(this.firebrand);
-            expect(this.firebrand.hasKeyword('pride')).toBe(true);
-            expect(this.getChatLogs(3)).toContain('player1 uses Firebrand to give Firebrand Pride until end of the conflict');
-        });
-
-        it('should last until the end of the conflict', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.firebrand],
-                defenders: [this.solemnScholar],
-                type: 'military',
-                ring: 'fire'
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.firebrand);
-            this.player1.clickCard(this.firebrand);
-
-            this.player2.pass();
-            this.player1.pass();
-            this.player1.clickPrompt('Don\'t resolve');
+        it('should not work if opponent has the fire ring claimed', function() {
+            this.player2.claimRing('fire');
+            this.game.checkGameState(true);
             expect(this.player1).toHavePrompt('Action Window');
-            expect(this.firebrand.hasKeyword('pride')).toBe(false);
+            this.player1.clickCard(this.firebrand);
+            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

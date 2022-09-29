@@ -506,7 +506,9 @@ class BaseCard extends EffectSource {
         let total = max;
         effects.forEach(effect => {
             const value = effect.getValue(this);
-            if((value === true || value === ability) && effect.context.player === player) {
+            const applyingPlayer = value.applyingPlayer || effect.context.player;
+            const targetAbility = value.targetAbility;
+            if((!targetAbility || targetAbility === ability) && applyingPlayer === player) {
                 total++;
             }
         });

@@ -17,7 +17,7 @@ class JadeColoredRocks extends ProvinceCard {
                     })),
                     'Opponent loses 1 honor': AbilityDsl.actions.loseHonor(context => ({
                         amount: 1,
-                        target: context.player.opponent
+                        target: context.player.opponent.honor > 6 ? context.player.opponent : []
                     })),
                     'Opponent discards 1 card at random': AbilityDsl.actions.discardAtRandom(context => ({
                         amount: 1,

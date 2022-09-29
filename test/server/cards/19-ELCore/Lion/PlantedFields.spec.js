@@ -38,17 +38,18 @@ describe('Planted Fields', function() {
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });
 
-        it('should sacrifice itself to give 1 fate, 1 honor and draw 1 card', function() {
+        it('should sacrifice itself to give 2 fate and draw 2 cards', function() {
             let honor = this.player1.honor;
             let fate = this.player1.fate;
             let handSize = this.player1.hand.length;
             this.noMoreActions();
             this.player1.clickCard(this.plantedFields);
 
-            expect(this.player1.honor).toBe(honor + 1);
-            expect(this.player1.fate).toBe(fate + 1);
-            expect(this.player1.hand.length).toBe(handSize + 1);
+            expect(this.player1.honor).toBe(honor);
+            expect(this.player1.fate).toBe(fate + 2);
+            expect(this.player1.hand.length).toBe(handSize + 2);
             expect(this.plantedFields.location).toBe('dynasty discard pile');
+            expect(this.getChatLogs(5)).toContain('player1 uses Planted Fields, sacrificing Planted Fields to gain 2 fate and draw 2 cards');
         });
     });
 });

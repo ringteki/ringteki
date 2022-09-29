@@ -42,6 +42,24 @@ describe('Shinjo Archer', function() {
             expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
         });
 
+        it('should be able to trigger in a conflict where it is not participating to target participating characters', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.isawaTadaka],
+                defenders: [this.solemnScholar],
+                type: 'military'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.shinjoArcher);
+            expect(this.player1).toHavePrompt('Choose a character');
+
+            expect(this.player1).not.toBeAbleToSelect(this.shinjoArcher);
+            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
+            expect(this.player1).toBeAbleToSelect(this.isawaTadaka);
+            expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
+        });
+
         it('should send home Shinjo Archer and give the target -2/-2 unitl end of conflict', function() {
             this.noMoreActions();
             this.initiateConflict({
@@ -50,6 +68,7 @@ describe('Shinjo Archer', function() {
                 type: 'military'
             });
 
+            expect(this.shinjoArcher.inConflict).toBe(true);
             this.player2.pass();
             this.player1.clickCard(this.shinjoArcher);
             this.player1.clickCard(this.solemnScholar);
@@ -58,7 +77,7 @@ describe('Shinjo Archer', function() {
             expect(this.solemnScholar.getMilitarySkill()).toBe(0);
             expect(this.solemnScholar.getPoliticalSkill()).toBe(0);
 
-            expect(this.getChatLogs(3)).toContain('player1 uses Shinjo Archer, moving home Shinjo Archer to make a parting shot, giving Solemn Scholar -2military/-2political');
+            expect(this.getChatLogs(3)).toContain('player1 uses Shinjo Archer, moving Shinjo Archer home to give Solemn Scholar -2military/-2political');
 
             this.player2.pass();
             this.player1.pass();
@@ -66,6 +85,26 @@ describe('Shinjo Archer', function() {
             expect(this.player1).toHavePrompt('Action Window');
             expect(this.solemnScholar.getMilitarySkill()).toBe(1);
             expect(this.solemnScholar.getPoliticalSkill()).toBe(1);
+        });
+
+        it('should move Shinjo Archer to the conflict and give the target -2/-2 unitl end of conflict', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.isawaTadaka],
+                defenders: [this.solemnScholar],
+                type: 'military'
+            });
+
+            expect(this.shinjoArcher.inConflict).toBe(false);
+            this.player2.pass();
+            this.player1.clickCard(this.shinjoArcher);
+            this.player1.clickCard(this.solemnScholar);
+
+            expect(this.shinjoArcher.inConflict).toBe(true);
+            expect(this.solemnScholar.getMilitarySkill()).toBe(0);
+            expect(this.solemnScholar.getPoliticalSkill()).toBe(0);
+
+            expect(this.getChatLogs(3)).toContain('player1 uses Shinjo Archer, moving Shinjo Archer to the conflict to give Solemn Scholar -2military/-2political');
         });
     });
 });

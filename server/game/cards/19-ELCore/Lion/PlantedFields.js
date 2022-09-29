@@ -12,16 +12,15 @@ class PlantedFields extends DrawCard {
             cost: AbilityDsl.costs.sacrificeSelf(),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.gainFate(context => ({
-                    target: context.player
-                })),
-                AbilityDsl.actions.gainHonor(context => ({
-                    target: context.player
+                    target: context.player,
+                    amount: 2
                 })),
                 AbilityDsl.actions.draw(context => ({
-                    target: context.player
+                    target: context.player,
+                    amount: 2
                 }))
             ]),
-            effect: 'gain 1 fate, gain 1 honor and draw 1 card'
+            effect: 'gain 2 fate and draw 2 cards'
         });
     }
 }

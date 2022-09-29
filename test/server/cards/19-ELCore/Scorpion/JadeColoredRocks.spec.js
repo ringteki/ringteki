@@ -96,5 +96,39 @@ describe('Jade-Colored Rocks', function() {
             this.player2.clickPrompt('Opponent discards 1 card at random');
             expect(this.ann.location).toBe('conflict discard pile');
         });
+
+        it('should not remove 1 honor if at 6', function() {
+            this.player1.honor = 6;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.isawaTadaka],
+                defenders: [],
+                province: this.jadeColoredRocks,
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.jadeColoredRocks);
+            expect(this.player2).toHavePrompt('Choose an option');
+            expect(this.player2.currentButtons).toContain('Opponent loses 1 fate');
+            expect(this.player2.currentButtons).not.toContain('Opponent loses 1 honor');
+            expect(this.player2.currentButtons).toContain('Opponent discards 1 card at random');
+        });
+
+        it('should not remove 1 honor if lower than 6', function() {
+            this.player1.honor = 2;
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.isawaTadaka],
+                defenders: [],
+                province: this.jadeColoredRocks,
+                type: 'military'
+            });
+
+            this.player2.clickCard(this.jadeColoredRocks);
+            expect(this.player2).toHavePrompt('Choose an option');
+            expect(this.player2.currentButtons).toContain('Opponent loses 1 fate');
+            expect(this.player2.currentButtons).not.toContain('Opponent loses 1 honor');
+            expect(this.player2.currentButtons).toContain('Opponent discards 1 card at random');
+        });
     });
 });

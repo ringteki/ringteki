@@ -1,19 +1,12 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Durations, EventNames, Locations, Players } = require('../../../Constants');
+const { CardTypes, Durations, Locations, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
-const EventRegistrar = require('../../../eventregistrar.js');
 
 class CeremonialRobes extends DrawCard {
     setupCardAbilities() {
-        this.declaredDefenders = [];
-        this.movedToDefend = [];
-
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([EventNames.OnDefendersDeclared, EventNames.OnMoveToConflict, EventNames.OnPhaseEnded, EventNames.OnPhaseStarted]);
-
         this.action({
             title: 'Ready your stronghold',
-            condition: context => context.player.stronghold && this.declaredDefenders.includes(context.source) || this.movedToDefend.includes(context.source),
+            condition: context => !!context.player.stronghold,
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.ready(context => ({
                     target: context.player.stronghold
@@ -21,52 +14,49 @@ class CeremonialRobes extends DrawCard {
                 AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.player.stronghold,
                     duration: Durations.UntilEndOfPhase,
-                    effect: AbilityDsl.effects.increaseLimitOnAbilities()
+                    effect: AbilityDsl.effects.increaseLimitOnAbilities({
+                        applyingPlayer: context.player
+                    })
                 }))
             ]),
+            anyPlayer: true,
             effect: 'ready {1} and add an additional use to each of its abilities',
             effectArgs: context => [context.player.stronghold]
         });
 
         this.forcedReaction({
-            title: 'Blank and reveal a province',
+            title: 'Blank and reveal provinces',
             when: {
-                onDefendersDeclared: (event, context) => event.defenders.includes(context.source)
+                onCardAbilityInitiated: (event, context) => event.card === context.source
             },
-            target: {
-                activePromptTitle: 'Choose a province to blank',
-                location: Locations.Provinces,
-                cardType: CardTypes.Province,
-                controller: Players.Self,
-                cardCondition: card => !card.isBroken,
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.dishonorProvince(),
-                    AbilityDsl.actions.reveal({ chatMessage: true })
-                ])
-            }
+            targets: {
+                myProvince: {
+                    activePromptTitle: 'Choose a province to blank',
+                    cardType: CardTypes.Province,
+                    controller: Players.Self,
+                    location: Locations.Provinces,
+                    cardCondition: card => !card.isBroken && !card.isDishonored,
+                    gameAction: AbilityDsl.actions.sequential([
+                        AbilityDsl.actions.dishonorProvince(),
+                        AbilityDsl.actions.reveal({ chatMessage: true })
+                    ])
+                },
+                oppProvince: {
+                    activePromptTitle: 'Choose a province to blank',
+                    player: Players.Opponent,
+                    controller: Players.Opponent,
+                    cardType: CardTypes.Province,
+                    location: Locations.Provinces,
+                    cardCondition: card => !card.isBroken && !card.isDishonored,
+                    gameAction: AbilityDsl.actions.sequential([
+                        AbilityDsl.actions.dishonorProvince(),
+                        AbilityDsl.actions.reveal({ chatMessage: true })
+                    ])
+                }
+            },
+            effect: 'place a dishonored status token on {1} and {2}, blanking them',
+            effectArgs: context => [context.targets.myProvince, context.targets.oppProvince]
         });
-    }
-
-    onDefendersDeclared(event) {
-        if(event.defenders) {
-            this.declaredDefenders.push(...event.defenders);
-        }
-    }
-
-    onMoveToConflict(event) {
-        if(event.card.type === CardTypes.Character && event.card.isDefending()) {
-            this.movedToDefend.push(event.card);
-        }
-    }
-
-    onPhaseEnded() {
-        this.declaredDefenders = [];
-        this.movedToDefend = [];
-    }
-
-    onPhaseStarted() {
-        this.declaredDefenders = [];
-        this.movedToDefend = [];
     }
 }
 

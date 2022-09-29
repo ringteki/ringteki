@@ -1,4 +1,4 @@
-describe('Precocious Alchemist', function() {
+describe('Otter Fisherman', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
@@ -16,6 +16,7 @@ describe('Precocious Alchemist', function() {
 
             this.solemnScholar = this.player2.findCardByName('solemn-scholar');
             this.kitsuMotso = this.player2.findCardByName('kitsu-motso');
+            this.player1.player.imperialFavor = 'political';
         });
 
         it('should not be able to trigger in a non-water conflict', function() {
