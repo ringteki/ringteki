@@ -1,6 +1,6 @@
 describe('Underground Ophidiarium', function () {
     integration(function () {
-        describe("Underground Ophidiarium's ability", function () {
+        describe('Underground Ophidiarium\'s ability', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
@@ -36,7 +36,7 @@ describe('Underground Ophidiarium', function () {
                 expect(this.player1).not.toHavePromptButton('Kirei-ko');
             });
 
-            it("should put the card in the player's hand", function () {
+            it('should put the card in the player\'s hand', function () {
                 let handsize = this.player1.player.hand.size();
                 this.player1.clickCard(this.undergroundOphidiarium);
                 this.player1.clickPrompt('Fiery Madness');
