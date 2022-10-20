@@ -47,7 +47,7 @@ class MangroveSafehouse extends DrawCard {
                 controller: Players.Self,
                 cardCondition: (card) => card.isAttacking(),
                 gameAction: AbilityDsl.actions.multipleContext((context) => {
-                    if (this.targetIsMantis(context)) {
+                    if(this.targetIsMantis(context)) {
                         return {
                             gameActions: [
                                 AbilityDsl.actions.sendHome(),
@@ -56,11 +56,11 @@ class MangroveSafehouse extends DrawCard {
                                 })
                             ]
                         };
-                    } else {
-                        return {
-                            gameActions: [AbilityDsl.actions.sendHome()]
-                        };
                     }
+                    return {
+                        gameActions: [AbilityDsl.actions.sendHome()]
+                    };
+
                 })
             }
         });

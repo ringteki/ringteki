@@ -1,6 +1,6 @@
 describe('Mangrove Safehouse', function () {
     integration(function () {
-        describe("Mangrove Safehouse's ability", function () {
+        describe('Mangrove Safehouse\'s ability', function () {
             describe('Constant ability', function () {
                 beforeEach(function () {
                     this.setupTest({
@@ -125,6 +125,7 @@ describe('Mangrove Safehouse', function () {
                     this.player1.clickCard(this.mangroveSafehouse);
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
+
                 it('should not trigger on military defenses', function () {
                     this.initiateConflict({
                         type: 'military',
@@ -261,6 +262,7 @@ describe('Mangrove Safehouse', function () {
                             this.game.currentConflict.attackers
                         ).not.toContain(this.adeptOfTheWaves);
                     });
+
                     it('steals no fate', function () {
                         expect(this.player1.fate).toBe(this.p1FateBefore);
                         expect(this.player2.fate).toBe(this.p2FateBefore);
