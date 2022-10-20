@@ -34,11 +34,11 @@ class MangroveSafehouse extends DrawCard {
 
         this.action({
             title: 'Move an attacker out of the conflict',
-            effect: 'move {0} home {1}',
+            effect: 'move {0} home{1}',
             effectArgs: (context) => [
                 this.targetIsMantis(context) &&
                 this.opponentHasFateToBeStolen(context)
-                    ? 'and steal 1 fate'
+                    ? ' and steal 1 fate'
                     : ''
             ],
             condition: (context) => context.game.isDuringConflict('military'),
@@ -60,7 +60,6 @@ class MangroveSafehouse extends DrawCard {
                     return {
                         gameActions: [AbilityDsl.actions.sendHome()]
                     };
-
                 })
             }
         });
