@@ -256,16 +256,16 @@ describe('Mangrove Safehouse', function () {
                         this.player1.clickCard(this.adeptOfTheWaves);
                     });
 
-                    it('moves the target home', function () {
+                    it('moves the target home and steals no fate', function () {
                         expect(this.adeptOfTheWaves.inConflict).toBe(false);
                         expect(
                             this.game.currentConflict.attackers
                         ).not.toContain(this.adeptOfTheWaves);
-                    });
-
-                    it('steals no fate', function () {
                         expect(this.player1.fate).toBe(this.p1FateBefore);
                         expect(this.player2.fate).toBe(this.p2FateBefore);
+                        expect(this.getChatLogs(3)).toContain(
+                            'player1 uses Mangrove Safehouse to move Adept of the Waves home'
+                        );
                     });
                 });
 
@@ -274,16 +274,16 @@ describe('Mangrove Safehouse', function () {
                         this.player1.clickCard(this.kudaka);
                     });
 
-                    it('moves the target home', function () {
+                    it('moves the target home and steals 1 fate', function () {
                         expect(this.kudaka.inConflict).toBe(false);
                         expect(
                             this.game.currentConflict.attackers
                         ).not.toContain(this.kudaka);
-                    });
-
-                    it('steals 1 fate', function () {
                         expect(this.player1.fate).toBe(this.p1FateBefore + 1);
                         expect(this.player2.fate).toBe(this.p2FateBefore - 1);
+                        expect(this.getChatLogs(3)).toContain(
+                            'player1 uses Mangrove Safehouse to move Kudaka home and steal 1 fate'
+                        );
                     });
                 });
             });
