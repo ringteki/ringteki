@@ -41,7 +41,7 @@ class MangroveSafehouse extends DrawCard {
                     ? ' and steal 1 fate'
                     : ''
             ],
-            condition: (context) => context.game.isDuringConflict('military'),
+            condition: (context) => context.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
