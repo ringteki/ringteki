@@ -29,7 +29,7 @@ class DaidojiAmbusher extends DrawCard {
             effectArgs: context => [
                 'military',
                 this.checkCondition(context, true) ? ` and ${context.target.getFate() > 0 ? 'remove a fate from them' : 'discard them'}` : ''
-            ],
+            ]
         });
     }
 

@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { Players, TargetModes, Locations } = require('../../../Constants');
+const { Players, TargetModes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class PromisingHohei extends DrawCard {
@@ -7,7 +7,7 @@ class PromisingHohei extends DrawCard {
         this.reaction({
             title: 'return a follower to hand',
             when: {
-                onCardAttached: (event, context) => event.card === context.source,
+                onCardAttached: (event, context) => event.card === context.source
             },
             target: {
                 mode: TargetModes.Single,

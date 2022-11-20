@@ -7,7 +7,7 @@ class IkomaMasterHunter extends DrawCard {
         this.reaction({
             title: 'move in and ready when target joins',
             when: {
-                onPhaseStarted: (event, _) => event.phase === Phases.Conflict 
+                onPhaseStarted: (event) => event.phase === Phases.Conflict
             },
             target: {
                 mode: TargetModes.Single,
@@ -24,13 +24,13 @@ class IkomaMasterHunter extends DrawCard {
                         },
                         multipleTrigger: true,
                         gameAction: AbilityDsl.actions.multiple([
-                            AbilityDsl.actions.moveToConflict({ 
+                            AbilityDsl.actions.moveToConflict({
                                 target: context.source
                             }),
-                            AbilityDsl.actions.ready({ 
+                            AbilityDsl.actions.ready({
                                 target: context.source
                             })
-                        ]),
+                        ])
                     })
                 }))
             },

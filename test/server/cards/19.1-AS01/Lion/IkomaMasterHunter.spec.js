@@ -5,7 +5,7 @@ describe('Ikoma Master Hunter', function () {
                 this.setupTest({
                     phase: 'draw',
                     player1: {
-                        inPlay: ['ikoma-master-hunter'],
+                        inPlay: ['ikoma-master-hunter']
                     },
                     player2: {
                         inPlay: ['solemn-scholar', 'shinjo-outrider']
@@ -28,7 +28,7 @@ describe('Ikoma Master Hunter', function () {
                 expect(this.player1).toBeAbleToSelect(this.ikomaMasterHunter);
 
                 this.player1.clickCard(this.ikomaMasterHunter);
-            
+
                 expect(this.player1).not.toBeAbleToSelect(this.ikomaMasterHunter);
                 expect(this.player1).toBeAbleToSelect(this.scholar);
                 expect(this.player1).toBeAbleToSelect(this.outrider);

@@ -27,7 +27,7 @@
 //                 this.akodoKage = this.player2.findCardByName('akodo-kage');
 //                 this.akodoCho = this.player2.findCardByName('akodo-cho');
 
-                
+
 //             });
 
 //             it('should not be playable with no participating follower cards', function () {

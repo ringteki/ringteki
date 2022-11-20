@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { AbilityTypes, CardTypes } = require('../../../Constants');
+const { AbilityTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class DesperateAide extends DrawCard {
@@ -11,7 +11,7 @@ class DesperateAide extends DrawCard {
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.draw(context => ({ target: context.player })),
                     AbilityDsl.actions.gainHonor(context => {
-                        let diff = this.game.currentConflict.attackerSkill - this.game.currentConflict.defenderSkill
+                        let diff = this.game.currentConflict.attackerSkill - this.game.currentConflict.defenderSkill;
                         const winning = context.player.isAttackingPlayer() ? diff > 0 : diff < 0;
                         return {
                             amount: winning ? 1 : 0,
@@ -21,7 +21,7 @@ class DesperateAide extends DrawCard {
                 ]),
                 effect: 'draw 1 card{1}',
                 effectArgs: context => {
-                    let diff = this.game.currentConflict.attackerSkill - this.game.currentConflict.defenderSkill
+                    let diff = this.game.currentConflict.attackerSkill - this.game.currentConflict.defenderSkill;
                     const winning = context.player.isAttackingPlayer() ? diff > 0 : diff < 0;
                     return [winning ? ' and gain 1 honor' : ''];
                 }

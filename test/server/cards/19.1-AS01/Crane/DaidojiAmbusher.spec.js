@@ -7,7 +7,7 @@ describe('Daidoji Ambusher', function () {
                     inPlay: ['doji-diplomat', 'shosuro-sadako', 'daidoji-ambusher']
                 },
                 player2: {
-                    inPlay: ['daidoji-uji', 'doji-challenger', 'adept-of-shadows'],
+                    inPlay: ['daidoji-uji', 'doji-challenger', 'adept-of-shadows']
                 }
             });
 
@@ -25,7 +25,7 @@ describe('Daidoji Ambusher', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.ambusher],
-                defenders: [this.challenger],
+                defenders: [this.challenger]
             });
 
             this.player2.pass();
@@ -41,7 +41,7 @@ describe('Daidoji Ambusher', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.sadako, this.ambusher],
-                defenders: [this.uji, this.challenger, this.adept],
+                defenders: [this.uji, this.challenger, this.adept]
             });
             this.player2.pass();
 
@@ -58,7 +58,7 @@ describe('Daidoji Ambusher', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.sadako, this.ambusher],
-                defenders: [this.uji, this.challenger, this.adept],
+                defenders: [this.uji, this.challenger, this.adept]
             });
             this.player2.pass();
 
@@ -74,7 +74,7 @@ describe('Daidoji Ambusher', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.sadako, this.ambusher],
-                defenders: [this.uji, this.challenger, this.adept],
+                defenders: [this.uji, this.challenger, this.adept]
             });
             this.player2.pass();
 
@@ -89,7 +89,7 @@ describe('Daidoji Ambusher', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.sadako, this.ambusher],
-                defenders: [this.uji, this.challenger, this.adept],
+                defenders: [this.uji, this.challenger, this.adept]
             });
             this.player2.pass();
 

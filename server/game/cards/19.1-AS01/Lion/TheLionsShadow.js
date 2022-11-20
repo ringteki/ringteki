@@ -1,7 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const { Phases, AbilityTypes, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
-const { context } = require('raven-js');
 
 class TheLionsShadow extends DrawCard {
     setupCardAbilities() {
@@ -33,9 +32,9 @@ class TheLionsShadow extends DrawCard {
                     reveal: false,
                     gameAction: AbilityDsl.actions.moveCard({
                         destination: Locations.Hand
-                    }),
+                    })
                 })
-            }),
+            })
         });
     }
 }

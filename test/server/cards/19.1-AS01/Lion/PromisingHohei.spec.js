@@ -46,7 +46,7 @@ describe('Promising Hohei', function () {
 
                 this.player1.clickCard(this.promisingHohei);
                 this.player1.clickCard(this.relentlessGloryseeker);
-            
+
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.promisingHohei);
 

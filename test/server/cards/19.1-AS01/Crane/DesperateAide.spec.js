@@ -7,7 +7,7 @@ describe('Desperate Aide', function () {
                     inPlay: ['doji-diplomat', 'brash-samurai', 'isawa-tadaka']
                 },
                 player2: {
-                    inPlay: ['kakita-yoshi', 'desperate-aide'],
+                    inPlay: ['kakita-yoshi', 'desperate-aide']
                 }
             });
 
@@ -26,7 +26,7 @@ describe('Desperate Aide', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.brash, this.tadaka],
-                defenders: [this.aide],
+                defenders: [this.aide]
             });
 
             expect(this.player2).toHavePrompt('Conflict Action Window');
@@ -39,7 +39,7 @@ describe('Desperate Aide', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.brash, this.tadaka],
-                defenders: [this.aide],
+                defenders: [this.aide]
             });
 
             let hand = this.player2.hand.length;

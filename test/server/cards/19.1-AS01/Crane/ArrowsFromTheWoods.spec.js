@@ -25,7 +25,7 @@ describe('Arrows from the Woods', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.brash, this.tadaka],
-                defenders: [this.challenger, this.yoshi, this.adept],
+                defenders: [this.challenger, this.yoshi, this.adept]
             });
 
             this.player2.clickCard(this.arrows);
@@ -41,7 +41,7 @@ describe('Arrows from the Woods', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.tadaka],
-                defenders: [this.yoshi, this.challenger, this.adept],
+                defenders: [this.yoshi, this.challenger, this.adept]
             });
             this.player2.clickCard(this.arrows);
             this.player2.clickCard(this.adept);
@@ -57,7 +57,7 @@ describe('Arrows from the Woods', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.brash, this.tadaka],
-                defenders: [this.yoshi, this.challenger, this.adept],
+                defenders: [this.yoshi, this.challenger, this.adept]
             });
             this.player2.clickCard(this.arrows);
             this.player2.clickCard(this.challenger);

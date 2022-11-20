@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { ConflictTypes, TargetModes, Locations, Players } = require('../../../Constants');
+const { ConflictTypes, TargetModes, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 const cornerThePreyCost = function () {
@@ -22,10 +22,11 @@ const cornerThePreyCost = function () {
                 context: context,
                 mode: TargetModes.Select,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.hasTrait('follower') && card.parent.isParticpating(),
+                cardCondition: (card) => card.hasTrait('follower') && card.parent.isParticpating(),
                 onSelect: (_, card) => {
-                    if(!context.costs.cornerThePreyCost)
-                        context.costs.cornerThePreyCost = [card]
+                    if(!context.costs.cornerThePreyCost) {
+                        context.costs.cornerThePreyCost = [card];
+                    }
                     context.costs.cornerThePreyCost.push(card);
                     return true;
                 },
@@ -52,8 +53,8 @@ class CornerThePrey extends DrawCard {
             condition: context => context.game.isDuringConflict(ConflictTypes.Military),
             gameAction: AbilityDsl.actions.selectCard(() => ({
                 cardCondition: (card, context) => {
-                    console.log('cost: ', context.costs.cornerThePreyCost)
-                    return card.isParticipating() && context.costs.cornerThePreyCost && card.printedCost <= context.costs.cornerThePreyCost.length
+                    console.log('cost: ', context.costs.cornerThePreyCost);
+                    return card.isParticipating() && context.costs.cornerThePreyCost && card.printedCost <= context.costs.cornerThePreyCost.length;
                 },
                 activePromptTitle: 'Choose a card to discard',
                 gameAction: AbilityDsl.actions.discardFromPlay()
