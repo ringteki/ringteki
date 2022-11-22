@@ -21,11 +21,11 @@ describe('Kagi Nawa', function () {
             this.samuraiOfIntegrity = this.player2.findCardByName('samurai-of-integrity');
         });
 
-        it('should only be attachable to any Shinobi', function () {
+        it('should only be attachable to a Shinobi you control', function () {
             this.player1.clickCard(this.kagiNawa);
 
             expect(this.player1).toBeAbleToSelect(this.sadako);
-            expect(this.player1).toBeAbleToSelect(this.alibiArtist);
+            expect(this.player1).not.toBeAbleToSelect(this.alibiArtist);
             expect(this.player1).not.toBeAbleToSelect(this.solemnScholar);
             expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);

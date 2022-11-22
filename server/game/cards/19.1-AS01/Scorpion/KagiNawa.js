@@ -5,7 +5,8 @@ const { CardTypes, Players } = require('../../../Constants.js');
 class KagiNawa extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            trait: 'shinobi'
+            trait: 'shinobi',
+            myControl: true
         });
 
         this.action({
