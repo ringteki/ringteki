@@ -1,4 +1,4 @@
-fdescribe('Kagi Nawa', function () {
+describe('Kagi Nawa', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -38,7 +38,7 @@ fdescribe('Kagi Nawa', function () {
             expect(this.player1).toBeAbleToSelect(this.longJourneyHome);
 
             this.player1.clickCard(this.longJourneyHome);
-            expect(this.getChatLogs(3)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase')
+            expect(this.getChatLogs(3)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase');
             expect(this.challenger.bowed).toBe(true);
         });
 
