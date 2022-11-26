@@ -683,6 +683,7 @@ class BaseCard extends EffectSource {
             } else if(keyword.startsWith('no attachments except')) {
                 var traits = keyword.replace('no attachments except ', '');
                 this.allowedAttachmentTraits = traits.split(' or ');
+            } else if(keyword.startsWith('no attachments,')) { //catch all for statements that are to hard to parse automatically
             } else if(keyword.startsWith('no attachments')) {
                 this.allowedAttachmentTraits = ['none'];
             }
