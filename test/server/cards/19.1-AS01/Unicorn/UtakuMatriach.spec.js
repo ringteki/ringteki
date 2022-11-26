@@ -1,4 +1,4 @@
-fdescribe('Utaku Matriarch', function () {
+describe('Utaku Matriarch', function () {
     integration(function () {
         describe('action ability', function () {
             beforeEach(function () {
