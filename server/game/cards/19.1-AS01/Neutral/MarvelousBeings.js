@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { ConflictTypes, CardTypes, Players, Durations } = require('../../../Constants.js');
+const { ConflictTypes, CardTypes, Durations } = require('../../../Constants.js');
 
 class MarvelousBeings extends DrawCard {
     setupCardAbilities() {
