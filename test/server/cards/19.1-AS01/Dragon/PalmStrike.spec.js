@@ -5,7 +5,7 @@ describe('Palm Strike', function () {
                 phase: 'conflict',
                 player1: {
                     inPlay: [
-                        'togashi-initiate',
+                        'togashi-ichi',
                         'doomed-shugenja',
                         'shrine-maiden'
                     ],
@@ -18,7 +18,7 @@ describe('Palm Strike', function () {
                 }
             });
 
-            this.initiate = this.player1.findCardByName('togashi-initiate');
+            this.togashiIchi = this.player1.findCardByName('togashi-ichi');
             this.doomedShugenja =
                 this.player1.findCardByName('doomed-shugenja');
             this.shrineMaiden = this.player1.findCardByName('shrine-maiden');
@@ -37,7 +37,7 @@ describe('Palm Strike', function () {
                 this.player2.playAttachment(this.kakitaBlade, this.brash);
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.initiate, this.doomedShugenja],
+                    attackers: [this.togashiIchi, this.doomedShugenja],
                     defenders: [this.brash]
                 });
             });
@@ -54,11 +54,11 @@ describe('Palm Strike', function () {
             beforeEach(function () {
                 this.player1.playAttachment(
                     this.ancestralDaisho,
-                    this.initiate
+                    this.togashiIchi
                 );
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.initiate, this.doomedShugenja],
+                    attackers: [this.togashiIchi, this.doomedShugenja],
                     defenders: [this.brash]
                 });
             });
@@ -105,10 +105,7 @@ describe('Palm Strike', function () {
 
             it('displays messages', function () {
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 plays Palm Strike to bow an opposing character'
-                );
-                expect(this.getChatLogs(5)).toContain(
-                    'Shrine Maiden strikes down Brash Samurai.'
+                    'player1 plays Palm Strike to bow Brash Samurai — they are stricken down by the Shrine Maiden.'
                 );
             });
         });
@@ -121,14 +118,14 @@ describe('Palm Strike', function () {
                 );
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.initiate, this.doomedShugenja],
+                    attackers: [this.togashiIchi, this.doomedShugenja],
                     defenders: [this.brash],
                     ring: 'void'
                 });
 
                 this.player2.pass();
                 this.player1.clickCard(this.palmStrike);
-                this.player1.clickCard(this.initiate);
+                this.player1.clickCard(this.togashiIchi);
                 this.player1.clickCard(this.brash);
             });
 
@@ -151,10 +148,7 @@ describe('Palm Strike', function () {
 
             it('displays messages', function () {
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 plays Palm Strike to bow an opposing character'
-                );
-                expect(this.getChatLogs(5)).toContain(
-                    'Togashi Initiate overpowers Brash Samurai with the mystical powers of the Ise Zumi.'
+                    'player1 plays Palm Strike to bow Brash Samurai — they are overwhelmed by the mystical tattoos of Togashi Ichi.'
                 );
             });
         });
