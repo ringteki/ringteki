@@ -70,7 +70,7 @@ describe('Kuro', function () {
                     defenders: [],
                     type: 'military'
                 });
-    
+
                 this.player2.pass();
 
                 this.player1.clickCard(this.kuro);
@@ -87,7 +87,7 @@ describe('Kuro', function () {
                     defenders: [],
                     type: 'military'
                 });
-    
+
                 this.player2.pass();
 
                 const initialFate = this.player1.fate;
@@ -104,7 +104,7 @@ describe('Kuro', function () {
                     defenders: [],
                     type: 'military'
                 });
-    
+
                 this.player2.pass();
 
                 const initialFate = this.player1.fate;
@@ -121,7 +121,7 @@ describe('Kuro', function () {
                     defenders: [],
                     type: 'military'
                 });
-    
+
                 this.player2.pass();
 
                 const initialFate = this.player1.fate;
@@ -138,7 +138,7 @@ describe('Kuro', function () {
                     defenders: [],
                     type: 'military'
                 });
-    
+
                 this.player2.pass();
 
                 const initialFate = this.player1.fate;

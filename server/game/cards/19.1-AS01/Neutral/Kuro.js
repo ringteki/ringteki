@@ -28,6 +28,7 @@ class Kuro extends DrawCard {
                         source: this,
                         payCosts: true,
                         target: context.target,
+                        optional: false,
                         playCardTarget: attachContext => {
                             attachContext.target = context.source;
                             attachContext.targets.target = context.source;
