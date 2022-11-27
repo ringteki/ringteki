@@ -27,7 +27,7 @@ describe('Mantis Raider', function () {
                     defenders: [],
                     ring: 'air',
                     type: 'military'
-                })
+                });
 
                 this.player2.pass();
                 this.player1.clickCard(this.mantisRaider);
@@ -47,7 +47,7 @@ describe('Mantis Raider', function () {
                     defenders: [],
                     ring: 'air',
                     type: 'military'
-                })
+                });
 
                 const initialFate = this.player1.fate;
                 this.player2.pass();

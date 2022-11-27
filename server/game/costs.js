@@ -30,6 +30,10 @@ const Costs = {
      */
     moveHomeSelf: () => new GameActionCost(GameActions.sendHome(context => ({target: context.source}))),
     /**
+     * Cost that will send the target to the conflict.
+     */
+    moveToConflict: properties => getSelectCost(GameActions.moveToConflict(), properties, 'Select card to move to the conflict'),
+    /**
      * Cost that will sacrifice the card that initiated the ability.
      */
     sacrificeSelf: () => new GameActionCost(GameActions.sacrifice()),

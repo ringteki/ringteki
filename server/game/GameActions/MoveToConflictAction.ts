@@ -11,6 +11,7 @@ export interface MoveToConflictProperties extends CardActionProperties {
 export class MoveToConflictAction extends CardGameAction {
     name = 'moveToConflict';
     eventName = EventNames.OnMoveToConflict;
+    cost = 'moving {0} into the conflict';
     effect = 'move {0} into the conflict';
     targetType = [CardTypes.Character];
     defaultProperties: MoveToConflictProperties = { side: null };
