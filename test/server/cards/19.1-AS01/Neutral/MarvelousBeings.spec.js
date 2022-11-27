@@ -1,4 +1,4 @@
-fdescribe('Marvelous Beings', function () {
+describe('Marvelous Beings', function () {
     integration(function () {
         describe('action ability', function () {
             beforeEach(function () {
@@ -30,7 +30,7 @@ fdescribe('Marvelous Beings', function () {
                     defenders: [],
                     ring: 'air',
                     type: 'military'
-                })
+                });
                 this.player2.pass();
                 this.player1.clickCard(this.marvelousBeings);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -43,7 +43,7 @@ fdescribe('Marvelous Beings', function () {
                     defenders: [],
                     ring: 'air',
                     type: 'political'
-                })
+                });
                 this.player2.pass();
                 this.player1.clickCard(this.marvelousBeings);
                 expect(this.player1).toHavePrompt('Select card to move to the conflict');
@@ -60,7 +60,7 @@ fdescribe('Marvelous Beings', function () {
                     defenders: [],
                     ring: 'air',
                     type: 'political'
-                })
+                });
                 this.player2.pass();
                 this.player1.clickCard(this.marvelousBeings);
                 this.player1.clickCard(this.guardianKami);
