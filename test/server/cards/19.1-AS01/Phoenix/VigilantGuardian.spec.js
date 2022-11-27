@@ -59,9 +59,7 @@ describe('Vigilant Guardian', function () {
                 this.player2.clickCard(this.steward);
                 this.noMoreActions();
                 expect(this.vigilantGuardian.bowed).toBe(false);
-                expect(this.getChatLogs(5)).toContain('player2 attempts to initiate Banzai!, but Hida Kisada cancels it');
                 expect(this.player1).toHavePrompt('Action Window');
-
             });
         });
     });
