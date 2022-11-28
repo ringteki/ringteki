@@ -4,8 +4,9 @@ const { Locations, Players, CardTypes, TargetModes } = require('../../../Constan
 
 class Kuro extends DrawCard {
     allowAttachment(attachment) {
-        if(attachment.printedCost < 1)
+        if(attachment.printedCost < 1) {
             return false;
+        }
         return super.allowAttachment(attachment);
     }
 

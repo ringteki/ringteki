@@ -62,7 +62,7 @@ describe('To Connect the People', function () {
                 //opponent card and glory not too high, but unique character
                 expect(this.player1).not.toBeAbleToSelect(this.opponentDynastyDiscardAkodoMakoto);
 
-                //opponent cards in discard pile with 2 or more glory 
+                //opponent cards in discard pile with 2 or more glory
                 expect(this.player1).not.toBeAbleToSelect(this.opponentConflictDiscardIkomaAnakazu);
                 expect(this.player1).not.toBeAbleToSelect(this.opponentDynastyDiscardAkodoKaede);
                 expect(this.player1).not.toBeAbleToSelect(this.opponentConflictDiscardRenownedSinger);

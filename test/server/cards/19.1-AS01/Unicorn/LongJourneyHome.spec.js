@@ -79,7 +79,7 @@ describe('Kagi Nawa', function () {
             this.player1.clickCard(this.longJourneyHome);
             this.player1.clickCard(this.challenger);
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase')
+            expect(this.getChatLogs(5)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase');
             expect(this.challenger.location).toBe('play area');
             expect(this.challenger.bowed).toBe(true);
         });
