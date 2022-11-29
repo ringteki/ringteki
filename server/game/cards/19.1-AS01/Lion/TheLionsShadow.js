@@ -5,7 +5,7 @@ const AbilityDsl = require('../../../abilitydsl');
 class TheLionsShadow extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            limitTrait: { 'battlefield': 1 },
+            limitTrait: { 'title': 1 },
             trait: 'courtier'
         });
 
