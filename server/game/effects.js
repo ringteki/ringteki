@@ -23,6 +23,7 @@ const Effects = {
     addKeyword: (keyword) => EffectBuilder.card.static(EffectNames.AddKeyword, keyword),
     addTrait: (trait) => EffectBuilder.card.static(EffectNames.AddTrait, trait),
     additionalTriggerCostForCard: (func) => EffectBuilder.card.static(EffectNames.AdditionalTriggerCost, func),
+    attachmentCardCondition: (func) => EffectBuilder.card.static(EffectNames.AttachmentCardCondition, func),
     attachmentFactionRestriction: (factions) => EffectBuilder.card.static(EffectNames.AttachmentFactionRestriction, factions),
     attachmentLimit: (amount) => EffectBuilder.card.static(EffectNames.AttachmentLimit, amount),
     attachmentMyControlOnly: () => EffectBuilder.card.static(EffectNames.AttachmentMyControlOnly),

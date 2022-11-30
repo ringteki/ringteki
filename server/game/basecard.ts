@@ -305,6 +305,9 @@ class BaseCard extends EffectSource {
                 effect: effects
             });
         }
+        if(properties.cardCondition) {
+            effects.push(Effects.attachmentCardCondition(properties.cardCondition))
+        }
     }
 
     composure(properties): void {
@@ -835,6 +838,8 @@ class BaseCard extends EffectSource {
         } else if(this.getEffects(EffectNames.AttachmentFactionRestriction).some(factions => !factions.some(faction => parent.isFaction(faction)))) {
             return false;
         } else if(this.getEffects(EffectNames.AttachmentTraitRestriction).some(traits => !traits.some(trait => parent.hasTrait(trait)))) {
+            return false;
+        } else if(this.getEffects(EffectNames.AttachmentCardCondition).some(cardCondition => !cardCondition(parent))){
             return false;
         }
         return true;

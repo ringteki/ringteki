@@ -197,7 +197,8 @@ export interface AttachmentConditionProps {
     unique?: boolean;
     faction?: string | string[];
     trait?: string | string[];
-    limitTrait?: traitLimit | traitLimit[]
+    limitTrait?: traitLimit | traitLimit[],
+    cardCondition?: (card: BaseCard) => boolean 
 };
 
 interface HonoredToken {

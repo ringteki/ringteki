@@ -37,6 +37,7 @@ export enum EffectNames {
     AddFaction = 'addFaction',
     AddKeyword = 'addKeyword',
     AddTrait = 'addTrait',
+    AttachmentCardCondition = 'attachmentCardCondition',
     AttachmentFactionRestriction = 'attachmentFactionRestriction',
     AttachmentLimit = 'attachmentLimit',
     AttachmentMyControlOnly = 'attachmentMyControlOnly',
