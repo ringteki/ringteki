@@ -124,11 +124,10 @@ describe('Kuro', function () {
 
                 this.player2.pass();
 
-                const initialFate = this.player1.fate;
                 this.player1.clickCard(this.kuro);
                 this.player1.clickCard(this.aq);
                 expect(this.kuro.isParticipating()).toBe(true);
-                expect(this.getChatLogs(5)).toContain('player1 uses Kuro to seek the lost treasure \'Above Question\'. Kuro swoops into the conflict')
+                expect(this.getChatLogs(5)).toContain('player1 uses Kuro to seek the lost treasure \'Above Question\'. Kuro swoops into the conflict');
             });
 
             it('after attaching, if Kuro was in the conflict, Kuro should move home', function () {
@@ -141,11 +140,10 @@ describe('Kuro', function () {
 
                 this.player2.pass();
 
-                const initialFate = this.player1.fate;
                 this.player1.clickCard(this.kuro);
                 this.player1.clickCard(this.aq);
                 expect(this.kuro.isParticipating()).toBe(false);
-                expect(this.getChatLogs(5)).toContain('player1 uses Kuro to seek the lost treasure \'Above Question\'. Kuro returns home with their treasure')
+                expect(this.getChatLogs(5)).toContain('player1 uses Kuro to seek the lost treasure \'Above Question\'. Kuro returns home with their treasure');
             });
         });
     });

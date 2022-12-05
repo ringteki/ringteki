@@ -171,7 +171,7 @@ describe('Ichigo-kun', function () {
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 this.player1.clickCard(this.ichigoKun);
-                expect(this.getChatLogs(5)).toContain("player1 uses Ichigo-kun to place Fine Katana underneath Ichigo-kun instead of discarding them");
+                expect(this.getChatLogs(5)).toContain('player1 uses Ichigo-kun to place Fine Katana underneath Ichigo-kun instead of discarding them');
                 expect(this.fineKatana.location).toBe(this.ichigoKun.uuid);
                 expect(this.ichigoKun.getMilitarySkill()).toBe(3 + 1); //base + 1 card
                 expect(this.ichigoKun.getPoliticalSkill()).toBe(0); //base unmodified
