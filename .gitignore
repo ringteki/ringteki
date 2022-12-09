@@ -11,4 +11,5 @@ config/local*
 server/logs/*.gz
 build/
 !tsconfig.json
+!package-lock.json
 .idea/
