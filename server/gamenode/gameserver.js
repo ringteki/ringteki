@@ -190,6 +190,7 @@ class GameServer {
         });
 
         game.initialise();
+        logger.info('onStartGame completed');
     }
 
     onSpectator(pendingGame, user) {
