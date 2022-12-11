@@ -160,6 +160,7 @@ class GameServer {
     }
 
     handshake(socket, next) {
+        logger.info('handshaking');
         if(socket.handshake.query.token && socket.handshake.query.token !== 'undefined') {
             jwt.verify(socket.handshake.query.token, config.secret, function(err, user) {
                 if(err) {
@@ -248,6 +249,7 @@ class GameServer {
     }
 
     onConnection(ioSocket) {
+        logger.info('on connection');
         if(!ioSocket.request.user) {
             logger.info('socket connected with no user, disconnecting');
             ioSocket.disconnect();
