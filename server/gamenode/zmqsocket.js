@@ -60,6 +60,8 @@ class ZmqSocket extends EventEmitter {
             return;
         }
 
+        console.log('received message', message.command);
+
         switch(message.command) {
             case 'PING':
                 this.send('PONG');

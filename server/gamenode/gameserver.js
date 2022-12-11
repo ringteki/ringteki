@@ -180,6 +180,7 @@ class GameServer {
     }
 
     onStartGame(pendingGame) {
+        logger.info('this is the start game for the game node')
         let game = new Game(pendingGame, { router: this, shortCardData: this.shortCardData });
         this.games[pendingGame.id] = game;
 
