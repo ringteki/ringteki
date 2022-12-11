@@ -57,6 +57,9 @@ class GameServer {
 
         options.path = '/' + (config.gameNode.name) + '/socket.io';
 
+        logger.info('making a socket for', server, options, config.gameNode.origin);
+        logger.info('listening on a server', config.gameNode.socketioPort);
+
         this.io = socketio(server, options);
         this.io.set('heartbeat timeout', 30000);
         this.io.use(this.handshake.bind(this));
