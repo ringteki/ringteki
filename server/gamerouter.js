@@ -117,12 +117,16 @@ class GameRouter extends EventEmitter {
 
         var message = undefined;
 
+        logger.info('got a message, going to try to parse it');
+
         try {
             message = JSON.parse(msg.toString());
         } catch(err) {
             logger.info(err);
             return;
         }
+
+        logger.info('got message!', message.command);
 
         switch(message.command) {
             case 'HELLO':
