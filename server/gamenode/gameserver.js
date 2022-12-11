@@ -66,6 +66,9 @@ class GameServer {
         }
 
         this.io.on('connection', this.onConnection.bind(this));
+
+        logger.info('listening on', this.host);
+        logger.info('path', options.path);
     }
 
     debugDump() {
