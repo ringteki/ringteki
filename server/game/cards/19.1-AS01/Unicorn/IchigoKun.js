@@ -2,11 +2,16 @@ const AbilityDsl = require('../../../abilitydsl.js');
 const { Elements, Locations } = require('../../../Constants.js');
 const DrawCard = require('../../../drawcard.js');
 
+const elementKey = 'ichigo-kun-fire';
+
 class IchigoKun extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.game.currentConflict
-                && context.game.currentConflict.hasElement(Elements.Fire),
+            condition: (context) =>
+                context.game.currentConflict &&
+                context.game.currentConflict.hasElement(
+                    this.getCurrentElementSymbol(elementKey)
+                ),
             effect: [
                 AbilityDsl.effects.cannotParticipateAsAttacker(),
                 AbilityDsl.effects.cannotParticipateAsDefender()
@@ -55,6 +60,16 @@ class IchigoKun extends DrawCard {
 
     getSkillBonus(card) {
         return card.game.allCards.filter(card => card.controller === this.controller && card.location === this.uuid).length;
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Restricted Ring',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }
 
