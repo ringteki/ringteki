@@ -49,6 +49,7 @@ import { MultipleGameAction } from './MultipleGameAction';
 import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
 import { PlaceCardUnderneathAction, PlaceCardUnderneathProperties } from './PlaceCardUnderneathAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
+import { PlaceFateAttachmentAction, PlaceFateAttachmentProperties } from './PlaceFateAttachmentAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
@@ -116,6 +117,7 @@ const GameActions = {
     moveCard: (propertyFactory: MoveCardProperties | ((context: TriggeredAbilityContext) => MoveCardProperties)) => new MoveCardAction(propertyFactory), // destination, switch = false, shuffle = false, faceup = false
     moveToConflict: (propertyFactory: MoveToConflictProperties | ((context: TriggeredAbilityContext) => MoveToConflictProperties) = {}) => new MoveToConflictAction(propertyFactory),
     placeFate: (propertyFactory: PlaceFateProperties | ((context: TriggeredAbilityContext) => PlaceFateProperties) = {}) => new PlaceFateAction(propertyFactory), // amount = 1, origin
+    placeFateAttachment: (propertyFactory: PlaceFateAttachmentProperties | ((context: TriggeredAbilityContext) => PlaceFateAttachmentProperties) = {}) => new PlaceFateAttachmentAction(propertyFactory), // amount = 1, origin
     playCard: (propertyFactory: PlayCardProperties | ((context: TriggeredAbilityContext) => PlayCardProperties) = {}) => new PlayCardAction(propertyFactory), // resetOnCancel = false, postHandler
     performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
     putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary

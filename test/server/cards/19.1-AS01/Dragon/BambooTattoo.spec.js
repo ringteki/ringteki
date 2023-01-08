@@ -1,4 +1,4 @@
-describe('Loyal Retainer', function() {
+describe('Bamboo Tattoo', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

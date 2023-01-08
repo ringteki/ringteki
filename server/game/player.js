@@ -789,6 +789,9 @@ class Player extends GameObject {
         if(context && context.source && context.source.isTemptationsMaho()) {
             alternateFatePools.push(...this.cardsInPlay.filter(a => a.type === 'character'));
         }
+        if(context && context.source && context.source.isTemptationsMaho()) {
+            alternateFatePools = alternateFatePools.filter(a => a.printedType !== 'ring' && a.type === CardTypes.Character);
+        }
 
         let rings = alternateFatePools.filter(a => a.printedType === 'ring');
         let cards = alternateFatePools.filter(a => a.printedType !== 'ring');
@@ -799,7 +802,7 @@ class Player extends GameObject {
         }
 
         cards.forEach(card => {
-            if(!card.allowGameAction('removeFate')) {
+            if(!card.allowGameAction('removeFate') && card.type !== CardTypes.Attachment) {
                 alternateFatePools = alternateFatePools.filter(a => a !== card);
             }
         });
