@@ -30,6 +30,7 @@ import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
 import { GainStatusTokenAction, GainStatusTokenProperties } from './GainStatusTokenAction';
 import { HandlerAction, HandlerProperties } from './HandlerAction';
 import { HonorAction, HonorProperties } from './HonorAction';
+import { HonorBidAction, HonorBidProperties } from './HonorBidAction';
 import { IfAbleAction, IfAbleActionProperties } from './IfAbleAction';
 import { InitiateConflictAction, InitiateConflictProperties } from './InitiateConflictAction';
 import { JointGameAction } from './JointGameAction';
@@ -151,6 +152,7 @@ const GameActions = {
     fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
     gainHonor: (propertyFactory: GainHonorProperties | ((context: TriggeredAbilityContext) => GainHonorProperties) = {}) => new GainHonorAction(propertyFactory), // amount = 1
+    honorBid: (propertyFactory: HonorBidProperties | ((context: TriggeredAbilityContext) => HonorBidProperties) = {}) => new HonorBidAction(propertyFactory), // giveHonor = false, players = Players.Any, prohibitedBids = []
     initiateConflict: (propertyFactory: InitiateConflictProperties | ((context: TriggeredAbilityContext) => InitiateConflictProperties) = {}) => new InitiateConflictAction(propertyFactory), // canPass = true
     loseFate: (propertyFactory: LoseFateProperties | ((context: TriggeredAbilityContext) => LoseFateProperties) = {}) => new LoseFateAction(propertyFactory),
     loseHonor: (propertyFactory: LoseHonorProperties | ((context: TriggeredAbilityContext) => LoseHonorProperties) = {}) => new LoseHonorAction(propertyFactory), // amount = 1

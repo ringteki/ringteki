@@ -5,13 +5,14 @@ const { EventNames, EffectNames } = require('../Constants');
 const GameModes = require('../../GameModes.js');
 
 class HonorBidPrompt extends AllPlayerPrompt {
-    constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null) {
+    constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null, raiseEvent = true) {
         super(game);
         this.menuTitle = menuTitle || 'Choose a bid';
         this.costHandler = costHandler;
         this.prohibitedBids = prohibitedBids;
         this.duel = duel;
         this.bid = {};
+        this.raiseEvent = raiseEvent;
     }
 
     activeCondition(player) {
@@ -26,7 +27,8 @@ class HonorBidPrompt extends AllPlayerPrompt {
         let completed = super.continue();
 
         if(completed) {
-            this.game.raiseEvent(EventNames.OnHonorDialsRevealed, { duel: this.duel }, () => {
+            const eventName = this.raiseEvent ? EventNames.OnHonorDialsRevealed : EventNames.Unnamed;
+            this.game.raiseEvent(eventName, { duel: this.duel }, () => {
                 for(const player of this.game.getPlayers()) {
                     player.honorBidModifier = 0;
                     this.game.actions.setHonorDial({ value: this.bid[player.uuid]}).resolve(player, this.game.getFrameworkContext());

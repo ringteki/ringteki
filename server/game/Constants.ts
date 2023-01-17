@@ -320,6 +320,7 @@ export enum EventNames {
     OnCardsDrawn = 'onCardsDrawn',
     OnLookAtCards = 'onLookAtCards',
     OnModifyBid = 'onModifyBid',
+    OnHonorBid = 'onHonorBid',
     OnModifyFate = 'onModifyFate',
     OnSetHonorDial = 'onSetHonorDial',
     OnSwitchConflictElement = 'onSwitchConflictElement',
