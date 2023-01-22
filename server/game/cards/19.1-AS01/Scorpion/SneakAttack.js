@@ -6,7 +6,9 @@ class SneakAttack extends DrawCard {
         this.reaction({
             title: 'The attacker gets the first action opportunity',
             cost: AbilityDsl.costs.payHonor(1),
-            when: { onConflictDeclared: () => true },
+            when: {
+                onConflictDeclared: (event, context) => event.conflict.attackingPlayer === context.player
+            },
             effect: 'give {1} the first action in this conflict.',
             effectArgs: (context) => context.player,
             gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
