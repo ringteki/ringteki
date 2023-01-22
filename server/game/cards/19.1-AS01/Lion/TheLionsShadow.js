@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { Phases, AbilityTypes, Locations } = require('../../../Constants');
+const { Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class TheLionsShadow extends DrawCard {
@@ -20,21 +20,8 @@ class TheLionsShadow extends DrawCard {
         });
 
         this.whileAttached({
-            effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
-                title: 'Look at 2 conflict cards and draw 1',
-                cost: AbilityDsl.costs.dishonorSelf(),
-                condition: context => context.source.isParticipating(),
-                effect: 'look at the top two cards of their deck',
-                gameAction: AbilityDsl.actions.deckSearch({
-                    amount: 2,
-                    placeOnBottomInRandomOrder: true,
-                    shuffle: false,
-                    reveal: false,
-                    gameAction: AbilityDsl.actions.moveCard({
-                        destination: Locations.Hand
-                    })
-                })
-            })
+            condition: context => context.source.parent.isAttacking() && context.game.currentConflict.getNumberOfParticipantsFor('attacker') === 1,
+            effect: AbilityDsl.effects.addKeyword('covert')
         });
     }
 }

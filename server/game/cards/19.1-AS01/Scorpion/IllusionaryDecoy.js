@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { CardTypes, Locations } = require('../../../Constants.js');
+const { CardTypes, Locations, Players } = require('../../../Constants.js');
 
 class IllusionaryDecoy extends DrawCard {
     setupCardAbilities() {
@@ -17,20 +17,37 @@ class IllusionaryDecoy extends DrawCard {
 
         this.reaction({
             title: 'Put into play',
-            location: [Locations.Hand, Locations.ConflictDiscardPile],
+            location: Locations.Hand,
             when: {
-                onDefendersDeclared: () => true
+                onConflictStarted: () => true
             },
-            gameAction: AbilityDsl.actions.putIntoPlay()
+            target: {
+                cardType: CardTypes.Character,
+                controller: Players.Self,
+                activePromptTitle: 'Choose a character to move home',
+                cardCondition: card => card.isParticipating(),
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.sendHome(context => ({
+                        target: context.target
+                    })),
+                    AbilityDsl.actions.putIntoConflict(context => ({
+                        target: context.source
+                    }))
+                ])
+            }
         });
 
         this.action({
             title: 'Return to hand',
-            condition: context => context.source.isParticipating() && context.source.controller.cardsInPlay.any(card => {
-                return card.getType() === CardTypes.Character &&
-                        card.hasTrait('shugenja') &&
-                        context.game.currentConflict.elements.some(element => card.hasTrait(element));
-            }),
+            condition: context => {
+                const claimedRings = context.source.controller.getClaimedRings();
+                const match = context.source.controller.cardsInPlay.any(card => {
+                    return card.getType() === CardTypes.Character &&
+                            card.hasTrait('shugenja') &&
+                            claimedRings.some(ring => ring.getElements().some(element => card.hasTrait(element)));
+                });
+                return context.source.isParticipating() && match;
+            },
             gameAction: AbilityDsl.actions.returnToHand()
         });
     }

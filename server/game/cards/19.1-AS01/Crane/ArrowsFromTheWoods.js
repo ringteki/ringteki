@@ -10,7 +10,7 @@ class ArrowsFromTheWoods extends DrawCard {
                 cardCondition: (card, context) => card.controller === context.player && card.isParticipating() && card.hasTrait('bushi')
             },
             gameAction: AbilityDsl.actions.conditional({
-                condition: context => context.target.hasTrait('shinobi'),
+                condition: context => context.target.hasTrait('shinobi') || context.target.hasTrait('scout'),
                 trueGameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.game.currentConflict.getCharacters(context.player.opponent),
                     effect: AbilityDsl.effects.modifyBothSkills(-2)
@@ -21,7 +21,7 @@ class ArrowsFromTheWoods extends DrawCard {
                 }))
             }),
             effect: 'give {1}\'s participating characters -{2}{3}',
-            effectArgs: context => [context.player.opponent, context.target.hasTrait('shinobi') ? '2' : '1', 'military']
+            effectArgs: context => [context.player.opponent, (context.target.hasTrait('shinobi') || context.target.hasTrait('scout')) ? '2' : '1', 'military']
         });
     }
 }

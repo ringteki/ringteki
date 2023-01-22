@@ -5,8 +5,8 @@ describe('Utaku Matriarch', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['utaku-matriarch'],
-                        dynastyDiscard: ['border-rider', 'moto-ariq', 'akodo-toturi-2'],
+                        inPlay: ['utaku-takeko'],
+                        dynastyDiscard: ['border-rider', 'moto-ariq', 'akodo-toturi-2', 'shinjo-yasamura'],
                         conflictDiscard: ['shinjo-ambusher']
                     },
                     player2: {
@@ -15,12 +15,12 @@ describe('Utaku Matriarch', function () {
                     }
                 });
 
-                this.utakuMatriarch = this.player1.findCardByName('utaku-matriarch');
+                this.utakuMatriarch = this.player1.findCardByName('utaku-takeko');
                 this.discardBorderRider = this.player1.findCardByName('border-rider');
                 this.discardMotoAriq = this.player1.findCardByName('moto-ariq');
                 this.discardAkodoToturi = this.player1.findCardByName('akodo-toturi-2');
                 this.discardAmbusher = this.player1.findCardByName('shinjo-ambusher');
-
+                this.yasamura = this.player1.findCardByName('shinjo-yasamura');
 
                 this.discardForthrightIde = this.player2.findCardByName('forthright-ide');
                 this.discardShikshaScout = this.player2.findCardByName('shiksha-scout');
@@ -36,6 +36,7 @@ describe('Utaku Matriarch', function () {
                 expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi);// not a unicorn
                 expect(this.player1).not.toBeAbleToSelect(this.discardForthrightIde); // not in player discard pile
                 expect(this.player1).not.toBeAbleToSelect(this.discardShikshaScout); // not in player discard pile
+                expect(this.player1).not.toBeAbleToSelect(this.yasamura); // unicorn with 1 glory but unique
 
                 const initialPLayerFate = this.player1.fate;
                 this.player1.clickCard(this.discardBorderRider);

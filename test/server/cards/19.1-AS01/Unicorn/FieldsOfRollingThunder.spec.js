@@ -4,74 +4,93 @@ describe('Fields of Rolling Thunder', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: [
-                        'aggressive-moto',
-                        'border-rider',
-                        'worldly-shiotome'
-                    ],
-                    provinces: ['fields-of-rolling-thunder']
+                    inPlay: ['doji-diplomat']
+                },
+                player2: {
+                    inPlay: ['border-rider', 'doji-whisperer'],
+                    dynastyDiscard: ['fields-of-rolling-thunder', 'fields-of-rolling-thunder', 'fields-of-rolling-thunder']
                 }
             });
 
-            this.fieldsOfRollingThunder = this.player1.findCardByName(
-                'fields-of-rolling-thunder'
-            );
+            this.diplomat = this.player1.findCardByName('doji-diplomat');
 
-            this.aggresiveMotoDishonored =
-                this.player1.findCardByName('aggressive-moto');
-            this.aggresiveMotoDishonored.dishonor();
-            this.borderRiderOrdinary =
-                this.player1.findCardByName('border-rider');
-            this.worldlyShiotomeHonored =
-                this.player1.findCardByName('worldly-shiotome');
-            this.worldlyShiotomeHonored.honor();
+            this.fields = this.player2.filterCardsByName('fields-of-rolling-thunder')[0];
+            this.fields2 = this.player2.filterCardsByName('fields-of-rolling-thunder')[1];
+            this.fields3 = this.player2.filterCardsByName('fields-of-rolling-thunder')[2];
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.rider = this.player2.findCardByName('border-rider');
+            this.player2.moveCard(this.fields, 'province 1');
+            this.fields.facedown = false;
         });
 
-        describe('before you pass a conflict', function () {
-            it('is not be triggerable', function () {
-                this.player1.clickCard(this.fieldsOfRollingThunder);
-                expect(this.player1).toHavePrompt('Initiate an action');
-            });
+        it('if you have a ring should let you choose and honor a unicorn character', function () {
+            this.player2.claimRing('water');
+            this.player1.pass();
+            this.player2.clickCard(this.fields);
+            expect(this.player2).toBeAbleToSelect(this.rider);
+            expect(this.player2).not.toBeAbleToSelect(this.whisperer);
+
+            this.player2.clickCard(this.rider);
+            expect(this.rider.isHonored).toBe(true);
+            expect(this.getChatLogs(1)).toContain('player2 uses Fields of Rolling Thunder to honor Border Rider');
         });
 
-        describe('if you have passed a conflict', function () {
-            it('makes ordinary the dishonored', function () {
-                this.noMoreActions();
-                this.player1.passConflict();
+        it('should not trigger if you don\'t have a ring', function () {
+            this.player1.pass();
+            expect(this.player2).toHavePrompt('Action Window');
+            this.player2.clickCard(this.fields);
+            expect(this.player2).toHavePrompt('Action Window');
+        });
 
-                this.player1.clickCard(this.fieldsOfRollingThunder);
-                expect(this.player1).toHavePrompt('Choose a character');
-
-                this.player1.clickCard(this.aggresiveMotoDishonored);
-                expect(this.aggresiveMotoDishonored.isDishonored).toBe(false);
-                expect(this.aggresiveMotoDishonored.isHonored).toBe(false);
-                expect(this.getChatLogs(1)).toContain(
-                    'player1 uses Fields of Rolling Thunder to honor Aggressive Moto'
-                );
+        it('should lose an extra honor for losing unopposed', function () {
+            this.noMoreActions();
+            let honor = this.player2.honor;
+            this.initiateConflict({
+                attackers: [this.diplomat],
+                defenders: [],
+                type: 'political',
+                ring: 'void'
             });
 
-            it('honors the hordinary', function () {
-                this.noMoreActions();
-                this.player1.passConflict();
-                this.player1.clickCard(this.fieldsOfRollingThunder);
-                expect(this.player1).toHavePrompt('Choose a character');
+            this.noMoreActions();
+            expect(this.player2.honor).toBe(honor - 2);
+            expect(this.getChatLogs(5)).toContain('player2 loses 2 honor for not defending the conflict');
+        });
 
-                this.player1.clickCard(this.borderRiderOrdinary);
-                expect(this.borderRiderOrdinary.isHonored).toBe(true);
-                expect(this.getChatLogs(1)).toContain(
-                    'player1 uses Fields of Rolling Thunder to honor Border Rider'
-                );
+        it('should not lose an extra honor for losing unopposed if facedown', function () {
+            this.fields.facedown = true;
+            this.noMoreActions();
+            let honor = this.player2.honor;
+            this.initiateConflict({
+                attackers: [this.diplomat],
+                defenders: [],
+                type: 'political',
+                ring: 'void'
             });
 
-            it('cannot be used on honored characters', function () {
-                this.noMoreActions();
-                this.player1.passConflict();
-                this.player1.clickCard(this.fieldsOfRollingThunder);
-                expect(this.player1).toHavePrompt('Choose a character');
-                expect(this.player1).not.toBeAbleToSelect(
-                    this.worldlyShiotomeHonored
-                );
+            this.noMoreActions();
+            expect(this.player2.honor).toBe(honor - 1);
+            expect(this.getChatLogs(5)).toContain('player2 loses 1 honor for not defending the conflict');
+        });
+
+        it('honor loss should stack', function () {
+            this.player2.moveCard(this.fields2, 'province 2');
+            this.player2.moveCard(this.fields3, 'province 3');
+
+            this.fields2.facedown = false;
+            this.fields3.facedown = false;
+            this.noMoreActions();
+            let honor = this.player2.honor;
+            this.initiateConflict({
+                attackers: [this.diplomat],
+                defenders: [],
+                type: 'political',
+                ring: 'void'
             });
+
+            this.noMoreActions();
+            expect(this.player2.honor).toBe(honor - 4);
+            expect(this.getChatLogs(5)).toContain('player2 loses 4 honor for not defending the conflict');
         });
     });
 });

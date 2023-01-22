@@ -16,7 +16,8 @@ class Retribution extends DrawCard {
                 controller: Players.Self,
                 cardCondition: (card, context) => {
                     const ringsArray = [this.game.rings.air, this.game.rings.earth, this.game.rings.fire, this.game.rings.void, this.game.rings.water];
-                    return card.isHonored && ringsArray.some(ring => ring.canDeclare(context.player) && card.canDeclareAsAttacker(ConflictTypes.Military, ring));
+                    const cardValid = card.isHonored || card.hasTrait('battle-maiden');
+                    return cardValid && ringsArray.some(ring => ring.canDeclare(context.player) && card.canDeclareAsAttacker(ConflictTypes.Military, ring));
                 },
                 gameAction: AbilityDsl.actions.sequentialContext(context => {
                     const gameActions = [];

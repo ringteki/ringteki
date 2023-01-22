@@ -20,7 +20,7 @@ describe('Ichigo-kun', function () {
                 expect(this.player1).toBeAbleToSelect(this.ichigoKun);
 
                 this.player1.clickCard(this.ichigoKun);
-                expect(this.ichigoKun.fate).toBe(5); //0 + 5 facedown
+                expect(this.ichigoKun.fate).toBe(4); //0 + 4 facedown non-stronghold
             });
         });
 

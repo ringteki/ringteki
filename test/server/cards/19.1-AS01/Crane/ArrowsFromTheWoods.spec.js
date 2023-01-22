@@ -7,7 +7,7 @@ describe('Arrows from the Woods', function () {
                     inPlay: ['doji-diplomat', 'brash-samurai', 'isawa-tadaka']
                 },
                 player2: {
-                    inPlay: ['kakita-yoshi', 'doji-challenger', 'adept-of-shadows'],
+                    inPlay: ['kakita-yoshi', 'doji-challenger', 'adept-of-shadows', 'cautious-scout'],
                     hand: ['arrows-from-the-woods']
                 }
             });
@@ -18,6 +18,7 @@ describe('Arrows from the Woods', function () {
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.tadaka = this.player1.findCardByName('isawa-tadaka');
             this.adept = this.player2.findCardByName('adept-of-shadows');
+            this.scout = this.player2.findCardByName('cautious-scout');
             this.arrows = this.player2.findCardByName('arrows-from-the-woods');
         });
 
@@ -53,7 +54,23 @@ describe('Arrows from the Woods', function () {
             expect(this.getChatLogs(10)).toContain('player2 plays Arrows from the Woods to give player1\'s participating characters -2military');
         });
 
-        it('should give opponents characters -1 mil if you target a shinobi', function () {
+        it('should give opponents characters -2 mil if you target a scout', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.diplomat, this.tadaka],
+                defenders: [this.yoshi, this.challenger, this.adept, this.scout]
+            });
+            this.player2.clickCard(this.arrows);
+            this.player2.clickCard(this.scout);
+            expect(this.diplomat.getMilitarySkill()).toBe(0);
+            expect(this.brash.getMilitarySkill()).toBe(2);
+            expect(this.tadaka.getMilitarySkill()).toBe(3);
+            expect(this.yoshi.getMilitarySkill()).toBe(2);
+
+            expect(this.getChatLogs(10)).toContain('player2 plays Arrows from the Woods to give player1\'s participating characters -2military');
+        });
+
+        it('should give opponents characters -1 mil if you don\'t target the right trait', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat, this.brash, this.tadaka],

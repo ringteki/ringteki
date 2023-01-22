@@ -22,28 +22,14 @@ class DisloyalOathkeeper extends DrawCard {
         this.reaction({
             title: 'Put card under this',
             when: {
-                onCardPlayed: (event, context) => event.player === context.player.opponent && event.card.type === CardTypes.Event
+                onCardPlayed: (event, context) => event.player === context.player.opponent && event.card.type === CardTypes.Event &&
+                context.source.controller.getSourceList(this.uuid).map(a => a).length === 0
             },
-            gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.handler({
-                    handler: context => {
-                        const cardsUnderneath = context.source.controller.getSourceList(this.uuid).map(a => a);
-                        if(cardsUnderneath.length > 0) {
-                            cardsUnderneath.forEach(card => {
-                                card.owner.moveCard(card, Locations.ConflictDiscardPile);
-                            });
-                            this.game.addMessage('{0} {1} discarded from underneath {2}', cardsUnderneath, cardsUnderneath.length === 1 ? 'is' : 'are', this);
-                        }
-                    }
-                }),
-                AbilityDsl.actions.placeCardUnderneath(context => ({
-                    target: context.event.card,
-                    hideWhenFaceup: true,
-                    destination: this
-                }))
-            ]),
-            effect: 'place {1} underneath itself',
-            effectArgs: context => [context.event.card]
+            gameAction: AbilityDsl.actions.placeCardUnderneath(context => ({
+                target: context.event.card,
+                hideWhenFaceup: true,
+                destination: this
+            }))
         });
     }
 }

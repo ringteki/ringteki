@@ -5,21 +5,21 @@ describe('The Lions Shadow', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
+                        inPlay: ['matsu-berserker', 'ikoma-message-runner'],
                         hand: ['the-lion-s-shadow'],
                         conflictDeck: ['way-of-the-lion', 'for-shame']
                     }
                 });
 
-                this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
                 this.lionsShadow = this.player1.findCardByName('the-lion-s-shadow');
-                this.relentlessGloryseeker.bow();
+                this.berserker.bow();
             });
 
             it('should only be able to be played on a courtier', function () {
                 this.player1.clickCard(this.lionsShadow);
-                expect(this.player1).not.toBeAbleToSelect(this.relentlessGloryseeker);
+                expect(this.player1).not.toBeAbleToSelect(this.berserker);
                 expect(this.player1).toBeAbleToSelect(this.messageRunner);
 
                 this.player1.clickCard(this.messageRunner);
@@ -32,12 +32,12 @@ describe('The Lions Shadow', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
+                        inPlay: ['matsu-berserker', 'ikoma-message-runner'],
                         hand: ['the-lion-s-shadow']
                     }
                 });
 
-                this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
                 this.lionsShadow = this.player1.findCardByName('the-lion-s-shadow');
                 this.messageRunner.dishonor();
@@ -59,12 +59,12 @@ describe('The Lions Shadow', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
+                        inPlay: ['matsu-berserker', 'ikoma-message-runner'],
                         hand: ['the-lion-s-shadow']
                     }
                 });
 
-                this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
                 this.lionsShadow = this.player1.findCardByName('the-lion-s-shadow');
                 this.messageRunner.dishonor();
@@ -82,61 +82,61 @@ describe('The Lions Shadow', function () {
             });
         });
 
-        describe('The Lions Shadow gained action ability', function () {
+        describe('The Lions Shadow covert', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
+                        inPlay: ['matsu-berserker', 'ikoma-message-runner'],
                         hand: ['the-lion-s-shadow']
+                    },
+                    player2: {
+                        inPlay: ['hantei-sotorii', 'kakita-yoshi']
                     }
                 });
 
-                this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
+                this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
                 this.lionsShadow = this.player1.findCardByName('the-lion-s-shadow');
+
+                this.sotorii = this.player2.findCardByName('hantei-sotorii');
+                this.yoshi = this.player2.findCardByName('kakita-yoshi');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+
+                this.player1.playAttachment(this.lionsShadow, this.messageRunner);
             });
 
-            it('should not prompt when dishonored', function () {
-                this.messageRunner.dishonor();
-                this.player1.clickCard(this.lionsShadow);
-                this.player1.clickCard(this.messageRunner);
-
+            it('should have covert when attacking alone', function () {
                 this.noMoreActions();
-                this.initiateConflict({
-                    type: 'political',
-                    attackers: [this.messageRunner],
-                    defenders: []
-                });
-
-                this.player2.pass();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.shamefulDisplay);
                 this.player1.clickCard(this.messageRunner);
-                expect(this.player1).not.toHavePrompt('Choose an ability:');
-                expect(this.player1).not.toHavePromptButton('Look at 2 conflict cards and draw 1');
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1).toHavePrompt('Choose covert target for Ikoma Message Runner');
+                this.player1.clickCard(this.sotorii);
+                expect(this.sotorii.covert).toBe(true);
+                expect(this.player2).toHavePrompt('Choose Defenders');
+                this.player2.clickCard(this.sotorii);
+                this.player2.clickCard(this.yoshi);
+                this.player2.clickPrompt('Done');
+                expect(this.sotorii.isParticipating()).toBe(false);
+                expect(this.yoshi.isParticipating()).toBe(true);
             });
 
-            it('should prompt to activate the ability to see two cards and draw 1', function () {
-                this.player1.clickCard(this.lionsShadow);
-                this.player1.clickCard(this.messageRunner);
-
+            it('should not have covert when not attacking alone', function () {
                 this.noMoreActions();
-                this.initiateConflict({
-                    type: 'political',
-                    attackers: [this.messageRunner],
-                    defenders: []
-                });
-
-                this.player2.pass();
+                this.player1.clickRing('air');
+                this.player1.clickCard(this.shamefulDisplay);
+                this.player1.clickCard(this.berserker);
                 this.player1.clickCard(this.messageRunner);
-                expect(this.player1).toHavePrompt('Choose an ability:');
-                expect(this.player1).toHavePromptButton('Look at 2 conflict cards and draw 1');
-                this.player1.clickPrompt('Look at 2 conflict cards and draw 1');
-
-                expect(this.player1).toHavePrompt('Select a card');
-                this.player1.clickPrompt('Supernatural Storm (2)');
-                expect(this.getChatLogs(5)).toContain('player1 uses Ikoma Message Runner\'s gained ability from The Lion\'s Shadow, dishonoring Ikoma Message Runner to look at the top two cards of their deck');
-                expect(this.getChatLogs(5)).toContain('player1 takes 1 card');
-                expect(this.getChatLogs(5)).not.toContain('player1 is shuffling their deck');
+                this.player1.clickPrompt('Initiate Conflict');
+                expect(this.player1).not.toHavePrompt('Choose covert target for Ikoma Message Runner');
+                expect(this.player2).toHavePrompt('Choose Defenders');
+                this.player2.clickCard(this.sotorii);
+                this.player2.clickCard(this.yoshi);
+                this.player2.clickPrompt('Done');
+                expect(this.sotorii.isParticipating()).toBe(true);
+                expect(this.yoshi.isParticipating()).toBe(true);
             });
         });
     });

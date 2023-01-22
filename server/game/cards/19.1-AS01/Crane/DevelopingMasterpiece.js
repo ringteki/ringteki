@@ -30,7 +30,7 @@ class DevelopingMasterpiece extends DrawCard {
             phase: Phases.Draw,
             cost: AbilityDsl.costs.bow({
                 cardType: CardTypes.Character,
-                cardCondition: card => card.hasTrait('courtier') || card.hasTrait('artisan')
+                cardCondition: card => card.isFaction('crane') || card.hasTrait('courtier') || card.hasTrait('artisan')
             }),
             location: [Locations.Hand, Locations.ConflictDiscardPile],
             gameAction: AbilityDsl.actions.ifAble(context => ({

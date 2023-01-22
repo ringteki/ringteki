@@ -4,7 +4,7 @@ describe('Developing Masterpiece', function () {
             this.setupTest({
                 phase: 'draw',
                 player1: {
-                    inPlay: ['brash-samurai', 'kakita-yoshi', 'master-at-arms'],
+                    inPlay: ['brash-samurai', 'kakita-yoshi', 'master-at-arms', 'togashi-initiate'],
                     hand: ['developing-masterpiece', 'elegance-and-grace']
                 },
                 player2: {
@@ -16,6 +16,7 @@ describe('Developing Masterpiece', function () {
             this.brash = this.player1.findCardByName('brash-samurai');
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.arms = this.player1.findCardByName('master-at-arms');
+            this.initiate = this.player1.findCardByName('togashi-initiate');
 
             this.whisperer = this.player2.findCardByName('doji-whisperer');
             this.letGo = this.player2.findCardByName('let-go');
@@ -35,10 +36,12 @@ describe('Developing Masterpiece', function () {
             this.yoshi.fate = 1;
         });
 
-        it('should get you to bow a courtier or an artisan as a cost and then attach', function () {
+        it('should get you to bow a crane or courtier or an artisan as a cost and then attach', function () {
             this.player1.clickCard(this.masterpiece);
             expect(this.player1).toBeAbleToSelect(this.yoshi);
             expect(this.player1).toBeAbleToSelect(this.arms);
+            expect(this.player1).toBeAbleToSelect(this.brash);
+            expect(this.player1).not.toBeAbleToSelect(this.initiate);
             this.player1.clickCard(this.yoshi);
 
             expect(this.yoshi.bowed).toBe(true);

@@ -39,7 +39,7 @@ describe('Ancient Golem', function() {
             this.player2.clickCard(this.oathkeeper);
             expect(this.crane.location).toBe(this.oathkeeper.uuid);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Disloyal Oathkeeper to place Way of the Crane underneath itself');
+            expect(this.getChatLogs(5)).toContain('player2 uses Disloyal Oathkeeper to place Way of the Crane underneath Disloyal Oathkeeper');
         });
 
         it('event should be playable', function() {
@@ -54,7 +54,7 @@ describe('Ancient Golem', function() {
             expect(this.getChatLogs(5)).toContain('player2 plays Way of the Crane to honor Doji Challenger');
         });
 
-        it('should discard existing cards if a new one is placed underneath', function() {
+        it('should not react if you already have a card underneath', function() {
             this.player1.clickCard(this.crane);
             this.player1.clickCard(this.whisperer);
             this.player2.clickCard(this.oathkeeper);
@@ -63,11 +63,7 @@ describe('Ancient Golem', function() {
 
             this.player1.clickCard(this.waves);
             this.player1.clickCard(this.isawaTadaka);
-            this.player2.clickCard(this.oathkeeper);
-            expect(this.waves.location).toBe(this.oathkeeper.uuid);
-            expect(this.crane.location).toBe('conflict discard pile');
-
-            expect(this.getChatLogs(5)).toContain('Way of the Crane is discarded from underneath Disloyal Oathkeeper');
+            expect(this.player2).toHavePrompt('Action Window');
         });
 
         it('should not react to an opponent\'s attachment', function() {

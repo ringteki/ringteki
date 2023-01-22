@@ -1,9 +1,19 @@
 const DrawCard = require('../../../drawcard.js');
-const { Players, TargetModes } = require('../../../Constants');
+const { Players, TargetModes, Locations, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class PromisingHohei extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            effect: AbilityDsl.effects.reduceCost({
+                amount: 1,
+                targetCondition: target => target.type === CardTypes.Character && target.getGlory() >= 2,
+                match: (card, source) => card === source
+            })
+        });
+
         this.reaction({
             title: 'return a follower to hand',
             when: {

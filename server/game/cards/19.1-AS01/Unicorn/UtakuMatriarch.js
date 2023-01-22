@@ -46,7 +46,7 @@ class UtakuMatriarch extends DrawCard {
                 mode: TargetModes.Single,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => card.glory >= 1 && card.isFaction('unicorn'),
+                cardCondition: card => card.glory >= 1 && card.isFaction('unicorn') && !card.isUnique(),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.cardLastingEffect(context => ({
                         target: context.target,
@@ -64,6 +64,6 @@ class UtakuMatriarch extends DrawCard {
     }
 }
 
-UtakuMatriarch.id = 'utaku-matriarch';
+UtakuMatriarch.id = 'utaku-takeko';
 
 module.exports = UtakuMatriarch;

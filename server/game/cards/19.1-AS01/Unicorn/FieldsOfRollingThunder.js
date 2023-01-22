@@ -1,23 +1,23 @@
-const ProvinceCard = require('../../../provincecard.js');
+const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 const { CardTypes } = require('../../../Constants');
 
-class FieldsOfRollingThunder extends ProvinceCard {
+class FieldsOfRollingThunder extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            condition: context => context.source.controller.isDefendingPlayer(),
+            effect: AbilityDsl.effects.modifyUnopposedHonorLoss(1)
+        });
+
         this.action({
             title: 'Honor a character',
-            canTriggerOutsideConflict: true,
-            condition: (context) => {
-                const hasPassedAConflict =
-                    context.game
-                        .getConflicts(context.player)
-                        .filter((conflict) => conflict.passed).length > 0;
-                return hasPassedAConflict;
-            },
+            condition: context => Object.values(this.game.rings).some(ring => ring.isConsideredClaimed(context.player)),
             target: {
                 cardType: CardTypes.Character,
+                cardCondition: card => card.isFaction('unicorn'),
                 gameAction: AbilityDsl.actions.honor()
-            }
+            },
+            max: AbilityDsl.limit.perRound(2)
         });
     }
 }

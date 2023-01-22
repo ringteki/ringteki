@@ -2,158 +2,147 @@ describe('Daidoji Ahma', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
-                phase: 'fate',
+                phase: 'conflict',
                 player1: {
-                    inPlay: ['daidoji-ahma']
+                    inPlay: ['togashi-initiate'],
+                    hand: ['i-can-swim']
                 },
                 player2: {
-                    inPlay: [],
-                    dynastyDiscard: ['moto-youth', 'moto-youth', 'border-rider', 'imperial-storehouse', 'a-season-of-war']
+                    inPlay: ['daidoji-uji', 'daidoji-ahma']
                 }
             });
-            this.ahma = this.player1.findCardByName('daidoji-ahma');
-            this.ahma.fate = 1;
-            this.youth1 = this.player2.filterCardsByName('moto-youth')[0];
-            this.youth2 = this.player2.filterCardsByName('moto-youth')[1];
-            this.rider = this.player2.findCardByName('border-rider');
-            this.storehouse = this.player2.findCardByName('imperial-storehouse');
-            this.season = this.player2.findCardByName('a-season-of-war');
+            this.togashiInitiate = this.player1.findCardByName('togashi-initiate');
+            this.daidojiUji = this.player2.findCardByName('daidoji-uji');
+            this.ahma = this.player2.findCardByName('daidoji-ahma');
+            this.swim = this.player1.findCardByName('i-can-swim');
+            this.daidojiUji.dishonor();
 
-            this.player2.moveCard(this.youth1, 'province 1');
-            this.player2.moveCard(this.youth2, 'province 2');
-            this.player2.moveCard(this.rider, 'province 2');
-            this.player2.moveCard(this.storehouse, 'province 3');
-            this.player2.moveCard(this.season, 'province 4');
-
-            this.youth1.facedown = false;
-            this.youth2.facedown = false;
-            this.rider.facedown = true;
-            this.storehouse.facedown = false;
-            this.season.facedown = false;
+            this.player1.player.showBid = 5;
+            this.player2.player.showBid = 1;
         });
 
-        it('should trigger at the start of any phase', function() {
-            this.card = this.player1.player.getDynastyCardInProvince('province 1');
-            this.card.facedown = true;
-            this.youth1.facedown = true;
+        it('void ring', function() {
+            this.daidojiUji.fate = 1;
             this.noMoreActions();
-            this.player1.clickPrompt('Done');
-            this.player2.clickPrompt('Done');
-
-            this.player2.clickPrompt('End Round');
-            this.player1.clickPrompt('End Round');
-
-            expect(this.game.currentPhase).toBe('dynasty');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickPrompt('Pass');
-            this.nextPhase();
-
-            expect(this.game.currentPhase).toBe('draw');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickPrompt('Pass');
-            this.nextPhase();
-
-            expect(this.game.currentPhase).toBe('conflict');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickPrompt('Pass');
-            this.nextPhase();
-
-            expect(this.game.currentPhase).toBe('fate');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'void'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Void Ring');
+            this.player1.clickCard(this.daidojiUji);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.fate).toBe(1);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of the Void Ring');
         });
 
-        it('should increase the cost of a chosen character & react after cards are revealed in dynasty', function() {
+        it('fire ring - honor', function() {
+            this.daidojiUji.fate = 1;
             this.noMoreActions();
-            this.player1.clickPrompt('Done');
-            this.player2.clickPrompt('Done');
-
-            this.youth1.facedown = true;
-            this.youth2.facedown = true;
-            this.storehouse.facedown = true;
-
-            this.player2.clickPrompt('End Round');
-            this.player1.clickPrompt('End Round');
-
-            // Player 2 is first player now
-
-            expect(this.game.currentPhase).toBe('dynasty');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickCard(this.ahma);
-
-            expect(this.youth1.isFaceup()).toBe(true);
-            expect(this.youth2.isFaceup()).toBe(true);
-            expect(this.storehouse.isFaceup()).toBe(true);
-
-            expect(this.player1).toBeAbleToSelect(this.youth1);
-            expect(this.player1).toBeAbleToSelect(this.youth2);
-            expect(this.player1).toBeAbleToSelect(this.rider);
-            expect(this.player1).toBeAbleToSelect(this.storehouse);
-            expect(this.player1).not.toBeAbleToSelect(this.season);
-            this.player1.clickCard(this.youth1);
-            let fate = this.player2.fate;
-            let cost1 = this.youth1.printedCost;
-            let cost2 = this.youth2.printedCost;
-
-            this.player2.clickCard(this.youth2);
-            this.player2.clickPrompt('0');
-            expect(this.player2.fate).toBe(fate - cost2);
-
-            this.player1.pass();
-
-            this.player2.clickCard(this.youth1);
-            this.player2.clickPrompt('0');
-            expect(this.player2.fate).toBe(fate - cost2 - (cost1 + 1));
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ahma to increase the cost to play Moto Youth by 1 this phase');
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'fire'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Fire Ring');
+            this.player1.clickCard(this.daidojiUji);
+            this.player1.clickPrompt('Honor Daidoji Uji');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.isHonored).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of the Fire Ring');
         });
 
-        it('should add a triggering cost to a holding', function() {
+        it('fire ring - dishonor', function() {
+            this.daidojiUji.fate = 1;
             this.noMoreActions();
-            this.player1.clickPrompt('Done');
-            this.player2.clickPrompt('Done');
-            this.player2.clickPrompt('End Round');
-            this.player1.clickPrompt('End Round');
-
-            // Player 2 is first player now
-
-            expect(this.game.currentPhase).toBe('dynasty');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickCard(this.ahma);
-            this.player1.clickCard(this.storehouse);
-            let fate1 = this.player1.fate;
-            let fate2 = this.player2.fate;
-
-            this.player2.clickCard(this.storehouse);
-            expect(this.player1.fate).toBe(fate1 + 1);
-            expect(this.player2.fate).toBe(fate2 - 1);
-
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ahma to force player2 to give them 1 fate as an additional cost to trigger Imperial Storehouse this phase');
-            expect(this.getChatLogs(10)).toContain('player2 gives player1 1 fate to trigger Imperial Storehouse\'s ability');
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'fire'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Fire Ring');
+            this.player1.clickCard(this.daidojiUji);
+            this.player1.clickPrompt('Honor Daidoji Uji');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of the Fire Ring');
         });
 
-        it('should not let you trigger the holding if you have no fate', function() {
+        it('water ring - bow', function() {
             this.noMoreActions();
-            this.player1.clickPrompt('Done');
-            this.player2.clickPrompt('Done');
-            this.player2.clickPrompt('End Round');
-            this.player1.clickPrompt('End Round');
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'water'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Water Ring');
+            this.player1.clickCard(this.daidojiUji);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.bowed).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of the Water Ring');
+        });
 
-            // Player 2 is first player now
+        it('water ring - ready', function() {
+            this.daidojiUji.bow();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'water'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Water Ring');
+            this.player1.clickCard(this.daidojiUji);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.bowed).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of the Water Ring');
+        });
 
-            expect(this.game.currentPhase).toBe('dynasty');
-            expect(this.player1).toBeAbleToSelect(this.ahma);
-            this.player1.clickCard(this.ahma);
-            this.player1.clickCard(this.storehouse);
-            this.player2.fate = 0;
-            this.game.checkGameState(true);
+        it('event', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [this.daidojiUji],
+                ring: 'water'
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.swim);
+            this.player1.clickCard(this.daidojiUji);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.ahma);
+            this.player2.clickCard(this.ahma);
+            expect(this.daidojiUji.location).toBe('play area');
+            expect(this.getChatLogs(5)).toContain('player2 uses Daidōji Ahma to cancel the effects of I Can Swim');
+        });
 
-            expect(this.player2).toHavePrompt('Play cards from provinces');
-            this.player2.clickCard(this.storehouse);
-            expect(this.player2).toHavePrompt('Play cards from provinces');
+        it('should not interrupt on a non-dishonored character', function() {
+            this.daidojiUji.fate = 1;
+            this.daidojiUji.honor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.togashiInitiate],
+                defenders: [],
+                ring: 'void'
+            });
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Void Ring');
+            this.player1.clickCard(this.daidojiUji);
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.daidojiUji.fate).toBe(0);
         });
     });
 });
-

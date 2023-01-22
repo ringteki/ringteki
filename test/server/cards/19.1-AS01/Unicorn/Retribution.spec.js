@@ -8,7 +8,7 @@ describe('Retribution', function () {
                     hand: ['peacemaker-s-blade', 'pacifism']
                 },
                 player2: {
-                    inPlay: ['daidoji-uji', 'doji-challenger', 'adept-of-shadows', 'bayushi-liar'],
+                    inPlay: ['daidoji-uji', 'doji-challenger', 'adept-of-shadows', 'bayushi-liar', 'battle-maiden-recruit'],
                     hand: ['retribution-']
                 }
             });
@@ -27,13 +27,14 @@ describe('Retribution', function () {
             this.adept = this.player2.findCardByName('adept-of-shadows');
             this.retribution = this.player2.findCardByName('retribution-');
             this.liar = this.player2.findCardByName('bayushi-liar');
+            this.recruit = this.player2.findCardByName('battle-maiden-recruit');
 
             this.uji.fate = 2;
             this.uji.honor();
             this.kageyu.honor();
         });
 
-        it('should react if you lose a conflict, after resolution and let you pick an honored character eligible to attack', function () {
+        it('should react if you lose a conflict, after resolution and let you pick an honored character or a battle maiden eligible to attack', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.diplomat],
@@ -53,6 +54,7 @@ describe('Retribution', function () {
 
             this.player2.clickCard(this.retribution);
             expect(this.player2).toBeAbleToSelect(this.uji);
+            expect(this.player2).toBeAbleToSelect(this.recruit);
             expect(this.player2).not.toBeAbleToSelect(this.challenger);
             expect(this.player2).not.toBeAbleToSelect(this.adept);
             expect(this.player2).not.toBeAbleToSelect(this.diplomat);
@@ -140,6 +142,7 @@ describe('Retribution', function () {
         });
 
         it('should not react if you have no eligible characters', function () {
+            this.recruit.bow();
             this.player1.playAttachment(this.pacifism, this.challenger);
             this.player2.pass();
             this.player1.playAttachment(this.blade, this.uji);

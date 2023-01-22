@@ -24,6 +24,24 @@ describe('Promising Hohei', function () {
                 this.ayubunePilot2 = this.player2.findCardByName('ayubune-pilot');
             });
 
+            it('should cost 0 if target has 2 glory', function () {
+                let fate = this.player1.fate;
+
+                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.relentlessGloryseeker);
+
+                expect(this.player1.fate).toBe(fate);
+            });
+
+            it('should cost 1 if target has <2 glory', function () {
+                let fate = this.player1.fate;
+
+                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.messageRunner);
+
+                expect(this.player1.fate).toBe(fate - 1);
+            });
+
             it('should not trigger if there is no follower attachment', function () {
                 this.player1.clickCard(this.fineKatana);
                 this.player1.clickCard(this.relentlessGloryseeker);

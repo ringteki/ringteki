@@ -36,7 +36,7 @@ class IchigoKun extends DrawCard {
             },
             gameAction: AbilityDsl.actions.placeFate(context => ({
                 target: context.source,
-                amount: context.player.getProvinces(province => province.facedown).length
+                amount: context.player.getProvinces(province => province.facedown && province.location !== Locations.StrongholdProvince).length
             }))
         });
 

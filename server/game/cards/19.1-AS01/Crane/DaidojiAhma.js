@@ -1,67 +1,31 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Players, CardTypes, Locations, Durations, PlayTypes, Phases } = require('../../../Constants');
-
-const ahmaCost = function (ahmaController) {
-    return {
-        canPay: function (context) {
-            const canLoseFate = context.game.actions.loseFate().canAffect(context.player, context);
-            const canGainFate = context.game.actions.gainFate().canAffect(ahmaController, context);
-            return canLoseFate && canGainFate && context.player === context.source.controller && context.player !== ahmaController;
-        },
-        resolve: function () {
-            return true;
-        },
-        payEvent: function (context) {
-            let events = [];
-            let honorAction = context.game.actions.takeFate({ target: context.player.opponent });
-            events.push(honorAction.getEvent(context.player, context));
-            context.game.addMessage('{0} gives {1} 1 fate to trigger {2}\'s ability', context.player, ahmaController, context.source);
-
-            return events;
-        },
-        promptsPlayer: false
-    };
-};
+const { Locations } = require('../../../Constants');
 
 class DaidojiAhma extends DrawCard {
-    setupCardAbilities() {
-        this.reaction({
-            title: 'Increase the cost of a character or holding',
-            when: {
-                onPhaseStarted: event => event.phase !== Phases.Setup && event.phase !== Phases.Dynasty,
-                onFateCollected: (event, context) => event.player === context.player
-            },
-            target: {
-                cardType: [CardTypes.Character, CardTypes.Holding],
-                location: Locations.Provinces,
-                controller: Players.Any,
-                cardCondition: card => card.isFaceup(),
-                gameAction: AbilityDsl.actions.conditional(context => ({
-                    condition: context => context.target.type === CardTypes.Character,
-                    trueGameAction: AbilityDsl.actions.playerLastingEffect({
-                        effect: AbilityDsl.effects.increaseCost({
-                            amount: 1,
-                            playingTypes: PlayTypes.PlayFromProvince,
-                            match: card => card === context.target
-                        }),
-                        duration: Durations.UntilEndOfPhase,
-                        targetController: Players.Opponent
-                    }),
-                    falseGameAction: AbilityDsl.actions.cardLastingEffect({
-                        duration: Durations.UntilEndOfPhase,
-                        effect: AbilityDsl.effects.additionalTriggerCostForCard(() => [ahmaCost(this.controller)])
-                    })
-                }))
-            },
-            effect: '{1}{2}{3}{4}{5}',
-            effectArgs: context => {
-                if(context.target.type === CardTypes.Character) {
-                    return ['increase the cost to play ', context.target, ' by 1 this phase', '', ''];
-                }
-                return ['force ', context.target.controller, ' to give them 1 fate as an additional cost to trigger ', context.target, ' this phase'];
+    cardMatches(card, context) {
+        return card.isDishonored && card.controller === context.player && card.location === Locations.PlayArea;
+    }
 
-            }
+    setupCardAbilities() {
+        this.wouldInterrupt({
+            title: 'Cancel ability',
+            when: {
+                onInitiateAbilityEffects: (event, context) => event.context.ability.isTriggeredAbility() && event.cardTargets.some(card => (
+                    this.cardMatches(card, context)
+                )),
+                onMoveFate: (event, context) => this.cardMatches(event.origin, context) && event.fate > 0 && event.context.source.type === 'ring',
+                onCardHonored: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
+                onCardDishonored: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
+                onCardBowed: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
+                onCardReadied: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring'
+            },
+            gameAction: AbilityDsl.actions.cancel(),
+            effect: 'cancel the effects of {1}{2}',
+            effectArgs: context => [
+                context.event.context.source.type === 'ring' ? 'the ' : '',
+                context.event.context.source
+            ]
         });
     }
 }
