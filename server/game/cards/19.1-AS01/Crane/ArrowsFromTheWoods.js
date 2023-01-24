@@ -13,11 +13,11 @@ class ArrowsFromTheWoods extends DrawCard {
                 condition: context => context.target.hasTrait('shinobi') || context.target.hasTrait('scout'),
                 trueGameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.game.currentConflict.getCharacters(context.player.opponent),
-                    effect: AbilityDsl.effects.modifyBothSkills(-2)
+                    effect: AbilityDsl.effects.modifyMilitarySkill(-2)
                 })),
                 falseGameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.game.currentConflict.getCharacters(context.player.opponent),
-                    effect: AbilityDsl.effects.modifyBothSkills(-1)
+                    effect: AbilityDsl.effects.modifyMilitarySkill(-1)
                 }))
             }),
             effect: 'give {1}\'s participating characters -{2}{3}',

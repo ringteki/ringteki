@@ -1,4 +1,4 @@
-describe('Arrows from the Woods', function () {
+fdescribe('Arrows from the Woods', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -47,9 +47,13 @@ describe('Arrows from the Woods', function () {
             this.player2.clickCard(this.arrows);
             this.player2.clickCard(this.adept);
             expect(this.diplomat.getMilitarySkill()).toBe(0);
+            expect(this.diplomat.getPoliticalSkill()).toBe(1);
             expect(this.brash.getMilitarySkill()).toBe(2);
+            expect(this.brash.getPoliticalSkill()).toBe(1);
             expect(this.tadaka.getMilitarySkill()).toBe(3);
+            expect(this.tadaka.getPoliticalSkill()).toBe(3);
             expect(this.yoshi.getMilitarySkill()).toBe(2);
+            expect(this.yoshi.getPoliticalSkill()).toBe(6);
 
             expect(this.getChatLogs(10)).toContain('player2 plays Arrows from the Woods to give player1\'s participating characters -2military');
         });
