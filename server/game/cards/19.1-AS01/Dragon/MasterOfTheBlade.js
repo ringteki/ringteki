@@ -7,7 +7,8 @@ class MasterOfTheBlade extends DrawCard {
         const sacCondition = (card, context) => card.allowGameAction('sacrifice', context) && !card.bowed && card.hasTrait('weapon');
 
         this.action({
-            condition: context => context.source.isParticipating(),
+            condition: (context) =>
+                context.source.isParticipating() && !context.source.bowed,
             limit: AbilityDsl.limit.perRound(2),
             cost: AbilityDsl.costs.bow({
                 cardType: CardTypes.Attachment,
