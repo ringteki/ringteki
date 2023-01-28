@@ -1,4 +1,4 @@
-describe('Utaku Matriarch', function () {
+describe('Utaku Takeko', function () {
     integration(function () {
         describe('action ability', function () {
             beforeEach(function () {
@@ -15,7 +15,7 @@ describe('Utaku Matriarch', function () {
                     }
                 });
 
-                this.utakuMatriarch = this.player1.findCardByName('utaku-takeko');
+                this.utakuTakeko = this.player1.findCardByName('utaku-takeko');
                 this.discardBorderRider = this.player1.findCardByName('border-rider');
                 this.discardMotoAriq = this.player1.findCardByName('moto-ariq');
                 this.discardAkodoToturi = this.player1.findCardByName('akodo-toturi-2');
@@ -27,7 +27,7 @@ describe('Utaku Matriarch', function () {
             });
 
             it('should allow you to pick a 1 glory or higher unicorn character from your dynasty discard pile and play it', function () {
-                this.player1.clickCard(this.utakuMatriarch);
+                this.player1.clickCard(this.utakuTakeko);
 
                 expect(this.player1).toHavePrompt('Choose a character');
                 expect(this.player1).toBeAbleToSelect(this.discardBorderRider); //Unicorn with 1 glory
