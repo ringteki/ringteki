@@ -4,6 +4,8 @@ const { CardTypes, Phases, Players } = require('../../../Constants');
 
 class ParanoidHososhi extends DrawCard {
     setupCardAbilities() {
+        this.legendary(2);
+
         this.persistentEffect({
             effect: AbilityDsl.effects.immunity({ restricts: 'events' })
         });
