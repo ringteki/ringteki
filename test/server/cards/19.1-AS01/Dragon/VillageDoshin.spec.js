@@ -1,11 +1,11 @@
-describe('Loyal Retainer', function() {
+describe('Village Doshin', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['master-of-the-blade'],
-                    hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'loyal-retainer']
+                    hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'village-doshin']
                 },
                 player2: {
                     hand: ['let-go', 'disarm']
@@ -17,7 +17,7 @@ describe('Loyal Retainer', function() {
             this.dragonsClaw = this.player1.findCardByName('dragon-s-claw');
             this.dragonsFang = this.player1.findCardByName('dragon-s-fang');
             this.fineKatana = this.player1.findCardByName('fine-katana');
-            this.loyalRetainer = this.player1.findCardByName('loyal-retainer');
+            this.villageDoshin = this.player1.findCardByName('village-doshin');
 
             this.letGo = this.player2.findCardByName('let-go');
             this.disarm = this.player2.findCardByName('disarm');
@@ -40,11 +40,11 @@ describe('Loyal Retainer', function() {
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.fineKatana);
 
-            this.player1.clickCard(this.loyalRetainer);
-            expect(this.loyalRetainer.location).toBe('conflict discard pile');
+            this.player1.clickCard(this.villageDoshin);
+            expect(this.villageDoshin.location).toBe('conflict discard pile');
             expect(this.letGo.location).toBe('conflict discard pile');
             expect(this.fineKatana.location).toBe('play area');
-            expect(this.getChatLogs(3)).toContain('player1 uses Loyal Retainer, discarding Loyal Retainer to cancel the effects of Let Go');
+            expect(this.getChatLogs(3)).toContain('player1 uses Village Dōshin, discarding Village Dōshin to cancel the effects of Let Go');
         });
     });
 });

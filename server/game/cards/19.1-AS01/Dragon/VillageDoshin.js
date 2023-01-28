@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { Locations, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
-class LoyalRetainer extends DrawCard {
+class VillageDoshin extends DrawCard {
     setupCardAbilities() {
         this.wouldInterrupt({
             title: 'Cancel ability',
@@ -18,6 +18,6 @@ class LoyalRetainer extends DrawCard {
     }
 }
 
-LoyalRetainer.id = 'loyal-retainer';
+VillageDoshin.id = 'village-doshin';
 
-module.exports = LoyalRetainer;
+module.exports = VillageDoshin;
