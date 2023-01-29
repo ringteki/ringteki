@@ -1,4 +1,4 @@
-fdescribe('Arrows from the Woods', function () {
+describe('Arrows from the Woods', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
