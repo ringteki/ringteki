@@ -46,7 +46,7 @@ describe('Kuro', function () {
                         inPlay: ['kuro', 'ikoma-prodigy']
                     },
                     player2: {
-                        conflictDiscard: ['fine-katana', 'above-question', 'adorned-barcha']
+                        conflictDiscard: ['fine-katana', 'above-question', 'adorned-barcha', 'total-warfare']
                     }
                 });
 
@@ -56,6 +56,7 @@ describe('Kuro', function () {
                 this.katana = this.player2.findCardByName('fine-katana');
                 this.aq = this.player2.findCardByName('above-question');
                 this.barcha = this.player2.findCardByName('adorned-barcha');
+                this.totalWarfare = this.player2.findCardByName('total-warfare');
             });
 
             it('should not work outside a conflict', function () {
@@ -76,6 +77,7 @@ describe('Kuro', function () {
                 this.player1.clickCard(this.kuro);
                 expect(this.player1).toHavePrompt('Choose an attachment');
                 expect(this.player1).not.toBeAbleToSelect(this.katana);
+                expect(this.player1).not.toBeAbleToSelect(this.totalWarfare);
                 expect(this.player1).toBeAbleToSelect(this.aq);
                 expect(this.player1).toBeAbleToSelect(this.barcha);
             });
