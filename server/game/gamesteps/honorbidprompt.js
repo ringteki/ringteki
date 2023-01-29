@@ -1,6 +1,6 @@
 const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 const AllPlayerPrompt = require('./allplayerprompt.js');
-const GameActions = require('../GameActions/GameActions');
+const { TransferHonorAction } = require('../GameActions/TransferHonorAction');
 const { EventNames, EffectNames } = require('../Constants');
 const GameModes = require('../../GameModes.js');
 
@@ -63,7 +63,8 @@ class HonorBidPrompt extends AllPlayerPrompt {
 
         var [, amountToTransfer] = CalculateHonorLimit(receivingPlayer, context.game.roundNumber, context.game.currentPhase, amount);
         this.game.addMessage('{0} gives {1} {2} honor', givingPlayer, receivingPlayer, amountToTransfer);
-        GameActions.takeHonor({ amount: Math.abs(difference), afterBid: true }).resolve(givingPlayer, context);
+        const gameAction = new TransferHonorAction({ amount: Math.abs(difference), afterBid: true });
+        gameAction.resolve(givingPlayer, context);
     }
 
 

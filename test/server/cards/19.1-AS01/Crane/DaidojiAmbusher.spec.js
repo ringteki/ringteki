@@ -50,7 +50,7 @@ describe('Daidoji Ambusher', function () {
             expect(this.adept.getMilitarySkill()).toBe(0);
             expect(this.adept.fate).toBe(1);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidoji Ambusher to give Adept of Shadows -2military');
+            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher to give Adept of Shadows -2military');
         });
 
         it('should remove a fate', function () {
@@ -66,7 +66,7 @@ describe('Daidoji Ambusher', function () {
             this.player1.clickCard(this.adept);
             expect(this.adept.getMilitarySkill()).toBe(0);
             expect(this.adept.fate).toBe(0);
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidoji Ambusher to give Adept of Shadows -2military and remove a fate from them');
+            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher to give Adept of Shadows -2military and remove a fate from them');
         });
 
         it('should discard', function () {
@@ -81,7 +81,7 @@ describe('Daidoji Ambusher', function () {
             this.player1.clickCard(this.ambusher);
             this.player1.clickCard(this.diplomat);
             expect(this.diplomat.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidoji Ambusher to give Doji Diplomat -2military and discard them');
+            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher to give Doji Diplomat -2military and discard them');
         });
 
         it('should not discard if skill isn\'t 0', function () {
@@ -96,7 +96,7 @@ describe('Daidoji Ambusher', function () {
             this.player1.clickCard(this.ambusher);
             this.player1.clickCard(this.uji);
             expect(this.diplomat.location).toBe('play area');
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidoji Ambusher to give Daidoji Uji -2military');
+            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher to give Daidoji Uji -2military');
         });
     });
 });
