@@ -76,6 +76,7 @@ describe('Writ of Sanctification', function () {
                 this.player2.pass();
 
                 this.player1.clickCard(this.jealousAncestor);
+                this.player1.clickPrompt('Play this character');
                 this.player1.clickPrompt('0');
                 expect(this.writOfSanctification.hasKeyword('ancestral')).toBe(false);
             });
