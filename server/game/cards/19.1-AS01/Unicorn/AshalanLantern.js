@@ -1,33 +1,37 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { CardTypes, Locations } = require('../../../Constants.js');
+const { PlayTypes, Durations } = require('../../../Constants.js');
 
 class AshalanLantern extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Place fate on card',
-            when: {
-                onCardAttached: (event, context) => (
-                    context.source.parent && event.card === context.source && event.originalLocation !== Locations.PlayArea
-                )
-            },
-            gameAction: AbilityDsl.actions.placeFateAttachment(context => ({
-                target: context.source,
-                amount: context.player.cardsInPlay.filter(card => card.hasTrait('shugenja')).length
-            }))
+        this.attachmentConditions({
+            trait: 'shugenja',
+            myControl: true
         });
 
-        this.persistentEffect({
-            effect: AbilityDsl.effects.alternateFatePool(card => {
-                if(card.type === CardTypes.Event) {
-                    return this;
-                }
-                return false;
-            })
+        this.action({
+            title: 'Place fate on card',
+            cost: AbilityDsl.costs.sacrificeSelf(),
+            gameAction: AbilityDsl.actions.sequential([
+                AbilityDsl.actions.playerLastingEffect(context => ({
+                    duration: Durations.UntilPassPriority,
+                    targetController: context.player,
+                    effect: AbilityDsl.effects.reduceNextPlayedCardCost(3)
+                })),
+                AbilityDsl.actions.deckSearch({
+                    amount: 3,
+                    activePromptTitle: 'Choose a card to play',
+                    gameAction: AbilityDsl.actions.playCard({
+                        resetOnCancel: true,
+                        source: this,
+                        playType: PlayTypes.PlayFromHand
+                    })
+                })
+            ]),
+            effect: 'play a card from their conflict deck'
         });
     }
 }
-
 AshalanLantern.id = 'ashalan-lantern';
 
 module.exports = AshalanLantern;
