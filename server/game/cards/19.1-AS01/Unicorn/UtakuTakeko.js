@@ -56,7 +56,7 @@ class UtakuTakeko extends DrawCard {
                         ]
                     })),
                     AbilityDsl.actions.playCard(context => ({
-                        target: context.target,
+                        target: context.target
                     }))
                 ])
             }

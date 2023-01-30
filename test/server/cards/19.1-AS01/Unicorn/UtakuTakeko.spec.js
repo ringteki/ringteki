@@ -1,4 +1,4 @@
-fdescribe('Utaku Takeko', function () {
+describe('Utaku Takeko', function () {
     integration(function () {
         describe('action ability', function () {
             beforeEach(function () {
@@ -54,7 +54,7 @@ fdescribe('Utaku Takeko', function () {
                     type: 'political',
                     ring: 'air'
                 });
-                
+
                 this.player2.pass();
                 this.player1.clickCard(this.utakuTakeko);
 
