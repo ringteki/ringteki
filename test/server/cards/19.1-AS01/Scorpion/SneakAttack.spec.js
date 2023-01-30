@@ -30,15 +30,15 @@ describe('Sneak Attack', function () {
                     attackers: [this.manipulator]
                 });
 
-                this.player1.clickCard(this.sneakAttack);
-                expect(this.player1.honor).toBe(player1StartingHonor - 1);
-
                 expect(this.player1).toHavePrompt(
                     'Waiting for opponent to choose defenders'
                 );
                 expect(this.player2).toHavePrompt('Choose defenders');
 
                 this.player2.clickPrompt('Done');
+
+                this.player1.clickCard(this.sneakAttack);
+                expect(this.player1.honor).toBe(player1StartingHonor - 1);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 expect(this.player2).toHavePrompt(
                     'Waiting for opponent to take an action or pass'

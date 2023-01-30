@@ -46,6 +46,59 @@ describe('Outmaneuvered by Force', function () {
                 });
             });
 
+            describe('Depending on high printed military character', function () {
+                beforeEach(function () {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['matsu-seventh-legion'],
+                            hand: ['outmaneuvered-by-force']
+                        }
+                    });
+                    this.matsuSeventhLegion = this.player1.findCardByName(
+                        'matsu-seventh-legion'
+                    );
+                    this.outmaneuveredByForce = this.player1.findCardByName(
+                        'outmaneuvered-by-force'
+                    );
+                });
+
+                it('immediately declare conflict', function () {
+                    this.player1.clickCard(this.outmaneuveredByForce);
+                    expect(this.player1).toHavePrompt('Initiate Conflict');
+                });
+            });
+
+            describe('With high military skill, but too low printed value', function () {
+                beforeEach(function () {
+                    this.setupTest({
+                        phase: 'conflict',
+                        player1: {
+                            inPlay: ['commander-of-the-legions'],
+                            hand: ['fine-katana', 'outmaneuvered-by-force']
+                        }
+                    });
+                    this.commanderOfTheLegions = this.player1.findCardByName(
+                        'commander-of-the-legions'
+                    );
+                    this.fineKatana =
+                        this.player1.findCardByName('fine-katana');
+                    this.outmaneuveredByForce = this.player1.findCardByName(
+                        'outmaneuvered-by-force'
+                    );
+                });
+
+                it('cannot be used', function () {
+                    this.player1.clickCard(this.fineKatana);
+                    this.player1.clickCard(this.commanderOfTheLegions);
+                    this.player2.pass();
+                    this.player1.clickCard(this.outmaneuveredByForce);
+                    expect(this.player1).not.toBeAbleToSelect(
+                        this.outmaneuveredByForce
+                    );
+                });
+            });
+
             describe('When conflicts were declared', function () {
                 beforeEach(function () {
                     this.setupTest({
@@ -67,7 +120,7 @@ describe('Outmaneuvered by Force', function () {
                     );
                 });
 
-                it('immediately declare conflict', function () {
+                it('cannot be used', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.adeptOfTheWaves],

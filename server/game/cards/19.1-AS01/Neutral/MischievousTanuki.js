@@ -1,5 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
+const { Phases } = require('../../../Constants.js');
 
 class MischievousTanuki extends DrawCard {
     setupCardAbilities() {
@@ -7,6 +8,7 @@ class MischievousTanuki extends DrawCard {
 
         this.action({
             title: 'Set honor dials',
+            phase: Phases.Conflict,
             gameAction: AbilityDsl.actions.honorBid({
                 message: '{0}{1}{2}{3}',
                 messageArgs: context => {

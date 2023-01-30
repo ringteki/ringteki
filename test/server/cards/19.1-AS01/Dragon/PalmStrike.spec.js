@@ -94,13 +94,11 @@ describe('Palm Strike', function () {
                 expect(this.brash.bowed).toBe(true);
             });
 
-            it('should prevent the opponent from readying during the conflict', function () {
+            it('should not prevent the opponent from readying during the conflict', function () {
                 this.player2.clickCard(this.elegantTessen);
                 this.player2.clickCard(this.brash);
-                expect(this.player2).toHavePrompt(
-                    'Waiting for opponent to take an action or pass'
-                );
-                expect(this.brash.bowed).toBe(true);
+                this.player2.clickCard(this.elegantTessen);
+                expect(this.brash.bowed).toBe(false);
             });
 
             it('displays messages', function () {
@@ -133,11 +131,7 @@ describe('Palm Strike', function () {
                 expect(this.brash.bowed).toBe(true);
             });
 
-            it('should prevent the opponent from readying until the end of the phase', function () {
-                this.noMoreActions();
-                this.player1.clickPrompt('No');
-
-                this.player1.pass();
+            it('should prevent the opponent from readying until the end of the conflict', function () {
                 this.player2.clickCard(this.elegantTessen);
                 this.player2.clickCard(this.brash);
                 expect(this.player2).toHavePrompt(

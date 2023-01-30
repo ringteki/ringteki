@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, AbilityTypes, Locations } = require('../../../Constants');
+const { CardTypes, AbilityTypes, Locations, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class ShibasOath extends DrawCard {
@@ -7,6 +7,11 @@ class ShibasOath extends DrawCard {
         this.attachmentConditions({
             limitTrait: { title: 1 },
             cardCondition: (card) => card.hasTrait('bushi')
+        });
+
+        this.persistentEffect({
+            condition: context => context.game.currentPhase === Phases.Conflict,
+            effect: AbilityDsl.effects.addKeyword('ancestral')
         });
 
         this.reaction({

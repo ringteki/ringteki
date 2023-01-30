@@ -1,9 +1,9 @@
 const AbilityDsl = require('../../../abilitydsl.js');
 const {
     CardTypes,
-    Players,
+    Elements,
     Locations,
-    Elements
+    Players
 } = require('../../../Constants.js');
 const DrawCard = require('../../../drawcard.js');
 
@@ -17,10 +17,10 @@ class MangroveSafehouse extends DrawCard {
             condition: (context) => {
                 const currentRingToClaim =
                     this.getCurrentElementSymbol(elementKey);
-                const youHaveNotClaimedTheRequiredRing = !this.game.rings[
+                const opponentClaimedTheRequiredRing = this.game.rings[
                     currentRingToClaim
-                ].isConsideredClaimed(context.player);
-                return youHaveNotClaimedTheRequiredRing;
+                ].isConsideredClaimed(context.player.opponent);
+                return opponentClaimedTheRequiredRing;
             },
             match: (card, context) => {
                 const isAdjacentProvince = context.player.areLocationsAdjacent(

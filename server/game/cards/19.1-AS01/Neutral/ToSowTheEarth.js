@@ -74,7 +74,8 @@ class ToSowTheEarth extends DrawCard {
                 controller: Players.Any,
                 cardCondition: card => card.isBroken === false,
                 gameAction: AbilityDsl.actions.turnFacedown()
-            }
+            },
+            max: AbilityDsl.limit.perRound(1)
         });
     }
 }

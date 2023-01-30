@@ -1,60 +1,129 @@
-describe('The Empty City', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('The Empty City', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
-                phase: 'dynasty',
+                phase: 'conflict',
                 player1: {
-                    provinces: ['the-empty-city', 'manicured-garden'],
-                    dynastyDiscard: ['bayushi-liar', 'isawa-tadaka']
-                }
+                    provinces: ['the-empty-city'],
+                    inPlay: ['adept-of-the-waves', 'fushicho'],
+                    hand: [],
+                    dynastyDiscard: [
+                        'crafty-tsukumogami',
+                        'kami-of-ancient-wisdom',
+                        'solemn-scholar'
+                    ],
+                    conflictDiscard: ['guardian-kami', 'ishiken-initiate']
+                },
+                player2: {}
             });
 
-            this.theEmptyCity = this.player1.findCardByName('the-empty-city', 'province 1');
-            this.manaicuredGarden = this.player1.findCardByName('manicured-garden', 'province 2');
-            this.bayushiLiar = this.player1.placeCardInProvince('bayushi-liar', 'province 1');
-            this.tadaka = this.player1.placeCardInProvince('isawa-tadaka', 'province 2');
+            this.theEmptyCity = this.player1.findCardByName(
+                'the-empty-city',
+                'province 1'
+            );
+
+            this.fushicho = this.player1.findCardByName('fushicho');
+            this.adeptOfTheWaves =
+                this.player1.findCardByName('adept-of-the-waves');
+            this.tsukumogami = this.player1.findCardByName(
+                'crafty-tsukumogami',
+                'dynasty discard pile'
+            );
+            this.kamiAncient = this.player1.findCardByName(
+                'kami-of-ancient-wisdom',
+                'dynasty discard pile'
+            );
+            this.solemnScholar = this.player1.findCardByName(
+                'solemn-scholar',
+                'dynasty discard pile'
+            );
+            this.guardianKami = this.player1.findCardByName(
+                'guardian-kami',
+                'conflict discard pile'
+            );
+            this.ishikenInitiate = this.player1.findCardByName(
+                'ishiken-initiate',
+                'conflict discard pile'
+            );
 
             this.player1.claimRing('earth');
             this.player2.claimRing('water');
         });
 
-        it('should react to a character being played from The Empty City', function() {
-            this.player1.clickCard(this.bayushiLiar);
-            this.player1.clickPrompt('1');
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.theEmptyCity);
-        });
-
-        it('should not react to a character being played from another province', function() {
-            this.player1.clickCard(this.tadaka);
-            this.player1.clickPrompt('1');
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.theEmptyCity);
-        });
-
-        it('should let the player choose an unclaimed ring', function() {
-            this.player1.clickCard(this.bayushiLiar);
-            this.player1.clickPrompt('1');
+        it('claims an unclaimed ring', function () {
             this.player1.clickCard(this.theEmptyCity);
+            expect(this.player1).toHavePrompt('The Empty City');
+            expect(this.player1).toHavePromptButton('Claim a ring');
+            expect(this.player1).toHavePromptButton(
+                'Put a Spirit character into play'
+            );
+            this.player1.clickPrompt('Claim a ring');
+
             expect(this.player1).toBeAbleToSelectRing('air');
             expect(this.player1).toBeAbleToSelectRing('void');
             expect(this.player1).toBeAbleToSelectRing('fire');
             expect(this.player1).not.toBeAbleToSelectRing('earth');
             expect(this.player1).not.toBeAbleToSelectRing('water');
+
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.fushicho);
+            expect(this.fushicho.bowed).toBe(true);
+            expect(this.game.rings.air.conflictType).toBe('political');
+            expect(this.game.rings.air.isClaimed()).toBe(true);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Empty City, bowing Fushichō to claim Air Ring as a political ring'
+            );
         });
 
-        it('should claim the ring without claiming fate', function() {
-            this.game.rings.air.fate = 1;
-            let initialFate = this.player1.fate;
-
-            this.player1.clickCard(this.bayushiLiar);
-            this.player1.clickPrompt('1');
+        it('puts a spirit character into play', function () {
             this.player1.clickCard(this.theEmptyCity);
-            this.player1.clickRing('air');
+            expect(this.player1).toHavePrompt('The Empty City');
+            expect(this.player1).toHavePromptButton('Claim a ring');
+            expect(this.player1).toHavePromptButton(
+                'Put a Spirit character into play'
+            );
+            this.player1.clickPrompt('Put a Spirit character into play');
 
-            expect(this.game.rings.air.fate).toBe(1);
-            expect(this.player1.fate).toBe(initialFate - 2); // -2 from liar without gaining 1 from the ring
-            expect(this.getChatLogs(3)).toContain('player1 uses The Empty City to claim Air Ring');
+            expect(this.player1).not.toBeAbleToSelect(this.fushicho);
+            expect(this.player1).not.toBeAbleToSelect(this.adeptOfTheWaves);
+            expect(this.player1).toBeAbleToSelect(this.tsukumogami);
+            expect(this.player1).not.toBeAbleToSelect(this.kamiAncient);
+            expect(this.player1).not.toBeAbleToSelect(this.solemnScholar);
+            expect(this.player1).toBeAbleToSelect(this.guardianKami);
+            expect(this.player1).not.toBeAbleToSelect(this.ishikenInitiate);
+
+            this.player1.clickCard(this.guardianKami);
+            expect(this.guardianKami.location).toBe('play area');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Empty City to put Guardian Kami into play'
+            );
+        });
+
+        it('can only use one of ability per round - claim first', function () {
+            this.player1.clickCard(this.theEmptyCity);
+            this.player1.clickPrompt('Claim a ring');
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.fushicho);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Empty City, bowing Fushichō to claim Air Ring as a political ring'
+            );
+
+            this.player2.pass();
+            this.player1.clickCard(this.theEmptyCity);
+            expect(this.player1).not.toHavePrompt('The Empty City');
+        });
+
+        it('can only use one of ability per round - put in play first', function () {
+            this.player1.clickCard(this.theEmptyCity);
+            this.player1.clickPrompt('Put a Spirit character into play');
+            this.player1.clickCard(this.tsukumogami);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Empty City to put Crafty Tsukumogami into play'
+            );
+
+            this.player2.pass();
+            this.player1.clickCard(this.theEmptyCity);
+            expect(this.player1).not.toHavePrompt('The Empty City');
         });
     });
 });

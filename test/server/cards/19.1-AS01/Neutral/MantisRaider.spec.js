@@ -82,18 +82,18 @@ describe('Mantis Raider', function () {
 
                 this.player2.pass();
                 this.player1.clickCard(this.mantisRaider);
-                expect(this.mantisRaider.militarySkill).toBe(4);
+                expect(this.mantisRaider.militarySkill).toBe(3);
                 expect(this.mantisRaider.fate).toBe(1);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Mantis Raider, removing 1 fate from Mantis Raider to give himself +2military/+2political'
+                    'player1 uses Mantis Raider, removing 1 fate from Mantis Raider to give himself +1military'
                 );
 
                 this.player2.pass();
                 this.player1.clickCard(this.mantisRaider);
                 expect(this.mantisRaider.fate).toBe(0);
-                expect(this.mantisRaider.militarySkill).toBe(6);
+                expect(this.mantisRaider.militarySkill).toBe(4);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Mantis Raider, removing 1 fate from Mantis Raider to give himself +2military/+2political'
+                    'player1 uses Mantis Raider, removing 1 fate from Mantis Raider to give himself +1military'
                 );
             });
         });

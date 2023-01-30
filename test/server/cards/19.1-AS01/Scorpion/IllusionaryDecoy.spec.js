@@ -131,5 +131,33 @@ describe('Illusionary Decoy', function() {
             expect(this.decoy.location).toBe('play area');
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
+
+        it('also returns to hand with same conditions, but outside conflicts', function() {
+            this.player2.claimRing('earth');
+            this.player1.pass();
+            this.player2.clickCard(this.isawaTadaka);
+            this.player2.clickPrompt('0');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger1],
+                defenders: [this.challenger],
+                type: 'military',
+                ring: 'air'
+            });
+            this.player2.clickCard(this.decoy);
+            this.player2.clickCard(this.challenger);
+            expect(this.decoy.location).toBe('play area');
+            expect(this.decoy.isParticipating()).toBe(true);
+
+            this.player2.pass();
+            this.player1.pass();
+            this.player1.clickPrompt('Take 1 Honor from opponent');
+
+
+            this.player1.pass();
+            this.player2.clickCard(this.decoy);
+            expect(this.decoy.location).toBe('hand');
+            expect(this.getChatLogs(3)).toContain('player2 uses Illusionary Decoy to return Illusionary Decoy to their hand');
+        });
     });
 });

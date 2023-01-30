@@ -1,86 +1,105 @@
-describe('Shore of the Ashen Flames', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Shore of the Ashen Flames', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['isawa-tadaka', 'matsu-berserker']
+                    inPlay: ['aggressive-moto'],
+                    hand: [
+                        'a-perfect-cut',
+                        'fine-katana',
+                        'curved-blade',
+                        'invocation-of-ash',
+                        'fiery-madness'
+                    ]
                 },
                 player2: {
-                    provinces: ['shore-of-the-ashen-flames', 'entrenched-position']
+                    provinces: ['shore-of-the-ashen-flames']
                 }
             });
 
-            this.isawaTadaka = this.player1.findCardByName('isawa-tadaka');
-            this.matsuBerserker = this.player1.findCardByName('matsu-berserker');
+            this.aggressiveMoto =
+                this.player1.findCardByName('aggressive-moto');
+            this.perfectCut = this.player1.findCardByName('a-perfect-cut');
+            this.fineKatana = this.player1.findCardByName('fine-katana');
+            this.curvedBlade = this.player1.findCardByName('curved-blade');
+            this.invocationOfAsh =
+                this.player1.findCardByName('invocation-of-ash');
+            this.fieryMadness = this.player1.findCardByName('fiery-madness');
 
-            this.shoreOfTheAshenFlames = this.player2.findCardByName('shore-of-the-ashen-flames', 'province 1');
-            this.entrenched = this.player2.findCardByName('entrenched-position');
+            this.shoreOfTheAshenFlames = this.player2.findCardByName(
+                'shore-of-the-ashen-flames',
+                'province 1'
+            );
         });
 
-        it('should not trigger if the province is broken', function() {
+        it('denies attachment bonuses', function () {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.isawaTadaka],
+                attackers: [this.aggressiveMoto],
                 defenders: [],
                 province: this.shoreOfTheAshenFlames,
-                type: 'military',
-                ring: 'earth'
+                type: 'military'
             });
 
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
+
             this.player2.pass();
-            this.player1.pass();
-            expect(this.player1).toHavePrompt('Do you wish to discard Adept of the Waves?');
+            this.player1.clickCard(this.fineKatana);
+            this.player1.clickCard(this.aggressiveMoto);
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
+
+            this.player2.pass();
+            this.player1.clickCard(this.invocationOfAsh);
+            this.player1.clickCard(this.aggressiveMoto);
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
+
+            this.player2.pass();
+            this.player1.clickCard(this.curvedBlade);
+            this.player1.clickCard(this.aggressiveMoto);
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
         });
 
-        it('should trigger if the province is not broken', function() {
+        it('allows attachment penalties', function () {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.matsuBerserker],
+                attackers: [this.aggressiveMoto],
                 defenders: [],
                 province: this.shoreOfTheAshenFlames,
-                type: 'military',
-                ring: 'earth'
+                type: 'military'
             });
 
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
+
             this.player2.pass();
-            this.player1.pass();
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.shoreOfTheAshenFlames);
+            this.player1.clickCard(this.fieryMadness);
+            this.player1.clickCard(this.aggressiveMoto);
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(1);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
         });
 
-        it('should reslove the conflict ring', function() {
+        it('allows event bonuses', function () {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.matsuBerserker],
+                attackers: [this.aggressiveMoto],
                 defenders: [],
                 province: this.shoreOfTheAshenFlames,
-                type: 'military',
-                ring: 'earth'
+                type: 'military'
             });
 
-            this.player2.pass();
-            this.player1.pass();
-            this.player2.clickCard(this.shoreOfTheAshenFlames);
-
-            expect(this.getChatLogs(3)).toContain('player2 uses Shore of the Ashen Flames to resolve Earth Ring');
-        });
-
-        it('should not trigger at another province', function() {
-            this.shoreOfTheAshenFlames.facedown = false;
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.matsuBerserker],
-                defenders: [],
-                province: this.entrenched,
-                type: 'military',
-                ring: 'earth'
-            });
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(3);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
 
             this.player2.pass();
-            this.player1.pass();
-            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.perfectCut);
+            this.player1.clickCard(this.aggressiveMoto);
+            expect(this.aggressiveMoto.getMilitarySkill()).toBe(5);
+            expect(this.aggressiveMoto.getPoliticalSkill()).toBe(0);
         });
     });
 });
