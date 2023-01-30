@@ -41,12 +41,12 @@ class IllusionaryDecoy extends DrawCard {
             title: 'Return to hand',
             condition: context => {
                 const claimedRings = context.source.controller.getClaimedRings();
-                const match = context.source.controller.cardsInPlay.any(card => {
+                const matchShugenjaElementWithClaimedRing = context.source.controller.cardsInPlay.any(card => {
                     return card.getType() === CardTypes.Character &&
                             card.hasTrait('shugenja') &&
                             claimedRings.some(ring => ring.getElements().some(element => card.hasTrait(element)));
                 });
-                return context.source.isParticipating() && match;
+                return matchShugenjaElementWithClaimedRing;
             },
             gameAction: AbilityDsl.actions.returnToHand()
         });

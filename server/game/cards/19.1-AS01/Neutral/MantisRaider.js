@@ -6,7 +6,7 @@ class MantisRaider extends DrawCard {
         this.reaction({
             title: 'Steal a fate',
             when: {
-                onDefendersDeclared: (event, context) =>
+                onConflictStarted: (event, context) =>
                     context.source.isAttacking() &&
                     event.conflict.defenders.length === 0
             },
@@ -18,13 +18,13 @@ class MantisRaider extends DrawCard {
         });
 
         this.action({
-            title: 'Give this character +2/+2',
+            title: 'Give this character +1 military',
             condition: () => this.game.isDuringConflict(),
             cost: AbilityDsl.costs.removeFateFromSelf(),
-            effect: 'give himself +2{1}/+2{2}',
-            effectArgs: () => ['military', 'political'],
+            effect: 'give himself +1{1}',
+            effectArgs: () => ['military'],
             gameAction: AbilityDsl.actions.cardLastingEffect({
-                effect: AbilityDsl.effects.modifyBothSkills(2)
+                effect: AbilityDsl.effects.modifyMilitarySkill(1)
             }),
             limit: AbilityDsl.limit.perConflict(2)
         });

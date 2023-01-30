@@ -8,7 +8,7 @@ describe('Bamboo Tattoo', function() {
                 },
                 player2: {
                     inPlay: ['impulsive-novice', 'doomed-shugenja', 'togashi-mitsu'],
-                    hand: ['bamboo-tattoo', 'high-kick']
+                    hand: ['bamboo-tattoo', 'high-kick','being-and-becoming']
                 }
             });
 
@@ -19,6 +19,9 @@ describe('Bamboo Tattoo', function() {
 
             this.bamboo = this.player2.findCardByName('bamboo-tattoo');
             this.kick = this.player2.findCardByName('high-kick');
+            this.beingAndBecoming = this.player2.findCardByName('being-and-becoming');
+
+            this.game.rings.fire.fate = 2;
         });
 
         it('should only be playable on monks and cost 1 when played on someone expensive', function() {
@@ -98,6 +101,29 @@ describe('Bamboo Tattoo', function() {
             this.player2.clickCard(this.bamboo);
             expect(this.novice.bowed).toBe(false);
 
+            expect(this.getChatLogs(5)).toContain('player2 uses Bamboo Tattoo to ready Impulsive Novice');
+        });
+
+        it('should also prompt you to ready outside conflicts', function() {
+            this.player1.pass();
+            this.player2.clickCard(this.bamboo);
+            this.player2.clickCard(this.novice);
+
+            this.player1.pass();
+            this.player2.clickCard(this.beingAndBecoming);
+            this.player2.clickCard(this.novice);
+
+
+            this.player1.pass();
+            this.player2.clickCard(this.beingAndBecoming);
+            this.player2.clickRing('fire');
+
+            expect(this.novice.bowed).toBe(true);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.bamboo);
+
+            this.player2.clickCard(this.bamboo);
+            expect(this.novice.bowed).toBe(false);
             expect(this.getChatLogs(5)).toContain('player2 uses Bamboo Tattoo to ready Impulsive Novice');
         });
 

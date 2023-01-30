@@ -8,7 +8,8 @@ describe('Master of the Blade', function() {
                     hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'a-new-name', 'inscribed-tanto']
                 },
                 player2: {
-                    inPlay: ['doji-challenger', 'doji-kuwanan']
+                    inPlay: ['doji-challenger', 'doji-kuwanan'],
+                    hand:['mirumoto-s-fury']
                 }
             });
 
@@ -23,6 +24,8 @@ describe('Master of the Blade', function() {
 
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
+            this.craneMirumotosFury = this.player2.findCardByName('mirumoto-s-fury');
+
             this.kuwanan.honor();
 
             this.player1.playAttachment(this.tanto, this.masterOfTheBlade);
@@ -198,6 +201,21 @@ describe('Master of the Blade', function() {
             expect(this.player2).toHavePrompt('Conflict Action Window');
             expect(this.getChatLogs(10)).toContain('player1 uses Master of the Blade, bowing Dragon\'s Claw to initiate a military duel : Master of the Blade vs. Doji Challenger');
             expect(this.getChatLogs(10)).toContain('Duel Effect: bow Doji Challenger');
+        });
+
+        it('does not work when the Master of the Blade is bowed',function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.masterOfTheBlade, this.raitsugu],
+                defenders: [this.challenger, this.kuwanan]
+            });
+            this.player2.clickCard(this.craneMirumotosFury);
+            this.player2.clickCard(this.masterOfTheBlade);
+
+            expect(this.masterOfTheBlade.bowed).toBe(true);
+            this.player1.clickCard(this.masterOfTheBlade);
+            expect(this.player1).not.toHavePrompt('Choose a character');
+
         });
     });
 });

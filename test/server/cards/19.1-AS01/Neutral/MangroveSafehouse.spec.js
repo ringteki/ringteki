@@ -36,25 +36,25 @@ describe('Mangrove Safehouse', function () {
                     );
                 });
 
-                describe('while you did not claim the water ring', function () {
-                    it('gives strength penalty to adjacent provinces', function () {
-                        expect(this.p1.getStrength()).toBe(3 - 1);
-                        expect(this.p2.getStrength()).toBe(3 + 1);
-                        expect(this.p3.getStrength()).toBe(3 - 1);
-                        expect(this.p4.getStrength()).toBe(3);
-                    });
-                });
-
-                describe('while you did claim the water ring', function () {
-                    beforeEach(function () {
-                        this.game.rings.water.claimRing(this.player1.player);
-                        this.game.checkGameState(true);
-                    });
-
+                describe('while the opponent did not claim the water ring', function () {
                     it('does not give strength penalty to adjacent provinces', function () {
                         expect(this.p1.getStrength()).toBe(3);
                         expect(this.p2.getStrength()).toBe(3 + 1);
                         expect(this.p3.getStrength()).toBe(3);
+                        expect(this.p4.getStrength()).toBe(3);
+                    });
+                });
+
+                describe('while the opponent did claim the water ring', function () {
+                    beforeEach(function () {
+                        this.game.rings.water.claimRing(this.player2.player);
+                        this.game.checkGameState(true);
+                    });
+
+                    it('gives strength penalty to adjacent provinces', function () {
+                        expect(this.p1.getStrength()).toBe(3 - 1);
+                        expect(this.p2.getStrength()).toBe(3 + 1);
+                        expect(this.p3.getStrength()).toBe(3 - 1);
                         expect(this.p4.getStrength()).toBe(3);
                     });
                 });

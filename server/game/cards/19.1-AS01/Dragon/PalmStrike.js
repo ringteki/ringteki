@@ -23,23 +23,21 @@ class PalmStrike extends DrawCard {
                     cardCondition: (opponentCharacter) =>
                         opponentCharacter.isParticipating() &&
                         this.cardHasNoWeaponAttachments(opponentCharacter),
-                    gameAction: AbilityDsl.actions.multipleContext(
-                        (context) => ({
-                            gameActions: [
-                                AbilityDsl.actions.bow(),
-                                AbilityDsl.actions.cardLastingEffect(() => ({
+                    gameAction: AbilityDsl.actions.multiple([
+                        AbilityDsl.actions.bow(),
+                        AbilityDsl.actions.conditional({
+                            condition: (context) =>
+                                context.targets.myMonk.hasTrait('tattooed'),
+                            falseGameAction: AbilityDsl.actions.noAction(),
+                            trueGameAction:
+                                AbilityDsl.actions.cardLastingEffect({
                                     effect: AbilityDsl.effects.cardCannot({
                                         cannot: 'ready'
                                     }),
-                                    duration: context.targets.myMonk.hasTrait(
-                                        'tattooed'
-                                    )
-                                        ? Durations.UntilEndOfPhase
-                                        : Durations.UntilEndOfConflict
-                                }))
-                            ]
+                                    duration: Durations.UntilEndOfConflict
+                                })
                         })
-                    )
+                    ])
                 }
             },
             effect: 'bow {1} — they are {2}{3}{4}.',

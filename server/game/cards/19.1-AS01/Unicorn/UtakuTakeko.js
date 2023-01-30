@@ -4,7 +4,7 @@ const { CardTypes, Locations, TargetModes, Players, PlayTypes } = require('../..
 const PlayCharacterAction = require('../../../playcharacteraction.js');
 const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAction.js');
 
-class UtakuMatriarchPlayAction extends PlayCharacterAction {
+class UtakuTakekoPlayAction extends PlayCharacterAction {
     constructor(card) {
         super(card, true);
     }
@@ -20,7 +20,7 @@ class UtakuMatriarchPlayAction extends PlayCharacterAction {
         return super.meetsRequirements(context, newIgnoredRequirements);
     }
 }
-class UtakuMatriarchPlayDisguisedAction extends PlayDisguisedCharacterAction {
+class UtakuTakekoPlayDisguisedAction extends PlayDisguisedCharacterAction {
     constructor(card) {
         super(card, true);
     }
@@ -37,7 +37,7 @@ class UtakuMatriarchPlayDisguisedAction extends PlayDisguisedCharacterAction {
     }
 }
 
-class UtakuMatriarch extends DrawCard {
+class UtakuTakeko extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Play character from your discard pile',
@@ -51,8 +51,8 @@ class UtakuMatriarch extends DrawCard {
                     AbilityDsl.actions.cardLastingEffect(context => ({
                         target: context.target,
                         effect: [
-                            AbilityDsl.effects.gainPlayAction(UtakuMatriarchPlayAction),
-                            AbilityDsl.effects.gainPlayAction(UtakuMatriarchPlayDisguisedAction)
+                            AbilityDsl.effects.gainPlayAction(UtakuTakekoPlayAction),
+                            AbilityDsl.effects.gainPlayAction(UtakuTakekoPlayDisguisedAction)
                         ]
                     })),
                     AbilityDsl.actions.playCard(context => ({
@@ -64,6 +64,6 @@ class UtakuMatriarch extends DrawCard {
     }
 }
 
-UtakuMatriarch.id = 'utaku-takeko';
+UtakuTakeko.id = 'utaku-takeko';
 
-module.exports = UtakuMatriarch;
+module.exports = UtakuTakeko;

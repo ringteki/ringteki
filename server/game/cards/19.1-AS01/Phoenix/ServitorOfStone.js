@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class TheLivingGate extends DrawCard {
+class ServitorOfStone extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: (context) =>
@@ -32,6 +32,6 @@ class TheLivingGate extends DrawCard {
     }
 }
 
-TheLivingGate.id = 'the-living-gate';
+ServitorOfStone.id = 'servitor-of-stone';
 
-module.exports = TheLivingGate;
+module.exports = ServitorOfStone;

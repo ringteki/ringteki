@@ -30,6 +30,36 @@ describe('Shiba\'s Oath', function () {
             });
         });
 
+        describe('Conflict hase Ancestral keyword', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['solemn-scholar', 'serene-warrior'],
+                        hand: ['shiba-s-oath']
+                    }
+                });
+                this.solemnScholar =
+                    this.player1.findCardByName('solemn-scholar');
+                this.sereneWarrior =
+                    this.player1.findCardByName('serene-warrior');
+                this.shibasOath = this.player1.findCardByName('shiba-s-oath');
+                this.game.checkGameState(true);
+            });
+
+            it('should gain ancestral in the conflict phase', function () {
+                this.player1.clickCard(this.shibasOath);
+                this.player1.clickCard(this.sereneWarrior);
+
+                this.player1.clickCard(this.shibasOath);
+
+                expect(this.shibasOath.hasKeyword('ancestral')).toBe(true);
+
+                this.flow.finishConflictPhase();
+                expect(this.shibasOath.hasKeyword('ancestral')).toBe(false);
+            });
+        });
+
         describe('reaction when played', function () {
             beforeEach(function () {
                 this.setupTest({

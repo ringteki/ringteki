@@ -1,11 +1,12 @@
 const DrawCard = require('../../../drawcard.js');
-const { Players, CardTypes } = require('../../../Constants');
+const { Players, CardTypes, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class OutmaneuveredByForce extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Declare a conflict right now',
+            phase: Phases.Conflict,
             condition: (context) =>
                 context.game
                     .getConflicts(Players.Any)
@@ -23,7 +24,7 @@ class OutmaneuveredByForce extends DrawCard {
             !context.player.cardsInPlay.any(
                 (card) =>
                     card.getType() === CardTypes.Character &&
-                    card.hasTrait('berserker')
+                    (card.hasTrait('berserker') || card.printedMilitarySkill >= 6)
             )
         ) {
             return false;
