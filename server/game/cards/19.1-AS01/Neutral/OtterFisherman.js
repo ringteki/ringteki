@@ -13,7 +13,7 @@ class OtterFisherman extends DrawCard {
         this.reaction({
             title: 'Gain resource after claiming water',
             when: {
-                onClaimRing: (_, context) => context.game.isDuringConflict('water')
+                onClaimRing: (event, context) => context.game.isDuringConflict('water') && event.player === context.player
             },
             target: {
                 mode: TargetModes.Select,

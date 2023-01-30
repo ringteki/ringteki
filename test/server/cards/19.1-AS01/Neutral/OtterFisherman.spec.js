@@ -36,6 +36,22 @@ describe('Otter Fisherman', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
+        it('should not be able to trigger when the opponent claims the ring', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.otterFisherman],
+                defenders: [this.kitsuMotso],
+                type: 'political',
+                ring: 'water'
+            });
+
+            this.player2.pass();
+            this.player1.pass();
+
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).toHavePrompt('Action Window');
+        });
+
         it('should be able to trigger in a political water conflict', function() {
             this.noMoreActions();
             this.initiateConflict({
