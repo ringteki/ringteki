@@ -5,12 +5,13 @@ const { EffectNames, Phases, PlayTypes, EventNames, Players, Locations } = requi
 const GameModes = require('../GameModes');
 
 class PlayCharacterAction extends BaseAction {
-    constructor(card, intoConflictOnly = false) {
+    constructor(card, intoConflictOnly = false, intoPlayOnly = false) {
         super(card, [
             Costs.chooseFate(PlayTypes.PlayFromHand),
             Costs.payReduceableFateCost()
         ]);
         this.intoConflictOnly = intoConflictOnly;
+        this.intoPlayOnly = intoPlayOnly;
         this.title = 'Play this character';
     }
 
@@ -60,7 +61,7 @@ class PlayCharacterAction extends BaseAction {
             context.game.addMessage('{0} plays {1} into the conflict with {2} additional fate', context.player, context.source, context.chooseFate);
             context.game.openEventWindow([GameActions.putIntoConflict({ fate: context.chooseFate }).getEvent(context.source, context), cardPlayedEvent]);
         };
-        if(context.source.allowGameAction('putIntoConflict', context)) {
+        if(context.source.allowGameAction('putIntoConflict', context) && !this.intoPlayOnly) {
             if(this.intoConflictOnly) {
                 putIntoConflictHandler();
             } else {

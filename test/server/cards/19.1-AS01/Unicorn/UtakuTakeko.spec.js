@@ -1,4 +1,4 @@
-describe('Utaku Takeko', function () {
+fdescribe('Utaku Takeko', function () {
     integration(function () {
         describe('action ability', function () {
             beforeEach(function () {
@@ -44,6 +44,36 @@ describe('Utaku Takeko', function () {
 
                 expect(this.player1.fate).toBe(initialPLayerFate - 3); // 2 fate base + 1 extra fate placed
                 expect(this.discardBorderRider.location).toBe('play area');
+            });
+
+            it('should allow you to pick a 1 glory or higher unicorn character from your dynasty discard pile and play it at home during a conflict', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.utakuTakeko],
+                    defenders: [],
+                    type: 'political',
+                    ring: 'air'
+                });
+                
+                this.player2.pass();
+                this.player1.clickCard(this.utakuTakeko);
+
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).toBeAbleToSelect(this.discardBorderRider); //Unicorn with 1 glory
+                expect(this.player1).not.toBeAbleToSelect(this.discardMotoAriq);//Unicorn with 0 glory
+                expect(this.player1).not.toBeAbleToSelect(this.discardAmbusher); //Unicorn with 1 glory but conflict discard
+                expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi);// not a unicorn
+                expect(this.player1).not.toBeAbleToSelect(this.discardForthrightIde); // not in player discard pile
+                expect(this.player1).not.toBeAbleToSelect(this.discardShikshaScout); // not in player discard pile
+                expect(this.player1).not.toBeAbleToSelect(this.yasamura); // unicorn with 1 glory but unique
+
+                const initialPLayerFate = this.player1.fate;
+                this.player1.clickCard(this.discardBorderRider);
+                this.player1.clickPrompt('1');
+
+                expect(this.player1.fate).toBe(initialPLayerFate - 3); // 2 fate base + 1 extra fate placed
+                expect(this.discardBorderRider.location).toBe('play area');
+                expect(this.discardBorderRider.isParticipating()).toBe(false);
             });
         });
     });
