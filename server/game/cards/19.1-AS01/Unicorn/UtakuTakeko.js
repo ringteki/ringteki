@@ -6,7 +6,7 @@ const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAct
 
 class UtakuTakekoPlayAction extends PlayCharacterAction {
     constructor(card) {
-        super(card, true);
+        super(card, false, true);
     }
 
     createContext(player = this.card.controller) {
@@ -22,7 +22,7 @@ class UtakuTakekoPlayAction extends PlayCharacterAction {
 }
 class UtakuTakekoPlayDisguisedAction extends PlayDisguisedCharacterAction {
     constructor(card) {
-        super(card, true);
+        super(card, false, true);
     }
 
     createContext(player = this.card.controller) {
