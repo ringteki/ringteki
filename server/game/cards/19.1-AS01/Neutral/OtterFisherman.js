@@ -1,6 +1,8 @@
 const DrawCard = require('../../../drawcard.js');
-const { TargetModes, Players } = require('../../../Constants');
+const { TargetModes, Players, Elements } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
+
+const elementKey = 'otter-fisherman-water';
 
 class OtterFisherman extends DrawCard {
     setupCardAbilities() {
@@ -13,7 +15,7 @@ class OtterFisherman extends DrawCard {
         this.reaction({
             title: 'Gain resource after claiming water',
             when: {
-                onClaimRing: (event, context) => context.game.isDuringConflict('water') && event.player === context.player
+                onClaimRing: (event, context) => ((event.conflict && event.conflict.hasElement(this.getCurrentElementSymbol(elementKey))) || event.ring.hasElement(this.getCurrentElementSymbol(elementKey))) && event.player === context.player
             },
             target: {
                 mode: TargetModes.Select,
@@ -35,6 +37,16 @@ class OtterFisherman extends DrawCard {
                 }
             }
         });
+    }
+
+    getPrintedElementSymbols() {
+        let symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: elementKey,
+            prettyName: 'Ring',
+            element: Elements.Water
+        });
+        return symbols;
     }
 }
 
