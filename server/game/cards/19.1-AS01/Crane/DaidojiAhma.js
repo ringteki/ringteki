@@ -4,7 +4,7 @@ const { Locations } = require('../../../Constants');
 
 class DaidojiAhma extends DrawCard {
     cardMatches(card, context) {
-        return card.isDishonored && card.controller === context.player && card.location === Locations.PlayArea;
+        return card.isDishonored && card.controller === context.player && card.location === Locations.PlayArea && card.isFaction('crane');
     }
 
     setupCardAbilities() {
@@ -14,11 +14,11 @@ class DaidojiAhma extends DrawCard {
                 onInitiateAbilityEffects: (event, context) => event.context.ability.isTriggeredAbility() && event.cardTargets.some(card => (
                     this.cardMatches(card, context)
                 )),
-                onMoveFate: (event, context) => this.cardMatches(event.origin, context) && event.fate > 0 && event.context.source.type === 'ring',
-                onCardHonored: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
-                onCardDishonored: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
-                onCardBowed: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring',
-                onCardReadied: (event, context) => this.cardMatches(event.card, context) && event.context.source.type === 'ring'
+                onMoveFate: (event, context) => event.context.source.type === 'ring' && this.cardMatches(event.origin, context) && event.fate > 0,
+                onCardHonored: (event, context) => event.context.source.type === 'ring' && this.cardMatches(event.card, context),
+                onCardDishonored: (event, context) => event.context.source.type === 'ring' && this.cardMatches(event.card, context),
+                onCardBowed: (event, context) => event.context.source.type === 'ring' && this.cardMatches(event.card, context),
+                onCardReadied: (event, context) => event.context.source.type === 'ring' && this.cardMatches(event.card, context)
             },
             gameAction: AbilityDsl.actions.cancel(),
             effect: 'cancel the effects of {1}{2}',

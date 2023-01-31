@@ -146,3 +146,31 @@ describe('Daidoji Ahma', function() {
         });
     });
 });
+
+describe('Daidoji Ahma - reported dynasty bug', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'dynasty',
+                player1: {
+                    inPlay: ['daidoji-ahma', 'doji-kuwanan'],
+                    dynastyDiscard: ['doji-kuwanan']
+                },
+                player2: {
+                }
+            });
+            this.ahma = this.player1.findCardByName('daidoji-ahma');
+            this.kuwananPlay = this.player1.findCardByName('doji-kuwanan', 'play area');
+            this.kuwananProvince = this.player1.findCardByName('doji-kuwanan', 'dynasty discard pile');
+
+            this.player1.moveCard(this.kuwananProvince, 'province 1');
+            this.kuwananProvince.facedown = false;
+            this.kuwananPlay.dishonor();
+        });
+
+        it('should allow duplicating uniques', function() {
+            this.player1.clickCard(this.kuwananProvince);
+            expect(this.kuwananPlay.fate).toBe(1);
+        });
+    });
+});
