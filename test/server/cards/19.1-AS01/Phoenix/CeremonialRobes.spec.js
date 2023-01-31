@@ -1,144 +1,145 @@
-describe('Ceremonial Robes', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Ceremonial Robes', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['ceremonial-robes', 'isawa-tadaka'],
-                    hand: ['favored-mount'],
-                    stronghold: ['city-of-the-open-hand'],
-                    honor: 5
-                },
-                player2: {
-                    inPlay: ['ceremonial-robes', 'kitsu-motso'],
-                    hand: ['favored-mount'],
-                    stronghold: ['isawa-mori-seido'],
-                    honor: 10
+                    inPlay: [
+                        'ceremonial-robes',
+                        'kami-of-ancient-wisdom',
+                        'solemn-scholar',
+                        'guardian-dojo'
+                    ]
                 }
             });
 
             this.robes = this.player1.findCardByName('ceremonial-robes');
-            this.isawaTadaka = this.player1.findCardByName('isawa-tadaka');
-            this.mount = this.player1.findCardByName('favored-mount');
-            this.city = this.player1.findCardByName('city-of-the-open-hand');
 
-            this.robes2 = this.player2.findCardByName('ceremonial-robes');
-            this.kitsuMotso = this.player2.findCardByName('kitsu-motso');
-            this.mount2 = this.player2.findCardByName('favored-mount');
-            this.ims = this.player2.findCardByName('isawa-mori-seido');
+            this.kami = this.player1.findCardByName('kami-of-ancient-wisdom');
+            this.solemn = this.player1.findCardByName('solemn-scholar');
+            this.dojo = this.player1.findCardByName('guardian-dojo');
 
-            this.player1.playAttachment(this.mount, this.robes);
-            this.player2.playAttachment(this.mount2, this.robes2);
-
-
-            this.p1 = this.player1.findCardByName('shameful-display', 'province 1');
-            this.p2 = this.player1.findCardByName('shameful-display', 'province 2');
-            this.p3 = this.player1.findCardByName('shameful-display', 'province 3');
-            this.p4 = this.player1.findCardByName('shameful-display', 'province 4');
-            this.pStronghold = this.player1.findCardByName('shameful-display', 'stronghold province');
-
-            this.p12 = this.player2.findCardByName('shameful-display', 'province 1');
-            this.p22 = this.player2.findCardByName('shameful-display', 'province 2');
-            this.p32 = this.player2.findCardByName('shameful-display', 'province 3');
-            this.p42 = this.player2.findCardByName('shameful-display', 'province 4');
-            this.pStronghold2 = this.player2.findCardByName('shameful-display', 'stronghold province');
-
-
-            this.p22.isBroken = true;
-            this.p32.facedown = false;
+            this.p11 = this.player1.findCardByName(
+                'shameful-display',
+                'province 1'
+            );
+            this.p12 = this.player2.findCardByName(
+                'shameful-display',
+                'province 1'
+            );
         });
 
-        it('action ability should ready your stronghold and then let you use it again and also trigger the reaction', function() {
-            let glory2 = this.robes2.getGlory();
-            let honor = this.player1.honor;
+        it('filters cards, put 1 in a province', function () {
+            this.player1.player.moveCard(this.kami, 'dynasty deck');
+            this.player1.player.moveCard(this.solemn, 'dynasty deck');
+            this.player1.player.moveCard(this.dojo, 'dynasty deck');
 
-            this.player1.clickCard(this.city);
-            this.player2.clickCard(this.ims);
-            this.player2.clickCard(this.robes2);
+            let p1InitialHonor = this.player1.honor;
+            let p2InitialHonor = this.player2.honor;
 
-            expect(this.player1.honor).toBe(honor + 1);
-            expect(this.robes2.getGlory()).toBe(glory2 + 2);
-            expect(this.city.bowed).toBe(true);
-            expect(this.ims.bowed).toBe(true);
+            this.player1.clickCard(this.robes);
+            expect(this.player1).toHavePrompt('Choose a province');
 
-            this.player1.pass();
-            this.player2.clickCard(this.robes2);
-            expect(this.getChatLogs(5)).toContain('player2 uses Ceremonial Robes to ready Isawa Mori Seidō and add an additional use to each of its abilities');
-            expect(this.player2).toHavePrompt('Choose a province to blank');
-            expect(this.player2).toBeAbleToSelect(this.p12);
-            expect(this.player2).not.toBeAbleToSelect(this.p22);
-            expect(this.player2).toBeAbleToSelect(this.p32);
-            expect(this.player2).toBeAbleToSelect(this.p42);
-            expect(this.player2).toBeAbleToSelect(this.pStronghold2);
-            expect(this.player2).not.toBeAbleToSelect(this.p1);
-            expect(this.player2).not.toBeAbleToSelect(this.p2);
-            expect(this.player2).not.toBeAbleToSelect(this.p3);
-            expect(this.player2).not.toBeAbleToSelect(this.p4);
-            expect(this.player2).not.toBeAbleToSelect(this.pStronghold);
+            this.player1.clickCard(this.p11);
+            expect(this.player1).toHavePrompt(
+                'Select a card to put on the bottom of the deck'
+            );
+            expect(this.player1).toHavePromptButton('Guardian Dōjō');
+            expect(this.player1).toHavePromptButton('Solemn Scholar');
+            expect(this.player1).toHavePromptButton('Kami of Ancient Wisdom');
 
-            this.player2.clickCard(this.p12);
+            this.player1.clickPrompt('Guardian Dōjō');
+            expect(this.dojo.location).toBe('dynasty deck');
 
-            expect(this.player1).toHavePrompt('Choose a province to blank');
-            expect(this.player1).not.toBeAbleToSelect(this.p12);
-            expect(this.player1).not.toBeAbleToSelect(this.p22);
-            expect(this.player1).not.toBeAbleToSelect(this.p32);
-            expect(this.player1).not.toBeAbleToSelect(this.p42);
-            expect(this.player1).not.toBeAbleToSelect(this.pStronghold2);
-            expect(this.player1).toBeAbleToSelect(this.p1);
-            expect(this.player1).toBeAbleToSelect(this.p2);
-            expect(this.player1).toBeAbleToSelect(this.p3);
-            expect(this.player1).toBeAbleToSelect(this.p4);
-            expect(this.player1).toBeAbleToSelect(this.pStronghold);
+            expect(this.player1).toHavePrompt(
+                'Select a card to put into the province faceup'
+            );
+            expect(this.player1).not.toHavePromptButton('Guardian Dōjō');
+            expect(this.player1).toHavePromptButton('Solemn Scholar');
+            expect(this.player1).toHavePromptButton('Kami of Ancient Wisdom');
 
-            this.player1.clickCard(this.p2);
+            this.player1.clickPrompt('Kami of Ancient Wisdom');
+            expect(this.kami.location).toBe('province 1');
+            expect(this.kami.facedown).toBe(false);
 
-            expect(this.p12.isBlank()).toBe(true);
-            expect(this.p2.isBlank()).toBe(true);
+            expect(this.solemn.location).toBe('dynasty discard pile');
+            expect(this.player1.honor).toBe(p1InitialHonor);
+            expect(this.player2.honor).toBe(p2InitialHonor);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Ceremonial Robes to place a dishonored status token on Shameful Display and Shameful Display, blanking them');
+            expect(this.player1).toHavePrompt(
+                'Waiting for opponent to take an action or pass'
+            );
 
-            this.player1.pass();
-
-            this.player2.clickCard(this.ims);
-            this.player2.clickCard(this.robes2);
-            expect(this.robes2.getGlory()).toBe(glory2 + 4);
-            expect(this.ims.bowed).toBe(true);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Ceremonial Robes to look at the top 3 cards of their dynasty deck'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 places a card on the bottom of the deck'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 places Kami of Ancient Wisdom into Shameful Display'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 discards Solemn Scholar'
+            );
         });
 
-        it('action ability should be usable by both players but should only trigger the reaction once', function() {
-            let glory2 = this.robes2.getGlory();
-            let honor = this.player1.honor;
+        it('filters cards, put 1 in a province, and make players lose honor when discarding a spirit', function () {
+            this.player1.player.moveCard(this.kami, 'dynasty deck');
+            this.player1.player.moveCard(this.solemn, 'dynasty deck');
+            this.player1.player.moveCard(this.dojo, 'dynasty deck');
 
-            this.player1.clickCard(this.city);
-            this.player2.clickCard(this.ims);
-            this.player2.clickCard(this.robes2);
+            let p1InitialHonor = this.player1.honor;
+            let p2InitialHonor = this.player2.honor;
 
-            expect(this.player1.honor).toBe(honor + 1);
-            expect(this.robes2.getGlory()).toBe(glory2 + 2);
-            expect(this.city.bowed).toBe(true);
-            expect(this.ims.bowed).toBe(true);
+            this.player1.clickCard(this.robes);
+            expect(this.player1).toHavePrompt('Choose a province');
 
-            this.player1.pass();
-            this.player2.clickCard(this.robes2);
-            expect(this.getChatLogs(5)).toContain('player2 uses Ceremonial Robes to ready Isawa Mori Seidō and add an additional use to each of its abilities');
-            this.player2.clickCard(this.p12);
-            this.player1.clickCard(this.p2);
+            this.player1.clickCard(this.p11);
+            expect(this.player1).toHavePrompt(
+                'Select a card to put on the bottom of the deck'
+            );
+            expect(this.player1).toHavePromptButton('Guardian Dōjō');
+            expect(this.player1).toHavePromptButton('Solemn Scholar');
+            expect(this.player1).toHavePromptButton('Kami of Ancient Wisdom');
 
-            this.player1.clickCard(this.robes2);
-            expect(this.getChatLogs(5)).toContain('player1 uses Ceremonial Robes to ready City of the Open Hand and add an additional use to each of its abilities');
-            expect(this.player2).toHavePrompt('Action Window');
+            this.player1.clickPrompt('Solemn Scholar');
+            expect(this.solemn.location).toBe('dynasty deck');
 
-            this.player2.clickCard(this.ims);
-            this.player2.clickCard(this.robes2);
-            expect(this.robes2.getGlory()).toBe(glory2 + 4);
-            expect(this.ims.bowed).toBe(true);
+            expect(this.player1).toHavePrompt(
+                'Select a card to put into the province faceup'
+            );
+            expect(this.player1).toHavePromptButton('Guardian Dōjō');
+            expect(this.player1).toHavePromptButton('Kami of Ancient Wisdom');
+            expect(this.player1).not.toHavePromptButton('Solemn Scholar');
 
-            expect(this.player1).toHavePrompt('Action Window');
-            expect(this.city.bowed).toBe(false);
-            this.player1.clickCard(this.city);
-            expect(this.player1.honor).toBe(honor + 2);
-            expect(this.city.bowed).toBe(true);
-            expect(this.player2).toHavePrompt('Action Window');
+            this.player1.clickPrompt('Guardian Dōjō');
+            expect(this.dojo.location).toBe('province 1');
+            expect(this.dojo.facedown).toBe(false);
+
+            expect(this.kami.location).toBe('dynasty discard pile');
+            expect(this.player1.honor).toBe(p1InitialHonor - 1);
+            expect(this.player2.honor).toBe(p2InitialHonor - 1);
+
+            expect(this.player1).toHavePrompt(
+                'Waiting for opponent to take an action or pass'
+            );
+
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Ceremonial Robes to look at the top 3 cards of their dynasty deck'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 places a card on the bottom of the deck'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 places Guardian Dōjō into Shameful Display'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 discards Kami of Ancient Wisdom'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'Kami of Ancient Wisdom was a Spirit! player1 and player2 lose 1 honor'
+            );
         });
     });
 });
