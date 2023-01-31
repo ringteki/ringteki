@@ -1,61 +1,114 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Durations, Locations, Players } = require('../../../Constants');
-const AbilityDsl = require('../../../abilitydsl');
+const { CardTypes, Locations, Players } = require('../../../Constants');
+const AbilityDsl = require('../../../abilitydsl.js');
 
 class CeremonialRobes extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Ready your stronghold',
-            condition: context => !!context.player.stronghold,
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.ready(context => ({
-                    target: context.player.stronghold
-                })),
-                AbilityDsl.actions.cardLastingEffect(context => ({
-                    target: context.player.stronghold,
-                    duration: Durations.UntilEndOfPhase,
-                    effect: AbilityDsl.effects.increaseLimitOnAbilities({
-                        applyingPlayer: context.player
-                    })
-                }))
-            ]),
-            anyPlayer: true,
-            effect: 'ready {1} and add an additional use to each of its abilities',
-            effectArgs: context => [context.player.stronghold]
-        });
+            title: 'Place a card from your deck faceup on a province',
+            effect: 'look at the top 3 cards of their dynasty deck',
+            target: {
+                location: Locations.Provinces,
+                cardType: CardTypes.Province,
+                controller: Players.Self
+            },
+            handler: (context) => {
+                let top3Cards = context.player.dynastyDeck.first(3);
+                let steps = [
+                    {
+                        activePromptTitle:
+                            'Select a card to put on the bottom of the deck',
+                        message: '{0} places a card on the bottom of the deck',
+                        callback: (chosenCard) =>
+                            context.player.moveCard(
+                                chosenCard,
+                                'dynasty deck bottom'
+                            )
+                    },
+                    {
+                        activePromptTitle:
+                            'Select a card to put into the province faceup',
+                        message: '{0} places {1} into {2}',
+                        callback: (chosenCard) => {
+                            context.player.moveCard(
+                                chosenCard,
+                                context.target.location
+                            );
+                            chosenCard.facedown = false;
+                        }
+                    },
+                    {
+                        activePromptTitle: 'Select a card to discard',
+                        message: '{0} discards {1}',
+                        callback: (chosenCard) => {
+                            context.player.moveCard(
+                                chosenCard,
+                                Locations.DynastyDiscardPile
+                            );
+                            if(chosenCard.hasTrait('spirit')) {
+                                this.game.addMessage(
+                                    '{0} was a Spirit! {1} and {2} lose 1 honor',
+                                    chosenCard,
+                                    context.player,
+                                    context.player.opponent
+                                );
+                                AbilityDsl.actions
+                                    .loseHonor((context) => ({
+                                        target: context.game.getPlayers()
+                                    }))
+                                    .resolve(chosenCard, context);
+                            }
+                        }
+                    }
+                ];
 
-        this.forcedReaction({
-            title: 'Blank and reveal provinces',
-            when: {
-                onCardAbilityInitiated: (event, context) => event.card === context.source
-            },
-            targets: {
-                myProvince: {
-                    activePromptTitle: 'Choose a province to blank',
-                    cardType: CardTypes.Province,
-                    controller: Players.Self,
-                    location: Locations.Provinces,
-                    cardCondition: card => !card.isBroken && !card.isDishonored,
-                    gameAction: AbilityDsl.actions.sequential([
-                        AbilityDsl.actions.dishonorProvince(),
-                        AbilityDsl.actions.reveal({ chatMessage: true })
-                    ])
-                },
-                oppProvince: {
-                    activePromptTitle: 'Choose a province to blank',
-                    player: Players.Opponent,
-                    controller: Players.Opponent,
-                    cardType: CardTypes.Province,
-                    location: Locations.Provinces,
-                    cardCondition: card => !card.isBroken && !card.isDishonored,
-                    gameAction: AbilityDsl.actions.sequential([
-                        AbilityDsl.actions.dishonorProvince(),
-                        AbilityDsl.actions.reveal({ chatMessage: true })
-                    ])
-                }
-            },
-            effect: 'place a dishonored status token on {1} and {2}, blanking them',
-            effectArgs: context => [context.targets.myProvince, context.targets.oppProvince]
+                this.ceremonialRobesPrompt(steps, context, top3Cards);
+            }
+        });
+    }
+
+    ceremonialRobesPrompt(remainingSteps, context, selectableCards) {
+        let currentStep = remainingSteps.shift();
+        if(!currentStep) {
+            return;
+        }
+        if(selectableCards.length === 0) {
+            return;
+        }
+        if(selectableCards.length === 1) {
+            let lastCard = selectableCards[0];
+            this.game.addMessage(
+                currentStep.message,
+                context.player,
+                lastCard,
+                context.target
+            );
+            currentStep.callback(lastCard);
+            return;
+        }
+
+        this.game.promptWithHandlerMenu(context.player, {
+            activePromptTitle: currentStep.activePromptTitle,
+            context: context,
+            cards: selectableCards,
+            cardHandler: (selectedCard) => {
+                this.game.addMessage(
+                    currentStep.message,
+                    context.player,
+                    selectedCard,
+                    context.target
+                );
+                currentStep.callback(selectedCard);
+
+                let newSelectableCards = selectableCards.filter(
+                    (c) => c !== selectedCard
+                );
+                this.ceremonialRobesPrompt(
+                    remainingSteps,
+                    context,
+                    newSelectableCards
+                );
+            }
         });
     }
 }
