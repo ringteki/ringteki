@@ -4,155 +4,136 @@ describe('Natures Wrath', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-diplomat', 'shosuro-sadako'],
-                    hand: ['discourage-pursuit'],
-                    dynastyDiscard: ['nature-s-wrath']
+                    inPlay: ['doji-diplomat', 'shosuro-sadako']
                 },
                 player2: {
-                    inPlay: ['daidoji-uji', 'doji-challenger'],
-                    dynastyDiscard: ['nature-s-wrath']
+                    inPlay: ['daidoji-uji', 'keeper-initiate'],
+                    hand: ['nature-s-wrath']
                 }
             });
 
             this.sadako = this.player1.findCardByName('shosuro-sadako');
-            this.pursuit = this.player1.findCardByName('discourage-pursuit');
             this.diplomat = this.player1.findCardByName('doji-diplomat');
             this.uji = this.player2.findCardByName('daidoji-uji');
-            this.challenger = this.player2.findCardByName('doji-challenger');
-            this.wrath1 = this.player1.findCardByName('nature-s-wrath');
+            this.keeper = this.player2.findCardByName('keeper-initiate');
             this.wrath = this.player2.findCardByName('nature-s-wrath');
-            this.player1.moveCard(this.wrath1, 'province 1');
-            this.player2.moveCard(this.wrath, 'province 1');
-
-            this.p1 = this.player2.findCardByName('shameful-display', 'province 1');
         });
 
-        it('should be put into the conflict when a province you control is revealed during a military conflict', function () {
-            this.p1.facedown = true;
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.diplomat],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'military'
-            });
-            expect(this.wrath.location).toBe('play area');
-            expect(this.wrath1.location).toBe('province 1');
-            expect(this.getChatLogs(5)).toContain('player2 uses Nature\'s Wrath to put Nature\'s Wrath into play in the conflict');
-        });
+        it('auto sends home dishonored characters', function () {
+            this.sadako.dishonor();
 
-        it('should not be put into the conflict when a province you control is already revealed', function () {
-            this.p1.facedown = false;
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.diplomat],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'military'
-            });
-            expect(this.wrath.location).toBe('province 1');
-            expect(this.wrath1.location).toBe('province 1');
-        });
-
-        it('should not be put into the conflict when a province you control is revealed during a pol conflict', function () {
-            this.p1.facedown = true;
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.diplomat],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'political'
-            });
-            expect(this.wrath.location).toBe('province 1');
-            expect(this.wrath1.location).toBe('province 1');
-        });
-
-        it('should not be put into the conflict from discard', function () {
-            this.p1.facedown = true;
-            this.player2.moveCard(this.wrath, 'dynasty discard pile');
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.diplomat],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'military'
-            });
-            expect(this.wrath.location).toBe('dynasty discard pile');
-            expect(this.wrath1.location).toBe('province 1');
-        });
-
-        it('action ability - should target participating characters but not itself', function () {
-            this.p1.facedown = true;
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.diplomat],
-                defenders: [this.challenger],
-                province: this.p1,
-                type: 'military'
+                attackers: [this.sadako],
+                defenders: [this.uji]
             });
 
             this.player2.clickCard(this.wrath);
-            expect(this.player2).toBeAbleToSelect(this.diplomat);
-            expect(this.player2).toBeAbleToSelect(this.challenger);
-            expect(this.player2).not.toBeAbleToSelect(this.sadako);
-            expect(this.player2).not.toBeAbleToSelect(this.uji);
-            expect(this.player2).not.toBeAbleToSelect(this.wrath);
-        });
+            expect(this.player2).toHavePrompt('Choose a character');
 
-        it('action ability - should let both players trigger to give someone -2 mil', function () {
-            this.p1.facedown = true;
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.diplomat, this.sadako],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'military'
-            });
-            let fate1 = this.player1.fate;
-            let fate2 = this.player2.fate;
-
-            this.player2.clickCard(this.wrath);
             this.player2.clickCard(this.sadako);
-            expect(this.player2.fate).toBe(fate2 - 1);
+            expect(this.player1).not.toHavePrompt('Select one');
+            expect(this.sadako.isParticipating()).toBe(false);
             expect(this.sadako.isDishonored).toBe(true);
-            expect(this.sadako.getMilitarySkill()).toBe(2);
-
-            this.player1.clickCard(this.wrath);
-            this.player1.clickCard(this.challenger);
-            expect(this.player1.fate).toBe(fate1 - 1);
-            expect(this.player2.fate).toBe(fate2 - 1);
-            expect(this.challenger.isDishonored).toBe(false);
-            expect(this.challenger.getMilitarySkill()).toBe(1);
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Nature\'s Wrath, spending 1 fate to give Shosuro Sadako -2military and dishonor them');
-            expect(this.getChatLogs(10)).toContain('player1 uses Nature\'s Wrath, spending 1 fate to give Doji Challenger -2military');
+            expect(this.getChatLogs(5)).toContain('player2 plays Nature\'s Wrath to send Shosuro Sadako home');
         });
 
-        it('action ability - should not dishonor if brought to zero after trigger', function () {
-            this.p1.facedown = true;
+        it('let opponent choose to go home home', function () {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.diplomat, this.sadako],
-                defenders: [this.uji, this.challenger],
-                province: this.p1,
-                type: 'military'
+                attackers: [this.sadako],
+                defenders: [this.uji]
             });
 
             this.player2.clickCard(this.wrath);
-            this.player2.clickCard(this.challenger);
-            expect(this.challenger.isDishonored).toBe(false);
-            expect(this.challenger.getMilitarySkill()).toBe(1);
-            this.player1.clickCard(this.pursuit);
-            this.player1.clickCard(this.challenger);
-            this.player1.clickCard(this.sadako);
-            expect(this.challenger.isDishonored).toBe(false);
-            expect(this.challenger.getMilitarySkill()).toBe(0);
+            expect(this.player2).toHavePrompt('Choose a character');
+
+            this.player2.clickCard(this.sadako);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('Dishonor this character');
+            expect(this.player1).toHavePromptButton('Move this character home');
+
+            this.player1.clickPrompt('Move this character home');
+            expect(this.sadako.isParticipating()).toBe(false);
+            expect(this.sadako.isDishonored).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player2 plays Nature\'s Wrath to send Shosuro Sadako home');
+        });
+
+        it('let opponent choose to go dishonor their character', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.sadako],
+                defenders: [this.uji]
+            });
 
             this.player2.clickCard(this.wrath);
-            this.player2.clickCard(this.challenger);
-            expect(this.challenger.isDishonored).toBe(true);
-            expect(this.challenger.getMilitarySkill()).toBe(0);
-            expect(this.getChatLogs(10)).toContain('player2 uses Nature\'s Wrath, spending 1 fate to give Doji Challenger -2military and dishonor them');
+            expect(this.player2).toHavePrompt('Choose a character');
+
+            this.player2.clickCard(this.sadako);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('Dishonor this character');
+            expect(this.player1).toHavePromptButton('Move this character home');
+
+            this.player1.clickPrompt('Dishonor this character');
+            expect(this.sadako.isParticipating()).toBe(true);
+            expect(this.sadako.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 plays Nature\'s Wrath to dishonor Shosuro Sadako');
+        });
+
+        it('can dishonor participating character to use it again', function () {
+            this.sadako.dishonor();
+            this.uji.honor();
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.sadako, this.diplomat],
+                defenders: [this.uji]
+            });
+
+            this.player2.clickCard(this.wrath);
+            expect(this.player2).toHavePrompt('Choose a character');
+
+            this.player2.clickCard(this.sadako);
+            expect(this.sadako.isParticipating()).toBe(false);
+            expect(this.sadako.isDishonored).toBe(true);
+
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('Dishonor a participating character to resolve this ability again');
+            expect(this.player2).toHavePromptButton('Done');
+
+            this.player2.clickPrompt('Dishonor a participating character to resolve this ability again');
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toBeAbleToSelect(this.uji);
+            expect(this.player2).not.toBeAbleToSelect(this.keeper);
+
+            this.player2.clickCard(this.uji);
+            expect(this.uji.isOrdinary()).toBe(true);
+            expect(this.getChatLogs(5)).toContain(
+                'player2 chooses to dishonor Daidoji Uji to resolve Nature\'s Wrath again'
+            );
+
+            expect(this.player2).toHavePrompt('Choose a character');
+
+            this.player2.clickCard(this.diplomat);
+            expect(this.player1).toHavePrompt('Select one');
+            expect(this.player1).toHavePromptButton('Dishonor this character');
+            expect(this.player1).toHavePromptButton('Move this character home');
+
+            this.player1.clickPrompt('Dishonor this character');
+            expect(this.diplomat.isParticipating()).toBe(true);
+            expect(this.diplomat.isDishonored).toBe(true);
+
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('Dishonor a participating character for no effect');
+            expect(this.player2).toHavePromptButton('Done');
+
+            this.player2.clickPrompt('Dishonor a participating character for no effect');
+            this.player2.clickCard(this.uji);
+
+            expect(this.uji.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 chooses to dishonor Daidoji Uji for no effect');
+
+            expect(this.player2).not.toHavePrompt('Choose a character');
         });
     });
 });

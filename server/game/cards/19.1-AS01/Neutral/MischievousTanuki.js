@@ -30,7 +30,7 @@ class MischievousTanuki extends DrawCard {
                     falseGameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.draw(context => ({
                             target: context.player.showBid % 2 === 1 ? context.player : context.player.opponent,
-                            amount: 1
+                            amount: 2
                         })),
                         AbilityDsl.actions.gainHonor(context => ({
                             target: context.player.showBid % 2 === 0 ? context.player : context.player.opponent,

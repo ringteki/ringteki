@@ -16,7 +16,9 @@ class ConnectThePeoplePlayAction extends PlayCharacterAction {
     }
 
     meetsRequirements(context, ignoredRequirements = []) {
-        let newIgnoredRequirements = ignoredRequirements.includes('location') ? ignoredRequirements : ignoredRequirements.concat('location');
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
         return super.meetsRequirements(context, newIgnoredRequirements);
     }
 }
@@ -32,7 +34,9 @@ class ConnectThePeoplePlayDisguisedAction extends PlayDisguisedCharacterAction {
     }
 
     meetsRequirements(context, ignoredRequirements = []) {
-        let newIgnoredRequirements = ignoredRequirements.includes('location') ? ignoredRequirements : ignoredRequirements.concat('location');
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
         return super.meetsRequirements(context, newIgnoredRequirements);
     }
 }
@@ -40,28 +44,37 @@ class ConnectThePeoplePlayDisguisedAction extends PlayDisguisedCharacterAction {
 class ToConnectThePeople extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Ready this character',
-            condition: context => !context.game.isDuringConflict(),
-            target: {
-                cardType: CardTypes.Character,
-                controller: Players.Opponent,
-                location: [Locations.ConflictDiscardPile, Locations.DynastyDiscardPile],
-                cardCondition: (card, context) => !card.isUnique() && context.player.cardsInPlay.some(cardInPlay => cardInPlay.glory >= card.glory),
-                mode: TargetModes.Single,
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect(context => ({
-                        target: context.target,
-                        effect: [
-                            AbilityDsl.effects.gainPlayAction(ConnectThePeoplePlayAction),
-                            AbilityDsl.effects.gainPlayAction(ConnectThePeoplePlayDisguisedAction)
-                        ]
-                    })),
-                    AbilityDsl.actions.playCard(context => ({
-                        target: context.target,
-                        ignoredRequirements: ['location']
-                    }))
-                ])
-            }
+            title: 'Play a character from your opponent\'s discard pile',
+            condition: (context) =>
+                !context.game.isDuringConflict() &&
+                context.player.cardsInPlay.any(
+                    (card) => card.getType() === CardTypes.Character && card.hasTrait('merchant')
+                ),
+            gameAction: AbilityDsl.actions.sequential([
+                AbilityDsl.actions.discardCard((context) => ({
+                    target: context.player.opponent && context.player.opponent.dynastyDeck.first(3)
+                })),
+
+                AbilityDsl.actions.selectCard({
+                    cardType: CardTypes.Character,
+                    controller: Players.Opponent,
+                    location: [Locations.ConflictDiscardPile, Locations.DynastyDiscardPile],
+                    targets: true,
+                    cardCondition: (card, context) =>
+                        !card.isUnique() &&
+                        context.player.cardsInPlay.some((cardInPlay) => cardInPlay.glory >= card.glory),
+                    mode: TargetModes.Single,
+                    gameAction: AbilityDsl.actions.sequential([
+                        AbilityDsl.actions.cardLastingEffect({
+                            effect: [
+                                AbilityDsl.effects.gainPlayAction(ConnectThePeoplePlayAction),
+                                AbilityDsl.effects.gainPlayAction(ConnectThePeoplePlayDisguisedAction)
+                            ]
+                        }),
+                        AbilityDsl.actions.playCard({ ignoredRequirements: ['location'] })
+                    ])
+                })
+            ])
         });
     }
 }

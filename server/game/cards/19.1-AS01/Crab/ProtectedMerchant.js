@@ -1,16 +1,25 @@
 const DrawCard = require('../../../drawcard.js');
-const { Phases } = require('../../../Constants');
+const { CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class ProtectedMerchant extends DrawCard {
     setupCardAbilities() {
-        this.reaction({
-            title: 'Put 1 fate on this character',
-            when: {
-                onCharacterEntersPlay: (event, context) => event.card === context.source && context.game.currentPhase === Phases.Dynasty
-            },
-            gameAction: AbilityDsl.actions.placeFate()
+        this.persistentEffect({
+            effect: AbilityDsl.effects.modifyGlory(() => Math.min(2, this.getHoldingsInPlay()))
         });
+    }
+
+    getHoldingsInPlay() {
+        return this.game.allCards.reduce(
+            (sum, card) =>
+                card.type === CardTypes.Holding &&
+                card.controller === this.controller &&
+                card.isFaceup() &&
+                card.isInProvince()
+                    ? sum + 1
+                    : sum,
+            0
+        );
     }
 }
 

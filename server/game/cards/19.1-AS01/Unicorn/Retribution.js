@@ -42,7 +42,8 @@ class Retribution extends DrawCard {
 
                     return { gameActions };
                 })
-            }
+            },
+            limit: AbilityDsl.limit.perRound(1)
         });
     }
 }

@@ -48,6 +48,16 @@ describe('To Connect the People', function () {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
+            it('discards a few cards from the opponents dynasty deck', function () {
+                let initialDiscardPile = this.player2.player.dynastyDiscardPile.size();
+
+                this.player1.clickCard(this.toConnectThePeople);
+                expect(this.player2.player.dynastyDiscardPile.size()).toBe(initialDiscardPile + 3);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays To Connect the People to discard Adept of the Waves, Adept of the Waves and Adept of the Waves'
+                );
+            });
+
             it('should allow you to purchase any character from your opponent discard piles that has glory equal or lower than a merchant you control', function () {
                 this.player1.clickCard(this.toConnectThePeople);
 
@@ -72,6 +82,7 @@ describe('To Connect the People', function () {
                 expect(this.player1).not.toBeAbleToSelect(this.conflictDiscardAmbusher);
 
                 const initialPLayerFate = this.player1.fate;
+                expect(this.player1).toHavePrompt('Choose a character');
                 this.player1.clickCard(this.opponentDynastyDiscardAkodoMotivator);
                 this.player1.clickPrompt('1');
 

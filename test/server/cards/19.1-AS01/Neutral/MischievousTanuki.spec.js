@@ -158,7 +158,7 @@ describe('Mischievous Tanuki', function () {
                 expect(this.player1.honor).toBe(p1Honor);
                 expect(this.player2.honor).toBe(p2Honor + 2);
 
-                expect(this.player1.hand.length).toBe(p1cards + 1);
+                expect(this.player1.hand.length).toBe(p1cards + 2);
                 expect(this.player2.hand.length).toBe(p2cards);
 
                 expect(this.getChatLogs(10)).toContain(
