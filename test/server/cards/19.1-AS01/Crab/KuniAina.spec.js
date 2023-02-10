@@ -1,7 +1,6 @@
 describe('Kuni Aina', function () {
     integration(function () {
-        /* eslint-disable jasmine/no-disabled-tests */
-        xdescribe('Static ability - no honor costs', function () {
+        describe('Static ability - no honor costs', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
@@ -12,38 +11,23 @@ describe('Kuni Aina', function () {
                     },
                     player2: {
                         inPlay: ['bayushi-manipulator'],
-                        hand: [
-                            'backhanded-compliment',
-                            'way-of-the-scorpion',
-                            'assassination'
-                        ]
+                        hand: ['backhanded-compliment', 'way-of-the-scorpion', 'assassination']
                     }
                 });
 
                 this.kuniAina = this.player1.findCardByName('kuni-aina');
                 this.envoy = this.player1.findCardByName('kaiu-envoy');
-                this.exiledGuardian =
-                    this.player1.findCardByName('exiled-guardian');
-                this.assassinationCrab =
-                    this.player1.findCardByName('assassination');
+                this.exiledGuardian = this.player1.findCardByName('exiled-guardian');
+                this.assassinationCrab = this.player1.findCardByName('assassination');
                 this.banzai = this.player1.findCardByName('banzai');
-                this.obsidianTalisman =
-                    this.player1.findCardByName('obsidian-talisman');
+                this.obsidianTalisman = this.player1.findCardByName('obsidian-talisman');
                 this.fireAndOil = this.player1.findCardByName('fire-and-oil');
-                this.province1 = this.player1.findCardByName(
-                    'shameful-display',
-                    'province 1'
-                );
+                this.province1 = this.player1.findCardByName('shameful-display', 'province 1');
 
-                this.manipulator = this.player2.findCardByName(
-                    'bayushi-manipulator'
-                );
+                this.manipulator = this.player2.findCardByName('bayushi-manipulator');
                 this.bhc = this.player2.findCardByName('backhanded-compliment');
-                this.assassinationScorp =
-                    this.player2.findCardByName('assassination');
-                this.wayOfTheScorpion = this.player2.findCardByName(
-                    'way-of-the-scorpion'
-                );
+                this.assassinationScorp = this.player2.findCardByName('assassination');
+                this.wayOfTheScorpion = this.player2.findCardByName('way-of-the-scorpion');
             });
 
             it('Loses honor normally due to effects', function () {
@@ -87,6 +71,53 @@ describe('Kuni Aina', function () {
                 this.player1.clickCard(this.assassinationCrab);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
+
+            it('cannot trigger holdings that cost honor', function () {
+                this.noMoreActions();
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.manipulator],
+                    defenders: []
+                });
+
+                this.player1.clickCard(this.fireAndOil);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('cannot pay additional honor costs imposed by opponent', function () {
+                this.noMoreActions();
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.manipulator],
+                    defenders: []
+                });
+
+                this.player1.clickCard(this.fireAndOil);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('cannot declare tainted characters into conflicts', function () {
+                this.exiledGuardian.taint();
+                this.noMoreActions();
+
+                this.player1.clickCard(this.player2.provinces['province 1'].provinceCard);
+                this.player1.clickRing('fire');
+                this.player1.clickCard(this.exiledGuardian);
+                expect(this.player1).not.toHavePromptButton('Initiate Conflict');
+                this.player1.clickCard(this.envoy);
+                expect(this.player1).toHavePromptButton('Initiate Conflict');
+                this.player1.clickPrompt('Initiate Conflict');
+
+                expect(this.getChatLogs(5)).toContain('player1 has initiated a military conflict with skill 1');
+            });
         });
 
         describe('Static ability - skill penalty', function () {
@@ -104,59 +135,31 @@ describe('Kuni Aina', function () {
                         hand: ['lurking-affliction']
                     },
                     player2: {
-                        inPlay: [
-                            'unleashed-experiment',
-                            'jealous-ancestor',
-                            'kaiu-envoy',
-                            'borderlands-defender'
-                        ],
+                        inPlay: ['unleashed-experiment', 'jealous-ancestor', 'kaiu-envoy', 'borderlands-defender'],
                         hand: ['lurking-affliction']
                     }
                 });
 
                 this.kuniAina = this.player1.findCardByName('kuni-aina');
-                this.experimentP1 = this.player1.findCardByName(
-                    'unleashed-experiment'
-                );
-                this.jealousP1 =
-                    this.player1.findCardByName('jealous-ancestor');
+                this.experimentP1 = this.player1.findCardByName('unleashed-experiment');
+                this.jealousP1 = this.player1.findCardByName('jealous-ancestor');
                 this.envoyP1 = this.player1.findCardByName('kaiu-envoy');
-                this.borderlandsP1 = this.player1.findCardByName(
-                    'borderlands-defender'
-                );
-                this.afflictionP1 =
-                    this.player1.findCardByName('lurking-affliction');
+                this.borderlandsP1 = this.player1.findCardByName('borderlands-defender');
+                this.afflictionP1 = this.player1.findCardByName('lurking-affliction');
 
-                this.experimentP2 = this.player2.findCardByName(
-                    'unleashed-experiment'
-                );
-                this.jealousP2 =
-                    this.player2.findCardByName('jealous-ancestor');
+                this.experimentP2 = this.player2.findCardByName('unleashed-experiment');
+                this.jealousP2 = this.player2.findCardByName('jealous-ancestor');
                 this.envoyP2 = this.player2.findCardByName('kaiu-envoy');
-                this.borderlandsP2 = this.player2.findCardByName(
-                    'borderlands-defender'
-                );
-                this.afflictionP2 =
-                    this.player2.findCardByName('lurking-affliction');
+                this.borderlandsP2 = this.player2.findCardByName('borderlands-defender');
+                this.afflictionP2 = this.player2.findCardByName('lurking-affliction');
             });
 
             it('When Aina is in the conflict, it gives skill penalty to shadowlands', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: [
-                        this.kuniAina,
-                        this.experimentP1,
-                        this.jealousP1,
-                        this.envoyP1,
-                        this.borderlandsP1
-                    ],
-                    defenders: [
-                        this.experimentP2,
-                        this.jealousP2,
-                        this.envoyP2,
-                        this.borderlandsP2
-                    ]
+                    attackers: [this.kuniAina, this.experimentP1, this.jealousP1, this.envoyP1, this.borderlandsP1],
+                    defenders: [this.experimentP2, this.jealousP2, this.envoyP2, this.borderlandsP2]
                 });
 
                 this.player2.clickCard(this.afflictionP2);
@@ -190,18 +193,8 @@ describe('Kuni Aina', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: [
-                        this.experimentP1,
-                        this.jealousP1,
-                        this.envoyP1,
-                        this.borderlandsP1
-                    ],
-                    defenders: [
-                        this.experimentP2,
-                        this.jealousP2,
-                        this.envoyP2,
-                        this.borderlandsP2
-                    ]
+                    attackers: [this.experimentP1, this.jealousP1, this.envoyP1, this.borderlandsP1],
+                    defenders: [this.experimentP2, this.jealousP2, this.envoyP2, this.borderlandsP2]
                 });
 
                 this.player2.clickCard(this.afflictionP2);
@@ -250,9 +243,7 @@ describe('Kuni Aina', function () {
                 this.envoy = this.player1.findCardByName('kaiu-envoy');
                 this.katana = this.player1.findCardByName('fine-katana');
                 this.finger = this.player1.findCardByName('finger-of-jade');
-                this.borderlands = this.player2.findCardByName(
-                    'borderlands-defender'
-                );
+                this.borderlands = this.player2.findCardByName('borderlands-defender');
                 this.fan = this.player2.findCardByName('ornate-fan');
             });
 

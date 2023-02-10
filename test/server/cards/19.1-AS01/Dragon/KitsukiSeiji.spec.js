@@ -14,8 +14,7 @@ describe('Kitsuki Seiji', function () {
                 });
                 this.seiji = this.player1.findCardByName('kitsuki-seiji');
                 this.tsukune = this.player2.findCardByName('shiba-tsukune');
-                this.gameOfSadane =
-                    this.player1.findCardByName('game-of-sadane');
+                this.gameOfSadane = this.player1.findCardByName('game-of-sadane');
             });
 
             describe('When the bid is odd', function () {
@@ -70,58 +69,121 @@ describe('Kitsuki Seiji', function () {
             });
         });
 
-        describe('Reaction ability', function () {
+        describe('Interrupt ability', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['kitsuki-seiji']
+                        inPlay: ['kitsuki-seiji', 'tranquil-philosopher'],
+                        hand: ['elemental-inversion']
                     },
                     player2: {
-                        inPlay: ['shiba-tsukune']
+                        hand: ['written-in-the-stars']
                     }
                 });
                 this.seiji = this.player1.findCardByName('kitsuki-seiji');
-                this.tsukune = this.player2.findCardByName('shiba-tsukune');
-                this.noMoreActions();
+                this.tranquil = this.player1.findCardByName('tranquil-philosopher');
+                this.elementalInversion = this.player1.findCardByName('elemental-inversion');
+
+                this.writtenInTheStars = this.player2.findCardByName('written-in-the-stars');
             });
 
-            it('should trigger when the player claims the water ring', function () {
-                this.initiateConflict({
-                    type: 'military',
-                    ring: 'water',
-                    attackers: [this.seiji],
-                    defenders: [this.tsukune],
-                    jumpTo: 'afterConflict'
-                });
-                this.player1.clickPrompt('Don\'t resolve');
+            it('gains fate when water ring gets fate during Fate phase', function () {
+                this.seiji.fate = 1;
+
+                this.flow.finishConflictPhase();
+
+                this.player1.clickPrompt('Done'); // removing fate from characters
+                expect(this.seiji.fate).toBe(0);
+
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.seiji);
                 this.player1.clickCard(this.seiji);
                 expect(this.seiji.fate).toBe(1);
+                expect(this.game.rings.water.fate).toBe(0);
+                expect(this.game.rings.air.fate).toBe(1);
+                expect(this.game.rings.earth.fate).toBe(1);
+                expect(this.game.rings.fire.fate).toBe(1);
+                expect(this.game.rings.void.fate).toBe(1);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Kitsuki Seiji to place 1 fate on Kitsuki Seiji'
+                    'player1 uses Kitsuki Seiji to put the fate that would go on the water ring on Kitsuki Seiji instead'
                 );
             });
 
-            it('should trigger when another player claims the water ring', function () {
-                this.player1.passConflict();
-                this.noMoreActions();
-                this.initiateConflict({
-                    type: 'political',
-                    ring: 'water',
-                    attackers: [this.tsukune],
-                    defenders: [],
-                    jumpTo: 'afterConflict'
-                });
-                this.player2.clickPrompt('No');
-                this.player2.clickPrompt('Don\'t resolve');
+            it('gains fate when water ring gets fate added due to effects', function () {
+                this.seiji.fate = 0;
+                expect(this.seiji.fate).toBe(0);
+
+                this.player1.pass();
+
+                this.player2.clickCard(this.writtenInTheStars);
+                this.player2.clickPrompt('Place one fate on each unclaimed ring with no fate');
+
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.seiji);
                 this.player1.clickCard(this.seiji);
                 expect(this.seiji.fate).toBe(1);
+                expect(this.game.rings.water.fate).toBe(0);
+                expect(this.game.rings.air.fate).toBe(1);
+                expect(this.game.rings.earth.fate).toBe(1);
+                expect(this.game.rings.fire.fate).toBe(1);
+                expect(this.game.rings.void.fate).toBe(1);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Kitsuki Seiji to place 1 fate on Kitsuki Seiji'
+                    'player1 uses Kitsuki Seiji to put the fate that would go on the water ring on Kitsuki Seiji instead'
+                );
+            });
+
+            it('gains fate when fate is moved to the water ring', function () {
+                this.seiji.fate = 0;
+                this.game.rings.earth.fate = 2;
+                expect(this.seiji.fate).toBe(0);
+
+                this.player1.clickCard(this.tranquil);
+                this.player1.clickRing('earth');
+                this.player1.clickRing('water');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.seiji);
+                this.player1.clickCard(this.seiji);
+                expect(this.seiji.fate).toBe(1);
+                expect(this.game.rings.water.fate).toBe(0);
+                expect(this.game.rings.earth.fate).toBe(1);
+                expect(this.game.rings.air.fate).toBe(0);
+                expect(this.game.rings.fire.fate).toBe(0);
+                expect(this.game.rings.void.fate).toBe(0);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Kitsuki Seiji to put the fate that would go on the water ring on Kitsuki Seiji instead'
+                );
+            });
+
+            it('gains all the fate when multiple fate is moved to the water ring', function () {
+                this.seiji.fate = 0;
+                this.game.rings.earth.fate = 2;
+                expect(this.seiji.fate).toBe(0);
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    ring: 'water',
+                    attackers: [this.seiji],
+                    defenders: []
+                });
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.elementalInversion);
+                this.player1.clickRing('earth');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.seiji);
+                this.player1.clickCard(this.seiji);
+                expect(this.seiji.fate).toBe(2);
+                expect(this.game.rings.water.fate).toBe(0);
+                expect(this.game.rings.earth.fate).toBe(0);
+                expect(this.game.rings.air.fate).toBe(0);
+                expect(this.game.rings.fire.fate).toBe(0);
+                expect(this.game.rings.void.fate).toBe(0);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Kitsuki Seiji to put the fate that would go on the water ring on Kitsuki Seiji instead'
                 );
             });
         });

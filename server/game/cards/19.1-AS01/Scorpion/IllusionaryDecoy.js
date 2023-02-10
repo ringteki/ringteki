@@ -4,47 +4,52 @@ const { CardTypes, Locations, Players } = require('../../../Constants.js');
 
 class IllusionaryDecoy extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            effect: AbilityDsl.effects.delayedEffect({
-                condition:  context => !context.source.controller.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.hasTrait('shugenja')),
-                message: '{0} is discarded from play as {1} does not control a shugenja',
-                messageArgs: context => [context.source, context.source.controller],
-                gameAction: AbilityDsl.actions.discardFromPlay(context => ({
-                    target: context.source
-                }))
-            })
-        });
-
         this.reaction({
             title: 'Put into play',
             location: Locations.Hand,
             when: {
-                onConflictStarted: () => true
+                onConflictStarted: (event, context) =>
+                    context.player.anyCardsInPlay((card) => card.hasTrait('shugenja'))
             },
-            target: {
-                cardType: CardTypes.Character,
-                controller: Players.Self,
-                activePromptTitle: 'Choose a character to move home',
-                cardCondition: card => card.isParticipating(),
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.sendHome(context => ({
-                        target: context.target
-                    })),
-                    AbilityDsl.actions.putIntoConflict(context => ({
-                        target: context.source
-                    }))
-                ])
-            }
+            gameAction: AbilityDsl.actions.multiple([
+                AbilityDsl.actions.putIntoConflict((context) => ({
+                    target: context.source
+                })),
+                AbilityDsl.actions.chooseAction((context) => {
+                    let moveChoice = 'Move another of your characters home';
+                    let stayChoice = 'Done';
+                    return {
+                        messages: {
+                            [moveChoice]: '', // Don't want messages here
+                            [stayChoice]: '' // Don't want messages here
+                        },
+                        choices: {
+                            [moveChoice]: AbilityDsl.actions.selectCard({
+                                controller: Players.Self,
+                                cardType: CardTypes.Character,
+                                cardCondition: (card) => card.isParticipating(),
+                                message: '{0} moves home {1} - they were an {2}!',
+                                messageArgs: (card, player) => [player, card, context.source],
+                                gameAction: AbilityDsl.actions.sendHome()
+                            }),
+                            [stayChoice]: AbilityDsl.actions.noAction()
+                        }
+                    };
+                })
+            ]),
+            effect: 'put {0} into play in the conflict'
         });
 
         this.action({
             title: 'Return to hand',
-            condition: context => {
+            condition: (context) => {
                 const claimedRings = context.source.controller.getClaimedRings();
-                const matchShugenjaElementWithClaimedRing = context.source.controller.cardsInPlay.any(card => {
-                    return card.getType() === CardTypes.Character &&
-                            card.hasTrait('shugenja') &&
-                            claimedRings.some(ring => ring.getElements().some(element => card.hasTrait(element)));
+                const matchShugenjaElementWithClaimedRing = context.source.controller.cardsInPlay.any((card) => {
+                    return (
+                        card.getType() === CardTypes.Character &&
+                        card.hasTrait('shugenja') &&
+                        claimedRings.some((ring) => ring.getElements().some((element) => card.hasTrait(element)))
+                    );
                 });
                 return matchShugenjaElementWithClaimedRing;
             },

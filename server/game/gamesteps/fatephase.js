@@ -89,12 +89,11 @@ class FatePhase extends Phase {
         if(this.game.gameMode === GameModes.Skirmish) {
             return;
         }
-        this.game.raiseEvent(EventNames.OnPlaceFateOnUnclaimedRings, {}, () => {
-            _.each(this.game.rings, ring => {
-                if(ring.isUnclaimed()) {
-                    ring.modifyFate(1);
-                }
-            });
+        let recipients = Object.values(this.game.rings)
+            .filter((ring) => ring.isUnclaimed())
+            .map((ring) => ({ ring: ring, amount: 1 }));
+        this.game.raiseEvent(EventNames.OnPlaceFateOnUnclaimedRings, { recipients: recipients }, () => {
+            recipients.forEach((recipient) => recipient.ring.modifyFate(recipient.amount));
         });
     }
 
