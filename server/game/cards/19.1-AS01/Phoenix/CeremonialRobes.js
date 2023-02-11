@@ -17,16 +17,6 @@ class CeremonialRobes extends DrawCard {
                 let steps = [
                     {
                         activePromptTitle:
-                            'Select a card to put on the bottom of the deck',
-                        message: '{0} places a card on the bottom of the deck',
-                        callback: (chosenCard) =>
-                            context.player.moveCard(
-                                chosenCard,
-                                'dynasty deck bottom'
-                            )
-                    },
-                    {
-                        activePromptTitle:
                             'Select a card to put into the province faceup',
                         message: '{0} places {1} into {2}',
                         callback: (chosenCard) => {
@@ -36,6 +26,16 @@ class CeremonialRobes extends DrawCard {
                             );
                             chosenCard.facedown = false;
                         }
+                    },
+                    {
+                        activePromptTitle:
+                            'Select a card to put on the bottom of the deck',
+                        message: '{0} places a card on the bottom of the deck',
+                        callback: (chosenCard) =>
+                            context.player.moveCard(
+                                chosenCard,
+                                'dynasty deck bottom'
+                            )
                     },
                     {
                         activePromptTitle: 'Select a card to discard',
