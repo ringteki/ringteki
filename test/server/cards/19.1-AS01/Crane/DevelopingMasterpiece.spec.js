@@ -5,7 +5,7 @@ describe('Developing Masterpiece', function () {
                 phase: 'draw',
                 player1: {
                     inPlay: ['brash-samurai', 'kakita-yoshi', 'master-at-arms', 'togashi-initiate'],
-                    hand: ['developing-masterpiece', 'elegance-and-grace']
+                    hand: ['developing-masterpiece']
                 },
                 player2: {
                     inPlay: ['doji-whisperer'],
@@ -22,7 +22,6 @@ describe('Developing Masterpiece', function () {
             this.letGo = this.player2.findCardByName('let-go');
 
             this.masterpiece = this.player1.findCardByName('developing-masterpiece');
-            this.elegance = this.player1.findCardByName('elegance-and-grace');
 
             this.player1.player.promptedActionWindows.draw = true;
             this.player2.player.promptedActionWindows.draw = true;
@@ -36,29 +35,33 @@ describe('Developing Masterpiece', function () {
             this.yoshi.fate = 1;
         });
 
-        it('should get you to bow a crane or courtier or an artisan as a cost and then attach', function () {
+        it('should let you attach to a crane or courtier or an artisan', function () {
             this.player1.clickCard(this.masterpiece);
             expect(this.player1).toBeAbleToSelect(this.yoshi);
             expect(this.player1).toBeAbleToSelect(this.arms);
             expect(this.player1).toBeAbleToSelect(this.brash);
             expect(this.player1).not.toBeAbleToSelect(this.initiate);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
             this.player1.clickCard(this.yoshi);
 
-            expect(this.yoshi.bowed).toBe(true);
             expect(this.masterpiece.location).toBe('play area');
             expect(this.masterpiece.parent).toBe(this.yoshi);
-            expect(this.getChatLogs(5)).toContain('player1 uses Developing Masterpiece, bowing Kakita Yoshi to attach Developing Masterpiece to Kakita Yoshi');
         });
 
-        it('should prevent readying', function () {
+        it('should prevent participating', function () {
             this.player1.clickCard(this.masterpiece);
             this.player1.clickCard(this.yoshi);
 
-            expect(this.yoshi.bowed).toBe(true);
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Action Window');
-            this.player1.clickCard(this.elegance);
-            expect(this.player1).toHavePrompt('Action Window');
+            this.noMoreActions();
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.yoshi, this.initiate],
+                defenders: []
+            });
+
+            expect(this.game.currentConflict.attackers).toContain(this.initiate);
+            expect(this.game.currentConflict.attackers).not.toContain(this.yoshi);
         });
 
         it('should let you gain honor in the fate phase', function () {
@@ -77,18 +80,15 @@ describe('Developing Masterpiece', function () {
 
             let honor = this.player1.honor;
             this.player1.clickCard(this.masterpiece);
-            expect(this.masterpiece.location).toBe('conflict discard pile');
+            expect(this.masterpiece.location).toBe('removed from game');
             expect(this.player1.honor).toBe(honor + 3);
-            expect(this.getChatLogs(5)).toContain('player1 uses Developing Masterpiece, sacrificing Developing Masterpiece to gain 3 honor');
+            expect(this.getChatLogs(5)).toContain('player1 uses Developing Masterpiece, removing Developing Masterpiece from the game to gain 3 honor');
         });
 
         it('playable from discard', function () {
             this.player1.clickCard(this.masterpiece);
-            expect(this.player1).toBeAbleToSelect(this.yoshi);
-            expect(this.player1).toBeAbleToSelect(this.arms);
             this.player1.clickCard(this.yoshi);
 
-            expect(this.yoshi.bowed).toBe(true);
             expect(this.masterpiece.location).toBe('play area');
             expect(this.masterpiece.parent).toBe(this.yoshi);
 
@@ -96,11 +96,8 @@ describe('Developing Masterpiece', function () {
             this.player2.clickCard(this.masterpiece);
 
             this.player1.clickCard(this.masterpiece);
-            expect(this.player1).not.toBeAbleToSelect(this.yoshi);
-            expect(this.player1).toBeAbleToSelect(this.arms);
             this.player1.clickCard(this.arms);
 
-            expect(this.arms.bowed).toBe(true);
             expect(this.masterpiece.location).toBe('play area');
             expect(this.masterpiece.parent).toBe(this.arms);
         });

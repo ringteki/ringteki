@@ -46,11 +46,14 @@ describe('Storm from Sakkaku', function () {
                     'province 1'
                 );
 
+                this.mitsu = this.player1.findCardByName('togashi-mitsu-2');
+                this.mitsu.dishonor();
+
                 this.game.checkGameState(true);
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
-                    attackers: ['togashi-mitsu-2'],
+                    attackers: [this.mitsu],
                     ring: 'earth',
                     defenders: [],
                     province: 'manicured-garden'
@@ -95,6 +98,7 @@ describe('Storm from Sakkaku', function () {
 
             describe('when the province is broken', function () {
                 beforeEach(function () {
+                    this.mitsu.honor();
                     this.player1.clickCard('fine-katana');
                     this.player1.clickCard('togashi-mitsu-2');
                     this.player2.pass();

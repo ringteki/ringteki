@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { Locations, CardTypes, Phases } = require('../../../Constants');
+const { Locations, CardTypes, Phases, PlayTypes } = require('../../../Constants');
 
 const captureParentCost = function() {
     return {
@@ -19,27 +19,15 @@ const captureParentCost = function() {
 class DevelopingMasterpiece extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            effect: AbilityDsl.effects.cardCannot({
-                cannot: 'ready',
-                source: this
-            })
+            effect: [
+                AbilityDsl.effects.cannotParticipateAsAttacker(),
+                AbilityDsl.effects.cannotParticipateAsDefender()
+            ]
         });
 
-        this.action({
-            title: 'Attach this to a character',
-            phase: Phases.Draw,
-            cost: AbilityDsl.costs.bow({
-                cardType: CardTypes.Character,
-                cardCondition: card => card.isFaction('crane') || card.hasTrait('courtier') || card.hasTrait('artisan')
-            }),
-            location: [Locations.Hand, Locations.ConflictDiscardPile],
-            gameAction: AbilityDsl.actions.ifAble(context => ({
-                ifAbleAction: AbilityDsl.actions.attach({
-                    target: context.costs.bow,
-                    attachment: context.source
-                }),
-                otherwiseAction: AbilityDsl.actions.discardCard({ target: context.source })
-            }))
+        this.persistentEffect({
+            location: Locations.ConflictDiscardPile,
+            effect: AbilityDsl.effects.canPlayFromOwn(Locations.ConflictDiscardPile, [this], this, PlayTypes.Other)
         });
 
         this.action({
@@ -48,13 +36,32 @@ class DevelopingMasterpiece extends DrawCard {
             condition: context => context.source.parent,
             cost: [
                 captureParentCost(),
-                AbilityDsl.costs.sacrificeSelf()
+                AbilityDsl.costs.removeSelfFromGame()
             ],
             gameAction: AbilityDsl.actions.gainHonor(context => ({
                 amount: context.costs.captureParentCost ? context.costs.captureParentCost.getGlory() : context.source.parent.getGlory(),
                 target: context.player
             }))
         });
+    }
+
+    canAttach(card) {
+        if(card.controller !== this.controller) {
+            return false;
+        }
+
+        if(card.getType() === CardTypes.Character && (card.hasTrait('courtier') || card.hasTrait('artisan') || card.isFaction('crane'))) {
+            return super.canAttach(card);
+        }
+        return false;
+    }
+
+    canPlay(context, playType) {
+        if(context.game.currentPhase !== Phases.Draw) {
+            return false;
+        }
+
+        return super.canPlay(context, playType);
     }
 }
 

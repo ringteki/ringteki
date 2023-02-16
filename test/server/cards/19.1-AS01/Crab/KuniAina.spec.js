@@ -296,5 +296,30 @@ describe('Kuni Aina', function () {
                 );
             });
         });
+
+        describe('Action taint ability - dynasty', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'dynasty',
+                    player1: {
+                        inPlay: ['kuni-aina', 'kaiu-envoy']
+                    },
+                    player2: {
+                        inPlay: ['borderlands-defender'],
+                        hand: ['ornate-fan']
+                    }
+                });
+
+                this.kuniAina = this.player1.findCardByName('kuni-aina');
+                this.envoy = this.player1.findCardByName('kaiu-envoy');
+                this.borderlands = this.player2.findCardByName('borderlands-defender');
+                this.fan = this.player2.findCardByName('ornate-fan');
+            });
+
+            it('When Aina has fewer cards in hand, do not taint a character', function () {
+                this.player1.clickCard(this.kuniAina);
+                expect(this.player1).toHavePrompt('Play cards from provinces');
+            });
+        });
     });
 });

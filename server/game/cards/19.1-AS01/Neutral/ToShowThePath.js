@@ -9,10 +9,11 @@ class ToShowThePath extends DrawCard {
             condition: context => context.player.cardsInPlay.some(card => card.hasTrait('monk') || card.hasTrait('shugenja')),
             target: {
                 cardType: CardTypes.Character,
-                controller: Players.Any,
+                controller: Players.Self,
                 mode: TargetModes.Single,
                 cardCondition: card => !card.hasTrait('monk') && !card.hasTrait('shugenja'),
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+                    target: [context.target, ...context.target.attachments.toArray()],
                     duration: Durations.UntilEndOfPhase,
                     effect: AbilityDsl.effects.fateCostToTarget({
                         amount: 1,
@@ -20,7 +21,8 @@ class ToShowThePath extends DrawCard {
                     })
                 }))
             },
-            effect: 'make targeting {0} with any card ability by opponents cost 1 more fate'
+            effect: 'make targeting {1} with any card ability by opponents cost 1 more fate',
+            effectArgs: context => [[context.target, ...context.target.attachments.toArray()]]
         });
     }
 }

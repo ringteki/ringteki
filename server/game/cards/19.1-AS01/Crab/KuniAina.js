@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Players } = require('../../../Constants');
+const { CardTypes, Players, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class KuniAina extends DrawCard {
@@ -17,6 +17,7 @@ class KuniAina extends DrawCard {
         this.action({
             title: 'Taint a character',
             effect: 'identify the source of Crab\'s misfortune… it is {0}! {0} is tainted.',
+            phase: Phases.Conflict,
             condition: (context) =>
                 context.player.opponent && context.player.hand.size() <= context.player.opponent.hand.size(),
             target: {

@@ -47,12 +47,12 @@ describe('To Show the Path', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['doomed-shugenja', 'togashi-mitsu', 'ikoma-prodigy'],
-                        hand: ['to-show-the-path', 'a-perfect-cut']
+                        inPlay: ['doomed-shugenja', 'togashi-mitsu', 'ikoma-prodigy', 'moto-youth'],
+                        hand: ['to-show-the-path', 'a-perfect-cut', 'a-new-name', 'duelist-training']
                     },
                     player2: {
-                        inPlay: ['togashi-ichi', 'isawa-kaede', 'moto-youth'],
-                        hand: ['a-perfect-cut']
+                        inPlay: ['togashi-ichi', 'isawa-kaede'],
+                        hand: ['a-perfect-cut', 'let-go', 'let-go']
                     }
                 });
 
@@ -62,12 +62,18 @@ describe('To Show the Path', function () {
 
                 this.togashiIchi = this.player2.findCardByName('togashi-ichi');
                 this.isawaKaede = this.player2.findCardByName('isawa-kaede');
-                this.motoYouth = this.player2.findCardByName('moto-youth');
+                this.motoYouth = this.player1.findCardByName('moto-youth');
 
                 this.toShowThePath = this.player1.findCardByName('to-show-the-path');
                 this.aPerfectCut1 = this.player1.findCardByName('a-perfect-cut');
 
                 this.aPerfectCut2 = this.player2.findCardByName('a-perfect-cut');
+
+                this.letgo = this.player2.filterCardsByName('let-go')[0];
+                this.letgo2 = this.player2.filterCardsByName('let-go')[1];
+
+                this.ann = this.player1.findCardByName('a-new-name');
+                this.duelist = this.player1.findCardByName('duelist-training');
             });
 
             it('it should allow to target a non-monk, non-shugenja owned by either player', function () {
@@ -93,8 +99,8 @@ describe('To Show the Path', function () {
 
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.prodigy],
-                    defenders: [this.motoYouth],
+                    attackers: [this.prodigy, this.motoYouth],
+                    defenders: [],
                     type: 'military'
                 });
 
@@ -109,6 +115,29 @@ describe('To Show the Path', function () {
 
                 expect(this.player1.fate).toBe(player1InitialFate); // no cost increase for the player of To Show the Path
                 expect(this.player2.fate).toBe(player2InitialFate - 1); // cost increase for the opponent
+            });
+
+            it('should also tax attachments that are on the character when the event is played', function () {
+                this.player1.playAttachment(this.duelist, this.motoYouth);
+                this.player2.pass();
+                this.player1.clickCard(this.toShowThePath);
+                this.player1.clickCard(this.motoYouth);
+                expect(this.getChatLogs(3)).toContain('player1 plays To Show the Path to make targeting Moto Youth and Duelist Training with any card ability by opponents cost 1 more fate');
+
+                this.player2.pass();
+                this.player1.playAttachment(this.ann, this.motoYouth);
+
+                const fate = this.player2.fate;
+                this.player2.clickCard(this.letgo);
+                this.player2.clickCard(this.duelist);
+                expect(this.player2.fate).toBe(fate - 1); // cost increase for the opponent
+                expect(this.duelist.location).toBe('conflict discard pile');
+
+                this.player1.pass();
+                this.player2.clickCard(this.letgo2);
+                this.player2.clickCard(this.ann);
+                expect(this.player2.fate).toBe(fate - 1); // no cost increase for the opponent
+                expect(this.ann.location).toBe('conflict discard pile');
             });
         });
     });

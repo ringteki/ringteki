@@ -375,7 +375,7 @@ class Conflict extends GameObject {
             if(cannotContribute) {
                 return sum;
             }
-            return sum + skillFunction(card);
+            return sum + skillFunction(card, this);
         }, 0);
     }
 
