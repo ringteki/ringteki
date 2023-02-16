@@ -21,22 +21,29 @@ describe('Kagi Nawa', function () {
             this.samuraiOfIntegrity = this.player2.findCardByName('samurai-of-integrity');
         });
 
-        it('should only be attachable to a Shinobi you control', function () {
+        it('has no abilities when attached to a non-shinobi', function () {
             this.player1.clickCard(this.kagiNawa);
+            this.player1.clickCard(this.solemnScholar);
+            expect(this.kagiNawa.location).toBe('play area');
 
-            expect(this.player1).toBeAbleToSelect(this.sadako);
-            expect(this.player1).not.toBeAbleToSelect(this.alibiArtist);
-            expect(this.player1).not.toBeAbleToSelect(this.solemnScholar);
-            expect(this.player1).not.toBeAbleToSelect(this.kitsuMotso);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-            expect(this.player1).not.toBeAbleToSelect(this.samuraiOfIntegrity);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.solemnScholar],
+                defenders: [],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.solemnScholar);
+
+            expect(this.player1).not.toHavePrompt('Choose a character with printed cost 2 or lower to move in');
         });
 
-        it('should not work in a conflict', function () {
+        it('should not work outside a conflict', function () {
             this.player1.clickCard(this.kagiNawa);
             this.player1.clickCard(this.sadako);
             this.player2.pass();
-            this.player1.clickCard(this.kagiNawa);
+            this.player1.clickCard(this.sadako);
 
             expect(this.player1).toHavePrompt('Action Window');
             expect(this.getChatLogs(3)).toContain('player1 plays Kagi-Nawa, attaching it to Shosuro Sadako');
@@ -55,7 +62,7 @@ describe('Kagi Nawa', function () {
             });
 
             this.player2.pass();
-            this.player1.clickCard(this.kagiNawa);
+            this.player1.clickCard(this.sadako);
 
             expect(this.player1).toHavePrompt('Choose a character with printed cost 2 or lower to move in');
             expect(this.player1).toBeAbleToSelect(this.solemnScholar);
@@ -67,7 +74,9 @@ describe('Kagi Nawa', function () {
 
             this.player1.clickCard(this.samuraiOfIntegrity);
             expect(this.samuraiOfIntegrity.inConflict).toBe(true);
-            expect(this.getChatLogs(3)).toContain('player1 uses Kagi-Nawa to hook Samurai of Integrity and drag them into the conflict');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 uses Shosuro Sadako\'s gained ability from Kagi-Nawa to hook Samurai of Integrity and drag them into the conflict'
+            );
         });
     });
 });

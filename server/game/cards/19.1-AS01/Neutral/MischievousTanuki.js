@@ -15,9 +15,9 @@ class MischievousTanuki extends DrawCard {
                     if(context.player.showBid % 2 === context.player.opponent.showBid % 2) {
                         return [context.player, ' takes 2 fate from ', context.player.opponent, ''];
                     } else if(context.player.showBid % 2 === 0) {
-                        return [context.player, ' gains 2 honor and ', context.player.opponent, ' draws a card'];
+                        return [context.player, ' gains 2 honor and ', context.player.opponent, ' draws 2 cards'];
                     }
-                    return [context.player, ' draws a card and ', context.player.opponent, ' gains 2 honor'];
+                    return [context.player, ' draws 2 cards and ', context.player.opponent, ' gains 2 honor'];
                 },
                 postBidAction: AbilityDsl.actions.conditional({
                     condition: context => {

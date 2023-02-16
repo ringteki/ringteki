@@ -9,7 +9,7 @@ class PromisingHohei extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: target => target.type === CardTypes.Character && target.getGlory() >= 2,
+                targetCondition: (target) => target.type === CardTypes.Character && target.getGlory() >= 2,
                 match: (card, source) => card === source
             })
         });
@@ -22,7 +22,7 @@ class PromisingHohei extends DrawCard {
             target: {
                 mode: TargetModes.Single,
                 controller: Players.Self,
-                cardCondition: (card, context) => card.hasTrait('follower') && card !== context.source,
+                cardCondition: (card) => card.name !== 'Promising Hohei' && card.hasTrait('follower'),
                 gameAction: AbilityDsl.actions.returnToHand()
             }
         });

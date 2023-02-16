@@ -6,7 +6,7 @@ describe('Promising Hohei', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
-                        hand: ['promising-hohei', 'ayubune-pilot', 'fine-katana']
+                        hand: ['promising-hohei', 'ayubune-pilot', 'fine-katana', 'promising-hohei']
                     },
                     player2: {
                         inPlay: ['solemn-scholar'],
@@ -16,7 +16,9 @@ describe('Promising Hohei', function () {
 
                 this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
-                this.promisingHohei = this.player1.findCardByName('promising-hohei');
+                this.promisingHohei1 = this.player1.filterCardsByName('promising-hohei')[0];
+                this.promisingHohei2 = this.player1.filterCardsByName('promising-hohei')[1];
+
                 this.ayubunePilot1 = this.player1.findCardByName('ayubune-pilot');
                 this.fineKatana = this.player1.findCardByName('fine-katana');
 
@@ -27,7 +29,7 @@ describe('Promising Hohei', function () {
             it('should cost 0 if target has 2 glory', function () {
                 let fate = this.player1.fate;
 
-                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.promisingHohei1);
                 this.player1.clickCard(this.relentlessGloryseeker);
 
                 expect(this.player1.fate).toBe(fate);
@@ -36,7 +38,7 @@ describe('Promising Hohei', function () {
             it('should cost 1 if target has <2 glory', function () {
                 let fate = this.player1.fate;
 
-                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.promisingHohei1);
                 this.player1.clickCard(this.messageRunner);
 
                 expect(this.player1.fate).toBe(fate - 1);
@@ -48,7 +50,7 @@ describe('Promising Hohei', function () {
 
                 this.player2.pass();
 
-                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.promisingHohei1);
                 this.player1.clickCard(this.relentlessGloryseeker);
 
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
@@ -62,15 +64,37 @@ describe('Promising Hohei', function () {
                 this.player2.clickCard(this.ayubunePilot2);
                 this.player2.clickCard(this.solemnScholar);
 
-                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.promisingHohei1);
                 this.player1.clickCard(this.relentlessGloryseeker);
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.promisingHohei);
+                expect(this.player1).toBeAbleToSelect(this.promisingHohei1);
 
-                this.player1.clickCard(this.promisingHohei);
+                this.player1.clickCard(this.promisingHohei1);
                 expect(this.player1).toBeAbleToSelect(this.ayubunePilot1);
                 expect(this.player1).not.toBeAbleToSelect(this.ayubunePilot2);
+
+                this.player1.clickCard(this.ayubunePilot1);
+                expect(this.ayubunePilot1.location).toBe('hand');
+            });
+
+            it('cannot return cards named Promising Hohei', function () {
+                this.player1.clickCard(this.ayubunePilot1);
+                this.player1.clickCard(this.relentlessGloryseeker);
+                this.player2.pass();
+                this.player1.clickCard(this.promisingHohei1);
+                this.player1.clickCard(this.relentlessGloryseeker);
+                this.player1.clickPrompt('Pass'); // First Hohei
+                this.player2.pass();
+                this.player1.clickCard(this.promisingHohei2);
+                this.player1.clickCard(this.messageRunner);
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.promisingHohei2);
+
+                this.player1.clickCard(this.promisingHohei2);
+                expect(this.player1).toBeAbleToSelect(this.ayubunePilot1);
+                expect(this.player1).not.toBeAbleToSelect(this.promisingHohei1);
 
                 this.player1.clickCard(this.ayubunePilot1);
                 expect(this.ayubunePilot1.location).toBe('hand');

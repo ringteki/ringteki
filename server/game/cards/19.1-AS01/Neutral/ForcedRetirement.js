@@ -1,27 +1,26 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { Players, CardTypes } = require('../../../Constants');
+const { Players, CardTypes, CharacterStatus } = require('../../../Constants');
 
 class ForcedRetirement extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Remove the dishonor from a character, and discard it from play',
+            title: 'Remove negative status tokens from a character, and discard it from play',
             effect: 'expiate {0}\'s misdeeds by retiring them to the nearest monatery{1} Let them contemplate their sins.',
             effectArgs: (context) => [
-                context.target.fate > 0
-                    ? ', recovering their ' + context.target.fate + ' fate.'
-                    : '.'
+                context.target.fate > 0 ? ', recovering their ' + context.target.fate + ' fate.' : '.'
             ],
-
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (character) => character.isDishonored
+                cardCondition: (card) => (card.isDishonored || card.isTainted) && !card.isParticipating()
             },
             gameAction: AbilityDsl.actions.sequentialContext((context) => ({
                 gameActions: [
                     AbilityDsl.actions.multiple([
-                        AbilityDsl.actions.honor({ target: context.target }),
+                        AbilityDsl.actions.discardStatusToken({
+                            target: [context.target.statusTokens.filter((t) => this._isAffectedToken(t))]
+                        }),
                         AbilityDsl.actions.removeFate({
                             target: context.target,
                             amount: context.target.getFate(),
@@ -40,6 +39,13 @@ class ForcedRetirement extends DrawCard {
                 ]
             }))
         });
+    }
+
+    _isAffectedToken(statusToken) {
+        return (
+            statusToken.grantedStatus === CharacterStatus.Dishonored ||
+            statusToken.grantedStatus === CharacterStatus.Tainted
+        );
     }
 }
 

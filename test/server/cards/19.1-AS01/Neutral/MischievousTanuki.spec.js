@@ -162,7 +162,7 @@ describe('Mischievous Tanuki', function () {
                 expect(this.player2.hand.length).toBe(p2cards);
 
                 expect(this.getChatLogs(10)).toContain(
-                    'player1 draws a card and player2 gains 2 honor'
+                    'player1 draws 2 cards and player2 gains 2 honor'
                 );
             });
         });

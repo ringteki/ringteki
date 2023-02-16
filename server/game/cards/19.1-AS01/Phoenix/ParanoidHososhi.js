@@ -6,10 +6,6 @@ class ParanoidHososhi extends DrawCard {
     setupCardAbilities() {
         this.legendary(2);
 
-        this.persistentEffect({
-            effect: AbilityDsl.effects.immunity({ restricts: 'events' })
-        });
-
         this.action({
             title: 'Steal fate from a character',
             phase: Phases.Conflict,
@@ -17,9 +13,7 @@ class ParanoidHososhi extends DrawCard {
             target: {
                 controller: Players.Any,
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) =>
-                    card.getCost() ===
-                    this.getHighestCostOfCharactersInPlay(context),
+                cardCondition: (card, context) => card.getCost() === this.getHighestCostOfCharactersInPlay(context),
                 gameAction: AbilityDsl.actions.removeFate((context) => ({
                     amount: 1,
                     recipient: context.player
@@ -30,15 +24,11 @@ class ParanoidHososhi extends DrawCard {
     }
 
     getHighestCostOfCharactersInPlay(context) {
-        let charactersInPlay = context.game.findAnyCardsInPlay(
-            (c) => c.type === CardTypes.Character
-        );
-        let characterCosts = charactersInPlay.map((c) => {
+        let charactersInPlay = context.game.findAnyCardsInPlay((c) => c.type === CardTypes.Character);
+        return charactersInPlay.reduce((prevHighestCost, c) => {
             let cost = c.getCost();
-            return typeof cost === 'number' && !isNaN(cost) ? cost : 0;
-        });
-
-        return Math.max(...characterCosts);
+            return typeof cost === 'number' && cost > prevHighestCost ? cost : prevHighestCost;
+        }, 0);
     }
 }
 

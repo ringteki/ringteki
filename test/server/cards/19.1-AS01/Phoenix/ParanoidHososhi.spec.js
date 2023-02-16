@@ -30,10 +30,10 @@ describe('Paranoid Hososhi', function () {
                 this.player2.pass();
             });
 
-            it('is immune to events', function () {
+            it('is not immune to events', function () {
                 this.player1.clickCard(this.assassination);
                 expect(this.player1).toBeAbleToSelect(this.adeptOfTheWaves);
-                expect(this.player1).not.toBeAbleToSelect(this.paranoidHososhi);
+                expect(this.player1).toBeAbleToSelect(this.paranoidHososhi);
             });
         });
 

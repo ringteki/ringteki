@@ -18,7 +18,7 @@ class CeremonialRobes extends DrawCard {
                     {
                         activePromptTitle:
                             'Select a card to put into the province faceup',
-                        message: '{0} places {1} into {2}',
+                        message: '{0} places {1} into their province',
                         callback: (chosenCard) => {
                             context.player.moveCard(
                                 chosenCard,

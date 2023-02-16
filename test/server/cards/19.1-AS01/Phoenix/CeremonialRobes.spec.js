@@ -57,7 +57,7 @@ describe('Ceremonial Robes', function () {
                 'player1 uses Ceremonial Robes to look at the top 3 cards of their dynasty deck'
             );
             expect(this.getChatLogs(5)).toContain('player1 places a card on the bottom of the deck');
-            expect(this.getChatLogs(5)).toContain('player1 places Guardian Dōjō into Shameful Display');
+            expect(this.getChatLogs(5)).toContain('player1 places Guardian Dōjō into their province');
             expect(this.getChatLogs(5)).toContain('player1 discards Solemn Scholar');
         });
 
@@ -100,7 +100,7 @@ describe('Ceremonial Robes', function () {
                 'player1 uses Ceremonial Robes to look at the top 3 cards of their dynasty deck'
             );
             expect(this.getChatLogs(5)).toContain('player1 places a card on the bottom of the deck');
-            expect(this.getChatLogs(5)).toContain('player1 places Solemn Scholar into Shameful Display');
+            expect(this.getChatLogs(5)).toContain('player1 places Solemn Scholar into their province');
             expect(this.getChatLogs(5)).toContain('player1 discards Kami of Ancient Wisdom');
             expect(this.getChatLogs(5)).toContain(
                 'Kami of Ancient Wisdom was a Spirit! player1 and player2 lose 1 honor'
