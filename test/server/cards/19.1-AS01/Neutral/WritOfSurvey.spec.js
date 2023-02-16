@@ -6,13 +6,14 @@ describe('Writ of Survey', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['doomed-shugenja', 'matsu-berserker'],
-                        hand: ['writ-of-survey']
+                        hand: ['writ-of-survey', 'resourcefulness']
                     }
                 });
 
                 this.doomedShugenja = this.player1.findCardByName('doomed-shugenja');
                 this.matsuBerserker = this.player1.findCardByName('matsu-berserker');
                 this.writOfSurvey = this.player1.findCardByName('writ-of-survey');
+                this.resourcefulness = this.player1.findCardByName('resourcefulness');
             });
 
             it('should only be able to be played on a honored character', function () {
@@ -25,6 +26,27 @@ describe('Writ of Survey', function () {
 
                 this.player1.clickCard(this.doomedShugenja);
                 expect(this.getChatLogs(5)).toContain('player1 plays Writ of Survey, attaching it to Doomed Shugenja');
+            });
+
+            it('should not fall off when dishonored', function () {
+                this.doomedShugenja.honor();
+                this.game.checkGameState(true);
+                this.player1.clickCard(this.writOfSurvey);
+                expect(this.player1).toHavePrompt('Choose a card');
+                this.player1.clickCard(this.matsuBerserker);
+                expect(this.player1).toHavePrompt('Choose a card');
+
+                this.player1.clickCard(this.doomedShugenja);
+                expect(this.getChatLogs(5)).toContain('player1 plays Writ of Survey, attaching it to Doomed Shugenja');
+
+                this.player2.pass();
+
+                this.player1.clickCard(this.resourcefulness);
+                this.player1.clickCard(this.matsuBerserker);
+                this.player1.clickCard(this.doomedShugenja);
+                expect(this.getChatLogs(5)).toContain('player1 plays Resourcefulness, dishonoring Doomed Shugenja to honor Matsu Berserker');
+                expect(this.doomedShugenja.isHonored).toBe(false);
+                expect(this.writOfSurvey.parent).toBe(this.doomedShugenja);
             });
         });
 

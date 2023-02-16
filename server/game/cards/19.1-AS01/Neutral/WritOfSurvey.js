@@ -5,8 +5,7 @@ const AbilityDsl = require('../../../abilitydsl');
 class WritOfSurvey extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
-            limitTrait: { 'title': 1 },
-            cardCondition: card => card.isHonored
+            limitTrait: { 'title': 1 }
         });
 
         this.persistentEffect({
@@ -27,6 +26,10 @@ class WritOfSurvey extends DrawCard {
                 }
             })
         });
+    }
+
+    canPlayOn(source) {
+        return source.isHonored && super.canPlayOn(source);
     }
 }
 
