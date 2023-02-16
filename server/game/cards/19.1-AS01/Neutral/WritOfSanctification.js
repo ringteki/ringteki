@@ -23,7 +23,7 @@ class WritOfSanctification extends DrawCard {
                     cardType: CardTypes.Character,
                     controller: Players.Any,
                     mode: TargetModes.Single,
-                    cardCondition: card => card.isParticipating() && (card.hasTrait('haunted') || card.hasTrait('shadowlands')),
+                    cardCondition: card => card.isParticipating() && (card.hasTrait('haunted') || card.hasTrait('shadowlands') || card.isTainted),
                     gameAction: AbilityDsl.actions.bow()
                 }
             })

@@ -146,9 +146,10 @@ describe('Writ of Sanctification', function () {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be able to target a haunted or shadowlands participating character', function () {
+            it('should be able to target a haunted, tainted or shadowlands participating character', function () {
                 this.player1.clickCard(this.writOfSanctification);
                 this.player1.clickCard(this.doomedShugenja);
+                this.messageRunner.taint();
 
                 this.noMoreActions();
                 this.initiateConflict({
@@ -161,7 +162,7 @@ describe('Writ of Sanctification', function () {
                 this.player1.clickCard(this.doomedShugenja);
                 expect(this.player1).toBeAbleToSelect(this.goblinSneak);
                 expect(this.player1).toBeAbleToSelect(this.jealousAncestor);
-                expect(this.player1).not.toBeAbleToSelect(this.messageRunner);
+                expect(this.player1).toBeAbleToSelect(this.messageRunner);
             });
         });
     });
