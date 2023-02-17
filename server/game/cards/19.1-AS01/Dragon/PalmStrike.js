@@ -17,6 +17,7 @@ class PalmStrike extends DrawCard {
                         this.cardHasNoWeaponAttachments(monkCharacter)
                 },
                 characterToBow: {
+                    dependsOn: 'myMonk',
                     activePromptTitle: 'Choose a character to bow',
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
@@ -26,8 +27,7 @@ class PalmStrike extends DrawCard {
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.bow(),
                         AbilityDsl.actions.conditional({
-                            condition: (context) =>
-                                context.targets.myMonk.hasTrait('tattooed'),
+                            condition: (context) => context.targets.myMonk && context.targets.myMonk.hasTrait('tattooed'),
                             falseGameAction: AbilityDsl.actions.noAction(),
                             trueGameAction:
                                 AbilityDsl.actions.cardLastingEffect({
