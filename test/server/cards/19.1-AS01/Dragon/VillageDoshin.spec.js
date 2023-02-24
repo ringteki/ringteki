@@ -4,7 +4,7 @@ describe('Village Doshin', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['master-of-the-blade'],
+                    inPlay: ['mirumoto-raitsugu'],
                     hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'village-doshin']
                 },
                 player2: {
@@ -13,7 +13,7 @@ describe('Village Doshin', function () {
                 }
             });
 
-            this.masterOfTheBlade = this.player1.findCardByName('master-of-the-blade');
+            this.raitsugu = this.player1.findCardByName('mirumoto-raitsugu');
 
             this.dragonsClaw = this.player1.findCardByName('dragon-s-claw');
             this.dragonsFang = this.player1.findCardByName('dragon-s-fang');
@@ -28,7 +28,7 @@ describe('Village Doshin', function () {
 
         it('should trigger when an attachment is target', function () {
             this.player1.clickCard(this.fineKatana);
-            this.player1.clickCard(this.masterOfTheBlade);
+            this.player1.clickCard(this.raitsugu);
 
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.fineKatana);
@@ -38,7 +38,7 @@ describe('Village Doshin', function () {
 
         it('saves the attachment if the opponent refuses to pay the added cost', function () {
             this.player1.clickCard(this.fineKatana);
-            this.player1.clickCard(this.masterOfTheBlade);
+            this.player1.clickCard(this.raitsugu);
 
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.fineKatana);
@@ -62,7 +62,7 @@ describe('Village Doshin', function () {
             this.player1.moveCard(this.againstTheWaves, 'conflict discard pile');
 
             this.player1.clickCard(this.fineKatana);
-            this.player1.clickCard(this.masterOfTheBlade);
+            this.player1.clickCard(this.raitsugu);
 
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.fineKatana);
@@ -81,11 +81,11 @@ describe('Village Doshin', function () {
             this.player2.moveCard(this.chukanNobue, 'play area');
 
             this.player1.clickCard(this.fineKatana);
-            this.player1.clickCard(this.masterOfTheBlade);
+            this.player1.clickCard(this.raitsugu);
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.masterOfTheBlade],
+                attackers: [this.raitsugu],
                 defenders: []
             });
 
@@ -105,7 +105,7 @@ describe('Village Doshin', function () {
 
         it('does not save the attachment if the opponent pays the added cost', function () {
             this.player1.clickCard(this.dragonsClaw);
-            this.player1.clickCard(this.masterOfTheBlade);
+            this.player1.clickCard(this.raitsugu);
 
             this.player2.clickCard(this.letGo);
             this.player2.clickCard(this.dragonsClaw);
