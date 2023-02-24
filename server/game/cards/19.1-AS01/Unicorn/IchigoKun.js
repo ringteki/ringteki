@@ -1,17 +1,11 @@
 const AbilityDsl = require('../../../abilitydsl.js');
-const { Elements, Locations, EventNames } = require('../../../Constants.js');
+const { Elements, CardTypes, Players, TargetModes } = require('../../../Constants.js');
 const DrawCard = require('../../../drawcard.js');
-const EventRegistrar = require('../../../eventregistrar.js');
 
 const elementKey = 'ichigo-kun-fire';
-const MAXIMUM_FATE_GAIN_PER_ICHIG_ABILITY = 1;
 
 class IchigoKun extends DrawCard {
     setupCardAbilities() {
-        this.fateGainedThisRoundByIchigoAbility = 0;
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([EventNames.OnRoundEnded]);
-
         this.persistentEffect({
             condition: (context) =>
                 context.game.currentConflict &&
@@ -20,62 +14,51 @@ class IchigoKun extends DrawCard {
         });
 
         this.persistentEffect({
-            effect: AbilityDsl.effects.cardCannot({
-                cannot: 'applyCovert',
-                restricts: 'opponentsCardEffects'
-            })
+            effect: AbilityDsl.effects.cardCannot({ cannot: 'applyCovert', restricts: 'opponentsCardEffects' })
         });
 
-        this.persistentEffect({
-            effect: AbilityDsl.effects.modifyMilitarySkill((card) => this.getSkillBonus(card))
-        });
-
-        this.wouldInterrupt({
-            title: 'Place discarded cards under this',
-            when: {
-                onCardsDiscardedFromHand: (event, context) =>
-                    context.source.isParticipating() && event.context.source.type !== 'ring',
-                onCardsDiscarded: (event, context) =>
-                    context.source.isParticipating() &&
-                    event.cards &&
-                    event.cards.some((card) => this.isCardDiscardedFromHand(card))
+        this.action({
+            title: 'Modify military skill and glory',
+            condition: (context) => context.source.isParticipating(),
+            targets: {
+                otherCharacter: {
+                    cardType: CardTypes.Character,
+                    controller: Players.Self,
+                    cardCondition: (card, context) => card.isParticipating() && card !== context.source
+                },
+                select: {
+                    mode: TargetModes.Select,
+                    dependsOn: 'otherCharacter',
+                    choices: (context) => ({
+                        'Increase own military, reduce other glory': AbilityDsl.actions.multiple([
+                            AbilityDsl.actions.cardLastingEffect({
+                                target: context.source,
+                                effect: AbilityDsl.effects.modifyMilitarySkill(+2)
+                            }),
+                            AbilityDsl.actions.cardLastingEffect({
+                                target: context.targets.otherCharacter,
+                                effect: AbilityDsl.effects.modifyGlory(-2)
+                            })
+                        ]),
+                        'Reduce own military, increase other glory': AbilityDsl.actions.multiple([
+                            AbilityDsl.actions.cardLastingEffect({
+                                target: context.source,
+                                effect: AbilityDsl.effects.modifyMilitarySkill(-2)
+                            }),
+                            AbilityDsl.actions.cardLastingEffect({
+                                target: context.targets.otherCharacter,
+                                effect: AbilityDsl.effects.modifyGlory(+2)
+                            })
+                        ])
+                    })
+                }
             },
-            limit: AbilityDsl.limit.perRound(Infinity),
-            effect: 'place {1} underneath {0} instead of letting them be discarded{2} - tasty!',
-            effectArgs: (context) => [
-                context.event.cards.filter((card) => this.isCardDiscardedFromHand(card)),
-                this.fateGainedThisRoundByIchigoAbility < MAXIMUM_FATE_GAIN_PER_ICHIG_ABILITY
-                    ? ' and place 1 fate on Ichigo-kun'
-                    : ''
-            ],
-            gameAction: AbilityDsl.actions.cancel((context) => ({
-                replacementGameAction: AbilityDsl.actions.placeCardUnderneath({
-                    destination: context.source,
-                    target: context.event.cards.filter((card) => this.isCardDiscardedFromHand(card))
-                })
-            })),
-            then: () => {
-                let shouldGainFate = this.fateGainedThisRoundByIchigoAbility < MAXIMUM_FATE_GAIN_PER_ICHIG_ABILITY;
-                this.fateGainedThisRoundByIchigoAbility++;
-                return {
-                    gameAction: shouldGainFate
-                        ? AbilityDsl.actions.placeFate({ target: this })
-                        : AbilityDsl.actions.noAction()
-                };
-            }
+            effect: 'give {0} {1} {2} and {3} {4} glory - {0} {5}',
+            effectArgs: (context) =>
+                context.selects.select.choice === 'Increase own military, reduce other glory'
+                    ? ['+2', 'military', context.targets.otherCharacter, '-2', 'is wild today!']
+                    : ['-2', 'military', context.targets.otherCharacter, '+2', 'is well-behaved. Impressive!']
         });
-    }
-
-    getSkillBonus(card) {
-        return card.game.allCards.filter((card) => card.location === this.uuid).length;
-    }
-
-    isCardDiscardedFromHand(card) {
-        return card.location === Locations.Hand;
-    }
-
-    onRoundEnded() {
-        this.fateGainedThisRoundByIchigoAbility = 0;
     }
 
     getPrintedElementSymbols() {

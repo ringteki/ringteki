@@ -37,7 +37,8 @@ class IllusionaryDecoy extends DrawCard {
                     };
                 })
             ]),
-            effect: 'put {0} into play in the conflict'
+            effect: 'put {0} into play in the conflict',
+            max: AbilityDsl.limit.perConflict(1)
         });
 
         this.action({

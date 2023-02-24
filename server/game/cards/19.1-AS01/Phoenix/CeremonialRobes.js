@@ -4,47 +4,50 @@ const AbilityDsl = require('../../../abilitydsl.js');
 
 class CeremonialRobes extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            effect: AbilityDsl.effects.modifyGlory(() =>
+                this.game.allCards.reduce(
+                    (sum, card) =>
+                        card.type === CardTypes.Character &&
+                        card.controller === this.controller &&
+                        card.hasTrait('spirit')
+                            ? sum + 1
+                            : sum,
+                    0
+                )
+            )
+        });
+
         this.action({
             title: 'Place a card from your deck faceup on a province',
             effect: 'look at the top 3 cards of their dynasty deck',
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
+                cardCondition: (card) => card.location !== Locations.StrongholdProvince,
                 controller: Players.Self
             },
             handler: (context) => {
                 let top3Cards = context.player.dynastyDeck.first(3);
                 let steps = [
                     {
-                        activePromptTitle:
-                            'Select a card to put into the province faceup',
+                        activePromptTitle: 'Select a card to put into the province faceup',
                         message: '{0} places {1} into their province',
                         callback: (chosenCard) => {
-                            context.player.moveCard(
-                                chosenCard,
-                                context.target.location
-                            );
+                            context.player.moveCard(chosenCard, context.target.location);
                             chosenCard.facedown = false;
                         }
                     },
                     {
-                        activePromptTitle:
-                            'Select a card to put on the bottom of the deck',
+                        activePromptTitle: 'Select a card to put on the bottom of the deck',
                         message: '{0} places a card on the bottom of the deck',
-                        callback: (chosenCard) =>
-                            context.player.moveCard(
-                                chosenCard,
-                                'dynasty deck bottom'
-                            )
+                        callback: (chosenCard) => context.player.moveCard(chosenCard, 'dynasty deck bottom')
                     },
                     {
                         activePromptTitle: 'Select a card to discard',
                         message: '{0} discards {1}',
                         callback: (chosenCard) => {
-                            context.player.moveCard(
-                                chosenCard,
-                                Locations.DynastyDiscardPile
-                            );
+                            context.player.moveCard(chosenCard, Locations.DynastyDiscardPile);
                             if(chosenCard.hasTrait('spirit')) {
                                 this.game.addMessage(
                                     '{0} was a Spirit! {1} and {2} lose 1 honor',
@@ -77,12 +80,7 @@ class CeremonialRobes extends DrawCard {
         }
         if(selectableCards.length === 1) {
             let lastCard = selectableCards[0];
-            this.game.addMessage(
-                currentStep.message,
-                context.player,
-                lastCard,
-                context.target
-            );
+            this.game.addMessage(currentStep.message, context.player, lastCard, context.target);
             currentStep.callback(lastCard);
             return;
         }
@@ -92,22 +90,11 @@ class CeremonialRobes extends DrawCard {
             context: context,
             cards: selectableCards,
             cardHandler: (selectedCard) => {
-                this.game.addMessage(
-                    currentStep.message,
-                    context.player,
-                    selectedCard,
-                    context.target
-                );
+                this.game.addMessage(currentStep.message, context.player, selectedCard, context.target);
                 currentStep.callback(selectedCard);
 
-                let newSelectableCards = selectableCards.filter(
-                    (c) => c !== selectedCard
-                );
-                this.ceremonialRobesPrompt(
-                    remainingSteps,
-                    context,
-                    newSelectableCards
-                );
+                let newSelectableCards = selectableCards.filter((c) => c !== selectedCard);
+                this.ceremonialRobesPrompt(remainingSteps, context, newSelectableCards);
             }
         });
     }

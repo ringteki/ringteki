@@ -4,7 +4,7 @@ const { Phases } = require('../../../Constants.js');
 
 class MischievousTanuki extends DrawCard {
     setupCardAbilities() {
-        this.legendary(1);
+        this.legendary(0);
 
         this.action({
             title: 'Set honor dials',

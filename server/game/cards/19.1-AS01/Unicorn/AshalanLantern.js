@@ -1,34 +1,91 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { PlayTypes, Durations } = require('../../../Constants.js');
+const { PlayTypes, Durations, CardTypes, Decks } = require('../../../Constants.js');
+const PlayCharacterAction = require('../../../playcharacteraction.js');
+const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAction.js');
+
+class AshalanLanternPlayAction extends PlayCharacterAction {
+    constructor(card) {
+        super(card, true);
+    }
+
+    createContext(player = this.card.controller) {
+        const context = super.createContext(player);
+        context.playType = PlayTypes.PlayFromHand;
+        return context;
+    }
+
+    meetsRequirements(context, ignoredRequirements = []) {
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
+        return super.meetsRequirements(context, newIgnoredRequirements);
+    }
+}
+
+class AshalanLanternPlayDisguisedAction extends PlayDisguisedCharacterAction {
+    constructor(card) {
+        super(card, true);
+    }
+
+    createContext(player = this.card.controller) {
+        const context = super.createContext(player);
+        context.playType = PlayTypes.PlayFromHand;
+        return context;
+    }
+
+    meetsRequirements(context, ignoredRequirements = []) {
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
+        return super.meetsRequirements(context, newIgnoredRequirements);
+    }
+}
 
 class AshalanLantern extends DrawCard {
     setupCardAbilities() {
-        this.attachmentConditions({
-            trait: 'shugenja',
-            myControl: true
-        });
-
         this.action({
-            title: 'Place fate on card',
-            cost: AbilityDsl.costs.sacrificeSelf(),
+            title: 'Play a character from your opponent\'s dynasty deck',
+            condition: (context) =>
+                context.player.opponent && context.source.parent && context.source.parent.isParticipating(),
+            cost: AbilityDsl.costs.nameCard(),
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.playerLastingEffect(context => ({
+                AbilityDsl.actions.playerLastingEffect((context) => ({
                     duration: Durations.UntilPassPriority,
                     targetController: context.player,
-                    effect: AbilityDsl.effects.reduceNextPlayedCardCost(3)
+                    effect: AbilityDsl.effects.reduceNextPlayedCardCost(
+                        3,
+                        (card) => card.name === context.costs.nameCardCost
+                    )
                 })),
-                AbilityDsl.actions.deckSearch({
+                AbilityDsl.actions.deckSearch((context) => ({
                     amount: 3,
-                    activePromptTitle: 'Choose a card to play',
-                    gameAction: AbilityDsl.actions.playCard({
-                        resetOnCancel: true,
-                        source: this,
-                        playType: PlayTypes.PlayFromHand
-                    })
+                    deck: Decks.DynastyDeck,
+                    player: context.player.opponent,
+                    choosingPlayer: context.player,
+                    reveal: true,
+                    shuffle: false,
+                    placeOnBottomInRandomOrder: true,
+                    cardCondition: (card) => card.type === CardTypes.Character && !card.isUnique(),
+                    gameAction: AbilityDsl.actions.sequential([
+                        AbilityDsl.actions.cardLastingEffect({
+                            effect: [
+                                AbilityDsl.effects.gainPlayAction(AshalanLanternPlayAction),
+                                AbilityDsl.effects.gainPlayAction(AshalanLanternPlayDisguisedAction)
+                            ]
+                        }),
+                        AbilityDsl.actions.playCard({ ignoredRequirements: ['location'] })
+                    ])
+                })),
+
+                AbilityDsl.actions.conditional({
+                    condition: (context) => !context.source.parent.hasTrait('gaijin'),
+                    falseGameAction: AbilityDsl.actions.noAction(),
+                    trueGameAction: AbilityDsl.actions.discardFromPlay({ target: this })
                 })
             ]),
-            effect: 'play a card from their conflict deck'
+            effect: 'look for a character on the top of {1}\'s dynasty deck',
+            effectArgs: (context) => [context.player.opponent]
         });
     }
 }

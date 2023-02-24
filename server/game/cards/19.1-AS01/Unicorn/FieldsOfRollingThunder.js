@@ -4,17 +4,22 @@ const { CardTypes } = require('../../../Constants');
 
 class FieldsOfRollingThunder extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            condition: context => context.source.controller.isDefendingPlayer(),
-            effect: AbilityDsl.effects.modifyUnopposedHonorLoss(1)
+        this.forcedReaction({
+            title: 'Discard this holding',
+            when: {
+                afterConflict: (event, context) =>
+                    event.conflict.loser === context.player && event.conflict.conflictUnopposed
+            },
+            gameAction: AbilityDsl.actions.discardFromPlay()
         });
 
         this.action({
             title: 'Honor a character',
-            condition: context => Object.values(this.game.rings).some(ring => ring.isConsideredClaimed(context.player)),
+            condition: (context) =>
+                Object.values(this.game.rings).some((ring) => ring.isConsideredClaimed(context.player)),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isFaction('unicorn'),
+                cardCondition: (card) => card.isFaction('unicorn'),
                 gameAction: AbilityDsl.actions.honor()
             },
             max: AbilityDsl.limit.perRound(2)

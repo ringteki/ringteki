@@ -6,11 +6,15 @@ class CliffsOfTheSeaDragon extends ProvinceCard {
         this.persistentEffect({
             targetController: Players.Opponent,
             condition: (context) =>
-                !context.game.conflictRecord.some(
-                    (conflict) => conflict.winner === this.controller.opponent
-                ),
+                !context.game.conflictRecord.some((conflict) => this.cliffsTurnOffCondition(context, conflict)),
             effect: ability.effects.playerCannot('takeFateFromRings')
         });
+    }
+
+    cliffsTurnOffCondition(context, conflict) {
+        let lostByDragon = conflict.winner === context.source.controller.opponent;
+        let passedByAnyone = conflict.passed;
+        return lostByDragon || passedByAnyone;
     }
 }
 

@@ -37,7 +37,8 @@ class BrokenBlades extends DrawCard {
                     })),
                     AbilityDsl.actions.discardFromPlay()
                 ])
-            }
+            },
+            max:AbilityDsl.limit.perConflict(1)
         });
     }
 }

@@ -122,234 +122,97 @@ describe('Ichigo-kun', function () {
             });
         });
 
-        describe('Ichigo-kun interaction with discarding cards from hand', function () {
+        describe('Ichigo-kun ability', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['ichigo-kun', 'merchant-of-curiosities'],
-                        hand: ['spoils-of-war', 'ornate-fan']
+                        inPlay: ['ichigo-kun', 'worldly-shiotome']
                     },
                     player2: {
-                        inPlay: ['master-whisperer', 'keeper-initiate'],
-                        hand: ['ambush']
+                        inPlay: ['solemn-scholar']
                     }
                 });
 
                 this.ichigoKun = this.player1.findCardByName('ichigo-kun');
-                this.merchantOfCuriosities = this.player1.findCardByName('merchant-of-curiosities');
-                this.spoilsOfWar = this.player1.findCardByName('spoils-of-war');
+                this.shiotome = this.player1.findCardByName('worldly-shiotome');
 
-                this.ornateFan = this.player1.findCardByName('ornate-fan');
-
-                this.masterWhisperer = this.player2.findCardByName('master-whisperer');
-                this.keeperInitiate = this.player2.findCardByName('keeper-initiate');
-                this.ambush = this.player2.findCardByName('ambush');
-
+                this.solemn = this.player2.findCardByName('solemn-scholar');
                 this.noMoreActions();
             });
 
-            it('while not participating does not captures own cards from player effects', function () {
-                this.player1.moveCard(this.ornateFan, 'conflict deck');
-
+            it('does not trigger when alone', function () {
                 this.initiateConflict({
                     ring: 'void',
                     type: 'military',
-                    attackers: [this.merchantOfCuriosities],
-                    defenders: [this.keeperInitiate]
-                });
-                this.noMoreActions();
-
-                this.player1.clickCard(this.spoilsOfWar);
-                this.player1.clickCard(this.ornateFan);
-
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-            });
-
-            it('while not participating captures cards from costs', function () {
-                this.initiateConflict({
-                    ring: 'void',
-                    type: 'military',
-                    attackers: [this.merchantOfCuriosities],
-                    defenders: [this.keeperInitiate]
+                    attackers: [this.ichigoKun],
+                    defenders: [this.solemn]
                 });
 
                 this.player2.pass();
-                this.player1.clickCard(this.merchantOfCuriosities);
-                this.player1.clickCard(this.ornateFan);
-                this.player2.clickPrompt('Yes');
-                this.player2.clickCard(this.ambush);
 
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
                 expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
+                expect(this.player1).not.toBeAbleToSelect(this.solemn);
+                expect(this.player1).not.toBeAbleToSelect(this.shiotome);
             });
 
-            it('while not participating captures own cards from opponent effects', function () {
+            it('gains military on itself and reduces glory of companion', function () {
                 this.initiateConflict({
                     ring: 'void',
                     type: 'military',
-                    attackers: [this.merchantOfCuriosities],
-                    defenders: [this.keeperInitiate]
-                });
-
-                this.player2.clickCard(this.masterWhisperer);
-                this.player2.clickPrompt('player1');
-
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-            });
-
-            it('while not participating does not capture cards from ring effects', function () {
-                this.initiateConflict({
-                    ring: 'earth',
-                    type: 'military',
-                    attackers: [this.merchantOfCuriosities],
-                    defenders: [this.keeperInitiate]
-                });
-
-                this.noMoreActions();
-
-                expect(this.player1).toHavePrompt('Any reactions?');
-                this.player1.clickPrompt('Pass');
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-                expect(this.player1).toHavePrompt('Choose an effect to resolve');
-                this.player1.clickPrompt('Draw a card and opponent discards');
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-            });
-
-            it('while participating captures own cards from player effects', function () {
-                this.player1.moveCard(this.ornateFan, 'conflict deck');
-
-                this.initiateConflict({
-                    ring: 'void',
-                    type: 'military',
-                    attackers: [this.ichigoKun],
-                    defenders: [this.keeperInitiate]
-                });
-                this.noMoreActions();
-
-                this.player1.clickCard(this.spoilsOfWar);
-                this.player1.clickCard(this.ornateFan);
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                this.player1.clickCard(this.ichigoKun);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Ornate Fan underneath Ichigo-kun instead of letting them be discarded and place 1 fate on Ichigo-kun - tasty!'
-                );
-                expect(this.ornateFan.location).toBe(this.ichigoKun.uuid);
-                expect(this.ichigoKun.getMilitarySkill()).toBe(3 + 1); //base + 1 card
-                expect(this.ichigoKun.getPoliticalSkill()).toBe(0); //base unmodified
-            });
-
-            it('while participating captures cards from costs', function () {
-                this.initiateConflict({
-                    ring: 'void',
-                    type: 'military',
-                    attackers: [this.ichigoKun],
-                    defenders: [this.keeperInitiate]
+                    attackers: [this.ichigoKun, this.shiotome],
+                    defenders: [this.solemn]
                 });
 
                 this.player2.pass();
-                this.player1.clickCard(this.merchantOfCuriosities);
-                this.player1.clickCard(this.ornateFan);
-                this.player2.clickPrompt('Yes');
-                this.player2.clickCard(this.ambush);
 
-                expect(this.player1).toHavePrompt('Triggered Abilities');
                 this.player1.clickCard(this.ichigoKun);
-                expect(this.player1).toHavePrompt('Choose an event to respond to');
-                expect(this.player1).toHavePromptButton('onCardsDiscarded');
-                this.player1.clickPrompt('onCardsDiscarded');
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Ornate Fan underneath Ichigo-kun instead of letting them be discarded and place 1 fate on Ichigo-kun - tasty!'
-                );
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
+                expect(this.player1).not.toBeAbleToSelect(this.solemn);
+                expect(this.player1).toBeAbleToSelect(this.shiotome);
 
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                this.player1.clickCard(this.ichigoKun);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Ambush underneath Ichigo-kun instead of letting them be discarded - tasty!'
-                );
+                this.player1.clickCard(this.shiotome);
+                expect(this.player1).toHavePrompt('Select one');
+                expect(this.player1).toHavePromptButton('Increase own military, reduce other glory');
+                expect(this.player1).toHavePromptButton('Reduce own military, increase other glory');
 
-                expect(this.ornateFan.location).toBe(this.ichigoKun.uuid);
-                expect(this.ambush.location).toBe(this.ichigoKun.uuid);
-                expect(this.ichigoKun.getMilitarySkill()).toBe(3 + 2); //base + 1 card
-                expect(this.ichigoKun.getPoliticalSkill()).toBe(0); //base unmodified
+                this.player1.clickPrompt('Increase own military, reduce other glory');
+                expect(this.ichigoKun.militarySkill).toBe(5);
+                expect(this.shiotome.glory).toBe(0);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Ichigo-kun to give Ichigo-kun +2 military and Worldly Shiotome -2 glory - Ichigo-kun is wild today!'
+                );
             });
 
-            it('while participating captures own cards from opponent effects', function () {
+            it('loses military on itself and increases glory of companion', function () {
                 this.initiateConflict({
                     ring: 'void',
                     type: 'military',
-                    attackers: [this.ichigoKun],
-                    defenders: [this.keeperInitiate]
-                });
-
-                this.player2.clickCard(this.masterWhisperer);
-                this.player2.clickPrompt('player1');
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                this.player1.clickCard(this.ichigoKun);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Spoils of War and Ornate Fan underneath Ichigo-kun instead of letting them be discarded and place 1 fate on Ichigo-kun - tasty!'
-                );
-                expect(this.ornateFan.location).toBe(this.ichigoKun.uuid);
-                expect(this.ichigoKun.getMilitarySkill()).toBe(3 + 2); //base + 2 cards
-                expect(this.ichigoKun.getPoliticalSkill()).toBe(0); //base unmodified
-            });
-
-            it('while participating does not capture cards from ring effects', function () {
-                this.initiateConflict({
-                    ring: 'earth',
-                    type: 'military',
-                    attackers: [this.ichigoKun],
-                    defenders: [this.keeperInitiate]
-                });
-
-                this.noMoreActions();
-
-                expect(this.player1).toHavePrompt('Any reactions?');
-                this.player1.clickPrompt('Pass');
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-                expect(this.player1).toHavePrompt('Choose an effect to resolve');
-                this.player1.clickPrompt('Draw a card and opponent discards');
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
-            });
-
-            it('gains fate on first capture of the round', function () {
-                expect(this.ichigoKun.fate).toBe(0);
-
-                this.initiateConflict({
-                    ring: 'void',
-                    type: 'military',
-                    attackers: [this.ichigoKun],
-                    defenders: [this.keeperInitiate]
+                    attackers: [this.ichigoKun, this.shiotome],
+                    defenders: [this.solemn]
                 });
 
                 this.player2.pass();
-                this.player1.clickCard(this.merchantOfCuriosities);
-                this.player1.clickCard(this.ornateFan);
-                this.player2.clickPrompt('No');
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                this.player1.clickCard(this.ichigoKun);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Ornate Fan underneath Ichigo-kun instead of letting them be discarded and place 1 fate on Ichigo-kun - tasty!'
-                );
-                expect(this.ichigoKun.fate).toBe(1);
 
-                this.player2.clickCard(this.masterWhisperer);
-                this.player2.clickPrompt('player1');
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
                 this.player1.clickCard(this.ichigoKun);
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).not.toBeAbleToSelect(this.ichigoKun);
+                expect(this.player1).not.toBeAbleToSelect(this.solemn);
+                expect(this.player1).toBeAbleToSelect(this.shiotome);
+
+                this.player1.clickCard(this.shiotome);
+                expect(this.player1).toHavePrompt('Select one');
+                expect(this.player1).toHavePromptButton('Increase own military, reduce other glory');
+                expect(this.player1).toHavePromptButton('Reduce own military, increase other glory');
+
+                this.player1.clickPrompt('Reduce own military, increase other glory');
+                expect(this.ichigoKun.militarySkill).toBe(1);
+                expect(this.shiotome.glory).toBe(4);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Ichigo-kun to place Spoils of War and Supernatural Storm underneath Ichigo-kun instead of letting them be discarded - tasty!'
+                    'player1 uses Ichigo-kun to give Ichigo-kun -2 military and Worldly Shiotome +2 glory - Ichigo-kun is well-behaved. Impressive!'
                 );
-                expect(this.ichigoKun.fate).toBe(1);
             });
         });
     });

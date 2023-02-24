@@ -1,11 +1,11 @@
-describe('Kuni Aina', function () {
+describe('Kuni Juurou', function () {
     integration(function () {
         describe('Static ability - no honor costs', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['kuni-aina', 'kaiu-envoy', 'exiled-guardian'],
+                        inPlay: ['kuni-juurou', 'kaiu-envoy', 'exiled-guardian'],
                         hand: ['assassination', 'obsidian-talisman', 'banzai'],
                         dynastyDeck: ['fire-and-oil']
                     },
@@ -15,7 +15,7 @@ describe('Kuni Aina', function () {
                     }
                 });
 
-                this.kuniAina = this.player1.findCardByName('kuni-aina');
+                this.kuniAina = this.player1.findCardByName('kuni-juurou');
                 this.envoy = this.player1.findCardByName('kaiu-envoy');
                 this.exiledGuardian = this.player1.findCardByName('exiled-guardian');
                 this.assassinationCrab = this.player1.findCardByName('assassination');
@@ -126,7 +126,7 @@ describe('Kuni Aina', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: [
-                            'kuni-aina',
+                            'kuni-juurou',
                             'unleashed-experiment',
                             'jealous-ancestor',
                             'kaiu-envoy',
@@ -140,7 +140,7 @@ describe('Kuni Aina', function () {
                     }
                 });
 
-                this.kuniAina = this.player1.findCardByName('kuni-aina');
+                this.kuniAina = this.player1.findCardByName('kuni-juurou');
                 this.experimentP1 = this.player1.findCardByName('unleashed-experiment');
                 this.jealousP1 = this.player1.findCardByName('jealous-ancestor');
                 this.envoyP1 = this.player1.findCardByName('kaiu-envoy');
@@ -154,7 +154,7 @@ describe('Kuni Aina', function () {
                 this.afflictionP2 = this.player2.findCardByName('lurking-affliction');
             });
 
-            it('When Aina is in the conflict, it gives skill penalty to shadowlands', function () {
+            it('When Juurou is in the conflict, it gives skill penalty to shadowlands', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -189,7 +189,7 @@ describe('Kuni Aina', function () {
                 expect(this.borderlandsP2.getPoliticalSkill()).toBe(3);
             });
 
-            it('When Aina is not in the conflict, it gives skill penalty to shadowlands', function () {
+            it('When Juurou is not in the conflict, it gives skill penalty to shadowlands', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -230,7 +230,7 @@ describe('Kuni Aina', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['kuni-aina', 'kaiu-envoy'],
+                        inPlay: ['kuni-juurou', 'kaiu-envoy'],
                         hand: ['fine-katana', 'finger-of-jade']
                     },
                     player2: {
@@ -239,7 +239,7 @@ describe('Kuni Aina', function () {
                     }
                 });
 
-                this.kuniAina = this.player1.findCardByName('kuni-aina');
+                this.kuniAina = this.player1.findCardByName('kuni-juurou');
                 this.envoy = this.player1.findCardByName('kaiu-envoy');
                 this.katana = this.player1.findCardByName('fine-katana');
                 this.finger = this.player1.findCardByName('finger-of-jade');
@@ -247,12 +247,12 @@ describe('Kuni Aina', function () {
                 this.fan = this.player2.findCardByName('ornate-fan');
             });
 
-            it('When Aina has more cards in hand, cannot be triggered', function () {
+            it('When Juurou has more cards in hand, cannot be triggered', function () {
                 this.player1.clickCard(this.kuniAina);
                 expect(this.player1).toHavePrompt('Initiate an action');
             });
 
-            it('When Aina has the same amount of cards in hand, taint a character', function () {
+            it('When Juurou has the same amount of cards in hand, taint a character', function () {
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.kuniAina);
 
@@ -268,11 +268,11 @@ describe('Kuni Aina', function () {
                 expect(this.borderlands.isTainted).toBe(true);
 
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Kuni Aina to identify the source of Crab\'s misfortune… it is Borderlands Defender! Borderlands Defender is tainted.'
+                    'player1 uses Kuni Juurou to identify the source of Crab\'s misfortune… it is Borderlands Defender! Borderlands Defender is tainted.'
                 );
             });
 
-            it('When Aina has fewer cards in hand, taint a character', function () {
+            it('When Juurou has fewer cards in hand, taint a character', function () {
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.kuniAina);
 
@@ -292,7 +292,7 @@ describe('Kuni Aina', function () {
                 this.player1.clickCard(this.borderlands);
                 expect(this.borderlands.isTainted).toBe(true);
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Kuni Aina to identify the source of Crab\'s misfortune… it is Borderlands Defender! Borderlands Defender is tainted.'
+                    'player1 uses Kuni Juurou to identify the source of Crab\'s misfortune… it is Borderlands Defender! Borderlands Defender is tainted.'
                 );
             });
         });
@@ -302,7 +302,7 @@ describe('Kuni Aina', function () {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
-                        inPlay: ['kuni-aina', 'kaiu-envoy']
+                        inPlay: ['kuni-juurou', 'kaiu-envoy']
                     },
                     player2: {
                         inPlay: ['borderlands-defender'],
@@ -310,13 +310,13 @@ describe('Kuni Aina', function () {
                     }
                 });
 
-                this.kuniAina = this.player1.findCardByName('kuni-aina');
+                this.kuniAina = this.player1.findCardByName('kuni-juurou');
                 this.envoy = this.player1.findCardByName('kaiu-envoy');
                 this.borderlands = this.player2.findCardByName('borderlands-defender');
                 this.fan = this.player2.findCardByName('ornate-fan');
             });
 
-            it('When Aina has fewer cards in hand, do not taint a character', function () {
+            it('When Juurou has fewer cards in hand, do not taint a character', function () {
                 this.player1.clickCard(this.kuniAina);
                 expect(this.player1).toHavePrompt('Play cards from provinces');
             });

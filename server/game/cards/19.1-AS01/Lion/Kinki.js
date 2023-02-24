@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { Players, TargetModes, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
-class BloodlineOfBenika extends DrawCard {
+class Kinki extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({
             myControl: true
@@ -32,6 +32,6 @@ class BloodlineOfBenika extends DrawCard {
     }
 }
 
-BloodlineOfBenika.id = 'bloodline-of-benika';
+Kinki.id = 'kinki';
 
-module.exports = BloodlineOfBenika;
+module.exports = Kinki;

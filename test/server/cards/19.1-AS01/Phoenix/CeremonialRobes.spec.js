@@ -14,11 +14,18 @@ describe('Ceremonial Robes', function () {
             this.solemn = this.player1.findCardByName('solemn-scholar');
             this.dojo = this.player1.findCardByName('guardian-dojo');
 
-            this.p11 = this.player1.findCardByName('shameful-display', 'province 1');
-            this.p12 = this.player2.findCardByName('shameful-display', 'province 1');
+            this.prov1 = this.player1.findCardByName('shameful-display', 'province 1');
+            this.prov2 = this.player1.findCardByName('shameful-display', 'province 2');
+            this.prov3 = this.player1.findCardByName('shameful-display', 'province 3');
+            this.prov4 = this.player1.findCardByName('shameful-display', 'province 4');
+            this.provSH = this.player1.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('filters cards, put 1 in a province', function () {
+        it('gains glory for each spirit character player controls',function() {
+            expect(this.robes.glory).toBe(2);
+        });
+
+        it('filters cards, put 1 in a non-sh province', function () {
             this.player1.player.moveCard(this.kami, 'dynasty deck');
             this.player1.player.moveCard(this.solemn, 'dynasty deck');
             this.player1.player.moveCard(this.dojo, 'dynasty deck');
@@ -28,8 +35,13 @@ describe('Ceremonial Robes', function () {
 
             this.player1.clickCard(this.robes);
             expect(this.player1).toHavePrompt('Choose a province');
+            expect(this.player1).toBeAbleToSelect(this.prov1);
+            expect(this.player1).toBeAbleToSelect(this.prov2);
+            expect(this.player1).toBeAbleToSelect(this.prov3);
+            expect(this.player1).toBeAbleToSelect(this.prov4);
+            expect(this.player1).not.toBeAbleToSelect(this.provSH);
 
-            this.player1.clickCard(this.p11);
+            this.player1.clickCard(this.prov1);
             expect(this.player1).toHavePrompt('Select a card to put into the province faceup');
             expect(this.player1).toHavePromptButton('Guardian Dōjō');
             expect(this.player1).toHavePromptButton('Solemn Scholar');
@@ -61,7 +73,7 @@ describe('Ceremonial Robes', function () {
             expect(this.getChatLogs(5)).toContain('player1 discards Solemn Scholar');
         });
 
-        it('filters cards, put 1 in a province, and make players lose honor when discarding a spirit', function () {
+        it('filters cards, put 1 in a non-sh province, and make players lose honor when discarding a spirit', function () {
             this.player1.player.moveCard(this.kami, 'dynasty deck');
             this.player1.player.moveCard(this.solemn, 'dynasty deck');
             this.player1.player.moveCard(this.dojo, 'dynasty deck');
@@ -71,8 +83,13 @@ describe('Ceremonial Robes', function () {
 
             this.player1.clickCard(this.robes);
             expect(this.player1).toHavePrompt('Choose a province');
+            expect(this.player1).toBeAbleToSelect(this.prov1);
+            expect(this.player1).toBeAbleToSelect(this.prov2);
+            expect(this.player1).toBeAbleToSelect(this.prov3);
+            expect(this.player1).toBeAbleToSelect(this.prov4);
+            expect(this.player1).not.toBeAbleToSelect(this.provSH);
 
-            this.player1.clickCard(this.p11);
+            this.player1.clickCard(this.prov1);
             expect(this.player1).toHavePrompt('Select a card to put into the province faceup');
             expect(this.player1).toHavePromptButton('Guardian Dōjō');
             expect(this.player1).toHavePromptButton('Solemn Scholar');

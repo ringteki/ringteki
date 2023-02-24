@@ -1,4 +1,6 @@
-describe('Master of the Blade', function() {
+/* The card is not going forward for now, but this is a lot of code to lose */
+/* eslint-disable jasmine/no-disabled-tests */
+xdescribe('Master of the Blade', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

@@ -3,7 +3,7 @@ const { Locations, CardTypes } = require('../../../Constants');
 const EventRegistrar = require('../../../eventregistrar');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class BloodthirstySatsugai extends DrawCard {
+class BloodthirstyOnryo extends DrawCard {
     setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register(['onCardLeavesPlay']);
@@ -28,6 +28,6 @@ class BloodthirstySatsugai extends DrawCard {
     }
 }
 
-BloodthirstySatsugai.id = 'bloodthirsty-satsugai';
+BloodthirstyOnryo.id = 'bloodthirsty-onryo';
 
-module.exports = BloodthirstySatsugai;
+module.exports = BloodthirstyOnryo;

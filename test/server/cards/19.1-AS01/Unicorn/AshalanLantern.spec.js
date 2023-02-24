@@ -1,161 +1,183 @@
-describe('Ashalan Lantern', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Ashalan Lantern', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    fate: 10,
-                    inPlay: ['solemn-scholar', 'shiba-tsukune', 'isawa-tadaka'],
-                    hand: ['ashalan-lantern', 'elegance-and-grace', 'the-mirror-s-gaze', 'a-fate-worse-than-death', 'bayushi-kachiko', 'appeal-to-sympathy']
+                    fate: 3,
+                    inPlay: ['battle-maiden-recruit', 'saadiyah-al-mozedu'],
+                    hand: ['ashalan-lantern']
                 },
                 player2: {
-                    inPlay: ['doji-challenger', 'asahina-artisan'],
-                    hand: ['way-of-the-crane']
+                    inPlay: ['brash-samurai', 'kakita-asami', 'courtly-challenger', 'tengu-sensei']
                 }
             });
-            this.scholar = this.player1.findCardByName('solemn-scholar');
-            this.tsukune = this.player1.findCardByName('shiba-tsukune');
-            this.tadaka = this.player1.findCardByName('isawa-tadaka');
 
-            this.artisan = this.player2.findCardByName('asahina-artisan');
-            this.challenger = this.player2.findCardByName('doji-challenger');
-
+            this.recruit = this.player1.findCardByName('battle-maiden-recruit');
+            this.saadiyah = this.player1.findCardByName('saadiyah-al-mozedu');
             this.lantern = this.player1.findCardByName('ashalan-lantern');
-            this.elegance = this.player1.findCardByName('elegance-and-grace');
-            this.gaze = this.player1.findCardByName('the-mirror-s-gaze');
-            this.afwtd = this.player1.findCardByName('a-fate-worse-than-death');
-            this.kachiko = this.player1.findCardByName('bayushi-kachiko');
-            this.appeal = this.player1.findCardByName('appeal-to-sympathy');
-            this.way = this.player2.findCardByName('way-of-the-crane');
 
-            this.player1.reduceDeckToNumber('conflict deck', 0);
-            this.player1.moveCard(this.elegance, 'conflict deck');
-            this.player1.moveCard(this.gaze, 'conflict deck');
-            this.player1.moveCard(this.afwtd, 'conflict deck');
+            this.brash = this.player2.findCardByName('brash-samurai');
+            this.asami = this.player2.findCardByName('kakita-asami');
+            this.courtly = this.player2.findCardByName('courtly-challenger');
+            this.tengu = this.player2.findCardByName('tengu-sensei');
+
+            this.player2.reduceDeckToNumber('dynasty deck', 0);
         });
 
-        it('should only attach to shugenja you control', function() {
+        it('searches the top 3 dynasty cards for a character and play it, then discard attachment', function () {
+            this.player2.moveCard(this.brash, 'dynasty deck');
+            this.player2.moveCard(this.courtly, 'dynasty deck');
+            this.player2.moveCard(this.tengu, 'dynasty deck');
+
             this.player1.clickCard(this.lantern);
-            expect(this.player1).toBeAbleToSelect(this.scholar);
-            expect(this.player1).toBeAbleToSelect(this.tadaka);
-            expect(this.player1).not.toBeAbleToSelect(this.tsukune);
-            expect(this.player1).not.toBeAbleToSelect(this.tsukune);
-        });
+            this.player1.clickCard(this.recruit);
 
-        it('should let you choose a card that is legal to play and reduce the cost', function() {
-            this.tsukune.bow();
-            this.tsukune.honor();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.recruit],
+                defenders: []
+            });
 
-            this.player1.playAttachment(this.lantern, this.scholar);
             this.player2.pass();
 
-            let p1Fate = this.player1.fate;
-
+            let p1InitialFate = this.player1.fate;
             this.player1.clickCard(this.lantern);
-            expect(this.player1).toHaveDisabledPromptButton('A Fate Worse Than Death');
-            expect(this.player1).toHavePromptButton('The Mirror\'s Gaze');
-            expect(this.player1).toHavePromptButton('Elegance and Grace');
 
-            this.player1.clickPrompt('Elegance and Grace');
-            this.player1.clickCard(this.tsukune);
-            this.player1.clickPrompt('Done');
+            expect(this.player1).toHavePrompt('Name a card');
+            this.player1.chooseCardInPrompt('Good Omen', 'card-name');
 
-            expect(this.player1.fate).toBe(p1Fate);
-            expect(this.tsukune.bowed).toBe(false);
-            expect(this.elegance.location).toBe('conflict discard pile');
+            expect(this.player1).toHavePrompt('Select a card to reveal');
+            expect(this.player1).toHavePromptButton(this.brash.name);
+            expect(this.player1).toHavePromptButton(this.courtly.name);
+            expect(this.player1).toHavePromptButton(this.tengu.name);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Ashalan Lantern, sacrificing Ashalan Lantern to play a card from their conflict deck');
-            expect(this.getChatLogs(10)).toContain('player1 takes Elegance and Grace');
-            expect(this.getChatLogs(10)).toContain('player1 plays Elegance and Grace from their conflict deck');
-            expect(this.getChatLogs(10)).toContain('player1 plays Elegance and Grace to ready Shiba Tsukune');
-            expect(this.getChatLogs(10)).toContain('player1 is shuffling their conflict deck');
-        });
+            this.player1.clickPrompt(this.brash.name);
+            expect(this.player1).toHavePrompt('Choose additional fate');
 
-        it('should work on attachments', function() {
-            this.tsukune.bow();
-            this.tsukune.honor();
-
-            this.player1.playAttachment(this.lantern, this.scholar);
-            this.player2.pass();
-
-            let p1Fate = this.player1.fate;
-
-            this.player1.clickCard(this.lantern);
-            expect(this.player1).toHaveDisabledPromptButton('A Fate Worse Than Death');
-            expect(this.player1).toHavePromptButton('The Mirror\'s Gaze');
-            expect(this.player1).toHavePromptButton('Elegance and Grace');
-
-            this.player1.clickPrompt('The Mirror\'s Gaze');
-            this.player1.clickCard(this.scholar);
-
-            expect(this.player1.fate).toBe(p1Fate);
-            expect(this.gaze.location).toBe('play area');
-            expect(this.scholar.attachments).toContain(this.gaze);
-
-            expect(this.getChatLogs(10)).toContain('player1 takes The Mirror\'s Gaze');
-            expect(this.getChatLogs(10)).toContain('player1 plays The Mirror\'s Gaze, attaching it to Solemn Scholar');
-        });
-
-        it('should work on characters', function() {
-            this.player1.moveCard(this.kachiko, 'conflict deck');
-            this.player1.playAttachment(this.lantern, this.scholar);
-            this.player2.pass();
-
-            let p1Fate = this.player1.fate;
-
-            this.player1.clickCard(this.lantern);
-            expect(this.player1).toHaveDisabledPromptButton('A Fate Worse Than Death');
-            expect(this.player1).toHavePromptButton('The Mirror\'s Gaze');
-            expect(this.player1).toHavePromptButton('Bayushi Kachiko');
-
-            this.player1.clickPrompt('Bayushi Kachiko');
-            this.player1.clickPrompt('1');
-
-            expect(this.player1.fate).toBe(p1Fate - 5 - 1 + 3); // cost, 1 extra fate, 3 discount
-            expect(this.kachiko.location).toBe('play area');
-
-            expect(this.getChatLogs(10)).toContain('player1 takes Bayushi Kachiko');
-            expect(this.getChatLogs(10)).toContain('player1 plays Bayushi Kachiko at home with 1 additional fate');
-        });
-
-        it('should let you play if you can\'t afford the base cost', function() {
-            this.player1.moveCard(this.kachiko, 'conflict deck');
-            this.player1.playAttachment(this.lantern, this.scholar);
-            this.player1.fate = 3;
-            this.player2.pass();
-
-            let p1Fate = this.player1.fate;
-
-            this.player1.clickCard(this.lantern);
-            expect(this.player1).toHaveDisabledPromptButton('A Fate Worse Than Death');
-            expect(this.player1).toHavePromptButton('The Mirror\'s Gaze');
-            expect(this.player1).toHavePromptButton('Bayushi Kachiko');
-
-            this.player1.clickPrompt('Bayushi Kachiko');
             this.player1.clickPrompt('0');
+            expect(this.brash.location).toBe('play area');
+            expect(this.game.currentConflict.attackers).toContain(this.brash);
+            expect(this.game.currentConflict.defenders).not.toContain(this.brash);
+            expect(this.player1.fate).toBe(p1InitialFate - 2);
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+            );
 
-            expect(this.player1.fate).toBe(p1Fate - 5 + 3); // cost, 0 extra fate, 3 discount
-            expect(this.kachiko.location).toBe('play area');
-
-            expect(this.getChatLogs(10)).toContain('player1 takes Bayushi Kachiko');
-            expect(this.getChatLogs(10)).toContain('player1 plays Bayushi Kachiko at home with 0 additional fate');
+            expect(this.lantern.location).toBe('conflict discard pile');
         });
 
-        it('discount should not carry over if you take nothing', function() {
-            this.player1.playAttachment(this.lantern, this.scholar);
-            this.player2.pass();
-
-            let p1Fate = this.player1.fate;
+        it('searches the top 3 dynasty cards for a character and play it, then keep attachment if attached character is Foreign', function () {
+            this.player2.moveCard(this.brash, 'dynasty deck');
+            this.player2.moveCard(this.courtly, 'dynasty deck');
+            this.player2.moveCard(this.tengu, 'dynasty deck');
 
             this.player1.clickCard(this.lantern);
+            this.player1.clickCard(this.saadiyah);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.saadiyah],
+                defenders: []
+            });
+
+            this.player2.pass();
+
+            let p1InitialFate = this.player1.fate;
+            this.player1.clickCard(this.lantern);
+
+            expect(this.player1).toHavePrompt('Name a card');
+            this.player1.chooseCardInPrompt('Good Omen', 'card-name');
+
+            expect(this.player1).toHavePrompt('Select a card to reveal');
+            expect(this.player1).toHavePromptButton(this.brash.name);
+            expect(this.player1).toHavePromptButton(this.courtly.name);
+            expect(this.player1).toHavePromptButton(this.tengu.name);
+
+            this.player1.clickPrompt(this.brash.name);
+            expect(this.player1).toHavePrompt('Choose additional fate');
+
+            this.player1.clickPrompt('0');
+            expect(this.brash.location).toBe('play area');
+            expect(this.game.currentConflict.attackers).toContain(this.brash);
+            expect(this.game.currentConflict.defenders).not.toContain(this.brash);
+            expect(this.player1.fate).toBe(p1InitialFate - 2);
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+            );
+
+            expect(this.lantern.location).toBe('play area');
+        });
+
+        it('gives 3 fate discount if character chosen matches the name', function () {
+            this.player2.moveCard(this.brash, 'dynasty deck');
+            this.player2.moveCard(this.courtly, 'dynasty deck');
+            this.player2.moveCard(this.tengu, 'dynasty deck');
+
+            this.player1.clickCard(this.lantern);
+            this.player1.clickCard(this.recruit);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.recruit],
+                defenders: []
+            });
+
+            this.player2.pass();
+
+            let p1InitialFate = this.player1.fate;
+            this.player1.clickCard(this.lantern);
+
+            expect(this.player1).toHavePrompt('Name a card');
+            this.player1.chooseCardInPrompt(this.tengu.name, 'card-name');
+
+            expect(this.player1).toHavePrompt('Select a card to reveal');
+            expect(this.player1).toHavePromptButton(this.brash.name);
+            expect(this.player1).toHavePromptButton(this.courtly.name);
+            expect(this.player1).toHavePromptButton(this.tengu.name);
+
+            this.player1.clickPrompt(this.tengu.name);
+            expect(this.player1).toHavePrompt('Choose additional fate');
+
+            this.player1.clickPrompt('0');
+            expect(this.tengu.location).toBe('play area');
+            expect(this.game.currentConflict.attackers).toContain(this.tengu);
+            expect(this.game.currentConflict.defenders).not.toContain(this.tengu);
+            expect(this.player1.fate).toBe(p1InitialFate - 2);
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Ashalan Lantern, naming Tengu Sensei to look for a character on the top of player2\'s dynasty deck'
+            );
+        });
+
+        it('allows to decide not play any character', function () {
+            this.player2.moveCard(this.brash, 'dynasty deck');
+            this.player2.moveCard(this.courtly, 'dynasty deck');
+            this.player2.moveCard(this.tengu, 'dynasty deck');
+
+            this.player1.clickCard(this.lantern);
+            this.player1.clickCard(this.recruit);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.recruit],
+                defenders: []
+            });
+
+            this.player2.pass();
+
+            this.player1.clickCard(this.lantern);
+
+            expect(this.player1).toHavePrompt('Name a card');
+            this.player1.chooseCardInPrompt('Good Omen', 'card-name');
+
+            expect(this.player1).toHavePrompt('Select a card to reveal');
+            expect(this.player1).toHavePromptButton('Take nothing');
+
             this.player1.clickPrompt('Take nothing');
-            expect(this.player1.fate).toBe(p1Fate);
-
-            this.player2.clickCard(this.way);
-            this.player2.clickCard(this.challenger);
-
-            this.player1.clickCard(this.appeal);
-            expect(this.player1.fate).toBe(p1Fate - 2);
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+            );
+            expect(this.lantern.location).toBe('conflict discard pile');
         });
     });
 });

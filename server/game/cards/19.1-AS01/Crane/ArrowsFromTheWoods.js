@@ -5,7 +5,7 @@ class ArrowsFromTheWoods extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Reduce opponent\'s characters mil',
-            condition: context => context.game.isDuringConflict(),
+            condition: context => context.game.isDuringConflict('military'),
             target: {
                 cardCondition: (card, context) => card.controller === context.player && card.isParticipating() && card.hasTrait('bushi')
             },

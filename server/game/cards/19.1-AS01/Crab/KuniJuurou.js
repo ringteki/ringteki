@@ -2,7 +2,7 @@ const DrawCard = require('../../../drawcard.js');
 const { CardTypes, Players, Phases } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
-class KuniAina extends DrawCard {
+class KuniJuurou extends DrawCard {
     setupCardAbilities() {
         this.cannotPayHonorCostsEffect();
 
@@ -48,6 +48,6 @@ class KuniAina extends DrawCard {
     }
 }
 
-KuniAina.id = 'kuni-aina';
+KuniJuurou.id = 'kuni-juurou';
 
-module.exports = KuniAina;
+module.exports = KuniJuurou;

@@ -5,7 +5,7 @@ describe('The Lions Shadow', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['matsu-berserker', 'ikoma-message-runner'],
+                        inPlay: ['matsu-berserker', 'ikoma-message-runner','meticulous-scout'],
                         hand: ['the-lion-s-shadow'],
                         conflictDeck: ['way-of-the-lion', 'for-shame']
                     }
@@ -13,14 +13,16 @@ describe('The Lions Shadow', function () {
 
                 this.berserker = this.player1.findCardByName('matsu-berserker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
+                this.scout = this.player1.findCardByName('meticulous-scout');
                 this.lionsShadow = this.player1.findCardByName('the-lion-s-shadow');
                 this.berserker.bow();
             });
 
-            it('should only be able to be played on a courtier', function () {
+            it('should only be able to be played on a courtier or scout', function () {
                 this.player1.clickCard(this.lionsShadow);
                 expect(this.player1).not.toBeAbleToSelect(this.berserker);
                 expect(this.player1).toBeAbleToSelect(this.messageRunner);
+                expect(this.player1).toBeAbleToSelect(this.scout);
 
                 this.player1.clickCard(this.messageRunner);
                 expect(this.getChatLogs(5)).toContain('player1 plays The Lion\'s Shadow, attaching it to Ikoma Message Runner');
