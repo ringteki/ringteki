@@ -7,6 +7,9 @@ describe('Fields of Rolling Thunder', function () {
                     player1: {
                         inPlay: ['border-rider', 'doji-whisperer'],
                         dynastyDiscard: ['fields-of-rolling-thunder']
+                    },
+                    player2: {
+                        inPlay: ['kaiu-siege-force']
                     }
                 });
 
@@ -14,23 +17,59 @@ describe('Fields of Rolling Thunder', function () {
                 this.whisperer = this.player1.findCardByName('doji-whisperer');
                 this.rider = this.player1.findCardByName('border-rider');
                 this.player1.moveCard(this.fields, 'province 1');
+
+                this.siegeForce = this.player2.findCardByName('kaiu-siege-force');
             });
 
-            it('if you have a ring should let you choose and honor a unicorn character', function () {
-                this.player1.claimRing('water');
+            it('honors a character and stays honored when winning the conflict', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.rider, this.whisperer],
+                    defenders: [],
+                    type: 'military',
+                    ring: 'void'
+                });
+
+                this.player2.pass();
                 this.player1.clickCard(this.fields);
                 expect(this.player1).toBeAbleToSelect(this.rider);
                 expect(this.player1).not.toBeAbleToSelect(this.whisperer);
 
                 this.player1.clickCard(this.rider);
                 expect(this.rider.isHonored).toBe(true);
-                expect(this.getChatLogs(1)).toContain('player1 uses Fields of Rolling Thunder to honor Border Rider');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Fields of Rolling Thunder to honor Border Rider. They will be dishonored at the end of the conflict if player1 loses the conflict.'
+                );
+
+                this.noMoreActions();
+                this.player1.clickPrompt('Yes');
+
+                expect(this.rider.isHonored).toBe(true);
             });
 
-            it('should not trigger if you don\'t have a ring', function () {
-                expect(this.player1).toHavePrompt('Action Window');
+            it('honors a character and dishonors them when losing the conflict', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.rider, this.whisperer],
+                    defenders: [this.siegeForce],
+                    type: 'military',
+                    ring: 'void'
+                });
+
+                this.player2.pass();
                 this.player1.clickCard(this.fields);
-                expect(this.player1).toHavePrompt('Action Window');
+                expect(this.player1).toBeAbleToSelect(this.rider);
+                expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+
+                this.player1.clickCard(this.rider);
+                expect(this.rider.isHonored).toBe(true);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Fields of Rolling Thunder to honor Border Rider. They will be dishonored at the end of the conflict if player1 loses the conflict.'
+                );
+
+                this.noMoreActions();
+
+                expect(this.rider.isHonored).toBe(false);
             });
         });
 

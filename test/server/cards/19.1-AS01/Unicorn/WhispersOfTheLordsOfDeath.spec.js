@@ -1,231 +1,118 @@
-describe('Whispers of the Lords of Death', function() {
-    integration(function() {
-        beforeEach(function() {
-            this.setupTest({
-                phase: 'conflict',
-                player1: {
-                    inPlay: ['doji-challenger', 'isawa-tadaka'],
-                    hand: ['whispers-of-the-lords-of-death']
-                },
-                player2: {
-                    inPlay: ['solemn-scholar', 'kitsu-motso', 'akodo-reserve-company'],
-                    hand: ['whispers-of-the-lords-of-death']
-                }
+describe('Whispers of the Lords of Death', function () {
+    integration(function () {
+        describe('glory count effect', function () {
+            it('adds the highest MIL skill from each player to their count', function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['whispers-of-the-lords-of-death', 'moto-conqueror', 'aggressive-moto'],
+                        hand: ['curved-blade']
+                    },
+                    player2: {
+                        inPlay: ['repentant-legion', 'hida-kisada']
+                    }
+                });
+
+                this.curvedBlade = this.player1.findCardByName('curved-blade');
+                this.motoConqueror = this.player1.findCardByName('moto-conqueror');
+
+                this.player1.claimRing('earth');
+                this.player1.claimRing('water');
+                this.player2.claimRing('fire');
+                this.player2.claimRing('void');
+                this.player2.claimRing('air');
+
+                this.player1.clickCard(this.curvedBlade);
+                this.player1.clickCard(this.motoConqueror);
+
+                this.flow.finishConflictPhase();
+                /**
+                 * p1 =  7 = 2 rings + 0 Glory + 5 MIL
+                 * p2 = 13 = 3 rings + 1 Glory + 9 MIL
+                 */
+                expect(this.getChatLogs(5)).toContain('player2 wins the glory count 13 vs 7');
             });
-
-            this.challenger = this.player1.findCardByName('doji-challenger');
-            this.isawaTadaka = this.player1.findCardByName('isawa-tadaka');
-            this.whispers = this.player1.findCardByName('whispers-of-the-lords-of-death');
-
-            this.solemnScholar = this.player2.findCardByName('solemn-scholar');
-            this.kitsuMotso = this.player2.findCardByName('kitsu-motso');
-            this.whispers2 = this.player2.findCardByName('whispers-of-the-lords-of-death');
-            this.company = this.player2.findCardByName('akodo-reserve-company');
-
-            this.challenger.fate = 2;
-            this.kitsuMotso.fate = 1;
-            this.isawaTadaka.fate = 0;
-            this.solemnScholar.fate = 0;
         });
 
-        it('should let you attach to anyone', function() {
-            this.player1.clickCard(this.whispers);
-            expect(this.player1).toBeAbleToSelect(this.challenger);
-            expect(this.player1).toBeAbleToSelect(this.isawaTadaka);
-            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
-            expect(this.player1).toBeAbleToSelect(this.kitsuMotso);
+        describe('put into play ability', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['iuchi-wayfinder', 'miya-mystic'],
+                        hand: ['whispers-of-the-lords-of-death', 'fine-katana']
+                    },
+                    player2: {
+                        inPlay: ['solemn-scholar'],
+                        hand: ['assassination']
+                    }
+                });
 
-            this.player1.clickCard(this.challenger);
-            expect(this.challenger.attachments).toContain(this.whispers);
-        });
+                this.wayfinder = this.player1.findCardByName('iuchi-wayfinder');
+                this.mystic = this.player1.findCardByName('miya-mystic');
+                this.whispers = this.player1.findCardByName('whispers-of-the-lords-of-death');
+                this.katana = this.player1.findCardByName('fine-katana');
 
-        it('should react when parent loses a conflict, but not if they win', function() {
-            this.player1.playAttachment(this.whispers, this.solemnScholar);
-            this.player2.playAttachment(this.whispers2, this.challenger);
+                this.solemnScholar = this.player2.findCardByName('solemn-scholar');
+                this.assassination = this.player2.findCardByName('assassination');
 
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.solemnScholar, this.kitsuMotso],
-                type: 'military'
+                this.player1.clickCard(this.katana);
+                this.player1.clickCard(this.wayfinder);
             });
 
-            this.challenger.bow();
-            this.isawaTadaka.bow();
+            it('does not trigger outside conflicts', function () {
+                this.player1.clickCard(this.mystic);
+                this.player1.clickCard(this.katana);
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
 
-            let fate = this.challenger.fate;
-            expect(this.challenger.attachments).toContain(this.whispers2);
-            expect(this.kitsuMotso.attachments).not.toContain(this.whispers2);
-
-            this.noMoreActions();
-
-            expect(this.player1).toHavePrompt('Choose a character to receive the Lords of Death');
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-            expect(this.player1).not.toBeAbleToSelect(this.isawaTadaka);
-            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
-            expect(this.player1).toBeAbleToSelect(this.kitsuMotso);
-
-            this.player1.clickCard(this.kitsuMotso);
-
-            expect(this.challenger.fate).toBe(fate - 1);
-            expect(this.challenger.attachments).not.toContain(this.whispers2);
-            expect(this.kitsuMotso.attachments).toContain(this.whispers2);
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Whispers of the Lords of Death to remove a fate from Doji Challenger and move Whispers of the Lords of Death to another character');
-            expect(this.getChatLogs(10)).toContain('player1 attaches Whispers of the Lords of Death to Kitsu Motso');
-
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should react when parent loses a conflict, but not if they win', function() {
-            this.player1.playAttachment(this.whispers, this.solemnScholar);
-            this.player2.playAttachment(this.whispers2, this.challenger);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.solemnScholar, this.kitsuMotso],
-                type: 'military'
+                this.player1.clickCard(this.whispers);
+                expect(this.whispers.location).toBe('hand');
             });
 
-            this.challenger.bow();
-            this.isawaTadaka.bow();
+            it('trigger on own character leaving play due to own action', function () {
+                this.noMoreActions();
 
-            let fate = this.challenger.fate;
-            expect(this.challenger.attachments).toContain(this.whispers2);
-            expect(this.kitsuMotso.attachments).not.toContain(this.whispers2);
+                this.initiateConflict({
+                    ring: 'earth',
+                    type: 'military',
+                    attackers: [this.wayfinder],
+                    defenders: []
+                });
 
-            this.noMoreActions();
+                this.player2.pass();
+                this.player1.clickCard(this.mystic);
+                this.player1.clickCard(this.katana);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
 
-            expect(this.player1).toHavePrompt('Choose a character to receive the Lords of Death');
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-            expect(this.player1).not.toBeAbleToSelect(this.isawaTadaka);
-            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
-            expect(this.player1).toBeAbleToSelect(this.kitsuMotso);
-            expect(this.player1).not.toBeAbleToSelect(this.company);
-
-            this.player1.clickCard(this.kitsuMotso);
-
-            expect(this.challenger.fate).toBe(fate - 1);
-            expect(this.challenger.attachments).not.toContain(this.whispers2);
-            expect(this.kitsuMotso.attachments).toContain(this.whispers2);
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Whispers of the Lords of Death to remove a fate from Doji Challenger and move Whispers of the Lords of Death to another character');
-            expect(this.getChatLogs(10)).toContain('player1 attaches Whispers of the Lords of Death to Kitsu Motso');
-
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should react even if parent has no fate', function() {
-            this.player1.playAttachment(this.whispers, this.solemnScholar);
-            this.player2.playAttachment(this.whispers2, this.isawaTadaka);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.solemnScholar, this.kitsuMotso],
-                type: 'military'
+                this.player1.clickCard(this.whispers);
+                expect(this.whispers.location).toBe('play area');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Whispers of the Lords of Death to put Whispers of the Lords of Death into play and claim the Imperial Favor'
+                );
+                expect(this.getChatLogs(5)).toContain('player1 claims the Emperor\'s military favor!');
             });
 
-            this.challenger.bow();
-            this.isawaTadaka.bow();
+            it('trigger on own character leaving play due to opponent action', function () {
+                this.noMoreActions();
 
-            let fate = this.isawaTadaka.fate;
+                this.initiateConflict({
+                    ring: 'earth',
+                    type: 'military',
+                    attackers: [this.wayfinder],
+                    defenders: []
+                });
 
-            this.noMoreActions();
-            this.player1.clickCard(this.kitsuMotso);
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.wayfinder);
+                expect(this.player1).toHavePrompt('Triggered Abilities');
 
-            expect(this.isawaTadaka.fate).toBe(fate);
-            expect(this.isawaTadaka.attachments).not.toContain(this.whispers2);
-            expect(this.kitsuMotso.attachments).toContain(this.whispers2);
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Whispers of the Lords of Death to remove a fate from Isawa Tadaka and move Whispers of the Lords of Death to another character');
-            expect(this.getChatLogs(10)).toContain('player1 attaches Whispers of the Lords of Death to Kitsu Motso');
-
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should react if parent has fate and there is no legal target', function() {
-            this.player1.playAttachment(this.whispers, this.challenger);
-
-            this.player2.moveCard(this.solemnScholar, 'dynasty dicard pile');
-            this.player2.moveCard(this.kitsuMotso, 'dynasty dicard pile');
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.company],
-                type: 'military'
+                this.player1.clickCard(this.whispers);
+                expect(this.whispers.location).toBe('play area');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Whispers of the Lords of Death to put Whispers of the Lords of Death into play and claim the Imperial Favor'
+                );
+                expect(this.getChatLogs(5)).toContain('player1 claims the Emperor\'s military favor!');
             });
-
-            this.challenger.bow();
-            this.isawaTadaka.bow();
-
-            let fate = this.challenger.fate;
-
-            this.noMoreActions();
-            expect(this.player1).not.toHavePrompt('Choose a character to receive the Lords of Death');
-            expect(this.challenger.fate).toBe(fate - 1);
-            expect(this.challenger.attachments).toContain(this.whispers);
-
-            expect(this.getChatLogs(10)).toContain('player1 uses Whispers of the Lords of Death to remove a fate from Doji Challenger and move Whispers of the Lords of Death to another character');
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should not react if parent has no fate and there is no legal target', function() {
-            this.player1.playAttachment(this.whispers, this.isawaTadaka);
-
-            this.player2.moveCard(this.solemnScholar, 'dynasty dicard pile');
-            this.player2.moveCard(this.kitsuMotso, 'dynasty dicard pile');
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.company],
-                type: 'military'
-            });
-
-            this.challenger.bow();
-            this.isawaTadaka.bow();
-
-            this.noMoreActions();
-            expect(this.player1).not.toHavePrompt('Choose a character to receive the Lords of Death');
-            expect(this.isawaTadaka.attachments).toContain(this.whispers);
-
-            expect(this.getChatLogs(10)).not.toContain('player1 uses Whispers of the Lords of Death to remove a fate from Isawa Tadaka and move Whispers of the Lords of Death to another character');
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should always let controller pick new target', function() {
-            this.player1.playAttachment(this.whispers, this.challenger);
-            this.player2.playAttachment(this.whispers2, this.challenger);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.challenger, this.isawaTadaka],
-                defenders: [this.solemnScholar, this.kitsuMotso],
-                type: 'military'
-            });
-
-            this.challenger.bow();
-            this.isawaTadaka.bow();
-
-            let fate = this.challenger.fate;
-            this.noMoreActions();
-
-            expect(this.player1).toHavePrompt('Choose a character to receive the Lords of Death');
-            this.player1.clickCard(this.kitsuMotso);
-            expect(this.player1).toHavePrompt('Choose a character to receive the Lords of Death');
-            this.player1.clickCard(this.solemnScholar);
-
-            expect(this.challenger.fate).toBe(fate - 2);
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Whispers of the Lords of Death to remove a fate from Doji Challenger and move Whispers of the Lords of Death to another character');
-            expect(this.getChatLogs(10)).toContain('player1 uses Whispers of the Lords of Death to remove a fate from Doji Challenger and move Whispers of the Lords of Death to another character');
-            expect(this.getChatLogs(10)).toContain('player1 attaches Whispers of the Lords of Death to Kitsu Motso');
-            expect(this.getChatLogs(10)).toContain('player1 attaches Whispers of the Lords of Death to Solemn Scholar');
-
-            expect(this.player1).toHavePrompt('Action Window');
         });
     });
 });

@@ -1,4 +1,4 @@
-describe('Ancient Golem', function() {
+describe('Disloyal Oathkeeper', function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

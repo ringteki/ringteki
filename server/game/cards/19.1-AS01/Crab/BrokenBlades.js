@@ -17,6 +17,7 @@ class BrokenBlades extends DrawCard {
                     ],
             when: {
                 afterConflict: (event, context) =>
+                    context.player.isAttackingPlayer() &&
                     event.conflict.winner === context.player &&
                     event.conflict.conflictType === ConflictTypes.Military
             },

@@ -97,6 +97,7 @@ const Effects = {
     legendaryFate: (amount = 1) => EffectBuilder.card.flexible(EffectNames.LegendaryFate, amount),
     loseAllNonKeywordAbilities: () => EffectBuilder.card.static(EffectNames.LoseAllNonKeywordAbilities),
     loseKeyword: (keyword) => EffectBuilder.card.static(EffectNames.LoseKeyword, keyword),
+    loseTrait: (trait) => EffectBuilder.card.static(EffectNames.LoseTrait, trait),
     modifyBaseMilitarySkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseMilitarySkillMultiplier, value),
     modifyBasePoliticalSkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBasePoliticalSkillMultiplier, value),
     modifyBaseProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseProvinceStrength, value),
@@ -212,7 +213,7 @@ const Effects = {
     modifyHonorTransferGiven: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferGiven, amount),
     modifyHonorTransferReceived: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferReceived, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
-    changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
+    changePlayerGloryModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
     customDetachedPlayer: (properties) => EffectBuilder.player.detached(EffectNames.CustomEffect, properties),
     gainActionPhasePriority: () => EffectBuilder.player.detached(EffectNames.GainActionPhasePriority, {

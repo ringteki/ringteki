@@ -8,6 +8,7 @@ describe('Village Doshin', function () {
                     hand: ['fine-katana', 'dragon-s-fang', 'dragon-s-claw', 'village-doshin']
                 },
                 player2: {
+                    inPlay: ['keeper-initiate'],
                     dynastyDiscard: ['chukan-nobue'],
                     hand: ['let-go', 'clarity-of-purpose', 'against-the-waves']
                 }
@@ -20,6 +21,7 @@ describe('Village Doshin', function () {
             this.fineKatana = this.player1.findCardByName('fine-katana');
             this.villageDoshin = this.player1.findCardByName('village-doshin');
 
+            this.keeperInitiate = this.player2.findCardByName('keeper-initiate');
             this.chukanNobue = this.player2.findCardByName('chukan-nobue');
             this.letGo = this.player2.findCardByName('let-go');
             this.clarity = this.player2.findCardByName('clarity-of-purpose');
@@ -125,6 +127,16 @@ describe('Village Doshin', function () {
                 'player1 uses Village Dōshin, discarding Village Dōshin to protect Dragon\'s Claw'
             );
             expect(this.getChatLogs(5)).toContain('player2 pays off the Dōshin. The action continues as normal');
+        });
+
+        it('does not save attachments on characters controlled by another player', function () {
+            this.player1.clickCard(this.dragonsClaw);
+            this.player1.clickCard(this.keeperInitiate);
+
+            this.player2.clickCard(this.letGo);
+            this.player2.clickCard(this.dragonsClaw);
+
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });
     });
 });

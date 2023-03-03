@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { Locations, Players, CardTypes } = require('../../../Constants');
+const { CardTypes, Locations, Players, Stages } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class BambooTattoo extends DrawCard {
@@ -17,9 +17,7 @@ class BambooTattoo extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: (target) =>
-                    target.type === CardTypes.Character &&
-                    target.printedCost <= 3,
+                targetCondition: (target) => target.type === CardTypes.Character && target.printedCost <= 3,
                 match: (card, source) => card === source
             })
         });
@@ -33,10 +31,21 @@ class BambooTattoo extends DrawCard {
                     event.context.source.type !== 'ring' &&
                     event.context.source.name !== 'Framework effect'
             },
-            gameAction: AbilityDsl.actions.ready((context) => ({
-                target: context.source.parent
-            }))
+            gameAction: AbilityDsl.actions.multiple([
+                AbilityDsl.actions.ready((context) => ({ target: context.source.parent })),
+                AbilityDsl.actions.conditional({
+                    condition: (context) => this._tattooUsedDuringCost(context),
+                    trueGameAction: AbilityDsl.actions.dishonor((context) => ({ target: context.source.parent })),
+                    falseGameAction: AbilityDsl.actions.noAction()
+                })
+            ]),
+            effect: 'ready{2} {1}',
+            effectArgs: (context) => [context.source.parent, this._tattooUsedDuringCost(context) ? ' and dishonor' : '']
         });
+    }
+
+    _tattooUsedDuringCost(context) {
+        return context.event.context.stage === Stages.Cost;
     }
 }
 

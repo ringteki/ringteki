@@ -13,11 +13,14 @@ class VillageDoshin extends DrawCard {
             when: {
                 onCardLeavesPlay: (event, context) => {
                     let attachment = event.card.type === CardTypes.Attachment;
-                    let youControl = event.card.controller === context.player;
+                    let onCharacterYouControl =
+                        event.card.parent &&
+                        event.card.parent.type === CardTypes.Character &&
+                        event.card.parent.controller === context.player;
                     let inPlay = event.card.location === Locations.PlayArea;
                     let byAbility = event.context.ability.isTriggeredAbility();
                     let fromOpponent = event.context.player === context.player.opponent;
-                    return attachment && youControl && inPlay && byAbility && fromOpponent;
+                    return attachment && onCharacterYouControl && inPlay && byAbility && fromOpponent;
                 }
             },
 
@@ -55,7 +58,8 @@ class VillageDoshin extends DrawCard {
                         },
                         messages: {
                             [payOption]: '{0} pays off the Dōshin. The action continues as normal',
-                            [refuseOption]: '{0} refuses to discard 2 cards. The attachment stays in play'
+                            [refuseOption]:
+                                '{0} refuses to discard ' + DOSHIN_TAX + ' cards. The attachment stays in play'
                         },
                         messageArgs: [context.player.opponent]
                     };

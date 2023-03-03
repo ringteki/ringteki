@@ -14,17 +14,13 @@ describe('Broken Blades', function () {
                     }
                 });
 
-                this.oneOfTheForgotten = this.player1.findCardByName(
-                    'one-of-the-forgotten'
-                );
+                this.oneOfTheForgotten = this.player1.findCardByName('one-of-the-forgotten');
                 this.kaiuEnvoy = this.player1.findCardByName('kaiu-envoy');
 
-                this.dojiChallenger =
-                    this.player2.findCardByName('doji-challenger');
+                this.dojiChallenger = this.player2.findCardByName('doji-challenger');
                 this.dojiChallenger.fate = 2;
 
-                this.brokenBlades =
-                    this.player1.findCardByName('broken-blades');
+                this.brokenBlades = this.player1.findCardByName('broken-blades');
             });
 
             it('should not trigger if there are no participating characters', function () {
@@ -38,7 +34,25 @@ describe('Broken Blades', function () {
                 expect(this.player1).toHavePrompt('Break Shameful Display');
             });
 
-            it('should trigger after you win a military conflict', function () {
+            it('does not trigger after you win a military conflict as defender', function () {
+                this.noMoreActions();
+                this.player1.passConflict();
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.dojiChallenger],
+                    defenders: [this.oneOfTheForgotten, this.kaiuEnvoy]
+                });
+
+                this.player1.pass();
+                this.player2.pass();
+
+                expect(this.player1).not.toHavePrompt('Any reactions?');
+                expect(this.player1).toHavePrompt('Initiate an action');
+            });
+
+            it('should trigger after you win a military conflict as attacker', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -52,9 +66,7 @@ describe('Broken Blades', function () {
                 this.player1.clickCard(this.brokenBlades);
                 expect(this.player1).toHavePrompt('Choose a character');
                 expect(this.player1).toBeAbleToSelect(this.dojiChallenger);
-                expect(this.player1).not.toBeAbleToSelect(
-                    this.oneOfTheForgotten
-                );
+                expect(this.player1).not.toBeAbleToSelect(this.oneOfTheForgotten);
                 expect(this.player1).not.toBeAbleToSelect(this.kaiuEnvoy);
 
                 this.player1.clickCard(this.dojiChallenger);
@@ -65,9 +77,7 @@ describe('Broken Blades', function () {
                     'player1 plays Broken Blades, sacrificing One of the Forgotten to ensure Doji Challenger is gone! (player2 recovers 2 fate)'
                 );
                 expect(this.player2.fate).toBe(12);
-                expect(this.dojiChallenger.location).toBe(
-                    'dynasty discard pile'
-                );
+                expect(this.dojiChallenger.location).toBe('dynasty discard pile');
             });
         });
     });

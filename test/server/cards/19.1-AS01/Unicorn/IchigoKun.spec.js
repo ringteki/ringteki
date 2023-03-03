@@ -179,7 +179,7 @@ describe('Ichigo-kun', function () {
                 expect(this.player1).toHavePromptButton('Reduce own military, increase other glory');
 
                 this.player1.clickPrompt('Increase own military, reduce other glory');
-                expect(this.ichigoKun.militarySkill).toBe(5);
+                expect(this.ichigoKun.militarySkill).toBe(6);
                 expect(this.shiotome.glory).toBe(0);
                 expect(this.getChatLogs(5)).toContain(
                     'player1 uses Ichigo-kun to give Ichigo-kun +2 military and Worldly Shiotome -2 glory - Ichigo-kun is wild today!'
@@ -208,7 +208,7 @@ describe('Ichigo-kun', function () {
                 expect(this.player1).toHavePromptButton('Reduce own military, increase other glory');
 
                 this.player1.clickPrompt('Reduce own military, increase other glory');
-                expect(this.ichigoKun.militarySkill).toBe(1);
+                expect(this.ichigoKun.militarySkill).toBe(2);
                 expect(this.shiotome.glory).toBe(4);
                 expect(this.getChatLogs(5)).toContain(
                     'player1 uses Ichigo-kun to give Ichigo-kun -2 military and Worldly Shiotome +2 glory - Ichigo-kun is well-behaved. Impressive!'

@@ -369,14 +369,21 @@ class BaseCard extends EffectSource {
     }
 
     hasTrait(trait: string): boolean {
-        trait = trait.toLowerCase();
-        return this.getTraits().includes(trait) || this.getEffects(EffectNames.AddTrait).includes(trait);
+        return this.getTraits().includes(trait.toLowerCase());
     }
 
     getTraits(): string[] {
         let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        let traits = copyEffect ? copyEffect.traits : this.getEffects(EffectNames.Blank).some(blankTraits => blankTraits) ? [] : this.traits;
-        return _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
+        let traits = copyEffect
+            ? copyEffect.traits
+            : this.getEffects(EffectNames.Blank).some((blankTraits) => blankTraits)
+            ? []
+            : this.traits;
+
+        let withGainedTraits = _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
+        let lostTraits = new Set(this.getEffects(EffectNames.LoseTrait));
+        let withoutLostTraits = withGainedTraits.filter((trait) => !lostTraits.has(trait));
+        return withoutLostTraits;
     }
 
     isFaction(faction: string): boolean {

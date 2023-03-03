@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { CardTypes } = require('../../../Constants');
+const { CardTypes, Durations } = require('../../../Constants');
 
 class FieldsOfRollingThunder extends DrawCard {
     setupCardAbilities() {
@@ -15,14 +15,30 @@ class FieldsOfRollingThunder extends DrawCard {
 
         this.action({
             title: 'Honor a character',
-            condition: (context) =>
-                Object.values(this.game.rings).some((ring) => ring.isConsideredClaimed(context.player)),
+            condition: () => this.game.isDuringConflict(),
+            effect: 'honor {0}. They will be dishonored at the end of the conflict if {1} loses the conflict.',
+            effectArgs: (context) => [context.source.controller],
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.isFaction('unicorn'),
-                gameAction: AbilityDsl.actions.honor()
-            },
-            max: AbilityDsl.limit.perRound(2)
+                cardCondition: (card) => card.isParticipating() && card.isFaction('unicorn'),
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.honor(),
+                    AbilityDsl.actions.cardLastingEffect((context) => {
+                        let conflictWhenItWasTriggered = this.game.currentConflict;
+                        return {
+                            duration: Durations.UntilEndOfPhase,
+                            effect: AbilityDsl.effects.delayedEffect({
+                                when: {
+                                    onConflictFinished: (event, context) =>
+                                        event.conflict === conflictWhenItWasTriggered &&
+                                        event.conflict.winner === context.player.opponent
+                                },
+                                gameAction: AbilityDsl.actions.dishonor({ target: context.target })
+                            })
+                        };
+                    })
+                ])
+            }
         });
     }
 }

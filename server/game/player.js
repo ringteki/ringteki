@@ -12,7 +12,18 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 
-const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
+const {
+    AbilityTypes,
+    CardTypes,
+    ConflictTypes,
+    Decks,
+    EffectNames,
+    EventNames,
+    FavorTypes,
+    Locations,
+    Players,
+    PlayTypes
+} = require('./Constants');
 const GameModes = require('../GameModes');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
 
@@ -1263,7 +1274,7 @@ class Player extends GameObject {
     /**
      * Marks that this player controls the favor for the relevant conflict type
      */
-    claimImperialFavor() {
+    claimImperialFavor(favorType) {
         if(this.opponent) {
             this.opponent.loseImperialFavor();
         }
@@ -1272,7 +1283,13 @@ class Player extends GameObject {
             this.game.addMessage('{0} claims the Emperor\'s favor!', this);
             return;
         }
-        let handlers = _.map(['military', 'political'], type => {
+        if(favorType && favorType !== FavorTypes.Both) {
+            this.imperialFavor = favorType;
+            this.game.addMessage('{0} claims the Emperor\'s {1} favor!', this, favorType);
+            return;
+        }
+
+        let handlers = _.map(['military', 'political'], (type) => {
             return () => {
                 this.imperialFavor = type;
                 this.game.addMessage('{0} claims the Emperor\'s {1} favor!', this, type);

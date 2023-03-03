@@ -1,45 +1,14 @@
 const AbilityDsl = require('../../../abilitydsl.js');
-const {
-    CardTypes,
-    Elements,
-    Locations,
-    Players
-} = require('../../../Constants.js');
+const { CardTypes, Players } = require('../../../Constants.js');
 const DrawCard = require('../../../drawcard.js');
-
-const elementKey = 'mangrove-safehouse-water';
 
 class MangroveSafehouse extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            targetLocation: Locations.Provinces,
-            targetController: Players.Self,
-            condition: (context) => {
-                const currentRingToClaim =
-                    this.getCurrentElementSymbol(elementKey);
-                const opponentClaimedTheRequiredRing = this.game.rings[
-                    currentRingToClaim
-                ].isConsideredClaimed(context.player.opponent);
-                return opponentClaimedTheRequiredRing;
-            },
-            match: (card, context) => {
-                const isAdjacentProvince = context.player.areLocationsAdjacent(
-                    context.source.location,
-                    card.location
-                );
-                return isAdjacentProvince;
-            },
-            effect: AbilityDsl.effects.modifyProvinceStrength(-1)
-        });
-
         this.action({
             title: 'Move an attacker out of the conflict',
             effect: 'move {0} home{1}',
             effectArgs: (context) => [
-                this.targetIsMantis(context) &&
-                this.opponentHasFateToBeStolen(context)
-                    ? ' and steal 1 fate'
-                    : ''
+                this.targetIsMantis(context) && this.opponentHasFateToBeStolen(context) ? ' and steal 1 fate' : ''
             ],
             condition: (context) => context.game.isDuringConflict(),
             target: {
@@ -63,16 +32,6 @@ class MangroveSafehouse extends DrawCard {
                 })
             }
         });
-    }
-
-    getPrintedElementSymbols() {
-        let symbols = super.getPrintedElementSymbols();
-        symbols.push({
-            key: elementKey,
-            prettyName: 'Claimed Ring',
-            element: Elements.Water
-        });
-        return symbols;
     }
 
     targetIsMantis(context) {

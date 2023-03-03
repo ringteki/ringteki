@@ -1,65 +1,6 @@
 describe('Mangrove Safehouse', function () {
     integration(function () {
         describe('Mangrove Safehouse\'s ability', function () {
-            describe('Constant ability', function () {
-                beforeEach(function () {
-                    this.setupTest({
-                        phase: 'conflict',
-                        player1: {
-                            dynastyDiscard: ['mangrove-safehouse'],
-                            inPlay: ['adept-of-the-waves', 'kudaka']
-                        },
-                        player2: {
-                            inPlay: ['bayushi-manipulator', 'yuta']
-                        }
-                    });
-
-                    this.mangroveSafehouse = this.player1.placeCardInProvince(
-                        'mangrove-safehouse',
-                        'province 2'
-                    );
-                    this.p1 = this.player1.findCardByName(
-                        'shameful-display',
-                        'province 1'
-                    );
-                    this.p2 = this.player1.findCardByName(
-                        'shameful-display',
-                        'province 2'
-                    );
-                    this.p3 = this.player1.findCardByName(
-                        'shameful-display',
-                        'province 3'
-                    );
-                    this.p4 = this.player1.findCardByName(
-                        'shameful-display',
-                        'province 4'
-                    );
-                });
-
-                describe('while the opponent did not claim the water ring', function () {
-                    it('does not give strength penalty to adjacent provinces', function () {
-                        expect(this.p1.getStrength()).toBe(3);
-                        expect(this.p2.getStrength()).toBe(3 + 1);
-                        expect(this.p3.getStrength()).toBe(3);
-                        expect(this.p4.getStrength()).toBe(3);
-                    });
-                });
-
-                describe('while the opponent did claim the water ring', function () {
-                    beforeEach(function () {
-                        this.game.rings.water.claimRing(this.player2.player);
-                        this.game.checkGameState(true);
-                    });
-
-                    it('gives strength penalty to adjacent provinces', function () {
-                        expect(this.p1.getStrength()).toBe(3 - 1);
-                        expect(this.p2.getStrength()).toBe(3 + 1);
-                        expect(this.p3.getStrength()).toBe(3 - 1);
-                        expect(this.p4.getStrength()).toBe(3);
-                    });
-                });
-            });
-
             describe('Outside of a conflict', function () {
                 beforeEach(function () {
                     this.setupTest({
