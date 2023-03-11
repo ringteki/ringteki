@@ -5,7 +5,7 @@ describe('Vigilant Guardian', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['steward-of-law'],
+                        inPlay: ['steward-of-law','asahina-diviner'],
                         dynastyDiscard: ['iuchi-soulweaver', 'iuchi-soulweaver']
                     },
                     player2: {
@@ -15,6 +15,7 @@ describe('Vigilant Guardian', function () {
                 });
 
                 this.steward = this.player1.findCardByName('steward-of-law');
+                this.asahinaDiviner = this.player1.findCardByName('asahina-diviner');
                 this.soulweaver1 =
                     this.player1.filterCardsByName('iuchi-soulweaver')[0];
                 this.soulweaver2 =
@@ -57,6 +58,16 @@ describe('Vigilant Guardian', function () {
                 });
                 this.player2.clickCard(this.rout);
                 this.player2.clickCard(this.steward);
+                this.noMoreActions();
+                expect(this.vigilantGuardian.bowed).toBe(false);
+                expect(this.player1).toHavePrompt('Action Window');
+            });
+
+            it('does not bow when defending vs attackers that sum zero skill', function () {
+                this.initiateConflict({
+                    attackers: [this.asahinaDiviner],
+                    defenders: [this.vigilantGuardian]
+                });
                 this.noMoreActions();
                 expect(this.vigilantGuardian.bowed).toBe(false);
                 expect(this.player1).toHavePrompt('Action Window');

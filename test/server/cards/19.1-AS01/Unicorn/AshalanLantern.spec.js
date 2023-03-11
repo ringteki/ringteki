@@ -63,7 +63,9 @@ describe('Ashalan Lantern', function () {
             expect(this.getChatLogs(10)).toContain(
                 'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
             );
-
+            expect(this.getChatLogs(10)).toContain(
+                'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
+            );
             expect(this.lantern.location).toBe('conflict discard pile');
         });
 
@@ -105,7 +107,9 @@ describe('Ashalan Lantern', function () {
             expect(this.getChatLogs(10)).toContain(
                 'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
             );
-
+            expect(this.getChatLogs(10)).not.toContain(
+                'Saadiyah al-Mozedu is not Foreign, their Ashalan Lantern is discarded'
+            );
             expect(this.lantern.location).toBe('play area');
         });
 
@@ -147,6 +151,9 @@ describe('Ashalan Lantern', function () {
             expect(this.getChatLogs(10)).toContain(
                 'player1 uses Ashalan Lantern, naming Tengu Sensei to look for a character on the top of player2\'s dynasty deck'
             );
+            expect(this.getChatLogs(10)).toContain(
+                'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
+            );
         });
 
         it('allows to decide not play any character', function () {
@@ -177,7 +184,11 @@ describe('Ashalan Lantern', function () {
             expect(this.getChatLogs(10)).toContain(
                 'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
             );
-            expect(this.lantern.location).toBe('conflict discard pile');
+            expect(this.lantern.location).toBe('play area');
+            expect(this.getChatLogs(10)).toContain('player1 takes nothing');
+            expect(this.getChatLogs(10)).not.toContain(
+                'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
+            );
         });
     });
 });

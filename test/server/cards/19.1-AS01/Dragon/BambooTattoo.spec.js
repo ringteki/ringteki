@@ -8,6 +8,7 @@ describe('Bamboo Tattoo', function () {
                 },
                 player2: {
                     inPlay: ['impulsive-novice', 'doomed-shugenja', 'togashi-mitsu'],
+                    provinces: ['courteous-greeting'],
                     hand: ['bamboo-tattoo', 'high-kick', 'being-and-becoming']
                 }
             });
@@ -20,6 +21,7 @@ describe('Bamboo Tattoo', function () {
             this.bamboo = this.player2.findCardByName('bamboo-tattoo');
             this.kick = this.player2.findCardByName('high-kick');
             this.beingAndBecoming = this.player2.findCardByName('being-and-becoming');
+            this.greeting = this.player2.findCardByName('courteous-greeting');
 
             this.game.rings.fire.fate = 2;
         });
@@ -71,6 +73,30 @@ describe('Bamboo Tattoo', function () {
             this.player2.clickCard(this.kick);
             this.player2.clickCard(this.kuwanan);
             this.player2.clickCard(this.novice);
+
+            expect(this.novice.bowed).toBe(true);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.bamboo);
+            this.player2.clickCard(this.bamboo);
+            expect(this.novice.bowed).toBe(false);
+            expect(this.novice.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 uses Bamboo Tattoo to ready and dishonor Impulsive Novice');
+        });
+
+        it('should prompt you to ready when you bow attached character for an effect', function () {
+            this.player1.pass();
+            this.player2.clickCard(this.bamboo);
+            this.player2.clickCard(this.novice);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                province: this.greeting,
+                attackers: [this.kuwanan],
+                defenders: [this.novice]
+            });
+            this.player2.clickCard(this.greeting);
+            this.player2.clickCard(this.novice);
+            this.player2.clickCard(this.kuwanan);
 
             expect(this.novice.bowed).toBe(true);
             expect(this.player2).toHavePrompt('Triggered Abilities');

@@ -1,16 +1,12 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Locations, Players, Stages } = require('../../../Constants');
+const { CardTypes, Locations, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class BambooTattoo extends DrawCard {
     setupCardAbilities() {
-        this.attachmentConditions({
-            trait: 'monk'
-        });
+        this.attachmentConditions({ myControl: true, trait: 'monk' });
 
-        this.whileAttached({
-            effect: AbilityDsl.effects.addTrait('tattooed')
-        });
+        this.whileAttached({ effect: AbilityDsl.effects.addTrait('tattooed') });
 
         this.persistentEffect({
             location: Locations.Any,
@@ -34,18 +30,25 @@ class BambooTattoo extends DrawCard {
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.ready((context) => ({ target: context.source.parent })),
                 AbilityDsl.actions.conditional({
-                    condition: (context) => this._tattooUsedDuringCost(context),
+                    condition: (context) => this._bambooTattooSelfTrigger(context),
                     trueGameAction: AbilityDsl.actions.dishonor((context) => ({ target: context.source.parent })),
                     falseGameAction: AbilityDsl.actions.noAction()
                 })
             ]),
-            effect: 'ready{2} {1}',
-            effectArgs: (context) => [context.source.parent, this._tattooUsedDuringCost(context) ? ' and dishonor' : '']
+            effect: 'ready{1} {2}',
+            effectArgs: (context) => [
+                this._bambooTattooSelfTrigger(context) ? ' and dishonor' : '',
+                context.source.parent
+            ]
         });
     }
 
-    _tattooUsedDuringCost(context) {
-        return context.event.context.stage === Stages.Cost;
+    _bambooTattooSelfTrigger(context) {
+        return (
+            context.source.controller &&
+            context.event.context.player &&
+            context.source.controller === context.event.context.player
+        );
     }
 }
 

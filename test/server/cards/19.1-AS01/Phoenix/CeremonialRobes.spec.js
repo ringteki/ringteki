@@ -4,7 +4,8 @@ describe('Ceremonial Robes', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['ceremonial-robes', 'kami-of-ancient-wisdom', 'solemn-scholar', 'guardian-dojo']
+                    inPlay: ['ceremonial-robes', 'kami-of-ancient-wisdom', 'solemn-scholar', 'guardian-dojo'],
+                    dynastyDiscard: ['fushicho']
                 }
             });
 
@@ -14,6 +15,8 @@ describe('Ceremonial Robes', function () {
             this.solemn = this.player1.findCardByName('solemn-scholar');
             this.dojo = this.player1.findCardByName('guardian-dojo');
 
+            this.player1.moveCard('fushicho', 'dynasty deck');
+
             this.prov1 = this.player1.findCardByName('shameful-display', 'province 1');
             this.prov2 = this.player1.findCardByName('shameful-display', 'province 2');
             this.prov3 = this.player1.findCardByName('shameful-display', 'province 3');
@@ -21,7 +24,7 @@ describe('Ceremonial Robes', function () {
             this.provSH = this.player1.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('gains glory for each spirit character player controls',function() {
+        it('gains glory for each spirit character player controls', function () {
             expect(this.robes.glory).toBe(2);
         });
 

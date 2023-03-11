@@ -1,6 +1,6 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { PlayTypes, Durations, CardTypes, Decks } = require('../../../Constants.js');
+const { PlayTypes, Durations, CardTypes, Decks, Locations } = require('../../../Constants.js');
 const PlayCharacterAction = require('../../../playcharacteraction.js');
 const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAction.js');
 
@@ -46,8 +46,7 @@ class AshalanLantern extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Play a character from your opponent\'s dynasty deck',
-            condition: (context) =>
-                context.player.opponent && context.source.parent && context.source.parent.isParticipating(),
+            condition: (context) => context.game.isDuringConflict(),
             cost: AbilityDsl.costs.nameCard(),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.playerLastingEffect((context) => ({
@@ -65,7 +64,6 @@ class AshalanLantern extends DrawCard {
                     choosingPlayer: context.player,
                     reveal: true,
                     shuffle: false,
-                    placeOnBottomInRandomOrder: true,
                     cardCondition: (card) => card.type === CardTypes.Character && !card.isUnique(),
                     gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.cardLastingEffect({
@@ -74,15 +72,21 @@ class AshalanLantern extends DrawCard {
                                 AbilityDsl.effects.gainPlayAction(AshalanLanternPlayDisguisedAction)
                             ]
                         }),
-                        AbilityDsl.actions.playCard({ ignoredRequirements: ['location'] })
+                        AbilityDsl.actions.playCard({
+                            ignoredRequirements: ['location'],
+                            postHandler: () => {
+                                if(!context.source.parent.hasTrait('gaijin')) {
+                                    context.game.addMessage(
+                                        '{0} is not Foreign, their {1} is discarded',
+                                        context.source.parent,
+                                        context.source
+                                    );
+                                    context.player.moveCard(context.source, Locations.ConflictDiscardPile);
+                                }
+                            }
+                        })
                     ])
-                })),
-
-                AbilityDsl.actions.conditional({
-                    condition: (context) => !context.source.parent.hasTrait('gaijin'),
-                    falseGameAction: AbilityDsl.actions.noAction(),
-                    trueGameAction: AbilityDsl.actions.discardFromPlay({ target: this })
-                })
+                }))
             ]),
             effect: 'look for a character on the top of {1}\'s dynasty deck',
             effectArgs: (context) => [context.player.opponent]

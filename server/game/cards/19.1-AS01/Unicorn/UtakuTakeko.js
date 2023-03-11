@@ -16,7 +16,9 @@ class UtakuTakekoPlayAction extends PlayCharacterAction {
     }
 
     meetsRequirements(context, ignoredRequirements = []) {
-        let newIgnoredRequirements = ignoredRequirements.includes('location') ? ignoredRequirements : ignoredRequirements.concat('location');
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
         return super.meetsRequirements(context, newIgnoredRequirements);
     }
 }
@@ -32,7 +34,9 @@ class UtakuTakekoPlayDisguisedAction extends PlayDisguisedCharacterAction {
     }
 
     meetsRequirements(context, ignoredRequirements = []) {
-        let newIgnoredRequirements = ignoredRequirements.includes('location') ? ignoredRequirements : ignoredRequirements.concat('location');
+        let newIgnoredRequirements = ignoredRequirements.includes('location')
+            ? ignoredRequirements
+            : ignoredRequirements.concat('location');
         return super.meetsRequirements(context, newIgnoredRequirements);
     }
 }
@@ -46,21 +50,40 @@ class UtakuTakeko extends DrawCard {
                 mode: TargetModes.Single,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => card.glory >= 1 && card.isFaction('unicorn') && !card.isUnique(),
+                cardCondition: (card) => card.glory >= 1 && card.isFaction('unicorn') && !card.isUnique(),
                 gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect(context => ({
+                    AbilityDsl.actions.cardLastingEffect((context) => ({
                         target: context.target,
                         effect: [
                             AbilityDsl.effects.gainPlayAction(UtakuTakekoPlayAction),
                             AbilityDsl.effects.gainPlayAction(UtakuTakekoPlayDisguisedAction)
                         ]
                     })),
-                    AbilityDsl.actions.playCard(context => ({
+                    AbilityDsl.actions.playCard((context) => ({
                         target: context.target
                     }))
                 ])
-            }
+            },
+            effect: 'recall a distant relative who is {1} {2}',
+            effectArgs: (context) => [this._takekoConnectiveForName(context.target), context.target]
         });
+    }
+
+    _takekoConnectiveForName(card) {
+        if(card.hasTrait('army')) {
+            return 'in the';
+        }
+
+        switch(card.name[0]) {
+            case 'A':
+            case 'E':
+            case 'I':
+            case 'O':
+            case 'U':
+                return 'an';
+            default:
+                return 'a';
+        }
     }
 }
 

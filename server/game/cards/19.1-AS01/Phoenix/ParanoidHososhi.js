@@ -6,9 +6,11 @@ class ParanoidHososhi extends DrawCard {
     setupCardAbilities() {
         this.legendary(2);
 
-        this.action({
+        this.interrupt({
             title: 'Steal fate from a character',
-            phase: Phases.Conflict,
+            when: {
+                onPhaseEnded: (event) => event.phase === Phases.Conflict
+            },
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 controller: Players.Any,

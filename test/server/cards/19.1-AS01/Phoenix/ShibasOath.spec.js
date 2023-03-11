@@ -10,10 +10,8 @@ describe('Shiba\'s Oath', function () {
                     }
                 });
 
-                this.solemnScholar =
-                    this.player1.findCardByName('solemn-scholar');
-                this.sereneWarrior =
-                    this.player1.findCardByName('serene-warrior');
+                this.solemnScholar = this.player1.findCardByName('solemn-scholar');
+                this.sereneWarrior = this.player1.findCardByName('serene-warrior');
                 this.shibasOath = this.player1.findCardByName('shiba-s-oath');
             });
 
@@ -24,9 +22,7 @@ describe('Shiba\'s Oath', function () {
                 expect(this.player1).toHavePrompt('Choose a card');
 
                 this.player1.clickCard(this.sereneWarrior);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 plays Shiba\'s Oath, attaching it to Serene Warrior'
-                );
+                expect(this.getChatLogs(5)).toContain('player1 plays Shiba\'s Oath, attaching it to Serene Warrior');
             });
         });
 
@@ -39,10 +35,8 @@ describe('Shiba\'s Oath', function () {
                         hand: ['shiba-s-oath']
                     }
                 });
-                this.solemnScholar =
-                    this.player1.findCardByName('solemn-scholar');
-                this.sereneWarrior =
-                    this.player1.findCardByName('serene-warrior');
+                this.solemnScholar = this.player1.findCardByName('solemn-scholar');
+                this.sereneWarrior = this.player1.findCardByName('serene-warrior');
                 this.shibasOath = this.player1.findCardByName('shiba-s-oath');
                 this.game.checkGameState(true);
             });
@@ -60,7 +54,7 @@ describe('Shiba\'s Oath', function () {
             });
         });
 
-        describe('reaction when played', function () {
+        describe('reaction when enter play', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
@@ -70,8 +64,7 @@ describe('Shiba\'s Oath', function () {
                     }
                 });
 
-                this.sereneWarrior =
-                    this.player1.findCardByName('serene-warrior');
+                this.sereneWarrior = this.player1.findCardByName('serene-warrior');
                 this.shibasOath = this.player1.findCardByName('shiba-s-oath');
             });
 
@@ -80,9 +73,7 @@ describe('Shiba\'s Oath', function () {
                 this.player1.clickCard(this.sereneWarrior);
                 this.player1.clickCard(this.shibasOath);
                 expect(this.sereneWarrior.isHonored).toBe(true);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Shiba\'s Oath to honor Serene Warrior'
-                );
+                expect(this.getChatLogs(5)).toContain('player1 uses Shiba\'s Oath to honor Serene Warrior');
             });
         });
 
@@ -91,11 +82,7 @@ describe('Shiba\'s Oath', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: [
-                            'valiant-oathkeeper',
-                            'solemn-scholar',
-                            'fearless-sailor'
-                        ],
+                        inPlay: ['valiant-oathkeeper', 'solemn-scholar', 'fearless-sailor'],
                         hand: ['shiba-s-oath']
                     },
                     player2: {
@@ -104,22 +91,15 @@ describe('Shiba\'s Oath', function () {
                     }
                 });
 
-                this.valiantOathkeeper =
-                    this.player1.findCardByName('valiant-oathkeeper');
+                this.valiantOathkeeper = this.player1.findCardByName('valiant-oathkeeper');
                 this.sailor = this.player1.findCardByName('fearless-sailor');
-                this.solemnScholar =
-                    this.player1.findCardByName('solemn-scholar');
+                this.solemnScholar = this.player1.findCardByName('solemn-scholar');
                 this.shibasOath = this.player1.findCardByName('shiba-s-oath');
-                this.shamefulDisplay = this.player1.findCardByName(
-                    'shameful-display',
-                    'province 1'
-                );
+                this.shamefulDisplay = this.player1.findCardByName('shameful-display', 'province 1');
 
-                this.politicalRival =
-                    this.player2.findCardByName('political-rival');
+                this.politicalRival = this.player2.findCardByName('political-rival');
                 this.kuwanan = this.player2.findCardByName('doji-kuwanan');
-                this.assassination =
-                    this.player2.findCardByName('assassination');
+                this.assassination = this.player2.findCardByName('assassination');
 
                 this.player1.clickCard(this.shibasOath);
                 this.player1.clickCard(this.valiantOathkeeper);
@@ -129,19 +109,13 @@ describe('Shiba\'s Oath', function () {
             it('cancel events on non-bushi with both chars in conflict', function () {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [
-                        this.valiantOathkeeper,
-                        this.solemnScholar,
-                        this.sailor
-                    ],
+                    attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
                     defenders: [this.kuwanan]
                 });
 
                 this.player2.clickCard(this.assassination);
                 this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).toHavePrompt(
-                    'Any interrupts to the effects of Assassination?'
-                );
+                expect(this.player1).toHavePrompt('Any interrupts to the effects of Assassination?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).toContain(
@@ -152,19 +126,13 @@ describe('Shiba\'s Oath', function () {
             it('does not cancel events on other bushi at same location', function () {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [
-                        this.valiantOathkeeper,
-                        this.solemnScholar,
-                        this.sailor
-                    ],
+                    attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
                     defenders: [this.kuwanan]
                 });
 
                 this.player2.clickCard(this.assassination);
                 this.player2.clickCard(this.sailor);
-                expect(this.player1).not.toHavePrompt(
-                    'Any interrupts to the effects of Assassination?'
-                );
+                expect(this.player1).not.toHavePrompt('Any interrupts to the effects of Assassination?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).not.toContain(
@@ -172,7 +140,7 @@ describe('Shiba\'s Oath', function () {
                 );
             });
 
-            it('does not cancel events when the bushi and the non-bushi are in different locations', function () {
+            it('cancel events when the bushi and the non-bushi are in different locations', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.solemnScholar, this.sailor],
@@ -181,12 +149,10 @@ describe('Shiba\'s Oath', function () {
 
                 this.player2.clickCard(this.assassination);
                 this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).not.toHavePrompt(
-                    'Any interrupts to the effects of Assassination?'
-                );
+                expect(this.player1).toHavePrompt('Any interrupts to the effects of Assassination?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
-                expect(this.getChatLogs(5)).not.toContain(
+                expect(this.getChatLogs(5)).toContain(
                     'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Assassination'
                 );
             });
@@ -194,19 +160,13 @@ describe('Shiba\'s Oath', function () {
             it('cancel character abilities on non-bushi with both chars in conflict', function () {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [
-                        this.valiantOathkeeper,
-                        this.solemnScholar,
-                        this.sailor
-                    ],
+                    attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
                     defenders: [this.kuwanan]
                 });
 
                 this.player2.clickCard(this.kuwanan);
                 this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).toHavePrompt(
-                    'Any interrupts to the effects of Doji Kuwanan?'
-                );
+                expect(this.player1).toHavePrompt('Any interrupts to the effects of Doji Kuwanan?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).toContain(
@@ -217,19 +177,13 @@ describe('Shiba\'s Oath', function () {
             it('does not cancel character abilities on other bushi at same location', function () {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [
-                        this.valiantOathkeeper,
-                        this.solemnScholar,
-                        this.sailor
-                    ],
+                    attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
                     defenders: [this.kuwanan]
                 });
 
                 this.player2.clickCard(this.kuwanan);
                 this.player2.clickCard(this.sailor);
-                expect(this.player1).not.toHavePrompt(
-                    'Any interrupts to the effects of Doji Kuwanan?'
-                );
+                expect(this.player1).not.toHavePrompt('Any interrupts to the effects of Doji Kuwanan?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).not.toContain(
@@ -237,7 +191,7 @@ describe('Shiba\'s Oath', function () {
                 );
             });
 
-            it('does not cancel character abilities when the bushi and the non-bushi are in different locations', function () {
+            it('cancel character abilities when the bushi and the non-bushi are in different locations', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.solemnScholar, this.sailor],
@@ -246,12 +200,10 @@ describe('Shiba\'s Oath', function () {
 
                 this.player2.clickCard(this.kuwanan);
                 this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).not.toHavePrompt(
-                    'Any interrupts to the effects of Doji Kuwanan?'
-                );
+                expect(this.player1).toHavePrompt('Any interrupts to the effects of Doji Kuwanan?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
-                expect(this.getChatLogs(5)).not.toContain(
+                expect(this.getChatLogs(5)).toContain(
                     'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Doji Kuwanan'
                 );
             });
@@ -267,14 +219,10 @@ describe('Shiba\'s Oath', function () {
                 this.player2.clickCard(this.shamefulDisplay);
                 this.player2.clickCard(this.politicalRival);
                 this.player2.clickPrompt('Initiate Conflict');
-                expect(this.player2).toHavePrompt(
-                    'Choose covert target for Political Rival'
-                );
+                expect(this.player2).toHavePrompt('Choose covert target for Political Rival');
 
                 this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).toHavePrompt(
-                    'Any interrupts to the effects of Political Rival?'
-                );
+                expect(this.player1).toHavePrompt('Any interrupts to the effects of Political Rival?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).toContain(
@@ -293,14 +241,10 @@ describe('Shiba\'s Oath', function () {
                 this.player2.clickCard(this.shamefulDisplay);
                 this.player2.clickCard(this.politicalRival);
                 this.player2.clickPrompt('Initiate Conflict');
-                expect(this.player2).toHavePrompt(
-                    'Choose covert target for Political Rival'
-                );
+                expect(this.player2).toHavePrompt('Choose covert target for Political Rival');
 
                 this.player2.clickCard(this.sailor);
-                expect(this.player1).not.toHavePrompt(
-                    'Any interrupts to the effects of Political Rival?'
-                );
+                expect(this.player1).not.toHavePrompt('Any interrupts to the effects of Political Rival?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
                 expect(this.getChatLogs(5)).not.toContain(

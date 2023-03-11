@@ -160,6 +160,25 @@ describe('Retribution', function () {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
+        it('should not react if you have fewer broken provinces', function () {
+            this.sd.isBroken = true;
+            this.sd2.isBroken = true;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.diplomat],
+                defenders: [],
+                type: 'political',
+                ring: 'void'
+            });
+
+            this.noMoreActions();
+            this.player1.clickCard(this.uji);
+
+            expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            expect(this.player2).not.toBeAbleToSelect(this.retribution);
+        });
+
         it('should immediately declare a conflict and force you to attack alone', function () {
             this.noMoreActions();
             this.initiateConflict({

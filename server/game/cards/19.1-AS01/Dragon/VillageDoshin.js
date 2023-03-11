@@ -11,17 +11,16 @@ class VillageDoshin extends DrawCard {
             location: Locations.Hand,
             cost: AbilityDsl.costs.discardSelf(),
             when: {
-                onCardLeavesPlay: (event, context) => {
-                    let attachment = event.card.type === CardTypes.Attachment;
-                    let onCharacterYouControl =
-                        event.card.parent &&
-                        event.card.parent.type === CardTypes.Character &&
-                        event.card.parent.controller === context.player;
-                    let inPlay = event.card.location === Locations.PlayArea;
-                    let byAbility = event.context.ability.isTriggeredAbility();
-                    let fromOpponent = event.context.player === context.player.opponent;
-                    return attachment && onCharacterYouControl && inPlay && byAbility && fromOpponent;
-                }
+                onInitiateAbilityEffects: (event, context) =>
+                    event.cardTargets.some((card) => {
+                        let attachment = card.type === CardTypes.Attachment;
+                        let onCharacterYouControl =
+                            card.parent &&
+                            card.parent.type === CardTypes.Character &&
+                            card.parent.controller === context.player;
+                        let inPlay = card.location === Locations.PlayArea;
+                        return attachment && onCharacterYouControl && inPlay;
+                    })
             },
 
             gameAction: AbilityDsl.actions.conditional({
@@ -32,15 +31,10 @@ class VillageDoshin extends DrawCard {
                         .canAffect(context.player.opponent, context);
                     return opponentHasEnoughCards && opponentIsAllowedToDiscardCards;
                 },
-                falseGameAction: AbilityDsl.actions.cancel({
-                    replacementGameAction: AbilityDsl.actions.removeFromGame((context) => ({
-                        target: context.source,
-                        location: Locations.Any
-                    }))
-                }),
+                falseGameAction: AbilityDsl.actions.cancel(),
                 trueGameAction: AbilityDsl.actions.chooseAction((context) => {
-                    let payOption = 'Discard ' + DOSHIN_TAX + ' random cards from hand to continue';
-                    let refuseOption = 'Do not discard, let the attachment stay in play';
+                    let payOption = 'Discard ' + DOSHIN_TAX + ' random cards from hand';
+                    let refuseOption = 'Let the effect be canceled';
                     return {
                         player: Players.Opponent,
                         activePromptTitle: 'Select one',
@@ -49,25 +43,20 @@ class VillageDoshin extends DrawCard {
                                 amount: DOSHIN_TAX,
                                 target: context.player.opponent
                             }),
-                            [refuseOption]: AbilityDsl.actions.cancel({
-                                replacementGameAction: AbilityDsl.actions.removeFromGame((context) => ({
-                                    target: context.source,
-                                    location: Locations.Any
-                                }))
-                            })
+                            [refuseOption]: AbilityDsl.actions.cancel()
                         },
                         messages: {
-                            [payOption]: '{0} pays off the Dōshin. The action continues as normal',
+                            [payOption]: '{0} distracts the Dōshin.',
                             [refuseOption]:
-                                '{0} refuses to discard ' + DOSHIN_TAX + ' cards. The attachment stays in play'
+                                '{0} refuses to discard ' + DOSHIN_TAX + ' cards. The effects of {2} are canceled.'
                         },
-                        messageArgs: [context.player.opponent]
+                        messageArgs: [context.event.card]
                     };
                 })
             }),
 
             effect: 'protect {1}',
-            effectArgs: (context) => context.event.card
+            effectArgs: (context) => context.event.cardTargets
         });
     }
 }

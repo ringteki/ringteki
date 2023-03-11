@@ -4,9 +4,7 @@ const AbilityDsl = require('../../../abilitydsl.js');
 class VigilantGuardian extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            condition: (context) =>
-                context.source.isDefending() &&
-                context.game.currentConflict.getAttackers().length === 0,
+            condition: (context) => context.source.isDefending() && context.game.currentConflict.attackerSkill === 0,
             effect: AbilityDsl.effects.doesNotBow()
         });
     }

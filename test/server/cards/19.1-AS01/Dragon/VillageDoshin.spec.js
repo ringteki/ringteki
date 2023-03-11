@@ -47,17 +47,19 @@ describe('Village Doshin', function () {
 
             this.player1.clickCard(this.villageDoshin);
             expect(this.player2).toHavePrompt('Select one');
-            expect(this.player2).toHavePromptButton('Discard 2 random cards from hand to continue');
-            expect(this.player2).toHavePromptButton('Do not discard, let the attachment stay in play');
+            expect(this.player2).toHavePromptButton('Discard 2 random cards from hand');
+            expect(this.player2).toHavePromptButton('Let the effect be canceled');
 
-            this.player2.clickPrompt('Do not discard, let the attachment stay in play');
-            expect(this.villageDoshin.location).toBe('removed from game');
+            this.player2.clickPrompt('Let the effect be canceled');
+            expect(this.villageDoshin.location).toBe('conflict discard pile');
             expect(this.letGo.location).toBe('conflict discard pile');
             expect(this.fineKatana.location).toBe('play area');
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Village Dōshin, discarding Village Dōshin to protect Fine Katana'
             );
-            expect(this.getChatLogs(5)).toContain('player2 refuses to discard 2 cards. The attachment stays in play');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 refuses to discard 2 cards. The effects of Let Go are canceled.'
+            );
         });
 
         it('saves the attachment if the opponent does not have fate to pay the added cost', function () {
@@ -71,7 +73,7 @@ describe('Village Doshin', function () {
 
             this.player1.clickCard(this.villageDoshin);
             expect(this.player2).not.toHavePrompt('Select one');
-            expect(this.villageDoshin.location).toBe('removed from game');
+            expect(this.villageDoshin.location).toBe('conflict discard pile');
             expect(this.letGo.location).toBe('conflict discard pile');
             expect(this.fineKatana.location).toBe('play area');
             expect(this.getChatLogs(5)).toContain(
@@ -97,7 +99,7 @@ describe('Village Doshin', function () {
             this.player1.clickCard(this.villageDoshin);
             expect(this.player2.fate).toBeGreaterThanOrEqual(1);
             expect(this.player2).not.toHavePrompt('Select one');
-            expect(this.villageDoshin.location).toBe('removed from game');
+            expect(this.villageDoshin.location).toBe('conflict discard pile');
             expect(this.letGo.location).toBe('conflict discard pile');
             expect(this.fineKatana.location).toBe('play area');
             expect(this.getChatLogs(5)).toContain(
@@ -114,10 +116,10 @@ describe('Village Doshin', function () {
 
             this.player1.clickCard(this.villageDoshin);
             expect(this.player2).toHavePrompt('Select one');
-            expect(this.player2).toHavePromptButton('Discard 2 random cards from hand to continue');
-            expect(this.player2).toHavePromptButton('Do not discard, let the attachment stay in play');
+            expect(this.player2).toHavePromptButton('Discard 2 random cards from hand');
+            expect(this.player2).toHavePromptButton('Let the effect be canceled');
 
-            this.player2.clickPrompt('Discard 2 random cards from hand to continue');
+            this.player2.clickPrompt('Discard 2 random cards from hand');
             expect(this.villageDoshin.location).toBe('conflict discard pile');
             expect(this.letGo.location).toBe('conflict discard pile');
             expect(this.dragonsClaw.location).toBe('conflict discard pile');
@@ -126,7 +128,7 @@ describe('Village Doshin', function () {
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Village Dōshin, discarding Village Dōshin to protect Dragon\'s Claw'
             );
-            expect(this.getChatLogs(5)).toContain('player2 pays off the Dōshin. The action continues as normal');
+            expect(this.getChatLogs(5)).toContain('player2 distracts the Dōshin.');
         });
 
         it('does not save attachments on characters controlled by another player', function () {

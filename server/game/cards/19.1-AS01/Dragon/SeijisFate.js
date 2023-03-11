@@ -5,9 +5,10 @@ class SeijisFate extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
             effect: [
-                AbilityDsl.effects.blank(),
                 AbilityDsl.effects.addTrait('creature'),
-                AbilityDsl.effects.loseTrait('courtier')
+                AbilityDsl.effects.loseTrait('bushi'),
+                AbilityDsl.effects.loseTrait('courtier'),
+                AbilityDsl.effects.blank()
             ]
         });
     }
@@ -16,5 +17,3 @@ class SeijisFate extends DrawCard {
 SeijisFate.id = 'seiji-s-fate';
 
 module.exports = SeijisFate;
-
-

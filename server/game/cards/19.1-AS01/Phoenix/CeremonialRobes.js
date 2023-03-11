@@ -5,14 +5,9 @@ const AbilityDsl = require('../../../abilitydsl.js');
 class CeremonialRobes extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.modifyGlory(() =>
-                this.game.allCards.reduce(
-                    (sum, card) =>
-                        card.type === CardTypes.Character &&
-                        card.controller === this.controller &&
-                        card.hasTrait('spirit')
-                            ? sum + 1
-                            : sum,
+            effect: AbilityDsl.effects.modifyGlory((character, context) =>
+                context.player.cardsInPlay.reduce(
+                    (sum, card) => (card.type === CardTypes.Character && card.hasTrait('spirit') ? sum + 1 : sum),
                     0
                 )
             )

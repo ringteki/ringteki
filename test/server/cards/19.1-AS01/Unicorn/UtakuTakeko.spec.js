@@ -31,9 +31,9 @@ describe('Utaku Takeko', function () {
 
                 expect(this.player1).toHavePrompt('Choose a character');
                 expect(this.player1).toBeAbleToSelect(this.discardBorderRider); //Unicorn with 1 glory
-                expect(this.player1).not.toBeAbleToSelect(this.discardMotoAriq);//Unicorn with 0 glory
+                expect(this.player1).not.toBeAbleToSelect(this.discardMotoAriq); //Unicorn with 0 glory
                 expect(this.player1).not.toBeAbleToSelect(this.discardAmbusher); //Unicorn with 1 glory but conflict discard
-                expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi);// not a unicorn
+                expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi); // not a unicorn
                 expect(this.player1).not.toBeAbleToSelect(this.discardForthrightIde); // not in player discard pile
                 expect(this.player1).not.toBeAbleToSelect(this.discardShikshaScout); // not in player discard pile
                 expect(this.player1).not.toBeAbleToSelect(this.yasamura); // unicorn with 1 glory but unique
@@ -44,6 +44,9 @@ describe('Utaku Takeko', function () {
 
                 expect(this.player1.fate).toBe(initialPLayerFate - 3); // 2 fate base + 1 extra fate placed
                 expect(this.discardBorderRider.location).toBe('play area');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Utaku Takeko to recall a distant relative who is a Border Rider'
+                );
             });
 
             it('should allow you to pick a 1 glory or higher unicorn character from your dynasty discard pile and play it at home during a conflict', function () {
@@ -60,9 +63,9 @@ describe('Utaku Takeko', function () {
 
                 expect(this.player1).toHavePrompt('Choose a character');
                 expect(this.player1).toBeAbleToSelect(this.discardBorderRider); //Unicorn with 1 glory
-                expect(this.player1).not.toBeAbleToSelect(this.discardMotoAriq);//Unicorn with 0 glory
+                expect(this.player1).not.toBeAbleToSelect(this.discardMotoAriq); //Unicorn with 0 glory
                 expect(this.player1).not.toBeAbleToSelect(this.discardAmbusher); //Unicorn with 1 glory but conflict discard
-                expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi);// not a unicorn
+                expect(this.player1).not.toBeAbleToSelect(this.discardAkodoToturi); // not a unicorn
                 expect(this.player1).not.toBeAbleToSelect(this.discardForthrightIde); // not in player discard pile
                 expect(this.player1).not.toBeAbleToSelect(this.discardShikshaScout); // not in player discard pile
                 expect(this.player1).not.toBeAbleToSelect(this.yasamura); // unicorn with 1 glory but unique
@@ -74,6 +77,9 @@ describe('Utaku Takeko', function () {
                 expect(this.player1.fate).toBe(initialPLayerFate - 3); // 2 fate base + 1 extra fate placed
                 expect(this.discardBorderRider.location).toBe('play area');
                 expect(this.discardBorderRider.isParticipating()).toBe(false);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Utaku Takeko to recall a distant relative who is a Border Rider'
+                );
             });
         });
     });
