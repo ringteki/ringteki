@@ -48,7 +48,8 @@ class CinderSalamander extends DrawCard {
                     messageArgs: (cards, player) => [player, this.salamanderCountToText(cards.length)]
                 })
             ]),
-            effect: 'search their deck and provinces for other copies of {0} and put them into play'
+            effect: 'search their deck and provinces for other copies of {0} and put them into play',
+            max: AbilityDsl.limit.perRound(1)
         });
     }
 

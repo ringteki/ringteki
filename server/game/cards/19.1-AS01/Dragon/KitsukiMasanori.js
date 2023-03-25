@@ -1,69 +1,87 @@
-const DrawCard = require('../../../drawcard.js');
-const { Decks, CardTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
+const { CardTypes, Decks, Durations } = require('../../../Constants');
+const DrawCard = require('../../../drawcard.js');
+
+const choice = {
+    discardPile: 'Search discard pile',
+    conflictDeck: 'Search conflict deck'
+};
+
+const selectAttachmentPrompt = 'Select an attachment';
+
+const attachMsg = '{0} takes {1} and attaches it to {2}';
+
+function matchesSearchableCard(card, context) {
+    return (
+        card.type === CardTypes.Attachment &&
+        (card.hasTrait('title') || card.hasTrait('technique')) &&
+        card.canAttach(context.source)
+    );
+}
 
 class KitsukiMasanori extends DrawCard {
     setupCardAbilities() {
+        this.persistentEffect({
+            effect: AbilityDsl.effects.cardCannot({ cannot: 'applyCovert', restricts: 'opponentsCardEffects' })
+        });
+
         this.reaction({
-            title: 'Search your conflict deck',
+            title: 'Search for a Title or Technique',
             when: { onCharacterEntersPlay: (event, context) => event.card === context.source },
-            effect: 'search their deck for a technique or title',
-            gameAction: AbilityDsl.actions.deckSearch({
-                activePromptTitle: 'Select an attachment',
-                deck: Decks.ConflictDeck,
-                reveal: true,
-                cardCondition: (card, context) => card.type === CardTypes.Attachment && (card.hasTrait('title') || card.hasTrait('technique')) && card.canAttach(context.source),
-                selectedCardsHandler: (context, event, cards) => {
-                    if(cards && cards.length > 0) {
-                        const card = cards[0];
-                        this.game.addMessage('{0} takes {1} and attaches it to {2}', event.player, card, context.source);
-                        const attachAction = AbilityDsl.actions.attach({
-                            target: context.source,
-                            attachment: card
-                        });
-                        const cannotTargetAction = AbilityDsl.actions.cardLastingEffect(context => ({
-                            condition: (context) => card.parent === context.source,
-                            duration: Durations.Custom,
-                            target: card,
-                            effect: AbilityDsl.effects.cardCannot({
-                                cannot: 'target',
-                                restricts: 'opponentsCardAbilities',
-                                applyingPlayer: context.player
-                            })
-                        }));
+            effect: 'search for a Technique or Title',
+            gameAction: AbilityDsl.actions.sequential([
+                AbilityDsl.actions.chooseAction({
+                    activePromptTitle: 'Select where to search',
+                    choices: {
+                        [choice.discardPile]: AbilityDsl.actions.cardMenu((context) => ({
+                            activePromptTitle: selectAttachmentPrompt,
+                            cards: context.player.conflictDiscardPile.filter((card) =>
+                                matchesSearchableCard(card, context)
+                            ),
+                            subActionProperties: (card) => ({ attachment: card, target: context.source, bisteca: 33 }),
+                            gameAction: AbilityDsl.actions.attach(),
+                            message: '{0} takes {1} and attaches it to {2}',
+                            messageArgs: (card) => [context.source.controller, card, context.source]
+                        })),
+                        [choice.conflictDeck]: AbilityDsl.actions.deckSearch({
+                            activePromptTitle: selectAttachmentPrompt,
+                            deck: Decks.ConflictDeck,
+                            reveal: true,
+                            cardCondition: (card, context) => matchesSearchableCard(card, context),
+                            selectedCardsHandler: (context, event, cards) => {
+                                const card = cards[0];
+                                if(!card) {
+                                    return;
+                                }
 
-                        context.game.queueSimpleStep(() => {
-                            attachAction.resolve(null, context);
-                        });
-                        context.game.queueSimpleStep(() => {
-                            cannotTargetAction.resolve(null, context);
-                        });
+                                context.game.addMessage(attachMsg, event.player, card, context.source);
+                                context.game.queueSimpleStep(() =>
+                                    AbilityDsl.actions
+                                        .attach({ target: context.source, attachment: card })
+                                        .resolve(null, context)
+                                );
+                            }
+                        })
+                    },
+                    messages: {
+                        [choice.discardPile]: '{0} searches their discard pile',
+                        [choice.conflictDeck]: '{0} searches their conflict deck'
                     }
-                }
-                // gameAction: AbilityDsl.actions.sequentialContext(context => {
-                //     const events = context.events.filter(a => a.name === 'onDeckSearch' && !a.cancelled);
-                //     if(events.length > 0 && events[0].selectedCards) {
-                //         const selectedCard = events[0].selectedCards;
-
-                //         return {
-                //             gameActions: [
-                //                 AbilityDsl.actions.attach(context => ({
-                //                     target: context.source
-                //                 })),
-                //                 AbilityDsl.actions.cardLastingEffect({
-                //                     condition: () => this.game.isDuringConflict('political'),
-                //                     effect: AbilityDsl.effects.doesNotBow()
-                //                 }),
-                //             ]
-                //         }
-                //     }
-                // }),
-            })
-            // then: {
-            //     gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
-
-            //     }))
-            // }
+                }),
+                AbilityDsl.actions.cardLastingEffect((context) => {
+                    const fetchedAttachment = context.source.attachments.first();
+                    return {
+                        target: fetchedAttachment,
+                        condition: (context) => fetchedAttachment.parent === context.source,
+                        duration: Durations.Custom,
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'target',
+                            restricts: 'opponentsCardAbilities',
+                            applyingPlayer: context.player
+                        })
+                    };
+                })
+            ])
         });
     }
 }

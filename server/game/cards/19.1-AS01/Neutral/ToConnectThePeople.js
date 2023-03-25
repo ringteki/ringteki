@@ -74,7 +74,8 @@ class ToConnectThePeople extends DrawCard {
                         AbilityDsl.actions.playCard({ ignoredRequirements: ['location'] })
                     ])
                 })
-            ])
+            ]),
+            max:AbilityDsl.limit.perRound(1)
         });
     }
 }

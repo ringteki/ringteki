@@ -16,7 +16,8 @@ class MarvelousBeings extends DrawCard {
                 effect: AbilityDsl.effects.changePlayerSkillModifier(context.costs.moveToConflict ? context.costs.moveToConflict.printedCost : 0)
             })),
             effect: 'entrance the court, giving their side an extra {1}{2} this conflict',
-            effectArgs: context => [context.costs.moveToConflict.printedCost, 'political']
+            effectArgs: context => [context.costs.moveToConflict.printedCost, 'political'],
+            max:AbilityDsl.limit.perConflict(1)
         });
     }
 }

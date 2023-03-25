@@ -1,10 +1,11 @@
 const StrongholdCard = require('../../../strongholdcard.js');
 const { CardTypes, Players, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
-const Soldier = require('../../Soldier.js');
+const { default: Soldier } = require('../../Soldier');
 
 class Pride extends StrongholdCard {
     setupCardAbilities() {
+        // @ts-ignore
         const DummyAttachment = new Soldier(this);
 
         this.action({

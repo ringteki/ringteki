@@ -868,32 +868,41 @@ class Player extends GameObject {
     }
 
     getTargetingCost(abilitySource, targets) {
+        targets = Array.isArray(targets) ? targets : [targets];
+        targets = targets.filter(Boolean);
+        if(targets.length === 0) {
+            return 0;
+        }
+
+        const playerCostToTargetEffects = abilitySource.controller
+            ? abilitySource.controller.getEffects(EffectNames.PlayerFateCostToTargetCard)
+            : [];
+
         let targetCost = 0;
-        if(targets) {
-            if(!Array.isArray(targets)) {
-                targets = [targets];
+        for(const target of targets) {
+            for(const cardCostToTarget of target.getEffects(EffectNames.FateCostToTarget)) {
+                if(
+                    // no card type restriction
+                    (!cardCostToTarget.cardType ||
+                        // or match type restriction
+                        abilitySource.type === cardCostToTarget.cardType) &&
+                    // no player restriction
+                    (!cardCostToTarget.targetPlayer ||
+                        // or match player restriction
+                        abilitySource.controller ===
+                            (cardCostToTarget.targetPlayer === Players.Self
+                                ? target.controller
+                                : target.controller.opponent))
+                ) {
+                    targetCost += cardCostToTarget.amount;
+                }
             }
 
-            targets = targets.filter(a => !_.isEmpty(a));
-            targets.forEach(t => {
-                t.getEffects(EffectNames.FateCostToTarget).forEach(effect => {
-                    let typeMatch = true;
-                    let controllerMatch = true;
-                    if(effect.cardType && abilitySource.type !== effect.cardType) {
-                        typeMatch = false;
-                    }
-                    if(effect.targetPlayer && effect.targetPlayer === Players.Self && abilitySource.controller !== t.controller) {
-                        controllerMatch = false;
-                    }
-                    if(effect.targetPlayer && effect.targetPlayer === Players.Opponent && abilitySource.controller !== t.controller.opponent) {
-                        controllerMatch = false;
-                    }
-
-                    if(typeMatch && controllerMatch) {
-                        targetCost = targetCost + effect.amount;
-                    }
-                });
-            });
+            for(const playerCostToTarget of playerCostToTargetEffects) {
+                if(playerCostToTarget.match(target)) {
+                    targetCost += playerCostToTarget.amount;
+                }
+            }
         }
 
         return targetCost;
@@ -1356,11 +1365,11 @@ class Player extends GameObject {
             // In normal play, all attachments should already have been removed, but in manual play we may need to remove them.
             // This is also used by Back-Alley Hideaway when it is sacrificed. This won't trigger any leaves play effects
             card.attachments.each(attachment => {
-                attachment.leavesPlay();
+                attachment.leavesPlay(targetLocation);
                 attachment.owner.moveCard(attachment, attachment.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
             });
 
-            card.leavesPlay();
+            card.leavesPlay(targetLocation);
             card.controller = this;
         } else if(targetLocation === Locations.PlayArea) {
             card.setDefaultController(this);

@@ -1,6 +1,6 @@
-const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { PlayTypes, Durations, CardTypes, Decks, Locations } = require('../../../Constants.js');
+const { CardTypes, Decks, Durations, Locations, PlayTypes } = require('../../../Constants.js');
+const DrawCard = require('../../../drawcard.js');
 const PlayCharacterAction = require('../../../playcharacteraction.js');
 const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAction.js');
 
@@ -62,7 +62,6 @@ class AshalanLantern extends DrawCard {
                     deck: Decks.DynastyDeck,
                     player: context.player.opponent,
                     choosingPlayer: context.player,
-                    reveal: true,
                     shuffle: false,
                     cardCondition: (card) => card.type === CardTypes.Character && !card.isUnique(),
                     gameAction: AbilityDsl.actions.sequential([
@@ -85,11 +84,21 @@ class AshalanLantern extends DrawCard {
                                 }
                             }
                         })
-                    ])
+                    ]),
+                    remainingCardsHandler: (context, event, cards) => {
+                        context.game.addMessage(
+                            '{0} puts {1} on the top of {2}\' dynasty deck',
+                            event.player,
+                            cards,
+                            event.player.opponent
+                        );
+                    },
+                    message: '{0} compels {1} into service',
+                    messageArgs: (context, selectedCard) => [context.player, selectedCard]
                 }))
             ]),
-            effect: 'look for a character on the top of {1}\'s dynasty deck',
-            effectArgs: (context) => [context.player.opponent]
+            effect: 'look for a character on the top of {1}\'s dynasty deck. They reveal {2}',
+            effectArgs: (context) => [context.player.opponent, context.player.opponent.dynastyDeck.first(3)]
         });
     }
 }

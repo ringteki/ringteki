@@ -9,11 +9,10 @@ class GregariousWard extends DrawCard {
                 afterConflict: (event, context) =>
                     event.conflict.winner === context.source.controller &&
                     context.source.isParticipating() &&
-                    context.game.currentConflict.hasMoreParticipants(
-                        context.player
-                    )
+                    context.game.currentConflict.hasMoreParticipants(context.player)
             },
-            gameAction: AbilityDsl.actions.placeFate()
+            gameAction: AbilityDsl.actions.placeFate(),
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 }

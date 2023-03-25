@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const { CardTypes, Players, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
-const Soldier = require('../../Soldier.js');
+const { default: Soldier } = require('../../Soldier');
 
 class NobleVanguard extends DrawCard {
     setupCardAbilities() {

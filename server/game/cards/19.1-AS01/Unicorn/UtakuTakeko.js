@@ -1,6 +1,7 @@
-const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
-const { CardTypes, Locations, TargetModes, Players, PlayTypes } = require('../../../Constants');
+const { CardTypes, EventNames, Locations, Players, PlayTypes, TargetModes } = require('../../../Constants');
+const DrawCard = require('../../../drawcard.js');
+const EventRegistrar = require('../../../eventregistrar.js');
 const PlayCharacterAction = require('../../../playcharacteraction.js');
 const PlayDisguisedCharacterAction = require('../../../PlayDisguisedCharacterAction.js');
 
@@ -43,6 +44,10 @@ class UtakuTakekoPlayDisguisedAction extends PlayDisguisedCharacterAction {
 
 class UtakuTakeko extends DrawCard {
     setupCardAbilities() {
+        this.charactersLeftPlayThisPhase = new Set();
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnPhaseStarted, EventNames.OnCardLeavesPlay]);
+
         this.action({
             title: 'Play character from your discard pile',
             target: {
@@ -50,7 +55,11 @@ class UtakuTakeko extends DrawCard {
                 mode: TargetModes.Single,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card) => card.glory >= 1 && card.isFaction('unicorn') && !card.isUnique(),
+                cardCondition: (card) =>
+                    card.glory >= 1 &&
+                    card.isFaction('unicorn') &&
+                    !card.isUnique() &&
+                    !this.charactersLeftPlayThisPhase.has(card.name),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.cardLastingEffect((context) => ({
                         target: context.target,
@@ -64,9 +73,17 @@ class UtakuTakeko extends DrawCard {
                     }))
                 ])
             },
-            effect: 'recall a distant relative who is {1} {2}',
-            effectArgs: (context) => [this._takekoConnectiveForName(context.target), context.target]
+            effect: 'recall a {1} relative who is {2} {3}',
+            effectArgs: (context) => [
+                this._takekoDistanceMsg(context.target),
+                this._takekoConnectiveForName(context.target),
+                context.target
+            ]
         });
+    }
+
+    _takekoDistanceMsg(card) {
+        return card.hasTrait('gaijin') ? 'very distant' : 'distant';
     }
 
     _takekoConnectiveForName(card) {
@@ -83,6 +100,16 @@ class UtakuTakeko extends DrawCard {
                 return 'an';
             default:
                 return 'a';
+        }
+    }
+
+    onPhaseStarted() {
+        this.charactersLeftPlayThisPhase.clear();
+    }
+
+    onCardLeavesPlay(event) {
+        if(event.card.type === CardTypes.Character && event.card.controller === this.controller) {
+            this.charactersLeftPlayThisPhase.add(event.card.name);
         }
     }
 }

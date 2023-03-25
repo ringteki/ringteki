@@ -61,7 +61,7 @@ describe('Ashalan Lantern', function () {
             expect(this.game.currentConflict.defenders).not.toContain(this.brash);
             expect(this.player1.fate).toBe(p1InitialFate - 2);
             expect(this.getChatLogs(10)).toContain(
-                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck. They reveal Tengu Sensei, Courtly Challenger and Brash Samurai'
             );
             expect(this.getChatLogs(10)).toContain(
                 'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
@@ -105,8 +105,9 @@ describe('Ashalan Lantern', function () {
             expect(this.game.currentConflict.defenders).not.toContain(this.brash);
             expect(this.player1.fate).toBe(p1InitialFate - 2);
             expect(this.getChatLogs(10)).toContain(
-                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck. They reveal Tengu Sensei, Courtly Challenger and Brash Samurai'
             );
+            expect(this.getChatLogs(10)).toContain('player1 compels Brash Samurai into service');
             expect(this.getChatLogs(10)).not.toContain(
                 'Saadiyah al-Mozedu is not Foreign, their Ashalan Lantern is discarded'
             );
@@ -149,7 +150,11 @@ describe('Ashalan Lantern', function () {
             expect(this.game.currentConflict.defenders).not.toContain(this.tengu);
             expect(this.player1.fate).toBe(p1InitialFate - 2);
             expect(this.getChatLogs(10)).toContain(
-                'player1 uses Ashalan Lantern, naming Tengu Sensei to look for a character on the top of player2\'s dynasty deck'
+                'player1 uses Ashalan Lantern, naming Tengu Sensei to look for a character on the top of player2\'s dynasty deck. They reveal Tengu Sensei, Courtly Challenger and Brash Samurai'
+            );
+            expect(this.getChatLogs(10)).toContain('player1 compels Tengu Sensei into service');
+            expect(this.getChatLogs(10)).toContain(
+                'player2 puts Courtly Challenger and Brash Samurai on the top of player1\' dynasty deck'
             );
             expect(this.getChatLogs(10)).toContain(
                 'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
@@ -180,12 +185,11 @@ describe('Ashalan Lantern', function () {
             expect(this.player1).toHavePrompt('Select a card to reveal');
             expect(this.player1).toHavePromptButton('Take nothing');
 
-            this.player1.clickPrompt('Take nothing');
             expect(this.getChatLogs(10)).toContain(
-                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck'
+                'player1 uses Ashalan Lantern, naming Good Omen to look for a character on the top of player2\'s dynasty deck. They reveal Tengu Sensei, Courtly Challenger and Brash Samurai'
             );
+            this.player1.clickPrompt('Take nothing');
             expect(this.lantern.location).toBe('play area');
-            expect(this.getChatLogs(10)).toContain('player1 takes nothing');
             expect(this.getChatLogs(10)).not.toContain(
                 'Battle Maiden Recruit is not Foreign, their Ashalan Lantern is discarded'
             );

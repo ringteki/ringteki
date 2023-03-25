@@ -1,4 +1,4 @@
-describe('Kagi Nawa', function () {
+describe('Long Journey Home', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -8,7 +8,7 @@ describe('Kagi Nawa', function () {
                     hand: ['long-journey-home']
                 },
                 player2: {
-                    inPlay: ['doji-challenger'],
+                    inPlay: ['doji-challenger','doji-whisperer'],
                     hand: ['the-mountain-does-not-fall', 'ready-for-battle']
                 }
             });
@@ -16,6 +16,7 @@ describe('Kagi Nawa', function () {
             this.longJourneyHome = this.player1.findCardByName('long-journey-home');
 
             this.challenger = this.player2.findCardByName('doji-challenger');
+            this.whisperer = this.player2.findCardByName('doji-whisperer');
             this.mountain = this.player2.findCardByName('the-mountain-does-not-fall');
             this.readyForBattle = this.player2.findCardByName('ready-for-battle');
         });
@@ -24,7 +25,7 @@ describe('Kagi Nawa', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.motoNergui],
-                defenders: [this.challenger],
+                defenders: [this.challenger,this.whisperer],
                 type: 'military'
             });
 
@@ -38,7 +39,9 @@ describe('Kagi Nawa', function () {
             expect(this.player1).toBeAbleToSelect(this.longJourneyHome);
 
             this.player1.clickCard(this.longJourneyHome);
-            expect(this.getChatLogs(3)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase'
+            );
             expect(this.challenger.bowed).toBe(true);
         });
 
@@ -46,7 +49,7 @@ describe('Kagi Nawa', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.motoNergui],
-                defenders: [this.challenger],
+                defenders: [this.challenger,this.whisperer],
                 type: 'military'
             });
 
@@ -64,7 +67,7 @@ describe('Kagi Nawa', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.motoNergui],
-                defenders: [this.challenger],
+                defenders: [this.challenger, this.whisperer],
                 type: 'military'
             });
 
@@ -77,9 +80,14 @@ describe('Kagi Nawa', function () {
             expect(this.player1).toBeAbleToSelect(this.longJourneyHome);
 
             this.player1.clickCard(this.longJourneyHome);
-            this.player1.clickCard(this.challenger);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+            expect(this.player1).not.toBeAbleToSelect(this.motoNergui);
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase');
+            this.player1.clickCard(this.challenger);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase'
+            );
             expect(this.challenger.location).toBe('play area');
             expect(this.challenger.bowed).toBe(true);
         });

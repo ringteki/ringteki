@@ -24,6 +24,7 @@ describe('Daidoji Ambusher', function () {
         it('should target participating characters', function () {
             this.noMoreActions();
             this.initiateConflict({
+                type: 'military',
                 attackers: [this.diplomat, this.ambusher],
                 defenders: [this.challenger]
             });
@@ -40,6 +41,7 @@ describe('Daidoji Ambusher', function () {
         it('should give someone -2 mil and no kicker if not dishonored', function () {
             this.noMoreActions();
             this.initiateConflict({
+                type: 'military',
                 attackers: [this.diplomat, this.sadako, this.ambusher],
                 defenders: [this.uji, this.challenger, this.adept]
             });
@@ -57,6 +59,7 @@ describe('Daidoji Ambusher', function () {
             this.ambusher.dishonor();
             this.noMoreActions();
             this.initiateConflict({
+                type: 'military',
                 attackers: [this.diplomat, this.sadako, this.ambusher],
                 defenders: [this.uji, this.challenger, this.adept]
             });
@@ -73,6 +76,7 @@ describe('Daidoji Ambusher', function () {
             this.ambusher.dishonor();
             this.noMoreActions();
             this.initiateConflict({
+                type: 'military',
                 attackers: [this.diplomat, this.sadako, this.ambusher],
                 defenders: [this.uji, this.challenger, this.adept]
             });
@@ -88,6 +92,7 @@ describe('Daidoji Ambusher', function () {
             this.ambusher.dishonor();
             this.noMoreActions();
             this.initiateConflict({
+                type: 'military',
                 attackers: [this.diplomat, this.sadako, this.ambusher],
                 defenders: [this.uji, this.challenger, this.adept]
             });

@@ -74,6 +74,7 @@ export enum EffectNames {
     HonorCostToDeclare = 'honorCostToDeclare',
     FateCostToRingToDeclareConflictAgainst = 'fateCostToRingToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
+    PlayerFateCostToTargetCard = 'playerFateCostToTargetCard',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
     GainAllAbilitiesDynamic = 'gainAllAbilitiesDynamic',

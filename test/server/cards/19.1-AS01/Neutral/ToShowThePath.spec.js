@@ -88,7 +88,9 @@ describe('To Show the Path', function () {
                 expect(this.player1).not.toBeAbleToSelect(this.doomedShugenja);
 
                 this.player1.clickCard(this.prodigy);
-                expect(this.getChatLogs(3)).toContain('player1 plays To Show the Path to make targeting Ikoma Prodigy with any card ability by opponents cost 1 more fate');
+                expect(this.getChatLogs(3)).toContain(
+                    'player1 plays To Show the Path to make player2 pay 1 additional fate as a cost whenever they target Ikoma Prodigy or its attachments with a card ability until the end of the phase'
+                );
             });
 
             it('it should allow to target a non-monk, non-shugenja owned by either player', function () {
@@ -122,10 +124,31 @@ describe('To Show the Path', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.toShowThePath);
                 this.player1.clickCard(this.motoYouth);
-                expect(this.getChatLogs(3)).toContain('player1 plays To Show the Path to make targeting Moto Youth and Duelist Training with any card ability by opponents cost 1 more fate');
+                expect(this.getChatLogs(3)).toContain(
+                    'player1 plays To Show the Path to make player2 pay 1 additional fate as a cost whenever they target Moto Youth or its attachments with a card ability until the end of the phase'
+                );
 
                 this.player2.pass();
                 this.player1.playAttachment(this.ann, this.motoYouth);
+
+                const fate = this.player2.fate;
+                this.player2.clickCard(this.letgo);
+                this.player2.clickCard(this.duelist);
+                expect(this.player2.fate).toBe(fate - 1); // cost increase for the opponent
+                expect(this.duelist.location).toBe('conflict discard pile');
+            });
+
+            it('also taxes attachments played on the character after Show the Path', function () {
+                this.player1.playAttachment(this.duelist, this.motoYouth);
+
+                this.player2.pass();
+                this.player1.clickCard(this.toShowThePath);
+                this.player1.clickCard(this.motoYouth);
+
+                this.player2.pass();
+                expect(this.ann.location).toBe('hand');
+                this.player1.playAttachment(this.ann, this.motoYouth);
+                expect(this.ann.location).toBe('play area');
 
                 const fate = this.player2.fate;
                 this.player2.clickCard(this.letgo);
@@ -136,7 +159,7 @@ describe('To Show the Path', function () {
                 this.player1.pass();
                 this.player2.clickCard(this.letgo2);
                 this.player2.clickCard(this.ann);
-                expect(this.player2.fate).toBe(fate - 1); // no cost increase for the opponent
+                expect(this.player2.fate).toBe(fate - 2); // cost increase for the opponent
                 expect(this.ann.location).toBe('conflict discard pile');
             });
         });

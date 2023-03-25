@@ -6,7 +6,8 @@ describe('Promising Hohei', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['relentless-gloryseeker', 'ikoma-message-runner'],
-                        hand: ['promising-hohei', 'ayubune-pilot', 'fine-katana', 'promising-hohei']
+                        hand: ['promising-hohei', 'ayubune-pilot', 'fine-katana', 'promising-hohei', 'ornate-fan'],
+                        stronghold: ['pride']
                     },
                     player2: {
                         inPlay: ['solemn-scholar'],
@@ -14,10 +15,13 @@ describe('Promising Hohei', function () {
                     }
                 });
 
+                this.pride = this.player1.findCardByName('pride');
                 this.relentlessGloryseeker = this.player1.findCardByName('relentless-gloryseeker');
                 this.messageRunner = this.player1.findCardByName('ikoma-message-runner');
                 this.promisingHohei1 = this.player1.filterCardsByName('promising-hohei')[0];
                 this.promisingHohei2 = this.player1.filterCardsByName('promising-hohei')[1];
+                this.fan = this.player1.findCardByName('ornate-fan');
+                this.player1.moveCard(this.fan, 'conflict deck');
 
                 this.ayubunePilot1 = this.player1.findCardByName('ayubune-pilot');
                 this.fineKatana = this.player1.findCardByName('fine-katana');
@@ -98,6 +102,20 @@ describe('Promising Hohei', function () {
 
                 this.player1.clickCard(this.ayubunePilot1);
                 expect(this.ayubunePilot1.location).toBe('hand');
+            });
+
+            it('returns soldier tokens to hand', function () {
+                this.player1.clickCard(this.pride);
+                this.player1.clickCard(this.relentlessGloryseeker);
+                const soldier = this.relentlessGloryseeker.attachments.last();
+
+                this.player2.pass();
+                this.player1.clickCard(this.promisingHohei1);
+                this.player1.clickCard(this.relentlessGloryseeker);
+
+                this.player1.clickCard(this.promisingHohei1);
+                this.player1.clickCard(soldier);
+                expect(this.fan.location).toBe('hand');
             });
         });
     });

@@ -224,6 +224,7 @@ const Effects = {
     modifyCardsDrawnInDrawPhase: (amount) => EffectBuilder.player.flexible(EffectNames.ModifyCardsDrawnInDrawPhase, amount),
     playerCannot: (properties) => EffectBuilder.player.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ type: properties.cannot || properties }, properties))),
     playerDelayedEffect: (properties) => EffectBuilder.player.static(EffectNames.DelayedEffect, properties),
+    playerFateCostToTargetCard: (properties) => EffectBuilder.player.flexible(EffectNames.PlayerFateCostToTargetCard, properties), /* amount: number; match: (card) => boolean */
     reduceCost: (properties) => EffectBuilder.player.detached(EffectNames.CostReducer, {
         apply: (player, context) => player.addCostReducer(context.source, properties),
         unapply: (player, context, reducer) => player.removeCostReducer(reducer)
