@@ -57,9 +57,6 @@ class GameServer {
 
         options.path = '/' + (config.gameNode.name) + '/socket.io';
 
-        logger.info('making a socket for', server, options, config.gameNode.origin);
-        logger.info('listening on a server', config.gameNode.socketioPort);
-
         this.io = socketio(server, options);
         this.io.set('heartbeat timeout', 30000);
         this.io.use(this.handshake.bind(this));
@@ -69,9 +66,6 @@ class GameServer {
         }
 
         this.io.on('connection', this.onConnection.bind(this));
-
-        logger.info('listening on', this.host);
-        logger.info('path', options.path);
     }
 
     debugDump() {
@@ -163,7 +157,6 @@ class GameServer {
     }
 
     handshake(socket, next) {
-        logger.info('handshaking');
         if(socket.handshake.query.token && socket.handshake.query.token !== 'undefined') {
             jwt.verify(socket.handshake.query.token, config.secret, function(err, user) {
                 if(err) {
@@ -183,7 +176,6 @@ class GameServer {
     }
 
     onStartGame(pendingGame) {
-        logger.info('this is the start game for the game node')
         let game = new Game(pendingGame, { router: this, shortCardData: this.shortCardData });
         this.games[pendingGame.id] = game;
 
@@ -193,7 +185,6 @@ class GameServer {
         });
 
         game.initialise();
-        logger.info('onStartGame completed');
     }
 
     onSpectator(pendingGame, user) {
@@ -254,7 +245,6 @@ class GameServer {
     }
 
     onConnection(ioSocket) {
-        logger.info('on connection');
         if(!ioSocket.request.user) {
             logger.info('socket connected with no user, disconnecting');
             ioSocket.disconnect();

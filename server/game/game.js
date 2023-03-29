@@ -38,7 +38,6 @@ const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
 const { EffectNames, Phases, EventNames, Locations, ConflictTypes } = require('./Constants');
 const GameModes = require('../GameModes.js');
-const logger = require('../log.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -801,7 +800,6 @@ class Game extends EventEmitter {
      */
     initialise() {
         var players = {};
-        logger.info('initializing the game');
 
         _.each(this.playersAndSpectators, player => {
             if(!player.left) {
@@ -857,7 +855,6 @@ class Game extends EventEmitter {
         this.startedAt = new Date();
 
         this.continue();
-        logger.info('game initialize completed');
     }
 
     /*
