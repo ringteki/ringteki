@@ -23,6 +23,7 @@ const Effects = {
     addKeyword: (keyword) => EffectBuilder.card.static(EffectNames.AddKeyword, keyword),
     addTrait: (trait) => EffectBuilder.card.static(EffectNames.AddTrait, trait),
     additionalTriggerCostForCard: (func) => EffectBuilder.card.static(EffectNames.AdditionalTriggerCost, func),
+    attachmentCardCondition: (func) => EffectBuilder.card.static(EffectNames.AttachmentCardCondition, func),
     attachmentFactionRestriction: (factions) => EffectBuilder.card.static(EffectNames.AttachmentFactionRestriction, factions),
     attachmentLimit: (amount) => EffectBuilder.card.static(EffectNames.AttachmentLimit, amount),
     attachmentMyControlOnly: () => EffectBuilder.card.static(EffectNames.AttachmentMyControlOnly),
@@ -96,6 +97,7 @@ const Effects = {
     legendaryFate: (amount = 1) => EffectBuilder.card.flexible(EffectNames.LegendaryFate, amount),
     loseAllNonKeywordAbilities: () => EffectBuilder.card.static(EffectNames.LoseAllNonKeywordAbilities),
     loseKeyword: (keyword) => EffectBuilder.card.static(EffectNames.LoseKeyword, keyword),
+    loseTrait: (trait) => EffectBuilder.card.static(EffectNames.LoseTrait, trait),
     modifyBaseMilitarySkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseMilitarySkillMultiplier, value),
     modifyBasePoliticalSkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBasePoliticalSkillMultiplier, value),
     modifyBaseProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseProvinceStrength, value),
@@ -211,7 +213,7 @@ const Effects = {
     modifyHonorTransferGiven: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferGiven, amount),
     modifyHonorTransferReceived: (amount) => EffectBuilder.player.static(EffectNames.ModifyHonorTransferReceived, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
-    changePlayerGloryModifier: (value) => EffectBuilder.player.static(EffectNames.ChangePlayerGloryModifier, value),
+    changePlayerGloryModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerGloryModifier, value),
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
     customDetachedPlayer: (properties) => EffectBuilder.player.detached(EffectNames.CustomEffect, properties),
     gainActionPhasePriority: () => EffectBuilder.player.detached(EffectNames.GainActionPhasePriority, {
@@ -222,6 +224,7 @@ const Effects = {
     modifyCardsDrawnInDrawPhase: (amount) => EffectBuilder.player.flexible(EffectNames.ModifyCardsDrawnInDrawPhase, amount),
     playerCannot: (properties) => EffectBuilder.player.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ type: properties.cannot || properties }, properties))),
     playerDelayedEffect: (properties) => EffectBuilder.player.static(EffectNames.DelayedEffect, properties),
+    playerFateCostToTargetCard: (properties) => EffectBuilder.player.flexible(EffectNames.PlayerFateCostToTargetCard, properties), /* amount: number; match: (card) => boolean */
     reduceCost: (properties) => EffectBuilder.player.detached(EffectNames.CostReducer, {
         apply: (player, context) => player.addCostReducer(context.source, properties),
         unapply: (player, context, reducer) => player.removeCostReducer(reducer)
@@ -255,6 +258,7 @@ const Effects = {
     restrictNumberOfDefenders: (value) => EffectBuilder.conflict.static(EffectNames.RestrictNumberOfDefenders, value), // TODO: Add this to lasting effect checks
     resolveConflictEarly: () => EffectBuilder.player.static(EffectNames.ResolveConflictEarly),
     forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed),
+    modifyUnopposedHonorLoss: (amount = 1) => EffectBuilder.conflict.static(EffectNames.ModifyUnopposedHonorLoss, amount),
     additionalAttackedProvince: (province) => EffectBuilder.conflict.static(EffectNames.AdditionalAttackedProvince, province),
     conflictIgnoreStatusTokens: () => EffectBuilder.conflict.static(EffectNames.ConflictIgnoreStatusTokens)
 };

@@ -1,17 +1,18 @@
 const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 const AllPlayerPrompt = require('./allplayerprompt.js');
-const GameActions = require('../GameActions/GameActions');
+const { TransferHonorAction } = require('../GameActions/TransferHonorAction');
 const { EventNames, EffectNames } = require('../Constants');
 const GameModes = require('../../GameModes.js');
 
 class HonorBidPrompt extends AllPlayerPrompt {
-    constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null) {
+    constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null, raiseEvent = true) {
         super(game);
         this.menuTitle = menuTitle || 'Choose a bid';
         this.costHandler = costHandler;
         this.prohibitedBids = prohibitedBids;
         this.duel = duel;
         this.bid = {};
+        this.raiseEvent = raiseEvent;
     }
 
     activeCondition(player) {
@@ -26,7 +27,8 @@ class HonorBidPrompt extends AllPlayerPrompt {
         let completed = super.continue();
 
         if(completed) {
-            this.game.raiseEvent(EventNames.OnHonorDialsRevealed, { duel: this.duel }, () => {
+            const eventName = this.raiseEvent ? EventNames.OnHonorDialsRevealed : EventNames.Unnamed;
+            this.game.raiseEvent(eventName, { duel: this.duel }, () => {
                 for(const player of this.game.getPlayers()) {
                     player.honorBidModifier = 0;
                     this.game.actions.setHonorDial({ value: this.bid[player.uuid]}).resolve(player, this.game.getFrameworkContext());
@@ -61,7 +63,8 @@ class HonorBidPrompt extends AllPlayerPrompt {
 
         var [, amountToTransfer] = CalculateHonorLimit(receivingPlayer, context.game.roundNumber, context.game.currentPhase, amount);
         this.game.addMessage('{0} gives {1} {2} honor', givingPlayer, receivingPlayer, amountToTransfer);
-        GameActions.takeHonor({ amount: Math.abs(difference), afterBid: true }).resolve(givingPlayer, context);
+        const gameAction = new TransferHonorAction({ amount: Math.abs(difference), afterBid: true });
+        gameAction.resolve(givingPlayer, context);
     }
 
 

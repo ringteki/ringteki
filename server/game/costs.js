@@ -26,6 +26,14 @@ const Costs = {
      */
     bow: properties => getSelectCost(GameActions.bow(), properties, 'Select card to bow'),
     /**
+     * Cost that will move home the card that initiated the ability.
+     */
+    moveHomeSelf: () => new GameActionCost(GameActions.sendHome(context => ({target: context.source}))),
+    /**
+     * Cost that will send the target to the conflict.
+     */
+    moveToConflict: properties => getSelectCost(GameActions.moveToConflict(), properties, 'Select card to move to the conflict'),
+    /**
      * Cost that will sacrifice the card that initiated the ability.
      */
     sacrificeSelf: () => new GameActionCost(GameActions.sacrifice()),
@@ -65,6 +73,10 @@ const Costs = {
      * Cost that requires discarding a specific card.
      */
     discardCardSpecific: cardFunc => new GameActionCost(GameActions.discardCard(context => ({ target: cardFunc(context) }))),
+    /**
+     * Cost that requires discarding itself from hand.
+     */
+    discardSelf: () => new GameActionCost(GameActions.discardCard(context => ({ target: context.source }))),
     /**
      * Cost that requires discarding a card to be selected by the player.
      */

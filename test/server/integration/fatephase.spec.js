@@ -179,8 +179,16 @@ describe('(4) Fate Phase', function() {
                 expect(this.game.rings.water.fate).toBe(1);
             });
 
-            it('should raise an onPlaceFateOnUnclaimedRings event', function() {
-                expect(this.raiseEventSpy).toHaveBeenCalledWith('onPlaceFateOnUnclaimedRings', {}, jasmine.any(Function));
+            it('should raise an onPlaceFateOnUnclaimedRings event', function () {
+                expect(this.raiseEventSpy).toHaveBeenCalledWith(
+                    'onPlaceFateOnUnclaimedRings',
+                    jasmine.objectContaining({
+                        recipients: jasmine.arrayContaining([
+                            jasmine.objectContaining({ amount: 1, ring: jasmine.anything() })
+                        ])
+                    }),
+                    jasmine.any(Function)
+                );
             });
         });
 

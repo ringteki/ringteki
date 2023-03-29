@@ -602,8 +602,11 @@ class ConflictFlow extends BaseStepWithPipeline {
         }
 
         if(this.conflict.conflictUnopposed) {
-            this.game.addMessage('{0} loses 1 honor for not defending the conflict', this.conflict.loser);
-            GameActions.loseHonor({ dueToUnopposed: true }).resolve(this.conflict.loser, this.game.getFrameworkContext(this.conflict.loser));
+            let honorLossMods = this.conflict.sumEffects(EffectNames.ModifyUnopposedHonorLoss);
+
+            const honorLoss = Math.max(0, 1 + honorLossMods);
+            this.game.addMessage('{0} loses {1} honor for not defending the conflict', this.conflict.loser, honorLoss);
+            GameActions.loseHonor({ dueToUnopposed: true, amount: honorLoss }).resolve(this.conflict.loser, this.game.getFrameworkContext(this.conflict.loser));
         }
     }
 

@@ -15,7 +15,9 @@ class SmugglingDeal extends DrawCard {
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     target: context.targetAbility.card,
                     duration: Durations.UntilEndOfRound,
-                    effect: AbilityDsl.effects.increaseLimitOnAbilities(context.targetAbility)
+                    effect: AbilityDsl.effects.increaseLimitOnAbilities({
+                        targetAbility: context.targetAbility
+                    })
                 }))
             },
             effect: 'increase the limit on {1}\'s \'{2}\' ability',

@@ -9,6 +9,7 @@ export interface SendHomeProperties extends CardActionProperties {
 export class SendHomeAction extends CardGameAction {
     name = 'sendHome';
     eventName = EventNames.OnSendHome;
+    cost = 'moving home {0}';
     effect = 'send {0} home';
     targetType = [CardTypes.Character];
 

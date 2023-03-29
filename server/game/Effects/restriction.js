@@ -1,6 +1,7 @@
 const EffectValue = require('./EffectValue');
 
-const { AbilityTypes, CardTypes, Phases, Stages } = require('../Constants');
+const { AbilityTypes, CardTypes, Locations, Phases, Stages } = require('../Constants');
+const { MoveCardAction } = require('../GameActions/MoveCardAction');
 
 const checkRestrictions = {
     abilitiesTriggeredByOpponents: (context, effect) =>
@@ -56,12 +57,25 @@ const checkRestrictions = {
     nonForcedAbilities: context => context.ability.isTriggeredAbility() && context.ability.abilityType !== AbilityTypes.ForcedReaction && context.ability.abilityType !== AbilityTypes.ForcedInterrupt,
     equalOrMoreExpensiveCharacterTriggeredAbilities: (context, effect, card) => context.source.type === CardTypes.Character && !context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
     equalOrMoreExpensiveCharacterKeywords: (context, effect, card) => context.source.type === CardTypes.Character && context.ability.isKeywordAbility && context.source.printedCost >= card.printedCost,
-    eventPlayedByHigherBidPlayer: (context, effect, card) => context.source.type === CardTypes.Event && context.player.showBid > card.controller.showBid
+    eventPlayedByHigherBidPlayer: (context, effect, card) => context.source.type === CardTypes.Event && context.player.showBid > card.controller.showBid,
+    toHand: (context) => {
+        let targetActions = context.ability.properties.target ? context.ability.properties.target.gameAction : [];
+        let nestedActions = context.ability.gameAction
+            ? context.ability.gameAction.map((topAction) => topAction.properties.gameAction)
+            : [];
+
+        return targetActions.some(isMoveToHandAction) || nestedActions.some(isMoveToHandAction);
+    },
+    loseHonorAsCost: (context) => context.stage === Stages.Cost
 };
 
 const getApplyingPlayer = (effect) => {
     return effect.applyingPlayer || effect.context.player;
 };
+
+const isMoveToHandAction = (gameAction) =>
+    // @ts-ignorea
+    gameAction instanceof MoveCardAction && gameAction.properties.destination === Locations.Hand;
 
 const leavePlayTypes = [
     'discardFromPlay',

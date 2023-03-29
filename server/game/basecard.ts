@@ -305,6 +305,9 @@ class BaseCard extends EffectSource {
                 effect: effects
             });
         }
+        if(properties.cardCondition) {
+            effects.push(Effects.attachmentCardCondition(properties.cardCondition))
+        }
     }
 
     composure(properties): void {
@@ -366,14 +369,21 @@ class BaseCard extends EffectSource {
     }
 
     hasTrait(trait: string): boolean {
-        trait = trait.toLowerCase();
-        return this.getTraits().includes(trait) || this.getEffects(EffectNames.AddTrait).includes(trait);
+        return this.getTraits().includes(trait.toLowerCase());
     }
 
     getTraits(): string[] {
         let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        let traits = copyEffect ? copyEffect.traits : this.getEffects(EffectNames.Blank).some(blankTraits => blankTraits) ? [] : this.traits;
-        return _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
+        let traits = copyEffect
+            ? copyEffect.traits
+            : this.getEffects(EffectNames.Blank).some((blankTraits) => blankTraits)
+            ? []
+            : this.traits;
+
+        let withGainedTraits = _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
+        let lostTraits = new Set(this.getEffects(EffectNames.LoseTrait));
+        let withoutLostTraits = withGainedTraits.filter((trait) => !lostTraits.has(trait));
+        return withoutLostTraits;
     }
 
     isFaction(faction: string): boolean {
@@ -409,7 +419,7 @@ class BaseCard extends EffectSource {
         });
     }
 
-    leavesPlay(): void {
+    leavesPlay(destination?: Locations): void {
         this.tokens = {};
         _.each(this.abilities.actions, action => action.limit.reset());
         _.each(this.abilities.reactions, reaction => reaction.limit.reset());
@@ -506,7 +516,9 @@ class BaseCard extends EffectSource {
         let total = max;
         effects.forEach(effect => {
             const value = effect.getValue(this);
-            if((value === true || value === ability) && effect.context.player === player) {
+            const applyingPlayer = value.applyingPlayer || effect.context.player;
+            const targetAbility = value.targetAbility;
+            if((!targetAbility || targetAbility === ability) && applyingPlayer === player) {
                 total++;
             }
         });
@@ -681,6 +693,7 @@ class BaseCard extends EffectSource {
             } else if(keyword.startsWith('no attachments except')) {
                 var traits = keyword.replace('no attachments except ', '');
                 this.allowedAttachmentTraits = traits.split(' or ');
+            } else if(keyword.startsWith('no attachments,')) { //catch all for statements that are to hard to parse automatically
             } else if(keyword.startsWith('no attachments')) {
                 this.allowedAttachmentTraits = ['none'];
             }
@@ -832,6 +845,8 @@ class BaseCard extends EffectSource {
         } else if(this.getEffects(EffectNames.AttachmentFactionRestriction).some(factions => !factions.some(faction => parent.isFaction(faction)))) {
             return false;
         } else if(this.getEffects(EffectNames.AttachmentTraitRestriction).some(traits => !traits.some(trait => parent.hasTrait(trait)))) {
+            return false;
+        } else if(this.getEffects(EffectNames.AttachmentCardCondition).some(cardCondition => !cardCondition(parent))){
             return false;
         }
         return true;

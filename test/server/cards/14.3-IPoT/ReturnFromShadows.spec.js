@@ -221,7 +221,7 @@ describe('Return From Shadows', function() {
             this.player1.clickCard(this.returnFromShadows);
             this.player1.clickCard(this.manicured);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays Return From Shadows to place a dishonor token on province 2, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 plays Return From Shadows to place a dishonored status token on province 2, blanking it');
             expect(this.getChatLogs(10)).toContain('player1 reveals Manicured Garden due to Return From Shadows');
         });
 
@@ -237,7 +237,7 @@ describe('Return From Shadows', function() {
             this.player1.clickCard(this.returnFromShadows);
             this.player1.clickCard(this.pilgrimage);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays Return From Shadows to place a dishonor token on Pilgrimage, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 plays Return From Shadows to place a dishonored status token on Pilgrimage, blanking it');
             expect(this.getChatLogs(10)).not.toContain('player1 reveals Pilgrimage due to Return From Shadows');
         });
 

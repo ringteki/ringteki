@@ -1,8 +1,9 @@
-const DrawCard = require('../drawcard.js');
-const { Locations, CardTypes } = require('../Constants');
+import { CardTypes, Locations } from '../Constants';
+import DrawCard = require('../drawcard');
+import Player = require('../player');
 
-class Soldier extends DrawCard {
-    constructor(facedownCard) {
+export default class Soldier<D extends DrawCard> extends DrawCard {
+    constructor(facedownCard: D) {
         super(facedownCard.owner, {
             clan: 'neutral',
             cost: null,
@@ -23,8 +24,8 @@ class Soldier extends DrawCard {
         this.facedownCard = facedownCard;
     }
 
-    leavesPlay() {
-        this.owner.moveCard(this.facedownCard, Locations.ConflictDiscardPile);
+    leavesPlay(destination = Locations.ConflictDiscardPile): void {
+        this.owner.moveCard(this.facedownCard, destination);
         this.game.queueSimpleStep(() => {
             this.owner.removeCardFromPile(this);
             this.game.allCards = this.owner.removeCardByUuid(this.game.allCards, this.uuid);
@@ -32,14 +33,12 @@ class Soldier extends DrawCard {
         super.leavesPlay();
     }
 
-    getSummary(activePlayer, hideWhenFaceup) {
-        let summary = super.getSummary(activePlayer, hideWhenFaceup);
-        let tokenProps = { isToken: true };
-        if(activePlayer === this.controller) {
-            tokenProps.id = this.facedownCard.cardData.id;
-        }
+    getSummary(activePlayer: Player, hideWhenFaceup: boolean) {
+        const summary = super.getSummary(activePlayer, hideWhenFaceup);
+        const tokenProps = {
+            isToken: true,
+            id: activePlayer === this.controller ? this.facedownCard.cardData.id : undefined
+        };
         return Object.assign(summary, tokenProps);
     }
 }
-
-module.exports = Soldier;
