@@ -375,7 +375,7 @@ class Conflict extends GameObject {
             if(cannotContribute) {
                 return sum;
             }
-            return sum + skillFunction(card);
+            return sum + skillFunction(card, this);
         }, 0);
     }
 
@@ -433,6 +433,10 @@ class Conflict extends GameObject {
         this.game.currentConflict = null;
         this.game.raiseEvent(EventNames.OnConflictPass, { conflict: this });
         this.resetCards();
+    }
+
+    isBreaking() {
+        return this.conflictProvince && (this.getConflictProvinces().some(p => p.getStrength() - (this.attackerSkill - this.defenderSkill) <= 0));
     }
 }
 

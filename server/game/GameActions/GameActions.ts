@@ -30,6 +30,7 @@ import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
 import { GainStatusTokenAction, GainStatusTokenProperties } from './GainStatusTokenAction';
 import { HandlerAction, HandlerProperties } from './HandlerAction';
 import { HonorAction, HonorProperties } from './HonorAction';
+import { HonorBidAction, HonorBidProperties } from './HonorBidAction';
 import { IfAbleAction, IfAbleActionProperties } from './IfAbleAction';
 import { InitiateConflictAction, InitiateConflictProperties } from './InitiateConflictAction';
 import { JointGameAction } from './JointGameAction';
@@ -49,6 +50,7 @@ import { MultipleGameAction } from './MultipleGameAction';
 import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
 import { PlaceCardUnderneathAction, PlaceCardUnderneathProperties } from './PlaceCardUnderneathAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
+import { PlaceFateAttachmentAction, PlaceFateAttachmentProperties } from './PlaceFateAttachmentAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
@@ -116,6 +118,7 @@ const GameActions = {
     moveCard: (propertyFactory: MoveCardProperties | ((context: TriggeredAbilityContext) => MoveCardProperties)) => new MoveCardAction(propertyFactory), // destination, switch = false, shuffle = false, faceup = false
     moveToConflict: (propertyFactory: MoveToConflictProperties | ((context: TriggeredAbilityContext) => MoveToConflictProperties) = {}) => new MoveToConflictAction(propertyFactory),
     placeFate: (propertyFactory: PlaceFateProperties | ((context: TriggeredAbilityContext) => PlaceFateProperties) = {}) => new PlaceFateAction(propertyFactory), // amount = 1, origin
+    placeFateAttachment: (propertyFactory: PlaceFateAttachmentProperties | ((context: TriggeredAbilityContext) => PlaceFateAttachmentProperties) = {}) => new PlaceFateAttachmentAction(propertyFactory), // amount = 1, origin
     playCard: (propertyFactory: PlayCardProperties | ((context: TriggeredAbilityContext) => PlayCardProperties) = {}) => new PlayCardAction(propertyFactory), // resetOnCancel = false, postHandler
     performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
     putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary
@@ -149,6 +152,7 @@ const GameActions = {
     fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
     gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
     gainHonor: (propertyFactory: GainHonorProperties | ((context: TriggeredAbilityContext) => GainHonorProperties) = {}) => new GainHonorAction(propertyFactory), // amount = 1
+    honorBid: (propertyFactory: HonorBidProperties | ((context: TriggeredAbilityContext) => HonorBidProperties) = {}) => new HonorBidAction(propertyFactory), // giveHonor = false, players = Players.Any, prohibitedBids = []
     initiateConflict: (propertyFactory: InitiateConflictProperties | ((context: TriggeredAbilityContext) => InitiateConflictProperties) = {}) => new InitiateConflictAction(propertyFactory), // canPass = true
     loseFate: (propertyFactory: LoseFateProperties | ((context: TriggeredAbilityContext) => LoseFateProperties) = {}) => new LoseFateAction(propertyFactory),
     loseHonor: (propertyFactory: LoseHonorProperties | ((context: TriggeredAbilityContext) => LoseHonorProperties) = {}) => new LoseHonorAction(propertyFactory), // amount = 1

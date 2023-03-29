@@ -212,7 +212,7 @@ describe('Meticulous Scout', function() {
             this.player1.clickCard(this.scout);
             this.player1.clickCard(this.khan);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Meticulous Scout to place a dishonor token on province 1, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 uses Meticulous Scout to place a dishonored status token on province 1, blanking it');
             expect(this.getChatLogs(10)).toContain('player1 reveals Khan\'s Ordu due to Meticulous Scout');
         });
 
@@ -229,7 +229,7 @@ describe('Meticulous Scout', function() {
             this.player1.clickCard(this.scout);
             this.player1.clickCard(this.pilgrimage);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Meticulous Scout to place a dishonor token on Pilgrimage, blanking it');
+            expect(this.getChatLogs(10)).toContain('player1 uses Meticulous Scout to place a dishonored status token on Pilgrimage, blanking it');
             expect(this.getChatLogs(10)).not.toContain('player1 reveals Pilgrimage due to Meticulous Scout');
         });
 

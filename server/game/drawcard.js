@@ -306,13 +306,22 @@ class DrawCard extends BaseCard {
         };
     }
 
-    getMilitaryModifiers(exclusions = []) {
+    getMilitaryModifiers(exclusions) {
         let baseSkillModifiers = this.getBaseSkillModifiers();
         if(isNaN(baseSkillModifiers.baseMilitarySkill)) {
             return baseSkillModifiers.baseMilitaryModifiers;
         }
 
-        let rawEffects = this.getRawEffects().filter(effect => !exclusions.includes(effect.type));
+        if(!exclusions) {
+            exclusions = [];
+        }
+
+        let rawEffects;
+        if(typeof exclusions === 'function') {
+            rawEffects = this.getRawEffects().filter(effect => !exclusions(effect));
+        } else {
+            rawEffects = this.getRawEffects().filter(effect => !exclusions.includes(effect.type));
+        }
 
         // set effects
         let setEffects = rawEffects.filter(effect => effect.type === EffectNames.SetMilitarySkill || effect.type === EffectNames.SetDash);
@@ -346,13 +355,22 @@ class DrawCard extends BaseCard {
         return modifiers;
     }
 
-    getPoliticalModifiers(exclusions = []) {
+    getPoliticalModifiers(exclusions) {
         let baseSkillModifiers = this.getBaseSkillModifiers();
         if(isNaN(baseSkillModifiers.basePoliticalSkill)) {
             return baseSkillModifiers.basePoliticalModifiers;
         }
 
-        let rawEffects = this.getRawEffects().filter(effect => !exclusions.includes(effect.type));
+        if(!exclusions) {
+            exclusions = [];
+        }
+
+        let rawEffects;
+        if(typeof exclusions === 'function') {
+            rawEffects = this.getRawEffects().filter(effect => !exclusions(effect));
+        } else {
+            rawEffects = this.getRawEffects().filter(effect => !exclusions.includes(effect.type));
+        }
 
         // set effects
         let setEffects = rawEffects.filter(effect => effect.type === EffectNames.SetPoliticalSkill);
@@ -575,7 +593,7 @@ class DrawCard extends BaseCard {
     }
 
     getMilitarySkillExcludingModifiers(exclusions, floor = true) {
-        if(!Array.isArray(exclusions)) {
+        if(!Array.isArray(exclusions) && typeof exclusions !== 'function') {
             exclusions = [exclusions];
         }
         let modifiers = this.getMilitaryModifiers(exclusions);
@@ -600,10 +618,10 @@ class DrawCard extends BaseCard {
     }
 
     getPoliticalSkillExcludingModifiers(exclusions, floor = true) {
-        if(!Array.isArray(exclusions)) {
+        if(!Array.isArray(exclusions) && typeof exclusions !== 'function') {
             exclusions = [exclusions];
         }
-        let modifiers = this.getPoliticalModifiers();
+        let modifiers = this.getPoliticalModifiers(exclusions);
         let skill = modifiers.reduce((total, modifier) => total + modifier.amount, 0);
         if(isNaN(skill)) {
             return 0;

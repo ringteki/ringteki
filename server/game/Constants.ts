@@ -37,6 +37,8 @@ export enum EffectNames {
     AddFaction = 'addFaction',
     AddKeyword = 'addKeyword',
     AddTrait = 'addTrait',
+    LoseTrait = 'loseTrait',
+    AttachmentCardCondition = 'attachmentCardCondition',
     AttachmentFactionRestriction = 'attachmentFactionRestriction',
     AttachmentLimit = 'attachmentLimit',
     AttachmentMyControlOnly = 'attachmentMyControlOnly',
@@ -72,6 +74,7 @@ export enum EffectNames {
     HonorCostToDeclare = 'honorCostToDeclare',
     FateCostToRingToDeclareConflictAgainst = 'fateCostToRingToDeclareConflictAgainst',
     FateCostToTarget = 'fateCostToTarget',
+    PlayerFateCostToTargetCard = 'playerFateCostToTargetCard',
     GainAbility = 'gainAbility',
     GainAllAbilities = 'gainAllAbilities',
     GainAllAbilitiesDynamic = 'gainAllAbilitiesDynamic',
@@ -178,6 +181,7 @@ export enum EffectNames {
     LimitLegalAttackers = 'limitLegalAttackers',
     ModifyHonorTransferGiven = "modifyHonorTransferGiven",
     ModifyHonorTransferReceived = "modifyHonorTransferReceived",
+    ModifyUnopposedHonorLoss = "modifyUnopposedHonorLoss"
 };
 
 export enum Durations {
@@ -319,6 +323,7 @@ export enum EventNames {
     OnCardsDrawn = 'onCardsDrawn',
     OnLookAtCards = 'onLookAtCards',
     OnModifyBid = 'onModifyBid',
+    OnHonorBid = 'onHonorBid',
     OnModifyFate = 'onModifyFate',
     OnSetHonorDial = 'onSetHonorDial',
     OnSwitchConflictElement = 'onSwitchConflictElement',

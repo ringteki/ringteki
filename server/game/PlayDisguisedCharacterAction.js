@@ -52,12 +52,13 @@ class DisguisedReduceableFateCost extends ReduceableFateCost {
 }
 
 class PlayDisguisedCharacterAction extends BaseAction {
-    constructor(card, intoConflictOnly = false) {
+    constructor(card, intoConflictOnly = false, intoPlayOnly = false) {
         super(card, [
             ChooseDisguisedCharacterCost(intoConflictOnly),
             new DisguisedReduceableFateCost(intoConflictOnly)
         ]);
         this.intoConflictOnly = intoConflictOnly;
+        this.intoPlayOnly = intoPlayOnly;
         this.title = 'Play this character with Disguise';
     }
 
@@ -100,7 +101,7 @@ class PlayDisguisedCharacterAction extends BaseAction {
         const frameworkKeepsDisguisedInCurrentLocation = context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian;
         const conflictOnly = this.intoConflictOnly || (frameworkKeepsDisguisedInCurrentLocation && replacedCharacter.isParticipating());
 
-        let intoConflict = conflictOnly;
+        let intoConflict = conflictOnly && !this.intoPlayOnly;
         if(replacedCharacter.inConflict && !conflictOnly) {
             context.game.promptWithHandlerMenu(context.player, {
                 activePromptTitle: 'Where do you wish to play this character?',

@@ -16,7 +16,7 @@ class AsakoDiplomat extends DrawCard {
                 gameAction: AbilityDsl.actions.chooseAction({
                     messages: {
                         'Honor this character': '{0} chooses to honor {1}',
-                        'Dishonor this character': '{0} chooses to honor {1}'
+                        'Dishonor this character': '{0} chooses to dishonor {1}'
                     },
                     choices: {
                         'Honor this character': AbilityDsl.actions.honor(),

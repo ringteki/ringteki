@@ -12,7 +12,18 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 
-const { Locations, Decks, EffectNames, CardTypes, PlayTypes, EventNames, AbilityTypes, Players, ConflictTypes } = require('./Constants');
+const {
+    AbilityTypes,
+    CardTypes,
+    ConflictTypes,
+    Decks,
+    EffectNames,
+    EventNames,
+    FavorTypes,
+    Locations,
+    Players,
+    PlayTypes
+} = require('./Constants');
 const GameModes = require('../GameModes');
 const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
 
@@ -789,6 +800,9 @@ class Player extends GameObject {
         if(context && context.source && context.source.isTemptationsMaho()) {
             alternateFatePools.push(...this.cardsInPlay.filter(a => a.type === 'character'));
         }
+        if(context && context.source && context.source.isTemptationsMaho()) {
+            alternateFatePools = alternateFatePools.filter(a => a.printedType !== 'ring' && a.type === CardTypes.Character);
+        }
 
         let rings = alternateFatePools.filter(a => a.printedType === 'ring');
         let cards = alternateFatePools.filter(a => a.printedType !== 'ring');
@@ -799,7 +813,7 @@ class Player extends GameObject {
         }
 
         cards.forEach(card => {
-            if(!card.allowGameAction('removeFate')) {
+            if(!card.allowGameAction('removeFate') && card.type !== CardTypes.Attachment) {
                 alternateFatePools = alternateFatePools.filter(a => a !== card);
             }
         });
@@ -854,32 +868,41 @@ class Player extends GameObject {
     }
 
     getTargetingCost(abilitySource, targets) {
+        targets = Array.isArray(targets) ? targets : [targets];
+        targets = targets.filter(Boolean);
+        if(targets.length === 0) {
+            return 0;
+        }
+
+        const playerCostToTargetEffects = abilitySource.controller
+            ? abilitySource.controller.getEffects(EffectNames.PlayerFateCostToTargetCard)
+            : [];
+
         let targetCost = 0;
-        if(targets) {
-            if(!Array.isArray(targets)) {
-                targets = [targets];
+        for(const target of targets) {
+            for(const cardCostToTarget of target.getEffects(EffectNames.FateCostToTarget)) {
+                if(
+                    // no card type restriction
+                    (!cardCostToTarget.cardType ||
+                        // or match type restriction
+                        abilitySource.type === cardCostToTarget.cardType) &&
+                    // no player restriction
+                    (!cardCostToTarget.targetPlayer ||
+                        // or match player restriction
+                        abilitySource.controller ===
+                            (cardCostToTarget.targetPlayer === Players.Self
+                                ? target.controller
+                                : target.controller.opponent))
+                ) {
+                    targetCost += cardCostToTarget.amount;
+                }
             }
 
-            targets = targets.filter(a => !_.isEmpty(a));
-            targets.forEach(t => {
-                t.getEffects(EffectNames.FateCostToTarget).forEach(effect => {
-                    let typeMatch = true;
-                    let controllerMatch = true;
-                    if(effect.cardType && abilitySource.type !== effect.cardType) {
-                        typeMatch = false;
-                    }
-                    if(effect.targetPlayer && effect.targetPlayer === Players.Self && abilitySource.controller !== t.controller) {
-                        controllerMatch = false;
-                    }
-                    if(effect.targetPlayer && effect.targetPlayer === Players.Opponent && abilitySource.controller !== t.controller.opponent) {
-                        controllerMatch = false;
-                    }
-
-                    if(typeMatch && controllerMatch) {
-                        targetCost = targetCost + effect.amount;
-                    }
-                });
-            });
+            for(const playerCostToTarget of playerCostToTargetEffects) {
+                if(playerCostToTarget.match(target)) {
+                    targetCost += playerCostToTarget.amount;
+                }
+            }
         }
 
         return targetCost;
@@ -1260,7 +1283,7 @@ class Player extends GameObject {
     /**
      * Marks that this player controls the favor for the relevant conflict type
      */
-    claimImperialFavor() {
+    claimImperialFavor(favorType) {
         if(this.opponent) {
             this.opponent.loseImperialFavor();
         }
@@ -1269,7 +1292,13 @@ class Player extends GameObject {
             this.game.addMessage('{0} claims the Emperor\'s favor!', this);
             return;
         }
-        let handlers = _.map(['military', 'political'], type => {
+        if(favorType && favorType !== FavorTypes.Both) {
+            this.imperialFavor = favorType;
+            this.game.addMessage('{0} claims the Emperor\'s {1} favor!', this, favorType);
+            return;
+        }
+
+        let handlers = _.map(['military', 'political'], (type) => {
             return () => {
                 this.imperialFavor = type;
                 this.game.addMessage('{0} claims the Emperor\'s {1} favor!', this, type);
@@ -1336,11 +1365,11 @@ class Player extends GameObject {
             // In normal play, all attachments should already have been removed, but in manual play we may need to remove them.
             // This is also used by Back-Alley Hideaway when it is sacrificed. This won't trigger any leaves play effects
             card.attachments.each(attachment => {
-                attachment.leavesPlay();
+                attachment.leavesPlay(targetLocation);
                 attachment.owner.moveCard(attachment, attachment.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
             });
 
-            card.leavesPlay();
+            card.leavesPlay(targetLocation);
             card.controller = this;
         } else if(targetLocation === Locations.PlayArea) {
             card.setDefaultController(this);
