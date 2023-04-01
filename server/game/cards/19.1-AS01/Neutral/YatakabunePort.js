@@ -6,7 +6,7 @@ class YatakabunePort extends ProvinceCard {
         this.interrupt({
             title: 'Claim the imperial favor',
             when: {
-                onBreakProvince: (event, context) => event.card === context.source && context.game.currentConflict && context.game.currentConflict.attackingPlayer && context.game.currentConflict.attackingPlayer.hand.size() > 0
+                onBreakProvince: (event, context) => event.card === context.source
             },
             gameAction: AbilityDsl.actions.claimImperialFavor(context => ({
                 target: context.player

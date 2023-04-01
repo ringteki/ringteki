@@ -9,7 +9,7 @@ class EarnestSculptor extends DrawCard {
             title: 'Search top 5 card for a spell',
             effect: 'look at the top five cards of their deck',
             gameAction: AbilityDsl.actions.deckSearch({
-                amount: 5,
+                amount: 8,
                 cardCondition: (card) => card.hasTrait('spell'),
                 gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand

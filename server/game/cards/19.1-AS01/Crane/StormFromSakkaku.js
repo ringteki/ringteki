@@ -43,6 +43,7 @@ class StormFromSakkaku extends DrawCard {
         return context.game.allCards.filter(
             (card) =>
                 card.location === context.source.location &&
+                card.controller === context.source.controller &&
                 card.type === CardTypes.Holding &&
                 !card.facedown &&
                 card !== context.source

@@ -34,7 +34,16 @@ class CraftyTsukumogami extends DrawCard {
                     })),
                     AbilityDsl.actions.attachToRing(context => ({
                         attachment: context.source
-                    }))
+                    })),
+                    AbilityDsl.actions.handler({
+                        handler: context => {
+                            const card = context.source;
+                            card.controller.cardsInPlay.splice(card.controller.cardsInPlay.indexOf(card), 1);
+                            if(context.game.isDuringConflict()) {
+                                context.game.currentConflict.removeFromConflict(card);
+                            }
+                        }
+                    })
                 ])
             },
             effect: 'attach itself to the {0}'
