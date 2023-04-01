@@ -46,11 +46,22 @@ describe('Crafty Tsukumogami', function() {
             expect(this.crafty.getType()).toBe('attachment');
         });
 
-        it('should remove attachments, status tokens and fate', function() {
+        it('should remove attachments, status tokens, fate, and no longer count skill in a conflict', function() {
             this.crafty.fate = 5;
             this.crafty.honor();
-            this.player1.playAttachment(this.katana, this.crafty);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.crafty],
+                defenders: [this.whisperer],
+                type: 'political',
+                ring: 'air'
+            });
+
             this.player2.pass();
+            this.player1.playAttachment(this.katana, this.crafty);
+            expect(this.getChatLogs(10)).toContain('Political Air conflict - Attacker: 1 Defender: 3');
+            this.player2.pass();
+
             this.player1.clickCard(this.crafty);
             this.player1.clickRing('fire');
             expect(this.game.rings['fire'].attachments).toContain(this.crafty);
@@ -62,6 +73,8 @@ describe('Crafty Tsukumogami', function() {
 
             expect(this.getChatLogs(10)).toContain('player1 uses Crafty Tsukumogami to attach itself to the Fire Ring');
             expect(this.getChatLogs(10)).toContain('Fine Katana is discarded from Crafty Tsukumogami as it is no longer legally attached');
+            expect(this.getChatLogs(5)).toContain('Political Air conflict - Attacker: 0 Defender: 3');
+            expect(this.getChatLogs(5)).not.toContain('Political Air conflict - Attacker: 1 Defender: 3');
         });
 
         it('should force players who attack with the ring to discard a card', function() {

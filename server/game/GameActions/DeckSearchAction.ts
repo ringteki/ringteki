@@ -245,6 +245,7 @@ export class DeckSearchAction extends PlayerAction {
         }
         let { gameAction } = this.getProperties(event.context);
         if(gameAction) {
+            event.context.targets = selectedCards;
             gameAction.setDefaultTarget(() => selectedCards);
             context.game.queueSimpleStep(() => {
                 if(gameAction.hasLegalTarget(context)) {

@@ -175,6 +175,9 @@ describe('Storm from Sakkaku', function () {
                             'aranat'
                         ],
                         provinces: ['manicured-garden', 'endless-plains', 'fertile-fields', 'magistrate-station']
+                    },
+                    player2: {
+                        dynastyDiscard: ['kakita-dojo']
                     }
                 });
 
@@ -193,6 +196,10 @@ describe('Storm from Sakkaku', function () {
                 this.p3 = this.player1.findCardByName('fertile-fields');
                 this.p4 = this.player1.findCardByName('magistrate-station');
                 this.sh = this.player1.findCardByName('shameful-display', 'stronghold province');
+
+                this.dojo = this.player2.findCardByName('kakita-dojo');
+                this.player2.placeCardInProvince(this.dojo, 'province 2');
+                this.dojo.facedown = false;
             });
 
             it('moves to another non-sh province', function () {
@@ -213,6 +220,8 @@ describe('Storm from Sakkaku', function () {
 
             it('moves to another province, and discard other faceup holdings in there', function () {
                 expect(this.stormFromSakkaku.location).toBe('province 1');
+                expect(this.dojo.location).toBe('province 2');
+                expect(this.storehouse.location).toBe('province 2');
 
                 this.player1.clickCard(this.stormFromSakkaku);
                 expect(this.player1).toHavePrompt('Choose a province');
@@ -227,6 +236,7 @@ describe('Storm from Sakkaku', function () {
                 expect(this.getChatLogs(5)).toContain(
                     'The Storm from Sakkaku is angry and discards the holdings that they find in the province'
                 );
+                expect(this.dojo.location).toBe('province 2');
             });
         });
     });

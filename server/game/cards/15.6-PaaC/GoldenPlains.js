@@ -5,7 +5,7 @@ const AbilityDsl = require('../../abilitydsl');
 class GoldenPlains extends ProvinceCard {
     setupCardAbilities() {
         this.persistentEffect({
-            match: (card, context) => card.controller === context.player,
+            match: (card, context) => card.controller === context.player && card.location === Locations.PlayArea,
             targetController: Players.Self,
             effect: AbilityDsl.effects.addTrait('cavalry'),
             condition: context => context.player.stronghold.name === 'Golden Plains Outpost'

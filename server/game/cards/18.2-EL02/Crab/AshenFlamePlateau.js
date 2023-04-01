@@ -11,18 +11,20 @@ class AshenFlamePlateau extends ProvinceCard {
             },
             effect: 'prevent {1} from triggering character abilities this conflict',
             effectArgs: context => [context.player.opponent],
-            gameAction: AbilityDsl.actions.conflictLastingEffect({
+            gameAction: AbilityDsl.actions.conflictLastingEffect(context => ({
                 duration: Durations.UntilEndOfConflict,
                 effect: [AbilityDsl.effects.charactersCannot({
                     cannot: 'triggerAbilities',
-                    restricts: 'opponentsCharacters'
+                    restricts: 'opponentsCharacters',
+                    applyingPlayer: context.player
                 }),
                 AbilityDsl.effects.charactersCannot({
                     cannot: 'initiateKeywords',
-                    restricts: 'opponentsCharacters'
+                    restricts: 'opponentsCharacters',
+                    applyingPlayer: context.player
                 })
                 ]
-            })
+            }))
         });
     }
 }

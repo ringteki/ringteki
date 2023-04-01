@@ -98,9 +98,12 @@ describe('Earnest Sculptor', function () {
                             'against-the-waves',
                             'mantra-of-fire',
                             'censure',
-                            'cloud-the-mind'
+                            'cloud-the-mind',
+                            'fine-katana',
+                            'rebuild',
+                            'a-new-name'
                         ],
-                        conflictDeckSize: 5
+                        conflictDeckSize: 8
                     },
                     player2: {}
                 });
@@ -108,7 +111,7 @@ describe('Earnest Sculptor', function () {
                 this.cloudTheMind = this.player1.findCardByName('cloud-the-mind');
             });
 
-            it('should prompt to choose from the top 5 cards for a spell', function () {
+            it('should prompt to choose from the top 8 cards for a spell', function () {
                 this.player1.clickCard(this.earnestSculptor);
                 expect(this.player1).toHavePrompt('Select a card to reveal');
                 expect(this.player1).toHaveDisabledPromptButton('Hurricane Punch');
@@ -116,6 +119,9 @@ describe('Earnest Sculptor', function () {
                 expect(this.player1).toHaveDisabledPromptButton('Mantra of Fire');
                 expect(this.player1).toHaveDisabledPromptButton('Censure');
                 expect(this.player1).toHavePromptButton('Cloud the Mind');
+                expect(this.player1).toHaveDisabledPromptButton('Fine Katana');
+                expect(this.player1).toHaveDisabledPromptButton('Rebuild');
+                expect(this.player1).toHaveDisabledPromptButton('A New Name');
             });
 
             it('should reveal the chosen attachment', function () {

@@ -95,7 +95,7 @@ export interface PlayCardProperties extends CardActionProperties {
     source?: any;
     allowReactions?: boolean;
     ignoredRequirements?: string[];
-    playAction?: BaseAction;
+    playAction?: BaseAction | BaseAction[];
 }
 
 export class PlayCardAction extends CardGameAction {
@@ -149,7 +149,11 @@ export class PlayCardAction extends CardGameAction {
 
     getLegalActions(card: DrawCard, context: AbilityContext, properties: PlayCardProperties) {
         if (properties.playAction) {
-            return [properties.playAction];
+            let actions = properties.playAction;
+            if (!Array.isArray(actions)) {
+                actions = [actions];
+            }
+            return actions;
         }
         return card.getPlayActions();
     }

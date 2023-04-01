@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl.js');
 const { CardTypes, Players, Locations, PlayTypes } = require('../../../Constants');
-const PlayDynastyAsConflictCharacterAction = require('../../../playdynastycharacterasconflictaction');
+const { PlayDynastyAsConflictCharacterAction, PlayDisguisedDynastyAsConflictCharacterAction } = require('../../../playdynastycharacterasconflictaction');
 
 class ScoutsSteed extends DrawCard {
     setupCardAbilities() {
@@ -25,7 +25,10 @@ class ScoutsSteed extends DrawCard {
                     source: this,
                     resetOnCancel: false,
                     playType: PlayTypes.PlayFromHand,
-                    playAction: context.target ? new PlayDynastyAsConflictCharacterAction(context.target, true) : undefined,
+                    playAction: context.target ? [
+                        new PlayDynastyAsConflictCharacterAction(context.target, true),
+                        new PlayDisguisedDynastyAsConflictCharacterAction(context.target, true)
+                    ] : undefined,
                     ignoredRequirements: ['phase']
                 }))
             },
