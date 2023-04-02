@@ -18,13 +18,13 @@ describe('Daikyu Reprint', function() {
             this.toturi = this.player2.findCardByName('akodo-toturi');
             this.whisperer = this.player2.findCardByName('doji-whisperer');
 
-            this.daikyu1 = this.player1.findCardByName('naginata');
-            this.daikyu2 = this.player2.findCardByName('naginata');
+            this.naginata1 = this.player1.findCardByName('naginata');
+            this.naginata2 = this.player2.findCardByName('naginata');
             this.mount = this.player2.findCardByName('favored-mount');
             this.hand = this.player2.findCardByName('way-of-the-open-hand');
 
-            this.player1.playAttachment(this.daikyu1, this.hotaru);
-            this.player2.playAttachment(this.daikyu2, this.toturi);
+            this.player1.playAttachment(this.naginata1, this.hotaru);
+            this.player2.playAttachment(this.naginata2, this.toturi);
             this.player1.pass();
             this.player2.playAttachment(this.mount, this.whisperer);
         });
@@ -45,8 +45,8 @@ describe('Daikyu Reprint', function() {
             this.player2.clickCard(this.mount);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.hotaru);
-            this.player1.clickCard(this.hotaru);
+            expect(this.player1).toBeAbleToSelect(this.naginata1);
+            this.player1.clickCard(this.naginata1);
             expect(this.player1).not.toBeAbleToSelect(this.hotaru);
             expect(this.player1).not.toBeAbleToSelect(this.toturi);
             expect(this.player1).toBeAbleToSelect(this.initiate);
@@ -54,8 +54,8 @@ describe('Daikyu Reprint', function() {
             this.player1.clickCard(this.whisperer);
             expect(this.whisperer.bowed).toBe(true);
             expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.toturi);
-            this.player2.clickCard(this.toturi);
+            expect(this.player2).toBeAbleToSelect(this.naginata2);
+            this.player2.clickCard(this.naginata2);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.initiate);
@@ -77,8 +77,8 @@ describe('Daikyu Reprint', function() {
 
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.toturi);
-            this.player2.clickCard(this.toturi);
+            expect(this.player2).toBeAbleToSelect(this.naginata2);
+            this.player2.clickCard(this.naginata2);
             expect(this.player2).not.toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.initiate);
