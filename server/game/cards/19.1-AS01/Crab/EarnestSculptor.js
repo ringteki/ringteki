@@ -6,8 +6,8 @@ const PlayAttachmentAction = require('../../../playattachmentaction.js');
 class EarnestSculptor extends DrawCard {
     setupCardAbilities() {
         this.action({
-            title: 'Search top 5 card for a spell',
-            effect: 'look at the top five cards of their deck',
+            title: 'Search top 8 card for a spell',
+            effect: 'look at the top 8 cards of their deck',
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 8,
                 cardCondition: (card) => card.hasTrait('spell'),

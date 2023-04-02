@@ -24,6 +24,8 @@ describe('Storm from Sakkaku', function () {
                         dynastyDeck: ['keeper-initiate']
                     }
                 });
+                this.storm = this.player2.findCardByName('storm-from-sakkaku');
+
                 this.player1.placeCardInProvince(
                     this.player1.findCardByName('shintao-monastery', 'dynasty discard pile'),
                     'province 1'
@@ -45,6 +47,8 @@ describe('Storm from Sakkaku', function () {
                     this.player2.findCardByName('storm-from-sakkaku', 'dynasty discard pile'),
                     'province 1'
                 );
+
+                this.storm.facedown = false;
 
                 this.mitsu = this.player1.findCardByName('togashi-mitsu-2');
                 this.mitsu.dishonor();
@@ -70,6 +74,13 @@ describe('Storm from Sakkaku', function () {
                     this.noMoreActions();
                     expect(this.player1).toHavePrompt('Action Window');
                     expect(this.getChatLogs(1)).toContain('Storm from Sakkaku cancels the ring effect');
+                });
+
+                it('when facedown should not cancel the effects of the conflict ring', function () {
+                    this.storm.facedown = true;
+                    this.noMoreActions();
+                    expect(this.player1).toHavePrompt('Earth Ring');
+                    expect(this.getChatLogs(5)).not.toContain('Storm from Sakkaku cancels the ring effect');
                 });
 
                 it('should cancel conflict ring resolution due to card effects', function () {
