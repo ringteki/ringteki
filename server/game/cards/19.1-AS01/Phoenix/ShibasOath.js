@@ -1,5 +1,5 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, AbilityTypes, Locations, Phases } = require('../../../Constants');
+const { CardTypes, AbilityTypes, Locations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
 
 class ShibasOath extends DrawCard {
@@ -7,11 +7,6 @@ class ShibasOath extends DrawCard {
         this.attachmentConditions({
             limitTrait: { title: 1 },
             cardCondition: (card) => card.hasTrait('bushi')
-        });
-
-        this.persistentEffect({
-            condition: (context) => context.game.currentPhase === Phases.Conflict,
-            effect: AbilityDsl.effects.addKeyword('ancestral')
         });
 
         this.reaction({
@@ -45,9 +40,15 @@ class ShibasOath extends DrawCard {
                         )
                 },
                 cost: AbilityDsl.costs.sacrificeSelf(),
-                gameAction: AbilityDsl.actions.cancel(),
-                effect: 'cancel the effects of {1}',
-                effectArgs: (context) => [context.event.card]
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.cancel(),
+                    AbilityDsl.actions.moveCard({
+                        target: this,
+                        destination: Locations.Hand
+                    })
+                ]),
+                effect: 'cancel the effects of {1} and return {2} to their hand',
+                effectArgs: (context) => [context.event.card, this]
             })
         });
     }

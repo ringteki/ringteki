@@ -26,34 +26,6 @@ describe('Shiba\'s Oath', function () {
             });
         });
 
-        describe('Conflict hase Ancestral keyword', function () {
-            beforeEach(function () {
-                this.setupTest({
-                    phase: 'conflict',
-                    player1: {
-                        inPlay: ['solemn-scholar', 'serene-warrior'],
-                        hand: ['shiba-s-oath']
-                    }
-                });
-                this.solemnScholar = this.player1.findCardByName('solemn-scholar');
-                this.sereneWarrior = this.player1.findCardByName('serene-warrior');
-                this.shibasOath = this.player1.findCardByName('shiba-s-oath');
-                this.game.checkGameState(true);
-            });
-
-            it('should gain ancestral in the conflict phase', function () {
-                this.player1.clickCard(this.shibasOath);
-                this.player1.clickCard(this.sereneWarrior);
-
-                this.player1.clickCard(this.shibasOath);
-
-                expect(this.shibasOath.hasKeyword('ancestral')).toBe(true);
-
-                this.flow.finishConflictPhase();
-                expect(this.shibasOath.hasKeyword('ancestral')).toBe(false);
-            });
-        });
-
         describe('reaction when enter play', function () {
             beforeEach(function () {
                 this.setupTest({
@@ -106,7 +78,7 @@ describe('Shiba\'s Oath', function () {
                 this.player1.clickCard(this.shibasOath);
             });
 
-            it('cancel events on non-bushi with both chars in conflict', function () {
+            it('cancel events on non-bushi', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
@@ -118,12 +90,13 @@ describe('Shiba\'s Oath', function () {
                 expect(this.player1).toHavePrompt('Any interrupts to the effects of Assassination?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
+                expect(this.shibasOath.location).toBe('hand');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Assassination'
+                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Assassination and return Shiba\'s Oath to their hand'
                 );
             });
 
-            it('does not cancel events on other bushi at same location', function () {
+            it('does not cancel events on other bushi', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
@@ -140,24 +113,7 @@ describe('Shiba\'s Oath', function () {
                 );
             });
 
-            it('cancel events when the bushi and the non-bushi are in different locations', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.solemnScholar, this.sailor],
-                    defenders: [this.kuwanan]
-                });
-
-                this.player2.clickCard(this.assassination);
-                this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).toHavePrompt('Any interrupts to the effects of Assassination?');
-
-                this.player1.clickCard(this.valiantOathkeeper);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Assassination'
-                );
-            });
-
-            it('cancel character abilities on non-bushi with both chars in conflict', function () {
+            it('cancel character abilities on non-bushi', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
@@ -169,12 +125,13 @@ describe('Shiba\'s Oath', function () {
                 expect(this.player1).toHavePrompt('Any interrupts to the effects of Doji Kuwanan?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
+                expect(this.shibasOath.location).toBe('hand');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Doji Kuwanan'
+                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Doji Kuwanan and return Shiba\'s Oath to their hand'
                 );
             });
 
-            it('does not cancel character abilities on other bushi at same location', function () {
+            it('does not cancel character abilities on other bushi', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.valiantOathkeeper, this.solemnScholar, this.sailor],
@@ -191,24 +148,7 @@ describe('Shiba\'s Oath', function () {
                 );
             });
 
-            it('cancel character abilities when the bushi and the non-bushi are in different locations', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.solemnScholar, this.sailor],
-                    defenders: [this.kuwanan]
-                });
-
-                this.player2.clickCard(this.kuwanan);
-                this.player2.clickCard(this.solemnScholar);
-                expect(this.player1).toHavePrompt('Any interrupts to the effects of Doji Kuwanan?');
-
-                this.player1.clickCard(this.valiantOathkeeper);
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Doji Kuwanan'
-                );
-            });
-
-            it('cancel character static abilities on non-bushi with both chars in conflict', function () {
+            it('cancel character static abilities on non-bushi', function () {
                 this.noMoreActions();
                 this.player1.clickPrompt('Pass Conflict');
                 this.player1.clickPrompt('Yes');
@@ -225,12 +165,13 @@ describe('Shiba\'s Oath', function () {
                 expect(this.player1).toHavePrompt('Any interrupts to the effects of Political Rival?');
 
                 this.player1.clickCard(this.valiantOathkeeper);
+                expect(this.shibasOath.location).toBe('hand');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Political Rival'
+                    'player1 uses Valiant Oathkeeper\'s gained ability from Shiba\'s Oath, sacrificing Valiant Oathkeeper to cancel the effects of Political Rival and return Shiba\'s Oath to their hand'
                 );
             });
 
-            it('does not cancel character static abilities on other bushi at same location', function () {
+            it('does not cancel character static abilities on other bushi', function () {
                 this.noMoreActions();
                 this.player1.clickPrompt('Pass Conflict');
                 this.player1.clickPrompt('Yes');
