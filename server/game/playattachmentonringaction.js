@@ -2,7 +2,7 @@ const BaseAction = require('./BaseAction');
 const Costs = require('./costs.js');
 const GameActions = require('./GameActions/GameActions');
 const { Phases, PlayTypes, EventNames, TargetModes } = require('./Constants');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 
 class PlayAttachmentToRingAction extends BaseAction {
     constructor(card) {

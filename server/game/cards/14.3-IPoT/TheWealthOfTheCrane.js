@@ -1,7 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Players, Locations, CardTypes } = require('../../Constants');
-const GameModes = require('../../../GameModes.js');
+const { GameModes } = require('../../../GameModes.js');
 
 class TheWealthOfTheCrane extends DrawCard {
     cards = [];

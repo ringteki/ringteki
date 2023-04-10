@@ -24,8 +24,14 @@ const {
     Players,
     PlayTypes
 } = require('./Constants');
-const GameModes = require('../GameModes');
-const provinceLocations = [Locations.StrongholdProvince, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour];
+const { GameModes } = require('../GameModes');
+const provinceLocations = [
+    Locations.StrongholdProvince,
+    Locations.ProvinceOne,
+    Locations.ProvinceTwo,
+    Locations.ProvinceThree,
+    Locations.ProvinceFour
+];
 
 class Player extends GameObject {
     constructor(id, user, owner, game, clockdetails) {

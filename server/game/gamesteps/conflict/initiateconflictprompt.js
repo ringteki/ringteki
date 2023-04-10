@@ -4,7 +4,7 @@ const { Locations, CardTypes } = require('../../Constants');
 const AttackersMatrix = require('./attackersMatrix.js');
 const AbilityContext = require('../../AbilityContext');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
-const GameModes = require('../../../GameModes.js');
+const { GameModes } = require('../../../GameModes.js');
 
 const capitalize = {
     military: 'Military',

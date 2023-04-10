@@ -1,7 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { Locations, CardTypes, Players, TargetModes, Decks } = require('../../Constants');
-const GameModes = require('../../../GameModes.js');
+const { GameModes } = require('../../../GameModes.js');
 
 class KaiuShihobu extends DrawCard {
     setupCardAbilities() {

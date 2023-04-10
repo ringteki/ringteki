@@ -2,7 +2,7 @@ const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 const AllPlayerPrompt = require('./allplayerprompt.js');
 const { TransferHonorAction } = require('../GameActions/TransferHonorAction');
 const { EventNames, EffectNames } = require('../Constants');
-const GameModes = require('../../GameModes.js');
+const { GameModes } = require('../../GameModes.js');
 
 class HonorBidPrompt extends AllPlayerPrompt {
     constructor(game, menuTitle, costHandler, prohibitedBids = {}, duel = null, raiseEvent = true) {

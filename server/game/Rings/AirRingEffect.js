@@ -2,7 +2,7 @@ const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
 
 const BaseAbility = require('../baseability.js');
 const { TargetModes } = require('../Constants');
-const GameModes = require('../../GameModes.js');
+const { GameModes } = require('../../GameModes.js');
 
 class AirRingEffect extends BaseAbility {
     constructor(optional = true, gameMode = GameModes.Stronghold) {

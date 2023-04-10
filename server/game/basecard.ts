@@ -24,7 +24,7 @@ const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
 const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
 import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
 import ElementSymbol = require('./ElementSymbol');
-import GameModes = require('../GameModes');
+import { GameModes } from '../GameModes';
 
 const ValidKeywords = [
     'ancestral',

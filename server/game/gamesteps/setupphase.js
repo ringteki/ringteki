@@ -5,7 +5,7 @@ const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
 const SetupProvincesPrompt = require('./setup/setupprovincesprompt.js');
 const { Locations } = require('../Constants');
-const GameModes = require('../../GameModes.js');
+const { GameModes } = require('../../GameModes.js');
 
 class SetupPhase extends Phase {
     constructor(game) {

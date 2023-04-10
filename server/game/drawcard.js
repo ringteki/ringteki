@@ -9,7 +9,7 @@ const RallyAbility = require('./KeywordAbilities/RallyAbility');
 const StatModifier = require('./StatModifier');
 
 const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {

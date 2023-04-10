@@ -1,6 +1,6 @@
 const TriggeredAbility = require('../triggeredability.js');
 const { AbilityTypes, Locations } = require('../Constants');
-const GameModes = require('../../GameModes.js');
+const { GameModes } = require('../../GameModes.js');
 
 class RallyAbility extends TriggeredAbility {
     constructor(game, card) {

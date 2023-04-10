@@ -1,4 +1,4 @@
-const GameModes = require('../../GameModes.js');
+const { GameModes } = require('../../GameModes.js');
 const BaseAbility = require('../baseability.js');
 const { Locations, CardTypes } = require('../Constants');
 
