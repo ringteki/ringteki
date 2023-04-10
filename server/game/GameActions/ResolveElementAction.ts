@@ -1,7 +1,7 @@
 import AbilityContext = require('../AbilityContext');
 import Event = require('../Events/Event');
 import Player = require('../player');
-import RingEffects = require('../RingEffects');
+import { RingEffects } from '../RingEffects';
 import Ring = require('../ring');
 import { RingAction, RingActionProperties} from './RingAction';
 import { EventNames, EffectNames } from '../Constants';

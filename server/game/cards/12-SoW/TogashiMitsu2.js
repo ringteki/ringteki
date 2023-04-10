@@ -1,7 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const { Players, TargetModes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl.js');
-const RingEffects = require('../../RingEffects.js');
+const { RingEffects } = require('../../RingEffects.js');
 
 class TogashiMitsu2 extends DrawCard {
     setupCardAbilities() {
