@@ -10,7 +10,7 @@ class ToShowThePath extends DrawCard {
                 context.player.cardsInPlay.some((card) => card.hasTrait('monk') || card.hasTrait('shugenja')),
             target: {
                 cardType: CardTypes.Character,
-                controller: Players.Self,
+                controller: Players.Any,
                 mode: TargetModes.Single,
                 cardCondition: (card) => !card.hasTrait('monk') && !card.hasTrait('shugenja'),
                 gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
