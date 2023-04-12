@@ -4,7 +4,7 @@ const _ = require('underscore');
 
 const { Locations, EffectNames } = require('./Constants');
 const AbilityDsl = require('./abilitydsl.js');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 
 class ProvinceCard extends BaseCard {
     constructor(owner, cardData = { strength: 3, element: [], type: 'province', side: 'province', name: 'Skirmish Province', id: 'skirmish-province' }) {

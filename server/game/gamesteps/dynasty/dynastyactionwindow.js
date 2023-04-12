@@ -1,6 +1,6 @@
 const ActionWindow = require('../actionwindow.js');
 const { EventNames, EffectNames } = require('../../Constants');
-const GameModes = require('../../../GameModes.js');
+const { GameModes } = require('../../../GameModes.js');
 
 class DynastyActionWindow extends ActionWindow {
     constructor(game) {

@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 const { Locations, DuelTypes, EffectNames } = require('./Constants');
 
 const DuelParticipants = Object.freeze({

@@ -1,7 +1,7 @@
 const StrongholdCard = require('../../../strongholdcard.js');
 const { CardTypes, Locations, Players } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
-const GameModes = require('../../../../GameModes.js');
+const { GameModes } = require('../../../../GameModes.js');
 
 class TheEastWind extends StrongholdCard {
     setupCardAbilities() {

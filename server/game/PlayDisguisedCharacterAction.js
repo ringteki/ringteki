@@ -2,7 +2,7 @@ const BaseAction = require('./BaseAction.js');
 const ReduceableFateCost = require('./costs/ReduceableFateCost');
 
 const { CardTypes, EventNames, Phases, Players, EffectNames } = require ('./Constants');
-const GameModes = require('../GameModes.js');
+const { GameModes } = require('../GameModes.js');
 
 const ChooseDisguisedCharacterCost = function(intoConflictOnly) {
     return {

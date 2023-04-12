@@ -1,4 +1,4 @@
-const GameModes = require('../../../server/GameModes');
+const { GameModes } = require('../../../build/server/GameModes');
 
 describe('Attachments - Obsidian', function() {
     integration(function() {

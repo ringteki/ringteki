@@ -37,7 +37,7 @@ const MenuCommands = require('./MenuCommands');
 const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
 
 const { EffectNames, Phases, EventNames, Locations, ConflictTypes } = require('./Constants');
-const GameModes = require('../GameModes.js');
+const { GameModes } = require('../GameModes.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {

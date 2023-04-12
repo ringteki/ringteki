@@ -5,7 +5,7 @@ describe('To Connect the People', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['ikoma-prodigy', 'forthright-ide'],
+                        inPlay: ['ikoma-prodigy', 'forthright-ide', 'serene-warrior'],
                         hand: ['to-connect-the-people'],
                         dynastyDiscard: ['border-rider'],
                         conflictDiscard: ['shinjo-ambusher']
