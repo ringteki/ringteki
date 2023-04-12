@@ -2,7 +2,7 @@ const BaseAction = require('./BaseAction');
 const Costs = require('./costs.js');
 const GameActions = require('./GameActions/GameActions');
 const { EffectNames, Phases, PlayTypes, EventNames, Players, Locations } = require('./Constants');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 
 class PlayCharacterAction extends BaseAction {
     constructor(card, intoConflictOnly = false, intoPlayOnly = false) {

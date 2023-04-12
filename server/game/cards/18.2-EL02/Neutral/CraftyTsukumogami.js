@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const { TargetModes, CardTypes, AbilityTypes, Durations } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl');
-const GameModes = require('../../../../GameModes.js');
+const { GameModes } = require('../../../../GameModes.js');
 
 class CraftyTsukumogami extends DrawCard {
     setupCardAbilities() {

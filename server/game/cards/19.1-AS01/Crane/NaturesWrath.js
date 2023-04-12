@@ -1,11 +1,13 @@
 const DrawCard = require('../../../drawcard.js');
-const { CardTypes, Players, TargetModes, EventNames } = require('../../../Constants');
+const { CardTypes, Players, TargetModes, EventNames, ConflictTypes } = require('../../../Constants');
 
 class NaturesWrath extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
             title: 'Dishonor or move home a character',
-            condition: (context) => context.player.anyCardsInPlay((card) => card.isParticipating()),
+            condition: (context) =>
+                context.game.isDuringConflict(ConflictTypes.Military) &&
+                context.player.anyCardsInPlay((card) => card.isParticipating()),
             targets: {
                 character: {
                     cardType: CardTypes.Character,

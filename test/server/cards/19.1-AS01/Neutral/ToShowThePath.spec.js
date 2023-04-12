@@ -51,7 +51,7 @@ describe('To Show the Path', function () {
                         hand: ['to-show-the-path', 'a-perfect-cut', 'a-new-name', 'duelist-training']
                     },
                     player2: {
-                        inPlay: ['togashi-ichi', 'isawa-kaede'],
+                        inPlay: ['togashi-ichi', 'isawa-kaede', 'matsu-berserker'],
                         hand: ['a-perfect-cut', 'let-go', 'let-go']
                     }
                 });
@@ -59,10 +59,11 @@ describe('To Show the Path', function () {
                 this.doomedShugenja = this.player1.findCardByName('doomed-shugenja');
                 this.togashiMitsu = this.player1.findCardByName('togashi-mitsu');
                 this.prodigy = this.player1.findCardByName('ikoma-prodigy');
+                this.motoYouth = this.player1.findCardByName('moto-youth');
 
                 this.togashiIchi = this.player2.findCardByName('togashi-ichi');
                 this.isawaKaede = this.player2.findCardByName('isawa-kaede');
-                this.motoYouth = this.player1.findCardByName('moto-youth');
+                this.matsuBerserker = this.player2.findCardByName('matsu-berserker');
 
                 this.toShowThePath = this.player1.findCardByName('to-show-the-path');
                 this.aPerfectCut1 = this.player1.findCardByName('a-perfect-cut');
@@ -82,6 +83,7 @@ describe('To Show the Path', function () {
 
                 expect(this.player1).toBeAbleToSelect(this.prodigy);
                 expect(this.player1).toBeAbleToSelect(this.motoYouth);
+                expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
                 expect(this.player1).not.toBeAbleToSelect(this.togashiIchi);
                 expect(this.player1).not.toBeAbleToSelect(this.isawaKaede);
                 expect(this.player1).not.toBeAbleToSelect(this.togashiMitsu);
@@ -93,7 +95,7 @@ describe('To Show the Path', function () {
                 );
             });
 
-            it('it should allow to target a non-monk, non-shugenja owned by either player', function () {
+            it('taxes targets on character', function () {
                 this.player1.clickCard(this.toShowThePath);
                 expect(this.player1).toHavePrompt('Choose a character');
 
@@ -119,7 +121,7 @@ describe('To Show the Path', function () {
                 expect(this.player2.fate).toBe(player2InitialFate - 1); // cost increase for the opponent
             });
 
-            it('should also tax attachments that are on the character when the event is played', function () {
+            it('taxes attachments that are on the character when the event is played', function () {
                 this.player1.playAttachment(this.duelist, this.motoYouth);
                 this.player2.pass();
                 this.player1.clickCard(this.toShowThePath);
@@ -138,7 +140,7 @@ describe('To Show the Path', function () {
                 expect(this.duelist.location).toBe('conflict discard pile');
             });
 
-            it('also taxes attachments played on the character after Show the Path', function () {
+            it('taxes attachments played on the character after Show the Path', function () {
                 this.player1.playAttachment(this.duelist, this.motoYouth);
 
                 this.player2.pass();

@@ -1,7 +1,7 @@
 const DrawCard = require('../../../drawcard.js');
 const AbilityDsl = require('../../../abilitydsl');
 const { ConflictTypes, CardTypes, Players, Durations, Locations } = require('../../../Constants.js');
-const GameModes = require('../../../../GameModes.js');
+const { GameModes } = require('../../../../GameModes.js');
 
 class Retribution extends DrawCard {
     setupCardAbilities() {

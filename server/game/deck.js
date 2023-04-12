@@ -6,7 +6,7 @@ const ProvinceCard = require('./provincecard.js');
 const StrongholdCard = require('./strongholdcard.js');
 const RoleCard = require('./rolecard.js');
 const { Locations, CardTypes } = require('./Constants');
-const GameModes = require('../GameModes');
+const { GameModes } = require('../GameModes');
 
 class Deck {
     constructor(data) {

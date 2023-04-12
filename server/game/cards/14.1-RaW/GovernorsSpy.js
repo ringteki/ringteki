@@ -1,7 +1,7 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
 const { TargetModes, Locations, Players, CardTypes } = require('../../Constants');
-const GameModes = require('../../../GameModes.js');
+const { GameModes } = require('../../../GameModes.js');
 
 class CardWrapper {
     constructor(card) {

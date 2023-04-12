@@ -1,4 +1,4 @@
-const GameModes = require('../GameModes.js');
+const { GameModes } = require('../GameModes.js');
 const CardAbility = require('./CardAbility.js');
 const { AbilityTypes, CardTypes, Phases, PlayTypes, EffectNames } = require('./Constants');
 

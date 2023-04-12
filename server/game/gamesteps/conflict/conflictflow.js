@@ -12,7 +12,7 @@ const InitiateCardAbilityEvent = require('../../Events/InitiateCardAbilityEvent'
 const AttackersMatrix = require('./attackersMatrix.js');
 
 const { Players, CardTypes, EventNames, EffectNames, Locations, ConflictTypes} = require('../../Constants');
-const GameModes = require('../../../GameModes');
+const { GameModes } = require('../../../GameModes');
 
 /**
 Conflict Resolution
