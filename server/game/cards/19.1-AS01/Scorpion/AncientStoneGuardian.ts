@@ -1,9 +1,14 @@
-const DrawCard = require('../../../drawcard.js');
-const AbilityDsl = require('../../../abilitydsl');
-const { CardTypes, Players } = require('../../../Constants.js');
+import { CardTypes, Players } from '../../../Constants';
+import { SequentialContextProperties } from '../../../GameActions/SequentialContextAction';
+import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
+import AbilityDsl = require('../../../abilitydsl');
+import BaseCard = require('../../../basecard');
+import DrawCard = require('../../../drawcard');
 
-class AncientStoneGuardian extends DrawCard {
-    setupCardAbilities() {
+export default class AncientStoneGuardian extends DrawCard {
+    static id = 'ancient-stone-guardian';
+
+    public setupCardAbilities() {
         this.persistentEffect({
             effect: [AbilityDsl.effects.cardCannot('declareAsAttacker')]
         });
@@ -25,9 +30,9 @@ class AncientStoneGuardian extends DrawCard {
                     hideIfNoLegalTargets: true,
                     controller: (context) => (context.player.firstPlayer ? Players.Self : Players.Opponent),
                     player: (context) => (context.player.firstPlayer ? Players.Self : Players.Opponent),
-                    cardCondition: (card, context) => this._stoneGuardianCardCondition(card, context),
+                    cardCondition: (card, context) => this.cardCanBeChosenForDishonor(card, context),
                     gameAction: AbilityDsl.actions.sequentialContext((context) =>
-                        this._stoneGuardianSequence(context.targets.firstCharacter)
+                        this.dishonorAndDraw(context.targets.firstCharacter)
                     )
                 },
                 secondCharacter: {
@@ -37,45 +42,42 @@ class AncientStoneGuardian extends DrawCard {
                     hideIfNoLegalTargets: true,
                     controller: (context) => (context.player.firstPlayer ? Players.Opponent : Players.Self),
                     player: (context) => (context.player.firstPlayer ? Players.Opponent : Players.Self),
-                    cardCondition: (card, context) => this._stoneGuardianCardCondition(card, context),
+                    cardCondition: (card, context) => this.cardCanBeChosenForDishonor(card, context),
                     gameAction: AbilityDsl.actions.sequentialContext((context) =>
-                        this._stoneGuardianSequence(context.targets.secondCharacter)
+                        this.dishonorAndDraw(context.targets.secondCharacter)
                     )
                 }
             },
 
             effect: 'present an opportunity to sneak around {0} and find some secrets!{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}',
-            effectArgs: (context) =>
-                this._stoneGuardianEffectParts(context.targets.firstCharacter).concat(
-                    this._stoneGuardianEffectParts(context.targets.secondCharacter)
+            effectArgs: (context: TriggeredAbilityContext) =>
+                this.effectsForCard(context.targets.firstCharacter).concat(
+                    this.effectsForCard(context.targets.secondCharacter)
                 )
         });
     }
 
-    _stoneGuardianCardCondition(card, context) {
+    private cardCanBeChosenForDishonor(card: BaseCard, context: TriggeredAbilityContext): boolean {
         return card !== context.source && AbilityDsl.actions.dishonor({ target: card }).canAffect(card, context);
     }
 
-    _stoneGuardianSequence(target) {
+    private dishonorAndDraw(target?: BaseCard): SequentialContextProperties {
         return {
-            gameActions: [
-                AbilityDsl.actions.dishonor({ target: target }),
-                AbilityDsl.actions.draw({ target: target.controller })
-            ]
+            gameActions: target
+                ? [
+                      AbilityDsl.actions.dishonor({ target: target }),
+                      AbilityDsl.actions.draw({ target: target.controller })
+                  ]
+                : []
         };
     }
 
-    _stoneGuardianEffectParts(target) {
-        if(target instanceof DrawCard) {
+    private effectsForCard(target?: BaseCard | []) {
+        if (target instanceof DrawCard) {
             // Target selected
             return [' ', target.controller, ' dishonors ', target, ' to draw a card.'];
         }
         // Target skipped
         return ['', '', '', '', ''];
-
     }
 }
-
-AncientStoneGuardian.id = 'ancient-stone-guardian';
-
-module.exports = AncientStoneGuardian;
