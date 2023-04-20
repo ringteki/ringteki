@@ -4,11 +4,7 @@ describe('Palm Strike', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: [
-                        'togashi-ichi',
-                        'doomed-shugenja',
-                        'shrine-maiden'
-                    ],
+                    inPlay: ['togashi-ichi', 'doomed-shugenja', 'shrine-maiden'],
                     hand: ['palm-strike', 'ancestral-daisho'],
                     dynastyDiscard: []
                 },
@@ -19,12 +15,10 @@ describe('Palm Strike', function () {
             });
 
             this.togashiIchi = this.player1.findCardByName('togashi-ichi');
-            this.doomedShugenja =
-                this.player1.findCardByName('doomed-shugenja');
+            this.doomedShugenja = this.player1.findCardByName('doomed-shugenja');
             this.shrineMaiden = this.player1.findCardByName('shrine-maiden');
             this.palmStrike = this.player1.findCardByName('palm-strike');
-            this.ancestralDaisho =
-                this.player1.findCardByName('ancestral-daisho');
+            this.ancestralDaisho = this.player1.findCardByName('ancestral-daisho');
 
             this.brash = this.player2.findCardByName('brash-samurai');
             this.kakitaBlade = this.player2.findCardByName('kakita-blade');
@@ -52,10 +46,7 @@ describe('Palm Strike', function () {
 
         describe('when the monk has a weapon', function () {
             beforeEach(function () {
-                this.player1.playAttachment(
-                    this.ancestralDaisho,
-                    this.togashiIchi
-                );
+                this.player1.playAttachment(this.ancestralDaisho, this.togashiIchi);
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.togashiIchi, this.doomedShugenja],
@@ -73,10 +64,7 @@ describe('Palm Strike', function () {
 
         describe('when an non-tattooed monk and the opponent have no weapons', function () {
             beforeEach(function () {
-                this.player1.playAttachment(
-                    this.ancestralDaisho,
-                    this.doomedShugenja
-                );
+                this.player1.playAttachment(this.ancestralDaisho, this.doomedShugenja);
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.shrineMaiden, this.doomedShugenja],
@@ -102,18 +90,16 @@ describe('Palm Strike', function () {
             });
 
             it('displays messages', function () {
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 plays Palm Strike to bow Brash Samurai — they are stricken down by the Shrine Maiden.'
+                expect(this.getChatLogs(5)).toContain('player1 plays Palm Strike to bow Brash Samurai');
+                expect(this.getChatLogs(5)).not.toContain(
+                    'Brash Samurai cannot ready until the end of the conflict - they are overwhelmed by the mystical tattoos of the Shrine Maiden!'
                 );
             });
         });
 
         describe('when a tattooed monk and the opponent have no weapons', function () {
             beforeEach(function () {
-                this.player1.playAttachment(
-                    this.ancestralDaisho,
-                    this.doomedShugenja
-                );
+                this.player1.playAttachment(this.ancestralDaisho, this.doomedShugenja);
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.togashiIchi, this.doomedShugenja],
@@ -134,15 +120,14 @@ describe('Palm Strike', function () {
             it('should prevent the opponent from readying until the end of the conflict', function () {
                 this.player2.clickCard(this.elegantTessen);
                 this.player2.clickCard(this.brash);
-                expect(this.player2).toHavePrompt(
-                    'Waiting for opponent to take an action or pass'
-                );
+                expect(this.player2).toHavePrompt('Waiting for opponent to take an action or pass');
                 expect(this.brash.bowed).toBe(true);
             });
 
             it('displays messages', function () {
+                expect(this.getChatLogs(5)).toContain('player1 plays Palm Strike to bow Brash Samurai');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 plays Palm Strike to bow Brash Samurai — they are overwhelmed by the mystical tattoos of Togashi Ichi.'
+                    'Brash Samurai cannot ready until the end of the conflict - they are overwhelmed by the mystical tattoos of Togashi Ichi!'
                 );
             });
         });
