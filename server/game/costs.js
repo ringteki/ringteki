@@ -703,8 +703,40 @@ const Costs = {
                     }
                 });
             },
-            pay: function () {
-            }
+            pay: function () {}
+        };
+    },
+
+    switchLocation: function () {
+        return {
+            canPay: function (context) {
+                const canMoveHome = context.game.actions.sendHome().canAffect(context.source, context);
+                const canMoveToConflict = context.game.actions.moveToConflict().canAffect(context.source, context);
+
+                return canMoveHome || canMoveToConflict;
+            },
+            getActionName(context) {
+                // eslint-disable-line no-unused-vars
+                return 'switchLocation';
+            },
+            getCostMessage: (context) => {
+                if(!context.source.isParticipating()) {
+                    return ['moving {1} home', [context.source]];
+                }
+                return ['moving {1} to the conflict', [context.source]];
+            },
+            resolve: function (context, result) {
+                // eslint-disable-line no-unused-vars
+                context.costs.switchLocation = context.source;
+            },
+            payEvent: function (context) {
+                let action = context.game.actions.moveToConflict({ target: context.costs.switchLocation });
+                if(context.source.isParticipating()) {
+                    action = context.game.actions.sendHome({ target: context.costs.switchLocation });
+                }
+                return action.getEvent(context.costs.switchLocation, context);
+            },
+            promptsPlayer: false
         };
     }
 };
