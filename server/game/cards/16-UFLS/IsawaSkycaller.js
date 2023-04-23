@@ -1,13 +1,13 @@
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const PlayCharacterAction = require('../../playcharacteraction');
+const { PlayCharacterIntoLocation, PlayCharacterAction } = require('../../PlayCharacterAction.js');
 const { Elements, Locations, PlayTypes } = require('../../Constants');
 
 const elementKey = 'isawa-skycaller-air';
 
 class IsawaSkycallerPlayAction extends PlayCharacterAction {
     constructor(card) {
-        super(card, true);
+        super(card, PlayCharacterIntoLocation.Conflict);
     }
 
     createContext(player = this.card.controller) {
