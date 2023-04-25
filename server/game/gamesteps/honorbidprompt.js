@@ -28,10 +28,13 @@ class HonorBidPrompt extends AllPlayerPrompt {
 
         if(completed) {
             const eventName = this.raiseEvent ? EventNames.OnHonorDialsRevealed : EventNames.Unnamed;
-            this.game.raiseEvent(eventName, { duel: this.duel }, () => {
+            const eventProps = { duel: this.duel, isHonorBid: typeof this.costHandler !== 'function' };
+            this.game.raiseEvent(eventName, eventProps, () => {
                 for(const player of this.game.getPlayers()) {
                     player.honorBidModifier = 0;
-                    this.game.actions.setHonorDial({ value: this.bid[player.uuid]}).resolve(player, this.game.getFrameworkContext());
+                    this.game.actions
+                        .setHonorDial({ value: this.bid[player.uuid] })
+                        .resolve(player, this.game.getFrameworkContext());
                 }
             });
             if(this.costHandler) {

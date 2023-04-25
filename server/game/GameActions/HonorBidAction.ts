@@ -67,40 +67,38 @@ export class HonorBidAction extends PlayerAction {
     }
 
     eventHandler(event): void {
-        let context = event.context;
+        const context = event.context;
 
         if (event.players === Players.Any) {
-            let prohibitedBids = {};
-            for(const player of context.game.getPlayers()) {
+            const prohibitedBids = {};
+            for (const player of context.game.getPlayers()) {
                 prohibitedBids[player.uuid] = event.prohibitedBids;
             }
-            let costHandler = undefined;
-            if (!event.giveHonor) {
-                costHandler = () => { };
-            }
-            context.game.queueStep(new HonorBidPrompt(context.game, 'Choose your bid', costHandler, prohibitedBids, null, false));
-            context.game.queueStep(new SimpleStep(context.game, () => event.postBidAction.resolve(context.player, context)));
-            context.game.queueStep(new SimpleStep(context.game, () => {
-                let message, messageArgs;
-                if(event.message) {
-                    message = event.message;
-                    messageArgs = event.messageArgs ? [].concat(event.messageArgs(context)) : [];
-                } else {
-                    [message, messageArgs] = event.postBidAction.getEffectMessage(context);
-                }
-                context.game.addMessage(message, ...messageArgs);
-            }));
-        }
-        else {
-            const player = (event.players === Players.Self) ? context.player : context.player.opponent;
+            const costHandler = event.giveHonor ? undefined : () => {};
+            context.game.queueStep(
+                new HonorBidPrompt(context.game, 'Choose your bid', costHandler, prohibitedBids, null, true)
+            );
+            context.game.queueStep(
+                new SimpleStep(context.game, () => event.postBidAction.resolve(context.player, context))
+            );
+            context.game.queueStep(
+                new SimpleStep(context.game, () => {
+                    const [message, messageArgs] = event.message
+                        ? [event.message, event.messageArgs ? Array.from(event.messageArgs(context)) : []]
+                        : event.postBidAction.getEffectMessage(context);
+                    context.game.addMessage(message, ...messageArgs);
+                })
+            );
+        } else {
+            const player = event.players === Players.Self ? context.player : context.player.opponent;
 
             event.context.game.promptWithHandlerMenu(player, {
                 activePromptTitle: 'Choose a value to set your honor dial at',
                 context: event.context,
                 choices: ['1', '2', '3', '4', '5'],
-                handlers: [1,2,3,4,5].map(value => {
-                    return () => context.game.actions.setHonorDial({ value }).resolve(player, context);
-                })
+                handlers: [1, 2, 3, 4, 5].map(
+                    (value) => () => context.game.actions.setHonorDial({ value }).resolve(player, context)
+                )
             });
         }
     }
