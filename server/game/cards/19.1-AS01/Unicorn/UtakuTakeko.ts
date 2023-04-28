@@ -1,20 +1,18 @@
 import { CardTypes, EventNames, Locations, Players, TargetModes } from '../../../Constants';
+import { EventRegistrar } from '../../../EventRegistrar';
 import { PlayCharacterAsIfFromHandAtHome } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandAtHome } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
 import DrawCard = require('../../../drawcard');
-import EventRegistrar = require('../../../eventregistrar');
 
 export default class UtakuTakeko extends DrawCard {
     static id = 'utaku-takeko';
 
-    private charactersLeftPlayThisPhase: Set<string>;
-    private eventRegistrar: EventRegistrar;
+    private charactersLeftPlayThisPhase = new Set<string>();
+    private eventRegistrar?: EventRegistrar;
 
     public setupCardAbilities() {
-        this.charactersLeftPlayThisPhase = new Set();
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnPhaseStarted, EventNames.OnCardLeavesPlay]);
 
@@ -42,11 +40,7 @@ export default class UtakuTakeko extends DrawCard {
                 ])
             },
             effect: 'recall a {1} relative who is {2} {3}',
-            effectArgs: (context: TriggeredAbilityContext) => [
-                this.msgDistance(context.target),
-                this.msgArticle(context.target),
-                context.target
-            ]
+            effectArgs: (context) => [this.msgDistance(context.target), this.msgArticle(context.target), context.target]
         });
     }
 

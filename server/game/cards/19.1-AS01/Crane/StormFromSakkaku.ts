@@ -1,12 +1,14 @@
 import { EventNames, AbilityTypes, Locations, CardTypes, Players } from '../../../Constants';
+import { EventRegistrar } from '../../../EventRegistrar';
 import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
 import DrawCard = require('../../../drawcard');
-import EventRegistrar = require('../../../eventregistrar');
 
 export default class StormFromSakkaku extends DrawCard {
     static id = 'storm-from-sakkaku';
+
+    private eventRegistrar?: EventRegistrar;
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);

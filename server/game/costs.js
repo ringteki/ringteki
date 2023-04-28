@@ -715,8 +715,7 @@ const Costs = {
 
                 return canMoveHome || canMoveToConflict;
             },
-            getActionName(context) {
-                // eslint-disable-line no-unused-vars
+            getActionName(context) { // eslint-disable-line no-unused-vars
                 return 'switchLocation';
             },
             getCostMessage: (context) => {
@@ -725,8 +724,7 @@ const Costs = {
                 }
                 return ['moving {1} to the conflict', [context.source]];
             },
-            resolve: function (context, result) {
-                // eslint-disable-line no-unused-vars
+            resolve: function (context, result) { // eslint-disable-line no-unused-vars
                 context.costs.switchLocation = context.source;
             },
             payEvent: function (context) {

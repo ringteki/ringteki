@@ -105,11 +105,11 @@ class Deck {
     }
 
     eachRepeatedCard(cards, func) {
-        if (!cards) {
+        if(!cards) {
             return;
         }
-        for (const cardEntry of cards) {
-            for (let i = 0; i < cardEntry.count; i++) {
+        for(const cardEntry of cards) {
+            for(let i = 0; i < cardEntry.count; i++) {
                 func(cardEntry.card);
             }
         }

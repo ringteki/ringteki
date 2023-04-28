@@ -1,7 +1,7 @@
 import { CardTypes, Locations } from '../../../Constants';
+import { EventRegistrar } from '../../../EventRegistrar';
 import AbilityDsl = require('../../../abilitydsl');
 import DrawCard = require('../../../drawcard');
-import EventRegistrar = require('../../../eventregistrar');
 
 export default class BloodthirstyOnryo extends DrawCard {
     static id = 'bloodthirsty-onryo';

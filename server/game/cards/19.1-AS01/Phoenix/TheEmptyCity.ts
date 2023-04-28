@@ -1,7 +1,7 @@
-import { EventNames, CardTypes, TargetModes, Durations, Players, Locations } from '../../../Constants';
+import { CardTypes, Durations, EventNames, Locations, Players, TargetModes } from '../../../Constants';
+import { EventRegistrar } from '../../../EventRegistrar';
 import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
-import EventRegistrar = require('../../../eventregistrar');
 import ProvinceCard = require('../../../provincecard');
 
 export default class TheEmptyCity extends ProvinceCard {

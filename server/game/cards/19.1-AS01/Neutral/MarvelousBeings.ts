@@ -1,5 +1,5 @@
+import AbilityContext = require('../../../AbilityContext');
 import { CardTypes, ConflictTypes, Durations } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
 import DrawCard = require('../../../drawcard');
 
@@ -25,7 +25,7 @@ export default class MarvelousBeings extends DrawCard {
         });
     }
 
-    private marvelousSkillBonus(context: TriggeredAbilityContext): number {
+    private marvelousSkillBonus(context: AbilityContext): number {
         if (!context.costs.moveToConflict) {
             return 0;
         }

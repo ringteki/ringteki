@@ -1,6 +1,6 @@
-describe('Honored Veterans', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Honored Veterans', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'dynasty',
                 player1: {
@@ -31,12 +31,12 @@ describe('Honored Veterans', function() {
             this.samurai = this.player2.placeCardInProvince('brash-samurai', 'province 4');
         });
 
-        it('should not work if no characters have been bought', function() {
+        it('should not work if no characters have been bought', function () {
             this.player1.clickCard(this.veterans);
             expect(this.player1).toHavePrompt('Play cards from provinces');
         });
 
-        it('should let each player pick a bushi they bought and honor them both', function() {
+        it('should let each player pick a bushi they bought and honor them both', function () {
             this.player1.clickCard(this.toshimoko);
             this.player1.clickPrompt('0');
             this.player2.clickCard(this.kaezin);
@@ -72,10 +72,12 @@ describe('Honored Veterans', function() {
             expect(this.toshimoko.isHonored).toBe(true);
             expect(this.samurai.isHonored).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Honored Veterans to honor Kakita Toshimoko and Brash Samurai');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 plays Honored Veterans to honor Kakita Toshimoko and Brash Samurai'
+            );
         });
 
-        it('should let you not pick a character if you don\'t want', function() {
+        it('should let you not pick a character if you don\'t want', function () {
             this.player1.clickCard(this.toshimoko);
             this.player1.clickPrompt('0');
             this.player2.clickCard(this.kaezin);
@@ -100,7 +102,7 @@ describe('Honored Veterans', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Honored Veterans to honor Kakita Kaezin');
         });
 
-        it('should let both players not pick a character', function() {
+        it('should let both players not pick a character', function () {
             this.player1.clickCard(this.toshimoko);
             this.player1.clickPrompt('0');
             this.player2.clickCard(this.kaezin);
@@ -123,7 +125,7 @@ describe('Honored Veterans', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Honored Veterans to honor no one');
         });
 
-        it('should work if only one player has bought a bushi - just self', function() {
+        it('should work if only one player has bought a bushi - just self', function () {
             this.player1.clickCard(this.toshimoko);
             this.player1.clickPrompt('0');
 
@@ -139,7 +141,7 @@ describe('Honored Veterans', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Honored Veterans to honor Kakita Toshimoko');
         });
 
-        it('should work if only one player has bought a bushi - just opponent', function() {
+        it('should work if only one player has bought a bushi - just opponent', function () {
             this.player1.clickCard(this.yoshi);
             this.player1.clickPrompt('0');
 

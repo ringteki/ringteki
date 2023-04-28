@@ -1,7 +1,7 @@
 import { EventNames, Locations, Phases } from '../../../Constants';
+import { EventRegistrar } from '../../../EventRegistrar';
 import AbilityDsl = require('../../../abilitydsl');
 import DrawCard = require('../../../drawcard');
-import EventRegistrar = require('../../../eventregistrar');
 
 const MAXIMUM_RESSURRECTIONS = 1;
 
@@ -9,9 +9,9 @@ export default class RelentlessGloryseeker extends DrawCard {
     static id = 'relentless-gloryseeker';
 
     private ressurrectionsThisRound = 0;
+    private eventRegistrar?: EventRegistrar;
 
     public setupCardAbilities() {
-        this.ressurrectionsThisRound = 0;
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnRoundEnded, EventNames.OnCardLeavesPlay]);
 
