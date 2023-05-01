@@ -1,4 +1,6 @@
 import Game = require('./game');
+import EffectEngine = require('./effectengine');
+import BaseCard = require('./basecard');
 
 interface EventHandler {
     name: string;
@@ -12,7 +14,7 @@ interface EventHandler {
 export class EventRegistrar {
     private events: EventHandler[];
 
-    constructor(private game: Game, private context: unknown) {
+    constructor(private game: Game, private context: EffectEngine | BaseCard) {
         this.events = [];
     }
 
@@ -50,8 +52,8 @@ export class EventRegistrar {
      * Registers a single event handler.
      */
     public registerEvent(eventName: string, methodName = '') {
-        const method = this.context[methodName || eventName];
-        if (!method) {
+        const method: unknown = this.context[methodName || eventName];
+        if (typeof method !== 'function') {
             throw new Error(`Cannot bind event handler for ${eventName}`);
         }
 
