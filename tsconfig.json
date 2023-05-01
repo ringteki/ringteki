@@ -1,24 +1,14 @@
 {
-  "compilerOptions": { 
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "build",
-    "allowJs": true,
-    "checkJs": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ]
-  },
-  "include": [
-    "server/**/*",
-    "index.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "test/**/*",
-    "client/**/*"
-  ]
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "ES2019",
+        "sourceMap": true,
+        "outDir": "build",
+        "allowJs": true,
+        "checkJs": true,
+        "lib": ["ES2019", "ES2020.BigInt", "ES2020.string", "ES2020.Symbol.WellKnown"]
+    },
+    "include": ["server/**/*", "index.js"],
+    "exclude": ["node_modules", "test/**/*", "client/**/*"]
 }

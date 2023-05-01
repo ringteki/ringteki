@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const EventRegistrar = require('./eventregistrar.js');
+const { EventRegistrar } = require('./EventRegistrar');
 const { EffectNames, Durations, EventNames } = require('./Constants');
 
 class EffectEngine {

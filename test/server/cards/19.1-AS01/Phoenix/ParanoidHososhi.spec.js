@@ -18,7 +18,7 @@ describe('Paranoid Hososhi', function () {
 
                     this.tsukune = this.player2.findCardByName('shiba-tsukune');
                     this.tsukune.fate = 1;
-                    this.flow.finishConflictPhase();
+                    this.noMoreActions();
                 });
 
                 it('is triggerable', function () {
@@ -56,7 +56,7 @@ describe('Paranoid Hososhi', function () {
 
                     this.tsukune = this.player2.findCardByName('shiba-tsukune');
                     this.tsukune.fate = 0;
-                    this.flow.finishConflictPhase();
+                    this.noMoreActions();
                 });
 
                 it('is not triggerable', function () {

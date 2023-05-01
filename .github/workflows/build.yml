@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: '12.18.3'
       - run: npm install
-      - run: npm install -g typescript@3.4.5
-      - run: tsc
+      - run: npm install -g typescript@4.9.5
+      - run: npx tsc
       - name: Fetch Data
         run: node server/scripts/fetchdata.js
       - name: Test

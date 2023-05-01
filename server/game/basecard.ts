@@ -13,9 +13,9 @@ import Game = require('./game');
 
 import { Locations, EffectNames, Durations, CardTypes, EventNames, AbilityTypes, Players, CharacterStatus } from './Constants';
 import { ActionProps, TriggeredAbilityProps, PersistentEffectProps, AttachmentConditionProps } from './Interfaces';
-import PlayDisguisedCharacterAction = require('./PlayDisguisedCharacterAction');
+import { PlayDisguisedCharacterAction } from './PlayDisguisedCharacterAction';
 import DynastyCardAction = require('./dynastycardaction');
-import PlayCharacterAction = require('./playcharacteraction');
+import { PlayCharacterAction } from './PlayCharacterAction.js';
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');

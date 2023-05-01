@@ -1,6 +1,6 @@
-describe('Disloyal Oathkeeper', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Disloyal Oathkeeper', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -29,7 +29,7 @@ describe('Disloyal Oathkeeper', function() {
             this.player2.playAttachment(this.dragon, this.oathkeeper);
         });
 
-        it('should react to an opponent\'s event and put it underneath self', function() {
+        it('should react to an opponent\'s event and put it underneath self', function () {
             this.player1.clickCard(this.crane);
             this.player1.clickCard(this.whisperer);
 
@@ -39,10 +39,12 @@ describe('Disloyal Oathkeeper', function() {
             this.player2.clickCard(this.oathkeeper);
             expect(this.crane.location).toBe(this.oathkeeper.uuid);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Disloyal Oathkeeper to place Way of the Crane underneath Disloyal Oathkeeper');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 uses Disloyal Oathkeeper to place Way of the Crane underneath Disloyal Oathkeeper'
+            );
         });
 
-        it('event should be playable', function() {
+        it('event should be playable', function () {
             this.player1.clickCard(this.crane);
             this.player1.clickCard(this.whisperer);
             this.player2.clickCard(this.oathkeeper);
@@ -54,7 +56,7 @@ describe('Disloyal Oathkeeper', function() {
             expect(this.getChatLogs(5)).toContain('player2 plays Way of the Crane to honor Doji Challenger');
         });
 
-        it('should not react if you already have a card underneath', function() {
+        it('should not react if you already have a card underneath', function () {
             this.player1.clickCard(this.crane);
             this.player1.clickCard(this.whisperer);
             this.player2.clickCard(this.oathkeeper);
@@ -66,21 +68,21 @@ describe('Disloyal Oathkeeper', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should not react to an opponent\'s attachment', function() {
+        it('should not react to an opponent\'s attachment', function () {
             this.player1.clickCard(this.katana);
             this.player1.clickCard(this.whisperer);
 
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should not react to an opponent\'s character', function() {
+        it('should not react to an opponent\'s character', function () {
             this.player1.clickCard(this.rival);
             this.player1.clickPrompt('0');
 
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should not react to your own events', function() {
+        it('should not react to your own events', function () {
             this.player1.pass();
             this.player2.clickCard(this.crane2);
             this.player2.clickCard(this.challenger);

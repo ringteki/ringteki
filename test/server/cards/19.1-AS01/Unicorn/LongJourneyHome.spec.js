@@ -8,7 +8,7 @@ describe('Long Journey Home', function () {
                     hand: ['long-journey-home']
                 },
                 player2: {
-                    inPlay: ['doji-challenger','doji-whisperer'],
+                    inPlay: ['doji-challenger', 'doji-whisperer'],
                     hand: ['the-mountain-does-not-fall', 'ready-for-battle']
                 }
             });
@@ -25,7 +25,7 @@ describe('Long Journey Home', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.motoNergui],
-                defenders: [this.challenger,this.whisperer],
+                defenders: [this.challenger, this.whisperer],
                 type: 'military'
             });
 
@@ -39,6 +39,12 @@ describe('Long Journey Home', function () {
             expect(this.player1).toBeAbleToSelect(this.longJourneyHome);
 
             this.player1.clickCard(this.longJourneyHome);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).not.toBeAbleToSelect(this.motoNergui);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.challenger);
+
             expect(this.getChatLogs(3)).toContain(
                 'player1 plays Long Journey Home to make Doji Challenger take the long way home. Doji Challenger is bowed and cannot ready until the end of the phase'
             );
@@ -49,7 +55,7 @@ describe('Long Journey Home', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.motoNergui],
-                defenders: [this.challenger,this.whisperer],
+                defenders: [this.challenger, this.whisperer],
                 type: 'military'
             });
 
@@ -58,6 +64,12 @@ describe('Long Journey Home', function () {
             this.player1.clickCard(this.challenger);
 
             this.player1.clickCard(this.longJourneyHome);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).not.toBeAbleToSelect(this.motoNergui);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.challenger);
+
             expect(this.challenger.bowed).toBe(true);
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).toHavePrompt('Conflict Action Window');
@@ -80,9 +92,16 @@ describe('Long Journey Home', function () {
             expect(this.player1).toBeAbleToSelect(this.longJourneyHome);
 
             this.player1.clickCard(this.longJourneyHome);
+            expect(this.player1).toHavePrompt('Select a card to affect');
             expect(this.player1).toBeAbleToSelect(this.challenger);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
             expect(this.player1).not.toBeAbleToSelect(this.motoNergui);
+
+            this.player1.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).not.toBeAbleToSelect(this.motoNergui);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
 
             this.player1.clickCard(this.challenger);
             expect(this.getChatLogs(5)).toContain(
