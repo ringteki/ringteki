@@ -2,12 +2,11 @@ import { CardTypes } from '../../Constants';
 import { EventRegistrar } from '../../EventRegistrar';
 import AbilityDsl = require('../../abilitydsl');
 import DrawCard = require('../../drawcard');
-import BaseCard = require('../../basecard');
 
 export default class KakitasFinalStance extends DrawCard {
     static id = 'kakita-s-final-stance';
 
-    private duelParticipantsThisConflict = new Set<BaseCard>();
+    private duelParticipantsInThisConflict = new Set<DrawCard>();
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
@@ -20,7 +19,7 @@ export default class KakitasFinalStance extends DrawCard {
                 cardCondition: (card) => card.isParticipating(),
                 gameAction: [
                     AbilityDsl.actions.cardLastingEffect((context) => ({
-                        condition: () => this.duelParticipantsThisConflict.has(context.target),
+                        condition: () => this.duelParticipantsInThisConflict.has(context.target),
                         effect: AbilityDsl.effects.doesNotBow()
                     })),
                     AbilityDsl.actions.cardLastingEffect((context) => ({
@@ -37,15 +36,22 @@ export default class KakitasFinalStance extends DrawCard {
     }
 
     public onConflictFinished() {
-        this.duelParticipantsThisConflict.clear();
+        this.duelParticipantsInThisConflict.clear();
     }
 
     public afterDuel(event: any) {
-        if (event.duel.challenger) {
-            this.duelParticipantsThisConflict.add(event.duel.challenger);
+        if (event.duel.challenger instanceof DrawCard) {
+            this.duelParticipantsInThisConflict.add(event.duel.challenger);
         }
-        if (event.duel.target) {
-            this.duelParticipantsThisConflict.add(event.duel.target);
+        if (event.duel.target instanceof DrawCard) {
+            this.duelParticipantsInThisConflict.add(event.duel.target);
+        }
+        if (Array.isArray(event.duel.target)) {
+            for (const target of event.duel.target) {
+                if (target instanceof DrawCard) {
+                    this.duelParticipantsInThisConflict.add(target);
+                }
+            }
         }
     }
 }
