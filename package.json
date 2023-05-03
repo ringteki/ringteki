@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "@types/babel-types": "7.0.9",
-    "@types/node": "^6.0.0",
+    "@types/node": "^12.20.55",
     "autoprefixer": "^7.1.4",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
