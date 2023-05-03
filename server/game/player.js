@@ -7,7 +7,7 @@ const ClockSelector = require('./Clocks/ClockSelector');
 const CostReducer = require('./costreducer.js');
 const GameActions = require('./GameActions/GameActions');
 const { RingEffects } = require('./RingEffects.js');
-const PlayableLocation = require('./playablelocation.js');
+const { PlayableLocation } = require('./PlayableLocation');
 const PlayerPromptState = require('./playerpromptstate.js');
 const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
@@ -790,7 +790,7 @@ class Player extends GameObject {
         if(!player) {
             return;
         }
-        let playableLocation = new PlayableLocation(type, player, location, cards);
+        let playableLocation = new PlayableLocation(type, player, location, new Set(cards));
         this.playableLocations.push(playableLocation);
         return playableLocation;
     }
