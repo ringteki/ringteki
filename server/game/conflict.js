@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const GameObject = require('./GameObject');
+const { GameObject } = require('./GameObject');
 const Player = require('./player.js');
 const Settings = require('../settings.js');
 const { CardTypes, EffectNames, EventNames, Locations } = require('./Constants');

@@ -1,6 +1,6 @@
+import type { GameObject } from '../GameObject';
 import { GameAction, GameActionProperties } from './GameAction';
 import AbilityContext = require('../AbilityContext');
-import GameObject = require('../GameObject');
 
 export interface SequentialContextProperties extends GameActionProperties {
     gameActions: GameAction[];

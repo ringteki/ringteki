@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const GameObject = require('./GameObject');
+const { GameObject } = require('./GameObject');
 const Deck = require('./deck.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 const ClockSelector = require('./Clocks/ClockSelector');
@@ -1569,13 +1569,21 @@ class Player extends GameObject {
      * @param {Boolean} optional - Indicates that the player can choose which effects to resolve.  This parameter only effects resolution of a single effect
      */
     resolveRingEffects(elements, optional = true) {
-        if(!Array.isArray(elements)) {
+        if (!Array.isArray(elements)) {
             elements = [elements];
         }
         optional = optional && elements.length === 1;
-        let effects = elements.map(element => RingEffects.contextFor(this, element, optional));
-        effects = _.sortBy(effects, context => this.firstPlayer ? context.ability.defaultPriority : -context.ability.defaultPriority);
-        this.game.openSimultaneousEffectWindow(effects.map(context => ({ title: context.ability.title, handler: () => this.game.resolveAbility(context) })));
+        let effects = elements.map((element) => RingEffects.contextFor(this, element, optional));
+        effects = _.sortBy(effects, (context) =>
+            this.firstPlayer ? context.ability.defaultPriority : -context.ability.defaultPriority
+        );
+        this.game.openSimultaneousEffectWindow(
+            effects.map((context) => ({
+                // @ts-ignore
+                title: context.ability.title,
+                handler: () => this.game.resolveAbility(context)
+            }))
+        );
     }
 
     isKihoPlayedThisConflict(context, cardBeingPlayed) {
