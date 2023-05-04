@@ -1,11 +1,11 @@
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
-const PlayCharacterAction = require('../../playcharacteraction');
+const { PlayCharacterIntoLocation, PlayCharacterAction } = require('../../PlayCharacterAction.js');
 const { CardTypes, Locations, PlayTypes } = require('../../Constants');
 
 class WindsPathPlayAction extends PlayCharacterAction {
     constructor(card) {
-        super(card, true);
+        super(card, PlayCharacterIntoLocation.Conflict);
     }
 
     createContext(player = this.card.controller) {

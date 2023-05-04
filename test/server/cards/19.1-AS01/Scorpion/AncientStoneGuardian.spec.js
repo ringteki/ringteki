@@ -139,6 +139,39 @@ describe('Ancient Stone Guardian', function () {
                     'player2 uses Ancient Stone Guardian to present an opportunity to sneak around Ancient Stone Guardian and find some secrets! player1 dishonors Shinjo Archer to draw a card.'
                 );
             });
+
+            it('skips a player prompt if they have no character to dishonor', function () {
+                this.shinjoArcher.dishonor();
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.shinjoArcher],
+                    defenders: [this.solemnScholar],
+                    type: 'military'
+                });
+
+                this.player2.clickCard(this.assassination);
+                this.player2.clickCard(this.stoneGuardian);
+
+                let p2HandSizeInit = this.player2.hand.length;
+
+                expect(this.player1).not.toHavePrompt('Choose a character');
+
+                expect(this.player2).toHavePrompt('Choose a character');
+                expect(this.player2).toHavePromptButton('Done');
+                expect(this.player2).toBeAbleToSelect(this.solemnScholar);
+                expect(this.player2).not.toBeAbleToSelect(this.stoneGuardian);
+
+                this.player2.clickCard(this.solemnScholar);
+
+                expect(this.shinjoArcher.isDishonored).toBe(true);
+                expect(this.solemnScholar.isDishonored).toBe(true);
+                expect(this.player2.hand.length).toBe(p2HandSizeInit + 1);
+
+                expect(this.getChatLogs(3)).toContain(
+                    'player2 uses Ancient Stone Guardian to present an opportunity to sneak around Ancient Stone Guardian and find some secrets! player2 dishonors Solemn Scholar to draw a card.'
+                );
+            });
         });
     });
 });

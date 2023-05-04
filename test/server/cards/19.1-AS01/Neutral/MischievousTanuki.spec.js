@@ -66,7 +66,8 @@ describe('Mischievous Tanuki', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['mischievous-tanuki', 'bayushi-manipulator'],
-                        hand: []
+                        hand: [],
+                        dynastyDiscard: ['ide-negotiator']
                     },
                     player2: {
                         inPlay: []
@@ -77,6 +78,7 @@ describe('Mischievous Tanuki', function () {
                 this.player2.player.showBid = 5;
 
                 this.tanuki = this.player1.findCardByName('mischievous-tanuki');
+                this.ideNegotiator = this.player1.findCardByName('ide-negotiator');
             });
 
             it('should prompt each player to choose a bid and not transfer honor and should not proc dial revealed reactions', function () {
@@ -100,22 +102,14 @@ describe('Mischievous Tanuki', function () {
 
                 this.player1.clickPrompt('3');
 
-                expect(this.getChatLogs(5)).toContain(
-                    'player1 has chosen a bid.'
-                );
+                expect(this.getChatLogs(5)).toContain('player1 has chosen a bid.');
                 expect(this.player1.player.showBid).toBe(5);
 
                 this.player2.clickPrompt('1');
 
-                expect(this.getChatLogs(5)).toContain(
-                    'player2 has chosen a bid.'
-                );
-                expect(this.getChatLogs(10)).toContain(
-                    'player1 reveals a bid of 3'
-                );
-                expect(this.getChatLogs(10)).toContain(
-                    'player2 reveals a bid of 1'
-                );
+                expect(this.getChatLogs(5)).toContain('player2 has chosen a bid.');
+                expect(this.getChatLogs(10)).toContain('player1 reveals a bid of 3');
+                expect(this.getChatLogs(10)).toContain('player2 reveals a bid of 1');
                 expect(this.player1.player.showBid).toBe(3);
                 expect(this.player2.player.showBid).toBe(1);
 
@@ -135,9 +129,7 @@ describe('Mischievous Tanuki', function () {
 
                 expect(this.player1.fate).toBe(p1Fate + 2);
                 expect(this.player2.fate).toBe(p2Fate - 2);
-                expect(this.getChatLogs(10)).toContain(
-                    'player1 takes 2 fate from player2'
-                );
+                expect(this.getChatLogs(10)).toContain('player1 takes 2 fate from player2');
             });
 
             it('different parity', function () {
@@ -161,9 +153,30 @@ describe('Mischievous Tanuki', function () {
                 expect(this.player1.hand.length).toBe(p1cards + 2);
                 expect(this.player2.hand.length).toBe(p2cards);
 
-                expect(this.getChatLogs(10)).toContain(
-                    'player1 draws 2 cards and player2 gains 2 honor'
-                );
+                expect(this.getChatLogs(10)).toContain('player1 draws 2 cards and player2 gains 2 honor');
+            });
+
+            it('interacts with abilities that change dials on reveal', function () {
+                this.player1.moveCard(this.ideNegotiator, 'play area');
+
+                let p1Fate = this.player1.fate;
+                let p2Fate = this.player2.fate;
+
+                this.player1.clickCard(this.tanuki);
+                this.player1.clickPrompt('3');
+                this.player2.clickPrompt('2');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.ideNegotiator);
+
+                this.player1.clickCard(this.ideNegotiator);
+                expect(this.player1).toHavePrompt('Ide Negotiator');
+
+                this.player1.clickPrompt('Increase bid by 1');
+
+                expect(this.player1.fate).toBe(p1Fate + 2);
+                expect(this.player2.fate).toBe(p2Fate - 2);
+                expect(this.getChatLogs(10)).toContain('player1 takes 2 fate from player2');
             });
         });
     });

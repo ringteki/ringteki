@@ -1,6 +1,4 @@
-const _ = require('underscore');
-
-const cards = require('./cards');
+const { cards } = require('./cards');
 const DrawCard = require('./drawcard.js');
 const ProvinceCard = require('./provincecard.js');
 const StrongholdCard = require('./strongholdcard.js');
@@ -107,16 +105,19 @@ class Deck {
     }
 
     eachRepeatedCard(cards, func) {
-        _.each(cards, cardEntry => {
-            for(var i = 0; i < cardEntry.count; i++) {
+        if(!cards) {
+            return;
+        }
+        for(const cardEntry of cards) {
+            for(let i = 0; i < cardEntry.count; i++) {
                 func(cardEntry.card);
             }
-        });
+        }
     }
 
     createCard(baseClass, player, cardData) {
-        var cardClass = cards[cardData.id] || baseClass;
-        return new cardClass(player, cardData);
+        const CardConstructor = cards.get(cardData.id) || baseClass;
+        return new CardConstructor(player, cardData);
     }
 }
 

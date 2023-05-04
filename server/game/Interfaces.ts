@@ -9,6 +9,7 @@ import CardAbility = require('./CardAbility');
 import { DuelProperties } from './GameActions/DuelAction';
 import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } from './Constants';
 import StatusToken = require('./StatusTokens/StatusToken');
+import Player = require('./player');
 
 interface BaseTarget {
     activePromptTitle?: string;
@@ -109,9 +110,18 @@ interface InitiateDuel extends DuelProperties {
     opponentChoosesDuelTarget?: boolean;
     opponentChoosesChallenger?: boolean;
     duelTargetMustBeAtHome?: boolean;
-};
+}
 
-interface AbilityProps {
+type EffectArg =
+    | number
+    | string
+    | Player
+    | DrawCard
+    | Ring
+    | { id: string; label: string; name: string; facedown: boolean; type: CardTypes }
+    | EffectArg[];
+
+interface AbilityProps<Context> {
     title: string;
     location?: Locations | Locations[];
     cost?: any;
@@ -124,13 +134,13 @@ interface AbilityProps {
     printedAbility?: boolean;
     cannotTargetFirst?: boolean;
     effect?: string;
-    effectArgs?: any;
+    effectArgs?: EffectArg | ((context: Context) => EffectArg);
     gameAction?: GameAction | GameAction[];
     handler?: (context?: AbilityContext) => void;
     then?: ((context?: AbilityContext) => object) | object;
 };
 
-export interface ActionProps extends AbilityProps {
+export interface ActionProps extends AbilityProps<AbilityContext> {
     condition?: (context?: AbilityContext) => boolean;
     phase?: string;
     anyPlayer?: boolean;
@@ -156,7 +166,7 @@ export type WhenType = {
     [EventName in EventNames]?: (event: any, context?: TriggeredAbilityContext) => boolean;
 };
 
-interface TriggeredAbilityWhenProps extends AbilityProps {
+interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbilityContext> {
     when: WhenType;
     collectiveTrigger?: boolean;
     anyPlayer?: boolean;
@@ -166,7 +176,7 @@ interface TriggeredAbilityWhenProps extends AbilityProps {
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 };
 
-interface TriggeredAbilityAggregateWhenProps extends AbilityProps {
+interface TriggeredAbilityAggregateWhenProps extends AbilityProps<TriggeredAbilityContext> {
     aggregateWhen: (events: any[], context: TriggeredAbilityContext) => boolean;
     collectiveTrigger?: boolean;
     target?: TriggeredAbilityTarget & TriggeredAbilityTarget;
