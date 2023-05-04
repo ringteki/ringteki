@@ -1,4 +1,4 @@
-const Conflict = require('./conflict.js');
+const { Conflict } = require('./conflict.js');
 const ConflictFlow = require('./gamesteps/conflict/conflictflow.js');
 const { Locations } = require('./Constants');
 

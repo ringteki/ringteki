@@ -1,4 +1,4 @@
-const Conflict = require('../../../build/server/game/conflict.js');
+const { Conflict } = require('../../../build/server/game/conflict.js');
 const Player = require('../../../build/server/game/player.js');
 const DrawCard = require('../../../build/server/game/drawcard.js');
 
