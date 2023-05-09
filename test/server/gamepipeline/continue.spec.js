@@ -1,4 +1,4 @@
-const BaseStep = require('../../../build/server/game/gamesteps/basestep.js');
+const { BaseStep } = require('../../../build/server/game/gamesteps/basestep.js');
 const GamePipeline = require('../../../build/server/game/gamepipeline.js');
 
 describe('the GamePipeline', function() {

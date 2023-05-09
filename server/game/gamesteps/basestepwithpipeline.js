@@ -1,4 +1,4 @@
-const BaseStep = require('./basestep.js');
+const { BaseStep } = require('./BaseStep');
 const GamePipeline = require('../gamepipeline.js');
 
 class BaseStepWithPipeline extends BaseStep {

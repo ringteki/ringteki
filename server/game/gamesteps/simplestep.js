@@ -1,4 +1,4 @@
-const BaseStep = require('./basestep.js');
+const { BaseStep } = require('./BaseStep');
 
 class SimpleStep extends BaseStep {
     constructor(game, continueFunc) {

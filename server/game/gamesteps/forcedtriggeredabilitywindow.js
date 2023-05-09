@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const BaseStep = require('./basestep.js');
+const { BaseStep } = require('./BaseStep');
 const TriggeredAbilityWindowTitles = require('./triggeredabilitywindowtitles.js');
 const { Locations } = require('../Constants');
 
