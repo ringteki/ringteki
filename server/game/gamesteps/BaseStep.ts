@@ -1,19 +1,25 @@
+import type BaseCard = require('../basecard');
 import type Game = require('../game');
+import type Player = require('../player');
+import type Ring = require('../ring');
+import type { Step } from './Step';
 
-export class BaseStep {
+export class BaseStep implements Step {
     constructor(public game: Game) {}
 
-    continue(): void {}
+    continue() {
+        return undefined;
+    }
 
-    onCardClicked(): boolean {
+    onCardClicked(player: Player, card: BaseCard): boolean {
         return false;
     }
 
-    onRingClicked(): boolean {
+    onRingClicked(player: Player, ring: Ring): boolean {
         return false;
     }
 
-    onMenuCommand(): boolean {
+    onMenuCommand(player: Player, arg: string, uuid: string, method: string): boolean {
         return false;
     }
 

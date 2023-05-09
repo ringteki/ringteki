@@ -1,8 +1,8 @@
 const _ = require('underscore');
 
-const BaseStepWithPipeline = require('../gamesteps/basestepwithpipeline.js');
+const { BaseStepWithPipeline } = require('../gamesteps/BaseStepWithPipeline.js');
 const ForcedTriggeredAbilityWindow = require('../gamesteps/forcedtriggeredabilitywindow.js');
-const { SimpleStep } = require('../gamesteps/simplestep.js');
+const { SimpleStep } = require('../gamesteps/SimpleStep.js');
 const TriggeredAbilityWindow = require('../gamesteps/triggeredabilitywindow.js');
 const { AbilityTypes } = require('../Constants');
 const KeywordAbilityWindow = require('../gamesteps/keywordabilitywindow.js');

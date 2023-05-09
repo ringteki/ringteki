@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
-const BaseStepWithPipeline = require('./basestepwithpipeline.js');
-const { SimpleStep } = require('./simplestep.js');
+const { BaseStepWithPipeline } = require('./BaseStepWithPipeline.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const InitiateCardAbilityEvent = require('../Events/InitiateCardAbilityEvent');
 const InitiateAbilityEventWindow = require('../Events/InitiateAbilityEventWindow');
 const { Locations, Stages, CardTypes, EventNames } = require('../Constants');

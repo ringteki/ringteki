@@ -1,4 +1,4 @@
-const BaseStepWithPipeline = require('./basestepwithpipeline.js');
+const { BaseStepWithPipeline } = require('./BaseStepWithPipeline.js');
 const { SimpleStep } = require('./SimpleStep.js');
 const { EventNames } = require('../Constants');
 

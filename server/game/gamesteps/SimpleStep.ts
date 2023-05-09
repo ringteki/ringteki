@@ -7,7 +7,8 @@ export class SimpleStep extends BaseStep {
     }
 
     continue() {
-        return this.continueFunc();
+        this.continueFunc();
+        return undefined;
     }
 
     getDebugInfo() {
