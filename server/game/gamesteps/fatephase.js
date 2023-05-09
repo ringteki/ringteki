@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const Phase = require('./phase.js');
 const ActionWindow = require('./actionwindow.js');
-const SimpleStep = require('./simplestep.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const { Players, Phases, CardTypes, EventNames, Locations, EffectNames } = require('../Constants');
 const { GameModes } = require('../../GameModes.js');
 

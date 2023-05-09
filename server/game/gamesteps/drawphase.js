@@ -1,5 +1,5 @@
 const Phase = require('./phase.js');
-const SimpleStep = require('./simplestep.js');
+const { SimpleStep } = require('./simplestep.js');
 const ActionWindow = require('./actionwindow.js');
 const HonorBidPrompt = require('./honorbidprompt.js');
 const GameActions = require('../GameActions/GameActions');

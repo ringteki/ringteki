@@ -1,6 +1,6 @@
 const _ = require('underscore');
 const Phase = require('./phase.js');
-const SimpleStep = require('./simplestep.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
 const SetupProvincesPrompt = require('./setup/setupprovincesprompt.js');

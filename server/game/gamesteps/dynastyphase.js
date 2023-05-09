@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const Phase = require('./phase.js');
-const SimpleStep = require('./simplestep.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const DynastyActionWindow = require('./dynasty/dynastyactionwindow.js');
 const { Phases, EffectNames } = require('../Constants');
 
