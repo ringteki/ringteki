@@ -5,7 +5,7 @@ import Game = require('./game');
 import Player = require('./player');
 import type ProvinceCard = require('./provincecard');
 import type Ring = require('./ring');
-import Settings = require('../settings');
+import * as Settings from '../settings';
 import DrawCard = require('./drawcard');
 
 type Predicate = (card: DrawCard) => boolean;
@@ -127,7 +127,7 @@ export class Conflict extends GameObject {
     }
 
     private singlePlayerDefender() {
-        let dummyPlayer = new Player(
+        const dummyPlayer = new Player(
             '',
             Settings.getUserWithDefaultsSet({ username: 'Dummy Player' }),
             false,
