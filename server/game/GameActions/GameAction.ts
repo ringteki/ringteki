@@ -1,11 +1,10 @@
 import AbilityContext = require('../AbilityContext');
 import Event = require('../Events/Event.js');
 import { CardTypes, EventNames, Stages } from '../Constants';
-
+import type { StatusToken } from '../StatusToken';
 import BaseCard = require('../basecard');
-import Ring = require ('../ring');
+import Ring = require('../ring');
 import Player = require('../player');
-import StatusToken = require('../StatusTokens/StatusToken');
 
 type PlayerOrRingOrCardOrToken = Player | Ring | BaseCard | StatusToken;
 
@@ -25,30 +24,37 @@ export class GameAction {
     cost = '';
     effect = '';
     defaultProperties: GameActionProperties = { cannotBeCancelled: false, optional: false };
-    getDefaultTargets: (context: AbilityContext) => any = context => this.defaultTargets(context);
+    getDefaultTargets: (context: AbilityContext) => any = (context) => this.defaultTargets(context);
 
     constructor(propertyFactory: GameActionProperties | ((context?: AbilityContext) => GameActionProperties) = {}) {
-        if(typeof propertyFactory === 'function') {
+        if (typeof propertyFactory === 'function') {
             this.propertyFactory = <(context?: AbilityContext) => GameActionProperties>propertyFactory;
         } else {
             this.properties = propertyFactory;
         }
     }
 
-    defaultTargets(context: AbilityContext): any[] { // eslint-disable-line no-unused-vars
+    defaultTargets(context: AbilityContext): any[] {
+        // eslint-disable-line no-unused-vars
         return [];
     }
 
     getProperties(context: AbilityContext, additionalProperties = {}): GameActionProperties {
-        let properties = Object.assign({ target: this.getDefaultTargets(context) }, this.defaultProperties, additionalProperties, this.properties || this.propertyFactory(context));
-        if(!Array.isArray(properties.target)) {
+        let properties = Object.assign(
+            { target: this.getDefaultTargets(context) },
+            this.defaultProperties,
+            additionalProperties,
+            this.properties || this.propertyFactory(context)
+        );
+        if (!Array.isArray(properties.target)) {
             properties.target = [properties.target];
         }
-        properties.target = properties.target.filter(target => !!target);
+        properties.target = properties.target.filter((target) => !!target);
         return properties;
     }
 
-    getCostMessage(context: AbilityContext): [string, any[]] { // eslint-disable-line no-unused-vars
+    getCostMessage(context: AbilityContext): [string, any[]] {
+        // eslint-disable-line no-unused-vars
         return [this.cost, []];
     }
 
@@ -63,23 +69,32 @@ export class GameAction {
 
     canAffect(target: any, context: AbilityContext, additionalProperties = {}): boolean {
         const { cannotBeCancelled } = this.getProperties(context, additionalProperties);
-        return this.targetType.includes(target.type) && !context.gameActionsResolutionChain.includes(this) &&
-            (context.stage === Stages.Effect && cannotBeCancelled || target.checkRestrictions(this.name, context));
+        return (
+            this.targetType.includes(target.type) &&
+            !context.gameActionsResolutionChain.includes(this) &&
+            ((context.stage === Stages.Effect && cannotBeCancelled) || target.checkRestrictions(this.name, context))
+        );
     }
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties);
-        return (properties.target as PlayerOrRingOrCardOrToken[]).some(target => this.canAffect(target, context, additionalProperties));
+        return (properties.target as PlayerOrRingOrCardOrToken[]).some((target) =>
+            this.canAffect(target, context, additionalProperties)
+        );
     }
 
     allTargetsLegal(context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties);
-        return (properties.target as PlayerOrRingOrCardOrToken[]).every(target => this.canAffect(target, context, additionalProperties));
+        return (properties.target as PlayerOrRingOrCardOrToken[]).every((target) =>
+            this.canAffect(target, context, additionalProperties)
+        );
     }
 
     addEventsToArray(events: Event[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties);
-        for(const target of (properties.target as PlayerOrRingOrCardOrToken[]).filter(target => this.canAffect(target, context, additionalProperties))) {
+        for (const target of (properties.target as PlayerOrRingOrCardOrToken[]).filter((target) =>
+            this.canAffect(target, context, additionalProperties)
+        )) {
             events.push(this.getEvent(target, context, additionalProperties));
         }
     }
@@ -93,19 +108,20 @@ export class GameAction {
     updateEvent(event: Event, target: any, context: AbilityContext, additionalProperties = {}): void {
         event.name = this.eventName;
         this.addPropertiesToEvent(event, target, context, additionalProperties);
-        event.replaceHandler(event => this.eventHandler(event, additionalProperties));
+        event.replaceHandler((event) => this.eventHandler(event, additionalProperties));
         event.condition = () => this.checkEventCondition(event, additionalProperties);
     }
 
     createEvent(target: any, context: AbilityContext, additionalProperties): Event {
         const { cannotBeCancelled } = this.getProperties(context, additionalProperties);
         const event = new Event(EventNames.Unnamed, { cannotBeCancelled });
-        event.checkFullyResolved = eventAtResolution => this.isEventFullyResolved(eventAtResolution, target, context, additionalProperties);
+        event.checkFullyResolved = (eventAtResolution) =>
+            this.isEventFullyResolved(eventAtResolution, target, context, additionalProperties);
         return event;
     }
 
     resolve(target: PlayerOrRingOrCardOrToken, context: AbilityContext): void {
-        if(target) {
+        if (target) {
             this.setDefaultTarget(() => target);
         }
         const events = [];
@@ -119,18 +135,22 @@ export class GameAction {
         return events;
     }
 
-    addPropertiesToEvent(event: any, target: any, context: AbilityContext, additionalProperties = {}): void { // eslint-disable-line no-unused-vars
+    addPropertiesToEvent(event: any, target: any, context: AbilityContext, additionalProperties = {}): void {
+        // eslint-disable-line no-unused-vars
         event.context = context;
     }
 
-    eventHandler(event: any, additionalProperties = {}): void { // eslint-disable-line no-unused-vars
+    eventHandler(event: any, additionalProperties = {}): void {
+        // eslint-disable-line no-unused-vars
     }
 
-    checkEventCondition(event: Event, additionalProperties = {}): boolean { // eslint-disable-line no-unused-vars
+    checkEventCondition(event: Event, additionalProperties = {}): boolean {
+        // eslint-disable-line no-unused-vars
         return true;
     }
 
-    isEventFullyResolved(event: Event, target: any, context: AbilityContext, additionalProperties = {}): boolean { // eslint-disable-line no-unused-vars
+    isEventFullyResolved(event: Event, target: any, context: AbilityContext, additionalProperties = {}): boolean {
+        // eslint-disable-line no-unused-vars
         return !event.cancelled && event.name === this.eventName;
     }
 
@@ -140,32 +160,39 @@ export class GameAction {
     }
 
     moveFateEventCondition(event): boolean {
-        if(event.origin) {
-            if(event.origin.getFate() === 0) {
+        if (event.origin) {
+            if (event.origin.getFate() === 0) {
                 return false;
-            } else if(event.origin.type === CardTypes.Character && !event.origin.allowGameAction('removeFate', event.context)) {
-                return false;
-            }
-        }
-        if(event.recipient) {
-            if(event.recipient.type === CardTypes.Character && !event.recipient.allowGameAction('placeFate', event.context)) {
+            } else if (
+                event.origin.type === CardTypes.Character &&
+                !event.origin.allowGameAction('removeFate', event.context)
+            ) {
                 return false;
             }
         }
-        return (!!event.origin || !!event.recipient);
+        if (event.recipient) {
+            if (
+                event.recipient.type === CardTypes.Character &&
+                !event.recipient.allowGameAction('placeFate', event.context)
+            ) {
+                return false;
+            }
+        }
+        return !!event.origin || !!event.recipient;
     }
 
     moveFateEventHandler(event): void {
-        if(event.origin) {
+        if (event.origin) {
             event.fate = Math.min(event.fate, event.origin.getFate());
             event.origin.modifyFate(-event.fate);
         }
-        if(event.recipient) {
+        if (event.recipient) {
             event.recipient.modifyFate(event.fate);
         }
     }
 
-    hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean { // eslint-disable-line no-unused-vars
+    hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {
+        // eslint-disable-line no-unused-vars
         return false;
     }
 }

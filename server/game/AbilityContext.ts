@@ -3,7 +3,7 @@ import EffectSource = require('./EffectSource.js');
 import Game = require('./game');
 import Player = require('./player');
 import Ring = require('./ring');
-import StatusToken = require('./StatusTokens/StatusToken');
+import type { StatusToken } from './StatusToken.js';
 import { Stages, Locations, PlayTypes } from './Constants.js';
 import { GameAction } from './GameActions/GameAction.js';
 import BaseCard = require('./basecard.js');

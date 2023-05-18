@@ -1,6 +1,6 @@
+import type { StatusToken } from '../StatusToken';
 import { GameAction, GameActionProperties } from './GameAction';
 import AbilityContext = require('../AbilityContext');
-import StatusToken = require('../StatusTokens/StatusToken');
 
 export interface TokenActionProperties extends GameActionProperties {}
 
@@ -12,8 +12,8 @@ export class TokenAction extends GameAction {
     }
 
     canAffect(target: StatusToken, context: AbilityContext, additionalProperties = {}): boolean {
-        if(Array.isArray(target)) {
-            return target.length > 0 && target.every(a => a.type === 'token');
+        if (Array.isArray(target)) {
+            return target.length > 0 && target.every((a) => a.type === 'token');
         }
         return target.type === 'token';
     }
@@ -25,7 +25,7 @@ export class TokenAction extends GameAction {
     addPropertiesToEvent(event, token: StatusToken, context: AbilityContext, additionalProperties): void {
         super.addPropertiesToEvent(event, token, context, additionalProperties);
         event.token = token;
-        if(Array.isArray(event.token)) {
+        if (Array.isArray(event.token)) {
             event.token = [...event.token];
         }
     }

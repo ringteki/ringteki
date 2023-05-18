@@ -19,10 +19,7 @@ import { PlayCharacterAction } from './PlayCharacterAction.js';
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');
-const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
-const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
-const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
-import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
+import { StatusToken } from './StatusToken';
 import ElementSymbol = require('./ElementSymbol');
 import { GameModes } from '../GameModes';
 
@@ -905,7 +902,7 @@ class BaseCard extends EffectSource {
             } else if(tokenType === CharacterStatus.Dishonored && this.isHonored) {
                 this.removeStatusToken(CharacterStatus.Honored);
             } else {
-                const token = GetStatusToken(this.game, this, tokenType);
+                const token = StatusToken.create(this.game, this, tokenType);
                 if(token) {
                     token.setCard(this);
                     this.statusTokens.push(token);

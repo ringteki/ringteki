@@ -1,5 +1,5 @@
 import { CardTypes, Players, CharacterStatus } from '../../../Constants';
-import StatusToken = require('../../../StatusTokens/StatusToken');
+import type { StatusToken } from '../../../StatusToken';
 import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
 import DrawCard = require('../../../drawcard');

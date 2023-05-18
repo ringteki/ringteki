@@ -1,10 +1,9 @@
-import { TokenAction, TokenActionProperties} from './TokenAction';
 import { EventNames } from '../Constants';
-import AbilityContext = require("../AbilityContext");
-import StatusToken = require('../StatusTokens/StatusToken');
+import type { StatusToken } from '../StatusToken';
+import { TokenAction, TokenActionProperties } from './TokenAction';
+import AbilityContext = require('../AbilityContext');
 
-export interface DiscardStatusProperties extends TokenActionProperties {
-}
+export interface DiscardStatusProperties extends TokenActionProperties {}
 
 export class DiscardStatusAction extends TokenAction {
     name = 'discardStatus';
@@ -18,22 +17,21 @@ export class DiscardStatusAction extends TokenAction {
             if (!Array.isArray(targets)) {
                 targets = [targets];
             }
-            let cards = targets.map(a => {
+            let cards = targets.map((a) => {
                 let token = a as StatusToken;
-                if (token)
-                    return token.card;
+                if (token) return token.card;
                 return a;
             });
-            return['discard {0}\'s status token', cards];
+            return ["discard {0}'s status token", cards];
         }
-        return['discard a status token', []];
+        return ['discard a status token', []];
     }
 
     eventHandler(event): void {
         let tokens = event.token;
-        if(!Array.isArray(tokens)) {
+        if (!Array.isArray(tokens)) {
             tokens = [tokens];
         }
-        tokens.forEach(token => token.card.removeStatusToken(token));
+        tokens.forEach((token) => token.card.removeStatusToken(token));
     }
 }
