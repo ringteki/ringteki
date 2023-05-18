@@ -144,7 +144,7 @@ export interface ActionProps extends AbilityProps<AbilityContext> {
     condition?: (context?: AbilityContext) => boolean;
     phase?: string;
     anyPlayer?: boolean;
-    conflictProvinceCondition?: (province: ProvinceCard) => boolean;
+    conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext) => boolean;
     canTriggerOutsideConflict?: boolean;
 };
 

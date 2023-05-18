@@ -47,7 +47,7 @@ class CardAction extends CardAbility {
             return 'location';
         }
 
-        if(!ignoredRequirements.includes('province') && !this.checkProvinceCondition()) {
+        if (!ignoredRequirements.includes('province') && !this.checkProvinceCondition(context)) {
             return 'province';
         }
 
@@ -72,9 +72,15 @@ class CardAction extends CardAbility {
         return super.meetsRequirements(context, ignoredRequirements);
     }
 
-    checkProvinceCondition() {
-        return this.card.type !== CardTypes.Province || this.canTriggerOutsideConflict ||
-            this.game.currentConflict && this.game.currentConflict.getConflictProvinces().some(p => this.conflictProvinceCondition(p));
+    checkProvinceCondition(context) {
+        return (
+            this.card.type !== CardTypes.Province ||
+            this.canTriggerOutsideConflict ||
+            (this.game.currentConflict &&
+                this.game.currentConflict
+                    .getConflictProvinces()
+                    .some((p) => this.conflictProvinceCondition(p, context)))
+        );
     }
 
     isAction() {
