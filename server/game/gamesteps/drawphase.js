@@ -1,4 +1,4 @@
-const Phase = require('./phase.js');
+const { Phase } = require('./Phase.js');
 const { SimpleStep } = require('./simplestep.js');
 const ActionWindow = require('./actionwindow.js');
 const HonorBidPrompt = require('./honorbidprompt.js');

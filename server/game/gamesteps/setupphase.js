@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const Phase = require('./phase.js');
+const { Phase } = require('./Phase.js');
 const { SimpleStep } = require('./SimpleStep.js');
 const MulliganDynastyPrompt = require('./setup/mulligandynastyprompt.js');
 const MulliganConflictPrompt = require('./setup/mulliganconflictprompt.js');
@@ -9,8 +9,9 @@ const { GameModes } = require('../../GameModes.js');
 
 class SetupPhase extends Phase {
     constructor(game) {
-        super(game, 'setup');
-        this.game.currentPhase = this.name;
+        const name = 'setup';
+        super(game, name);
+        this.game.currentPhase = name;
         this.pipeline.initialise([
             new SimpleStep(game, () => this.setupBegin()),
             new SimpleStep(game, () => this.chooseFirstPlayer()),

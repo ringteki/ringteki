@@ -1,6 +1,6 @@
 const AbilityDsl = require('../abilitydsl.js');
 
-const Phase = require('./phase.js');
+const { Phase } = require('./Phase.js');
 const { SimpleStep } = require('./SimpleStep.js');
 const { Conflict } = require('../conflict.js');
 const ActionWindow = require('./actionwindow.js');
