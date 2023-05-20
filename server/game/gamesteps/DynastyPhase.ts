@@ -3,7 +3,7 @@ import type DrawCard from '../drawcard';
 import type Game from '../game';
 import { Phase } from './Phase';
 import { SimpleStep } from './SimpleStep';
-import DynastyActionWindow from './dynasty/dynastyactionwindow';
+import { DynastyActionWindow } from './dynasty/DynastyActionWindow';
 
 /*
 I Dynasty Phase
