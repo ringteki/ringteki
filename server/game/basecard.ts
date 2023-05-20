@@ -366,21 +366,31 @@ class BaseCard extends EffectSource {
     }
 
     hasTrait(trait: string): boolean {
-        return this.getTraits().includes(trait.toLowerCase());
+        return this.getTraitSet().has(trait.toLowerCase());
     }
 
     getTraits(): string[] {
-        let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        let traits = copyEffect
-            ? copyEffect.traits
-            : this.getEffects(EffectNames.Blank).some((blankTraits) => blankTraits)
-            ? []
-            : this.traits;
+        return Array.from(this.getTraitSet());
+    }
 
-        let withGainedTraits = _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
-        let lostTraits = new Set(this.getEffects(EffectNames.LoseTrait));
-        let withoutLostTraits = withGainedTraits.filter((trait) => !lostTraits.has(trait));
-        return withoutLostTraits;
+    getTraitSet(): Set<string> {
+        const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        const set = new Set(
+            copyEffect
+                ? (copyEffect.traits as string[])
+                : this.getEffects(EffectNames.Blank).some((blankTraits: boolean) => blankTraits)
+                ? []
+                : this.traits
+        );
+
+        for (const gainedTrait of this.getEffects(EffectNames.AddTrait)) {
+            set.add(gainedTrait);
+        }
+        for (const lostTrait of this.getEffects(EffectNames.LoseTrait)) {
+            set.delete(lostTrait);
+        }
+
+        return set;
     }
 
     isFaction(faction: string): boolean {
