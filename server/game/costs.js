@@ -1,9 +1,9 @@
 const _ = require('underscore');
-const ReduceableFateCost = require('./costs/ReduceableFateCost');
-const TargetDependentFateCost = require('./costs/TargetDependentFateCost');
+const { ReduceableFateCost } = require('./costs/ReduceableFateCost');
+const { TargetDependentFateCost } = require('./costs/TargetDependentFateCost');
 const GameActions = require('./GameActions/GameActions');
-const GameActionCost = require('./costs/GameActionCost');
-const MetaActionCost = require('./costs/MetaActionCost');
+const { GameActionCost } = require('./costs/GameActionCost');
+const { MetaActionCost } = require('./costs/MetaActionCost');
 const Event = require('./Events/Event');
 const { EventNames, Locations, Players, TargetModes, PlayTypes, CharacterStatus } = require('./Constants');
 
@@ -181,7 +181,7 @@ const Costs = {
     /**
      * Cost that is dependent on context.targets[targetName]
      */
-    payTargetDependentFateCost: (targetName, ignoreType = false) => new TargetDependentFateCost(targetName, ignoreType),
+    payTargetDependentFateCost: (targetName, ignoreType = false) => new TargetDependentFateCost(ignoreType, targetName),
     /**
      * Cost in which the player must pay a fixed, non-reduceable amount of fate.
      */

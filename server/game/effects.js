@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const AbilityLimit = require('./abilitylimit.js');
+const AbilityLimit = require('./AbilityLimit');
 const CopyCharacter = require('./Effects/CopyCharacter');
 const GainAllAbiliites = require('./Effects/GainAllAbilities.js');
 const GainAllAbiliitesDynamic = require('./Effects/GainAllAbilitiesDynamic.js');

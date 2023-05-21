@@ -89,6 +89,7 @@ class PendingGame {
         if(password) {
             bcrypt.hash(password, 10, (err, hash) => {
                 if(err) {
+                    // @ts-ignore
                     logger.info(err);
 
                     callback(err);

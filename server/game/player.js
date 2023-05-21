@@ -1,13 +1,13 @@
 const _ = require('underscore');
 
-const GameObject = require('./GameObject');
+const { GameObject } = require('./GameObject');
 const Deck = require('./deck.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 const ClockSelector = require('./Clocks/ClockSelector');
 const CostReducer = require('./costreducer.js');
 const GameActions = require('./GameActions/GameActions');
 const { RingEffects } = require('./RingEffects.js');
-const PlayableLocation = require('./playablelocation.js');
+const { PlayableLocation } = require('./PlayableLocation');
 const PlayerPromptState = require('./playerpromptstate.js');
 const RoleCard = require('./rolecard.js');
 const StrongholdCard = require('./strongholdcard.js');
@@ -790,7 +790,7 @@ class Player extends GameObject {
         if(!player) {
             return;
         }
-        let playableLocation = new PlayableLocation(type, player, location, cards);
+        let playableLocation = new PlayableLocation(type, player, location, new Set(cards));
         this.playableLocations.push(playableLocation);
         return playableLocation;
     }
@@ -1573,9 +1573,17 @@ class Player extends GameObject {
             elements = [elements];
         }
         optional = optional && elements.length === 1;
-        let effects = elements.map(element => RingEffects.contextFor(this, element, optional));
-        effects = _.sortBy(effects, context => this.firstPlayer ? context.ability.defaultPriority : -context.ability.defaultPriority);
-        this.game.openSimultaneousEffectWindow(effects.map(context => ({ title: context.ability.title, handler: () => this.game.resolveAbility(context) })));
+        let effects = elements.map((element) => RingEffects.contextFor(this, element, optional));
+        effects = _.sortBy(effects, (context) =>
+            this.firstPlayer ? context.ability.defaultPriority : -context.ability.defaultPriority
+        );
+        this.game.openSimultaneousEffectWindow(
+            effects.map((context) => ({
+                // @ts-ignore
+                title: context.ability.title,
+                handler: () => this.game.resolveAbility(context)
+            }))
+        );
     }
 
     isKihoPlayedThisConflict(context, cardBeingPlayed) {

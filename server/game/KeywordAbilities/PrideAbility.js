@@ -1,5 +1,5 @@
 const TriggeredAbility = require('../triggeredability.js');
-const AbilityLimit = require('../abilitylimit');
+const AbilityLimit = require('../AbilityLimit');
 const { AbilityTypes } = require('../Constants');
 
 class PrideAbility extends TriggeredAbility {

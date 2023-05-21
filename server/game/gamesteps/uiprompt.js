@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const BaseStep = require('./basestep.js');
+const { BaseStep } = require('./BaseStep');
 const uuid = require('uuid');
 
 class UiPrompt extends BaseStep {

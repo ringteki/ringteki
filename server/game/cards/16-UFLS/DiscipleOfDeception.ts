@@ -1,6 +1,6 @@
 import { CardTypes, TargetModes } from '../../Constants';
 import { EventRegistrar } from '../../EventRegistrar';
-import StatusToken = require('../../StatusTokens/StatusToken');
+import type { StatusToken } from '../../StatusToken';
 import AbilityDsl = require('../../abilitydsl');
 import DrawCard = require('../../drawcard');
 

@@ -1,7 +1,7 @@
 const _ = require('underscore');
-const Phase = require('./phase.js');
+const { Phase } = require('./Phase.js');
 const ActionWindow = require('./actionwindow.js');
-const SimpleStep = require('./simplestep.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const { Players, Phases, CardTypes, EventNames, Locations, EffectNames } = require('../Constants');
 const { GameModes } = require('../../GameModes.js');
 
@@ -74,6 +74,7 @@ class FatePhase extends Phase {
         this.game.queueSimpleStep(() => {
             for(let player of this.game.getPlayersInFirstPlayerOrder()) {
                 if(!processed) {
+                    // @ts-ignore
                     const numFate = events.filter(a => !a.recipient).length;
                     let postFunc = player.mostRecentEffect(EffectNames.CustomFatePhaseFateRemoval);
                     if(postFunc) {

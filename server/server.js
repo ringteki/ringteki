@@ -155,7 +155,7 @@ class Server {
                         return done(null, false, { message: 'Invalid username/password' });
                     }
 
-                    let userObj = {
+                    const userObj = Settings.getUserWithDefaultsSet({
                         username: user.username,
                         email: user.email,
                         emailHash: user.emailHash,
@@ -165,9 +165,7 @@ class Server {
                         promptedActionWindows: user.promptedActionWindows,
                         permissions: user.permissions,
                         blockList: user.blockList
-                    };
-
-                    userObj = Settings.getUserWithDefaultsSet(userObj);
+                    });
 
                     return done(null, userObj);
                 });
