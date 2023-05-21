@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const UiPrompt = require('./uiprompt.js');
+const { UiPrompt } = require('./UiPrompt.js');
 
 /**
  * Represents a UI Prompt that prompts each player individually in first-player

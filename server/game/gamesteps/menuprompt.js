@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const UiPrompt = require('./uiprompt.js');
+const { UiPrompt } = require('./UiPrompt.js');
 
 /**
  * General purpose menu prompt. By specifying a context object, the buttons in

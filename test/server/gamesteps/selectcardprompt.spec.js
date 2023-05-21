@@ -22,7 +22,7 @@ describe('the SelectCardPrompt', function() {
         this.otherPlayer = jasmine.createSpyObj('player2', ['setPrompt', 'cancelPrompt', 'clearSelectableCards', 'clearSelectedCards', 'setSelectableCards', 'setSelectedCards', 'startClock', 'stopClock', 'resetClock']);
         this.otherPlayer.findPlayType = () => undefined;
         this.card = createCardSpy({ controller: this.player });
-
+        this.game.getPlayers.and.returnValue([this.player, this.otherPlayer]);
 
         this.player.cardsInPlay.push(this.card);
 

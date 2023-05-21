@@ -7,23 +7,23 @@ import type { Step } from './Step';
 export class BaseStep implements Step {
     constructor(public game: Game) {}
 
-    continue() {
+    public continue(): undefined | boolean {
         return undefined;
     }
 
-    onCardClicked(player: Player, card: BaseCard): boolean {
+    public onCardClicked(player: Player, card: BaseCard): boolean {
         return false;
     }
 
-    onRingClicked(player: Player, ring: Ring): boolean {
+    public onRingClicked(player: Player, ring: Ring): boolean {
         return false;
     }
 
-    onMenuCommand(player: Player, arg: string, uuid: string, method: string): boolean {
+    public onMenuCommand(player: Player, arg: string, uuid: string, method: string): boolean {
         return false;
     }
 
-    getDebugInfo(): string {
+    public getDebugInfo(): string {
         return this.constructor.name;
     }
 }

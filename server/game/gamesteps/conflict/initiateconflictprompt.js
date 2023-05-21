@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const UiPrompt = require('../uiprompt.js');
+const { UiPrompt } = require('../UiPrompt.js');
 const { Locations, CardTypes } = require('../../Constants');
 const AttackersMatrix = require('./attackersMatrix.js');
 const AbilityContext = require('../../AbilityContext');

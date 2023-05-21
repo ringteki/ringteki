@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const AbilityContext = require('../AbilityContext.js');
 const EffectSource = require('../EffectSource.js');
-const UiPrompt = require('./uiprompt.js');
+const { UiPrompt } = require('./UiPrompt.js');
 
 /**
  * General purpose prompt that asks the user to select a ring.

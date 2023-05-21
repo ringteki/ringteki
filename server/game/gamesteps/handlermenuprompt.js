@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const AbilityContext = require('../AbilityContext.js');
 const EffectSource = require('../EffectSource.js');
-const UiPrompt = require('./uiprompt.js');
+const { UiPrompt } = require('./UiPrompt.js');
 
 /**
  * General purpose menu prompt. Takes a choices object with menu options and

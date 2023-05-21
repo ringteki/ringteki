@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const UiPrompt = require('../uiprompt.js');
+const { UiPrompt } = require('../UiPrompt.js');
 const { CardTypes, EffectNames, EventNames } = require('../../Constants');
 
 const capitalize = {
