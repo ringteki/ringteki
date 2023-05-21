@@ -1569,7 +1569,7 @@ class Player extends GameObject {
      * @param {Boolean} optional - Indicates that the player can choose which effects to resolve.  This parameter only effects resolution of a single effect
      */
     resolveRingEffects(elements, optional = true) {
-        if (!Array.isArray(elements)) {
+        if(!Array.isArray(elements)) {
             elements = [elements];
         }
         optional = optional && elements.length === 1;
