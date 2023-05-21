@@ -1,4 +1,4 @@
-const AbilityLimit = require('../abilitylimit');
+const AbilityLimit = require('../AbilityLimit');
 const EffectValue = require('./EffectValue');
 const { AbilityTypes, Locations } = require('../Constants');
 
@@ -17,11 +17,11 @@ class GainAbility extends EffectValue {
             let newProps = { printedAbility: false, abilityIdentifier: ability.abilityIdentifier, origin: ability.card };
             if(ability.properties.limit) {
                 // If the copied ability has a limit, we need to create a new instantiation of it, with the same max and reset event
-                newProps.limit = AbilityLimit.repeatable(ability.properties.limit.max, ability.properties.limit.eventName);
+                newProps.limit = ability.properties.limit.clone();
             }
             if(ability.properties.max) {
                 // Same for max
-                newProps.max = AbilityLimit.repeatable(ability.properties.max.max, ability.properties.max.eventName);
+                newProps.max = ability.properties.max.clone();
             }
             this.properties = Object.assign({}, ability.properties, newProps);
         } else {
