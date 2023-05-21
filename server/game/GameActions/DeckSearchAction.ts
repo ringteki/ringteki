@@ -1,6 +1,6 @@
 import type AbilityContext from '../AbilityContext';
 import { Decks, EventNames, Locations, TargetModes } from '../Constants';
-import { Helpers } from '../Utils/helpers';
+import { shuffleArray } from '../Utils/helpers';
 import type DrawCard from '../drawcard';
 import type { GameAction } from './GameAction';
 import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
@@ -223,7 +223,7 @@ export class DeckSearchAction extends PlayerAction {
         if (properties.placeOnBottomInRandomOrder) {
             const cardsToMove = allCards.filter((card) => !selectedCards.has(card));
             if (cardsToMove.length > 0) {
-                Helpers.shuffleArray(cardsToMove);
+                shuffleArray(cardsToMove);
                 for (const card of cardsToMove) {
                     event.player.moveCard(card, Locations.ConflictDeck, { bottom: true });
                 }
