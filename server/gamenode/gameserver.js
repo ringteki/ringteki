@@ -58,10 +58,12 @@ class GameServer {
         options.path = '/' + (config.gameNode.name) + '/socket.io';
 
         this.io = socketio(server, options);
+        // @ts-ignore
         this.io.set('heartbeat timeout', 30000);
         this.io.use(this.handshake.bind(this));
 
         if(config.gameNode.origin) {
+            // @ts-ignore
             this.io.set('origins', config.gameNode.origin);
         }
 
