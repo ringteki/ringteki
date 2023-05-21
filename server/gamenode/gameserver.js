@@ -6,6 +6,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const config = require('config');
+const { default: axios } = require('axios');
 
 const { detectBinary } = require('../util');
 const logger = require('../log.js');
@@ -174,7 +175,12 @@ class GameServer {
     }
 
     gameWon(game, reason, winner) {
-        this.zmqSocket.send('GAMEWIN', { game: game.getSaveState(), winner: winner.name, reason: reason });
+        const saveState = game.getSaveState();
+        this.zmqSocket.send('GAMEWIN', { game: saveState, winner: winner.name, reason: reason });
+
+        void axios
+            .post('https://l5r-analytics-engine-production.up.railway.app/api/game-report', saveState)
+            .catch(() => {});
     }
 
     onStartGame(pendingGame) {
