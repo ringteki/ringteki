@@ -13,5 +13,5 @@
         "forceConsistentCasingInFileNames": true
     },
     "include": ["server/**/*", "index.js"],
-    "exclude": ["node_modules", "test/**/*", "client/**/*"]
+    "exclude": ["test/**/*", "client/**/*"]
 }
