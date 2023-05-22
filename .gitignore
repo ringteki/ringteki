@@ -2,7 +2,6 @@ bower_components
 node_modules
 public
 typings
-coverage
 *.log
 server/events.txt
 .DS_Store

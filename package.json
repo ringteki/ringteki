@@ -6,7 +6,6 @@
     "scripts": {
         "test": "npm run jasmine",
         "jasmine": "tsc && cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine",
-        "coverage": "cross-env JASMINE_CONFIG_PATH=./jasmine.json nyc jasmine && nyc report --reporter=text-lcov | coveralls",
         "lint": "eslint server/ test/server/ client/ --ext=js --ext=jsx"
     },
     "repository": {
@@ -62,7 +61,6 @@
         "@types/socket.io": "^1.4.42",
         "@types/uuid": "^9.0.1",
         "body-parser": "^1.18.2",
-        "coveralls": "^3.0.0",
         "eslint": "^4.7.2",
         "eslint-plugin-jasmine": "^2.10.1",
         "jasmine": "^4.6.0",
