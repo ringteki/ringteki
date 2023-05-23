@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, Players } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl.js');
+const { CardTypes, Players } = require('../../Constants.js');
 
 class IronFoundationsStance extends DrawCard {
     setupCardAbilities() {
@@ -10,16 +10,16 @@ class IronFoundationsStance extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => card.isParticipating() && card.hasTrait('monk'),
+                cardCondition: (card) => card.isParticipating() && card.hasTrait('monk'),
                 gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.cardLastingEffect(context => ({
+                    AbilityDsl.actions.cardLastingEffect((context) => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'sendHome',
                             restricts: 'opponentsCardEffects',
                             applyingPlayer: context.player
                         })
                     })),
-                    AbilityDsl.actions.cardLastingEffect(context => ({
+                    AbilityDsl.actions.cardLastingEffect((context) => ({
                         effect: AbilityDsl.effects.cardCannot({
                             cannot: 'bow',
                             restricts: 'opponentsCardEffects',
@@ -28,13 +28,13 @@ class IronFoundationsStance extends DrawCard {
                     })),
                     AbilityDsl.actions.conditional({
                         condition: (context) => context.player.isKihoPlayedThisConflict(context, this),
-                        trueGameAction: AbilityDsl.actions.draw(context => ({ target: context.player })),
+                        trueGameAction: AbilityDsl.actions.draw((context) => ({ target: context.player })),
                         falseGameAction: AbilityDsl.actions.draw({ amount: 0 })
                     })
                 ])
             },
             effect: 'prevent opponents\' actions from bowing or moving home {0}{1}',
-            effectArgs: (context) => context.player.isKihoPlayedThisConflict(context, this) ? ' and draw 1 card' : ''
+            effectArgs: (context) => (context.player.isKihoPlayedThisConflict(context, this) ? ' and draw 1 card' : '')
         });
     }
 }

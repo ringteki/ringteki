@@ -4,10 +4,9 @@ const { Players, Locations, CardTypes } = require('../../Constants');
 const { GameModes } = require('../../../GameModes.js');
 
 class TheWealthOfTheCrane extends DrawCard {
-    cards = [];
-    chosenProvinces = [];
-
     setupCardAbilities() {
+        this.cards = [];
+        this.chosenProvinces = [];
         this.persistentEffect({
             location: Locations.Any,
             targetController: Players.Any,
@@ -22,9 +21,9 @@ class TheWealthOfTheCrane extends DrawCard {
         this.action({
             title: 'Look at your dynasty deck',
             effect: 'look at the top ten cards of their dynasty deck',
-            condition: context => context.player.dynastyDeck.size() > 0,
+            condition: (context) => context.player.dynastyDeck.size() > 0,
             max: AbilityDsl.limit.perPhase(1),
-            handler: context => {
+            handler: (context) => {
                 this.cards = context.player.dynastyDeck.first(10);
                 this.chosenProvinces = [];
 
@@ -39,19 +38,24 @@ class TheWealthOfTheCrane extends DrawCard {
             return;
         }
 
-        let cardHandler = currentCard => {
+        let cardHandler = (currentCard) => {
             this.game.promptForSelect(context.player, {
                 activePromptTitle: 'Choose a province for ' + currentCard.name,
                 context: context,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => card.type === CardTypes.Province && this.isProvinceValidTarget(card),
+                cardCondition: (card) => card.type === CardTypes.Province && this.isProvinceValidTarget(card),
                 onSelect: (player, card) => {
-                    this.game.addMessage('{0} puts {1} into {2}', context.player, currentCard, card.isFacedown() ? 'a facedown province' : card.name);
+                    this.game.addMessage(
+                        '{0} puts {1} into {2}',
+                        context.player,
+                        currentCard,
+                        card.isFacedown() ? 'a facedown province' : card.name
+                    );
                     this.chosenProvinces.push(card);
                     context.player.moveCard(currentCard, card.location);
                     currentCard.facedown = false;
-                    this.cards = this.cards.filter(a => a !== currentCard);
+                    this.cards = this.cards.filter((a) => a !== currentCard);
 
                     if(this.cards && this.cards.length > 0 && this.hasRemainingTarget()) {
                         this.game.promptWithHandlerMenu(context.player, {
@@ -82,7 +86,7 @@ class TheWealthOfTheCrane extends DrawCard {
     }
 
     isProvinceValidTarget(province) {
-        return province.location !== Locations.StrongholdProvince && !this.chosenProvinces.some(a => a === province);
+        return province.location !== Locations.StrongholdProvince && !this.chosenProvinces.some((a) => a === province);
     }
 
     hasRemainingTarget() {
@@ -98,4 +102,3 @@ class TheWealthOfTheCrane extends DrawCard {
 TheWealthOfTheCrane.id = 'the-wealth-of-the-crane';
 
 module.exports = TheWealthOfTheCrane;
-

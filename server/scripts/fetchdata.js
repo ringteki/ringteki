@@ -9,7 +9,7 @@ const PathToJSON = path.join(__dirname, '../../test/json/Card');
 function apiRequest(path) {
     // const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
     const apiUrl = 'https://www.emeralddb.org/api/';
-    return axios.get(apiUrl + path).then(res=>res.data)
+    return axios.get(apiUrl + path).then(res=>res.data);
 }
 
 let fetchCards = apiRequest('cards')

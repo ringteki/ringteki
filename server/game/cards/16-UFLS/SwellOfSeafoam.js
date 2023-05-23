@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, Players } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl.js');
+const { CardTypes, Players } = require('../../Constants.js');
 
 class SwellOfSeafoam extends DrawCard {
     setupCardAbilities() {
@@ -10,12 +10,12 @@ class SwellOfSeafoam extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                cardCondition: card => card.isParticipating() && card.hasTrait('monk'),
+                cardCondition: (card) => card.isParticipating() && card.hasTrait('monk'),
                 gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.cardLastingEffect(({
+                    AbilityDsl.actions.cardLastingEffect({
                         effect: AbilityDsl.effects.doesNotBow()
-                    })),
-                    AbilityDsl.actions.honor(context => ({
+                    }),
+                    AbilityDsl.actions.honor((context) => ({
                         target: context.player.isKihoPlayedThisConflict(context, this) ? context.target : []
                     }))
                 ])

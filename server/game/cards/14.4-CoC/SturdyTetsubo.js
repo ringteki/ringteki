@@ -1,6 +1,6 @@
-import { AbilityTypes } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { AbilityTypes } = require('../../Constants.js');
 
 class SturdyTetsubo extends DrawCard {
     setupCardAbilities() {
@@ -10,8 +10,10 @@ class SturdyTetsubo extends DrawCard {
                 limit: AbilityDsl.limit.perRound(2),
                 printedAbility: false,
                 when: {
-                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller
-                        && context.player.opponent
+                    afterConflict: (event, context) =>
+                        context.source.isParticipating() &&
+                        event.conflict.winner === context.source.controller &&
+                        context.player.opponent
                 },
                 gameAction: AbilityDsl.actions.chosenDiscard()
             })

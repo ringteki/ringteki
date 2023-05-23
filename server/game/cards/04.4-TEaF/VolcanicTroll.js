@@ -1,6 +1,6 @@
 const DrawCard = require('../../drawcard.js');
-import { Elements } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
+const { Elements } = require('../../Constants.js');
 
 const elementKey = 'isawa-tsuke-2-fire';
 class VolcanicTroll extends DrawCard {

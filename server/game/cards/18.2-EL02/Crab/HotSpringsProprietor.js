@@ -1,6 +1,5 @@
-import { CardTypes } from '../../../Constants.js';
 const DrawCard = require('../../../drawcard.js');
-const { Decks } = require('../../../Constants');
+const { Decks, CardTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class BiasedArbitrator extends DrawCard {
@@ -14,7 +13,7 @@ class BiasedArbitrator extends DrawCard {
             gameAction: AbilityDsl.actions.deckSearch({
                 activePromptTitle: 'Choose a character to put into play ',
                 deck: Decks.DynastyDeck,
-                cardCondition: card => card.type === CardTypes.Character && card.printedCost <= 1,
+                cardCondition: (card) => card.type === CardTypes.Character && card.printedCost <= 1,
                 gameAction: AbilityDsl.actions.putIntoPlay()
             })
         });

@@ -1,6 +1,6 @@
-import { TokenTypes } from '../../Constants.js';
 const ProvinceCard = require('../../provincecard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { TokenTypes } = require('../../Constants.js');
 
 class FortifiedAssembly extends ProvinceCard {
     setupCardAbilities() {
@@ -11,7 +11,7 @@ class FortifiedAssembly extends ProvinceCard {
             },
             gameAction: AbilityDsl.actions.addToken(),
             effect: 'put an honor token on {0}',
-            effectArgs: context => context.source
+            effectArgs: (context) => context.source
         });
         this.persistentEffect({
             effect: AbilityDsl.effects.modifyProvinceStrength(() => this.getTokenCount(TokenTypes.Honor) * 2)

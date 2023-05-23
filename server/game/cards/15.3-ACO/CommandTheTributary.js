@@ -1,7 +1,6 @@
-import { CardTypes, AbilityTypes } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes, AbilityTypes } = require('../../Constants.js');
 
 class CommandTheTributary extends DrawCard {
     setupCardAbilities() {
@@ -10,7 +9,7 @@ class CommandTheTributary extends DrawCard {
                 title: 'Move 1 fate to a character',
                 target: {
                     cardType: CardTypes.Character,
-                    gameAction: AbilityDsl.actions.placeFate(context => ({
+                    gameAction: AbilityDsl.actions.placeFate((context) => ({
                         origin: context.source,
                         amount: 1
                     }))

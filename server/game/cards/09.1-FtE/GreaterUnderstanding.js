@@ -1,4 +1,4 @@
-import { CardTypes } from '../../Constants.js';
+const { CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 const DrawCard = require('../../drawcard.js');
 

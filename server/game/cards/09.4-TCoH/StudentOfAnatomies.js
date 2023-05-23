@@ -1,8 +1,6 @@
-import { Durations } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
-const { CardTypes } = require('../../Constants');
+const { CardTypes, Durations } = require('../../Constants');
 
 class StudentOfAnatomies extends DrawCard {
     setupCardAbilities() {
@@ -19,7 +17,7 @@ class StudentOfAnatomies extends DrawCard {
                 })
             },
             effect: 'treat {1} as if its printed text box were blank until the end of the phase',
-            effectArgs: context => context.target
+            effectArgs: (context) => context.target
         });
     }
 }
@@ -27,4 +25,3 @@ class StudentOfAnatomies extends DrawCard {
 StudentOfAnatomies.id = 'student-of-anatomies';
 
 module.exports = StudentOfAnatomies;
-

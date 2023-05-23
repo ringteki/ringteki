@@ -1,7 +1,6 @@
-import { CardTypes } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes } = require('../../Constants.js');
 
 class EarthBecomesSky extends DrawCard {
     setupCardAbilities() {
@@ -9,10 +8,9 @@ class EarthBecomesSky extends DrawCard {
             title: 'Bow a character that just readied',
             when: {
                 onCardReadied: (event, context) =>
-                    event.card.type === CardTypes.Character &&
-                    event.card.controller === context.player.opponent
+                    event.card.type === CardTypes.Character && event.card.controller === context.player.opponent
             },
-            gameAction: AbilityDsl.actions.bow(context => ({ target: context.event.card }))
+            gameAction: AbilityDsl.actions.bow((context) => ({ target: context.event.card }))
         });
     }
 }
