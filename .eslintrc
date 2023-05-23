@@ -129,6 +129,5 @@
     "no-trailing-spaces": [
       2
     ]
-  },
-  "parser": "babel-eslint"
+  }
 }
