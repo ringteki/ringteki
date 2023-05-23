@@ -9,7 +9,7 @@ const config = require('config');
 const { default: axios } = require('axios');
 
 const { detectBinary } = require('../util');
-const logger = require('../log.js');
+const { logger } = require('../logger');
 const ZmqSocket = require('./zmqsocket.js');
 const Game = require('../game/game.js');
 const Socket = require('../socket.js');

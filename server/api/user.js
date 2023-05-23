@@ -1,6 +1,6 @@
 const monk = require('monk');
 const UserService = require('../services/UserService.js');
-const logger = require('../log.js');
+const { logger } = require('../logger');
 const config = require('config');
 
 let db = monk(config.dbPath);

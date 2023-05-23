@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const logger = require('../log.js');
+const { logger } = require('../logger');
 
 class GameService {
     constructor(db) {

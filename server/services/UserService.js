@@ -1,5 +1,5 @@
 const escapeRegex = require('../util.js').escapeRegex;
-const logger = require('../log.js');
+const { logger } = require('../logger');
 
 class UserService {
     constructor(db) {

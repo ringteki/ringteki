@@ -1,4 +1,4 @@
-const logger = require('../log.js');
+const { logger } = require('../logger');
 
 class DeckService {
     constructor(db) {

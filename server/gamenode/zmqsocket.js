@@ -1,7 +1,7 @@
 const EventEmitter = require('events');
 const zmq = require('zeromq');
 const config = require('config');
-const logger = require('../log.js');
+const { logger } = require('../logger');
 
 class ZmqSocket extends EventEmitter {
     constructor(listenAddress, protocol) {

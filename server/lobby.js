@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 const moment = require('moment');
 
-const logger = require('./log.js');
+const { logger } = require('./logger');
 const version = moment(require('../version.js'));
 const PendingGame = require('./pendinggame.js');
 const GameRouter = require('./gamerouter.js');
