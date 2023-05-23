@@ -38,7 +38,7 @@
         "express-session": "^1.17.3",
         "helmet": "^3.8.1",
         "jsonwebtoken": "^7.4.3",
-        "moment": "^2.18.1",
+        "moment": "^2.29.4",
         "mongodb": "4.1.4",
         "monk": "^3.1.4",
         "nodemailer": ">=6.4.16",
