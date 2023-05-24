@@ -1,10 +1,10 @@
+import { EventNames, Players } from '../Constants';
+import { SimpleStep } from '../gamesteps/SimpleStep.js';
+import { GameAction } from './GameAction';
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
-import { EventNames, Players } from '../Constants';
 import HonorBidPrompt = require('../gamesteps/honorbidprompt');
-import { GameAction } from './GameAction';
-import SimpleStep = require('../gamesteps/simplestep');
 
 export interface HonorBidProperties extends PlayerActionProperties {
     giveHonor?: boolean;

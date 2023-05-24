@@ -1,6 +1,6 @@
-import { AbilityTypes, CardTypes, Players } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { AbilityTypes, CardTypes, Players } = require('../../Constants.js');
 
 class JadeInlaidKatana extends DrawCard {
     setupCardAbilities() {
@@ -9,7 +9,8 @@ class JadeInlaidKatana extends DrawCard {
                 title: 'Remove 1 fate from a character',
                 printedAbility: false,
                 when: {
-                    afterConflict: (event, context) => context.source.isParticipating() && event.conflict.winner === context.source.controller
+                    afterConflict: (event, context) =>
+                        context.source.isParticipating() && event.conflict.winner === context.source.controller
                 },
                 target: {
                     cardType: CardTypes.Character,

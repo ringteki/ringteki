@@ -2,14 +2,11 @@ bower_components
 node_modules
 public
 typings
-coverage
 *.log
-*.json
 server/events.txt
 .DS_Store
 config/local*
 server/logs/*.gz
 build/
-!tsconfig.json
-!package-lock.json
 .idea/
+test/json/Card

@@ -17,8 +17,6 @@ const { Stages, TargetModes } = require('./Constants.js');
  * ability is generated from.
  */
 class BaseAbility {
-    abilityType = 'action';
-
     /**
      * Creates an ability.
      *
@@ -31,6 +29,7 @@ class BaseAbility {
      * @param [properties.gameAction] - GameAction[] optional array of game actions
      */
     constructor(properties) {
+        this.abilityType = 'action';
         this.gameAction = properties.gameAction || [];
         if(!Array.isArray(this.gameAction)) {
             this.gameAction = [this.gameAction];
@@ -39,11 +38,11 @@ class BaseAbility {
         this.cost = this.buildCost(properties.cost);
         for(const cost of this.cost) {
             if(cost.dependsOn) {
-                let dependsOnTarget = this.targets.find(target => target.name === cost.dependsOn);
+                let dependsOnTarget = this.targets.find((target) => target.name === cost.dependsOn);
                 dependsOnTarget.dependentCost = cost;
             }
         }
-        this.nonDependentTargets = this.targets.filter(target => !target.properties.dependsOn);
+        this.nonDependentTargets = this.targets.filter((target) => !target.properties.dependsOn);
     }
 
     buildCost(cost) {
@@ -112,7 +111,7 @@ class BaseAbility {
     }
 
     checkGameActionsForPotential(context) {
-        return this.gameAction.some(gameAction => gameAction.hasLegalTarget(context));
+        return this.gameAction.some((gameAction) => gameAction.hasLegalTarget(context));
     }
 
     /**
@@ -122,17 +121,18 @@ class BaseAbility {
      */
     canPayCosts(context) {
         let contextCopy = context.copy({ stage: Stages.Cost });
-        return this.getCosts(context).every(cost => cost.canPay(contextCopy));
+        return this.getCosts(context).every((cost) => cost.canPay(contextCopy));
     }
 
-    getCosts(context, playCosts = true, triggerCosts = true) { // eslint-disable-line no-unused-vars
-        let costs = this.cost.map(a => a);
+    // eslint-disable-next-line no-unused-vars
+    getCosts(context, playCosts = true, triggerCosts = true) {
+        let costs = this.cost.map((a) => a);
         if(context.ignoreFateCost) {
-            costs = costs.filter(cost => !cost.isPrintedFateCost);
+            costs = costs.filter((cost) => !cost.isPrintedFateCost);
         }
 
         if(!playCosts) {
-            costs = costs.filter(cost => !cost.isPlayCost);
+            costs = costs.filter((cost) => !cost.isPlayCost);
         }
         return costs;
     }
@@ -149,7 +149,9 @@ class BaseAbility {
                         }
                         context.game.queueSimpleStep(() => {
                             if(!results.cancelled) {
-                                let newEvents = cost.payEvent ? cost.payEvent(context) : context.game.getEvent('payCost', {}, () => cost.pay(context));
+                                let newEvents = cost.payEvent
+                                    ? cost.payEvent(context)
+                                    : context.game.getEvent('payCost', {}, () => cost.pay(context));
                                 if(Array.isArray(newEvents)) {
                                     for(let event of newEvents) {
                                         results.events.push(event);
@@ -171,7 +173,7 @@ class BaseAbility {
      * @returns {Boolean}
      */
     canResolveTargets(context) {
-        return this.nonDependentTargets.every(target => target.canResolve(context));
+        return this.nonDependentTargets.every((target) => target.canResolve(context));
     }
 
     /**
@@ -179,7 +181,8 @@ class BaseAbility {
      */
     resolveTargets(context) {
         let targetResults = {
-            canIgnoreAllCosts: context.stage === Stages.PreTarget ? this.cost.every(cost => cost.canIgnoreForTargeting) : false,
+            canIgnoreAllCosts:
+                context.stage === Stages.PreTarget ? this.cost.every((cost) => cost.canIgnoreForTargeting) : false,
             cancelled: false,
             payCostsFirst: false,
             delayTargeting: null
@@ -193,7 +196,7 @@ class BaseAbility {
     resolveRemainingTargets(context, nextTarget) {
         const index = this.targets.indexOf(nextTarget);
         let targets = this.targets.slice();
-        if(targets.slice(0, index).every(target => target.checkTarget(context))) {
+        if(targets.slice(0, index).every((target) => target.checkTarget(context))) {
             targets = targets.slice(index);
         }
         let targetResults = {};
@@ -204,29 +207,33 @@ class BaseAbility {
     }
 
     hasLegalTargets(context) {
-        return this.nonDependentTargets.every(target => target.hasLegalTarget(context));
+        return this.nonDependentTargets.every((target) => target.hasLegalTarget(context));
     }
 
     checkAllTargets(context) {
-        return this.nonDependentTargets.every(target => target.checkTarget(context));
+        return this.nonDependentTargets.every((target) => target.checkTarget(context));
     }
 
     hasTargetsChosenByInitiatingPlayer(context) {
-        return this.targets.some(target => target.hasTargetsChosenByInitiatingPlayer(context)) ||
-            this.gameAction.some(action => action.hasTargetsChosenByInitiatingPlayer(context)) ||
-            this.cost.some(cost => cost.hasTargetsChosenByInitiatingPlayer && cost.hasTargetsChosenByInitiatingPlayer(context));
+        return (
+            this.targets.some((target) => target.hasTargetsChosenByInitiatingPlayer(context)) ||
+            this.gameAction.some((action) => action.hasTargetsChosenByInitiatingPlayer(context)) ||
+            this.cost.some(
+                (cost) => cost.hasTargetsChosenByInitiatingPlayer && cost.hasTargetsChosenByInitiatingPlayer(context)
+            )
+        );
     }
 
-    displayMessage(context) { // eslint-disable-line no-unused-vars
-    }
+    // eslint-disable-next-line no-unused-vars
+    displayMessage(context) {}
 
     /**
      * Executes the ability once all costs have been paid. Inheriting classes
      * should override this method to implement their behavior; by default it
      * does nothing.
      */
-    executeHandler(context) { // eslint-disable-line no-unused-vars
-    }
+    // eslint-disable-next-line no-unused-vars
+    executeHandler(context) {}
 
     isAction() {
         return false;

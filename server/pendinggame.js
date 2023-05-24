@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const _ = require('underscore');
 const bcrypt = require('bcrypt');
 
-const logger = require('./log.js');
+const { logger } = require('./logger');
 const GameChat = require('./game/gamechat.js');
 
 class PendingGame {
@@ -89,6 +89,7 @@ class PendingGame {
         if(password) {
             bcrypt.hash(password, 10, (err, hash) => {
                 if(err) {
+                    // @ts-ignore
                     logger.info(err);
 
                     callback(err);

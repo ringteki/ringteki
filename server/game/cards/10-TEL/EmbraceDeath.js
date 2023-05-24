@@ -1,6 +1,6 @@
-import { CardTypes, Players } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes, Players } = require('../../Constants.js');
 
 class EmbraceDeath extends DrawCard {
     setupCardAbilities() {
@@ -10,11 +10,11 @@ class EmbraceDeath extends DrawCard {
                 afterConflict: (event, context) =>
                     event.conflict.loser === context.player &&
                     context.player.isAttackingPlayer() &&
-                    event.conflict.getAttackers().some(card => card.hasTrait('bushi'))
+                    event.conflict.getAttackers().some((card) => card.hasTrait('bushi'))
             },
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
-                cardCondition: card => card.hasTrait('bushi') && card.isAttacking()
+                cardCondition: (card) => card.hasTrait('bushi') && card.isAttacking()
             }),
             target: {
                 cardType: CardTypes.Character,
@@ -22,11 +22,11 @@ class EmbraceDeath extends DrawCard {
             },
             gameAction: AbilityDsl.actions.conditional({
                 // @ts-ignore
-                condition: context => context.target.getFate() > 0,
-                trueGameAction: AbilityDsl.actions.removeFate(context => ({
+                condition: (context) => context.target.getFate() > 0,
+                trueGameAction: AbilityDsl.actions.removeFate((context) => ({
                     target: context.target
                 })),
-                falseGameAction: AbilityDsl.actions.discardFromPlay(context => ({
+                falseGameAction: AbilityDsl.actions.discardFromPlay((context) => ({
                     target: context.target
                 }))
             })

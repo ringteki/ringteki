@@ -1,14 +1,14 @@
 const ProvinceCard = require('../../provincecard.js');
-import { CardTypes, TargetModes } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
+const { TargetModes, CardTypes } = require('../../Constants.js');
 
 class DishonorableAssault extends ProvinceCard {
     setupCardAbilities() {
         this.action({
             title: 'Discard cards to dishonor attackers',
             effect: 'discard {1} and dishonor {2}',
-            effectArgs: context => [context.costs.discardCardsUpToVariableX, context.target],
-            cost: AbilityDsl.costs.discardCardsUpToVariableX(context => this.getNumberOfLegalTargets(context)),
+            effectArgs: (context) => [context.costs.discardCardsUpToVariableX, context.target],
+            cost: AbilityDsl.costs.discardCardsUpToVariableX((context) => this.getNumberOfLegalTargets(context)),
             target: {
                 mode: TargetModes.ExactlyVariable,
                 numCardsFunc: (context) => {
@@ -19,7 +19,7 @@ class DishonorableAssault extends ProvinceCard {
                     return this.getNumberOfLegalTargets(context);
                 },
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isAttacking(),
+                cardCondition: (card) => card.isAttacking(),
                 gameAction: AbilityDsl.actions.dishonor()
             },
             cannotTargetFirst: true
@@ -28,9 +28,9 @@ class DishonorableAssault extends ProvinceCard {
 
     getNumberOfLegalTargets(context) {
         if(this.game.isDuringConflict()) {
-            let cards = this.game.currentConflict.getParticipants(card => card.isAttacking());
+            let cards = this.game.currentConflict.getParticipants((card) => card.isAttacking());
             let count = 0;
-            cards.forEach(card => {
+            cards.forEach((card) => {
                 if(card.allowGameAction('dishonor', context)) {
                     count++;
                 }
@@ -45,4 +45,3 @@ class DishonorableAssault extends ProvinceCard {
 DishonorableAssault.id = 'dishonorable-assault';
 
 module.exports = DishonorableAssault;
-

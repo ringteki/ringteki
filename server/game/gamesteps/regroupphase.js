@@ -1,6 +1,6 @@
 const _ = require('underscore');
-const Phase = require('./phase.js');
-const SimpleStep = require('./simplestep.js');
+const { Phase } = require('./Phase.js');
+const { SimpleStep } = require('./SimpleStep.js');
 const ActionWindow = require('./actionwindow.js');
 const EndRoundPrompt = require('./regroup/endroundprompt.js');
 const GameActions = require('../GameActions/GameActions');

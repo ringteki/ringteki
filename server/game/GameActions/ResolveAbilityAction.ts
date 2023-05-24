@@ -5,10 +5,10 @@ import CardAbility = require('../CardAbility');
 import Event = require('../Events/Event');
 import DrawCard = require('../drawcard');
 import Player = require('../player');
-import SimpleStep = require('../gamesteps/simplestep');
 import InitiateCardAbilityEvent = require('../Events/InitiateCardAbilityEvent');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
 import { EventNames } from '../Constants';
+import { SimpleStep } from '../gamesteps/SimpleStep.js';
+import { CardActionProperties, CardGameAction } from './CardGameAction';
 
 class ResolveAbilityActionResolver extends AbilityResolver {
     ignoreCosts: boolean;

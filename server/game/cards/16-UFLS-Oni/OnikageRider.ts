@@ -13,7 +13,7 @@ export default class OnikageRider extends BaseOni {
                 afterConflict: (event, context) =>
                     event.conflict.winner === context.source.controller &&
                     context.source.isParticipating() &&
-                    context.player.opponent
+                    context.player.opponent !== undefined
             },
             gameAction: AbilityDsl.actions.discardCard((context) => ({
                 target: context.player.opponent.getDynastyCardsInProvince(Locations.Provinces)

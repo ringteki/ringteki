@@ -1,15 +1,10 @@
-import { GameAction } from '../GameActions/GameAction';
-import AbilityContext = require('../AbilityContext');
+import type AbilityContext from '../AbilityContext';
+import type { GameAction } from '../GameActions/GameAction';
 
+export class GameActionCost {
+    constructor(public action: GameAction) {}
 
-class GameActionCost {
-    action: GameAction;
-
-    constructor(action) {
-        this.action = action;
-    }
-
-    getActionName(context: AbilityContext): string { // eslint-disable-line no-unused-vars
+    getActionName(context: AbilityContext): string {
         return this.action.name;
     }
 
@@ -17,7 +12,7 @@ class GameActionCost {
         return this.action.hasLegalTarget(context);
     }
 
-    addEventsToArray(events: any[], context: AbilityContext, result = null): void { // eslint-disable-line no-unused-vars
+    addEventsToArray(events: any[], context: AbilityContext, result = null): void {
         context.costs[this.action.name] = this.action.getProperties(context).target;
         this.action.addEventsToArray(events, context);
     }
@@ -26,5 +21,3 @@ class GameActionCost {
         return this.action.getCostMessage(context);
     }
 }
-
-export = GameActionCost;

@@ -1,7 +1,6 @@
-import { Locations, CardTypes } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { CardTypes, Locations } = require('../../Constants.js');
 
 class AshigaruLevy extends DrawCard {
     setupCardAbilities() {
@@ -13,8 +12,7 @@ class AshigaruLevy extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 location: [Locations.Provinces, Locations.DynastyDiscardPile],
-                cardCondition: (card, context) => card.owner === context.player
-                    && card.id === 'ashigaru-levy',
+                cardCondition: (card, context) => card.owner === context.player && card.id === 'ashigaru-levy',
                 gameAction: AbilityDsl.actions.putIntoPlay()
             },
             effect: 'put {0} into play.'
@@ -25,4 +23,3 @@ class AshigaruLevy extends DrawCard {
 AshigaruLevy.id = 'ashigaru-levy';
 
 module.exports = AshigaruLevy;
-

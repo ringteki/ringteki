@@ -1,8 +1,8 @@
 const AbilityDsl = require('../abilitydsl.js');
 
-const Phase = require('./phase.js');
-const SimpleStep = require('./simplestep.js');
-const Conflict = require('../conflict.js');
+const { Phase } = require('./Phase.js');
+const { SimpleStep } = require('./SimpleStep.js');
+const { Conflict } = require('../conflict.js');
 const ActionWindow = require('./actionwindow.js');
 const GameActions = require('../GameActions/GameActions');
 const { Phases, EffectNames } = require('../Constants');

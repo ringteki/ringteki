@@ -1,4 +1,4 @@
-const logger = require('../log.js');
+const { logger } = require('../logger');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const config = require('config');

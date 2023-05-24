@@ -1,15 +1,15 @@
 const _ = require('underscore');
 const DrawCard = require('../../drawcard.js');
-import { CardTypes, TargetModes } from '../../Constants.js';
 const AbilityDsl = require('../../abilitydsl');
+const { TargetModes, CardTypes } = require('../../Constants.js');
 
 class ImbuedWithShadows extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Lose honor to discard status tokens',
             effect: 'lose {1} honor to discard status tokens from {2}',
-            effectArgs: context => [context.costs.variableHonorCost, context.target],
-            cost: AbilityDsl.costs.variableHonorCost(context => this.getNumberOfLegalTargets(context)),
+            effectArgs: (context) => [context.costs.variableHonorCost, context.target],
+            cost: AbilityDsl.costs.variableHonorCost((context) => this.getNumberOfLegalTargets(context)),
             target: {
                 mode: TargetModes.ExactlyVariable,
                 numCardsFunc: (context) => {
@@ -20,13 +20,13 @@ class ImbuedWithShadows extends DrawCard {
                     return this.getNumberOfLegalTargets(context);
                 },
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.multipleContext(context => {
+                gameAction: AbilityDsl.actions.multipleContext((context) => {
                     let targets = [];
                     targets = _.flatten(_.values(context.targets));
                     targets = targets.concat(_.flatten(_.values(context.selects)));
-                    return ({
+                    return {
                         gameActions: this.getStatusTokenPrompts(targets)
-                    });
+                    };
                 })
             },
             cannotTargetFirst: true
@@ -35,7 +35,7 @@ class ImbuedWithShadows extends DrawCard {
 
     getStatusTokenPrompts(targets) {
         let actions = [];
-        targets.forEach(target => {
+        targets.forEach((target) => {
             actions.push(
                 AbilityDsl.actions.selectToken(() => ({
                     card: target,
@@ -51,9 +51,9 @@ class ImbuedWithShadows extends DrawCard {
     }
 
     getNumberOfLegalTargets(context) {
-        let cards = context.game.findAnyCardsInPlay(card => card.isHonored || card.isDishonored);
+        let cards = context.game.findAnyCardsInPlay((card) => card.isHonored || card.isDishonored);
         let selectedCards = [];
-        cards.forEach(card => {
+        cards.forEach((card) => {
             if(card.canBeTargeted(context, selectedCards)) {
                 selectedCards.push(card);
             }
@@ -66,4 +66,3 @@ class ImbuedWithShadows extends DrawCard {
 ImbuedWithShadows.id = 'imbued-with-shadows';
 
 module.exports = ImbuedWithShadows;
-

@@ -1,5 +1,5 @@
 /*eslint no-console:0 */
-const request = require('request');
+const { default: axios } = require('axios');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
@@ -9,16 +9,7 @@ const PathToJSON = path.join(__dirname, '../../test/json/Card');
 function apiRequest(path) {
     // const apiUrl = 'https://beta-emeralddb.herokuapp.com/api/';
     const apiUrl = 'https://www.emeralddb.org/api/';
-    return new Promise((resolve, reject) => {
-        request.get(apiUrl + path, function(error, res, body) {
-            if(error) {
-                return reject(error);
-            }
-
-            const result = JSON.parse(body);
-            resolve(result);
-        });
-    });
+    return axios.get(apiUrl + path).then(res=>res.data);
 }
 
 let fetchCards = apiRequest('cards')

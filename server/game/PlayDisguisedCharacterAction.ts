@@ -1,7 +1,7 @@
 import { GameModes } from '../GameModes';
 import { CardTypes, EffectNames, EventNames, Phases, Players } from './Constants';
+import { ReduceableFateCost } from './costs/ReduceableFateCost';
 import BaseAction = require('./BaseAction');
-import ReduceableFateCost = require('./costs/ReduceableFateCost');
 import BaseCard = require('./basecard');
 import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
@@ -63,7 +63,7 @@ export class PlayDisguisedCharacterAction extends BaseAction {
     public title = 'Play this character with Disguise';
 
     constructor(card: BaseCard, private intoLocation = PlayDisguisedCharacterIntoLocation.Any) {
-        super(card, [ChooseDisguisedCharacterCost(intoLocation), new DisguisedReduceableFateCost(intoLocation)]);
+        super(card, [ChooseDisguisedCharacterCost(intoLocation), new DisguisedReduceableFateCost(false)]);
     }
 
     public meetsRequirements(context = this.createContext(), ignoredRequirements: string[] = []): string {

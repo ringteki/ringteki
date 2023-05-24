@@ -1,10 +1,10 @@
 const _ = require('underscore');
 const AbilityContext = require('../../AbilityContext');
-const BaseStepWithPipeline = require('../basestepwithpipeline.js');
+const { BaseStepWithPipeline } = require('../BaseStepWithPipeline.js');
 const Costs = require('../../costs');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
 const GameActions = require('../../GameActions/GameActions');
-const SimpleStep = require('../simplestep.js');
+const { SimpleStep } = require('../SimpleStep.js');
 const ConflictActionWindow = require('./conflictactionwindow.js');
 const InitiateConflictPrompt = require('./initiateconflictprompt.js');
 const SelectDefendersPrompt = require('./selectdefendersprompt.js');
@@ -242,6 +242,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 if(this.conflict.ring.fate > 0 && this.conflict.attackingPlayer.checkRestrictions('takeFateFromRings', this.game.getFrameworkContext())) {
                     this.game.addMessage('{0} takes {1} fate from {2}', this.conflict.attackingPlayer, this.conflict.ring.fate, this.conflict.ring);
                     this.game.actions.takeFateFromRing({
+                        // @ts-ignore
                         origin: this.conflict.ring,
                         recipient: this.conflict.attackingPlayer,
                         amount: this.conflict.ring.fate
@@ -404,6 +405,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                 { card: context.source, context: context },
                 () => context.target.covert = true
             ));
+            // @ts-ignore
             events = events.concat(this.covert.map(context => this.game.getEvent(EventNames.OnCovertResolved, { card: context.source, context: context })));
         }
         this.game.openThenEventWindow(events);

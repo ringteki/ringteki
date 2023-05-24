@@ -1,4 +1,4 @@
-const AbilityLimit = require('./abilitylimit.js');
+const AbilityLimit = require('./AbilityLimit');
 const Effects = require('./effects.js');
 const Costs = require('./costs.js');
 const GameActions = require('./GameActions/GameActions');

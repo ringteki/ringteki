@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const AbilityDsl = require('./abilitydsl.js');
-const GameObject = require('./GameObject');
+const { GameObject } = require('./GameObject');
 
 const { Locations, Durations } = require('./Constants');
 

@@ -1,6 +1,6 @@
-import { Durations } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { Durations } = require('../../Constants.js');
 
 class NaturalNegotiator extends DrawCard {
     setupCardAbilities() {
@@ -12,10 +12,10 @@ class NaturalNegotiator extends DrawCard {
         this.action({
             title: 'Switch attached characters base skills',
             effect: 'switch {1}\'s base {2} and {3} skill',
-            effectArgs: context => [context.source.parent, 'military', 'political'],
+            effectArgs: (context) => [context.source.parent, 'military', 'political'],
             cost: AbilityDsl.costs.giveHonorToOpponent(),
-            condition: context => context.game.isDuringConflict(),
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+            condition: (context) => context.game.isDuringConflict(),
+            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 duration: Durations.UntilEndOfConflict,
                 target: context.source.parent,
                 effect: AbilityDsl.effects.switchBaseSkills()
@@ -27,4 +27,3 @@ class NaturalNegotiator extends DrawCard {
 NaturalNegotiator.id = 'natural-negotiator';
 
 module.exports = NaturalNegotiator;
-

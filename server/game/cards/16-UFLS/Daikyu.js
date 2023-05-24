@@ -1,11 +1,11 @@
-import { AbilityTypes, CardTypes } from '../../Constants.js';
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { AbilityTypes, CardTypes } = require('../../Constants.js');
 
 class Daikyu extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
-            condition: context => context.source.parent && context.source.controller.firstPlayer,
+            condition: (context) => context.source.parent && context.source.controller.firstPlayer,
             effect: AbilityDsl.effects.modifyMilitarySkill(2)
         });
 
@@ -13,13 +13,17 @@ class Daikyu extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Bow a character',
                 when: {
-                    onConflictDeclared: (event, context) => context.source.isParticipating() && context.game.isDuringConflict('military'),
-                    onDefendersDeclared: (event, context) => context.source.isParticipating() && context.game.isDuringConflict('military'),
-                    onMoveToConflict: (event, context) => context.source.isParticipating() && context.game.isDuringConflict('military')
+                    onConflictDeclared: (event, context) =>
+                        context.source.isParticipating() && context.game.isDuringConflict('military'),
+                    onDefendersDeclared: (event, context) =>
+                        context.source.isParticipating() && context.game.isDuringConflict('military'),
+                    onMoveToConflict: (event, context) =>
+                        context.source.isParticipating() && context.game.isDuringConflict('military')
                 },
                 target: {
                     cardType: CardTypes.Character,
-                    cardCondition: (card, context) => card.getMilitarySkill() < context.source.getMilitarySkill() && card.isParticipating(),
+                    cardCondition: (card, context) =>
+                        card.getMilitarySkill() < context.source.getMilitarySkill() && card.isParticipating(),
                     gameAction: AbilityDsl.actions.bow()
                 }
             })

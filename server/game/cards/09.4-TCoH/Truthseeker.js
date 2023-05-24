@@ -1,4 +1,4 @@
-import { TargetModes } from '../../Constants.js';
+const { TargetModes } = require('../../Constants.js');
 const DrawCard = require('../../drawcard.js');
 
 class Truthseeker extends DrawCard {
@@ -6,25 +6,33 @@ class Truthseeker extends DrawCard {
         this.reaction({
             title: 'Look at top 3 cards',
             when: {
-                onCharacterEntersPlay: (event, context) =>
-                    event.card === context.source
+                onCharacterEntersPlay: (event, context) => event.card === context.source
             },
             target: {
                 mode: TargetModes.Select,
                 targets: true,
                 activePromptTitle: 'Choose which deck to look at:',
                 choices: {
-                    [this.getChoiceName('OppDynasty')]: context => context.player.opponent && context.player.opponent.dynastyDeck.size() > 0,
-                    [this.getChoiceName('OppConflict')]: context => context.player.opponent && context.player.opponent.conflictDeck.size() > 0,
-                    [this.getChoiceName('MyDynasty')]: context => context.player && context.player.dynastyDeck.size() > 0,
-                    [this.getChoiceName('MyConflict')]: context => context.player && context.player.conflictDeck.size() > 0
+                    [this.getChoiceName('OppDynasty')]: (context) =>
+                        context.player.opponent && context.player.opponent.dynastyDeck.size() > 0,
+                    [this.getChoiceName('OppConflict')]: (context) =>
+                        context.player.opponent && context.player.opponent.conflictDeck.size() > 0,
+                    [this.getChoiceName('MyDynasty')]: (context) =>
+                        context.player && context.player.dynastyDeck.size() > 0,
+                    [this.getChoiceName('MyConflict')]: (context) =>
+                        context.player && context.player.conflictDeck.size() > 0
                 }
             },
             effect: 'look at the top 3 cards of {1}\'s {2}',
-            effectArgs: context => this.mapChoiceToEffectArgs(context),
-            handler: context => {
+            effectArgs: (context) => this.mapChoiceToEffectArgs(context),
+            handler: (context) => {
                 let cardsToSort = this.mapChoiceToCards(context);
-                this.truthSeekerPrompt(context, cardsToSort, [], 'Select the card you would like to place on top of the deck.');
+                this.truthSeekerPrompt(
+                    context,
+                    cardsToSort,
+                    [],
+                    'Select the card you would like to place on top of the deck.'
+                );
             }
         });
     }
@@ -94,11 +102,16 @@ class Truthseeker extends DrawCard {
             activePromptTitle: promptTitle,
             context: context,
             cards: promptCards,
-            cardHandler: card => {
+            cardHandler: (card) => {
                 orderedCards.push(card);
-                promptCards = promptCards.filter(c => c !== card);
+                promptCards = promptCards.filter((c) => c !== card);
                 if(promptCards.length > 1) {
-                    this.truthSeekerPrompt(context, promptCards, orderedCards, 'Which card do you want to be the ' + orderPrompt[orderedCards.length] + ' card?');
+                    this.truthSeekerPrompt(
+                        context,
+                        promptCards,
+                        orderedCards,
+                        'Which card do you want to be the ' + orderPrompt[orderedCards.length] + ' card?'
+                    );
                     return;
                 } else if(promptCards.length === 1) {
                     orderedCards.push(promptCards[0]);
@@ -112,4 +125,3 @@ class Truthseeker extends DrawCard {
 Truthseeker.id = 'truthseeker';
 
 module.exports = Truthseeker;
-

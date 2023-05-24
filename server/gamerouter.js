@@ -1,6 +1,6 @@
 const zmq = require('zeromq');
 const router = zmq.socket('router');
-const logger = require('./log.js');
+const { logger } = require('./logger');
 const _ = require('underscore');
 const monk = require('monk');
 const EventEmitter = require('events');

@@ -1,7 +1,6 @@
-import { CardTypes, TargetModes } from '../../Constants.js';
-
 const DrawCard = require('../../drawcard.js');
 const AbilityDsl = require('../../abilitydsl');
+const { TargetModes, CardTypes } = require('../../Constants.js');
 
 class UnfulfilledDuty extends DrawCard {
     setupCardAbilities() {
@@ -10,11 +9,11 @@ class UnfulfilledDuty extends DrawCard {
             target: {
                 mode: TargetModes.MaxStat,
                 activePromptTitle: 'Choose characters',
-                cardStat: card => card.getCost(),
+                cardStat: (card) => card.getCost(),
                 maxStat: () => 6,
                 numCards: 0,
                 cardType: CardTypes.Character,
-                cardCondition: card => card.getFate() === 0,
+                cardCondition: (card) => card.getFate() === 0,
                 gameAction: AbilityDsl.actions.ready()
             }
         });

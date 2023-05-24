@@ -3,11 +3,11 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const config = require('config');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const logger = require('./log.js');
+const { logger } = require('./logger');
 const bcrypt = require('bcrypt');
 const api = require('./api');
 const path = require('path');
@@ -15,10 +15,6 @@ const jwt = require('jsonwebtoken');
 const http = require('http');
 const Raven = require('raven');
 const helmet = require('helmet');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpack = require('webpack');
-const webpackConfig = require('../webpack.config.js');
 const monk = require('monk');
 const _ = require('underscore');
 
@@ -46,20 +42,21 @@ class Server {
         app.use(helmet());
 
         app.set('trust proxy', 1);
-        app.use(session({
-            store: new MongoStore({ url: config.dbPath }),
-            saveUninitialized: false,
-            resave: false,
-            secret: config.secret,
-            cookie: {
-                maxAge: config.cookieLifetime,
-                secure: config.https,
-                httpOnly: false,
-                domain: config.domain
-            },
-            name: 'sessionId'
-
-        }));
+        app.use(
+            session({
+                store: new MongoStore({ mongoUrl: config.dbPath }),
+                saveUninitialized: false,
+                resave: false,
+                secret: config.secret,
+                cookie: {
+                    maxAge: config.cookieLifetime,
+                    secure: config.https,
+                    httpOnly: false,
+                    domain: config.domain
+                },
+                name: 'sessionId'
+            })
+        );
 
         app.use(passport.initialize());
         app.use(passport.session());
@@ -78,31 +75,6 @@ class Server {
         app.set('view engine', 'pug');
         app.set('views', path.join(__dirname, '..', 'views'));
 
-        if(this.isDeveloping) {
-            const compiler = webpack(webpackConfig);
-            const middleware = webpackDevMiddleware(compiler, {
-                hot: true,
-                contentBase: 'client',
-                publicPath: webpackConfig.output.publicPath,
-                stats: {
-                    colors: true,
-                    hash: false,
-                    timings: true,
-                    chunks: false,
-                    chunkModules: false,
-                    modules: false
-                },
-                historyApiFallback: true
-            });
-
-            app.use(middleware);
-            app.use(webpackHotMiddleware(compiler, {
-                log: false,
-                path: '/__webpack_hmr',
-                heartbeat: 2000
-            }));
-        }
-
         app.get('*', (req, res) => {
             let token = undefined;
 
@@ -111,11 +83,17 @@ class Server {
                 req.user = _.omit(req.user, 'blockList');
             }
 
-            res.render('index', { basedir: path.join(__dirname, '..', 'views'), user: Settings.getUserWithDefaultsSet(req.user), token: token, production: !this.isDeveloping });
+            res.render('index', {
+                basedir: path.join(__dirname, '..', 'views'),
+                user: Settings.getUserWithDefaultsSet(req.user),
+                token: token,
+                production: !this.isDeveloping
+            });
         });
 
         // Define error middleware last
-        app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
+        app.use(function (err, req, res) {
+            // eslint-disable-line no-unused-vars
             res.status(500).send({ success: false });
             logger.error(err);
         });
@@ -136,15 +114,16 @@ class Server {
     }
 
     verifyUser(username, password, done) {
-        this.userService.getUserByUsername(username)
-            .then(user => {
+        this.userService
+            .getUserByUsername(username)
+            .then((user) => {
                 if(!user) {
                     done(null, false, { message: 'Invalid username/password' });
 
                     return Promise.reject('Failed auth');
                 }
 
-                bcrypt.compare(password, user.password, function(err, valid) {
+                bcrypt.compare(password, user.password, function (err, valid) {
                     if(err) {
                         logger.info(err.message);
 
@@ -155,7 +134,7 @@ class Server {
                         return done(null, false, { message: 'Invalid username/password' });
                     }
 
-                    let userObj = {
+                    const userObj = Settings.getUserWithDefaultsSet({
                         username: user.username,
                         email: user.email,
                         emailHash: user.emailHash,
@@ -165,14 +144,12 @@ class Server {
                         promptedActionWindows: user.promptedActionWindows,
                         permissions: user.permissions,
                         blockList: user.blockList
-                    };
-
-                    userObj = Settings.getUserWithDefaultsSet(userObj);
+                    });
 
                     return done(null, userObj);
                 });
             })
-            .catch(err => {
+            .catch((err) => {
                 done(err);
 
                 logger.info(err);
@@ -186,26 +163,25 @@ class Server {
     }
 
     deserializeUser(id, done) {
-        this.userService.getUserById(id)
-            .then(user => {
-                if(!user) {
-                    return done(new Error('user not found'));
-                }
+        this.userService.getUserById(id).then((user) => {
+            if(!user) {
+                return done(new Error('user not found'));
+            }
 
-                let userObj = {
-                    username: user.username,
-                    email: user.email,
-                    emailHash: user.emailHash,
-                    _id: user._id,
-                    admin: user.admin,
-                    settings: user.settings,
-                    promptedActionWindows: user.promptedActionWindows,
-                    permissions: user.permissions,
-                    blockList: user.blockList
-                };
+            let userObj = {
+                username: user.username,
+                email: user.email,
+                emailHash: user.emailHash,
+                _id: user._id,
+                admin: user.admin,
+                settings: user.settings,
+                promptedActionWindows: user.promptedActionWindows,
+                permissions: user.permissions,
+                blockList: user.blockList
+            };
 
-                done(null, userObj);
-            });
+            done(null, userObj);
+        });
     }
 }
 module.exports = Server;

@@ -8,7 +8,7 @@ import ProvinceCard = require('./provincecard');
 import CardAbility = require('./CardAbility');
 import { DuelProperties } from './GameActions/DuelAction';
 import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } from './Constants';
-import StatusToken = require('./StatusTokens/StatusToken');
+import type { StatusToken } from './StatusToken';
 import Player = require('./player');
 
 interface BaseTarget {

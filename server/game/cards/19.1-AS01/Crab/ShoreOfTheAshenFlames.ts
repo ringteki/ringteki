@@ -1,7 +1,7 @@
 import { CardTypes, ConflictTypes, EffectNames, Players } from '../../../Constants';
 import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
-import Conflict = require('../../../conflict');
+import type { Conflict } from '../../../conflict';
 import ProvinceCard = require('../../../provincecard');
 
 export default class ShoreOfTheAshenFlames extends ProvinceCard {

@@ -26,7 +26,9 @@ export class ResolveElementAction extends RingAction {
         rings = rings.filter(a => a != undefined);
         if(rings.length > 1) {
             let sortedRings = rings.sort((a, b) => {
+                // @ts-ignore
                 let aPriority = RingEffects.contextFor(context.player, a.element).ability.defaultPriority;
+                // @ts-ignore
                 let bPriority = RingEffects.contextFor(context.player, b.element).ability.defaultPriority;
                 return context.player.firstPlayer ? aPriority - bPriority : bPriority - aPriority;
             });

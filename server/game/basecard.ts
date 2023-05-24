@@ -19,10 +19,7 @@ import { PlayCharacterAction } from './PlayCharacterAction.js';
 import PlayAttachmentAction = require('./playattachmentaction');
 import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
 import ConflictTracker = require('./conflicttracker');
-const HonoredStatusToken = require('./StatusTokens/HonoredStatusToken');
-const DishonoredStatusToken = require('./StatusTokens/DishonoredStatusToken');
-const TaintedStatusToken = require('./StatusTokens/TaintedStatusToken');
-import GetStatusToken = require('./StatusTokens/StatusTokenHelper');
+import { StatusToken } from './StatusToken';
 import ElementSymbol = require('./ElementSymbol');
 import { GameModes } from '../GameModes';
 
@@ -369,21 +366,31 @@ class BaseCard extends EffectSource {
     }
 
     hasTrait(trait: string): boolean {
-        return this.getTraits().includes(trait.toLowerCase());
+        return this.getTraitSet().has(trait.toLowerCase());
     }
 
     getTraits(): string[] {
-        let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        let traits = copyEffect
-            ? copyEffect.traits
-            : this.getEffects(EffectNames.Blank).some((blankTraits) => blankTraits)
-            ? []
-            : this.traits;
+        return Array.from(this.getTraitSet());
+    }
 
-        let withGainedTraits = _.uniq(traits.concat(this.getEffects(EffectNames.AddTrait)));
-        let lostTraits = new Set(this.getEffects(EffectNames.LoseTrait));
-        let withoutLostTraits = withGainedTraits.filter((trait) => !lostTraits.has(trait));
-        return withoutLostTraits;
+    getTraitSet(): Set<string> {
+        const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        const set = new Set(
+            copyEffect
+                ? (copyEffect.traits as string[])
+                : this.getEffects(EffectNames.Blank).some((blankTraits: boolean) => blankTraits)
+                ? []
+                : this.traits
+        );
+
+        for (const gainedTrait of this.getEffects(EffectNames.AddTrait)) {
+            set.add(gainedTrait);
+        }
+        for (const lostTrait of this.getEffects(EffectNames.LoseTrait)) {
+            set.delete(lostTrait);
+        }
+
+        return set;
     }
 
     isFaction(faction: string): boolean {
@@ -905,7 +912,7 @@ class BaseCard extends EffectSource {
             } else if(tokenType === CharacterStatus.Dishonored && this.isHonored) {
                 this.removeStatusToken(CharacterStatus.Honored);
             } else {
-                const token = GetStatusToken(this.game, this, tokenType);
+                const token = StatusToken.create(this.game, this, tokenType);
                 if(token) {
                     token.setCard(this);
                     this.statusTokens.push(token);
@@ -1035,8 +1042,8 @@ class BaseCard extends EffectSource {
         return 'none';
     }
 
-    getShortSummaryForControls(activePlayer) {
-        if(this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
+    public getShortSummaryForControls(activePlayer: Player) {
+        if (this.isFacedown() && (activePlayer !== this.controller || this.hideWhenFacedown())) {
             return { facedown: true, isDynasty: this.isDynasty, isConflict: this.isConflict };
         }
         return super.getShortSummaryForControls(activePlayer);

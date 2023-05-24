@@ -1,4 +1,4 @@
-const logger = require('./log.js');
+const { logger } = require('./logger');
 const EventEmitter = require('events');
 const jwt = require('jsonwebtoken');
 const Raven = require('raven');

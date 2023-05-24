@@ -1,5 +1,5 @@
-const BaseStep = require('../../../build/server/game/gamesteps/basestep.js');
-const GamePipeline = require('../../../build/server/game/gamepipeline.js');
+const { BaseStep } = require('../../../build/server/game/gamesteps/BaseStep.js');
+const { GamePipeline } = require('../../../build/server/game/GamePipeline.js');
 
 describe('the GamePipeline', function() {
     beforeEach(function() {
