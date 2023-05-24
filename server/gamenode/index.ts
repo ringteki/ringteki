@@ -1,5 +1,5 @@
 import pmx from 'pmx';
-import GameServer from './gameserver.js';
+import { GameServer } from './GameServer.js';
 
 const server = new GameServer();
 
