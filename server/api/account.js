@@ -13,12 +13,12 @@ const Settings = require('../settings.js');
 const _ = require('underscore');
 const { wrapAsync } = require('../util.js');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let userService = new UserService(db);
 
 function hashPassword(password, rounds) {
     return new Promise((resolve, reject) => {
-        bcrypt.hash(password, rounds, function(err, hash) {
+        bcrypt.hash(password, rounds, function (err, hash) {
             if(err) {
                 return reject(err);
             }
@@ -30,7 +30,7 @@ function hashPassword(password, rounds) {
 
 function loginUser(request, user) {
     return new Promise((resolve, reject) => {
-        request.login(user, function(err) {
+        request.login(user, function (err) {
             if(err) {
                 return reject(err);
             }
@@ -42,25 +42,28 @@ function loginUser(request, user) {
 
 function sendEmail(address, email) {
     return new Promise((resolve, reject) => {
-        var emailTransport = nodemailer.createTransport(config.emailPath);
+        var emailTransport = nodemailer.createTransport(config.get('emailPath'));
 
-        emailTransport.sendMail({
-            from: 'Jigoku Online <noreply@jigoku.online>',
-            to: address,
-            subject: 'Your account at Jigoku Online',
-            text: email
-        }, function(error) {
-            if(error) {
-                reject(error);
+        emailTransport.sendMail(
+            {
+                from: 'Jigoku Online <noreply@jigoku.online>',
+                to: address,
+                subject: 'Your account at Jigoku Online',
+                text: email
+            },
+            function (error) {
+                if(error) {
+                    reject(error);
+                }
+
+                resolve();
             }
-
-            resolve();
-        });
+        );
     });
 }
 
-module.exports.init = function(server) {
-    server.post('/api/account/register', function(req, res) {
+module.exports.init = function (server) {
+    server.post('/api/account/register', function (req, res) {
         if(!req.body.password) {
             res.send({ success: false, message: 'No password specified' });
 
@@ -79,19 +82,26 @@ module.exports.init = function(server) {
             return Promise.reject('No username');
         }
 
-        userService.getUserByEmail(req.body.email)
-            .then(user => {
+        userService
+            .getUserByEmail(req.body.email)
+            .then((user) => {
                 if(user) {
-                    res.send({ success: false, message: 'An account with that email already exists, please use another' });
+                    res.send({
+                        success: false,
+                        message: 'An account with that email already exists, please use another'
+                    });
 
                     return Promise.reject('Account email exists');
                 }
 
                 return userService.getUserByUsername(req.body.username);
             })
-            .then(user => {
+            .then((user) => {
                 if(user) {
-                    res.send({ success: false, message: 'An account with that name already exists, please choose another' });
+                    res.send({
+                        success: false,
+                        message: 'An account with that name already exists, please choose another'
+                    });
 
                     return Promise.reject('Account exists');
                 }
@@ -99,7 +109,7 @@ module.exports.init = function(server) {
             .then(() => {
                 return hashPassword(req.body.password, 10);
             })
-            .then(passwordHash => {
+            .then((passwordHash) => {
                 let user = {
                     password: passwordHash,
                     registered: new Date(),
@@ -110,22 +120,30 @@ module.exports.init = function(server) {
 
                 return userService.addUser(user);
             })
-            .then(user => {
+            .then((user) => {
                 return loginUser(req, user);
             })
             .then(() => {
-                res.send({ success: true, user: Settings.getUserWithDefaultsSet(req.body), token: jwt.sign(req.user, config.secret) });
+                res.send({
+                    success: true,
+                    user: Settings.getUserWithDefaultsSet(req.body),
+                    token: jwt.sign(req.user, config.get('secret'))
+                });
             })
             .catch(() => {
                 res.send({ success: false, message: 'An error occured registering your account' });
             });
     });
 
-    server.post('/api/account/check-username', function(req, res) {
-        userService.getUserByUsername(req.body.username)
-            .then(user => {
+    server.post('/api/account/check-username', function (req, res) {
+        userService
+            .getUserByUsername(req.body.username)
+            .then((user) => {
                 if(user) {
-                    return res.send({ success: true, message: 'An account with that name already exists, please choose another' });
+                    return res.send({
+                        success: true,
+                        message: 'An account with that name already exists, please choose another'
+                    });
                 }
 
                 return res.send({ success: true });
@@ -135,25 +153,26 @@ module.exports.init = function(server) {
             });
     });
 
-    server.post('/api/account/logout', function(req, res) {
+    server.post('/api/account/logout', function (req, res) {
         req.logout();
 
         res.send({ success: true });
     });
 
-    server.post('/api/account/login', passport.authenticate('local'), function(req, res) {
-        res.send({ success: true, user: req.user, token: jwt.sign(req.user, config.secret) });
+    server.post('/api/account/login', passport.authenticate('local'), function (req, res) {
+        res.send({ success: true, user: req.user, token: jwt.sign(req.user, config.get('secret')) });
     });
 
-    server.post('/api/account/password-reset-finish', function(req, res) {
+    server.post('/api/account/password-reset-finish', function (req, res) {
         let resetUser;
 
         if(!req.body.id || !req.body.token || !req.body.newPassword) {
             return res.send({ success: false, message: 'Invalid parameters' });
         }
 
-        userService.getUserById(req.body.id)
-            .then(user => {
+        userService
+            .getUserById(req.body.id)
+            .then((user) => {
                 if(!user) {
                     return Promise.reject('User not found');
                 }
@@ -161,7 +180,11 @@ module.exports.init = function(server) {
                 if(!user.resetToken) {
                     logger.error('Got unexpected reset request for user', user.username);
 
-                    res.send({ success: false, message: 'An error occured resetting your password, check the url you have entered and try again' });
+                    res.send({
+                        success: false,
+                        message:
+                            'An error occured resetting your password, check the url you have entered and try again'
+                    });
 
                     return Promise.reject('No reset token');
                 }
@@ -176,13 +199,17 @@ module.exports.init = function(server) {
                     return Promise.reject('Token expires');
                 }
 
-                let hmac = crypto.createHmac('sha512', config.hmacSecret);
+                let hmac = crypto.createHmac('sha512', config.get('hmacSecret'));
                 let resetToken = hmac.update('RESET ' + user.username + ' ' + user.tokenExpires).digest('hex');
 
                 if(resetToken !== req.body.token) {
                     logger.error('Invalid reset token', user.username, req.body.token);
 
-                    res.send({ success: false, message: 'An error occured resetting your password, check the url you have entered and try again' });
+                    res.send({
+                        success: false,
+                        message:
+                            'An error occured resetting your password, check the url you have entered and try again'
+                    });
 
                     return Promise.reject('Invalid token');
                 }
@@ -191,7 +218,7 @@ module.exports.init = function(server) {
 
                 return hashPassword(req.body.newPassword, 10);
             })
-            .then(passwordHash => {
+            .then((passwordHash) => {
                 return userService.setPassword(resetUser, passwordHash);
             })
             .then(() => {
@@ -200,20 +227,28 @@ module.exports.init = function(server) {
             .then(() => {
                 res.send({ success: true });
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error(err);
 
-                res.send({ success: false, message: 'An error occured resetting your password, check the url you have entered and try again' });
+                res.send({
+                    success: false,
+                    message: 'An error occured resetting your password, check the url you have entered and try again'
+                });
             });
     });
 
-    server.post('/api/account/password-reset', function(req, res) {
+    server.post('/api/account/password-reset', function (req, res) {
         let emailUser;
         let resetToken;
         let captchaDone = false;
 
-        util.httpRequest('https://www.google.com/recaptcha/api/siteverify?secret=' + config.captchaKey + '&response=' + req.body.captcha)
-            .then(response => {
+        util.httpRequest(
+            'https://www.google.com/recaptcha/api/siteverify?secret=' +
+                config.get('captchaKey') +
+                '&response=' +
+                req.body.captcha
+        )
+            .then((response) => {
                 let answer = JSON.parse(response);
 
                 if(!answer.success) {
@@ -226,7 +261,7 @@ module.exports.init = function(server) {
 
                 return userService.getUserByUsername(req.body.username);
             })
-            .then(user => {
+            .then((user) => {
                 if(!user) {
                     logger.error('Username not found for password reset', req.body.username);
 
@@ -235,7 +270,7 @@ module.exports.init = function(server) {
 
                 let expiration = moment().add(4, 'hours');
                 let formattedExpiration = expiration.format('YYYYMMDD-HH:mm:ss');
-                let hmac = crypto.createHmac('sha512', config.hmacSecret);
+                let hmac = crypto.createHmac('sha512', config.get('hmacSecret'));
 
                 resetToken = hmac.update('RESET ' + user.username + ' ' + formattedExpiration).digest('hex');
 
@@ -245,27 +280,35 @@ module.exports.init = function(server) {
             })
             .then(() => {
                 let url = 'https://jigoku.online/reset-password?id=' + emailUser._id + '&token=' + resetToken;
-                let emailText = 'Hi,\n\nSomeone, hopefully you, has requested their password on Jigoku Online (https://jigoku.online) to be reset.  If this was you, click this link ' + url + ' to complete the process.\n\n' +
+                let emailText =
+                    'Hi,\n\nSomeone, hopefully you, has requested their password on Jigoku Online (https://jigoku.online) to be reset.  If this was you, click this link ' +
+                    url +
+                    ' to complete the process.\n\n' +
                     'If you did not request this reset, do not worry, your account has not been affected and your password has not been changed, just ignore this email.\n' +
                     'Kind regards,\n\n' +
                     'The Jigoku Online team';
 
                 return sendEmail(emailUser.email, emailText);
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error(err);
 
                 if(!captchaDone) {
-                    return res.send({ success: false, message: 'There was a problem verifying the capthca, please try again' });
+                    return res.send({
+                        success: false,
+                        message: 'There was a problem verifying the capthca, please try again'
+                    });
                 }
             });
     });
 
     function updateUser(res, user) {
-        return userService.update(user)
+        return userService
+            .update(user)
             .then(() => {
                 res.send({
-                    success: true, user: {
+                    success: true,
+                    user: {
                         username: user.username,
                         email: user.email,
                         emailHash: user.emailHash,
@@ -274,7 +317,8 @@ module.exports.init = function(server) {
                         settings: user.settings,
                         promptedActionWindows: user.promptedActionWindows,
                         permissions: user.permissions || {}
-                    }, token: jwt.sign(user, config.secret)
+                    },
+                    token: jwt.sign(user, config.get('secret'))
                 });
             })
             .catch(() => {
@@ -294,8 +338,9 @@ module.exports.init = function(server) {
             return res.status(403).send({ message: 'Unauthorized' });
         }
 
-        userService.getUserByUsername(req.params.username)
-            .then(user => {
+        userService
+            .getUserByUsername(req.params.username)
+            .then((user) => {
                 if(!user) {
                     return res.status(404).send({ message: 'Not found' });
                 }
@@ -312,7 +357,7 @@ module.exports.init = function(server) {
 
                 return updateUser(res, user);
             })
-            .then(passwordHash => {
+            .then((passwordHash) => {
                 if(!passwordHash) {
                     return;
                 }
@@ -326,69 +371,90 @@ module.exports.init = function(server) {
             });
     });
 
-    server.get('/api/account/:username/blocklist', wrapAsync(async (req, res) => {
-        let user = await checkAuth(req, res);
+    server.get(
+        '/api/account/:username/blocklist',
+        wrapAsync(async (req, res) => {
+            let user = await checkAuth(req, res);
 
-        if(!user) {
-            return;
-        }
+            if(!user) {
+                return;
+            }
 
-        res.send({ success: true, blockList: user.blockList });
-    }));
+            res.send({ success: true, blockList: user.blockList });
+        })
+    );
 
-    server.post('/api/account/:username/blocklist', wrapAsync(async (req, res) => {
-        let user = await checkAuth(req, res);
+    server.post(
+        '/api/account/:username/blocklist',
+        wrapAsync(async (req, res) => {
+            let user = await checkAuth(req, res);
 
-        if(!user) {
-            return;
-        }
+            if(!user) {
+                return;
+            }
 
-        if(!user.blockList) {
-            user.blockList = [];
-        }
+            if(!user.blockList) {
+                user.blockList = [];
+            }
 
-        if(_.find(user.blockList, user => {
-            return user === req.body.username.toLowerCase();
-        })) {
-            return res.send({ success: false, message: 'Entry already on block list' });
-        }
+            if(
+                _.find(user.blockList, (user) => {
+                    return user === req.body.username.toLowerCase();
+                })
+            ) {
+                return res.send({ success: false, message: 'Entry already on block list' });
+            }
 
-        user.blockList.push(req.body.username.toLowerCase());
+            user.blockList.push(req.body.username.toLowerCase());
 
-        await userService.updateBlockList(user);
+            await userService.updateBlockList(user);
 
-        res.send({ success: true, message: 'Block list entry added successfully', username: req.body.username.toLowerCase() });
-    }));
+            res.send({
+                success: true,
+                message: 'Block list entry added successfully',
+                username: req.body.username.toLowerCase()
+            });
+        })
+    );
 
-    server.delete('/api/account/:username/blocklist/:entry', wrapAsync(async (req, res) => {
-        let user = await checkAuth(req, res);
+    server.delete(
+        '/api/account/:username/blocklist/:entry',
+        wrapAsync(async (req, res) => {
+            let user = await checkAuth(req, res);
 
-        if(!user) {
-            return;
-        }
+            if(!user) {
+                return;
+            }
 
-        if(!req.params.entry) {
-            return res.send({ success: false, message: 'Parameter "entry" is required' });
-        }
+            if(!req.params.entry) {
+                return res.send({ success: false, message: 'Parameter "entry" is required' });
+            }
 
-        if(!user.blockList) {
-            user.blockList = [];
-        }
+            if(!user.blockList) {
+                user.blockList = [];
+            }
 
-        if(!_.find(user.blockList, user => {
-            return user === req.params.entry.toLowerCase();
-        })) {
-            return res.status(404).send({ message: 'Not found' });
-        }
+            if(
+                !_.find(user.blockList, (user) => {
+                    return user === req.params.entry.toLowerCase();
+                })
+            ) {
+                return res.status(404).send({ message: 'Not found' });
+            }
 
-        user.blockList = _.reject(user.blockList, user => {
-            return user === req.params.entry.toLowerCase();
-        });
+            user.blockList = _.reject(user.blockList, (user) => {
+                return user === req.params.entry.toLowerCase();
+            });
 
-        await userService.updateBlockList(user);
+            await userService.updateBlockList(user);
 
-        res.send({ success: true, message: 'Block list entry removed successfully', username: req.params.entry.toLowerCase() });
-    }));
+            res.send({
+                success: true,
+                message: 'Block list entry removed successfully',
+                username: req.params.entry.toLowerCase()
+            });
+        })
+    );
 };
 
 async function checkAuth(req, res) {

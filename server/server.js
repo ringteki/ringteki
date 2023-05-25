@@ -13,18 +13,17 @@ const api = require('./api');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const http = require('http');
-const Raven = require('raven');
 const helmet = require('helmet');
 const monk = require('monk');
 const _ = require('underscore');
 
 const UserService = require('./services/UserService.js');
-const version = require('../version.js');
 const Settings = require('./settings.js');
+const { errorHandler, requestHandler } = require('./ErrorMonitoring');
 
 class Server {
     constructor(isDeveloping) {
-        let db = monk(config.dbPath);
+        let db = monk(config.get('dbPath'));
         this.userService = new UserService(db);
         this.isDeveloping = isDeveloping;
         // @ts-ignore
@@ -33,10 +32,8 @@ class Server {
 
     init() {
         if(!this.isDeveloping) {
-            Raven.config(config.sentryDsn, { release: version }).install();
-
-            app.use(Raven.requestHandler());
-            app.use(Raven.errorHandler());
+            app.use(requestHandler);
+            app.use(errorHandler);
         }
 
         app.use(helmet());
@@ -44,15 +41,15 @@ class Server {
         app.set('trust proxy', 1);
         app.use(
             session({
-                store: new MongoStore({ mongoUrl: config.dbPath }),
+                store: new MongoStore({ mongoUrl: config.get('dbPath') }),
                 saveUninitialized: false,
                 resave: false,
-                secret: config.secret,
+                secret: config.get('secret'),
                 cookie: {
-                    maxAge: config.cookieLifetime,
-                    secure: config.https,
+                    maxAge: config.get('cookieLifetime'),
+                    secure: config.get('https'),
                     httpOnly: false,
-                    domain: config.domain
+                    domain: config.get('domain')
                 },
                 name: 'sessionId'
             })
@@ -79,7 +76,7 @@ class Server {
             let token = undefined;
 
             if(req.user) {
-                token = jwt.sign(req.user, config.secret);
+                token = jwt.sign(req.user, config.get('secret'));
                 req.user = _.omit(req.user, 'blockList');
             }
 
@@ -102,7 +99,7 @@ class Server {
     }
 
     run() {
-        var port = config.lobby.port;
+        var port = config.get('lobby.port');
 
         this.server.listen(port, '127.0.0.1', function onStart(err) {
             if(err) {

@@ -3,7 +3,7 @@ const UserService = require('../services/UserService.js');
 const { logger } = require('../logger');
 const config = require('config');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let userService = new UserService(db);
 
 module.exports.init = function(server) {

@@ -2,7 +2,7 @@ const monk = require('monk');
 const config = require('config');
 const CardService = require('../services/CardService.js');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let cardService = new CardService(db);
 
 module.exports.init = function(server) {

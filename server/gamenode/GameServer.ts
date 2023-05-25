@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node';
 import axios from 'axios';
 import config from 'config';
 import fs from 'fs';
@@ -7,6 +6,7 @@ import https from 'https';
 import jwt from 'jsonwebtoken';
 import socketio from 'socket.io';
 
+import { captureException } from '../ErrorMonitoring';
 import Game from '../game/game';
 import type Player from '../game/player';
 import { logger } from '../logger';
@@ -14,10 +14,6 @@ import type PendingGame from '../pendinggame';
 import Socket from '../socket';
 import { detectBinary } from '../util';
 import { ZmqSocket } from './ZmqSocket';
-
-if (config.has('sentryDsn')) {
-    Sentry.init({ dsn: config.get('sentryDsn'), tracesSampleRate: 0 });
-}
 
 export class GameServer {
     private games = new Map<string, Game>();
@@ -120,7 +116,7 @@ export class GameServer {
             }
         }
 
-        Sentry.captureException(e, { extra: debugData });
+        captureException(e, { extra: debugData });
 
         if (game) {
             game.addMessage(

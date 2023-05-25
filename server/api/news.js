@@ -3,7 +3,7 @@ const NewsService = require('../services/NewsService.js');
 const { logger } = require('../logger');
 const config = require('config');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let newsService = new NewsService(db);
 
 module.exports.init = function(server) {

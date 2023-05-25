@@ -6,7 +6,7 @@ const monk = require('monk');
 const GameService = require('./services/GameService.js');
 const config = require('config');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let gameService = new GameService(db);
 
 let args = process.argv.slice(2);

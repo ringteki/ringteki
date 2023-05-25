@@ -3,7 +3,7 @@ const config = require('config');
 const DeckService = require('../services/DeckService.js');
 const {wrapAsync} = require('../util.js');
 
-let db = monk(config.dbPath);
+let db = monk(config.get('dbPath'));
 let deckService = new DeckService(db);
 
 module.exports.init = function(server) {

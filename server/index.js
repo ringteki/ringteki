@@ -7,7 +7,7 @@ const config = require('config');
 function runServer() {
     var server = new Server(process.env.NODE_ENV !== 'production');
     var httpServer = server.init();
-    var lobby = new Lobby(httpServer, { config: config, db: monk(config.dbPath) });
+    var lobby = new Lobby(httpServer, { config: config, db: monk(config.get('dbPath')) });
 
     pmx.action('status', reply => {
         var status = lobby.getStatus();
