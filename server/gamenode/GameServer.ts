@@ -172,7 +172,10 @@ export class GameServer {
         this.zmqSocket.send('GAMEWIN', { game: saveState, winner: winner.name, reason: reason });
 
         void axios
-            .post('https://l5r-analytics-engine-production.up.railway.app/api/game-report', saveState)
+            .post(
+                `https://l5r-analytics-engine-production.up.railway.app/api/game-report/${config.get('ENVIRONMENT')}`,
+                saveState
+            )
             .catch(() => {});
     }
 

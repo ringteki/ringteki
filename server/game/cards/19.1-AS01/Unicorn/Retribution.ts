@@ -1,10 +1,9 @@
-import { GameModes } from '../../../../GameModes';
-import { CardTypes, Players, Durations, ConflictTypes, Locations } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
+import { CardTypes, ConflictTypes, Durations, Players } from '../../../Constants';
+import type TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
+import type BaseCard = require('../../../basecard');
 import DrawCard = require('../../../drawcard');
-import Player = require('../../../player');
+import type Player = require('../../../player');
 
 export default class Retribution extends DrawCard {
     static id = 'retribution-';
@@ -75,17 +74,6 @@ export default class Retribution extends DrawCard {
     }
 
     private brokenProvinceCountForPlayer(player: Player) {
-        const gameModeProvinceCount = this.game.gameMode === GameModes.Skirmish ? 4 : 5;
-        const locations = [
-            Locations.StrongholdProvince,
-            Locations.ProvinceOne,
-            Locations.ProvinceTwo,
-            Locations.ProvinceThree,
-            Locations.ProvinceFour
-        ].slice(0, gameModeProvinceCount);
-        return locations.reduce(
-            (sum, location) => (player.getProvinceCardInProvince(location).isBroken ? sum + 1 : sum),
-            0
-        );
+        return player.getProvinceCards().reduce((sum, province) => (province.isBroken ? sum + 1 : sum), 0);
     }
 }

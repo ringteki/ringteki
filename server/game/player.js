@@ -296,7 +296,19 @@ class Player extends GameObject {
      */
     getProvinceCardInProvince(location) {
         let province = this.getSourceList(location);
-        return province.find(card => card.isProvince);
+        return province.find((card) => card.isProvince);
+    }
+
+    getProvinceCards() {
+        const gameModeProvinceCount = this.game.gameMode === GameModes.Skirmish ? 3 : 5;
+        const locations = [
+            Locations.ProvinceOne,
+            Locations.ProvinceTwo,
+            Locations.ProvinceThree,
+            Locations.ProvinceFour,
+            Locations.StrongholdProvince
+        ].slice(0, gameModeProvinceCount);
+        return locations.map((location) => this.getProvinceCardInProvince(location));
     }
 
     /**

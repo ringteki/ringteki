@@ -1270,14 +1270,13 @@ class Game extends EventEmitter {
      * This information is all logged when a game is won
      */
     getSaveState() {
-        var players = this.getPlayers().map(player => {
-            return {
-                name: player.name,
-                faction: player.faction.name || player.faction.value,
-                honor: player.getTotalHonor(),
-                deck: this.formatDeckForSaving(player.deck)
-            };
-        });
+        const players = this.getPlayers().map((player) => ({
+            name: player.name,
+            faction: player.faction.name || player.faction.value,
+            honor: player.getTotalHonor(),
+            lostProvinces: player.getProvinceCards().reduce((count, card) => (card.isBroken ? count + 1 : count), 0),
+            deck: this.formatDeckForSaving(player.deck)
+        }));
 
         return {
             id: this.savedGameId,
