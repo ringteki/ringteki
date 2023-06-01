@@ -3,7 +3,7 @@ const _ = require('underscore');
 const { GameObject } = require('./GameObject');
 const Deck = require('./deck.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
-const ClockSelector = require('./Clocks/ClockSelector');
+const { clockFor } = require('./Clocks/ClockSelector.js');
 const CostReducer = require('./costreducer.js');
 const GameActions = require('./GameActions/GameActions');
 const { RingEffects } = require('./RingEffects.js');
@@ -86,7 +86,7 @@ class Player extends GameObject {
         };
         this.imperialFavor = '';
 
-        this.clock = ClockSelector.for(this, clockdetails);
+        this.clock = clockFor(this, clockdetails);
 
         this.limitedPlayed = 0;
         this.deck = {};

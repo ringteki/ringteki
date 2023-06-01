@@ -1,15 +1,20 @@
-class Clock {
-    constructor(player, time, delayToStartClock = undefined) {
-        this.player = player;
+import type Player from '../player';
+
+export type Mode = 'stop' | 'down' | 'up' | 'off';
+
+export class Clock {
+    mainTime: number;
+    timeLeft: number;
+    timerStart = 0;
+    paused = false;
+    stateId = 0;
+    mode: Mode = 'off';
+    name = 'Clock';
+    manuallyPaused = false;
+
+    constructor(public player: Player, time: number, public delayToStartClock?: number) {
         this.mainTime = time;
         this.timeLeft = time;
-        this.mode = 'off';
-        this.timerStart = 0;
-        this.paused = false;
-        this.stateId = 0;
-        this.name = 'Clock';
-        this.delayToStartClock = delayToStartClock;
-        this.manuallyPaused = false;
     }
 
     manuallyPause() {
@@ -24,15 +29,15 @@ class Clock {
         this.updateStateId();
     }
 
-    pause() {
+    protected pause() {
         this.paused = true;
     }
 
-    restart() {
+    protected restart() {
         this.paused = false;
     }
 
-    modify(secs) {
+    modify(secs: number) {
         this.timeLeft += secs;
     }
 
@@ -40,51 +45,50 @@ class Clock {
         this.stateId++;
     }
 
-    start() {
-        if(!this.paused && !this.manuallyPaused) {
+    protected start() {
+        if (!this.paused && !this.manuallyPaused) {
             this.timerStart = Date.now();
             this.updateStateId();
         }
     }
 
-    stop() {
-        if(this.timerStart > 0) {
-            this.updateTimeLeft(Math.floor(((Date.now() - this.timerStart) / 1000) + 0.5));
+    protected stop() {
+        if (this.timerStart > 0) {
+            this.updateTimeLeft(Math.floor((Date.now() - this.timerStart) / 1000 + 0.5));
             this.timerStart = 0;
             this.updateStateId();
         }
     }
 
-    reset() {
-    }
+    protected reset() {}
 
-    opponentStart() {
+    protected opponentStart() {
         this.timerStart = Date.now();
         this.updateStateId();
     }
 
-    timeRanOut() {
+    protected timeRanOut() {
         return;
     }
 
-    updateTimeLeft(secs) {
-        if(this.timeLeft === 0 || secs < 0) {
+    protected updateTimeLeft(secs: number) {
+        if (this.timeLeft === 0 || secs < 0) {
             return;
         }
-        if(this.delayToStartClock && secs <= this.delayToStartClock) {
+        if (this.delayToStartClock && secs <= this.delayToStartClock) {
             return;
         }
 
-        if(this.delayToStartClock) {
+        if (this.delayToStartClock) {
             secs = secs - this.delayToStartClock;
         }
-        if(this.mode === 'down') {
+        if (this.mode === 'down') {
             this.modify(-secs);
-            if(this.timeLeft < 0) {
+            if (this.timeLeft < 0) {
                 this.timeLeft = 0;
                 this.timeRanOut();
             }
-        } else if(this.mode === 'up') {
+        } else if (this.mode === 'up') {
             this.modify(secs);
         }
     }
@@ -101,5 +105,3 @@ class Clock {
         };
     }
 }
-
-module.exports = Clock;
