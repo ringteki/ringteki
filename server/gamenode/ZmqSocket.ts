@@ -10,6 +10,7 @@ export class ZmqSocket extends EventEmitter {
     constructor(private listenAddress: string, private protocol: string) {
         super();
 
+        // @ts-ignore
         this.socket.identity = env.gameNodeName;
         this.socket.monitor(500, 0);
         this.socket.connect(env.mqUrl);
