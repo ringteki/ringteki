@@ -1,5 +1,4 @@
 import axios from 'axios';
-import config from 'config';
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
@@ -14,11 +13,12 @@ import type PendingGame from '../pendinggame';
 import Socket from '../socket';
 import { detectBinary } from '../util';
 import { ZmqSocket } from './ZmqSocket';
+import * as env from '../env.js';
 
 export class GameServer {
     private games = new Map<string, Game>();
     private protocol = 'https';
-    private host = config.get<string>('gameNode.host');
+    private host = env.gameNodeHost;
     private zmqSocket: ZmqSocket;
     private io: socketio.Server;
     private titleCardData: any;
@@ -28,8 +28,8 @@ export class GameServer {
         let privateKey: undefined | string;
         let certificate: undefined | string;
         try {
-            privateKey = fs.readFileSync(config.get<string>('gameNode.keyPath')).toString();
-            certificate = fs.readFileSync(config.get<string>('gameNode.certPath')).toString();
+            privateKey = fs.readFileSync(env.gameNodeKeyPath).toString();
+            certificate = fs.readFileSync(env.gameNodeCertPath).toString();
         } catch (e) {
             this.protocol = 'http';
         }
@@ -47,19 +47,19 @@ export class GameServer {
                 ? http.createServer()
                 : https.createServer({ key: privateKey, cert: certificate });
 
-        server.listen(config.get('gameNode.socketioPort'));
+        server.listen(env.gameNodeSocketIoPort);
 
         this.io = socketio(server, {
             perMessageDeflate: false,
-            path: `/${config.get('gameNode.name')}/socket.io`
+            path: `/${env.gameNodeName}/socket.io`
         });
         // @ts-ignore
         this.io.set('heartbeat timeout', 30000);
         this.io.use(this.handshake.bind(this));
 
-        if (config.has('gameNode.origin')) {
+        if (env.gameNodeOrigin) {
             // @ts-ignore
-            this.io.set('origins', config.get('gameNode.origin'));
+            this.io.set('origins', env.gameNodeOrigin);
         }
 
         this.io.on('connection', this.onConnection.bind(this));
@@ -154,7 +154,7 @@ export class GameServer {
 
     handshake(socket: socketio.Socket, next: () => void) {
         if (socket.handshake.query.token && socket.handshake.query.token !== 'undefined') {
-            jwt.verify(socket.handshake.query.token, config.get('secret'), function (err, user) {
+            jwt.verify(socket.handshake.query.token, env.secret, function (err, user) {
                 if (err) {
                     logger.info(err);
                     return;
@@ -173,7 +173,7 @@ export class GameServer {
 
         void axios
             .post(
-                `https://l5r-analytics-engine-production.up.railway.app/api/game-report/${config.get('ENVIRONMENT')}`,
+                `https://l5r-analytics-engine-production.up.railway.app/api/game-report/${env.environment}`,
                 saveState
             )
             .catch(() => {});
@@ -262,7 +262,7 @@ export class GameServer {
             return;
         }
 
-        const socket = new Socket(ioSocket, { config: config });
+        const socket = new Socket(ioSocket);
 
         const player = game.playersAndSpectators[socket.user.username];
         if (!player) {

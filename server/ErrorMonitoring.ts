@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/node';
-import config from 'config';
+import * as env from './env.js';
 
-if (config.has('sentryDsn')) {
-    Sentry.init({ dsn: config.get('sentryDsn'), tracesSampleRate: 0 });
+if (env.sentryDsn) {
+    Sentry.init({ dsn: env.sentryDsn, tracesSampleRate: 0 });
 }
 
 export function captureException(exception: any, extra?: Record<string, unknown>): void {

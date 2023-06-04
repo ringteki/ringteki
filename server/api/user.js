@@ -1,51 +1,53 @@
 const monk = require('monk');
 const UserService = require('../services/UserService.js');
 const { logger } = require('../logger');
-const config = require('config');
+const env = require('../env.js');
 
-let db = monk(config.get('dbPath'));
+let db = monk(env.dbPath);
 let userService = new UserService(db);
 
-module.exports.init = function(server) {
-    server.get('/api/user/:username', function(req, res) {
-        if(!req.user) {
+module.exports.init = function (server) {
+    server.get('/api/user/:username', function (req, res) {
+        if (!req.user) {
             return res.status(401);
         }
 
-        if(!req.user.permissions || !req.user.permissions.canManageUsers) {
+        if (!req.user.permissions || !req.user.permissions.canManageUsers) {
             return res.status(403);
         }
 
-        userService.getUserByUsername(req.params.username)
-            .then(user => {
-                if(!user) {
-                    res.status(404).send({ message: 'Not found'});
+        userService
+            .getUserByUsername(req.params.username)
+            .then((user) => {
+                if (!user) {
+                    res.status(404).send({ message: 'Not found' });
 
                     return Promise.reject('User not found');
                 }
 
                 res.send({ success: true, user: user });
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error(err);
             });
     });
 
-    server.put('/api/user/:username', function(req, res) {
-        if(!req.user) {
+    server.put('/api/user/:username', function (req, res) {
+        if (!req.user) {
             return res.status(401);
         }
 
-        if(!req.user.permissions || !req.user.permissions.canManageUsers) {
+        if (!req.user.permissions || !req.user.permissions.canManageUsers) {
             return res.status(403);
         }
 
         let userToSet = JSON.parse(req.body.data);
 
-        userService.getUserByUsername(req.params.username)
-            .then(user => {
-                if(!user) {
-                    return res.status(404).send({ message: 'Not found'});
+        userService
+            .getUserByUsername(req.params.username)
+            .then((user) => {
+                if (!user) {
+                    return res.status(404).send({ message: 'Not found' });
                 }
 
                 user.permissions = userToSet.permissions;

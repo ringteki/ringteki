@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const config = require('config');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const { logger } = require('./logger');
@@ -20,10 +19,11 @@ const _ = require('underscore');
 const UserService = require('./services/UserService.js');
 const Settings = require('./settings.js');
 const { errorHandler, requestHandler } = require('./ErrorMonitoring');
+const env = require('./env.js');
 
 class Server {
     constructor(isDeveloping) {
-        let db = monk(config.get('dbPath'));
+        let db = monk(env.dbPath);
         this.userService = new UserService(db);
         this.isDeveloping = isDeveloping;
         // @ts-ignore
@@ -31,7 +31,7 @@ class Server {
     }
 
     init() {
-        if(!this.isDeveloping) {
+        if (!this.isDeveloping) {
             app.use(requestHandler);
             app.use(errorHandler);
         }
@@ -41,15 +41,15 @@ class Server {
         app.set('trust proxy', 1);
         app.use(
             session({
-                store: new MongoStore({ mongoUrl: config.get('dbPath') }),
+                store: new MongoStore({ mongoUrl: env.dbPath }),
                 saveUninitialized: false,
                 resave: false,
-                secret: config.get('secret'),
+                secret: env.secret,
                 cookie: {
-                    maxAge: config.get('cookieLifetime'),
-                    secure: config.get('https'),
+                    maxAge: env.cookieLifetime,
+                    secure: env.https,
                     httpOnly: false,
-                    domain: config.get('domain')
+                    domain: env.domain
                 },
                 name: 'sessionId'
             })
@@ -75,8 +75,8 @@ class Server {
         app.get('*', (req, res) => {
             let token = undefined;
 
-            if(req.user) {
-                token = jwt.sign(req.user, config.get('secret'));
+            if (req.user) {
+                token = jwt.sign(req.user, env.secret);
                 req.user = _.omit(req.user, 'blockList');
             }
 
@@ -99,10 +99,10 @@ class Server {
     }
 
     run() {
-        var port = config.get('lobby.port');
+        var port = env.lobbyPort;
 
         this.server.listen(port, '127.0.0.1', function onStart(err) {
-            if(err) {
+            if (err) {
                 logger.error(err);
             }
 
@@ -114,20 +114,20 @@ class Server {
         this.userService
             .getUserByUsername(username)
             .then((user) => {
-                if(!user) {
+                if (!user) {
                     done(null, false, { message: 'Invalid username/password' });
 
                     return Promise.reject('Failed auth');
                 }
 
                 bcrypt.compare(password, user.password, function (err, valid) {
-                    if(err) {
+                    if (err) {
                         logger.info(err.message);
 
                         return done(err);
                     }
 
-                    if(!valid) {
+                    if (!valid) {
                         return done(null, false, { message: 'Invalid username/password' });
                     }
 
@@ -154,14 +154,14 @@ class Server {
     }
 
     serializeUser(user, done) {
-        if(user) {
+        if (user) {
             done(null, user._id);
         }
     }
 
     deserializeUser(id, done) {
         this.userService.getUserById(id).then((user) => {
-            if(!user) {
+            if (!user) {
                 return done(new Error('user not found'));
             }
 

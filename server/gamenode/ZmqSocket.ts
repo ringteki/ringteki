@@ -1,8 +1,8 @@
-import config from 'config';
 import EventEmitter from 'events';
 import zmq from 'zeromq';
-import { logger } from '../logger';
 import { z } from 'zod';
+import * as env from '../env.js';
+import { logger } from '../logger';
 
 export class ZmqSocket extends EventEmitter {
     private socket = zmq.socket('dealer');
@@ -10,9 +10,9 @@ export class ZmqSocket extends EventEmitter {
     constructor(private listenAddress: string, private protocol: string) {
         super();
 
-        this.socket.identity = config.get('gameNode.name');
+        this.socket.identity = env.gameNodeName;
         this.socket.monitor(500, 0);
-        this.socket.connect(config.get('mqUrl'));
+        this.socket.connect(env.mqUrl);
         this.socket.on('connect', this.onConnect.bind(this));
         this.socket.on('message', this.onMessage.bind(this));
     }
@@ -26,23 +26,14 @@ export class ZmqSocket extends EventEmitter {
     }
 
     private onGameSync(games: any) {
-        if (config.get('gameNode.proxyPort')) {
-            this.send('HELLO', {
-                maxGames: config.get('maxGames'),
-                address: this.listenAddress,
-                port: config.get('gameNode.proxyPort'),
-                protocol: this.protocol,
-                games: games
-            });
-        } else {
-            this.send('HELLO', {
-                maxGames: config.get('maxGames'),
-                address: this.listenAddress,
-                port: config.get('gameNode.socketioPort'),
-                protocol: this.protocol,
-                games: games
-            });
-        }
+        const port = env.gameNodeProxyPort ?? env.gameNodeSocketIoPort;
+        this.send('HELLO', {
+            maxGames: env.maxGames,
+            address: this.listenAddress,
+            port: port,
+            protocol: this.protocol,
+            games: games
+        });
     }
 
     private parseMsg(msg: unknown) {

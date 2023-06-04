@@ -31,7 +31,6 @@
         "@sentry/node": "^7.53.0",
         "axios": "^1.4.0",
         "bcrypt": "^5.1.0",
-        "config": "^3.3.9",
         "connect-mongo": "4.6.0",
         "cookie-parser": "^1.4.6",
         "cross-env": "^7.0.3",
@@ -57,7 +56,6 @@
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",
-        "@types/config": "^3.3.0",
         "@types/jsonwebtoken": "^9.0.2",
         "@types/node": "^14.18.47",
         "@types/socket.io": "^1.4.42",

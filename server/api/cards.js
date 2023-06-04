@@ -1,32 +1,34 @@
 const monk = require('monk');
-const config = require('config');
+const env = require('../env.js');
 const CardService = require('../services/CardService.js');
 
-let db = monk(config.get('dbPath'));
+let db = monk(env.dbPath);
 let cardService = new CardService(db);
 
-module.exports.init = function(server) {
-    server.get('/api/cards', function(req, res, next) {
-        cardService.getAllCards({ shortForm: true })
-            .then(cards => {
+module.exports.init = function (server) {
+    server.get('/api/cards', function (req, res, next) {
+        cardService
+            .getAllCards({ shortForm: true })
+            .then((cards) => {
                 res.send({ success: true, cards: cards });
             })
-            .catch(err => {
+            .catch((err) => {
                 return next(err);
             });
     });
 
-    server.get('/api/packs', function(req, res, next) {
-        cardService.getAllPacks()
-            .then(packs => {
+    server.get('/api/packs', function (req, res, next) {
+        cardService
+            .getAllPacks()
+            .then((packs) => {
                 res.send({ success: true, packs: packs });
             })
-            .catch(err => {
+            .catch((err) => {
                 return next(err);
             });
     });
 
-    server.get('/api/factions', function(req, res) {
+    server.get('/api/factions', function (req, res) {
         let factions = [
             { name: 'Crab Clan', value: 'crab' },
             { name: 'Crane Clan', value: 'crane' },

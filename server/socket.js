@@ -2,14 +2,14 @@ const { logger } = require('./logger');
 const EventEmitter = require('events');
 const jwt = require('jsonwebtoken');
 const { captureException } = require('./ErrorMonitoring');
+const env = require('./env.js');
 
 class Socket extends EventEmitter {
-    constructor(socket, options = {}) {
+    constructor(socket) {
         super();
 
         this.socket = socket;
         this.user = socket.request.user;
-        this.config = options.config;
 
         socket.on('error', this.onError.bind(this));
         socket.on('authenticate', this.onAuthenticate.bind(this));
@@ -43,21 +43,21 @@ class Socket extends EventEmitter {
 
     // Events
     onSocketEvent(callback, ...args) {
-        if(!this.user) {
+        if (!this.user) {
             return;
         }
 
         try {
             callback(this, ...args);
-        } catch(err) {
+        } catch (err) {
             logger.info(err);
             captureException(err, { args });
         }
     }
 
     onAuthenticate(token) {
-        jwt.verify(token, this.config.secret, (err, user) => {
-            if(err) {
+        jwt.verify(token, env.secret, (err, user) => {
+            if (err) {
                 logger.info(err);
                 return;
             }

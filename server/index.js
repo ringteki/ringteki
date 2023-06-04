@@ -2,22 +2,22 @@ const Server = require('./server.js');
 const Lobby = require('./lobby.js');
 const pmx = require('pmx');
 const monk = require('monk');
-const config = require('config');
+const env = require('./env.js');
 
 function runServer() {
     var server = new Server(process.env.NODE_ENV !== 'production');
     var httpServer = server.init();
-    var lobby = new Lobby(httpServer, { config: config, db: monk(config.get('dbPath')) });
+    var lobby = new Lobby(httpServer, { db: monk(env.dbPath) });
 
-    pmx.action('status', reply => {
+    pmx.action('status', (reply) => {
         var status = lobby.getStatus();
 
         reply(status);
     });
 
     pmx.action('disable', (param, reply) => {
-        if(!param) {
-            reply({error: 'Need to specify node to disable'});
+        if (!param) {
+            reply({ error: 'Need to specify node to disable' });
 
             return;
         }
@@ -26,8 +26,8 @@ function runServer() {
     });
 
     pmx.action('enable', (param, reply) => {
-        if(!param) {
-            reply({error: 'Need to specify node to enable'});
+        if (!param) {
+            reply({ error: 'Need to specify node to enable' });
 
             return;
         }
@@ -35,7 +35,7 @@ function runServer() {
         reply({ success: lobby.enableNode(param) });
     });
 
-    pmx.action('debug', reply => {
+    pmx.action('debug', (reply) => {
         reply(lobby.debugDump());
     });
 
