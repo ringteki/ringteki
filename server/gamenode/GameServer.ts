@@ -145,7 +145,7 @@ export class GameServer {
     }
 
     sendGameState(game: Game): void {
-        for (const player of game.getPlayersAndSpectators()) {
+        for (const player of Object.values<Player>(game.getPlayersAndSpectators())) {
             if (player.socket && !player.left && !player.disconnected) {
                 player.socket.send('gamestate', game.getState(player.name));
             }
