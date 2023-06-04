@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 const parsedEnv = z
     .object({
-        CAPTCHA_KEY: z.string(),
-        COOKIE_LIFETIME: z.string(),
+        CAPTCHA_KEY: z.string().optional(),
+        COOKIE_LIFETIME: z.string().optional(),
         DB_PATH: z.string(),
         DOMAIN: z.string(),
         EMAIL_PATH: z.string(),
