@@ -5,7 +5,7 @@ const DuplicateUniqueAction = require('./duplicateuniqueaction.js');
 const CourtesyAbility = require('./KeywordAbilities/CourtesyAbility');
 const PrideAbility = require('./KeywordAbilities/PrideAbility');
 const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
-const RallyAbility = require('./KeywordAbilities/RallyAbility');
+const { RallyAbility } = require('./KeywordAbilities/RallyAbility.js');
 const StatModifier = require('./StatModifier');
 
 const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
