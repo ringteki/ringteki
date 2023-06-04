@@ -26,7 +26,7 @@ const parsedEnv = z
     .safeParse(process.env);
 
 if (!parsedEnv.success) {
-    throw Error(`Failed to initialize environment variables: ${parsedEnv}`);
+    throw Error(`Failed to initialize environment variables: ${(parsedEnv as any).error.message}`);
 }
 
 export const captchaKey = parsedEnv.data.CAPTCHA_KEY;
