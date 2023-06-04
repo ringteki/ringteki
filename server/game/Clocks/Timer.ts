@@ -1,6 +1,7 @@
 import { Clock, Mode } from './Clock';
+import type { ClockInterface } from './types';
 
-export class Timer extends Clock {
+export class Timer extends Clock implements ClockInterface {
     mode: Mode = 'down';
     name = 'Timer';
 

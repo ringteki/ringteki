@@ -1,7 +1,8 @@
 import Player from '../player';
 import { Clock, Mode } from './Clock';
+import type { ClockInterface } from './types';
 
-export class ChessClock extends Clock {
+export class ChessClock extends Clock implements ClockInterface {
     mode: Mode = 'stop';
     name = 'Chess Clock';
 
@@ -17,11 +18,11 @@ export class ChessClock extends Clock {
         this.start();
     }
 
-    protected reset() {
+    public reset() {
         this.stop();
     }
 
-    protected start() {
+    public start() {
         if (!this.manuallyPaused) {
             if (this.mode !== 'down') {
                 this.mode = 'down';
@@ -30,12 +31,12 @@ export class ChessClock extends Clock {
         }
     }
 
-    protected stop() {
+    public stop() {
         super.stop();
         this.mode = 'stop';
     }
 
-    protected opponentStart() {}
+    public opponentStart() {}
 
     protected timeRanOut() {
         this.player.game.addMessage("{0}'s clock has run out", this.player);

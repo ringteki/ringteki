@@ -1,9 +1,10 @@
 import { ChessClock } from './ChessClock';
+import type { ClockInterface } from './types';
 
-export class Hourglass extends ChessClock {
+export class Hourglass extends ChessClock implements ClockInterface {
     name = 'Hourglass';
 
-    protected opponentStart() {
+    opponentStart() {
         this.mode = 'up';
         super.opponentStart();
     }

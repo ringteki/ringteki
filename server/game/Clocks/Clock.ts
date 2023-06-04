@@ -1,8 +1,9 @@
 import type Player from '../player';
+import type { ClockInterface } from './types';
 
 export type Mode = 'stop' | 'down' | 'up' | 'off';
 
-export class Clock {
+export class Clock implements ClockInterface {
     mainTime: number;
     timeLeft: number;
     timerStart = 0;
@@ -12,21 +13,43 @@ export class Clock {
     name = 'Clock';
     manuallyPaused = false;
 
-    constructor(public player: Player, time: number, public delayToStartClock?: number) {
+    constructor(protected player: Player, time: number, protected delayToStartClock?: number) {
         this.mainTime = time;
         this.timeLeft = time;
     }
 
-    manuallyPause() {
-        this.stop();
-        this.manuallyPaused = true;
+    public getState() {
+        return {
+            mode: this.mode,
+            timeLeft: this.timeLeft,
+            stateId: this.stateId,
+            mainTime: this.mainTime,
+            name: this.name,
+            delayToStartClock: this.delayToStartClock,
+            manuallyPaused: this.manuallyPaused
+        };
+    }
+
+    public opponentStart() {
+        this.timerStart = Date.now();
         this.updateStateId();
     }
 
-    manuallyResume() {
-        this.timerStart = 0;
-        this.manuallyPaused = false;
-        this.updateStateId();
+    public reset() {}
+
+    public start() {
+        if (!this.paused && !this.manuallyPaused) {
+            this.timerStart = Date.now();
+            this.updateStateId();
+        }
+    }
+
+    public stop() {
+        if (this.timerStart > 0) {
+            this.updateTimeLeft(Math.floor((Date.now() - this.timerStart) / 1000 + 0.5));
+            this.timerStart = 0;
+            this.updateStateId();
+        }
     }
 
     protected pause() {
@@ -35,36 +58,6 @@ export class Clock {
 
     protected restart() {
         this.paused = false;
-    }
-
-    modify(secs: number) {
-        this.timeLeft += secs;
-    }
-
-    updateStateId() {
-        this.stateId++;
-    }
-
-    protected start() {
-        if (!this.paused && !this.manuallyPaused) {
-            this.timerStart = Date.now();
-            this.updateStateId();
-        }
-    }
-
-    protected stop() {
-        if (this.timerStart > 0) {
-            this.updateTimeLeft(Math.floor((Date.now() - this.timerStart) / 1000 + 0.5));
-            this.timerStart = 0;
-            this.updateStateId();
-        }
-    }
-
-    protected reset() {}
-
-    protected opponentStart() {
-        this.timerStart = Date.now();
-        this.updateStateId();
     }
 
     protected timeRanOut() {
@@ -93,15 +86,23 @@ export class Clock {
         }
     }
 
-    getState() {
-        return {
-            mode: this.mode,
-            timeLeft: this.timeLeft,
-            stateId: this.stateId,
-            mainTime: this.mainTime,
-            name: this.name,
-            delayToStartClock: this.delayToStartClock,
-            manuallyPaused: this.manuallyPaused
-        };
+    manuallyPause() {
+        this.stop();
+        this.manuallyPaused = true;
+        this.updateStateId();
+    }
+
+    manuallyResume() {
+        this.timerStart = 0;
+        this.manuallyPaused = false;
+        this.updateStateId();
+    }
+
+    modify(secs: number) {
+        this.timeLeft += secs;
+    }
+
+    updateStateId() {
+        this.stateId++;
     }
 }
