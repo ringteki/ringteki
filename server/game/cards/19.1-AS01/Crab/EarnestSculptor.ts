@@ -1,9 +1,9 @@
 import { CardTypes, Locations } from '../../../Constants';
+import { PlayAttachmentAction } from '../../../PlayAttachmentAction';
 import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
 import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
 import DrawCard = require('../../../drawcard');
-import PlayAttachmentAction = require('../../../playattachmentaction');
 
 export default class EarnestSculptor extends DrawCard {
     static id = 'earnest-sculptor';

@@ -1,6 +1,11 @@
-const { GameModes } = require('../GameModes.js');
-const CardAbility = require('./CardAbility.js');
-const { AbilityTypes, CardTypes, Phases, PlayTypes, EffectNames } = require('./Constants');
+import type AbilityContext from './AbilityContext';
+import CardAbility from './CardAbility';
+import { AbilityTypes, CardTypes, EffectNames, Phases, PlayTypes } from './Constants';
+import { parseGameMode } from './GameMode';
+import type { ActionProps } from './Interfaces';
+import type BaseCard from './basecard.js';
+import type Game from './game';
+import type ProvinceCard from './provincecard';
 
 /**
  * Represents an action ability provided by card text.
@@ -29,21 +34,30 @@ const { AbilityTypes, CardTypes, Phases, PlayTypes, EffectNames } = require('./C
  * clickToActivate - boolean that indicates the action should be activated when
  *                   the card is clicked.
  */
-class CardAction extends CardAbility {
-    constructor(game, card, properties) {
+export class CardAction extends CardAbility {
+    abilityType = AbilityTypes.Action;
+
+    anyPlayer: boolean;
+    canTriggerOutsideConflict: boolean;
+    conflictProvinceCondition: (province: ProvinceCard, context: AbilityContext) => boolean;
+    doesNotTarget: boolean;
+    phase: string;
+
+    condition?: (context?: AbilityContext) => boolean;
+
+    constructor(game: Game, card: BaseCard, properties: ActionProps) {
         super(game, card, properties);
 
-        this.abilityType = AbilityTypes.Action;
-        this.phase = properties.phase || 'any';
-        this.anyPlayer = properties.anyPlayer || false;
+        this.phase = properties.phase ?? 'any';
+        this.anyPlayer = properties.anyPlayer ?? false;
         this.condition = properties.condition;
-        this.doesNotTarget = properties.doesNotTarget;
-        this.conflictProvinceCondition = properties.conflictProvinceCondition || (province => province === this.card);
+        this.doesNotTarget = (properties as any).doesNotTarget;
+        this.conflictProvinceCondition = properties.conflictProvinceCondition ?? ((province) => province === this.card);
         this.canTriggerOutsideConflict = !!properties.canTriggerOutsideConflict;
     }
 
-    meetsRequirements(context = this.createContext(), ignoredRequirements = []) {
-        if(!ignoredRequirements.includes('location') && !this.isInValidLocation(context)) {
+    meetsRequirements(context: AbilityContext = this.createContext(), ignoredRequirements = []) {
+        if (!ignoredRequirements.includes('location') && !this.isInValidLocation(context)) {
             return 'location';
         }
 
@@ -51,28 +65,37 @@ class CardAction extends CardAbility {
             return 'province';
         }
 
-        if(!ignoredRequirements.includes('phase') && this.phase !== 'any' && this.phase !== this.game.currentPhase) {
+        if (!ignoredRequirements.includes('phase') && this.phase !== 'any' && this.phase !== this.game.currentPhase) {
             return 'phase';
         }
 
-        if(!ignoredRequirements.includes('phase') && this.game.gameMode === GameModes.Skirmish && this.game.currentPhase === Phases.Dynasty && this.card.type === CardTypes.Event && context.playType === PlayTypes.PlayFromHand) {
+        if (
+            !ignoredRequirements.includes('phase') &&
+            !parseGameMode(this.game.gameMode).dynastyPhaseCanPlayConflictActions &&
+            this.game.currentPhase === Phases.Dynasty &&
+            this.card.type === CardTypes.Event &&
+            context.playType === PlayTypes.PlayFromHand
+        ) {
             return 'phase';
         }
 
-        let canOpponentTrigger = this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent) && this.abilityType !== AbilityTypes.ForcedInterrupt && this.abilityType !== AbilityTypes.ForcedReaction;
-        let canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || canOpponentTrigger;
-        if(!ignoredRequirements.includes('player') && this.card.type !== CardTypes.Event && !canPlayerTrigger) {
+        const canOpponentTrigger =
+            this.card.anyEffect(EffectNames.CanBeTriggeredByOpponent) &&
+            this.abilityType !== AbilityTypes.ForcedInterrupt &&
+            this.abilityType !== AbilityTypes.ForcedReaction;
+        const canPlayerTrigger = this.anyPlayer || context.player === this.card.controller || canOpponentTrigger;
+        if (!ignoredRequirements.includes('player') && this.card.type !== CardTypes.Event && !canPlayerTrigger) {
             return 'player';
         }
 
-        if(!ignoredRequirements.includes('condition') && this.condition && !this.condition(context)) {
+        if (!ignoredRequirements.includes('condition') && this.condition && !this.condition(context)) {
             return 'condition';
         }
 
         return super.meetsRequirements(context, ignoredRequirements);
     }
 
-    checkProvinceCondition(context) {
+    checkProvinceCondition(context: AbilityContext) {
         return (
             this.card.type !== CardTypes.Province ||
             this.canTriggerOutsideConflict ||
@@ -87,5 +110,3 @@ class CardAction extends CardAbility {
         return true;
     }
 }
-
-module.exports = CardAction;

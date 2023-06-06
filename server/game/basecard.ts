@@ -5,7 +5,7 @@ const CustomPlayAction = require('./customplayaction.js');
 const Effects = require('./effects');
 const EffectSource = require('./EffectSource.js');
 import CardAbility = require('./CardAbility');
-import CardAction = require('./cardaction.js');
+import { CardAction } from './CardAction.js';
 import TriggeredAbility = require('./triggeredability');
 import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
@@ -16,8 +16,8 @@ import { ActionProps, TriggeredAbilityProps, PersistentEffectProps, AttachmentCo
 import { PlayDisguisedCharacterAction } from './PlayDisguisedCharacterAction';
 import DynastyCardAction = require('./dynastycardaction');
 import { PlayCharacterAction } from './PlayCharacterAction.js';
-import PlayAttachmentAction = require('./playattachmentaction');
-import PlayAttachmentOnRingAction = require('./playattachmentonringaction.js');
+import { PlayAttachmentAction } from './PlayAttachmentAction.js';
+import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
 import ConflictTracker = require('./conflicttracker');
 import { StatusToken } from './StatusToken';
 import ElementSymbol = require('./ElementSymbol');
@@ -874,7 +874,7 @@ class BaseCard extends EffectSource {
                 actions.push(new PlayCharacterAction(this));
             }
         } else if(this.type === CardTypes.Attachment && this.mustAttachToRing()) {
-            actions.push(new PlayAttachmentOnRingAction(this));
+            actions.push(new PlayAttachmentToRingAction(this));
         } else if(this.type === CardTypes.Attachment) {
             actions.push(new PlayAttachmentAction(this));
         }

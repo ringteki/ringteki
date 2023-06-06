@@ -1,5 +1,5 @@
-import { GameModes } from '../../../GameModes';
 import { EffectNames, EventNames } from '../../Constants';
+import { parseGameMode } from '../../GameMode';
 import type Game from '../../game';
 import ActionWindow from '../actionwindow';
 
@@ -24,7 +24,7 @@ export class DynastyActionWindow extends ActionWindow {
             return this.complete();
         }
 
-        if (this.#gameModeHasPassingFate()) {
+        if (parseGameMode(this.game.gameMode).dynastyPhasePassingFate) {
             this.#handlePassingFate();
         } else {
             this.#handleSimplePass();
@@ -39,15 +39,6 @@ export class DynastyActionWindow extends ActionWindow {
         const otherPlayer = this.currentPlayer.opponent;
         if (otherPlayer && !otherPlayer.passedDynasty) {
             this.currentPlayer = otherPlayer;
-        }
-    }
-
-    #gameModeHasPassingFate(): boolean {
-        switch (this.game.gameMode) {
-            case GameModes.Skirmish:
-                return false;
-            default:
-                return true;
         }
     }
 

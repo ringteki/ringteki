@@ -1,6 +1,6 @@
 import AbilityDsl = require('./abilitydsl');
 import { Durations, CardTypes } from './Constants';
-import PlayAttachmentAction = require('./playattachmentaction');
+import { PlayAttachmentAction } from './PlayAttachmentAction.js';
 import DrawCard = require('./drawcard');
 
 export class PlayCharacterAsAttachment extends PlayAttachmentAction {
