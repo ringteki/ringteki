@@ -4,6 +4,18 @@ on:
   push:
   pull_request:
 
+env:
+    DB_PATH: "" 
+    DOMAIN: "" 
+    ENVIRONMENT: "" 
+    GAME_NODE_HOST: "" 
+    GAME_NODE_NAME: "" 
+    GAME_NODE_SOCKET_IO_PORT: "" 
+    HTTPS: "" 
+    LOBBY_PORT: "" 
+    MQ_URL: "" 
+    SECRET: "" 
+
 jobs:
   build:
     runs-on: ubuntu-latest 
