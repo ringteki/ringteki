@@ -1,7 +1,8 @@
 import { CardTypes } from '../../Constants';
+import type { Duel } from '../../Duel';
 import { EventRegistrar } from '../../EventRegistrar';
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
 export default class KakitasFinalStance extends DrawCard {
     static id = 'kakita-s-final-stance';
@@ -40,18 +41,10 @@ export default class KakitasFinalStance extends DrawCard {
     }
 
     public afterDuel(event: any) {
-        if (event.duel.challenger instanceof DrawCard) {
-            this.duelParticipantsInThisConflict.add(event.duel.challenger);
-        }
-        if (event.duel.target instanceof DrawCard) {
-            this.duelParticipantsInThisConflict.add(event.duel.target);
-        }
-        if (Array.isArray(event.duel.target)) {
-            for (const target of event.duel.target) {
-                if (target instanceof DrawCard) {
-                    this.duelParticipantsInThisConflict.add(target);
-                }
-            }
+        const duel = event.duel as Duel;
+        this.duelParticipantsInThisConflict.add(duel.challenger);
+        for (const target of duel.targets) {
+            this.duelParticipantsInThisConflict.add(target);
         }
     }
 }

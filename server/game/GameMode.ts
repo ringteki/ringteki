@@ -26,7 +26,7 @@ export interface GameMode {
     covertUnified: boolean;
     deckoutHonorLoss: number;
     disguiseKeepsCharactersInSameLocation: boolean;
-    duelRules: 'currentSkill' | 'baseSkill' | 'skirmish';
+    duelRules: 'currentSkill' | 'printedSkill' | 'skirmish';
     dynastyPhaseCanPlayAttachments: boolean;
     dynastyPhaseCanPlayConflictActions: boolean;
     dynastyPhaseCanPlayConflictCharacters: boolean;

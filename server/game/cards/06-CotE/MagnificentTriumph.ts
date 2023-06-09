@@ -1,13 +1,14 @@
 import { CardTypes, Players } from '../../Constants';
+import type { Duel } from '../../Duel';
 import { EventRegistrar } from '../../EventRegistrar';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
+import DrawCard from '../../drawcard';
 
 export default class MagnificentTriumph extends DrawCard {
     static id = 'magnificent-triumph';
 
-    private duelWinnersThisConflict = new Set<BaseCard>();
+    #duelWinnersThisConflict = new Set<BaseCard>();
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
@@ -18,7 +19,7 @@ export default class MagnificentTriumph extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                cardCondition: (card) => this.duelWinnersThisConflict.has(card),
+                cardCondition: (card) => this.#duelWinnersThisConflict.has(card),
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     effect: [
                         AbilityDsl.effects.modifyBothSkills(2),
@@ -36,12 +37,12 @@ export default class MagnificentTriumph extends DrawCard {
     }
 
     public onConflictFinished() {
-        this.duelWinnersThisConflict.clear();
+        this.#duelWinnersThisConflict.clear();
     }
 
     public afterDuel(event: any) {
-        if (event.duel.winner) {
-            this.duelWinnersThisConflict.add(event.duel.winner);
+        for (const winner of (event.duel as Duel).winner ?? []) {
+            this.#duelWinnersThisConflict.add(winner);
         }
     }
 }
