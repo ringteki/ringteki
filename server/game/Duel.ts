@@ -1,5 +1,5 @@
 import { DuelTypes, EffectNames, Locations } from './Constants';
-import { parseGameMode } from './GameMode';
+import { GameMode, parseGameMode } from './GameMode';
 import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
@@ -22,6 +22,7 @@ export class Duel {
     previousDuel?: Duel;
     winner?: DrawCard[];
     winningPlayer?: Player;
+    gameModeOpts: GameMode;
 
     constructor(
         private game: Game,
@@ -30,7 +31,9 @@ export class Duel {
         private type: DuelTypes,
         private statistic?: (card: DrawCard) => number,
         private challengingPlayer = challenger.controller
-    ) {}
+    ) {
+        this.gameModeOpts = parseGameMode(this.game.gameMode);
+    }
 
     get winnerController(): undefined | Player {
         return this.winner?.[0].controller;
@@ -130,18 +133,23 @@ export class Duel {
         if (this.statistic) {
             return this.statistic(card);
         }
+
         switch (this.type) {
             case DuelTypes.Military:
-                return card.getMilitarySkill();
+                return this.gameModeOpts.duelRules === 'printedSkill'
+                    ? card.printedMilitarySkill
+                    : card.getMilitarySkill();
             case DuelTypes.Political:
-                return card.getPoliticalSkill();
+                return this.gameModeOpts.duelRules === 'printedSkill'
+                    ? card.printedPoliticalSkill
+                    : card.getPoliticalSkill();
             case DuelTypes.Glory:
-                return card.glory;
+                return this.gameModeOpts.duelRules === 'printedSkill' ? card.printedGlory : card.glory;
         }
     }
 
     #getTotals(challengerStats: number, targetStats: number): [number, number] {
-        if (parseGameMode(this.game.gameMode).duelRules === 'skirmish') {
+        if (this.gameModeOpts.duelRules === 'skirmish') {
             if (challengerStats > targetStats) {
                 challengerStats = 1;
                 targetStats = 0;
