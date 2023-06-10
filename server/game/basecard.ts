@@ -18,7 +18,6 @@ import DynastyCardAction = require('./dynastycardaction');
 import { PlayCharacterAction } from './PlayCharacterAction.js';
 import { PlayAttachmentAction } from './PlayAttachmentAction.js';
 import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
-import ConflictTracker = require('./conflicttracker');
 import { StatusToken } from './StatusToken';
 import ElementSymbol = require('./ElementSymbol');
 import { GameModes } from '../GameModes';
