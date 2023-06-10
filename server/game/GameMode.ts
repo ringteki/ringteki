@@ -156,8 +156,11 @@ const Emerald: GameMode = {
     attachmentsMaxOneCopyPerName: true,
     covertUnified: true,
     disguiseKeepsCharactersInSameLocation: true,
-    dynastyPhaseCanPlayAttachments: true,
-    dynastyPhaseCanPlayConflictCharacters: true
+    duelRules: 'printedSkill',
+    dynastyPhaseCanPlayAttachments: false,
+    dynastyPhaseCanPlayConflictActions: false,
+    dynastyPhaseCanPlayConflictCharacters: false,
+    dynastyPhasePassingFate: false
 };
 const Obsidian: GameMode = {
     ...Stronghold,
