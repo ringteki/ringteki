@@ -84,7 +84,7 @@ describe('Portable bastion', function () {
                 );
             });
 
-            it('stops movement when the shugenja is at home', function () {
+            it('does not stop movement when the shugenja is at home', function () {
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves],
                     defenders: [],
@@ -93,14 +93,8 @@ describe('Portable bastion', function () {
 
                 this.player2.clickCard(this.favorableGround);
                 this.player2.clickCard(this.motoYouth);
-                expect(this.player1).toHavePrompt('Any interrupts?');
-
-                this.player1.clickCard(this.solemnScholar);
-                expect(this.motoYouth.inConflict).toBe(false);
-
-                expect(this.getChatLogs(3)).toContain(
-                    "player1 uses Solemn Scholar's gained ability from Portable Bastion to deny Moto Youth's movement"
-                );
+                expect(this.player1).not.toHavePrompt('Any interrupts?');
+                expect(this.player1).not.toBeAbleToSelect(this.solemnScholar);
             });
 
             it('only stops the movement, allows other effects', function () {

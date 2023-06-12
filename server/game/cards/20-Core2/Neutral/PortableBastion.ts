@@ -23,9 +23,9 @@ export default class PortableBastion extends DrawCard {
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.WouldInterrupt, {
                 title: 'Move a character to the conflict',
-                condition: (context: TriggeredAbilityContext) => context.source.isParticipating(),
                 when: {
-                    onMoveToConflict: (event: any) => event.card.type === CardTypes.Character
+                    onMoveToConflict: (event: any, context: TriggeredAbilityContext) =>
+                        event.card.type === CardTypes.Character && context.source.isParticipating()
                 },
                 effect: "deny {1}'s movement",
                 effectArgs: (context: TriggeredAbilityContext) => [context.event.card],
