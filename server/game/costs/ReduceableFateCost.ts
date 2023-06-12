@@ -1,5 +1,6 @@
 import type AbilityContext from '../AbilityContext';
 import { EventNames, Locations, Players } from '../Constants';
+import type { Cost, Result } from '../Costs';
 import Event from '../Events/Event';
 import GameActions from '../GameActions/GameActions';
 import BaseCard from '../basecard';
@@ -18,12 +19,7 @@ type Props = {
     numberOfChoices?: number;
 };
 
-type Result = {
-    canCancel?: boolean;
-    cancelled?: boolean;
-};
-
-export class ReduceableFateCost {
+export class ReduceableFateCost implements Cost {
     public isPlayCost = true;
     public isPrintedFateCost = true;
     constructor(public ignoreType: boolean) {}

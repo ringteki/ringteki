@@ -1,7 +1,8 @@
 import type AbilityContext from '../AbilityContext';
+import type { Cost, Result } from '../Costs';
 import type { GameAction } from '../GameActions/GameAction';
 
-export class GameActionCost {
+export class GameActionCost implements Cost {
     constructor(public action: GameAction) {}
 
     getActionName(context: AbilityContext): string {
@@ -12,7 +13,7 @@ export class GameActionCost {
         return this.action.hasLegalTarget(context);
     }
 
-    addEventsToArray(events: any[], context: AbilityContext, result = null): void {
+    addEventsToArray(events: any[], context: AbilityContext, result: Result): void {
         context.costs[this.action.name] = this.action.getProperties(context).target;
         this.action.addEventsToArray(events, context);
     }

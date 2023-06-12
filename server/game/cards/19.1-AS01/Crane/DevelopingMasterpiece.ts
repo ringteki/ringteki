@@ -1,12 +1,12 @@
-import AbilityContext = require('../../../AbilityContext');
-import { Locations, PlayTypes, Phases, CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type AbilityContext from '../../../AbilityContext';
+import { CardTypes, Locations, Phases, PlayTypes } from '../../../Constants';
+import type { Cost } from '../../../Costs';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
-function captureParentCost() {
+function captureParentCost(): Cost {
     return {
-        action: { name: 'captureParentCost', getCostMessage: () => '' },
         canPay() {
             return true;
         },

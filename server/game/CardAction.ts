@@ -71,10 +71,10 @@ export class CardAction extends CardAbility {
 
         if (
             !ignoredRequirements.includes('phase') &&
-            !parseGameMode(this.game.gameMode).dynastyPhaseCanPlayConflictActions &&
             this.game.currentPhase === Phases.Dynasty &&
             this.card.type === CardTypes.Event &&
-            context.playType === PlayTypes.PlayFromHand
+            context.playType === PlayTypes.PlayFromHand &&
+            !parseGameMode(this.game.gameMode).dynastyPhaseCanPlayConflictEvents(this)
         ) {
             return 'phase';
         }

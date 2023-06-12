@@ -1,8 +1,8 @@
 const { GameModes } = require('../../../build/server/GameModes');
 
-describe('Dynasty - Emerald', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Dynasty - Emerald', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'dynasty',
                 player1: {
@@ -27,17 +27,16 @@ describe('Dynasty - Emerald', function() {
             this.ann = this.player1.findCardByName('a-new-name');
         });
 
-        it('should let you play attachments in dynasty', function() {
+        it('should not let you play attachments in dynasty', function () {
             this.player1.clickCard(this.katana1);
             this.player1.clickCard(this.mitsu);
-            expect(this.mitsu.attachments.toArray()).toContain(this.katana1);
+            expect(this.mitsu.attachments.toArray()).not.toContain(this.katana1);
         });
 
-        it('should let you play conflict characters in dynasty', function() {
+        it('should not let you play conflict characters in dynasty', function () {
             this.player1.clickCard(this.steward);
-            this.player1.clickPrompt('1');
-            expect(this.steward.location).toBe('play area');
-            expect(this.steward.fate).toBe(1);
+            expect(this.player1).not.toHavePrompt('Choose additional fate');
+            expect(this.steward.location).not.toBe('play area');
         });
     });
 });

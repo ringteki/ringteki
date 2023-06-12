@@ -1,5 +1,6 @@
 import type AbilityContext from './AbilityContext';
-import { Locations } from './Constants';
+import type { CardAction } from './CardAction';
+import { AbilityTypes, Locations, Phases } from './Constants';
 import type BaseCard from './basecard';
 import type ProvinceCard from './provincecard';
 
@@ -28,7 +29,7 @@ export interface GameMode {
     disguiseKeepsCharactersInSameLocation: boolean;
     duelRules: 'currentSkill' | 'printedSkill' | 'skirmish';
     dynastyPhaseCanPlayAttachments: boolean;
-    dynastyPhaseCanPlayConflictActions: boolean;
+    dynastyPhaseCanPlayConflictEvents: (action: CardAction) => boolean;
     dynastyPhaseCanPlayConflictCharacters: boolean;
     dynastyPhaseForcedFatePerRound?: number;
     dynastyPhasePassingFate: boolean;
@@ -61,7 +62,7 @@ const Stronghold: GameMode = {
     disguiseKeepsCharactersInSameLocation: false,
     duelRules: 'currentSkill',
     dynastyPhaseCanPlayAttachments: false,
-    dynastyPhaseCanPlayConflictActions: true,
+    dynastyPhaseCanPlayConflictEvents: () => true,
     dynastyPhaseCanPlayConflictCharacters: false,
     dynastyPhaseForcedFatePerRound: undefined,
     dynastyPhasePassingFate: true,
@@ -108,7 +109,7 @@ const Skirmish: GameMode = {
     conflictOneFewerOpportunity: true,
     deckoutHonorLoss: 3,
     duelRules: 'skirmish',
-    dynastyPhaseCanPlayConflictActions: false,
+    dynastyPhaseCanPlayConflictEvents: () => false,
     dynastyPhaseForcedFatePerRound: 6,
     dynastyPhasePassingFate: false,
     fatePerRoundForced: 6,
@@ -158,7 +159,8 @@ const Emerald: GameMode = {
     disguiseKeepsCharactersInSameLocation: true,
     duelRules: 'printedSkill',
     dynastyPhaseCanPlayAttachments: false,
-    dynastyPhaseCanPlayConflictActions: false,
+    dynastyPhaseCanPlayConflictEvents: (action) =>
+        action.phase === Phases.Dynasty || action.abilityType !== AbilityTypes.Action,
     dynastyPhaseCanPlayConflictCharacters: false,
     dynastyPhasePassingFate: false
 };

@@ -1,9 +1,10 @@
 import type AbilityContext from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type { Cost } from '../Costs';
 import Event from '../Events/Event';
 import { ReduceableFateCost } from './ReduceableFateCost';
 
-export class TargetDependentFateCost extends ReduceableFateCost {
+export class TargetDependentFateCost extends ReduceableFateCost implements Cost {
     constructor(ignoreType: boolean, public dependsOn: string) {
         super(ignoreType);
     }

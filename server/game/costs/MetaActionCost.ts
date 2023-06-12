@@ -1,11 +1,12 @@
 import { Locations, Players } from '../Constants';
+import type { Cost, Result } from '../Costs';
 import type { GameAction } from '../GameActions/GameAction';
 import { SelectCardProperties } from '../GameActions/SelectCardAction';
 import { randomItem } from '../Utils/helpers';
 import { GameActionCost } from './GameActionCost';
 import AbilityContext = require('../AbilityContext');
 
-export class MetaActionCost extends GameActionCost {
+export class MetaActionCost extends GameActionCost implements Cost {
     constructor(action: GameAction, public activePromptTitle: string) {
         super(action);
     }
@@ -24,7 +25,7 @@ export class MetaActionCost extends GameActionCost {
         return this.action.hasLegalTarget(context, additionalProps);
     }
 
-    addEventsToArray(events: any[], context: AbilityContext, result): void {
+    addEventsToArray(events: any[], context: AbilityContext, result: Result): void {
         const properties = this.action.getProperties(context) as SelectCardProperties;
         if (properties.targets && context.choosingPlayerOverride) {
             context.costs[properties.gameAction.name] = randomItem(

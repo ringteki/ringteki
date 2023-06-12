@@ -5,6 +5,7 @@ import BaseAction = require('./BaseAction');
 import BaseCard = require('./basecard');
 import AbilityContext = require('./AbilityContext');
 import Player = require('./player');
+import { Cost } from './Costs';
 
 function ChooseDisguisedCharacterCost(intoConflictOnly: PlayDisguisedCharacterIntoLocation) {
     return {
@@ -32,7 +33,7 @@ function ChooseDisguisedCharacterCost(intoConflictOnly: PlayDisguisedCharacterIn
     };
 }
 
-class DisguisedReduceableFateCost extends ReduceableFateCost {
+class DisguisedReduceableFateCost extends ReduceableFateCost implements Cost {
     canPay(context: AbilityContext) {
         const maxCharacterCost = Math.max(
             ...context.player.cardsInPlay.map((card) =>

@@ -1,16 +1,16 @@
 import type AbilityContext from './AbilityContext';
 import BaseAction from './BaseAction';
 import { CardTypes, EventNames, Locations, Phases } from './Constants';
+import { payTargetDependentFateCost } from './Costs';
 import GameActions from './GameActions/GameActions';
 import { parseGameMode } from './GameMode';
 import type BaseCard from './basecard';
-import Costs from './costs';
 
 export class PlayAttachmentAction extends BaseAction {
     title = 'Play this attachment';
 
     constructor(card: BaseCard, ignoreType = false) {
-        super(card, [Costs.payTargetDependentFateCost('target', ignoreType)], {
+        super(card, [payTargetDependentFateCost('target', ignoreType)], {
             location: [Locations.PlayArea, Locations.Provinces],
             gameAction: GameActions.attach((context) => ({
                 attachment: context.source,

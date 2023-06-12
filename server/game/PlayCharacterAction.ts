@@ -1,10 +1,10 @@
-import { GameModes } from '../GameModes';
+import type AbilityContext from './AbilityContext';
+import BaseAction from './BaseAction';
 import { EffectNames, EventNames, Locations, Phases, PlayTypes, Players } from './Constants';
-import AbilityContext = require('./AbilityContext');
-import BaseAction = require('./BaseAction');
-import GameActions = require('./GameActions/GameActions');
-import BaseCard = require('./basecard');
-import Costs = require('./costs');
+import { chooseFate, payReduceableFateCost } from './Costs.js';
+import GameActions from './GameActions/GameActions';
+import { parseGameMode } from './GameMode';
+import type BaseCard from './basecard';
 
 export enum PlayCharacterIntoLocation {
     Any,
@@ -18,16 +18,14 @@ export class PlayCharacterAction extends BaseAction {
     public title = 'Play this character';
 
     public constructor(card: BaseCard, private intoLocation = PlayCharacterIntoLocation.Any) {
-        super(card, [Costs.chooseFate(PlayTypes.PlayFromHand), Costs.payReduceableFateCost()]);
+        super(card, [chooseFate(PlayTypes.PlayFromHand), payReduceableFateCost()]);
     }
 
     public meetsRequirements(context = this.createContext(), ignoredRequirements: string[] = []): string {
-        const frameworkAllowsConflictCharactersDuringDynasty =
-            context.game.gameMode === GameModes.Emerald || context.game.gameMode === GameModes.Obsidian;
         if (
             !ignoredRequirements.includes('phase') &&
             context.game.currentPhase === Phases.Dynasty &&
-            !frameworkAllowsConflictCharactersDuringDynasty
+            !parseGameMode(context.game.gameMode).dynastyPhaseCanPlayConflictCharacters
         ) {
             return 'phase';
         }

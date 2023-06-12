@@ -12,3 +12,9 @@ export function randomItem<T>(array: T[]): undefined | T {
     const j = Math.floor(Math.random() * array.length);
     return array[j];
 }
+
+export type Derivable<T extends boolean | string | number, C> = T | ((context: C) => T);
+
+export function derive<T extends boolean | string | number, C>(input: Derivable<T, C>, context: C): T {
+    return typeof input === 'function' ? input(context) : input;
+}
