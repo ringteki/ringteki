@@ -80,7 +80,7 @@ describe('Portable bastion', function () {
                 expect(this.motoYouth.inConflict).toBe(false);
 
                 expect(this.getChatLogs(3)).toContain(
-                    "player1 uses Solemn Scholar's gained ability from Portable Bastion to deny Moto Youth's movement"
+                    'player1 uses Solemn Scholar\'s gained ability from Portable Bastion to deny Moto Youth\'s movement'
                 );
             });
 
@@ -113,7 +113,7 @@ describe('Portable bastion', function () {
                 expect(this.motoYouth.bowed).toBe(false);
 
                 expect(this.getChatLogs(3)).toContain(
-                    "player1 uses Solemn Scholar's gained ability from Portable Bastion to deny Moto Youth's movement"
+                    'player1 uses Solemn Scholar\'s gained ability from Portable Bastion to deny Moto Youth\'s movement'
                 );
             });
         });
