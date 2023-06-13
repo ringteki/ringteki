@@ -53,8 +53,7 @@ export class GameAction {
         return properties;
     }
 
-    getCostMessage(context: AbilityContext): [string, any[]] {
-        // eslint-disable-line no-unused-vars
+    getCostMessage(context: AbilityContext): undefined | [string, any[]] {
         return [this.cost, []];
     }
 
