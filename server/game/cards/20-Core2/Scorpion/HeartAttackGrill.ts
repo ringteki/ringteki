@@ -76,24 +76,23 @@ export default class HeartAttackGrill extends ProvinceCard {
             );
             for (const card of process.cardsToRemove) {
                 AbilityDsl.actions
-                    .multiple([
-                        AbilityDsl.actions.placeCardUnderneath({
-                            target: card,
-                            destination: context.player.getProvinceCardInProvince(Locations.StrongholdProvince)
-                        }),
-                        AbilityDsl.actions.cardLastingEffect({
-                            target: card,
-                            targetLocation: Locations.Any,
-                            duration: Durations.Persistent,
-                            effect: [
-                                AbilityDsl.effects.canPlayFromOutOfPlay(
-                                    (player: Player) => player === context.player,
-                                    PlayTypes.PlayFromHand
-                                ),
-                                AbilityDsl.effects.registerToPlayFromOutOfPlay()
-                            ]
-                        })
-                    ])
+                    .placeCardUnderneath({
+                        target: card,
+                        destination: context.player.getProvinceCardInProvince(Locations.StrongholdProvince)
+                    })
+                    .resolve(card, context);
+                AbilityDsl.actions
+                    .cardLastingEffect({
+                        target: card,
+                        // targetLocation: Locations.Any,
+                        effect: [
+                            AbilityDsl.effects.canPlayFromOutOfPlay(
+                                (player: Player) => player === context.player,
+                                PlayTypes.PlayFromHand
+                            ),
+                            AbilityDsl.effects.registerToPlayFromOutOfPlay()
+                        ]
+                    })
                     .resolve(card, context);
             }
         }

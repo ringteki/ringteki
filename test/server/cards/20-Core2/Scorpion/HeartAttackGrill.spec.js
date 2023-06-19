@@ -102,6 +102,8 @@ describe('Heart Attack Grill', function () {
                 this.player1.clickPrompt('Gain 2 honor');
                 this.player1.pass();
                 this.player2.clickCard(this.fan);
+                this.player2.clickCard(this.aggressiveMoto);
+                expect(this.player2).toHavePrompt('as');
             });
         });
     });
