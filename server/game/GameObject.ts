@@ -1,11 +1,12 @@
 import { v1 as uuidV1 } from 'uuid';
 
 import { EffectNames, Stages } from './Constants';
-import GameActions = require('./GameActions/GameActions');
+import * as GameActions from './GameActions/GameActions';
 import type Game = require('./game');
 import type Player = require('./player');
 import type AbilityContext = require('./AbilityContext');
 import type DrawCard = require('./drawcard');
+import { GameAction } from './GameActions/GameAction';
 
 export class GameObject {
     public uuid = uuidV1();
@@ -45,8 +46,10 @@ export class GameObject {
     }
 
     public allowGameAction(actionType: string, context = this.game.getFrameworkContext()) {
-        if (GameActions[actionType]) {
-            return GameActions[actionType]().canAffect(this, context);
+        const gameActionFactory = GameActions[actionType]
+        if (gameActionFactory) {
+            const gameAction: GameAction = gameActionFactory()
+            return gameAction.canAffect(this, context);
         }
         return this.checkRestrictions(actionType, context);
     }

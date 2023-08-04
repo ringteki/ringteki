@@ -2,7 +2,7 @@ import type AbilityContext from '../AbilityContext';
 import { EventNames, Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
 import Event from '../Events/Event';
-import GameActions from '../GameActions/GameActions';
+import { removeFate } from '../GameActions/GameActions';
 import BaseCard from '../basecard';
 import Ring from '../ring';
 
@@ -155,7 +155,7 @@ export class ReduceableFateCost implements Cost {
                     alternatePool,
                     context.source
                 );
-                GameActions.removeFate({ amount }).resolve(alternatePool, context);
+                removeFate({ amount }).resolve(alternatePool, context);
                 totalAlternateFate += amount;
             }
         }

@@ -1,23 +1,24 @@
-import TriggeredAbilityContext = require('../TriggeredAbilityContext');
-import { GameAction } from './GameAction';
-import { AddTokenAction, AddTokenProperties} from './AddTokenAction';
+import type TriggeredAbilityContext = require('../TriggeredAbilityContext');
+import { AddTokenAction, AddTokenProperties } from './AddTokenAction';
 import { AttachAction, AttachActionProperties } from './AttachAction';
 import { AttachToRingAction, AttachToRingActionProperties } from './AttachToRingAction';
 import { BowAction, BowActionProperties } from './BowAction';
 import { BreakAction, BreakProperties } from './BreakAction';
 import { CancelAction, CancelActionProperties } from './CancelAction';
+import { CardGameAction } from './CardGameAction';
 import { CardMenuAction, CardMenuProperties } from './CardMenuAction';
-import { ChooseGameAction, ChooseActionProperties } from './ChooseGameAction';
+import { ChooseActionProperties, ChooseGameAction } from './ChooseGameAction';
 import { ChosenDiscardAction, ChosenDiscardProperties } from './ChosenDiscardAction';
 import { ChosenReturnToDeckAction, ChosenReturnToDeckProperties } from './ChosenReturnToDeckAction';
+import { ClaimFavorAction, ClaimFavorProperties } from './ClaimFavorAction';
 import { ClaimRingAction, ClaimRingProperties } from './ClaimRingAction';
 import { ConditionalAction, ConditionalActionProperties } from './ConditionalAction';
 import { CreateTokenAction, CreateTokenProperties } from './CreateTokenAction';
+import { DeckSearchAction, DeckSearchProperties } from './DeckSearchAction';
 import { DetachAction, DetachActionProperties } from './DetachAction';
-import { DeckSearchAction,  DeckSearchProperties} from './DeckSearchAction';
+import { DiscardCardAction, DiscardCardProperties } from './DiscardCardAction';
 import { DiscardFavorAction, DiscardFavorProperties } from './DiscardFavorAction';
 import { DiscardFromPlayAction, DiscardFromPlayProperties } from './DiscardFromPlayAction';
-import { DiscardCardAction, DiscardCardProperties } from './DiscardCardAction';
 import { DiscardStatusAction, DiscardStatusProperties } from './DiscardStatusAction';
 import { DishonorAction, DishonorProperties } from './DishonorAction';
 import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
@@ -25,9 +26,12 @@ import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
+import { FlipFavorAction, FlipFavorProperties } from './FlipFavorAction';
 import { GainFateAction, GainFateProperties } from './GainFateAction';
 import { GainHonorAction, GainHonorProperties } from './GainHonorAction';
 import { GainStatusTokenAction, GainStatusTokenProperties } from './GainStatusTokenAction';
+import { GameAction } from './GameAction';
+import { GloryCountAction, GloryCountProperties } from './GloryCountAction';
 import { HandlerAction, HandlerProperties } from './HandlerAction';
 import { HonorAction, HonorProperties } from './HonorAction';
 import { HonorBidAction, HonorBidProperties } from './HonorBidAction';
@@ -38,37 +42,41 @@ import { LastingEffectAction, LastingEffectProperties } from './LastingEffectAct
 import { LastingEffectCardAction, LastingEffectCardProperties } from './LastingEffectCardAction';
 import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingEffectRingAction';
 import { LookAtAction, LookAtProperties } from './LookAtAction';
-import { LoseFateProperties, LoseFateAction } from './LoseFateAction';
+import { LoseFateAction, LoseFateProperties } from './LoseFateAction';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction';
 import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction';
 import { MoveCardAction, MoveCardProperties } from './MoveCardAction';
+import { MoveConflictAction, MoveConflictProperties } from './MoveConflictAction';
 import { MoveToConflictAction, MoveToConflictProperties } from './MoveToConflictAction';
 import { MoveTokenAction, MoveTokenProperties } from './MoveTokenAction';
+import { MultipleContextActionProperties, MultipleContextGameAction } from './MultipleContextGameAction';
 import { MultipleGameAction } from './MultipleGameAction';
-import { MultipleContextGameAction, MultipleContextActionProperties } from './MultipleContextGameAction';
+import { OpponentPutIntoPlayAction, OpponentPutIntoPlayProperties } from './OpponentPutIntoPlayAction';
 import { PlaceCardUnderneathAction, PlaceCardUnderneathProperties } from './PlaceCardUnderneathAction';
 import { PlaceFateAction, PlaceFateProperties } from './PlaceFateAction';
 import { PlaceFateAttachmentAction, PlaceFateAttachmentProperties } from './PlaceFateAttachmentAction';
 import { PlaceFateRingAction, PlaceFateRingProperties } from './PlaceFateRingAction';
 import { PlayCardAction, PlayCardProperties } from './PlayCardAction';
-import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
 import { PutInProvinceAction, PutInProvinceProperties } from './PutInProvinceAction';
-import { OpponentPutIntoPlayAction, OpponentPutIntoPlayProperties } from './OpponentPutIntoPlayAction';
+import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
 import { RandomDiscardAction, RandomDiscardProperties } from './RandomDiscardAction';
 import { ReadyAction, ReadyProperties } from './ReadyAction';
 import { RefillFaceupAction, RefillFaceupProperties } from './RefillFaceupAction';
 import { RemoveFateAction, RemoveFateProperties } from './RemoveFateAction';
 import { RemoveFromGameAction, RemoveFromGameProperties } from './RemoveFromGameAction';
+import { RemoveRingFromPlayAction, RemoveRingFromPlayProperties } from './RemoveRingFromPlayAction';
 import { ResolveAbilityAction, ResolveAbilityProperties } from './ResolveAbilityAction';
-import { RestoreProvinceAction, RestoreProvinceProperties } from './RestoreProvinceAction';
 import { ResolveConflictRingAction } from './ResolveConflictRingAction';
 import { ResolveElementAction, ResolveElementProperties } from './ResolveElementAction';
+import { RestoreProvinceAction, RestoreProvinceProperties } from './RestoreProvinceAction';
 import { ReturnRingAction, ReturnRingProperties } from './ReturnRingAction';
+import { ReturnRingToPlayAction, ReturnRingToPlayProperties } from './ReturnRingToPlayAction';
 import { ReturnToDeckAction, ReturnToDeckProperties } from './ReturnToDeckAction';
 import { ReturnToHandAction, ReturnToHandProperties } from './ReturnToHandAction';
 import { RevealAction, RevealProperties } from './RevealAction';
+import { RingActionProperties } from './RingAction';
 import { SelectCardAction, SelectCardProperties } from './SelectCardAction';
 import { SelectRingAction, SelectRingProperties } from './SelectRingActions';
 import { SelectTokenAction, SelectTokenProperties } from './SelectTokenAction';
@@ -87,120 +95,395 @@ import { TransferFateAction, TransferFateProperties } from './TransferFateAction
 import { TransferHonorAction, TransferHonorProperties } from './TransferHonorAction';
 import { TriggerAbilityAction, TriggerAbilityProperties } from './TriggerAbilityAction';
 import { TurnCardFacedownAction, TurnCardFacedownProperties } from './TurnCardFacedownAction';
-import { GloryCountAction, GloryCountProperties } from './GloryCountAction';
-import { ClaimFavorAction, ClaimFavorProperties } from './ClaimFavorAction';
-import { RingActionProperties } from './RingAction';
-import { MoveConflictAction, MoveConflictProperties } from './MoveConflictAction';
-import { RemoveRingFromPlayAction, RemoveRingFromPlayProperties } from './RemoveRingFromPlayAction';
-import { ReturnRingToPlayAction, ReturnRingToPlayProperties } from './ReturnRingToPlayAction';
-import { FlipFavorAction, FlipFavorProperties } from './FlipFavorAction';
 
-const GameActions = {
-    // card
-    addToken: (propertyFactory: AddTokenProperties | ((context: TriggeredAbilityContext) => AddTokenProperties) = {}) => new AddTokenAction(propertyFactory),
-    attach: (propertyFactory: AttachActionProperties | ((context: TriggeredAbilityContext) => AttachActionProperties) = {}) => new AttachAction(propertyFactory), // attachment
-    attachToRing: (propertyFactory: AttachToRingActionProperties | ((context: TriggeredAbilityContext) => AttachToRingActionProperties) = {}) => new AttachToRingAction(propertyFactory), // attachment on a ring
-    bow: (propertyFactory: BowActionProperties | ((context: TriggeredAbilityContext) => BowActionProperties) = {}) => new BowAction(propertyFactory),
-    break: (propertyFactory: BreakProperties | ((context: TriggeredAbilityContext) => BreakProperties) = {}) => new BreakAction(propertyFactory),
-    cardLastingEffect: (propertyFactory: LastingEffectCardProperties | ((context: TriggeredAbilityContext) => LastingEffectCardProperties)) => new LastingEffectCardAction(propertyFactory),
-    claimImperialFavor: (propertyFactory: ClaimFavorProperties | ((context: TriggeredAbilityContext) => ClaimFavorProperties)) => new ClaimFavorAction(propertyFactory),
-    createToken: (propertyFactory: CreateTokenProperties | ((context: TriggeredAbilityContext) => CreateTokenProperties) = {}) => new CreateTokenAction(propertyFactory),
-    detach: (propertyFactory: DetachActionProperties | ((context: TriggeredAbilityContext) => DetachActionProperties) = {}) => new DetachAction(propertyFactory),
-    discardCard: (propertyFactory: DiscardCardProperties | ((context: TriggeredAbilityContext) => DiscardCardProperties) = {}) => new DiscardCardAction(propertyFactory),
-    discardFromPlay: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory),
-    dishonor: (propertyFactory: DishonorProperties | ((context: TriggeredAbilityContext) => DishonorProperties) = {}) => new DishonorAction(propertyFactory),
-    dishonorProvince: (propertyFactory: DishonorProvinceProperties | ((context: TriggeredAbilityContext) => DishonorProvinceProperties) = {}) => new DishonorProvinceAction(propertyFactory),
-    duel: (propertyFactory: DuelProperties | ((context: TriggeredAbilityContext) => DuelProperties)) => new DuelAction(propertyFactory), // type, challenger, resolutionHandler, costHandler
-    flipDynasty: (propertyFactory: FlipDynastyProperties | ((context: TriggeredAbilityContext) => FlipDynastyProperties) = {}) => new FlipDynastyAction(propertyFactory),
-    flipImperialFavor: (propertyFactory: FlipFavorProperties | ((context: TriggeredAbilityContext) => FlipFavorProperties)) => new FlipFavorAction(propertyFactory),
-    honor: (propertyFactory: HonorProperties | ((context: TriggeredAbilityContext) => HonorProperties) = {}) => new HonorAction(propertyFactory),
-    lookAt: (propertyFactory: LookAtProperties | ((context: TriggeredAbilityContext) => LookAtProperties) = {}) => new LookAtAction(propertyFactory),
-    moveCard: (propertyFactory: MoveCardProperties | ((context: TriggeredAbilityContext) => MoveCardProperties)) => new MoveCardAction(propertyFactory), // destination, switch = false, shuffle = false, faceup = false
-    moveToConflict: (propertyFactory: MoveToConflictProperties | ((context: TriggeredAbilityContext) => MoveToConflictProperties) = {}) => new MoveToConflictAction(propertyFactory),
-    placeFate: (propertyFactory: PlaceFateProperties | ((context: TriggeredAbilityContext) => PlaceFateProperties) = {}) => new PlaceFateAction(propertyFactory), // amount = 1, origin
-    placeFateAttachment: (propertyFactory: PlaceFateAttachmentProperties | ((context: TriggeredAbilityContext) => PlaceFateAttachmentProperties) = {}) => new PlaceFateAttachmentAction(propertyFactory), // amount = 1, origin
-    playCard: (propertyFactory: PlayCardProperties | ((context: TriggeredAbilityContext) => PlayCardProperties) = {}) => new PlayCardAction(propertyFactory), // resetOnCancel = false, postHandler
-    performGloryCount: (propertyFactory: GloryCountProperties | ((context: TriggeredAbilityContext) => GloryCountProperties)) => new GloryCountAction(propertyFactory),
-    putIntoConflict: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory), // fate = 0, status = ordinary
-    putIntoPlay: (propertyFactory: PutIntoPlayProperties | ((context: TriggeredAbilityContext) => PutIntoPlayProperties) = {}) => new PutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
-    putIntoProvince: (propertyFactory: PutInProvinceProperties | ((context: TriggeredAbilityContext) => PutInProvinceProperties)) => new PutInProvinceAction(propertyFactory),
-    opponentPutIntoPlay: (propertyFactory: OpponentPutIntoPlayProperties | ((context: TriggeredAbilityContext) => OpponentPutIntoPlayProperties) = {}) => new OpponentPutIntoPlayAction(propertyFactory, false), // fate = 0, status = ordinary
-    ready: (propertyFactory: ReadyProperties | ((context: TriggeredAbilityContext) => ReadyProperties) = {}) => new ReadyAction(propertyFactory),
-    removeFate: (propertyFactory: RemoveFateProperties | ((context: TriggeredAbilityContext) => RemoveFateProperties) = {}) => new RemoveFateAction(propertyFactory), // amount = 1, recipient
-    removeFromGame: (propertyFactory: RemoveFromGameProperties | ((context: TriggeredAbilityContext) => RemoveFromGameProperties) = {}) => new RemoveFromGameAction(propertyFactory),
-    resolveAbility: (propertyFactory: ResolveAbilityProperties | ((context: TriggeredAbilityContext) => ResolveAbilityProperties)) => new ResolveAbilityAction(propertyFactory), // ability
-    restoreProvince: (propertyFactory: RestoreProvinceProperties | ((context: TriggeredAbilityContext) => RestoreProvinceProperties) = {}) => new RestoreProvinceAction(propertyFactory),
-    returnToDeck: (propertyFactory: ReturnToDeckProperties | ((context: TriggeredAbilityContext) => ReturnToDeckProperties) = {}) => new ReturnToDeckAction(propertyFactory), // bottom = false
-    returnToHand: (propertyFactory: ReturnToHandProperties | ((context: TriggeredAbilityContext) => ReturnToHandProperties) = {}) => new ReturnToHandAction(propertyFactory),
-    reveal: (propertyFactory: RevealProperties | ((context: TriggeredAbilityContext) => RevealProperties) = {}) => new RevealAction(propertyFactory), // chatMessage = false
-    sendHome: (propertyFactory: SendHomeProperties | ((context: TriggeredAbilityContext) => SendHomeProperties) = {}) => new SendHomeAction(propertyFactory),
-    sacrifice: (propertyFactory: DiscardFromPlayProperties | ((context: TriggeredAbilityContext) => DiscardFromPlayProperties) = {}) => new DiscardFromPlayAction(propertyFactory, true),
-    taint: (propertyFactory: TaintProperties | ((context: TriggeredAbilityContext) => TaintProperties) = {}) => new TaintAction(propertyFactory),
-    takeControl: (propertyFactory: TakeControlProperties | ((context: TriggeredAbilityContext) => TakeControlProperties) = {}) => new TakeControlAction(propertyFactory),
-    triggerAbility: (propertyFactory: TriggerAbilityProperties | ((context: TriggeredAbilityContext) => TriggerAbilityProperties)) => new TriggerAbilityAction(propertyFactory), // ability
-    turnFacedown: (propertyFactory: TurnCardFacedownProperties | ((context: TriggeredAbilityContext) => TurnCardFacedownProperties) = {}) => new TurnCardFacedownAction(propertyFactory),
-    gainStatusToken: (propertyFactory: GainStatusTokenProperties | ((context: TriggeredAbilityContext) => GainStatusTokenProperties) = {}) => new GainStatusTokenAction(propertyFactory),
-    moveConflict: (propertyFactory: MoveConflictProperties | ((context: TriggeredAbilityContext) => MoveConflictProperties) = {}) => new MoveConflictAction(propertyFactory),
-    placeCardUnderneath: (propertyFactory: PlaceCardUnderneathProperties | ((context: TriggeredAbilityContext) => PlaceCardUnderneathProperties)) => new PlaceCardUnderneathAction(propertyFactory), // destination, hideWhenFaceup = true
-    // player actions
-    chosenDiscard: (propertyFactory: ChosenDiscardProperties | ((context: TriggeredAbilityContext) => ChosenDiscardProperties) = {}) => new ChosenDiscardAction(propertyFactory), // amount = 1
-    chosenReturnToDeck: (propertyFactory: ChosenReturnToDeckProperties | ((context: TriggeredAbilityContext) => ChosenReturnToDeckProperties) = {}) => new ChosenReturnToDeckAction(propertyFactory), // amount = 1
-    deckSearch: (propertyFactory: DeckSearchProperties | ((context: TriggeredAbilityContext) => DeckSearchProperties)) => new DeckSearchAction(propertyFactory), // amount = -1, reveal = true, cardCondition = (card, context) => true
-    discardAtRandom: (propertyFactory: RandomDiscardProperties | ((context: TriggeredAbilityContext) => RandomDiscardProperties) = {}) => new RandomDiscardAction(propertyFactory), // amount = 1
-    discardMatching: (propertyFactory: MatchingDiscardProperties | ((context: TriggeredAbilityContext) => MatchingDiscardProperties) = {}) => new MatchingDiscardAction(propertyFactory), // amount = 1
-    draw: (propertyFactory: DrawProperties | ((context: TriggeredAbilityContext) => DrawProperties) = {}) => new DrawAction(propertyFactory), // amount = 1
-    fillProvince: (propertyFactory: FillProvinceProperties | ((context: TriggeredAbilityContext) => FillProvinceProperties)) => new FillProvinceAction(propertyFactory), // location, amount = 1, faceup = false
-    gainFate: (propertyFactory: GainFateProperties | ((context: TriggeredAbilityContext) => GainFateProperties) = {}) => new GainFateAction(propertyFactory), // amount = 1
-    gainHonor: (propertyFactory: GainHonorProperties | ((context: TriggeredAbilityContext) => GainHonorProperties) = {}) => new GainHonorAction(propertyFactory), // amount = 1
-    honorBid: (propertyFactory: HonorBidProperties | ((context: TriggeredAbilityContext) => HonorBidProperties) = {}) => new HonorBidAction(propertyFactory), // giveHonor = false, players = Players.Any, prohibitedBids = []
-    initiateConflict: (propertyFactory: InitiateConflictProperties | ((context: TriggeredAbilityContext) => InitiateConflictProperties) = {}) => new InitiateConflictAction(propertyFactory), // canPass = true
-    loseFate: (propertyFactory: LoseFateProperties | ((context: TriggeredAbilityContext) => LoseFateProperties) = {}) => new LoseFateAction(propertyFactory),
-    loseHonor: (propertyFactory: LoseHonorProperties | ((context: TriggeredAbilityContext) => LoseHonorProperties) = {}) => new LoseHonorAction(propertyFactory), // amount = 1
-    loseImperialFavor: (propertyFactory: DiscardFavorProperties | ((context: TriggeredAbilityContext) => DiscardFavorProperties) = {}) => new DiscardFavorAction(propertyFactory),
-    modifyBid: (propertyFactory: ModifyBidProperties | ((context: TriggeredAbilityContext) => ModifyBidProperties) = {}) => new ModifyBidAction(propertyFactory), // amount = 1, direction = 'increast', promptPlayer = false
-    playerLastingEffect: (propertyFactory: LastingEffectProperties | ((context: TriggeredAbilityContext) => LastingEffectProperties) ) => new LastingEffectAction(propertyFactory), // duration = 'untilEndOfConflict', effect, targetController, condition, until
-    refillFaceup: (propertyFactory: RefillFaceupProperties | ((context: TriggeredAbilityContext) => RefillFaceupProperties)) => new RefillFaceupAction(propertyFactory), // location
-    setHonorDial: (propertyFactory: SetDialProperties | ((context: TriggeredAbilityContext) => SetDialProperties)) => new SetDialAction(propertyFactory), // value
-    shuffleDeck: (propertyFactory: ShuffleDeckProperties | ((context: TriggeredAbilityContext) => ShuffleDeckProperties)) => new ShuffleDeckAction(propertyFactory),
-    takeFate: (propertyFactory: TransferFateProperties | ((context: TriggeredAbilityContext) => TransferFateProperties) = {}) => new TransferFateAction(propertyFactory), // amount = 1
-    takeHonor: (propertyFactory: TransferHonorProperties | ((context: TriggeredAbilityContext) => TransferHonorProperties) = {}) => new TransferHonorAction(propertyFactory), // amount = 1
-    // ring actions
-    placeFateOnRing: (propertyFactory: PlaceFateRingProperties | ((context: TriggeredAbilityContext) => PlaceFateRingProperties) = {}) => new PlaceFateRingAction(propertyFactory), // amount = 1, origin
-    resolveConflictRing: (propertyFactory: RingActionProperties | ((context: TriggeredAbilityContext) => RingActionProperties) = {}) => new ResolveConflictRingAction(propertyFactory), // resolveAsAttacker = true
-    resolveRingEffect: (propertyFactory: ResolveElementProperties | ((context: TriggeredAbilityContext) => ResolveElementProperties) = {}) => new ResolveElementAction(propertyFactory), // options = false
-    returnRing: (propertyFactory: ReturnRingProperties | ((context: TriggeredAbilityContext) => ReturnRingProperties) = {}) => new ReturnRingAction(propertyFactory),
-    ringLastingEffect: (propertyFactory: LastingEffectRingProperties | ((context: TriggeredAbilityContext) => LastingEffectRingProperties)) => new LastingEffectRingAction(propertyFactory), // duration = 'untilEndOfConflict', effect, condition, until
-    selectRing: (propertyFactory: SelectRingProperties | ((context: TriggeredAbilityContext) => SelectRingProperties)) => new SelectRingAction(propertyFactory),
-    switchConflictElement: (propertyFactory: SwitchConflictElementProperties | ((context: TriggeredAbilityContext) => SwitchConflictElementProperties) = {}) => new SwitchConflictElementAction(propertyFactory),
-    switchConflictType: (propertyFactory: SwitchConflictTypeProperties | ((context: TriggeredAbilityContext) => SwitchConflictTypeProperties) = {}) => new SwitchConflictTypeAction(propertyFactory),
-    takeFateFromRing: (propertyFactory: TakeFateRingProperties | ((context: TriggeredAbilityContext) => TakeFateRingProperties) = {}) => new TakeFateRingAction(propertyFactory), // amount = 1
-    takeRing: (propertyFactory: TakeRingProperties | ((context: TriggeredAbilityContext) => TakeRingProperties) = {}) => new TakeRingAction(propertyFactory),
-    claimRing: (propertyFactory: ClaimRingProperties | ((context: TriggeredAbilityContext) => ClaimRingProperties) = {}) => new ClaimRingAction(propertyFactory),
-    removeRingFromPlay: (propertyFactory: RemoveRingFromPlayProperties | ((context: TriggeredAbilityContext) => RemoveRingFromPlayProperties) = {}) => new RemoveRingFromPlayAction(propertyFactory),
-    returnRingToPlay: (propertyFactory: ReturnRingToPlayProperties | ((context: TriggeredAbilityContext) => ReturnRingToPlayProperties) = {}) => new ReturnRingToPlayAction(propertyFactory),
-    // status token actions
-    discardStatusToken: (propertyFactory: DiscardStatusProperties | ((context: TriggeredAbilityContext) => DiscardStatusProperties) = {}) => new DiscardStatusAction(propertyFactory),
-    moveStatusToken: (propertyFactory: MoveTokenProperties | ((context: TriggeredAbilityContext) => MoveTokenProperties)) => new MoveTokenAction(propertyFactory),
-    // general actions
-    cancel: (propertyFactory: CancelActionProperties | ((context: TriggeredAbilityContext) => CancelActionProperties) = {}) => new CancelAction(propertyFactory),
-    handler: (propertyFactory: HandlerProperties | ((context: TriggeredAbilityContext) => HandlerProperties)) => new HandlerAction(propertyFactory),
-    noAction: () => new HandlerAction(),
-    // conflict actions
-    conflictLastingEffect: (propertyFactory: LastingEffectProperties | ((context: TriggeredAbilityContext) => LastingEffectProperties) ) => new LastingEffectAction(propertyFactory), // duration = 'untilEndOfConflict', effect, targetController, condition, until
+type PropsFactory<Props> = Props | ((context: TriggeredAbilityContext) => Props);
 
-    // meta actions
-    cardMenu: (propertyFactory: CardMenuProperties | ((context: TriggeredAbilityContext) => CardMenuProperties)) => new CardMenuAction(propertyFactory),
-    chooseAction: (propertyFactory: ChooseActionProperties | ((context: TriggeredAbilityContext) => ChooseActionProperties)) => new ChooseGameAction(propertyFactory), // choices, activePromptTitle = 'Select one'
-    conditional: (propertyFactory: ConditionalActionProperties | ((context: TriggeredAbilityContext) => ConditionalActionProperties)) => new ConditionalAction(propertyFactory),
-    ifAble: (propertyFactory: IfAbleActionProperties | ((context: TriggeredAbilityContext) => IfAbleActionProperties)) => new IfAbleAction(propertyFactory),
-    joint: (gameActions: GameAction[]) => new JointGameAction(gameActions), // takes an array of gameActions, not a propertyFactory
-    multiple: (gameActions: GameAction[]) => new MultipleGameAction(gameActions), // takes an array of gameActions, not a propertyFactory
-    multipleContext: (propertyFactory: MultipleContextActionProperties | ((context: TriggeredAbilityContext) => MultipleContextActionProperties)) => new MultipleContextGameAction(propertyFactory),
-    menuPrompt: (propertyFactory: MenuPromptProperties | ((context: TriggeredAbilityContext) => MenuPromptProperties)) => new MenuPromptAction(propertyFactory),
-    selectCard: (propertyFactory: SelectCardProperties | ((context: TriggeredAbilityContext) => SelectCardProperties)) => new SelectCardAction(propertyFactory),
-    selectToken: (propertyFactory: SelectTokenProperties | ((context: TriggeredAbilityContext) => SelectTokenProperties)) => new SelectTokenAction(propertyFactory),
-    sequential: (gameActions: GameAction[]) => new SequentialAction(gameActions), // takes an array of gameActions, not a propertyFactory
-    sequentialContext: (propertyFactory: SequentialContextProperties | ((context: TriggeredAbilityContext) => SequentialContextProperties)) => new SequentialContextAction(propertyFactory)
-};
 
-export = GameActions;
+//////////////
+// CARD
+//////////////
+export function addToken(propertyFactory: PropsFactory<AddTokenProperties> = {}): GameAction {
+    return new AddTokenAction(propertyFactory);
+}
+export function attach(propertyFactory: PropsFactory<AttachActionProperties> = {}): GameAction {
+    return new AttachAction(propertyFactory);
+}
+export function attachToRing(propertyFactory: PropsFactory<AttachToRingActionProperties> = {}): GameAction {
+    return new AttachToRingAction(propertyFactory);
+}
+export function bow(propertyFactory: PropsFactory<BowActionProperties> = {}): CardGameAction {
+    return new BowAction(propertyFactory);
+}
+export function breakProvince(propertyFactory: PropsFactory<BreakProperties> = {}): CardGameAction {
+    return new BreakAction(propertyFactory);
+}
+export function cardLastingEffect(propertyFactory: PropsFactory<LastingEffectCardProperties>): GameAction {
+    return new LastingEffectCardAction(propertyFactory);
+}
+export function claimImperialFavor(propertyFactory: PropsFactory<ClaimFavorProperties>): GameAction {
+    return new ClaimFavorAction(propertyFactory);
+}
+export function createToken(propertyFactory: PropsFactory<CreateTokenProperties> = {}): GameAction {
+    return new CreateTokenAction(propertyFactory);
+}
+export function detach(propertyFactory: PropsFactory<DetachActionProperties> = {}): GameAction {
+    return new DetachAction(propertyFactory);
+}
+export function discardCard(propertyFactory: PropsFactory<DiscardCardProperties> = {}): CardGameAction {
+    return new DiscardCardAction(propertyFactory);
+}
+export function discardFromPlay(propertyFactory: PropsFactory<DiscardFromPlayProperties> = {}): GameAction {
+    return new DiscardFromPlayAction(propertyFactory);
+}
+export function dishonor(propertyFactory: PropsFactory<DishonorProperties> = {}): CardGameAction {
+    return new DishonorAction(propertyFactory);
+}
+export function dishonorProvince(propertyFactory: PropsFactory<DishonorProvinceProperties> = {}): GameAction {
+    return new DishonorProvinceAction(propertyFactory);
+}
+export function duel(propertyFactory: PropsFactory<DuelProperties>): GameAction {
+    return new DuelAction(propertyFactory);
+}
+export function flipDynasty(propertyFactory: PropsFactory<FlipDynastyProperties> = {}): GameAction {
+    return new FlipDynastyAction(propertyFactory);
+}
+export function flipImperialFavor(propertyFactory: PropsFactory<FlipFavorProperties>): GameAction {
+    return new FlipFavorAction(propertyFactory);
+}
+export function honor(propertyFactory: PropsFactory<HonorProperties> = {}): GameAction {
+    return new HonorAction(propertyFactory);
+}
+export function lookAt(propertyFactory: PropsFactory<LookAtProperties> = {}): GameAction {
+    return new LookAtAction(propertyFactory);
+}
+/**
+ * default switch = false
+ * default shuffle = false
+ * default faceup = false
+ */
+export function moveCard(propertyFactory: PropsFactory<MoveCardProperties>): CardGameAction {
+    return new MoveCardAction(propertyFactory);
+}
+export function moveToConflict(propertyFactory: PropsFactory<MoveToConflictProperties> = {}): CardGameAction {
+    return new MoveToConflictAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function placeFate(propertyFactory: PropsFactory<PlaceFateProperties> = {}): GameAction {
+    return new PlaceFateAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function placeFateAttachment(propertyFactory: PropsFactory<PlaceFateAttachmentProperties> = {}): GameAction {
+    return new PlaceFateAttachmentAction(propertyFactory);
+}
+/**
+ * default resetOnCancel = false
+ */
+export function playCard(propertyFactory: PropsFactory<PlayCardProperties> = {}): GameAction {
+    return new PlayCardAction(propertyFactory);
+}
+export function performGloryCount(propertyFactory: PropsFactory<GloryCountProperties>): GameAction {
+    return new GloryCountAction(propertyFactory);
+}
+/**
+ * default fate = 0
+ * default status = ordinary
+ */
+export function putIntoConflict(propertyFactory: PropsFactory<PutIntoPlayProperties> = {}): GameAction {
+    return new PutIntoPlayAction(propertyFactory);
+}
+/**
+ * default fate = 0
+ * default status = ordinary
+ */
+export function putIntoPlay(propertyFactory: PropsFactory<PutIntoPlayProperties> = {}): GameAction {
+    return new PutIntoPlayAction(propertyFactory, false);
+}
+export function putIntoProvince(propertyFactory: PropsFactory<PutInProvinceProperties>): GameAction {
+    return new PutInProvinceAction(propertyFactory);
+}
+/**
+ * default fate = 0
+ * default status = ordinary
+ */
+export function opponentPutIntoPlay(propertyFactory: PropsFactory<OpponentPutIntoPlayProperties> = {}): GameAction {
+    return new OpponentPutIntoPlayAction(propertyFactory, false);
+}
+export function ready(propertyFactory: PropsFactory<ReadyProperties> = {}): GameAction {
+    return new ReadyAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function removeFate(propertyFactory: PropsFactory<RemoveFateProperties> = {}): CardGameAction {
+    return new RemoveFateAction(propertyFactory);
+}
+export function removeFromGame(propertyFactory: PropsFactory<RemoveFromGameProperties> = {}): CardGameAction {
+    return new RemoveFromGameAction(propertyFactory);
+}
+export function resolveAbility(propertyFactory: PropsFactory<ResolveAbilityProperties>): GameAction {
+    return new ResolveAbilityAction(propertyFactory);
+}
+export function restoreProvince(propertyFactory: PropsFactory<RestoreProvinceProperties> = {}): GameAction {
+    return new RestoreProvinceAction(propertyFactory);
+}
+/**
+ * default bottom = false
+ */
+export function returnToDeck(propertyFactory: PropsFactory<ReturnToDeckProperties> = {}): CardGameAction {
+    return new ReturnToDeckAction(propertyFactory);
+}
+export function returnToHand(propertyFactory: PropsFactory<ReturnToHandProperties> = {}): CardGameAction {
+    return new ReturnToHandAction(propertyFactory);
+}
+/**
+ * default chatMessage = false
+ */
+export function reveal(propertyFactory: PropsFactory<RevealProperties> = {}): CardGameAction {
+    return new RevealAction(propertyFactory);
+}
+export function sendHome(propertyFactory: PropsFactory<SendHomeProperties> = {}): GameAction {
+    return new SendHomeAction(propertyFactory);
+}
+export function sacrifice(propertyFactory: PropsFactory<DiscardFromPlayProperties> = {}): CardGameAction {
+    return new DiscardFromPlayAction(propertyFactory, true);
+}
+export function taint(propertyFactory: PropsFactory<TaintProperties> = {}): CardGameAction {
+    return new TaintAction(propertyFactory);
+}
+export function takeControl(propertyFactory: PropsFactory<TakeControlProperties> = {}): GameAction {
+    return new TakeControlAction(propertyFactory);
+}
+export function triggerAbility(propertyFactory: PropsFactory<TriggerAbilityProperties>): GameAction {
+    return new TriggerAbilityAction(propertyFactory);
+}
+export function turnFacedown(propertyFactory: PropsFactory<TurnCardFacedownProperties> = {}): GameAction {
+    return new TurnCardFacedownAction(propertyFactory);
+}
+export function gainStatusToken(propertyFactory: PropsFactory<GainStatusTokenProperties> = {}): GameAction {
+    return new GainStatusTokenAction(propertyFactory);
+}
+export function moveConflict(propertyFactory: PropsFactory<MoveConflictProperties> = {}): GameAction {
+    return new MoveConflictAction(propertyFactory);
+}
+/**
+ * default hideWhenFaceup = true
+ */
+export function placeCardUnderneath(propertyFactory: PropsFactory<PlaceCardUnderneathProperties>): GameAction {
+    return new PlaceCardUnderneathAction(propertyFactory);
+}
+
+//////////////
+// PLAYER
+//////////////
+/**
+ * default amount = 1
+ */
+export function chosenDiscard(propertyFactory: PropsFactory<ChosenDiscardProperties> = {}): GameAction {
+    return new ChosenDiscardAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function chosenReturnToDeck(propertyFactory: PropsFactory<ChosenReturnToDeckProperties> = {}): GameAction {
+    return new ChosenReturnToDeckAction(propertyFactory);
+}
+/**
+ * default amount = -1 (whole deck)
+ * default reveal = true
+ * default cardCondition = always true
+ */
+export function deckSearch(propertyFactory: PropsFactory<DeckSearchProperties>): GameAction {
+    return new DeckSearchAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function discardAtRandom(propertyFactory: PropsFactory<RandomDiscardProperties> = {}): GameAction {
+    return new RandomDiscardAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function discardMatching(propertyFactory: PropsFactory<MatchingDiscardProperties> = {}): GameAction {
+    return new MatchingDiscardAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ */
+export function draw(propertyFactory: PropsFactory<DrawProperties> = {}): GameAction {
+    return new DrawAction(propertyFactory);
+}
+/**
+ * default amount = 1
+ * default faceup = false
+ */
+export function fillProvince(propertyFactory: PropsFactory<FillProvinceProperties>): GameAction {
+    return new FillProvinceAction(propertyFactory);
+}
+export function gainFate(propertyFactory: PropsFactory<GainFateProperties> = {}): GameAction {
+    return new GainFateAction(propertyFactory);
+} // amount = 1
+export function gainHonor(propertyFactory: PropsFactory<GainHonorProperties> = {}): GameAction {
+    return new GainHonorAction(propertyFactory);
+} // amount = 1
+/**
+ * default giveHonor = false
+ * default players = Players.Any
+ * default prohibitedBids = All bids allowed
+ */
+export function honorBid(propertyFactory: PropsFactory<HonorBidProperties> = {}): GameAction {
+    return new HonorBidAction(propertyFactory);
+}
+export function initiateConflict(propertyFactory: PropsFactory<InitiateConflictProperties> = {}): GameAction {
+    return new InitiateConflictAction(propertyFactory);
+} // canPass = true
+export function loseFate(propertyFactory: PropsFactory<LoseFateProperties> = {}): GameAction {
+    return new LoseFateAction(propertyFactory);
+}
+export function loseHonor(propertyFactory: PropsFactory<LoseHonorProperties> = {}): GameAction {
+    return new LoseHonorAction(propertyFactory);
+} // amount = 1
+export function loseImperialFavor(propertyFactory: PropsFactory<DiscardFavorProperties> = {}): GameAction {
+    return new DiscardFavorAction(propertyFactory);
+}
+export function modifyBid(propertyFactory: PropsFactory<ModifyBidProperties> = {}): GameAction {
+    return new ModifyBidAction(propertyFactory);
+} // amount = 1, direction = 'increast', promptPlayer = false
+export function playerLastingEffect(propertyFactory: PropsFactory<LastingEffectProperties>): GameAction {
+    return new LastingEffectAction(propertyFactory);
+} // duration = 'untilEndOfConflict', effect, targetController, condition, until
+export function refillFaceup(propertyFactory: PropsFactory<RefillFaceupProperties>): GameAction {
+    return new RefillFaceupAction(propertyFactory);
+} // location
+export function setHonorDial(propertyFactory: PropsFactory<SetDialProperties>): GameAction {
+    return new SetDialAction(propertyFactory);
+} // value
+export function shuffleDeck(propertyFactory: PropsFactory<ShuffleDeckProperties>): GameAction {
+    return new ShuffleDeckAction(propertyFactory);
+}
+export function takeFate(propertyFactory: PropsFactory<TransferFateProperties> = {}): GameAction {
+    return new TransferFateAction(propertyFactory);
+} // amount = 1
+export function takeHonor(propertyFactory: PropsFactory<TransferHonorProperties> = {}): GameAction {
+    return new TransferHonorAction(propertyFactory);
+} // amount = 1
+
+//////////////
+// RING
+//////////////
+export function placeFateOnRing(propertyFactory: PropsFactory<PlaceFateRingProperties> = {}): GameAction {
+    return new PlaceFateRingAction(propertyFactory);
+} // amount = 1, origin
+export function resolveConflictRing(propertyFactory: PropsFactory<RingActionProperties> = {}): GameAction {
+    return new ResolveConflictRingAction(propertyFactory);
+} // resolveAsAttacker = true
+export function resolveRingEffect(propertyFactory: PropsFactory<ResolveElementProperties> = {}): GameAction {
+    return new ResolveElementAction(propertyFactory);
+} // options = false
+export function returnRing(propertyFactory: PropsFactory<ReturnRingProperties> = {}): GameAction {
+    return new ReturnRingAction(propertyFactory);
+}
+export function ringLastingEffect(propertyFactory: PropsFactory<LastingEffectRingProperties>): GameAction {
+    return new LastingEffectRingAction(propertyFactory);
+} // duration = 'untilEndOfConflict', effect, condition, until
+export function selectRing(propertyFactory: PropsFactory<SelectRingProperties>): GameAction {
+    return new SelectRingAction(propertyFactory);
+}
+export function switchConflictElement(propertyFactory: PropsFactory<SwitchConflictElementProperties> = {}): GameAction {
+    return new SwitchConflictElementAction(propertyFactory);
+}
+export function switchConflictType(propertyFactory: PropsFactory<SwitchConflictTypeProperties> = {}): GameAction {
+    return new SwitchConflictTypeAction(propertyFactory);
+}
+export function takeFateFromRing(propertyFactory: PropsFactory<TakeFateRingProperties> = {}): GameAction {
+    return new TakeFateRingAction(propertyFactory);
+} // amount = 1
+export function takeRing(propertyFactory: PropsFactory<TakeRingProperties> = {}): GameAction {
+    return new TakeRingAction(propertyFactory);
+}
+export function claimRing(propertyFactory: PropsFactory<ClaimRingProperties> = {}): GameAction {
+    return new ClaimRingAction(propertyFactory);
+}
+export function removeRingFromPlay(propertyFactory: PropsFactory<RemoveRingFromPlayProperties> = {}): GameAction {
+    return new RemoveRingFromPlayAction(propertyFactory);
+}
+export function returnRingToPlay(propertyFactory: PropsFactory<ReturnRingToPlayProperties> = {}): GameAction {
+    return new ReturnRingToPlayAction(propertyFactory);
+}
+
+//////////////
+// STATUS TOKEN
+//////////////
+export function discardStatusToken(propertyFactory: PropsFactory<DiscardStatusProperties> = {}): GameAction {
+    return new DiscardStatusAction(propertyFactory);
+}
+export function moveStatusToken(propertyFactory: PropsFactory<MoveTokenProperties>): GameAction {
+    return new MoveTokenAction(propertyFactory);
+}
+
+//////////////
+// GENERIC
+//////////////
+export function cancel(propertyFactory: PropsFactory<CancelActionProperties> = {}): GameAction {
+    return new CancelAction(propertyFactory);
+}
+export function handler(propertyFactory: PropsFactory<HandlerProperties>): GameAction {
+    return new HandlerAction(propertyFactory);
+}
+export function noAction(): GameAction {
+    return new HandlerAction();
+}
+
+//////////////
+// CONFLICT
+//////////////
+export function conflictLastingEffect(propertyFactory: PropsFactory<LastingEffectProperties>): GameAction {
+    return new LastingEffectAction(propertyFactory);
+} // duration = 'untilEndOfConflict', effect, targetController, condition, until
+export function immediatelyResolveConflict(): GameAction {
+    return new HandlerAction();
+}
+
+//////////////
+// META
+//////////////
+export function cardMenu(propertyFactory: PropsFactory<CardMenuProperties>): GameAction {
+    return new CardMenuAction(propertyFactory);
+}
+export function chooseAction(propertyFactory: PropsFactory<ChooseActionProperties>): GameAction {
+    return new ChooseGameAction(propertyFactory);
+} // choices, activePromptTitle = 'Select one'
+export function conditional(propertyFactory: PropsFactory<ConditionalActionProperties>): GameAction {
+    return new ConditionalAction(propertyFactory);
+}
+export function ifAble(propertyFactory: PropsFactory<IfAbleActionProperties>): GameAction {
+    return new IfAbleAction(propertyFactory);
+}
+export function joint(gameActions: GameAction[]): GameAction {
+    return new JointGameAction(gameActions);
+} // takes an array of gameActions, not a propertyFactory
+export function multiple(gameActions: GameAction[]): GameAction {
+    return new MultipleGameAction(gameActions);
+} // takes an array of gameActions, not a propertyFactory
+export function multipleContext(propertyFactory: PropsFactory<MultipleContextActionProperties>): GameAction {
+    return new MultipleContextGameAction(propertyFactory);
+}
+export function menuPrompt(propertyFactory: PropsFactory<MenuPromptProperties>): GameAction {
+    return new MenuPromptAction(propertyFactory);
+}
+export function selectCard(propertyFactory: PropsFactory<SelectCardProperties>): GameAction {
+    return new SelectCardAction(propertyFactory);
+}
+export function selectToken(propertyFactory: PropsFactory<SelectTokenProperties>): GameAction {
+    return new SelectTokenAction(propertyFactory);
+}
+export function sequential(gameActions: GameAction[]): GameAction {
+    return new SequentialAction(gameActions);
+} // takes an array of gameActions, not a propertyFactory
+export function sequentialContext(propertyFactory: PropsFactory<SequentialContextProperties>): GameAction {
+    return new SequentialContextAction(propertyFactory);
+}

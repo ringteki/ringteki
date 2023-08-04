@@ -2,7 +2,7 @@ import type AbilityContext from './AbilityContext';
 import BaseAction from './BaseAction';
 import { EffectNames, EventNames, Locations, Phases, PlayTypes, Players } from './Constants';
 import { chooseFate, payReduceableFateCost } from './Costs.js';
-import GameActions from './GameActions/GameActions';
+import { putIntoConflict, putIntoPlay } from './GameActions/GameActions';
 import { parseGameMode } from './GameMode';
 import type BaseCard from './basecard';
 
@@ -80,7 +80,7 @@ export class PlayCharacterAction extends BaseAction {
             const effect = context.source.getEffects(EffectNames.EntersPlayForOpponent);
             const player = effect.length > 0 ? Players.Opponent : Players.Self;
             context.game.openEventWindow([
-                GameActions.putIntoPlay({
+                putIntoPlay({
                     fate: context.chooseFate + extraFate,
                     controller: player,
                     overrideLocation: Locations.Hand
@@ -96,7 +96,7 @@ export class PlayCharacterAction extends BaseAction {
                 context.chooseFate
             );
             context.game.openEventWindow([
-                GameActions.putIntoConflict({ fate: context.chooseFate }).getEvent(context.source, context),
+                putIntoConflict({ fate: context.chooseFate }).getEvent(context.source, context),
                 cardPlayedEvent
             ]);
         };

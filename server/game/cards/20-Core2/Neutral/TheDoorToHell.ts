@@ -19,19 +19,12 @@ export default class TheDoorToHell extends ProvinceCard {
                 controller: Players.Opponent,
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.isAttacking(),
-                gameAction: AbilityDsl.actions.multipleContext((context) => ({
-                    gameActions: [
-                        AbilityDsl.actions.removeFate({
-                            target: context.target,
-                            amount: context.target.getFate()
-                        }),
-                        AbilityDsl.actions.handler({
-                            handler(context) {
-                                context.game.continue();
-                            }
-                        })
-                    ]
-                }))
+                gameAction: AbilityDsl.actions.sequential([
+                    AbilityDsl.actions.removeFate((context) => ({
+                        target: context.target,
+                        amount: context.target.getFate()
+                    }))
+                ])
             }
         });
     }

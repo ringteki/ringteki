@@ -3,7 +3,7 @@ import { CharacterStatus, EventNames, Locations, PlayTypes, Players, TargetModes
 import Event from './Events/Event';
 import { CardGameAction } from './GameActions/CardGameAction';
 import { GameAction } from './GameActions/GameAction';
-import GameActions from './GameActions/GameActions';
+import * as GameActions from './GameActions/GameActions';
 import { HandlerAction } from './GameActions/HandlerAction';
 import { ReturnToDeckProperties } from './GameActions/ReturnToDeckAction';
 import { SelectCardProperties } from './GameActions/SelectCardAction';
@@ -257,14 +257,14 @@ export function discardStatusTokenFromSelf(): Cost {
  * Cost that will break the province that initiated the ability
  */
 export function breakSelf(): Cost {
-    return new GameActionCost(GameActions.break());
+    return new GameActionCost(GameActions.breakProvince());
 }
 
 /**
  * Cost that requires breaking a province selected by the player
  */
 export function breakProvince(properties: SelectCostProperties): Cost {
-    return getSelectCost(GameActions.break(), properties, 'Select a province to break');
+    return getSelectCost(GameActions.breakProvince(), properties, 'Select a province to break');
 }
 
 /**

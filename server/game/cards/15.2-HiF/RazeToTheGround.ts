@@ -1,17 +1,20 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl');
-const { CardTypes, Locations } = require('../../Constants.js');
+import { CardTypes, Locations } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
-class MatsuTsuko2 extends DrawCard {
+export default class RazeToTheGround extends DrawCard {
+    static id = 'raze-to-the-ground';
+
     setupCardAbilities() {
         this.reaction({
-            title: 'Break the province',
+            title: 'Break the attacked province',
+            cost: [
+                AbilityDsl.costs.dishonor({ cardCondition: (card) => card.isParticipating() }),
+                AbilityDsl.costs.breakProvince({ cardCondition: (card) => card.isFaceup() })
+            ],
             when: {
                 afterConflict: (event, context) =>
-                    event.conflict.winner === context.source.controller &&
-                    context.source.isAttacking() &&
-                    context.player.opponent &&
-                    context.player.isMoreHonorable()
+                    event.conflict.winner === context.player && event.conflict.conflictType === 'military'
             },
             effect: 'break an attacked province',
             gameAction: AbilityDsl.actions.selectCard((context) => ({
@@ -22,12 +25,8 @@ class MatsuTsuko2 extends DrawCard {
                 cardCondition: (card) => card.isConflictProvince() && card.location !== Locations.StrongholdProvince,
                 message: '{0} breaks {1}',
                 messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.break()
+                gameAction: AbilityDsl.actions.breakProvince()
             }))
         });
     }
 }
-
-MatsuTsuko2.id = 'matsu-tsuko-2';
-
-module.exports = MatsuTsuko2;
