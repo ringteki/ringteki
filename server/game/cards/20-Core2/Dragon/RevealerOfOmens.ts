@@ -1,5 +1,5 @@
-import AbilityDsl from "../../../abilitydsl";
-import DrawCard from "../../../drawcard";
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class RevealerOfOmens extends DrawCard {
     static id = 'revealer-of-omens';

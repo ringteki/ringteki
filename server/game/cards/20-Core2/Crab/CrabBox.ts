@@ -21,10 +21,9 @@ export default class CrabBox extends StrongholdCard {
                     (event.context.ability as BaseAction).abilityType === 'action' &&
                     !this.playersWhoDidFirstAction.has(event.context.player.uuid) &&
                     context.player.anyCardsInPlay((card: DrawCard) => card.isDefending())
-                ,
             },
-            effect: 'cancel the effects of {1}\'s ability',
-            effectArgs: context => context.event.card,
+            effect: "cancel the effects of {1}'s ability",
+            effectArgs: (context) => context.event.card,
             gameAction: AbilityDsl.actions.cancel()
         });
     }
