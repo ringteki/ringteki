@@ -52,7 +52,10 @@ class FixedAbilityLimit {
 }
 
 class RepeatableAbilityLimit extends FixedAbilityLimit {
-    constructor(max: number, private eventName: Set<EventNames>) {
+    constructor(
+        max: number,
+        private eventName: Set<EventNames>
+    ) {
         super(max);
     }
 
@@ -99,6 +102,10 @@ export function perPhase(max: number) {
 
 export function perRound(max: number) {
     return new RepeatableAbilityLimit(max, new Set([EventNames.OnRoundEnded]));
+}
+
+export function perGame(max: number) {
+    return new RepeatableAbilityLimit(max, new Set());
 }
 
 export function unlimitedPerConflict() {
