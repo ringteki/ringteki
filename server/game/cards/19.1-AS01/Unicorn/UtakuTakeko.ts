@@ -1,64 +1,56 @@
-import { CardTypes, EventNames, Locations, Players, TargetModes } from '../../../Constants';
-import { EventRegistrar } from '../../../EventRegistrar';
+import { CardTypes, Decks, PlayTypes } from '../../../Constants';
 import { PlayCharacterAsIfFromHandAtHome } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandAtHome } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class UtakuTakeko extends DrawCard {
     static id = 'utaku-takeko';
 
-    private charactersLeftPlayThisPhase = new Set<string>();
-    private eventRegistrar?: EventRegistrar;
-
     public setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([EventNames.OnPhaseStarted, EventNames.OnCardLeavesPlay]);
-
         this.action({
             title: 'Play character from your discard pile',
-            target: {
-                location: Locations.DynastyDiscardPile,
-                mode: TargetModes.Single,
-                cardType: CardTypes.Character,
-                controller: Players.Self,
+            gameAction: AbilityDsl.actions.deckSearch(() => ({
+                activePromptTitle: 'Select a character to play',
+                amount: 8,
+                deck: Decks.DynastyDeck,
                 cardCondition: (card) =>
+                    card.type === CardTypes.Character &&
                     card.glory >= 1 &&
                     card.isFaction('unicorn') &&
-                    !card.isUnique() &&
-                    !this.charactersLeftPlayThisPhase.has(card.name),
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect((context) => ({
-                        target: context.target,
-                        effect: [
-                            AbilityDsl.effects.gainPlayAction(PlayCharacterAsIfFromHandAtHome),
-                            AbilityDsl.effects.gainPlayAction(PlayDisguisedCharacterAsIfFromHandAtHome)
-                        ]
-                    })),
-                    AbilityDsl.actions.playCard((context) => ({ target: context.target }))
-                ])
-            },
-            effect: 'recall a {1} relative who is {2} {3}',
-            effectArgs: (context) => [this.msgDistance(context.target), this.msgArticle(context.target), context.target]
+                    !card.isUnique(),
+                gameAction: AbilityDsl.actions.playCard(({ targets }) => {
+                    const target = targets[0];
+                    return {
+                        target,
+                        source: this,
+                        resetOnCancel: false,
+                        playType: PlayTypes.PlayFromHand,
+                        playAction: target
+                            ? [
+                                  new PlayCharacterAsIfFromHandAtHome(target),
+                                  new PlayDisguisedCharacterAsIfFromHandAtHome(target)
+                              ]
+                            : undefined,
+                        ignoredRequirements: ['phase']
+                    };
+                }),
+
+                shuffle: true,
+                message: '{0} recalls a {1} relative who is {2} {3}',
+                messageArgs: (context, [character]) =>
+                    character
+                        ? [context.source, this.#msgDistance(character), this.#msgArticle(character), character]
+                        : [context.source, 'loved', 'way too far', 'to help her now']
+            }))
         });
     }
 
-    public onPhaseStarted() {
-        this.charactersLeftPlayThisPhase.clear();
-    }
-
-    public onCardLeavesPlay(event: any) {
-        if (event.card.type === CardTypes.Character && event.card.controller === this.controller) {
-            this.charactersLeftPlayThisPhase.add(event.card.name);
-        }
-    }
-
-    private msgDistance(card: BaseCard): string {
+    #msgDistance(card: DrawCard): string {
         return card.hasTrait('gaijin') ? 'very distant' : 'distant';
     }
 
-    private msgArticle(card: BaseCard): string {
+    #msgArticle(card: DrawCard): string {
         if (card.hasTrait('army')) {
             return 'in the';
         }
