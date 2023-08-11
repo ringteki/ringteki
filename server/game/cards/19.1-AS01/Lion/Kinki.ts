@@ -1,6 +1,6 @@
 import { CardTypes, Players, TargetModes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class Kinki extends DrawCard {
     static id = 'kinki';
@@ -36,7 +36,8 @@ export default class Kinki extends DrawCard {
                         }))
                     }
                 }
-            }
+            },
+            limit: AbilityDsl.limit.perRound(1)
         });
     }
 }
