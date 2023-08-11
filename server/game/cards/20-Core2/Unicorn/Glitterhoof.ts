@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
 
-export default class LeadingCharger extends DrawCard {
-    static id = 'leading-charger';
+export default class Glitterhoof extends DrawCard {
+    static id = 'glitterhoof';
 
     setupCardAbilities() {
         this.persistentEffect({
