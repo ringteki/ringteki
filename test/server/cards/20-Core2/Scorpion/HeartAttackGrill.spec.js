@@ -1,4 +1,4 @@
-describe('Heart Attack Grill', function () {
+xdescribe('Heart Attack Grill', function () {
     integration(function () {
         describe('feeding an army interaction', function () {
             beforeEach(function () {

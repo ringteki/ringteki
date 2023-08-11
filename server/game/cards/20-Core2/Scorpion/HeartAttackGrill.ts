@@ -1,16 +1,15 @@
 import AbilityContext from '../../../AbilityContext';
-import { Durations, Locations, PlayTypes } from '../../../Constants';
+import { Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 import ProvinceCard from '../../../provincecard';
-import type Player from '../../../player';
 
 type CardHandler = (currentCard: DrawCard) => void;
 
 class Process {
     cardsToRemove: Set<DrawCard> = new Set();
 
-    constructor(public topCards: DrawCard[]) {}
+    constructor(public topCards: DrawCard[]) { }
 
     markCardForRemoval(card: DrawCard) {
         const idx = this.topCards.indexOf(card);
@@ -57,7 +56,7 @@ export default class HeartAttackGrill extends ProvinceCard {
         }
 
         this.game.promptWithHandlerMenu(context.player, {
-            activePromptTitle: `Select a card to put under your stronghold (${process.cardsToRemove.size} of 3)`,
+            activePromptTitle: `Select a card to take (${process.cardsToRemove.size} of 3)`,
             context: context,
             cards: process.topCards,
             cardHandler: cardHandler,
@@ -75,25 +74,17 @@ export default class HeartAttackGrill extends ProvinceCard {
                 context.player.opponent
             );
             for (const card of process.cardsToRemove) {
-                AbilityDsl.actions
-                    .placeCardUnderneath({
-                        target: card,
-                        destination: context.player.getProvinceCardInProvince(Locations.StrongholdProvince)
-                    })
-                    .resolve(card, context);
-                AbilityDsl.actions
-                    .cardLastingEffect({
-                        target: card,
-                        // targetLocation: Locations.Any,
-                        effect: [
-                            AbilityDsl.effects.canPlayFromOutOfPlay(
-                                (player: Player) => player === context.player,
-                                PlayTypes.PlayFromHand
-                            ),
-                            AbilityDsl.effects.registerToPlayFromOutOfPlay()
-                        ]
-                    })
-                    .resolve(card, context);
+                card.owner.removeCardFromPile(card);
+                card.moveTo(Locations.RemovedFromGame);
+                context.player.removedFromGame.unshift(card);
+                context.source.lastingEffect(() => ({
+                    until: {
+                        onCardMoved: (event) =>
+                            event.card === card && event.originalLocation === Locations.RemovedFromGame
+                    },
+                    match: card,
+                    effect: [AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)]
+                }));
             }
         }
         this.game.addMessage(
