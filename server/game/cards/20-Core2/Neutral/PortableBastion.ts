@@ -1,8 +1,8 @@
 import { AbilityTypes, CardTypes, Locations, Players } from '../../../Constants';
-import type TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import type BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class PortableBastion extends DrawCard {
     static id = 'portable-bastion';
@@ -22,7 +22,7 @@ export default class PortableBastion extends DrawCard {
 
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.WouldInterrupt, {
-                title: 'Move a character to the conflict',
+                title: "Block a character's movement to the conflict",
                 when: {
                     onMoveToConflict: (event: any, context: TriggeredAbilityContext) =>
                         event.card.type === CardTypes.Character && context.source.isParticipating()
