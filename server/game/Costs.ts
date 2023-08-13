@@ -338,8 +338,13 @@ export function payTargetDependentFateCost(targetName: string, ignoreType = fals
 /**
  * Cost in which the player must pay a fixed, non-reduceable amount of fate.
  */
-export function payFate(amount = 1): Cost {
-    return new GameActionCost(GameActions.loseFate((context) => ({ target: context.player, amount })));
+export function payFate(amount: number | ((context: TriggeredAbilityContext) => number) = 1): Cost {
+    return new GameActionCost(
+        GameActions.loseFate((context) => ({
+            target: context.player,
+            amount: typeof amount === 'number' ? amount : amount(context)
+        }))
+    );
 }
 
 /**
@@ -938,7 +943,7 @@ export function nameCard(): Cost {
                 }
             });
         },
-        pay() {}
+        pay() { }
     };
 }
 
