@@ -10,6 +10,13 @@ export default class DeployedGarrison extends DrawCard {
     static id = 'deployed-garrison';
 
     setupCardAbilities() {
+        this.persistentEffect({
+            effect: AbilityDsl.effects.cardCannot({
+                cannot: 'applyCovert',
+                restricts: 'opponentsCardEffects'
+            })
+        });
+
         this.reaction({
             title: 'Prevent a character from bowing at the end of the conflict',
             when: {
