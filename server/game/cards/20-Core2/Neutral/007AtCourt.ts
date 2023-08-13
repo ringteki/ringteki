@@ -14,12 +14,12 @@ export default class _007AtCourt extends DrawCard {
             },
             cost: AbilityDsl.costs.dishonor({
                 optional: true,
-                cardCondition: (card) => card.isParticipating() && card.hasTrait('courtier')
+                cardCondition: (card) => card.isParticipating()
             }),
             gameAction: AbilityDsl.actions.conditional({
                 condition: (context) => context.costs.dishonor instanceof DrawCard,
                 trueGameAction: AbilityDsl.actions.discardAtRandom((context) => ({
-                    amount: 3,
+                    amount: 2,
                     target: context.player.opponent
                 })),
                 falseGameAction: AbilityDsl.actions.chosenDiscard((context) => ({
