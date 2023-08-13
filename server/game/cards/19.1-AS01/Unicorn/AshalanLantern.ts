@@ -1,10 +1,10 @@
 import { CardTypes, Decks, Durations, Locations, PlayTypes } from '../../../Constants';
 import { PlayCharacterAsIfFromHandIntoConflict } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandIntoConflict } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class AshalanLantern extends DrawCard {
     static id = 'ashalan-lantern';
@@ -33,7 +33,7 @@ export default class AshalanLantern extends DrawCard {
                     gameAction: AbilityDsl.actions.playCard((deckSearchContext) => {
                         const target = deckSearchContext.targets[0];
                         return {
-                            target: target,
+                            target,
                             source: this,
                             resetOnCancel: false,
                             playType: PlayTypes.PlayFromHand,
@@ -44,16 +44,7 @@ export default class AshalanLantern extends DrawCard {
                                   ]
                                 : undefined,
                             ignoredRequirements: ['phase'],
-                            postHandler: () => {
-                                if (!context.source.parent.hasTrait('gaijin')) {
-                                    context.game.addMessage(
-                                        '{0} is not Foreign, their {1} is discarded',
-                                        context.source.parent,
-                                        context.source
-                                    );
-                                    context.player.moveCard(context.source, Locations.ConflictDiscardPile);
-                                }
-                            }
+                            postHandler: () => context.player.moveCard(context.source, Locations.ConflictDiscardPile)
                         };
                     }),
                     remainingCardsHandler: (context, event, cards) => {
