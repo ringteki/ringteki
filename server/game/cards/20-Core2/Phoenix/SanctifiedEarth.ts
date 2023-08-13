@@ -5,8 +5,6 @@ export default class SanctifiedEarth extends DrawCard {
     static id = 'sanctified-earth';
 
     public setupCardAbilities() {
-        this.attachmentConditions({ trait: 'shugenja' });
-
         this.action({
             title: 'Give attached character a skill bonus',
             condition: (context) => context.game.isDuringConflict() && context.source.parent?.isParticipating(),
