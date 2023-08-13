@@ -29,7 +29,12 @@ export default class AllDistancesAreOne extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move conflict to a different province',
-            condition: (context) => context.game.isDuringConflict() && this.#hasBaseReq(context.player),
+            condition: (context) =>
+                context.game.isDuringConflict() &&
+                this.#hasBaseReq(context.player) &&
+                !(context.game.currentConflict as Conflict)
+                    ?.getConflictProvinces()
+                    .some((province) => province.location !== Locations.StrongholdProvince),
             cost: captureOriginalProvince(),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 cardType: CardTypes.Province,
