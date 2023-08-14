@@ -6,12 +6,12 @@ import DrawCard from '../../../drawcard';
 export default class NewCensure extends DrawCard {
     static id = 'new-censure';
 
-    #censuresPlayedDuringPhase = 0;
-    #eventRegistrar?: EventRegistrar;
+    private censuresPlayedDuringPhase = 0;
+    private eventRegistrar?: EventRegistrar;
 
     setupCardAbilities() {
-        this.#eventRegistrar = new EventRegistrar(this.game, this);
-        this.#eventRegistrar.register([EventNames.OnPhaseStarted]);
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnPhaseStarted]);
 
         this.wouldInterrupt({
             title: 'Cancel an event',
@@ -19,10 +19,10 @@ export default class NewCensure extends DrawCard {
                 onInitiateAbilityEffects: (event) => event.card.type === CardTypes.Event
             },
             cannotBeMirrored: true,
-            cost: AbilityDsl.costs.payFate(() => this.#censuresPlayedDuringPhase),
+            cost: AbilityDsl.costs.payFate(() => this.censuresPlayedDuringPhase),
             gameAction: AbilityDsl.actions.cancel(),
             then: () => {
-                this.#censuresPlayedDuringPhase += 1;
+                this.censuresPlayedDuringPhase += 1;
             }
         });
     }
@@ -34,7 +34,7 @@ export default class NewCensure extends DrawCard {
         return false;
     }
 
-    public onPhaseStarted() {
-        this.#censuresPlayedDuringPhase = 0;
+    onPhaseStarted() {
+        this.censuresPlayedDuringPhase = 0;
     }
 }
