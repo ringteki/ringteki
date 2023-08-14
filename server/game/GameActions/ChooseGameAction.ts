@@ -1,25 +1,19 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
+import type AbilityContext from '../AbilityContext';
 import { Players } from '../Constants';
-
-export interface ChooseGameChoices {
-    [choice: string]: GameAction;
-}
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface ChooseActionProperties extends GameActionProperties {
     activePromptTitle?: string;
-    choices: ChooseGameChoices;
-    messages: object;
     messageArgs?: any[];
     player?: Players;
+    options: { [label: string]: { action: GameAction; message?: string } };
 }
 
 export class ChooseGameAction extends GameAction {
     effect = 'choose between different actions';
     defaultProperties: ChooseActionProperties = {
         activePromptTitle: 'Select an action:',
-        choices: {},
-        messages: {},
+        options: {},
         messageArgs: []
     };
     constructor(properties: ChooseActionProperties | ((context: AbilityContext) => ChooseActionProperties)) {
@@ -27,50 +21,56 @@ export class ChooseGameAction extends GameAction {
     }
 
     getProperties(context: AbilityContext, additionalProperties = {}): ChooseActionProperties {
-        let properties = super.getProperties(context, additionalProperties) as ChooseActionProperties;
-        for(const key of Object.keys(properties.choices)) {
-            properties.choices[key].setDefaultTarget(() => properties.target);
+        const properties = super.getProperties(context, additionalProperties) as ChooseActionProperties;
+        for (const opt of Object.values(properties.options)) {
+            opt.action.setDefaultTarget(() => properties.target);
         }
         return properties;
     }
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties);
-        return Object.values(properties.choices).some(
-            gameAction => gameAction.hasLegalTarget(context)
-        );
+        const { options } = this.getProperties(context, additionalProperties);
+        return Object.values(options).some(({ action }) => action.hasLegalTarget(context));
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
-        let properties = this.getProperties(context, additionalProperties);
-        let activePromptTitle = properties.activePromptTitle;
-        let choices = Object.keys(properties.choices);
-        choices = choices.filter(key => properties.choices[key].hasLegalTarget(context));
-        let player = properties.player === Players.Opponent ? context.player.opponent : context.player;
-        let choiceHandler = (choice: string): void => {
-            if(properties.messages[choice]) {
-                context.game.addMessage(properties.messages[choice], player, properties.target, ...properties.messageArgs);
-            }
-            context.game.queueSimpleStep(() => properties.choices[choice].addEventsToArray(events, context));
-        }
-        if(choices.length === 0) {
+        const properties = this.getProperties(context, additionalProperties);
+        const legalChoices = Object.entries(properties.options).filter(([_, option]) =>
+            option.action.hasLegalTarget(context)
+        );
+        if (legalChoices.length === 0) {
             return;
         }
-        let target = properties.target;
-        context.game.promptWithHandlerMenu(player, { activePromptTitle, context, choices, choiceHandler, target });
+
+        const { activePromptTitle, target } = properties;
+        const player = properties.player === Players.Opponent ? context.player.opponent : context.player;
+        const choiceLabels = legalChoices.map(([label, _]) => label);
+        const choiceHandler = (choiceLabel: string): void => {
+            const choice = legalChoices.find(([label, _]) => label === choiceLabel)?.[1];
+            if (!choice) {
+                return;
+            }
+            if (choice.message) {
+                context.game.addMessage(choice.message, player, properties.target, ...properties.messageArgs);
+            }
+            context.game.queueSimpleStep(() => choice.action.addEventsToArray(events, context));
+        };
+        context.game.promptWithHandlerMenu(player, {
+            activePromptTitle,
+            context,
+            choices: choiceLabels,
+            choiceHandler,
+            target
+        });
     }
 
     canAffect(target: any, context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties);
-        return Object.values(properties.choices).some(
-            gameAction => gameAction.canAffect(target, context)
-        );
+        const { options } = this.getProperties(context, additionalProperties);
+        return Object.values(options).some(({ action }) => action.canAffect(target, context));
     }
 
-    hasTargetsChosenByInitiatingPlayer(context) {
-        let properties = this.getProperties(context);
-        return Object.values(properties.choices).some(
-            gameAction => gameAction.hasTargetsChosenByInitiatingPlayer(context)
-        );
+    hasTargetsChosenByInitiatingPlayer(context: AbilityContext) {
+        const { options } = this.getProperties(context);
+        return Object.values(options).some(({ action }) => action.hasTargetsChosenByInitiatingPlayer(context));
     }
 }

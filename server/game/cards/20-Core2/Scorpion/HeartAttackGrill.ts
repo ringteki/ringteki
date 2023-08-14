@@ -9,7 +9,7 @@ type CardHandler = (currentCard: DrawCard) => void;
 class Process {
     cardsToRemove: Set<DrawCard> = new Set();
 
-    constructor(public topCards: DrawCard[]) { }
+    constructor(public topCards: DrawCard[]) {}
 
     markCardForRemoval(card: DrawCard) {
         const idx = this.topCards.indexOf(card);

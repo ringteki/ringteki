@@ -67,25 +67,24 @@ export default class ShibaShaHeiden extends DrawCard {
     }
 
     #createEffect(player: Player, cost: GameAction) {
-        const GAIN_FATE = 'Gain 1 fate';
-        const DRAW_CARD = 'Draw 1 card';
-
         return AbilityDsl.actions.chooseAction({
             activePromptTitle: 'Choose your boon',
             player: Players.Self,
-            choices: {
-                [GAIN_FATE]: AbilityDsl.actions.sequential([
-                    cost,
-                    AbilityDsl.actions.gainFate({ amount: 1, target: player })
-                ]),
-                [DRAW_CARD]: AbilityDsl.actions.sequential([
-                    cost,
-                    AbilityDsl.actions.draw({ amount: 1, target: player })
-                ])
-            },
-            messages: {
-                [GAIN_FATE]: '{0} chooses to gain 1 fate',
-                [DRAW_CARD]: '{0} chooses to draw 1 card'
+            options: {
+                'Gain 1 fate': {
+                    action: AbilityDsl.actions.sequential([
+                        cost,
+                        AbilityDsl.actions.gainFate({ amount: 1, target: player })
+                    ]),
+                    message: '{0} chooses to gain 1 fate'
+                },
+                'Draw 1 card': {
+                    action: AbilityDsl.actions.sequential([
+                        cost,
+                        AbilityDsl.actions.draw({ amount: 1, target: player })
+                    ]),
+                    message: '{0} chooses to draw 1 card'
+                }
             }
         });
     }

@@ -1,8 +1,8 @@
-import { Locations, CardTypes, Players } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import { CardTypes, Locations, Players } from '../../../Constants';
+import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 const DOSHIN_TAX = 2;
 
@@ -36,29 +36,25 @@ export default class VillageDoshin extends DrawCard {
                     return opponentHasEnoughCards && opponentIsAllowedToDiscardCards;
                 },
                 falseGameAction: AbilityDsl.actions.cancel(),
-                trueGameAction: AbilityDsl.actions.chooseAction((context) => {
-                    const payOption = 'Discard ' + DOSHIN_TAX + ' random cards from hand';
-                    const refuseOption = 'Let the effect be canceled';
-                    return {
-                        player: Players.Opponent,
-                        activePromptTitle: 'Select one',
-                        choices: {
-                            [payOption]: AbilityDsl.actions.discardAtRandom({
+                trueGameAction: AbilityDsl.actions.chooseAction((context) => ({
+                    player: Players.Opponent,
+                    activePromptTitle: 'Select one',
+                    options: {
+                        [`Discard ${DOSHIN_TAX} random cards from hand`]: {
+                            action: AbilityDsl.actions.discardAtRandom({
                                 amount: DOSHIN_TAX,
                                 target: context.player.opponent
                             }),
-                            [refuseOption]: AbilityDsl.actions.cancel()
+                            message: '{0} distracts the Dōshin.'
                         },
-                        messages: {
-                            [payOption]: '{0} distracts the Dōshin.',
-                            [refuseOption]:
-                                '{0} refuses to discard ' + DOSHIN_TAX + ' cards. The effects of {2} are canceled.'
-                        },
-                        messageArgs: [context.event.card]
-                    };
-                })
+                        'Let the effect be canceled': {
+                            action: AbilityDsl.actions.cancel(),
+                            message: `{0} refuses to discard ${DOSHIN_TAX} cards. The effects of {2} are canceled.`
+                        }
+                    },
+                    messageArgs: [context.event.card]
+                }))
             }),
-
             effect: 'protect {1}',
             effectArgs: (context: TriggeredAbilityContext) => context.event.cardTargets
         });

@@ -48,13 +48,17 @@ export default class AllDistancesAreOne extends DrawCard {
                 this.#hasKickerReq(context.player) && context[CAPTURED_ORIGINAL_PROVINCE] instanceof ProvinceCard
                     ? {
                           gameAction: AbilityDsl.actions.chooseAction({
-                              messages: {
-                                  Yes: 'Flip the original province facedown',
-                                  No: 'Leave it faceup'
-                              },
-                              choices: {
-                                  Yes: AbilityDsl.actions.turnFacedown({ target: context[CAPTURED_ORIGINAL_PROVINCE] }),
-                                  No: AbilityDsl.actions.noAction()
+                              options: {
+                                  Yes: {
+                                      action: AbilityDsl.actions.turnFacedown({
+                                          target: context[CAPTURED_ORIGINAL_PROVINCE]
+                                      }),
+                                      message: 'Flip the original province facedown'
+                                  },
+                                  No: {
+                                      action: AbilityDsl.actions.noAction(),
+                                      message: 'Leave it faceup'
+                                  }
                               }
                           })
                       }

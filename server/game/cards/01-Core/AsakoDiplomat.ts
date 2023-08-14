@@ -1,18 +1,20 @@
-import { CardTypes } from '../../../Constants';
-import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
+import { CardTypes } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
-export default class ForestOfRustlingWhispers extends ProvinceCard {
-    static id = 'forest-of-rustling-whispers';
+export default class AsakoDiplomat extends DrawCard {
+    static id = 'asako-diplomat';
 
-    public setupCardAbilities() {
-        this.action({
+    setupCardAbilities() {
+        this.reaction({
             title: 'Honor or dishonor a character',
-            effect: 'honor or dishonor {0}',
+            when: {
+                afterConflict: (event, context) =>
+                    event.conflict.winner === context.source.controller && context.source.isParticipating()
+            },
             target: {
                 activePromptTitle: 'Choose a character to honor or dishonor',
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating(),
                 gameAction: AbilityDsl.actions.chooseAction({
                     options: {
                         'Honor this character': {

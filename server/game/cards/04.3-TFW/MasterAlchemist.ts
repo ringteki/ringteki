@@ -1,18 +1,20 @@
-import { CardTypes } from '../../../Constants';
-import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
+import { CardTypes, Elements } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
-export default class ForestOfRustlingWhispers extends ProvinceCard {
-    static id = 'forest-of-rustling-whispers';
+const ELEMENT = 'master-alchemist-fire';
 
-    public setupCardAbilities() {
+export default class MasterAlchemist extends DrawCard {
+    static id = 'master-alchemist';
+
+    setupCardAbilities() {
         this.action({
             title: 'Honor or dishonor a character',
-            effect: 'honor or dishonor {0}',
+            cost: AbilityDsl.costs.payFateToRing(1, (ring) => ring.hasElement(this.getCurrentElementSymbol(ELEMENT))),
+            condition: () => this.game.isDuringConflict(),
             target: {
                 activePromptTitle: 'Choose a character to honor or dishonor',
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating(),
                 gameAction: AbilityDsl.actions.chooseAction({
                     options: {
                         'Honor this character': {
@@ -27,5 +29,15 @@ export default class ForestOfRustlingWhispers extends ProvinceCard {
                 })
             }
         });
+    }
+
+    getPrintedElementSymbols() {
+        const symbols = super.getPrintedElementSymbols();
+        symbols.push({
+            key: ELEMENT,
+            prettyName: 'Ring for Fate',
+            element: Elements.Fire
+        });
+        return symbols;
     }
 }

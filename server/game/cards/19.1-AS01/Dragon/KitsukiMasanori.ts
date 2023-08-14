@@ -4,14 +4,7 @@ import AbilityDsl = require('../../../abilitydsl');
 import BaseCard = require('../../../basecard');
 import DrawCard = require('../../../drawcard');
 
-const choice = {
-    discardPile: 'Search discard pile',
-    conflictDeck: 'Search conflict deck'
-};
-
 const selectAttachmentPrompt = 'Select an attachment';
-
-const attachMsg = '{0} takes {1} and attaches it to {2}';
 
 export default class KitsukiMasanori extends DrawCard {
     static id = 'kitsuki-masanori';
@@ -28,40 +21,52 @@ export default class KitsukiMasanori extends DrawCard {
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.chooseAction({
                     activePromptTitle: 'Select where to search',
-                    choices: {
-                        [choice.discardPile]: AbilityDsl.actions.cardMenu((context) => ({
-                            activePromptTitle: selectAttachmentPrompt,
-                            cards: context.player.conflictDiscardPile.filter((card: BaseCard) =>
-                                this.isSearchableCard(card, context)
-                            ),
-                            subActionProperties: (card) => ({ attachment: card, target: context.source, bisteca: 33 }),
-                            gameAction: AbilityDsl.actions.attach(),
-                            message: '{0} takes {1} and attaches it to {2}',
-                            messageArgs: (card) => [context.source.controller, card, context.source]
-                        })),
-                        [choice.conflictDeck]: AbilityDsl.actions.deckSearch({
-                            activePromptTitle: selectAttachmentPrompt,
-                            deck: Decks.ConflictDeck,
-                            reveal: true,
-                            cardCondition: (card, context) => this.isSearchableCard(card, context),
-                            selectedCardsHandler: (context, event, cards) => {
-                                const card = cards[0];
-                                if (!card) {
-                                    return;
-                                }
+                    options: {
+                        'Search discard pile': {
+                            action: AbilityDsl.actions.cardMenu((context) => ({
+                                activePromptTitle: selectAttachmentPrompt,
+                                cards: context.player.conflictDiscardPile.filter((card: BaseCard) =>
+                                    this.isSearchableCard(card, context)
+                                ),
+                                subActionProperties: (card) => ({
+                                    attachment: card,
+                                    target: context.source,
+                                    bisteca: 33
+                                }),
+                                gameAction: AbilityDsl.actions.attach(),
+                                message: '{0} takes {1} and attaches it to {2}',
+                                messageArgs: (card) => [context.source.controller, card, context.source]
+                            })),
+                            message: '{0} searches their discard pile'
+                        },
 
-                                context.game.addMessage(attachMsg, event.player, card, context.source);
-                                context.game.queueSimpleStep(() =>
-                                    AbilityDsl.actions
-                                        .attach({ target: context.source, attachment: card })
-                                        .resolve(null, context)
-                                );
-                            }
-                        })
-                    },
-                    messages: {
-                        [choice.discardPile]: '{0} searches their discard pile',
-                        [choice.conflictDeck]: '{0} searches their conflict deck'
+                        'Search conflict deck': {
+                            action: AbilityDsl.actions.deckSearch({
+                                activePromptTitle: selectAttachmentPrompt,
+                                deck: Decks.ConflictDeck,
+                                reveal: true,
+                                cardCondition: (card, context) => this.isSearchableCard(card, context),
+                                selectedCardsHandler: (context, event, cards) => {
+                                    const card = cards[0];
+                                    if (!card) {
+                                        return;
+                                    }
+
+                                    context.game.addMessage(
+                                        '{0} takes {1} and attaches it to {2}',
+                                        event.player,
+                                        card,
+                                        context.source
+                                    );
+                                    context.game.queueSimpleStep(() =>
+                                        AbilityDsl.actions
+                                            .attach({ target: context.source, attachment: card })
+                                            .resolve(null, context)
+                                    );
+                                }
+                            }),
+                            message: '{0} searches their conflict deck'
+                        }
                     }
                 }),
                 AbilityDsl.actions.cardLastingEffect((context) => {

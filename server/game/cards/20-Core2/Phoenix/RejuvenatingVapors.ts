@@ -6,9 +6,6 @@ export default class RejuvenatingVapors extends DrawCard {
     static id = 'rejuvenating-vapors';
 
     setupCardAbilities() {
-        const YES = 'Yes';
-        const NO = 'No';
-
         this.action({
             title: 'Ready a shugenja',
             target: {
@@ -22,15 +19,16 @@ export default class RejuvenatingVapors extends DrawCard {
                         trueGameAction: AbilityDsl.actions.chooseAction({
                             activePromptTitle: 'Move 1 fate from your pool to the shugenja?',
                             player: Players.Self,
-                            choices: {
-                                [YES]: AbilityDsl.actions.placeFate((context) => ({
-                                    origin: context.target.controller
-                                })),
-                                [NO]: AbilityDsl.actions.noAction()
-                            },
-                            messages: {
-                                [YES]: '{0} chooses to gain place 1 fate from their pool on {1}',
-                                [NO]: ''
+                            options: {
+                                Yes: {
+                                    action: AbilityDsl.actions.placeFate((context) => ({
+                                        origin: context.target.controller
+                                    })),
+                                    message: '{0} chooses to gain place 1 fate from their pool on {1}'
+                                },
+                                No: {
+                                    action: AbilityDsl.actions.noAction()
+                                }
                             }
                         }),
                         falseGameAction: AbilityDsl.actions.noAction()

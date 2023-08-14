@@ -1,11 +1,8 @@
-import { Locations, Players, CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
-import Ring = require('../../../ring');
-
-const CHOICE_MOVE = 'Move another of your characters home';
-const CHOICE_STAY = 'Done';
+import { CardTypes, Locations, Players } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
+import type Ring from '../../../ring';
 
 export default class IllusionaryDecoy extends DrawCard {
     static id = 'illusionary-decoy';
@@ -21,20 +18,18 @@ export default class IllusionaryDecoy extends DrawCard {
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.putIntoConflict((context) => ({ target: context.source })),
                 AbilityDsl.actions.chooseAction({
-                    messages: {
-                        [CHOICE_MOVE]: '', // Don't want messages here
-                        [CHOICE_STAY]: '' // Don't want messages here
-                    },
-                    choices: {
-                        [CHOICE_MOVE]: AbilityDsl.actions.selectCard((context) => ({
-                            controller: Players.Self,
-                            cardType: CardTypes.Character,
-                            cardCondition: (card) => card.isParticipating(),
-                            message: '{0} moves home {1} - they were an {2}!',
-                            messageArgs: (card, player) => [player, card, context.source],
-                            gameAction: AbilityDsl.actions.sendHome()
-                        })),
-                        [CHOICE_STAY]: AbilityDsl.actions.noAction()
+                    options: {
+                        'Move another of your characters home': {
+                            action: AbilityDsl.actions.selectCard((context) => ({
+                                controller: Players.Self,
+                                cardType: CardTypes.Character,
+                                cardCondition: (card) => card.isParticipating(),
+                                message: '{0} moves home {1} - they were an {2}!',
+                                messageArgs: (card, player) => [player, card, context.source],
+                                gameAction: AbilityDsl.actions.sendHome()
+                            }))
+                        },
+                        Done: { action: AbilityDsl.actions.noAction() }
                     }
                 })
             ]),

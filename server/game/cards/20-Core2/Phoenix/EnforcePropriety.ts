@@ -22,26 +22,24 @@ export default class EnforcePropriety extends DrawCard {
                 condition: (context) =>
                     this.#hasFateToPay(context.player.opponent) && this.#canLoseFate(context, context.player.opponent),
                 falseGameAction: AbilityDsl.actions.cancel(),
-                trueGameAction: AbilityDsl.actions.chooseAction((context) => {
-                    const payOption = 'Lose 1 fate';
-                    const refuseOption = 'Let the effects be canceled';
-                    return {
-                        player: Players.Opponent,
-                        activePromptTitle: 'Select one',
-                        choices: {
-                            [payOption]: AbilityDsl.actions.multiple([
+                trueGameAction: AbilityDsl.actions.chooseAction((context) => ({
+                    player: Players.Opponent,
+                    activePromptTitle: 'Select one',
+                    options: {
+                        'Lose 1 fate': {
+                            action: AbilityDsl.actions.multiple([
                                 AbilityDsl.actions.loseFate({ amount: 1, target: context.player.opponent }),
                                 AbilityDsl.actions.draw({ amount: 1, target: context.player })
                             ]),
-                            [refuseOption]: AbilityDsl.actions.cancel()
+                            message: '{0} loses 1 fate'
                         },
-                        messages: {
-                            [payOption]: '{0} loses 1 fate',
-                            [refuseOption]: '{0} refuses to lose 1 fate. The effects of {2} are canceled'
-                        },
-                        messageArgs: [context.event.card]
-                    };
-                })
+                        'Let the effects be canceled': {
+                            action: AbilityDsl.actions.cancel(),
+                            message: '{0} refuses to lose 1 fate. The effects of {2} are canceled'
+                        }
+                    },
+                    messageArgs: [context.event.card]
+                }))
             }),
             effect: 'tax {1}',
             effectArgs: (context: TriggeredAbilityContext) => context.event.cardTargets
