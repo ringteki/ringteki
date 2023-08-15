@@ -19,7 +19,7 @@ import { PlayCharacterAction } from './PlayCharacterAction.js';
 import { PlayAttachmentAction } from './PlayAttachmentAction.js';
 import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
 import { StatusToken } from './StatusToken';
-import ElementSymbol = require('./ElementSymbol');
+import { ElementSymbol } from './ElementSymbol';
 import { GameModes } from '../GameModes';
 
 const ValidKeywords = [
@@ -1014,7 +1014,7 @@ class BaseCard extends EffectSource {
         return [];
     }
 
-    getCurrentElementSymbols() {
+    getCurrentElementSymbols(): ElementSymbol[] {
         if (!this.isInPlay()) {
             return this.getPrintedElementSymbols();
         }
