@@ -14,7 +14,6 @@ export default class AkodoYoshitsune extends DrawCard {
         });
 
         this.persistentEffect({
-            condition: (context) => this.conflictAtKaiuWall(context),
             targetController: Players.Self,
             effect: AbilityDsl.effects.showTopConflictCard()
         });
