@@ -31,7 +31,7 @@ jobs:
       - run: npm install -g typescript@4.9.5
       - run: npx tsc
       - name: Fetch Data
-        run: node server/scripts/fetchdata.js
+        run: node bin/fetchdata.js prod
       - name: Test
         run: npm test
       - name: Lint
