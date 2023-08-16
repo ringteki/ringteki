@@ -40,10 +40,21 @@ export default class ChillFortunist extends DrawCard {
     }
 
     #ringOptions(): Elements[] {
-        return [
-            this.getCurrentElementSymbol(this.#earth),
-            this.getCurrentElementSymbol(this.#water),
-            this.getCurrentElementSymbol(this.#void)
-        ];
+        const elements = new Set<Elements>();
+
+        const earth = this.getCurrentElementSymbol(this.#earth);
+        if (earth !== 'none') {
+            elements.add(earth);
+        }
+        const water = this.getCurrentElementSymbol(this.#water);
+        if (water !== 'none') {
+            elements.add(water);
+        }
+        const voidEl = this.getCurrentElementSymbol(this.#void);
+        if (voidEl !== 'none') {
+            elements.add(voidEl);
+        }
+
+        return Array.from(elements.values());
     }
 }

@@ -41,10 +41,21 @@ export default class AngrySohei extends DrawCard {
     }
 
     #ringOptions(): Elements[] {
-        return [
-            this.getCurrentElementSymbol(this.#air),
-            this.getCurrentElementSymbol(this.#fire),
-            this.getCurrentElementSymbol(this.#void)
-        ];
+        const elements = new Set<Elements>();
+
+        const air = this.getCurrentElementSymbol(this.#air);
+        if (air !== 'none') {
+            elements.add(air);
+        }
+        const fire = this.getCurrentElementSymbol(this.#fire);
+        if (fire !== 'none') {
+            elements.add(fire);
+        }
+        const voidEl = this.getCurrentElementSymbol(this.#void);
+        if (voidEl !== 'none') {
+            elements.add(voidEl);
+        }
+
+        return Array.from(elements.values());
     }
 }
