@@ -181,7 +181,8 @@ export enum EffectNames {
     LimitLegalAttackers = 'limitLegalAttackers',
     ModifyHonorTransferGiven = "modifyHonorTransferGiven",
     ModifyHonorTransferReceived = "modifyHonorTransferReceived",
-    ModifyUnopposedHonorLoss = "modifyUnopposedHonorLoss"
+    ModifyUnopposedHonorLoss = "modifyUnopposedHonorLoss",
+    TriggersAbilitiesFromHome = "triggersAbilitiesFromHome"
 };
 
 export enum Durations {

@@ -39,6 +39,9 @@ const checkRestrictions = {
     opponentsCardEffects: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
         [CardTypes.Event, CardTypes.Character, CardTypes.Holding, CardTypes.Attachment, CardTypes.Stronghold, CardTypes.Province, CardTypes.Role].includes(context.source.type),
+    opponentsProvinceEffects: (context, effect) =>
+        context.player === getApplyingPlayer(effect).opponent && (context.ability.isCardAbility() || !context.ability.isCardPlayed()) &&
+        [CardTypes.Province].includes(context.source.type),
     opponentsEvents: (context, effect) =>
         context.player && context.player === getApplyingPlayer(effect).opponent && context.source.type === CardTypes.Event,
     opponentsRingEffects: (context, effect) =>
@@ -49,6 +52,9 @@ const checkRestrictions = {
     opponentsCardAbilities: (context, effect) =>
         context.player === getApplyingPlayer(effect).opponent && context.ability.isCardAbility(),
     opponentsCharacters: (context, effect) => context.source.type === CardTypes.Character && context.source.controller === getApplyingPlayer(effect).opponent,
+    opponentsCharacterAbilitiesWithLowerGlory: (context, effect) => context.source.type === CardTypes.Character
+        && context.source.controller === getApplyingPlayer(effect).opponent
+        && context.source.glory < effect.source.glory,
     provinces: context => context.source.type === CardTypes.Province,
     reactions: context => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,
