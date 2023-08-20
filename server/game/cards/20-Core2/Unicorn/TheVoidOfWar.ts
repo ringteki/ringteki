@@ -12,6 +12,7 @@ export default class TheVoidOfWar extends DrawCard {
             condition: context => context.game.isDuringConflict(ConflictTypes.Military),
             target: {
                 controller: Players.Opponent,
+                player: Players.Opponent,
                 cardType: CardTypes.Character,
                 cardCondition: card => card.isParticipating(),
                 gameAction: AbilityDsl.actions.bow()
@@ -21,7 +22,7 @@ export default class TheVoidOfWar extends DrawCard {
                 target: {
                     player: context.player.opponent ? Players.Opponent : Players.Self,
                     mode: TargetModes.Select,
-                    activePromptTitle: 'Resolve Hand to Hand\'s ability again?',
+                    activePromptTitle: 'Resolve The Void of War\'s ability again?',
                     choices: {
                         'Yes': AbilityDsl.actions.resolveAbility({
                             ability: context.ability as CardAbility,

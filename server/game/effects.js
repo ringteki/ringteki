@@ -134,6 +134,7 @@ const Effects = {
     switchBaseSkills: () => EffectBuilder.card.static(EffectNames.SwitchBaseSkills),
     suppressEffects: (condition) => EffectBuilder.card.static(EffectNames.SuppressEffects, new SuppressEffect(condition)),
     takeControl: (player) => EffectBuilder.card.static(EffectNames.TakeControl, player),
+    triggersAbilitiesFromHome: (properties) => EffectBuilder.card.static(EffectNames.TriggersAbilitiesFromHome, properties),
     participatesFromHome: (properties) => EffectBuilder.card.static(EffectNames.ParticipatesFromHome, properties),
     unlessActionCost: (properties) => EffectBuilder.card.static(EffectNames.UnlessActionCost, properties),
     replacePrintedElement: (value) => EffectBuilder.card.static(EffectNames.ReplacePrintedElement, value),
