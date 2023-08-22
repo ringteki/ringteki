@@ -24,7 +24,7 @@ export default class PropitiousMarket extends DrawCard {
                 messageArgs: (context: AbilityContext) => (context.select === 'No' ? 'not ' : ''),
                 then: (subThenContext: AbilityContext) => ({
                     gameAction: AbilityDsl.actions.gainFate({ amount: this.#amountOfFateGain(subThenContext.source) }),
-                    message: '{0} uses {1} to gain {3} honor',
+                    message: '{0} uses {1} to gain {3} fate',
                     messageArgs: [this.#amountOfFateGain(subThenContext.source)]
                 })
             })
