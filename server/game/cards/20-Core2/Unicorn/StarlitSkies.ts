@@ -20,9 +20,9 @@ export default class StarlitSkies extends DrawCard {
             handler: context => {
                 let topThree = [];
                 if(context.select === 'Dynasty Deck') {
-                    topThree = context.player.opponent.dynastyDeck.first(3);
+                    topThree = context.player.dynastyDeck.first(3);
                 } else {
-                    topThree = context.player.opponent.conflictDeck.first(3);
+                    topThree = context.player.conflictDeck.first(3);
                 }
                 let messages = ['{0} places a card on the bottom of the deck', '{0} chooses to discard {1}'];
                 let destinations = [topThree[0].isDynasty ? 'dynasty deck bottom' : 'conflict deck bottom', topThree[0].isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile];
@@ -30,7 +30,7 @@ export default class StarlitSkies extends DrawCard {
                 let handlers = [];
                 let cardHandler = card => {
                     this.game.addMessage(messages.pop(), context.player, card);
-                    context.player.opponent.moveCard(card, destinations.pop());
+                    context.player.moveCard(card, destinations.pop());
                     if(messages.length > 0) {
                         let index = topThree.findIndex(x => x === card);
                         topThree.splice(index, 1);
