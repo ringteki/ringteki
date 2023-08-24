@@ -18,21 +18,19 @@ export default class StarlitSkies extends DrawCard {
             effect: 'look at the top 3 cards of {1}\'s {2}',
             effectArgs: context => [context.player, context.select.toLowerCase()],
             handler: context => {
-                let topThree = [];
-                if(context.select === 'Dynasty Deck') {
-                    topThree = context.player.opponent.dynastyDeck.first(3);
-                } else {
-                    topThree = context.player.opponent.conflictDeck.first(3);
-                }
-                let messages = ['{0} places a card on the bottom of the deck', '{0} chooses to discard {1}'];
-                let destinations = [topThree[0].isDynasty ? 'dynasty deck bottom' : 'conflict deck bottom', topThree[0].isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile];
+                const topThree: DrawCard[] = (context.select === 'Dynasty Deck') ?
+                    context.player.dynastyDeck.first(3) :
+                    context.player.conflictDeck.first(3);
+
+                const messages = ['{0} places a card on the bottom of the deck', '{0} chooses to discard {1}'];
+                const destinations = [topThree[0].isDynasty ? 'dynasty deck bottom' : 'conflict deck bottom', topThree[0].isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile];
                 let choices = [];
-                let handlers = [];
-                let cardHandler = card => {
+                const handlers = [];
+                const cardHandler = card => {
                     this.game.addMessage(messages.pop(), context.player, card);
-                    context.player.opponent.moveCard(card, destinations.pop());
-                    if(messages.length > 0) {
-                        let index = topThree.findIndex(x => x === card);
+                    context.player.moveCard(card, destinations.pop());
+                    if (messages.length > 0) {
+                        const index = topThree.findIndex(x => x === card);
                         topThree.splice(index, 1);
                         this.game.promptWithHandlerMenu(context.player, {
                             activePromptTitle: 'Select a card to put on the bottom of the deck',
@@ -44,16 +42,16 @@ export default class StarlitSkies extends DrawCard {
                         });
                     }
                 };
-                if(topThree.length < 3) {
+                if (topThree.length < 3) {
                     choices = ['None'];
                     handlers.push(() => {
-                        if(topThree.length === 2) {
+                        if (topThree.length === 2) {
                             choices.pop();
                             handlers.pop();
                         }
                         messages.pop();
                         destinations.pop();
-                        if(messages.length > 0) {
+                        if (messages.length > 0) {
                             this.game.promptWithHandlerMenu(context.player, {
                                 activePromptTitle: 'Select a card to put on the bottom of the deck',
                                 context: context,
