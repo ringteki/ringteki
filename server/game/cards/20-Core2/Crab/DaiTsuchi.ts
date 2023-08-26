@@ -19,7 +19,7 @@ export default class DaiTsuchi extends DrawCard {
                 target: {
                     cardType: CardTypes.Attachment,
                     cardCondition: (card: DrawCard) =>
-                        card.parent && card.parent.type === CardTypes.Character && card.parent.isParticipating(),
+                        card.parent?.type === CardTypes.Character && (card.parent as DrawCard).isParticipating(),
                     gameAction: AbilityDsl.actions.returnToHand()
                 },
                 gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
