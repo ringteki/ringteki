@@ -119,7 +119,7 @@ export class GameAction {
         return event;
     }
 
-    resolve(target: PlayerOrRingOrCardOrToken, context: AbilityContext): void {
+    resolve(target: PlayerOrRingOrCardOrToken | PlayerOrRingOrCardOrToken[], context: AbilityContext): void {
         if (target) {
             this.setDefaultTarget(() => target);
         }

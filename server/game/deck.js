@@ -1,8 +1,8 @@
 const { cards } = require('./cards');
 const DrawCard = require('./drawcard.js');
 const ProvinceCard = require('./provincecard.js');
-const StrongholdCard = require('./strongholdcard.js');
-const RoleCard = require('./rolecard.js');
+const { StrongholdCard } = require('./StrongholdCard.js');
+const { RoleCard } = require('./RoleCard');
 const { Locations, CardTypes } = require('./Constants');
 const { GameModes } = require('../GameModes');
 

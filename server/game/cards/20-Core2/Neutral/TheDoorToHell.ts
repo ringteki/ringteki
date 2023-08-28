@@ -1,7 +1,6 @@
-import { CardTypes, Durations, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ConflictPhase = require('../../../gamesteps/conflictphase');
-import ProvinceCard = require('../../../provincecard');
+import { Players, CardTypes } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import ProvinceCard from '../../../provincecard';
 
 export default class TheDoorToHell extends ProvinceCard {
     static id = 'the-door-to-hell';

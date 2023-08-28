@@ -1,14 +1,13 @@
-import { CardTypes, Durations, Phases } from '../../../Constants';
-import { StrongholdCard } from '../../../StrongholdCard';
-import AbilityDsl from '../../../abilitydsl';
+import { CardTypes, Durations } from '../../Constants';
+import { StrongholdCard } from '../../StrongholdCard';
+import AbilityDsl from '../../abilitydsl';
 
-export default class CraneBox extends StrongholdCard {
-    static id = 'crane-box';
+export default class IsawaMoriSeido extends StrongholdCard {
+    static id = 'isawa-mori-seido';
 
     setupCardAbilities() {
         this.action({
             title: 'Bow this stronghold',
-            phase: Phases.Conflict,
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Character,
@@ -17,7 +16,7 @@ export default class CraneBox extends StrongholdCard {
                     effect: AbilityDsl.effects.modifyGlory(2)
                 })
             },
-            effect: 'give +2 glory to {0} for this phase'
+            effect: 'give +2 glory to {0} until the end of the phase'
         });
     }
 }

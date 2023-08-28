@@ -1,7 +1,7 @@
 import { ConflictTypes } from '../../../Constants';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class LionBox extends StrongholdCard {
     static id = 'lion-box';

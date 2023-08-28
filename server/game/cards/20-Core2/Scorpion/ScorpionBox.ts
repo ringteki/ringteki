@@ -1,6 +1,6 @@
 import { CardTypes, Durations } from '../../../Constants';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class ScorpionBox extends StrongholdCard {
     static id = 'scorpion-box';

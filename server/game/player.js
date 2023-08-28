@@ -9,8 +9,8 @@ const GameActions = require('./GameActions/GameActions');
 const { RingEffects } = require('./RingEffects.js');
 const { PlayableLocation } = require('./PlayableLocation');
 const PlayerPromptState = require('./playerpromptstate.js');
-const RoleCard = require('./rolecard.js');
-const StrongholdCard = require('./strongholdcard.js');
+const { RoleCard } = require('./RoleCard');
+const { StrongholdCard } = require('./StrongholdCard.js');
 
 const {
     AbilityTypes,

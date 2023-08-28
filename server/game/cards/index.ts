@@ -5,6 +5,10 @@ function allJsFiles(path: string): string[] {
     const files = [];
 
     for (const file of readdirSync(path)) {
+        if (file.startsWith('_')) {
+            continue;
+        }
+
         const filepath = join(path, file);
         if (lstatSync(filepath).isDirectory()) {
             files.push(...allJsFiles(filepath));

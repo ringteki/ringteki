@@ -1,10 +1,12 @@
 import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
-import StrongholdCard from '../../../strongholdcard';
+import { StrongholdCard } from '../../../StrongholdCard';
 
 export default class UnicornBox extends StrongholdCard {
     static id = 'unicorn-box';
+
+    stealFirstPlayerDuringSetup = true;
 
     setupCardAbilities() {
         this.action({

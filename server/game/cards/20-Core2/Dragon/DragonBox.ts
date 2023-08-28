@@ -1,6 +1,6 @@
 import { TargetModes } from '../../../Constants';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class DragonBox extends StrongholdCard {
     static id = 'dragon-box';

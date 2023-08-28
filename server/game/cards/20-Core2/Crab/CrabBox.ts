@@ -1,9 +1,9 @@
 import type BaseAction from '../../../BaseAction';
 import { EventNames } from '../../../Constants';
 import { EventRegistrar } from '../../../EventRegistrar';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class CrabBox extends StrongholdCard {
     static id = 'crab-box';

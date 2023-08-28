@@ -1,8 +1,8 @@
 import type AbilityContext from '../../../AbilityContext';
 import { TargetModes } from '../../../Constants';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type Ring from '../../../ring';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class PhoenixBox extends StrongholdCard {
     static id = 'phoenix-box';
