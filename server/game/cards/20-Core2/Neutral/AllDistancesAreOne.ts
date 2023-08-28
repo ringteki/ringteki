@@ -32,9 +32,9 @@ export default class AllDistancesAreOne extends DrawCard {
             condition: (context) =>
                 context.game.isDuringConflict() &&
                 this.#hasBaseReq(context.player) &&
-                !(context.game.currentConflict as Conflict)
+                (context.game.currentConflict as Conflict | undefined)
                     ?.getConflictProvinces()
-                    .some((province) => province.location !== Locations.StrongholdProvince),
+                    .every((province) => province.location !== Locations.StrongholdProvince),
             cost: captureOriginalProvince(),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 cardType: CardTypes.Province,

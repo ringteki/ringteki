@@ -14,4 +14,8 @@ export default class FumarolesYellowstone extends ProvinceCard {
             gameAction: AbilityDsl.actions.switchConflictType()
         });
     }
+
+    cannotBeStrongholdProvince() {
+        return true;
+    }
 }

@@ -7,7 +7,7 @@ export default class _007AtCourt extends DrawCard {
 
     setupCardAbilities() {
         this.reaction({
-            title: 'Force opponent to discard 3 cards',
+            title: 'Force opponent to discard 2 cards',
             when: {
                 afterConflict: (event, context) =>
                     event.conflict.winner === context.player && event.conflict.conflictType === ConflictTypes.Political
@@ -23,7 +23,7 @@ export default class _007AtCourt extends DrawCard {
                     target: context.player.opponent
                 })),
                 falseGameAction: AbilityDsl.actions.chosenDiscard((context) => ({
-                    amount: 3,
+                    amount: 2,
                     target: context.player.opponent
                 }))
             }),

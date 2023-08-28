@@ -1,3 +1,4 @@
+import type AbilityContext from '../../../AbilityContext';
 import { CardTypes, EventNames } from '../../../Constants';
 import { EventRegistrar } from '../../../EventRegistrar';
 import AbilityDsl from '../../../abilitydsl';
@@ -27,11 +28,8 @@ export default class NewCensure extends DrawCard {
         });
     }
 
-    canPlay(context, playType) {
-        if (context.player.imperialFavor !== '') {
-            return super.canPlay(context, playType);
-        }
-        return false;
+    canPlay(context: AbilityContext, playType) {
+        return context.player.imperialFavor !== '' && super.canPlay(context, playType);
     }
 
     onPhaseStarted() {

@@ -30,9 +30,7 @@ export default class GiantsCauseway extends ProvinceCard {
                 AbilityDsl.actions.moveToConflict(({ targets }) => ({ target: targets[STARTED_AT_HOME] }))
             ]),
             effect: 'move {1} home, and move {2} to the conflict',
-            effectArgs(context) {
-                return [context.targets[STARTED_IN_CONFLICT], context.targets[STARTED_AT_HOME]];
-            }
+            effectArgs: (context) => [context.targets[STARTED_IN_CONFLICT], context.targets[STARTED_AT_HOME]]
         });
     }
 }
