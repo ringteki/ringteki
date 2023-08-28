@@ -1,10 +1,10 @@
-import AbilityContext from '../../../AbilityContext';
+import type AbilityContext from '../../../AbilityContext';
 import { CardTypes } from '../../../Constants';
+import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import BaseCard from '../../../basecard';
-import { Conflict } from '../../../conflict';
+import type BaseCard from '../../../basecard';
+import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
-import ProvinceCard from '../../../provincecard';
 
 export default class DeployedGarrison extends DrawCard {
     static id = 'deployed-garrison';

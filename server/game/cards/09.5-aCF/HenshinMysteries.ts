@@ -1,5 +1,5 @@
 import { EventRegistrar } from '../../EventRegistrar';
-import ProvinceCard = require('../../provincecard');
+import { ProvinceCard } from '../../ProvinceCard';
 
 export default class HenshinMysteries extends ProvinceCard {
     static id = 'henshin-mysteries';

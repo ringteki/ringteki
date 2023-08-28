@@ -1,6 +1,6 @@
-import { Players, Locations, CardTypes } from '../../../Constants';
+import { CardTypes, Locations, Players } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
 
 export default class TheBubbleRom extends ProvinceCard {
     static id = 'the-bubble-room';

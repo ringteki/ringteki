@@ -1,7 +1,7 @@
 import { CardTypes, Durations } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
+import BaseCard from '../../../basecard';
 
 export default class FortunesField extends ProvinceCard {
     static id = 'fortune-s-field';

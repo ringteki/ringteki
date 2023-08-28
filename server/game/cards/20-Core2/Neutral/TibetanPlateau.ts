@@ -1,6 +1,6 @@
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class TibetanPlateau extends ProvinceCard {
     static id = 'tibetan-plateau';

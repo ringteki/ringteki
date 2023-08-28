@@ -1,7 +1,7 @@
 import { TargetModes } from '../../../Constants';
-import type TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class RedwoodsTreehouse extends ProvinceCard {
     static id = 'redwoods-treehouse';

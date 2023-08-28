@@ -1,6 +1,6 @@
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 const STARTED_IN_CONFLICT = 'started_in';
 const STARTED_AT_HOME = 'started_out';

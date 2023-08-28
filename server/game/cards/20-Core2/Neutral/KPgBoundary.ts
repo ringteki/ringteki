@@ -1,6 +1,6 @@
 import { CardTypes, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 const DONOR = 'donor';
 const RECIPIENT = 'recipient';

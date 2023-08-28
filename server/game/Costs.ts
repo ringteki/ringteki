@@ -1,5 +1,5 @@
 import AbilityContext from './AbilityContext';
-import { CharacterStatus, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
+import { CharacterStatus, Decks, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
 import Event from './Events/Event';
 import { CardGameAction } from './GameActions/CardGameAction';
 import { GameAction } from './GameActions/GameAction';
@@ -166,6 +166,27 @@ export function discardCard(properties?: SelectCostProperties): Cost {
         Object.assign({ location: Locations.Hand, mode: TargetModes.Exactly }, properties),
         (properties?.numCards ?? 0) > 1 ? `Select ${properties.numCards} cards to discard` : 'Select card to discard'
     );
+}
+
+export function discardTopCardsFromDeck(properties: { amount: number; deck: Decks }): Cost {
+    const getDeck =
+        properties.deck === Decks.DynastyDeck
+            ? (context: AbilityContext): DrawCard[] => context.player.dynastyDeck
+            : (context: AbilityContext): DrawCard[] => context.player.conflictDeck;
+    const destination =
+        properties.deck === Decks.DynastyDeck ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile;
+    return {
+        getCostMessage: (context) => ['discarding {0}'],
+        canPay: (context) => getDeck(context).length >= 4,
+        resolve: (context) => {
+            context.costs.discardTopCardsFromDeck = getDeck(context).slice(0, 4);
+        },
+        pay: (context) => {
+            for (const card of context.costs.discardTopCardsFromDeck as DrawCard[]) {
+                card.controller.moveCard(card, destination);
+            }
+        }
+    };
 }
 
 /**

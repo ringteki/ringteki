@@ -1,11 +1,11 @@
 import type AbilityContext from '../../../AbilityContext';
 import { CardTypes, Locations } from '../../../Constants';
 import type { Cost } from '../../../Costs';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
-import ProvinceCard from '../../../provincecard';
 
 const CAPTURED_ORIGINAL_PROVINCE = Symbol('Capture Province');
 

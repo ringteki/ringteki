@@ -1,5 +1,5 @@
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class TheBlueHole extends ProvinceCard {
     static id = 'the-blue-hole';

@@ -5,7 +5,7 @@ import { parseGameMode } from './GameMode';
 import type { ActionProps } from './Interfaces';
 import type BaseCard from './basecard.js';
 import type Game from './game';
-import type ProvinceCard from './provincecard';
+import type { ProvinceCard } from './ProvinceCard';
 
 /**
  * Represents an action ability provided by card text.

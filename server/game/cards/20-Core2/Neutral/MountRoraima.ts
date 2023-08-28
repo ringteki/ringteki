@@ -1,7 +1,7 @@
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import type BaseCard = require('../../../basecard');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 
 export default class MountRoraima extends ProvinceCard {
     static id = 'mount-roraima';

@@ -1,7 +1,7 @@
 import { CardTypes, Players } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
-import ProvinceCard from '../../../provincecard';
 
 export default class RabbitBeach extends ProvinceCard {
     static id = 'rabbit-beach';

@@ -1,6 +1,6 @@
-import AbilityDsl = require('../../abilitydsl');
-import type DrawCard = require('../../drawcard');
-import ProvinceCard = require('../../provincecard');
+import { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
 export default class SceneOfTheCrime extends ProvinceCard {
     static id = 'scene-of-the-crime';

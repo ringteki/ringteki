@@ -1,16 +1,16 @@
-import type AbilityContext = require('../../AbilityContext');
-import { CardTypes, Elements, Players, TargetModes } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import type BaseCard = require('../../basecard');
-import type DrawCard = require('../../drawcard');
-import ProvinceCard = require('../../provincecard');
+import AbilityContext from '../../AbilityContext';
+import { CardTypes, Players, TargetModes, Elements } from '../../Constants';
+import { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
+import BaseCard from '../../basecard';
+import DrawCard from '../../drawcard';
 
 const ELEMENT_KEY = 'weight-of-duty-void';
 
 export default class WeightOfDuty extends ProvinceCard {
     static id = 'weight-of-duty';
 
-    public setupCardAbilities() {
+    setupCardAbilities() {
         this.action({
             title: 'Bow & dishonor a character',
             condition: (context) => context.game.isDuringConflict() && context.player.opponent !== undefined,
@@ -19,25 +19,20 @@ export default class WeightOfDuty extends ProvinceCard {
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
                 cardCondition: (card: DrawCard, context: AbilityContext) =>
-                    card.isParticipating() && this.hasValidTarget(card, context)
+                    card.isParticipating() && this.#hasValidTarget(card, context)
             }),
             target: {
                 controller: Players.Opponent,
                 cardType: CardTypes.Character,
                 mode: TargetModes.Single,
-                cardCondition: (card, context) => {
-                    if (context.costs.sacrifice && !context.costs.sacrifice.isUnique()) {
-                        return !card.isUnique();
-                    }
-
-                    return true;
-                },
+                cardCondition: (card, context) =>
+                    context.costs.sacrifice && !context.costs.sacrifice.isUnique() ? !card.isUnique() : true,
                 gameAction: AbilityDsl.actions.multiple([AbilityDsl.actions.bow(), AbilityDsl.actions.dishonor()])
             }
         });
     }
 
-    public getPrintedElementSymbols() {
+    getPrintedElementSymbols() {
         let symbols = super.getPrintedElementSymbols();
         symbols.push({
             key: ELEMENT_KEY,
@@ -47,7 +42,7 @@ export default class WeightOfDuty extends ProvinceCard {
         return symbols;
     }
 
-    private hasValidTarget(card: DrawCard, context: AbilityContext) {
+    #hasValidTarget(card: DrawCard, context: AbilityContext) {
         if (card.isUnique()) {
             //uniques will always have a valid target based on the targeting check
             return true;

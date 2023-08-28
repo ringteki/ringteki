@@ -1,8 +1,8 @@
 import AbilityContext from '../../../AbilityContext';
 import { Locations } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
-import ProvinceCard from '../../../provincecard';
 
 type CardHandler = (currentCard: DrawCard) => void;
 

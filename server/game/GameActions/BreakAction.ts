@@ -1,11 +1,10 @@
-import { CardGameAction, CardActionProperties } from './CardGameAction';
+import type AbilityContext from '../AbilityContext';
 import { CardTypes, EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-import ProvinceCard = require('../provincecard');
+import type { ProvinceCard } from '../ProvinceCard';
+import type BaseCard from '../basecard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface BreakProperties extends CardActionProperties {
-}
+export interface BreakProperties extends CardActionProperties {}
 
 export class BreakAction extends CardGameAction {
     name = 'break';
@@ -15,7 +14,7 @@ export class BreakAction extends CardGameAction {
     effect = 'break {0}';
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card.isProvince || card.isBroken) {
+        if (!card.isProvince || card.isBroken) {
             return false;
         }
         return super.canAffect(card, context);

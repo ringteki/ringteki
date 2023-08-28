@@ -1,8 +1,8 @@
 import AbilityContext from '../../../AbilityContext';
 import { CardTypes, Durations, Locations } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import ProvinceCard from '../../../provincecard';
 
 export default class AntelopeCanyon extends ProvinceCard {
     static id = 'antelope-canyon';

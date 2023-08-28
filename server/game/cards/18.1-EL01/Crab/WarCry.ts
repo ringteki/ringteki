@@ -1,9 +1,9 @@
-import { CardTypes, ConflictTypes, Locations } from '../../../Constants';
+import { ConflictTypes, CardTypes, Locations } from '../../../Constants';
+import type { ProvinceCard } from '../../../ProvinceCard';
 import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
-import type ProvinceCard from '../../../provincecard';
 
 export default class WarCry extends DrawCard {
     static id = 'war-cry';

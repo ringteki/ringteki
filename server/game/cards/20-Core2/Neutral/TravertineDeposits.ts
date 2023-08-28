@@ -1,6 +1,6 @@
-import { CardTypes, Locations, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { CardTypes, Locations } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class TravertineDeposits extends ProvinceCard {
     static id = 'travertine-deposits';

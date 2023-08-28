@@ -1,6 +1,6 @@
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class DinnerInTheSky extends ProvinceCard {
     static id = 'dinner-in-the-sky';

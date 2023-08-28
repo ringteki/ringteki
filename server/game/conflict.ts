@@ -3,7 +3,7 @@ import { GameObject } from './GameObject';
 import BaseCard = require('./basecard');
 import Game = require('./game');
 import Player = require('./player');
-import type ProvinceCard = require('./provincecard');
+import type { ProvinceCard } './ProvinceCard';
 import type Ring = require('./ring');
 import * as Settings from '../settings';
 import DrawCard = require('./drawcard');

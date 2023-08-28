@@ -1,6 +1,6 @@
 import { Players, CardTypes } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
 
 export default class TheDoorToHell extends ProvinceCard {
     static id = 'the-door-to-hell';

@@ -1,6 +1,6 @@
 import { CardTypes } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
 
 export default class KilaueaVolcano extends ProvinceCard {
     static id = 'kilauea-volcano';

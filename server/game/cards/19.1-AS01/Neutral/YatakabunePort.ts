@@ -1,5 +1,5 @@
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
 
 export default class YatakabunePort extends ProvinceCard {
     static id = 'yatakabune-port';

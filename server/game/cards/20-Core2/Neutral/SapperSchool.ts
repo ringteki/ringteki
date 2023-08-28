@@ -1,7 +1,7 @@
 import { CardTypes, Locations, Phases } from '../../../Constants';
+import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import type ProvinceCard from '../../../provincecard';
 
 export default class SapperSchool extends DrawCard {
     static id = 'sapper-school';
