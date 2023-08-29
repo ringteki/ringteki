@@ -1,4 +1,4 @@
-import { CardTypes, Locations, Players, TargetModes } from '../../../Constants';
+import { CardTypes, Durations, Locations, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -28,6 +28,7 @@ export default class ShosuroElektra extends DrawCard {
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.putIntoConflict(),
                         AbilityDsl.actions.cardLastingEffect(context => ({
+                            duration: Durations.UntilEndOfPhase,
                             target: context.target,
                             effect: AbilityDsl.effects.delayedEffect({
                                 when: {
