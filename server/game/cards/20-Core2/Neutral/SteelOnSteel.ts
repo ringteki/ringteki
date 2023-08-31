@@ -11,12 +11,13 @@ export default class SteelOnSteel extends DrawCard {
             condition: (context) => context.game.isDuringConflict(ConflictTypes.Military),
             initiateDuel: {
                 type: DuelTypes.Military,
-                gameAction: duel => AbilityDsl.actions.conditional({
-                    target: duel.loser?.[0],
-                    condition: duel.loser?.[0]?.getFate() > 0,
-                    trueGameAction: AbilityDsl.actions.removeFate(),
-                    falseGameAction: AbilityDsl.actions.discardFromPlay()
-                })
+                gameAction: (duel) =>
+                    AbilityDsl.actions.conditional({
+                        target: duel.loser?.[0],
+                        condition: duel.loser?.[0]?.getFate() > 0,
+                        trueGameAction: AbilityDsl.actions.removeFate(),
+                        falseGameAction: AbilityDsl.actions.discardFromPlay()
+                    })
             }
         });
     }
