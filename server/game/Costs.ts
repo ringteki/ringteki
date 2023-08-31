@@ -772,6 +772,59 @@ export function discardHand(): Cost {
     };
 }
 
+export function optional(cost: Cost): Cost {
+    const getActionName = (context: TriggeredAbilityContext) =>
+        `optional${cost.getActionName(context).replace(/^./, (c) => c.toUpperCase())}`;
+
+    return {
+        promptsPlayer: true,
+        canPay: () => true,
+        getCostMessage: (context: TriggeredAbilityContext) =>
+            context.costs[getActionName(context)] ? cost.getCostMessage(context) : undefined,
+        getActionName: getActionName,
+        resolve: (context: TriggeredAbilityContext, result) => {
+            if (!cost.canPay(context)) {
+                return;
+            }
+            const actionName = getActionName(context);
+
+            const choices = ['Yes', 'No'];
+            const handlers = [
+                () => {
+                    context.costs[actionName] = true;
+                },
+                () => {}
+            ];
+
+            if (result.canCancel) {
+                choices.push('Cancel');
+                handlers.push(() => {
+                    result.cancelled = true;
+                });
+            }
+
+            context.game.promptWithHandlerMenu(context.player, {
+                activePromptTitle: 'Pay optional cost?',
+                source: context.source,
+                choices: choices,
+                handlers: handlers
+            });
+        },
+
+        payEvent: (context: TriggeredAbilityContext) => {
+            const actionName = getActionName(context);
+            if (!context.costs[actionName]) {
+                const doNothing = new HandlerAction();
+                return doNothing.getEvent(context.player, context);
+            }
+
+            const events = [];
+            cost.addEventsToArray(events, context, {});
+            return events;
+        }
+    };
+}
+
 export function optionalFateCost(amount: number): Cost {
     return {
         promptsPlayer: true,
