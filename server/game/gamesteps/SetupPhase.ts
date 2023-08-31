@@ -112,7 +112,7 @@ export class SetupPhase extends Phase {
             }
         }
 
-        for (const card of this.game.allCards as BaseCard[]) {
+        for (const card of this.game.allCards.toArray() as BaseCard[]) {
             card.applyAnyLocationPersistentEffects();
         }
     }

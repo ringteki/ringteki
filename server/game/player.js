@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const { GameObject } = require('./GameObject');
-const Deck = require('./deck.js');
+const { Deck } = require('./Deck.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 const { clockFor } = require('./Clocks/ClockSelector.js');
 const CostReducer = require('./costreducer.js');
