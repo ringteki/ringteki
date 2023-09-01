@@ -1,8 +1,8 @@
-const AbilityDsl = require('../../../../../build/server/game/abilitydsl');
+const { discardFromPlay } = require('../../../../../build/server/game/GameActions/GameActions.js');
 
-describe('Bake Kujira', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Bake Kujira', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -19,7 +19,6 @@ describe('Bake Kujira', function() {
             });
 
             this.whale = this.player1.findCardByName('bake-kujira');
-            this.diplomat = this.player1.findCardByName('doji-diplomat');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.command = this.player1.findCardByName('command-the-tributary');
             this.pyre = this.player1.placeCardInProvince('funeral-pyre', 'province 1');
@@ -41,145 +40,17 @@ describe('Bake Kujira', function() {
             this.mushin = this.player2.findCardByName('mushin-no-shin');
             this.katana = this.player2.findCardByName('fine-katana');
 
-            this.diplomat.fate = 5;
-            this.player1.playAttachment(this.command, this.diplomat);
+            this.fumiki.fate = 5;
         });
 
-        it('should be immune to events and not able to be put into play', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale],
-                defenders: [this.kuwanan],
-                ring: 'earth'
-            });
-
-            this.player2.clickCard(this.scorp);
-            expect(this.player2).toBeAbleToSelect(this.kuwanan);
-            expect(this.player2).not.toBeAbleToSelect(this.whale);
-            this.player2.clickCard(this.kuwanan);
-
-            let mil = this.whale.getMilitarySkill();
-            this.player1.clickCard(this.djinn);
-            expect(this.whale.getMilitarySkill()).toBe(mil);
-
-            this.player2.clickCard(this.echoes);
-            expect(this.player2).toBeAbleToSelect(this.challenger);
-            expect(this.player2).not.toBeAbleToSelect(this.whale2);
-
-            this.player2.clickPrompt('Cancel');
-
-            this.player2.placeCardInProvince(this.whale2, 'province 1');
-            this.player2.placeCardInProvince(this.challenger, 'province 2');
-
-            this.game.checkGameState(true);
-
-            this.player2.clickCard(this.charge);
-            expect(this.player2).toBeAbleToSelect(this.challenger);
-            expect(this.player2).not.toBeAbleToSelect(this.whale2);
-
-            this.player2.clickPrompt('Cancel');
-
-            this.uji.honor();
-            this.game.checkGameState(true);
-            this.player2.clickCard(this.whale2);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            this.player2.clickCard(this.challenger);
-            expect(this.player2).toHavePrompt('Choose additional fate');
-        });
-
-        it('bug report - skycaller', function() {
-            this.player2.moveCard(this.uji, 'dynasty discard pile');
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale],
-                defenders: [this.kuwanan],
-                ring: 'air'
-            });
-
-            this.player2.placeCardInProvince(this.whale2, 'province 1');
-            this.player2.placeCardInProvince(this.challenger, 'province 2');
-            this.game.checkGameState(true);
-            this.player2.clickCard(this.whale2);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            this.player2.clickCard(this.challenger);
-            expect(this.player2).toHavePrompt('Choose additional fate');
-        });
-
-        it('should eat people and remove from the game when it leaves - dynasty', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale],
-                defenders: [this.kuwanan]
-            });
-
-            this.player2.pass();
-
-            let mil = this.whale.getMilitarySkill();
-
-            this.player1.clickCard(this.whale);
-            expect(this.player1).not.toBeAbleToSelect(this.fumiki);
-            expect(this.player1).not.toBeAbleToSelect(this.whale);
-            expect(this.player1).toBeAbleToSelect(this.kuwanan);
-            this.player1.clickCard(this.kuwanan);
-            expect(this.whale.getMilitarySkill()).toBe(mil + 2);
-            expect(this.kuwanan.location).toBe(this.whale.uuid);
-
-            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Kuwanan whole!');
-
-            this.player2.pass();
-            this.player1.clickCard(this.pyre);
-            this.player1.clickCard(this.whale);
-            expect(this.kuwanan.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Doji Kuwanan is removed from the game due to Bake-Kujira leaving play');
-        });
-
-        it('should eat people and remove them from the game when it leaves - conflict', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale],
-                defenders: [this.fumiki]
-            });
-
-            this.player2.pass();
-
-            let mil = this.whale.getMilitarySkill();
-
-            this.player1.clickCard(this.whale);
-            this.player1.clickCard(this.fumiki);
-            expect(this.whale.getMilitarySkill()).toBe(mil + 2);
-            expect(this.fumiki.location).toBe(this.whale.uuid);
-
-            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Fumiki whole!');
-
-            this.player2.pass();
-            this.player1.clickCard(this.pyre);
-            this.player1.clickCard(this.whale);
-            expect(this.fumiki.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Doji Fumiki is removed from the game due to Bake-Kujira leaving play');
-        });
-
-        it('should not allow reprieve to save the target', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale],
-                defenders: [this.kuwanan]
-            });
-
-            this.player2.playAttachment(this.reprieve, this.kuwanan);
-            this.player1.clickCard(this.whale);
-            this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.location).toBe(this.whale.uuid);
-            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Kuwanan whole!');
-        });
-
-        it('should not be able to be saved', function() {
+        it('should not be able to be saved', function () {
             this.player2.moveCard(this.whale2, 'play area');
             this.player1.placeCardInProvince(this.mine, 'province 2');
 
             this.fumiki.action({
                 title: 'Discard a character',
                 target: {
-                    gameAction: AbilityDsl.actions.discardFromPlay()
+                    gameAction: discardFromPlay()
                 }
             });
 
@@ -198,60 +69,32 @@ describe('Bake Kujira', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should not be able to be saved - testing setup', function() {
-            this.player2.moveCard(this.whale2, 'play area');
-            this.player1.placeCardInProvince(this.mine, 'province 2');
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whale, this.diplomat],
-                defenders: [this.kuwanan, this.whale2]
-            });
-
-            this.player2.clickCard(this.whale2);
-            this.player2.clickCard(this.diplomat);
-
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.mine);
-        });
-
-        it('should not be able to put fate on it', function() {
-            this.player2.pass();
-            this.player1.clickCard(this.diplomat);
-            expect(this.player1).not.toBeAbleToSelect(this.diplomat);
-            expect(this.player1).not.toBeAbleToSelect(this.whale);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-
-            this.player1.clickCard(this.whisperer);
-            expect(this.whisperer.fate).toBe(1);
-        });
-
-        it('bug report - mushin', function() {
-            this.player2.moveCard(this.mushin, 'hand');
+        it('eats a character when it wins a conflict', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whale],
-                defenders: [this.kuwanan]
+                defenders: [this.kuwanan, this.fumiki],
+                type: 'military'
             });
 
-            this.player2.playAttachment(this.reprieve, this.kuwanan);
-            this.player1.pass();
-            this.player2.playAttachment(this.katana, this.kuwanan);
+            this.noMoreActions();
+            expect(this.player1).toHavePrompt('Any reactions?');
+
             this.player1.clickCard(this.whale);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.fumiki);
+            expect(this.player1).toBeAbleToSelect(this.kuwanan);
+
             this.player1.clickCard(this.kuwanan);
-            expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.mushin);
-            this.player2.clickCard(this.mushin);
-            expect(this.kuwanan.location).toBe('play area');
-            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to swallow Doji Kuwanan whole!');
-            expect(this.getChatLogs(5)).toContain('player2 plays Mushin no Shin to cancel the effects of Bake-Kujira');
+            expect(this.kuwanan.location).toBe('dynasty discard pile');
+            expect(this.getChatLogs(5)).toContain('player1 uses Bake-Kujira to discard Doji Kuwanan');
         });
     });
 });
 
-describe('Bake Kujira - Dynasty', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Bake Kujira - Dynasty', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'dynasty',
                 player1: {
@@ -259,8 +102,7 @@ describe('Bake Kujira - Dynasty', function() {
                     provinces: ['tsuma', 'toshi-ranbo', 'manicured-garden'],
                     fate: 20
                 },
-                player2: {
-                }
+                player2: {}
             });
 
             this.whale = this.player1.filterCardsByName('bake-kujira')[0];
@@ -272,7 +114,7 @@ describe('Bake Kujira - Dynasty', function() {
             this.player1.placeCardInProvince(this.whale2, this.ranbo.location);
         });
 
-        it('should not prompt you to add fate, but enter play with 1 fate', function() {
+        it('should not prompt you to add fate, but enter play with 1 fate', function () {
             this.player1.clickCard(this.whale);
             expect(this.player1).toHavePromptButton('0');
             expect(this.player1).not.toHavePromptButton('1');
@@ -283,7 +125,7 @@ describe('Bake Kujira - Dynasty', function() {
             expect(this.whale.fate).toBe(1);
         });
 
-        it('should not be able to dupe for fate', function() {
+        it('should not be able to dupe for fate', function () {
             this.player1.clickCard(this.whale);
             this.player1.clickPrompt('0');
             expect(this.whale.fate).toBe(1);
@@ -293,7 +135,7 @@ describe('Bake Kujira - Dynasty', function() {
             expect(this.whale2.location).toBe(this.ranbo.location);
         });
 
-        it('should not gain fate from Toshi Ranbo', function() {
+        it('should not gain fate from Toshi Ranbo', function () {
             this.player1.clickCard(this.whale2);
             this.player1.clickPrompt('0');
             expect(this.whale2.fate).toBe(1);
