@@ -1,4 +1,4 @@
-const { DrawCard } = require('../../../build/server/game/drawcard.js');
+const DrawCard = require('../../../build/server/game/drawcard.js');
 
 describe('the DrawCard', function () {
     describe('the hasKeyword() function', function () {

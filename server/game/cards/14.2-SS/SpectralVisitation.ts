@@ -1,4 +1,4 @@
-import { Locations, CardTypes, Players, Durations, Decks } from '../../Constants';
+import { CardTypes, Decks, Durations, Locations, Players } from '../../Constants';
 import { ProvinceCard } from '../../ProvinceCard';
 import AbilityDsl from '../../abilitydsl';
 

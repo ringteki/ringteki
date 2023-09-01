@@ -171,15 +171,16 @@ export function discardCard(properties?: SelectCostProperties): Cost {
 export function discardTopCardsFromDeck(properties: { amount: number; deck: Decks }): Cost {
     const getDeck =
         properties.deck === Decks.DynastyDeck
-            ? (context: AbilityContext): DrawCard[] => context.player.dynastyDeck
-            : (context: AbilityContext): DrawCard[] => context.player.conflictDeck;
+            ? (context: AbilityContext) => context.player.dynastyDeck
+            : (context: AbilityContext) => context.player.conflictDeck;
     const destination =
         properties.deck === Decks.DynastyDeck ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile;
     return {
+        getActionName: (context) => 'discardTopCardsFromDeck',
         getCostMessage: (context) => ['discarding {0}'],
-        canPay: (context) => getDeck(context).length >= 4,
+        canPay: (context) => getDeck(context).size() >= 4,
         resolve: (context) => {
-            context.costs.discardTopCardsFromDeck = getDeck(context).slice(0, 4);
+            context.costs.discardTopCardsFromDeck = getDeck(context).first(4);
         },
         pay: (context) => {
             for (const card of context.costs.discardTopCardsFromDeck as DrawCard[]) {
@@ -361,14 +362,9 @@ export function payTargetDependentFateCost(targetName: string, ignoreType = fals
  */
 export function payFate(amount: number | ((context: AbilityContext) => number) = 1): Cost {
     return new GameActionCost(
-        GameActions.conditional({
-            condition: (context) => (typeof amount === 'number' ? amount : amount(context)) > 0,
-            trueGameAction: GameActions.loseFate((context) => ({
-                target: context.player,
-                amount: typeof amount === 'number' ? amount : amount(context)
-            })),
-            falseGameAction: GameActions.noAction()
-        })
+        typeof amount === 'function'
+            ? GameActions.loseFate((context) => ({ target: context.player, amount: amount(context) }))
+            : GameActions.loseFate((context) => ({ target: context.player, amount }))
     );
 }
 

@@ -3,6 +3,17 @@ const EffectSource = require('./EffectSource');
 const { EffectNames } = require('./Constants');
 
 class Ring extends EffectSource {
+    menu = [
+        { command: 'flip', text: 'Flip' },
+        { command: 'claim', text: 'Claim' },
+        { command: 'contested', text: 'Switch this ring to contested' },
+        { command: 'unclaimed', text: 'Set to unclaimed' },
+        { command: 'addfate', text: 'Add 1 fate' },
+        { command: 'remfate', text: 'Remove 1 fate' },
+        { command: 'takefate', text: 'Take all fate' },
+        { command: 'conflict', text: 'Initiate Conflict' }
+    ];
+
     constructor(game, element, type) {
         super(game, element.replace(/\b\w/g, (l) => l.toUpperCase()) + ' Ring');
         this.printedType = 'ring';
@@ -14,17 +25,6 @@ class Ring extends EffectSource {
         this.fate = 0;
         this.attachments = [];
         this.removedFromGame = false;
-
-        this.menu = _([
-            { command: 'flip', text: 'Flip' },
-            { command: 'claim', text: 'Claim' },
-            { command: 'contested', text: 'Switch this ring to contested' },
-            { command: 'unclaimed', text: 'Set to unclaimed' },
-            { command: 'addfate', text: 'Add 1 fate' },
-            { command: 'remfate', text: 'Remove 1 fate' },
-            { command: 'takefate', text: 'Take all fate' },
-            { command: 'conflict', text: 'Initiate Conflict' }
-        ]);
     }
 
     isConsideredClaimed(player = null) {
