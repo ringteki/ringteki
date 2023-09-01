@@ -3,8 +3,8 @@ import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class EarthsStagnation extends DrawCard {
-    static id = 'earth-s-stagnation';
+export default class JadeInfusedArrows extends DrawCard {
+    static id = 'jade-infused-arrows';
 
     setupCardAbilities() {
         this.action({

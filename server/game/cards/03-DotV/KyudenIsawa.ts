@@ -2,7 +2,7 @@ import { CardTypes, Locations, PlayTypes, Players } from '../../Constants';
 import { StrongholdCard } from '../../StrongholdCard';
 import AbilityDsl from '../../abilitydsl';
 
-export class KyudenIsawa extends StrongholdCard {
+export default class KyudenIsawa extends StrongholdCard {
     static id = 'kyuden-isawa';
 
     setupCardAbilities() {

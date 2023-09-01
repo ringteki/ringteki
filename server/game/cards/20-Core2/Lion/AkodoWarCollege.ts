@@ -3,7 +3,7 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
 export default class AkodoWarCollege extends DrawCard {
-    static id = 'force-of-the-river';
+    static id = 'akodo-war-college';
 
     setupCardAbilities() {
         this.action({

@@ -1,6 +1,6 @@
 import { Players, CardTypes, Locations } from '../../Constants';
 import AbilityDsl = require('../../abilitydsl');
-import { BaseOni } from './BaseOni';
+import { BaseOni } from './_BaseOni';
 
 export default class EndlessRanks extends BaseOni {
     static id = 'endless-ranks';

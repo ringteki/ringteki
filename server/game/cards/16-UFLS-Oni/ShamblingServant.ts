@@ -1,5 +1,5 @@
 import { CardTypes, Players } from '../../Constants';
-import { BaseOni } from './BaseOni';
+import { BaseOni } from './_BaseOni';
 import AbilityDsl = require('../../abilitydsl');
 
 export default class ShamblingServant extends BaseOni {

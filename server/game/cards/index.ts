@@ -19,13 +19,17 @@ function allJsFiles(path: string): string[] {
     return files;
 }
 
-export const cards = new Map(
-    allJsFiles(__dirname).reduce<[string, unknown][]>((all, filepath) => {
-        const fileImported = require(filepath);
-        const card = 'default' in fileImported ? fileImported.default : fileImported;
-        if (card.id) {
-            all.push([card.id, card]);
-        }
-        return all;
-    }, [])
-);
+const cardsMap = new Map<string, unknown>();
+for (const filepath of allJsFiles(__dirname)) {
+    const fileImported = require(filepath);
+    const card = 'default' in fileImported ? fileImported.default : fileImported;
+    if (!card.id) {
+        throw Error('Importing card class without id!');
+    }
+    if (cardsMap.has(card.id)) {
+        throw Error(`Importing card class with repeated id!: ${card}`);
+    }
+    cardsMap.set(card.id, card);
+}
+
+export const cards = cardsMap;

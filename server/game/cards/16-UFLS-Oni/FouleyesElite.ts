@@ -1,6 +1,6 @@
 import { Players, CardTypes } from '../../Constants';
 import AbilityDsl = require('../../abilitydsl');
-import { BaseOni } from './BaseOni';
+import { BaseOni } from './_BaseOni';
 
 export default class FouleyesElite extends BaseOni {
     static id = 'fouleye-s-elite';

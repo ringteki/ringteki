@@ -2,7 +2,7 @@ import { Players, Phases } from '../../Constants';
 import { ProvinceCard } from '../../ProvinceCard';
 import AbilityDsl from '../../abilitydsl';
 
-export class CityOfTheRichFrog extends ProvinceCard {
+export default class CityOfTheRichFrog extends ProvinceCard {
     static id = 'city-of-the-rich-frog';
 
     setupCardAbilities() {
