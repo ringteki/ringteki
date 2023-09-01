@@ -1,84 +1,116 @@
-describe('Deployed Garrison', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Deployed Garrison', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    dynastyDiscard: ['deployed-garrison', 'imperial-storehouse', 'hida-kisada'],
-                    inPlay: ['brash-samurai', 'savvy-politician'],
-                    hand: ['common-cause']
+                    inPlay: ['daidoji-ahma', 'brash-samurai', 'daidoji-strategist']
+                },
+                player2: {
+                    dynastyDiscard: ['imperial-storehouse'],
+                    inPlay: ['deployed-garrison', 'kaiu-envoy'],
+                    provinces: ['manicured-garden']
                 }
             });
 
-            this.storehouse = this.player1.moveCard('imperial-storehouse', 'province 1');
-            this.garrison = this.player1.findCardByName('deployed-garrison');
-            this.kisada = this.player1.findCardByName('hida-kisada');
+            this.ahma = this.player1.findCardByName('daidoji-ahma');
             this.brash = this.player1.findCardByName('brash-samurai');
+            this.daidojiStrategist = this.player1.findCardByName('daidoji-strategist');
 
-            this.commonCause = this.player1.findCardByName('common-cause');
-            this.savvy = this.player1.findCardByName('savvy-politician');
-            this.savvy.bow();
+            this.storehouse = this.player2.moveCard('imperial-storehouse', 'province 1');
+            this.garrison = this.player2.findCardByName('deployed-garrison');
+            this.envoy = this.player2.findCardByName('kaiu-envoy');
+            this.garden = this.player2.findCardByName('manicured-garden');
         });
 
-        it('should let you put it into play from discard during a conflict and remove from game when the conflict ends', function() {
+        it('should not allow being chosen by covert', function () {
+            this.noMoreActions();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.garden);
+            this.player1.clickCard(this.ahma);
+            this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Choose covert target for Daidōji Ahma');
+            expect(this.player1).not.toBeAbleToSelect(this.garrison);
+            expect(this.player1).toBeAbleToSelect(this.envoy);
+        });
+
+        it('does not bow when win defending a holding', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
-                defenders: []
+                defenders: [this.garrison],
+                type: 'military'
             });
 
-            this.player2.pass();
-            this.player1.clickCard(this.garrison);
-            expect(this.player1).toHavePrompt('Select card to sacrifice');
-            expect(this.player1).toBeAbleToSelect(this.storehouse);
-            this.player1.clickCard(this.storehouse);
-            expect(this.garrison.location).toBe('play area');
-            expect(this.garrison.fate).toBe(0);
-            expect(this.getChatLogs(5)).toContain('player1 uses Deployed Garrison, sacrificing Imperial Storehouse to put Deployed Garrison into play in the conflict');
-
-            this.brash.bow();
-            this.garrison.bow();
             this.noMoreActions();
-            expect(this.garrison.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Deployed Garrison is removed from the game due to its effect');
+            expect(this.player2).toHavePrompt('Any reactions?');
+            this.player2.clickCard(this.garrison);
+
+            expect(this.brash.bowed).toBe(true);
+            expect(this.garrison.bowed).toBe(false);
+            expect(this.getChatLogs(5)).toContain(
+                'player2 uses Deployed Garrison to not bow during the conflict resolution'
+            );
         });
 
-        it('should let you put it into play from discard during a conflict and not remove from game if it leaves play', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.brash],
-                defenders: []
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.garrison);
-            expect(this.player1).toHavePrompt('Select card to sacrifice');
-            expect(this.player1).toBeAbleToSelect(this.storehouse);
-            this.player1.clickCard(this.storehouse);
-            expect(this.garrison.location).toBe('play area');
-            expect(this.garrison.fate).toBe(0);
-            expect(this.getChatLogs(5)).toContain('player1 uses Deployed Garrison, sacrificing Imperial Storehouse to put Deployed Garrison into play in the conflict');
-
-            this.player2.pass();
-            this.player1.clickCard(this.commonCause);
-            this.player1.clickCard(this.savvy);
-            this.player1.clickCard(this.garrison);
-            expect(this.garrison.location).toBe('dynasty discard pile');
-        });
-
-        it('should not let you put it into play from a province', function() {
-            this.player1.moveCard(this.garrison, 'province 2');
+        it('does not bow when win defending next to a holding', function () {
+            this.player2.moveCard(this.storehouse, 'province 2');
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
-                defenders: []
+                defenders: [this.garrison],
+                type: 'military'
             });
 
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-            this.player1.clickCard(this.garrison);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.noMoreActions();
+            expect(this.player2).toHavePrompt('Any reactions?');
+            this.player2.clickCard(this.garrison);
+
+            expect(this.brash.bowed).toBe(true);
+            expect(this.garrison.bowed).toBe(false);
+            expect(this.getChatLogs(5)).toContain(
+                'player2 uses Deployed Garrison to not bow during the conflict resolution'
+            );
+        });
+
+        it('bows when win defending far from a holding', function () {
+            this.player2.moveCard(this.storehouse, 'province 3');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash],
+                defenders: [this.garrison],
+                type: 'military'
+            });
+
+            this.noMoreActions();
+            expect(this.player2).not.toHavePrompt('Any reactions?');
+
+            expect(this.brash.bowed).toBe(true);
+            expect(this.garrison.bowed).toBe(true);
+            expect(this.getChatLogs(5)).not.toContain(
+                'player2 uses Deployed Garrison to not bow during the conflict resolution'
+            );
+        });
+
+        it('bows when lose defending a holding', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.daidojiStrategist],
+                defenders: [this.garrison],
+                type: 'military',
+                ring: 'void'
+            });
+
+            this.noMoreActions();
+            expect(this.player2).not.toHavePrompt('Any reactions?');
+
+            expect(this.daidojiStrategist.bowed).toBe(true);
+            expect(this.garrison.bowed).toBe(true);
+            expect(this.getChatLogs(5)).not.toContain(
+                'player2 uses Deployed Garrison to not bow during the conflict resolution'
+            );
         });
     });
 });

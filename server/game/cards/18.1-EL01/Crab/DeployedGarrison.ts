@@ -18,7 +18,7 @@ export default class DeployedGarrison extends DrawCard {
         });
 
         this.reaction({
-            title: 'Prevent a character from bowing at the end of the conflict',
+            title: 'Does not bow at the end of the conflict',
             when: {
                 afterConflict: (event, context) =>
                     context.player.isDefendingPlayer() &&
@@ -29,7 +29,8 @@ export default class DeployedGarrison extends DrawCard {
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
                 effect: AbilityDsl.effects.doesNotBow()
-            }))
+            })),
+            effect: 'not bow during the conflict resolution'
         });
     }
 
