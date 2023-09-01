@@ -2,8 +2,8 @@ import { ConflictTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class CaptiveAudience extends DrawCard {
-    static id = 'captive-audience';
+export default class DiplomatOfTheSteppes extends DrawCard {
+    static id = 'diplomat-of-the-steppes';
 
     setupCardAbilities() {
         this.action({
