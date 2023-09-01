@@ -25,7 +25,7 @@ export class Deck {
         };
 
         //conflict
-        for (const { count, card } of this.data.conflictCards) {
+        for (const { count, card } of this.data.conflictCards ?? []) {
             for (let i = 0; i < count; i++) {
                 if (card?.side === 'conflict') {
                     const CardConstructor = cards.get(card.id) ?? DrawCard;
@@ -38,7 +38,7 @@ export class Deck {
         }
 
         //dynasty
-        for (const { count, card } of this.data.dynastyCards) {
+        for (const { count, card } of this.data.dynastyCards ?? []) {
             for (let i = 0; i < count; i++) {
                 if (card?.side === 'dynasty') {
                     const CardConstructor = cards.get(card.id) ?? DrawCard;
@@ -52,7 +52,7 @@ export class Deck {
 
         //provinces
         if (player.game.gameMode !== GameModes.Skirmish) {
-            for (const { count, card } of this.data.provinceCards) {
+            for (const { count, card } of this.data.provinceCards ?? []) {
                 for (let i = 0; i < count; i++) {
                     if (card?.type === CardTypes.Province) {
                         const CardConstructor = cards.get(card.id) ?? ProvinceCard;
@@ -73,7 +73,7 @@ export class Deck {
 
         //stronghold & role
         if (player.game.gameMode !== GameModes.Skirmish) {
-            for (const { count, card } of this.data.stronghold) {
+            for (const { count, card } of this.data.stronghold ?? []) {
                 for (let i = 0; i < count; i++) {
                     if (card?.type === CardTypes.Stronghold) {
                         const CardConstructor = cards.get(card.id) ?? StrongholdCard;
@@ -84,7 +84,7 @@ export class Deck {
                     }
                 }
             }
-            for (const { count, card } of this.data.role) {
+            for (const { count, card } of this.data.role ?? []) {
                 for (let i = 0; i < count; i++) {
                     if (card?.type === CardTypes.Role) {
                         const CardConstructor = cards.get(card.id) ?? RoleCard;

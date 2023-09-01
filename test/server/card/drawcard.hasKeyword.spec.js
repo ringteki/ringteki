@@ -1,8 +1,8 @@
-const DrawCard = require('../../../build/server/game/drawcard.js');
+const { DrawCard } = require('../../../build/server/game/drawcard.js');
 
-describe('the DrawCard', function() {
-    describe('the hasKeyword() function', function() {
-        beforeEach(function() {
+describe('the DrawCard', function () {
+    describe('the hasKeyword() function', function () {
+        beforeEach(function () {
             this.addCovert = jasmine.createSpyObj('addCovert', ['getValue']);
             this.addCovert.getValue.and.returnValue('covert');
             this.addCovert.type = 'addKeyword';
@@ -10,16 +10,16 @@ describe('the DrawCard', function() {
             this.card = new DrawCard(this.owner, {});
         });
 
-        it('should return false if no keyword has been added', function() {
+        it('should return false if no keyword has been added', function () {
             expect(this.card.hasKeyword('covert')).toBe(false);
         });
 
-        it('should return true if a keyword has been added', function() {
+        it('should return true if a keyword has been added', function () {
             this.card.addEffect(this.addCovert);
             expect(this.card.hasKeyword('covert')).toBe(true);
         });
 
-        it('should not be case sensitive', function() {
+        it('should not be case sensitive', function () {
             this.card.addEffect(this.addCovert);
             expect(this.card.hasKeyword('COveRT')).toBe(true);
         });
@@ -40,13 +40,13 @@ describe('the DrawCard', function() {
         */
     });
 
-    describe('integration', function() {
+    describe('integration', function () {
         const _ = require('underscore');
 
         const Game = require('../../../build/server/game/game.js');
         const Player = require('../../../build/server/game/player.js');
 
-        beforeEach(function() {
+        beforeEach(function () {
             this.gameService = jasmine.createSpyObj('gameService', ['save']);
             this.game = new Game({}, { gameService: this.gameService });
             this.spy = spyOn(this.game, 'checkWinCondition');
@@ -70,10 +70,12 @@ describe('the DrawCard', function() {
             this.blankEffect.type = 'blank';
         });
 
-        describe('parsing initial keywords', function() {
-            describe('when the card mentions a keyword in its body', function() {
-                beforeEach(function() {
-                    this.card = new DrawCard(this.player, { text: 'Each <i>Covert</i> character you control cannot be bypassed by covert.' });
+        describe('parsing initial keywords', function () {
+            describe('when the card mentions a keyword in its body', function () {
+                beforeEach(function () {
+                    this.card = new DrawCard(this.player, {
+                        text: 'Each <i>Covert</i> character you control cannot be bypassed by covert.'
+                    });
                     this.card.location = 'hand';
                     this.player.hand = _([this.card]);
                     //this.player.initiateCardAction(this.card);
@@ -81,14 +83,19 @@ describe('the DrawCard', function() {
                     this.game.continue();
                 });
 
-                it('should return false.', function() {
+                it('should return false.', function () {
                     expect(this.card.hasKeyword('covert')).toBe(false);
                 });
             });
 
-            describe('when the card has a keyword line', function() {
-                beforeEach(function() {
-                    this.card = new DrawCard(this.player, { type: 'character', cost: 0, side: 'dynasty', text: 'Covert.\nSomestuff. Restricted.\nNotarealkeyword.\nExtra text because we need stuff here.' });
+            describe('when the card has a keyword line', function () {
+                beforeEach(function () {
+                    this.card = new DrawCard(this.player, {
+                        type: 'character',
+                        cost: 0,
+                        side: 'dynasty',
+                        text: 'Covert.\nSomestuff. Restricted.\nNotarealkeyword.\nExtra text because we need stuff here.'
+                    });
                     this.card.location = 'province 1';
                     this.player.provinceOne = _([this.card]);
                     this.player.dynastyDeck = _([new DrawCard(this.player, {})]);
@@ -98,16 +105,16 @@ describe('the DrawCard', function() {
                     this.game.checkGameState(true);
                 });
 
-                it('should return true for each keyword', function() {
+                it('should return true for each keyword', function () {
                     expect(this.card.hasKeyword('covert')).toBe(true);
                     expect(this.card.hasKeyword('Restricted')).toBe(true);
                 });
 
-                it('should reject non-valid keywords', function() {
+                it('should reject non-valid keywords', function () {
                     expect(this.card.hasKeyword('Notarealkeyword')).toBe(false);
                 });
 
-                it('should not blank externally given keywords', function() {
+                it('should not blank externally given keywords', function () {
                     this.card.addEffect(this.addSincerity);
                     this.card.addEffect(this.blankEffect);
                     this.game.checkGameState(true);

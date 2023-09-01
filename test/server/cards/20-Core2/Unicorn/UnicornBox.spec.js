@@ -7,7 +7,8 @@ describe('Unicorn Box', function () {
                     stronghold: 'unicorn-box',
                     inPlay: ['bayushi-manipulator', 'fushicho', 'solemn-scholar', 'iuchi-rimei']
                 },
-                player2: {}
+                player2: {},
+                skipAutoFirstPlayer: true
             });
             this.unicornBox = this.player1.findCardByName('unicorn-box');
             this.bayushiManipulator = this.player1.findCardByName('bayushi-manipulator');

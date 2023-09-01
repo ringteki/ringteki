@@ -41,15 +41,15 @@ export class SetupPhase extends Phase {
         }
 
         if (
-            firstPlayer.stronghold.stealFirstPlayerDuringSetup &&
-            !firstPlayer.opponent.stronghold.stealFirstPlayerDuringSetup
+            firstPlayer.stronghold?.stealFirstPlayerDuringSetup &&
+            !firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetup
         ) {
             return;
         }
 
         if (
-            !firstPlayer.stronghold.stealFirstPlayerDuringSetup &&
-            firstPlayer.opponent.stronghold.stealFirstPlayerDuringSetup
+            !firstPlayer.stronghold?.stealFirstPlayerDuringSetup &&
+            firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetup
         ) {
             firstPlayer.firstPlayer = false;
             firstPlayer.opponent.firstPlayer = true;
