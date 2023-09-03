@@ -13,6 +13,7 @@ import Player = require('./player');
 
 interface BaseTarget {
     activePromptTitle?: string;
+    controller?: ((context: AbilityContext) => Players) | Players;
     player?: ((context: AbilityContext) => Players) | Players;
     hideIfNoLegalTargets?: boolean;
     gameAction?: GameAction | GameAction[];
@@ -59,7 +60,6 @@ interface TargetElementSymbol extends BaseTarget {
 
 interface BaseTargetCard extends BaseTarget {
     cardType?: CardTypes | CardTypes[];
-    controller?: ((context: AbilityContext) => Players) | Players;
     location?: Locations | Locations[];
     optional?: boolean;
 }
