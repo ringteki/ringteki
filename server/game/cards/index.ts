@@ -1,5 +1,5 @@
 import { lstatSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { join, sep } from 'path';
 
 function allJsFiles(path: string): string[] {
     const files = [];
@@ -12,7 +12,7 @@ function allJsFiles(path: string): string[] {
         const filepath = join(path, file);
         if (lstatSync(filepath).isDirectory()) {
             files.push(...allJsFiles(filepath));
-        } else if (file.endsWith('.js') && !path.endsWith('/cards')) {
+        } else if (file.endsWith('.js') && !path.endsWith(`${sep}cards`)) {
             files.push(filepath);
         }
     }
