@@ -93,6 +93,7 @@ export enum EffectNames {
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
     ModifyBaseProvinceStrength = 'modifyBaseProvinceStrength',
     ModifyBothSkills = 'modifyBothSkills',
+    ModifyDuelSkill = 'modifyDuelSkill',
     ModifyGlory = 'modifyGlory',
     ModifyMilitarySkill = 'modifyMilitarySkill',
     AttachmentMilitarySkillModifier = 'attachmentMilitarySkillModifier',

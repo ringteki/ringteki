@@ -148,22 +148,38 @@ export class Duel extends GameObject {
     }
 
     #getSkillStatistic(card: DrawCard): number {
+        const rawEffects = card.getRawEffects().filter((effect) => effect.type === EffectNames.ModifyDuelSkill);
+        let baseStatistic = 0;
+        let effectModifier = 0;
+
+        rawEffects.forEach(effect => {
+            const props = effect.getValue();
+            if (props.duel === this) {
+                effectModifier += props.value;
+            }
+        })
+
         if (this.statistic) {
-            return this.statistic(card);
+            baseStatistic = this.statistic(card);
+        } else {
+            switch (this.duelType) {
+                case DuelTypes.Military:
+                    baseStatistic = this.gameModeOpts.duelRules === 'printedSkill'
+                        ? card.printedMilitarySkill
+                        : card.getMilitarySkill();
+                    break;
+                case DuelTypes.Political:
+                    baseStatistic = this.gameModeOpts.duelRules === 'printedSkill'
+                        ? card.printedPoliticalSkill
+                        : card.getPoliticalSkill();
+                    break;
+                case DuelTypes.Glory:
+                    baseStatistic = this.gameModeOpts.duelRules === 'printedSkill' ? card.printedGlory : card.glory;
+                    break;
+            }
         }
 
-        switch (this.duelType) {
-            case DuelTypes.Military:
-                return this.gameModeOpts.duelRules === 'printedSkill'
-                    ? card.printedMilitarySkill
-                    : card.getMilitarySkill();
-            case DuelTypes.Political:
-                return this.gameModeOpts.duelRules === 'printedSkill'
-                    ? card.printedPoliticalSkill
-                    : card.getPoliticalSkill();
-            case DuelTypes.Glory:
-                return this.gameModeOpts.duelRules === 'printedSkill' ? card.printedGlory : card.glory;
-        }
+        return baseStatistic + effectModifier;
     }
 
     #getTotals(challengerStats: number, targetStats: number): [number, number] {
