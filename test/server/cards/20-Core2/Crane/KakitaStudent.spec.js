@@ -26,7 +26,7 @@ describe('Kakita Student', function() {
             it('should react appropriately', function() {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.challenger],
+                    attackers: [this.challenger, this.whisperer],
                     defenders: [this.toshimoko]
                 });
 
@@ -64,6 +64,22 @@ describe('Kakita Student', function() {
                 expect(this.getChatLogs(10)).toContain('player1 uses Kakita Student to grant 2 bonus skill during the duel to Doji Challenger');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 4 vs 6: Doji Challenger');
             });
+
+            it('should not react if your duelist costs 1', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.challenger, this.whisperer],
+                    defenders: [this.toshimoko]
+                });
+
+                this.player2.clickCard(this.pd);
+                this.player2.clickCard(this.toshimoko);
+                this.player2.clickCard(this.whisperer);
+
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player1).toHavePrompt('Honor Bid');
+            });
+
         });
     });
 });
