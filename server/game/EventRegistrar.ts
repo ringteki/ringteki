@@ -1,6 +1,7 @@
 import Game = require('./game');
 import EffectEngine = require('./effectengine');
 import BaseCard = require('./basecard');
+import { GameObject } from './GameObject';
 
 interface EventHandler {
     name: string;
@@ -14,7 +15,7 @@ interface EventHandler {
 export class EventRegistrar {
     private events: EventHandler[];
 
-    constructor(private game: Game, private context: EffectEngine | BaseCard) {
+    constructor(private game: Game, private context: EffectEngine | BaseCard | GameObject) {
         this.events = [];
     }
 

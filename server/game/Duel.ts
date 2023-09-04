@@ -1,8 +1,19 @@
-import { DuelTypes, EffectNames, Locations } from './Constants';
+import { GameObject } from './GameObject';
+import { DuelTypes, EffectNames, EventNames, Locations } from './Constants';
 import { GameMode, parseGameMode } from './GameMode';
+import { EventRegistrar } from './EventRegistrar';
 import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
+
+/**
+ * Used to track whether a player has played a specific type of duel effect yet
+ */
+export interface DuelAbilities {
+    challenge: boolean,
+    focus: boolean,
+    strike: boolean,
+}
 
 enum DuelParticipants {
     Challenger,
@@ -15,7 +26,7 @@ type StatisticTotal = typeof InvalidStats | number;
 
 const listFormatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
-export class Duel {
+export class Duel extends GameObject {
     #bidFinished = false;
     loser?: DrawCard[];
     losingPlayer?: Player;
@@ -23,16 +34,23 @@ export class Duel {
     winner?: DrawCard[];
     winningPlayer?: Player;
     gameModeOpts: GameMode;
+    modifiers: Map<string, DuelAbilities>;
+    private eventRegistrar?: EventRegistrar;
 
     constructor(
-        private game: Game,
+        public game: Game,
         public challenger: DrawCard,
         public targets: DrawCard[],
-        private type: DuelTypes,
+        private duelType: DuelTypes,
         private statistic?: (card: DrawCard) => number,
         private challengingPlayer = challenger.controller
     ) {
+        super(game, 'Duel');
         this.gameModeOpts = parseGameMode(this.game.gameMode);
+        this.#initializeDuelModifiers(challenger.controller);
+
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnCardAbilityTriggered]);
     }
 
     get winnerController(): undefined | Player {
@@ -134,7 +152,7 @@ export class Duel {
             return this.statistic(card);
         }
 
-        switch (this.type) {
+        switch (this.duelType) {
             case DuelTypes.Military:
                 return this.gameModeOpts.duelRules === 'printedSkill'
                     ? card.printedMilitarySkill
@@ -203,6 +221,52 @@ export class Duel {
                 this.losingPlayer = this.challengingPlayer.opponent;
                 return;
             }
+        }
+    }
+
+    #initializeDuelModifiers(challengingPlayer: Player) {
+        this.modifiers = new Map();
+        this.modifiers.set(challengingPlayer.id, {
+            challenge: false,
+            focus: false,
+            strike: false
+        })
+        if (challengingPlayer.opponent) {
+            this.modifiers.set(challengingPlayer.opponent.id, {
+                challenge: false,
+                focus: false,
+                strike: false
+            })
+        }
+    }
+
+    cleanup() {
+        this.eventRegistrar.unregisterAll();
+    }
+
+    onCardAbilityTriggered(_event: any) {
+        const event = _event.context.event;
+
+        if (event.duel !== this) {
+            return;
+        }
+
+        if (event.name === EventNames.OnDuelChallenge) {
+            const player = _event.context.player;
+            const mods = this.modifiers.get(player.id);
+            mods.challenge = true;
+        }
+
+        if (event.name === EventNames.OnDuelFocus) {
+            const player = _event.context.player;
+            const mods = this.modifiers.get(player.id);
+            mods.focus = true;
+        }
+
+        if (event.name === EventNames.OnDuelStrike) {
+            const player = _event.context.player;
+            const mods = this.modifiers.get(player.id);
+            mods.strike = true;
         }
     }
 }

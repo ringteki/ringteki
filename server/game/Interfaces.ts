@@ -13,6 +13,7 @@ import Player = require('./player');
 
 interface BaseTarget {
     activePromptTitle?: string;
+    location?: Locations | Locations[];
     controller?: ((context: AbilityContext) => Players) | Players;
     player?: ((context: AbilityContext) => Players) | Players;
     hideIfNoLegalTargets?: boolean;
@@ -176,7 +177,7 @@ export type WhenType = {
     [EventName in EventNames]?: (event: any, context?: TriggeredAbilityContext) => boolean;
 };
 
-interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbilityContext> {
+export interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbilityContext> {
     when: WhenType;
     collectiveTrigger?: boolean;
     anyPlayer?: boolean;
@@ -186,7 +187,7 @@ interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbilityContext
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 }
 
-interface TriggeredAbilityAggregateWhenProps extends AbilityProps<TriggeredAbilityContext> {
+export interface TriggeredAbilityAggregateWhenProps extends AbilityProps<TriggeredAbilityContext> {
     aggregateWhen: (events: any[], context: TriggeredAbilityContext) => boolean;
     collectiveTrigger?: boolean;
     target?: TriggeredAbilityTarget & TriggeredAbilityTarget;

@@ -37,6 +37,9 @@ class HonorBidPrompt extends AllPlayerPrompt {
                         .resolve(player, this.game.getFrameworkContext());
                 }
             });
+            if (this.duel) {
+                this.game.raiseEvent(EventNames.OnDuelFocus, eventProps);
+            }
             if(this.costHandler) {
                 this.game.queueSimpleStep(() => this.costHandler(this));
             } else {

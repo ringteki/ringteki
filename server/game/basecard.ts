@@ -23,7 +23,7 @@ import {
     Players
 } from './Constants';
 import { ElementSymbol } from './ElementSymbol';
-import { ActionProps, AttachmentConditionProps, PersistentEffectProps, TriggeredAbilityProps } from './Interfaces';
+import { ActionProps, AttachmentConditionProps, PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces';
 import { PlayAttachmentAction } from './PlayAttachmentAction.js';
 import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
 import { PlayCharacterAction } from './PlayCharacterAction.js';
@@ -277,6 +277,60 @@ class BaseCard extends EffectSource {
 
     forcedInterrupt(properties: TriggeredAbilityProps): void {
         this.triggeredAbility(AbilityTypes.ForcedInterrupt, properties);
+    }
+
+    duelChallenge(properties: Omit<TriggeredAbilityProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
+        const newProperties: TriggeredAbilityProps = { 
+            ...properties,
+            when: {
+                onDuelChallenge: (event, context) => {
+                    if (!event.duel) {
+                        return false;
+                    }
+                    const player = context.player;
+                    const usedChallenge = event.duel.modifiers.get(player.id)?.challenge;
+                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
+                    return !usedChallenge && conditionMet;
+                }
+            },
+        };
+        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
+    }
+
+    duelFocus(properties: Omit<TriggeredAbilityWhenProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
+        const newProperties: TriggeredAbilityWhenProps = { 
+            ...properties,
+            when: {
+                onDuelFocus: (event, context) => {
+                    if (!event.duel) {
+                        return false;
+                    }
+                    const player = context.player;
+                    const usedChallenge = event.duel.modifiers.get(player.id)?.focus;
+                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
+                    return !usedChallenge && conditionMet;
+                }
+            },
+        };
+        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
+    }
+
+    duelStrike(properties: Omit<TriggeredAbilityProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
+        const newProperties: TriggeredAbilityProps = { 
+            ...properties,
+            when: {
+                onDuelStrike: (event, context) => {
+                    if (!event.duel) {
+                        return false;
+                    }
+                    const player = context.player;
+                    const usedChallenge = event.duel.modifiers.get(player.id)?.strike;
+                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
+                    return !usedChallenge && conditionMet;
+                }
+            },
+        };
+        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
     }
 
     /**

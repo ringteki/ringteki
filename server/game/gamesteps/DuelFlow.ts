@@ -28,10 +28,12 @@ export class DuelFlow extends BaseStepWithPipeline {
         this.pipeline.initialise([
             new SimpleStep(this.game, () => this.#setCurrentDuel()),
             new SimpleStep(this.game, () => this.#startDuel()),
+            new SimpleStep(this.game, () => this.#challenge()),
             new SimpleStep(this.game, () => this.#promptForHonorBid()),
             new SimpleStep(this.game, () => this.#modifyDuelingSkill()),
             new SimpleStep(this.game, () => this.#determineResults()),
             new SimpleStep(this.game, () => this.#announceResult()),
+            new SimpleStep(this.game, () => this.#strike()),
             new SimpleStep(this.game, () => this.#applyDuelResults()),
             new SimpleStep(this.game, () => this.#cleanUpDuel()),
             new SimpleStep(this.game, () => this.game.checkGameState(true))
@@ -47,6 +49,15 @@ export class DuelFlow extends BaseStepWithPipeline {
     #startDuel() {
         this.game.raiseEvent(EventNames.OnDuelStarted, { duel: this.duel });
     }
+
+    #challenge() {
+        this.game.raiseEvent(EventNames.OnDuelChallenge, { duel: this.duel });
+    }
+
+    #strike() {
+        this.game.raiseEvent(EventNames.OnDuelStrike, { duel: this.duel });
+    }
+
 
     #promptForHonorBid() {
         if (this.duel.challenger.mostRecentEffect(EffectNames.WinDuel) === this.duel) {
@@ -97,5 +108,6 @@ export class DuelFlow extends BaseStepWithPipeline {
     #cleanUpDuel() {
         this.game.currentDuel = this.duel.previousDuel;
         this.game.raiseEvent(EventNames.OnDuelFinished, { duel: this.duel });
+        this.duel.cleanup();
     }
 }
