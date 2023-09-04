@@ -35,6 +35,7 @@ export class Duel extends GameObject {
     winningPlayer?: Player;
     gameModeOpts: GameMode;
     modifiers: Map<string, DuelAbilities>;
+    finalDifference?: number;
     private eventRegistrar?: EventRegistrar;
 
     constructor(
@@ -87,12 +88,15 @@ export class Duel extends GameObject {
 
     determineResult(): void {
         const challengerWins = this.challenger.mostRecentEffect(EffectNames.WinDuel) === this;
+
+        this.#setDuelDifference();
+
         if (challengerWins) {
             this.#setWinner(DuelParticipants.Challenger);
             this.#setLoser(DuelParticipants.Target);
         } else {
             const challengerStats = this.#getStatsTotal([this.challenger]);
-            const targetStats = this.#getStatsTotal(this.targets);
+            const targetStats = this.#getStatsTotal(this.targets);    
             if (challengerStats === InvalidStats) {
                 if (targetStats !== InvalidStats && targetStats > 0) {
                     // Challenger dead, target alive
@@ -238,6 +242,23 @@ export class Duel extends GameObject {
                 return;
             }
         }
+    }
+
+    #setDuelDifference() {
+        const challengerStats = this.#getStatsTotal([this.challenger]);
+        const targetStats = this.#getStatsTotal(this.targets);
+
+        const [challengerStats2, targetStats2] = this.#getTotals(
+            challengerStats === InvalidStats ? 0 : challengerStats,
+            targetStats === InvalidStats ? 0 : targetStats
+        );
+
+        const difference = Math.abs(
+            (challengerStats === InvalidStats ? 0 : challengerStats2) -
+            (targetStats === InvalidStats ? 0 : targetStats2)
+        );
+
+        this.finalDifference = difference;
     }
 
     #initializeDuelModifiers(challengingPlayer: Player) {
