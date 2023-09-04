@@ -40,9 +40,6 @@ describe('Strike of Flowing Water', function() {
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.strike);
-                this.player1.clickCard(this.strike);
-                expect(this.player1).toBeAbleToSelect(this.challenger);
-                expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
             });
 
             it('should apply +X to the duel result where X is the difference between dials (opponent higher)', function() {
@@ -63,13 +60,13 @@ describe('Strike of Flowing Water', function() {
                 this.player2.clickPrompt('3');
 
                 this.player1.clickCard(this.strike);
-                this.player1.clickCard(this.challenger);
 
                 expect(this.player2.honor).toBe(honor2 - 2);
                 expect(this.player1.honor).toBe(honor1 + 1);
 
                 expect(this.player1).toHavePrompt('Conflict Action Window');
-                expect(this.getChatLogs(10)).toContain('player1 plays Strike of Flowing Water, losing 1 honor to grant 2 bonus skill for duel resolution to Doji Challenger');
+                expect(this.getChatLogs(10)).toContain('player1 plays Strike of Flowing Water, losing 1 honor to get 2 bonus skill for duel resolution');
+                expect(this.getChatLogs(10)).toContain('player1 gives Doji Challenger 2 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 6 vs 6: Doji Challenger');
             });
 
@@ -91,13 +88,13 @@ describe('Strike of Flowing Water', function() {
                 this.player2.clickPrompt('1');
 
                 this.player1.clickCard(this.strike);
-                this.player1.clickCard(this.challenger);
 
                 expect(this.player2.honor).toBe(honor2 + 2);
                 expect(this.player1.honor).toBe(honor1 - 3);
 
                 expect(this.player1).toHavePrompt('Policy Debate');
-                expect(this.getChatLogs(10)).toContain('player1 plays Strike of Flowing Water, losing 1 honor to grant 2 bonus skill for duel resolution to Doji Challenger');
+                expect(this.getChatLogs(10)).toContain('player1 plays Strike of Flowing Water, losing 1 honor to get 2 bonus skill for duel resolution');
+                expect(this.getChatLogs(10)).toContain('player1 gives Doji Challenger 2 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 4 vs 8: Doji Challenger');
             });
         });

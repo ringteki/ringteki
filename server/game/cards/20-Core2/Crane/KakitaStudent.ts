@@ -8,21 +8,25 @@ export default class KakitaStudent extends DrawCard {
     setupCardAbilities() {
         this.duelChallenge({
             title: 'Help a character with a duel',
-            target: {
+            gameAction: AbilityDsl.actions.selectCard((context) => ({
+                activePromptTitle: 'Choose a duel participant',
+                hidePromptIfSingleCard: true,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => {
+                cardCondition: card => {
                     const isInvolved = context.event.duel.isInvolved(card);
                     const higherCost = card.printedCost > context.source.printedCost;
 
                     return higherCost && isInvolved;
                 },
+                message: '{0} gives {1} 2 bonus skill for this duel',
+                messageArgs: (cards) => [context.player, cards],
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                     effect: AbilityDsl.effects.modifyDuelSkill(2, context.event.duel),
                     duration: Durations.UntilEndOfDuel
                 }))
-            },
-            effect: 'grant 2 bonus skill during the duel to {0}'
+            })),
+            effect: 'help win a duel'
         });
     }
 }

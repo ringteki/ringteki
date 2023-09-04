@@ -12,13 +12,14 @@ export default class StrikeOfFlowingWater extends DrawCard {
             title: 'Add to your duel',
             cost: AbilityDsl.costs.payHonor(1),
             duelCondition: (duel, context) => context.player.honorBid !== context.player.opponent.honorBid,
-            target: {
+            gameAction: AbilityDsl.actions.selectCard((context) => ({
+                activePromptTitle: 'Choose a duel participant',
+                hidePromptIfSingleCard: true,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => {
-                    const isInvolved = context.event.duel.isInvolved(card);
-                    return isInvolved;
-                },
+                cardCondition: (card) => context.event.duel.isInvolved(card),
+                message: '{0} gives {1} {2} bonus skill for this duel',
+                messageArgs: (cards) => [context.player, cards, Math.abs(context.player.honorBid - context.player.opponent.honorBid)],
                 gameAction: AbilityDsl.actions.cardLastingEffect(context => {
                     const value = Math.abs(context.player.honorBid - context.player.opponent.honorBid);
                     return {
@@ -26,8 +27,23 @@ export default class StrikeOfFlowingWater extends DrawCard {
                         duration: Durations.UntilEndOfDuel
                     };
                 })
-            },
-            effect: 'grant {1} bonus skill for duel resolution to {0}',
+            })),
+            // target: {
+            //     cardType: CardTypes.Character,
+            //     controller: Players.Self,
+            //     cardCondition: (card, context) => {
+            //         const isInvolved = context.event.duel.isInvolved(card);
+            //         return isInvolved;
+            //     },
+            //     gameAction: AbilityDsl.actions.cardLastingEffect(context => {
+            //         const value = Math.abs(context.player.honorBid - context.player.opponent.honorBid);
+            //         return {
+            //             effect: AbilityDsl.effects.modifyDuelSkill(value, context.event.duel),
+            //             duration: Durations.UntilEndOfDuel
+            //         };
+            //     })
+            // },
+            effect: 'get {1} bonus skill for duel resolution',
             effectArgs: context => [Math.abs(context.player.honorBid - context.player.opponent.honorBid)]
         });
 
