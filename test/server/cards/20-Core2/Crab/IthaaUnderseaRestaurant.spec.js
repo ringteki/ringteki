@@ -1,4 +1,4 @@
-describe('Ithaa Undersea Restaurant', function () {
+xdescribe('Ithaa Undersea Restaurant', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

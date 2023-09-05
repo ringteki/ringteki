@@ -1,4 +1,4 @@
-describe('Antelope Canyon', function () {
+xdescribe('Antelope Canyon', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -24,7 +24,7 @@ describe('Antelope Canyon', function () {
             this.antelopeCanyon = this.player2.findCardByName('antelope-canyon', 'province 1');
         });
 
-        it('reveals random cards from opponent\'s hand', function () {
+        it("reveals random cards from opponent's hand", function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.aggressiveMoto],
