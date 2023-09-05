@@ -27,7 +27,7 @@ export default class _007AtCourt extends DrawCard {
                     target: context.player.opponent
                 }))
             }),
-            max: AbilityDsl.limit.perRound(1)
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 }

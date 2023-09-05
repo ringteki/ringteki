@@ -114,10 +114,12 @@ interface ActionTargets {
     [propName: string]: ActionTarget & SubTarget;
 }
 
-interface InitiateDuel extends DuelProperties {
+export interface InitiateDuel extends DuelProperties {
     opponentChoosesDuelTarget?: boolean;
     opponentChoosesChallenger?: boolean;
-    duelTargetMustBeAtHome?: boolean;
+    requiresConflict?: boolean;
+    challengerCondition?: (card: DrawCard, context: TriggeredAbilityContext) => boolean;
+    targetCondition?: (card: DrawCard, context: TriggeredAbilityContext) => boolean;
 }
 
 type EffectArg =

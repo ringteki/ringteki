@@ -16,7 +16,8 @@ export default class SawakitensBlessing extends DrawCard {
                     effect: AbilityDsl.effects.doesNotBow()
                 }),
             },
-            effect: 'prevent {0} from bowing at the end of a political conflict'
+            effect: 'prevent {0} from bowing at the end of the conflict',
+            max: AbilityDsl.limit.perRound(1),
         });
     }
 }

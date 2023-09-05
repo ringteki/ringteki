@@ -17,6 +17,8 @@ export interface DuelProperties extends CardActionProperties {
     challengerEffect?;
     targetEffect?;
     refuseGameAction?: GameAction;
+    refusalMessage?: string;
+    refusalMessageArgs?: (context: AbilityContext) => any | any[];
 }
 
 export class DuelAction extends CardGameAction {
@@ -94,7 +96,7 @@ export class DuelAction extends CardGameAction {
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
-        const { target, refuseGameAction } = this.getProperties(context, additionalProperties);
+        const { target, refuseGameAction, refusalMessage, refusalMessageArgs } = this.getProperties(context, additionalProperties);
         const addDuelEventsHandler = () => {
             const cards = (target as DrawCard[]).filter((card) => this.canAffect(card, context));
             if (cards.length === 0) {
@@ -111,11 +113,16 @@ export class DuelAction extends CardGameAction {
                 choices: ['Yes', 'No'],
                 handlers: [
                     () => {
-                        context.game.addMessage(
-                            '{0} chooses to refuse the duel and {1}',
-                            context.player.opponent,
-                            refuseGameAction.getEffectMessage(context)
-                        );
+                        if (refusalMessage) {
+                            const refusalArgs = refusalMessageArgs ? [].concat(refusalMessageArgs(context)) : [];
+                            context.game.addMessage(refusalMessage, ...refusalArgs);
+                        } else {
+                            context.game.addMessage(
+                                '{0} chooses to refuse the duel and {1}',
+                                context.player.opponent,
+                                refuseGameAction.getEffectMessage(context)
+                            );
+                        }
                         refuseGameAction.addEventsToArray(events, context, additionalProperties);
                     },
                     addDuelEventsHandler
