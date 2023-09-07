@@ -99,10 +99,13 @@ class Player extends GameObject {
         ];
         if(this.game.gameMode !== GameModes.Skirmish) {
             this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.ProvinceFour));
-            this.playableLocations.push(new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince));
+            this.playableLocations.push(
+                new PlayableLocation(PlayTypes.PlayFromProvince, this, Locations.StrongholdProvince)
+            );
         }
         this.abilityMaxByIdentifier = {}; // This records max limits for abilities
-        this.promptedActionWindows = user.promptedActionWindows || { // these flags represent phase settings
+        this.promptedActionWindows = user.promptedActionWindows || {
+            // these flags represent phase settings
             dynasty: true,
             draw: true,
             preConflict: true,
@@ -146,7 +149,7 @@ class Player extends GameObject {
      * @param card BaseCard
      */
     isCardUuidInList(list, card) {
-        return list.any(c => {
+        return list.any((c) => {
             return c.uuid === card.uuid;
         });
     }
@@ -157,7 +160,7 @@ class Player extends GameObject {
      * @param card BaseCard
      */
     isCardNameInList(list, card) {
-        return list.any(c => {
+        return list.any((c) => {
             return c.name === card.name;
         });
     }
@@ -166,7 +169,7 @@ class Player extends GameObject {
      * Checks whether any cards in play are currently marked as selected
      */
     areCardsSelected() {
-        return this.cardsInPlay.any(card => {
+        return this.cardsInPlay.any((card) => {
             return card.selected;
         });
     }
@@ -177,9 +180,11 @@ class Player extends GameObject {
      * @param {String} uuid
      */
     removeCardByUuid(list, uuid) {
-        return _(list.reject(card => {
-            return card.uuid === uuid;
-        }));
+        return _(
+            list.reject((card) => {
+                return card.uuid === uuid;
+            })
+        );
     }
 
     /**
@@ -188,7 +193,7 @@ class Player extends GameObject {
      * @param {String} name
      */
     findCardByName(list, name) {
-        return this.findCard(list, card => card.name === name);
+        return this.findCard(list, (card) => card.name === name);
     }
 
     /**
@@ -197,7 +202,7 @@ class Player extends GameObject {
      * @param {String} uuid
      */
     findCardByUuid(list, uuid) {
-        return this.findCard(list, card => card.uuid === uuid);
+        return this.findCard(list, (card) => card.uuid === uuid);
     }
 
     /**
@@ -205,7 +210,7 @@ class Player extends GameObject {
      * @param {String} uuid
      */
     findCardInPlayByUuid(uuid) {
-        return this.findCard(this.cardsInPlay, card => card.uuid === uuid);
+        return this.findCard(this.cardsInPlay, (card) => card.uuid === uuid);
     }
 
     /**
@@ -234,7 +239,7 @@ class Player extends GameObject {
 
         var cardsToReturn = [];
 
-        cardList.each(card => {
+        cardList.each((card) => {
             if(predicate(card)) {
                 cardsToReturn.push(card);
             }
@@ -255,12 +260,17 @@ class Player extends GameObject {
      * @returns {boolean} true/false if the trait is in pay
      */
     isTraitInPlay(trait) {
-        return this.game.allCards.some(card => {
-            return card.controller === this && card.hasTrait(trait) && card.isFaceup() &&
-            (card.location === Locations.PlayArea || (card.isProvince && !card.isBroken) || (card.isInProvince() && card.type === CardTypes.Holding));
+        return this.game.allCards.some((card) => {
+            return (
+                card.controller === this &&
+                card.hasTrait(trait) &&
+                card.isFaceup() &&
+                (card.location === Locations.PlayArea ||
+                    (card.isProvince && !card.isBroken) ||
+                    (card.isInProvince() && card.type === CardTypes.Holding))
+            );
         });
     }
-
 
     areLocationsAdjacent(location1, location2) {
         let index1 = provinceLocations.indexOf(location1);
@@ -274,7 +284,7 @@ class Player extends GameObject {
      */
     getDynastyCardInProvince(location) {
         let province = this.getSourceList(location);
-        return province.find(card => card.isDynasty);
+        return province.find((card) => card.isDynasty);
     }
 
     /**
@@ -283,7 +293,7 @@ class Player extends GameObject {
      */
     getDynastyCardsInProvince(location) {
         let province = this.getSourceList(location);
-        let cards = province.filter(card => card.isDynasty);
+        let cards = province.filter((card) => card.isDynasty);
         if(!Array.isArray(cards)) {
             cards = [cards];
         }
@@ -316,15 +326,17 @@ class Player extends GameObject {
      * @param {Function} predicate - DrawCard => Boolean
      */
     anyCardsInPlay(predicate) {
-        return this.game.allCards.any(card => card.controller === this && card.location === Locations.PlayArea && predicate(card));
+        return this.game.allCards.any(
+            (card) => card.controller === this && card.location === Locations.PlayArea && predicate(card)
+        );
     }
 
     /**
      * Returns an array of all conflict cards matching the predicate owned by this player
      * @param {Function} predicate - DrawCard => Boolean
      */
-    getAllConflictCards(predicate = (() => true)) {
-        return this.game.allCards.filter(card => card.owner === this && card.isConflict && predicate(card));
+    getAllConflictCards(predicate = () => true) {
+        return this.game.allCards.filter((card) => card.owner === this && card.isConflict && predicate(card));
     }
 
     /**
@@ -332,7 +344,9 @@ class Player extends GameObject {
      * @param {Function} predicate  - DrawCard => Boolean
      */
     filterCardsInPlay(predicate) {
-        return this.game.allCards.filter(card => card.controller === this && card.location === Locations.PlayArea && predicate(card));
+        return this.game.allCards.filter(
+            (card) => card.controller === this && card.location === Locations.PlayArea && predicate(card)
+        );
     }
 
     hasComposure() {
@@ -346,22 +360,27 @@ class Player extends GameObject {
         }
         let conflictRing = properties.ring || Object.values(this.game.rings);
         conflictRing = Array.isArray(conflictRing) ? conflictRing : [conflictRing];
-        conflictRing = conflictRing.filter(ring => ring.canDeclare(this));
+        conflictRing = conflictRing.filter((ring) => ring.canDeclare(this));
         if(conflictRing.length === 0) {
             return false;
         }
         let cards = properties.attacker ? [properties.attacker] : this.cardsInPlay.toArray();
         if(!this.opponent) {
-            return conflictType.some(type => conflictRing.some(ring =>
-                cards.some(card => card.canDeclareAsAttacker(type, ring))
-            ));
+            return conflictType.some((type) =>
+                conflictRing.some((ring) => cards.some((card) => card.canDeclareAsAttacker(type, ring)))
+            );
         }
-        let conflictProvince = properties.province || this.opponent && this.opponent.getProvinces();
+        let conflictProvince = properties.province || (this.opponent && this.opponent.getProvinces());
         conflictProvince = Array.isArray(conflictProvince) ? conflictProvince : [conflictProvince];
-        return conflictType.some(type => conflictRing.some(ring => conflictProvince.some(province =>
-            province.canDeclare(type, ring) &&
-            cards.some(card => card.canDeclareAsAttacker(type, ring, province))
-        )));
+        return conflictType.some((type) =>
+            conflictRing.some((ring) =>
+                conflictProvince.some(
+                    (province) =>
+                        province.canDeclare(type, ring) &&
+                        cards.some((card) => card.canDeclareAsAttacker(type, ring, province))
+                )
+            )
+        );
     }
 
     getConflictOpportunities() {
@@ -375,43 +394,57 @@ class Player extends GameObject {
         }
 
         if(provideConflictDeclarationType) {
-            return this.getRemainingConflictOpportunitiesForType(provideConflictDeclarationType)
-                - this.declaredConflictOpportunities[ConflictTypes.Passed]
-                - this.declaredConflictOpportunities[ConflictTypes.Forced];
+            return (
+                this.getRemainingConflictOpportunitiesForType(provideConflictDeclarationType) -
+                this.declaredConflictOpportunities[ConflictTypes.Passed] -
+                this.declaredConflictOpportunities[ConflictTypes.Forced]
+            );
         }
 
         if(forceConflictDeclarationType) {
-            return this.getRemainingConflictOpportunitiesForType(forceConflictDeclarationType)
-                - this.declaredConflictOpportunities[ConflictTypes.Passed]
-                - this.declaredConflictOpportunities[ConflictTypes.Forced];
+            return (
+                this.getRemainingConflictOpportunitiesForType(forceConflictDeclarationType) -
+                this.declaredConflictOpportunities[ConflictTypes.Passed] -
+                this.declaredConflictOpportunities[ConflictTypes.Forced]
+            );
         }
 
         if(setConflictDeclarationType) {
-            return this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType)
-                - this.declaredConflictOpportunities[ConflictTypes.Passed]
-                - this.declaredConflictOpportunities[ConflictTypes.Forced];
+            return (
+                this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType) -
+                this.declaredConflictOpportunities[ConflictTypes.Passed] -
+                this.declaredConflictOpportunities[ConflictTypes.Forced]
+            );
         }
 
-        return this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military)
-            + this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political)
-            - this.declaredConflictOpportunities[ConflictTypes.Passed]
-            - this.declaredConflictOpportunities[ConflictTypes.Forced]
-            - skirmishModeRRGLimit; //Skirmish you have 1 less conflict per the rules
+        return (
+            this.getRemainingConflictOpportunitiesForType(ConflictTypes.Military) +
+            this.getRemainingConflictOpportunitiesForType(ConflictTypes.Political) -
+            this.declaredConflictOpportunities[ConflictTypes.Passed] -
+            this.declaredConflictOpportunities[ConflictTypes.Forced] -
+            skirmishModeRRGLimit
+        ); //Skirmish you have 1 less conflict per the rules
     }
 
     getRemainingConflictOpportunitiesForType(type) {
-        return Math.max(0, this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type]);
+        return Math.max(
+            0,
+            this.getMaxConflictOpportunitiesForPlayerByType(type) - this.declaredConflictOpportunities[type]
+        );
     }
 
     getLegalConflictTypes(properties) {
         let types = properties.type || [ConflictTypes.Military, ConflictTypes.Political];
         types = Array.isArray(types) ? types : [types];
-        const forcedDeclaredType = properties.forcedDeclaredType || this.game.currentConflict && this.game.currentConflict.forcedDeclaredType;
+        const forcedDeclaredType =
+            properties.forcedDeclaredType ||
+            (this.game.currentConflict && this.game.currentConflict.forcedDeclaredType);
         if(forcedDeclaredType) {
-            return [forcedDeclaredType].filter(type =>
-                types.includes(type) &&
-                this.getConflictOpportunities() > 0 &&
-                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+            return [forcedDeclaredType].filter(
+                (type) =>
+                    types.includes(type) &&
+                    this.getConflictOpportunities() > 0 &&
+                    !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
             );
         }
 
@@ -419,9 +452,10 @@ class Player extends GameObject {
             return [];
         }
 
-        return types.filter(type =>
-            this.getRemainingConflictOpportunitiesForType(type) > 0 &&
-            !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
+        return types.filter(
+            (type) =>
+                this.getRemainingConflictOpportunitiesForType(type) > 0 &&
+                !this.getEffects(EffectNames.CannotDeclareConflictsOfType).includes(type)
         );
     }
 
@@ -434,8 +468,10 @@ class Player extends GameObject {
         let forceConflictType = this.mostRecentEffect(EffectNames.ForceConflictDeclarationType);
         const provideConflictDeclarationType = this.mostRecentEffect(EffectNames.ProvideConflictDeclarationType);
         const additionalConflictEffects = this.getEffects(EffectNames.AdditionalConflict);
-        const additionalConflictsForType = additionalConflictEffects.filter(x => x === type).length;
-        let baselineAvailableConflicts = this.defaultAllowedConflicts[ConflictTypes.Military] + this.defaultAllowedConflicts[ConflictTypes.Political];
+        const additionalConflictsForType = additionalConflictEffects.filter((x) => x === type).length;
+        let baselineAvailableConflicts =
+            this.defaultAllowedConflicts[ConflictTypes.Military] +
+            this.defaultAllowedConflicts[ConflictTypes.Political];
         if(provideConflictDeclarationType && setConflictType !== provideConflictDeclarationType) {
             setConflictType = undefined;
         }
@@ -476,16 +512,18 @@ class Player extends GameObject {
             } else {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictTypes.Military];
             }
-            const availableAll = baselineAvailableConflicts + this.getEffects(EffectNames.AdditionalConflict).length - declaredConflictsOfOtherType;
+            const availableAll =
+                baselineAvailableConflicts +
+                this.getEffects(EffectNames.AdditionalConflict).length -
+                declaredConflictsOfOtherType;
             if(type === provideConflictDeclarationType) {
                 return availableAll;
             }
             const maxType = this.defaultAllowedConflicts[type] + additionalConflictsForType;
             const declaredType = this.declaredConflictOpportunities[type];
-            return Math.min((maxType - declaredType), availableAll);
+            return Math.min(maxType - declaredType, availableAll);
         }
         return this.defaultAllowedConflicts[type] + additionalConflictsForType;
-
     }
 
     /**
@@ -493,8 +531,17 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getProvinces(predicate = () => true) {
-        return this.game.getProvinceArray().reduce((array, location) =>
-            array.concat(this.getSourceList(location).filter(card => card.type === CardTypes.Province && predicate(card))), []);
+        return this.game
+            .getProvinceArray()
+            .reduce(
+                (array, location) =>
+                    array.concat(
+                        this.getSourceList(location).filter(
+                            (card) => card.type === CardTypes.Province && predicate(card)
+                        )
+                    ),
+                []
+            );
     }
 
     /**
@@ -502,7 +549,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFaceupProvinces(predicate = () => true) {
-        return this.getProvinces(card => card.isFaceup() && predicate(card)).length;
+        return this.getProvinces((card) => card.isFaceup() && predicate(card)).length;
     }
 
     /**
@@ -510,7 +557,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfOpponentsFaceupProvinces(predicate = () => true) {
-        return this.opponent && this.opponent.getNumberOfFaceupProvinces(predicate) || 0;
+        return (this.opponent && this.opponent.getNumberOfFaceupProvinces(predicate)) || 0;
     }
 
     /**
@@ -518,7 +565,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfFacedownProvinces(predicate = () => true) {
-        return this.getProvinces(card => card.isFacedown() && predicate(card)).length;
+        return this.getProvinces((card) => card.isFacedown() && predicate(card)).length;
     }
 
     /**
@@ -526,7 +573,7 @@ class Player extends GameObject {
      * @param {Function} predicate - format: (card) => return boolean, default: () => true
      * */
     getNumberOfOpponentsFacedownProvinces(predicate = () => true) {
-        return this.opponent && this.opponent.getNumberOfFacedownProvinces(predicate) || 0;
+        return (this.opponent && this.opponent.getNumberOfFacedownProvinces(predicate)) || 0;
     }
 
     /**
@@ -554,8 +601,17 @@ class Player extends GameObject {
      * Returns and array of holdings controlled by this player
      */
     getHoldingsInPlay() {
-        return this.game.getProvinceArray().reduce((array, province) =>
-            array.concat(this.getSourceList(province).filter(card => card.getType() === CardTypes.Holding && card.isFaceup())), []);
+        return this.game
+            .getProvinceArray()
+            .reduce(
+                (array, province) =>
+                    array.concat(
+                        this.getSourceList(province).filter(
+                            (card) => card.getType() === CardTypes.Holding && card.isFaceup()
+                        )
+                    ),
+                []
+            );
     }
 
     /**
@@ -564,21 +620,23 @@ class Player extends GameObject {
      * @param {String} playingType
      */
     isCardInPlayableLocation(card, playingType = null) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter((a) => a.player(this, card)).length > 0) {
             return true;
         }
 
-        return _.any(this.playableLocations, location =>
-            (!playingType || location.playingType === playingType) && location.contains(card));
+        return _.any(
+            this.playableLocations,
+            (location) => (!playingType || location.playingType === playingType) && location.contains(card)
+        );
     }
 
     findPlayType(card) {
-        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card)).length > 0) {
-            let effects = card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter(a => a.player(this, card));
+        if(card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter((a) => a.player(this, card)).length > 0) {
+            let effects = card.getEffects(EffectNames.CanPlayFromOutOfPlay).filter((a) => a.player(this, card));
             return effects[effects.length - 1].playType || PlayTypes.PlayFromHand;
         }
 
-        let location = this.playableLocations.find(location => location.contains(card));
+        let location = this.playableLocations.find((location) => location.contains(card));
         if(location) {
             return location.playingType;
         }
@@ -595,7 +653,7 @@ class Player extends GameObject {
             return undefined;
         }
 
-        return this.findCard(this.cardsInPlay, playCard => {
+        return this.findCard(this.cardsInPlay, (playCard) => {
             return playCard !== card && (playCard.id === card.id || playCard.name === card.name);
         });
     }
@@ -632,13 +690,18 @@ class Player extends GameObject {
         let discardPile = this.getSourceList(deck + ' discard pile');
         let action = GameActions.loseHonor({ amount: this.game.gameMode === GameModes.Skirmish ? 3 : 5 });
         if(action.canAffect(this, this.game.getFrameworkContext())) {
-            this.game.addMessage('{0}\'s {1} deck has run out of cards, so they lose {2} honor', this, deck, this.game.gameMode === GameModes.Skirmish ? 3 : 5);
+            this.game.addMessage(
+                '{0}\'s {1} deck has run out of cards, so they lose {2} honor',
+                this,
+                deck,
+                this.game.gameMode === GameModes.Skirmish ? 3 : 5
+            );
         } else {
             this.game.addMessage('{0}\'s {1} deck has run out of cards', this, deck);
         }
         action.resolve(this, this.game.getFrameworkContext());
         this.game.queueSimpleStep(() => {
-            discardPile.each(card => this.moveCard(card, deck + ' deck'));
+            discardPile.each((card) => this.moveCard(card, deck + ' deck'));
             if(deck === 'dynasty') {
                 this.shuffleDynastyDeck();
             } else {
@@ -747,7 +810,7 @@ class Player extends GameObject {
         this.conflictDeck = _(preparedDeck.conflictCards);
         this.dynastyDeck = _(preparedDeck.dynastyCards);
         this.preparedDeck = preparedDeck;
-        this.conflictDeck.each(card => {
+        this.conflictDeck.each((card) => {
             // register event reactions in case event-in-deck bluff window is enabled
             if(card.type === CardTypes.Event) {
                 for(let reaction of card.abilities.reactions) {
@@ -794,7 +857,7 @@ class Player extends GameObject {
     removeCostReducer(reducer) {
         if(_.contains(this.costReducers, reducer)) {
             reducer.unregisterEvents();
-            this.costReducers = _.reject(this.costReducers, r => r === reducer);
+            this.costReducers = _.reject(this.costReducers, (r) => r === reducer);
         }
     }
 
@@ -808,31 +871,38 @@ class Player extends GameObject {
     }
 
     removePlayableLocation(location) {
-        this.playableLocations = _.reject(this.playableLocations, l => l === location);
+        this.playableLocations = _.reject(this.playableLocations, (l) => l === location);
     }
 
     getAlternateFatePools(playingType, card, context) {
         let effects = this.getEffects(EffectNames.AlternateFatePool);
-        let alternateFatePools = effects.filter(match => match(card) && match(card).getFate() > 0).map(match => match(card));
+        let alternateFatePools = effects
+            .filter((match) => match(card) && match(card).getFate() > 0)
+            .map((match) => match(card));
 
         if(context && context.source && context.source.isTemptationsMaho()) {
-            alternateFatePools.push(...this.cardsInPlay.filter(a => a.type === 'character'));
+            alternateFatePools.push(...this.cardsInPlay.filter((a) => a.type === 'character'));
         }
         if(context && context.source && context.source.isTemptationsMaho()) {
-            alternateFatePools = alternateFatePools.filter(a => a.printedType !== 'ring' && a.type === CardTypes.Character);
+            alternateFatePools = alternateFatePools.filter(
+                (a) => a.printedType !== 'ring' && a.type === CardTypes.Character
+            );
         }
 
-        let rings = alternateFatePools.filter(a => a.printedType === 'ring');
-        let cards = alternateFatePools.filter(a => a.printedType !== 'ring');
-        if((!this.checkRestrictions('takeFateFromRings', context)) || (context && context.source && context.source.isTemptationsMaho())) {
-            rings.forEach(ring => {
-                alternateFatePools = alternateFatePools.filter(a => a !== ring);
+        let rings = alternateFatePools.filter((a) => a.printedType === 'ring');
+        let cards = alternateFatePools.filter((a) => a.printedType !== 'ring');
+        if(
+            !this.checkRestrictions('takeFateFromRings', context) ||
+            (context && context.source && context.source.isTemptationsMaho())
+        ) {
+            rings.forEach((ring) => {
+                alternateFatePools = alternateFatePools.filter((a) => a !== ring);
             });
         }
 
-        cards.forEach(card => {
+        cards.forEach((card) => {
             if(!card.allowGameAction('removeFate') && card.type !== CardTypes.Attachment) {
-                alternateFatePools = alternateFatePools.filter(a => a !== card);
+                alternateFatePools = alternateFatePools.filter((a) => a !== card);
             }
         });
 
@@ -848,8 +918,16 @@ class Player extends GameObject {
         let fakeWindow = { addChoice: () => triggeredCostReducers++ };
         let fakeEvent = this.game.getEvent(EventNames.OnCardPlayed, { card: card, player: this, context: context });
         this.game.emit(EventNames.OnCardPlayed + ':' + AbilityTypes.Interrupt, fakeEvent, fakeWindow);
-        let fakeResolverEvent = this.game.getEvent(EventNames.OnAbilityResolverInitiated, { card: card, player: this, context: context });
-        this.game.emit(EventNames.OnAbilityResolverInitiated + ':' + AbilityTypes.Interrupt, fakeResolverEvent, fakeWindow);
+        let fakeResolverEvent = this.game.getEvent(EventNames.OnAbilityResolverInitiated, {
+            card: card,
+            player: this,
+            context: context
+        });
+        this.game.emit(
+            EventNames.OnAbilityResolverInitiated + ':' + AbilityTypes.Interrupt,
+            fakeResolverEvent,
+            fakeWindow
+        );
         return Math.max(reducedCost - triggeredCostReducers - alternateFate, 0);
     }
 
@@ -860,20 +938,28 @@ class Player extends GameObject {
      * @param target BaseCard
      */
     getReducedCost(playingType, card, target, ignoreType = false) {
-        var matchingReducers = this.costReducers.filter(reducer => reducer.canReduce(playingType, card, target, ignoreType));
-        var costIncreases = matchingReducers.filter(a => a.getAmount(card, this) < 0).reduce((cost, reducer) => cost - reducer.getAmount(card, this), 0);
-        var costDecreases = matchingReducers.filter(a => a.getAmount(card, this) > 0).reduce((cost, reducer) => cost + reducer.getAmount(card, this), 0);
+        var matchingReducers = this.costReducers.filter((reducer) =>
+            reducer.canReduce(playingType, card, target, ignoreType)
+        );
+        var costIncreases = matchingReducers
+            .filter((a) => a.getAmount(card, this) < 0)
+            .reduce((cost, reducer) => cost - reducer.getAmount(card, this), 0);
+        var costDecreases = matchingReducers
+            .filter((a) => a.getAmount(card, this) > 0)
+            .reduce((cost, reducer) => cost + reducer.getAmount(card, this), 0);
 
         var baseCost = card.getCost() + costIncreases;
         var reducedCost = baseCost - costDecreases;
 
-        var costFloor = Math.min(baseCost, Math.max(...matchingReducers.map(a => a.costFloor)));
+        var costFloor = Math.min(baseCost, Math.max(...matchingReducers.map((a) => a.costFloor)));
         return Math.max(reducedCost, costFloor);
     }
 
     getTotalCostModifiers(playingType, card, target, ignoreType = false) {
         var baseCost = 0;
-        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target, ignoreType));
+        var matchingReducers = _.filter(this.costReducers, (reducer) =>
+            reducer.canReduce(playingType, card, target, ignoreType)
+        );
         var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card, this), baseCost);
         return reducedCost;
     }
@@ -933,8 +1019,8 @@ class Player extends GameObject {
      * @param target BaseCard
      */
     markUsedReducers(playingType, card, target = null) {
-        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card, target));
-        _.each(matchingReducers, reducer => {
+        var matchingReducers = _.filter(this.costReducers, (reducer) => reducer.canReduce(playingType, card, target));
+        _.each(matchingReducers, (reducer) => {
             reducer.markUsed();
             if(reducer.isExpired()) {
                 this.removeCostReducer(reducer);
@@ -992,7 +1078,7 @@ class Player extends GameObject {
 
         this.resetConflictOpportunities();
 
-        this.cardsInPlay.each(card => {
+        this.cardsInPlay.each((card) => {
             card.new = false;
         });
         this.passedDynasty = false;
@@ -1051,12 +1137,16 @@ class Player extends GameObject {
             case Locations.ProvinceDeck:
                 return this.provinceDeck;
             case Locations.Provinces:
-                return _(this.provinceOne.value().concat(
-                    this.provinceTwo.value(),
-                    this.provinceThree.value(),
-                    this.provinceFour.value(),
-                    this.strongholdProvince.value()
-                ));
+                return _(
+                    this.provinceOne
+                        .value()
+                        .concat(
+                            this.provinceTwo.value(),
+                            this.provinceThree.value(),
+                            this.provinceFour.value(),
+                            this.strongholdProvince.value()
+                        )
+                );
             case Locations.UnderneathStronghold:
                 return this.underneathStronghold;
             default:
@@ -1140,17 +1230,34 @@ class Player extends GameObject {
         var card = this.findCardByUuid(sourceList, cardId);
 
         // Dragging is only legal in manual mode, when the card is currently in source, when the source and target are different and when the target is a legal location
-        if(!this.game.manualMode || source === target || !this.isLegalLocationForCard(card, target) || card.location !== source) {
+        if(
+            !this.game.manualMode ||
+            source === target ||
+            !this.isLegalLocationForCard(card, target) ||
+            card.location !== source
+        ) {
             return;
         }
 
         // Don't allow two province cards in one province
-        if(card.isProvince && target !== Locations.ProvinceDeck && this.getSourceList(target).any(card => card.isProvince)) {
+        if(
+            card.isProvince &&
+            target !== Locations.ProvinceDeck &&
+            this.getSourceList(target).any((card) => card.isProvince)
+        ) {
             return;
         }
 
         let display = 'a card';
-        if(card.isFaceup() && source !== Locations.Hand || [Locations.PlayArea, Locations.DynastyDiscardPile, Locations.ConflictDiscardPile, Locations.RemovedFromGame].includes(target)) {
+        if(
+            (card.isFaceup() && source !== Locations.Hand) ||
+            [
+                Locations.PlayArea,
+                Locations.DynastyDiscardPile,
+                Locations.ConflictDiscardPile,
+                Locations.RemovedFromGame
+            ].includes(target)
+        ) {
             display = card;
         }
 
@@ -1174,8 +1281,20 @@ class Player extends GameObject {
             return true;
         }
 
-        const conflictCardLocations = [...this.game.getProvinceArray(), Locations.Hand, Locations.ConflictDeck, Locations.ConflictDiscardPile, Locations.RemovedFromGame];
-        const dynastyCardLocations = [...this.game.getProvinceArray(), Locations.DynastyDeck, Locations.DynastyDiscardPile, Locations.RemovedFromGame, Locations.UnderneathStronghold];
+        const conflictCardLocations = [
+            ...this.game.getProvinceArray(),
+            Locations.Hand,
+            Locations.ConflictDeck,
+            Locations.ConflictDiscardPile,
+            Locations.RemovedFromGame
+        ];
+        const dynastyCardLocations = [
+            ...this.game.getProvinceArray(),
+            Locations.DynastyDeck,
+            Locations.DynastyDiscardPile,
+            Locations.RemovedFromGame,
+            Locations.UnderneathStronghold
+        ];
         const legalLocations = {
             stronghold: [Locations.StrongholdProvince],
             role: [Locations.Role],
@@ -1224,7 +1343,7 @@ class Player extends GameObject {
     }
 
     resetForConflict() {
-        this.cardsInPlay.each(card => {
+        this.cardsInPlay.each((card) => {
             card.resetForConflict();
         });
     }
@@ -1243,9 +1362,9 @@ class Player extends GameObject {
 
     honorGained(round = null, phase = null, onlyPositive = false) {
         return this.honorEvents
-            .filter(event => !round || event.round === round)
-            .filter(event => !phase || event.phase === phase)
-            .filter(event => !onlyPositive || event.amount > 0)
+            .filter((event) => !round || event.round === round)
+            .filter((event) => !phase || event.phase === phase)
+            .filter((event) => !onlyPositive || event.amount > 0)
             .reduce((total, event) => total + event.amount, 0);
     }
 
@@ -1264,7 +1383,7 @@ class Player extends GameObject {
 
     resetHonorEvents(round, phase) {
         // in case a phase is restarded during the same round, reset honor tracking of that phase.
-        this.honorEvents = this.honorEvents.filter(event => event.round !== round && event.phase !== phase);
+        this.honorEvents = this.honorEvents.filter((event) => event.round !== round && event.phase !== phase);
     }
 
     isMoreHonorable() {
@@ -1274,7 +1393,7 @@ class Player extends GameObject {
         if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
             return true;
         }
-        return this.opponent && (this.honor > this.opponent.honor);
+        return this.opponent && this.honor > this.opponent.honor;
     }
 
     isLessHonorable() {
@@ -1284,18 +1403,21 @@ class Player extends GameObject {
         if(this.opponent && this.opponent.anyEffect(EffectNames.ConsideredLessHonorable)) {
             return false;
         }
-        return this.opponent && (this.honor < this.opponent.honor);
+        return this.opponent && this.honor < this.opponent.honor;
     }
 
     /**
      * Returns an Array of Rings of all rings claimed by this player
      */
     getClaimedRings() {
-        return _.filter(this.game.rings, ring => ring.isConsideredClaimed(this));
+        return _.filter(this.game.rings, (ring) => ring.isConsideredClaimed(this));
     }
 
     getGloryCount() {
-        return this.cardsInPlay.reduce((total, card) => total + card.getContributionToImperialFavor(), this.getClaimedRings().length + this.gloryModifier);
+        return this.cardsInPlay.reduce(
+            (total, card) => total + card.getContributionToImperialFavor(),
+            this.getClaimedRings().length + this.gloryModifier
+        );
     }
 
     /**
@@ -1368,13 +1490,18 @@ class Player extends GameObject {
 
         var targetPile = this.getSourceList(targetLocation);
 
-        if(!this.isLegalLocationForCard(card, targetLocation) || targetPile && targetPile.contains(card)) {
+        if(!this.isLegalLocationForCard(card, targetLocation) || (targetPile && targetPile.contains(card))) {
             return;
         }
 
         let location = card.location;
 
-        if(location === Locations.PlayArea || (card.type === CardTypes.Holding && card.isInProvince() && !this.game.getProvinceArray().includes(targetLocation))) {
+        if(
+            location === Locations.PlayArea ||
+            (card.type === CardTypes.Holding &&
+                card.isInProvince() &&
+                !this.game.getProvinceArray().includes(targetLocation))
+        ) {
             if(card.owner !== this) {
                 card.owner.moveCard(card, targetLocation, options);
                 return;
@@ -1382,10 +1509,13 @@ class Player extends GameObject {
 
             // In normal play, all attachments should already have been removed, but in manual play we may need to remove them.
             // This is also used by Back-Alley Hideaway when it is sacrificed. This won't trigger any leaves play effects
-            card.attachments.each(attachment => {
+            for(const attachment of card.attachments) {
                 attachment.leavesPlay(targetLocation);
-                attachment.owner.moveCard(attachment, attachment.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
-            });
+                attachment.owner.moveCard(
+                    attachment,
+                    attachment.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile
+                );
+            }
 
             card.leavesPlay(targetLocation);
             card.controller = this;
@@ -1416,7 +1546,11 @@ class Player extends GameObject {
             targetPile.push(card);
         } else if([Locations.ConflictDeck, Locations.DynastyDeck].includes(targetLocation) && !options.bottom) {
             targetPile.unshift(card);
-        } else if([Locations.ConflictDiscardPile, Locations.DynastyDiscardPile, Locations.RemovedFromGame].includes(targetLocation)) {
+        } else if(
+            [Locations.ConflictDiscardPile, Locations.DynastyDiscardPile, Locations.RemovedFromGame].includes(
+                targetLocation
+            )
+        ) {
             // new cards go on the top of the discard pile
             targetPile.unshift(card);
         } else if(targetPile) {
@@ -1499,16 +1633,16 @@ class Player extends GameObject {
     }
 
     getSummaryForCardList(list, activePlayer, hideWhenFaceup) {
-        return list.map(card => {
+        return list.map((card) => {
             return card.getSummary(activePlayer, hideWhenFaceup);
         });
     }
 
     getSortedSummaryForCardList(list, activePlayer, hideWhenFaceup) {
-        let cards = list.map(card => card);
+        let cards = list.map((card) => card);
         cards.sort((a, b) => a.printedName.localeCompare(b.printedName));
 
-        return cards.map(card => {
+        return cards.map((card) => {
             return card.getSummary(activePlayer, hideWhenFaceup);
         });
     }
@@ -1558,17 +1692,24 @@ class Player extends GameObject {
         }
 
         if(activePlayer === this) {
-            return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self);
+            return (
+                this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) ||
+                this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Self)
+            );
         }
 
-        return this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) || this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent);
+        return (
+            this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Any) ||
+            this.getEffects(EffectNames.ShowTopConflictCard).includes(Players.Opponent)
+        );
     }
 
     eventsCannotBeCancelled() {
         return this.anyEffect(EffectNames.EventsCannotBeCancelled);
     }
 
-    isTopDynastyCardShown(activePlayer = undefined) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    isTopDynastyCardShown(activePlayer = undefined) {
         if(this.dynastyDeck.size() <= 0) {
             return false;
         }
@@ -1599,7 +1740,12 @@ class Player extends GameObject {
     }
 
     isKihoPlayedThisConflict(context, cardBeingPlayed) {
-        return context.game.currentConflict.getNumberOfCardsPlayed(this, card => (card.hasTrait('kiho') && card.uuid !== cardBeingPlayed.uuid)) > 0;
+        return (
+            context.game.currentConflict.getNumberOfCardsPlayed(
+                this,
+                (card) => card.hasTrait('kiho') && card.uuid !== cardBeingPlayed.uuid
+            ) > 0
+        );
     }
 
     getStats() {
@@ -1628,7 +1774,9 @@ class Player extends GameObject {
                 removedFromGame: this.getSummaryForCardList(this.removedFromGame, activePlayer),
                 provinceDeck: this.getSummaryForCardList(this.provinceDeck, activePlayer, true)
             },
-            cardsPlayedThisConflict: this.game.currentConflict ? this.game.currentConflict.getNumberOfCardsPlayed(this) : NaN,
+            cardsPlayedThisConflict: this.game.currentConflict
+                ? this.game.currentConflict.getNumberOfCardsPlayed(this)
+                : NaN,
             disconnected: this.disconnected,
             faction: this.faction,
             firstPlayer: this.firstPlayer,
@@ -1657,7 +1805,7 @@ class Player extends GameObject {
         };
 
         if(this.additionalPiles && Object.keys(this.additionalPiles)) {
-            Object.keys(this.additionalPiles).forEach(key => {
+            Object.keys(this.additionalPiles).forEach((key) => {
                 if(this.additionalPiles[key].cards.size() > 0) {
                     state.cardPiles[key] = this.getSummaryForCardList(this.additionalPiles[key].cards, activePlayer);
                 }

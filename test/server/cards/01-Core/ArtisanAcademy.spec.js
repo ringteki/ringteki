@@ -1,6 +1,6 @@
-describe('Artisan Academy', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Artisan Academy', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -12,26 +12,26 @@ describe('Artisan Academy', function() {
             this.artisanAcademy = this.player1.placeCardInProvince('artisan-academy', 'province 1');
         });
 
-        describe('Before activating Artisan Academy', function() {
-            it('should have the top card facedown', function() {
+        describe('Before activating Artisan Academy', function () {
+            it('should have the top card facedown', function () {
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
         });
 
-        describe('When activating Artisan Academy', function() {
-            it('should turn the top card face up', function() {
+        describe('When activating Artisan Academy', function () {
+            it('should turn the top card face up', function () {
                 this.player1.clickCard(this.artisanAcademy);
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);
             });
 
-            it('should add a playable location', function() {
+            it('should add a playable location', function () {
                 this.player1.clickCard(this.artisanAcademy);
                 expect(this.player1.player.playableLocations.length).toBe(7); //stronghold became a playable location by default
             });
 
-            it('should make the top card playable if it\'s an attachment', function() {
+            it('should make the top card playable if it\'s an attachment', function () {
                 this.ornateFan = this.player1.moveCard('ornate-fan', 'conflict deck');
                 expect(this.player1.player.conflictDeck.first()).toBe(this.ornateFan);
                 this.player1.clickCard(this.artisanAcademy);
@@ -40,10 +40,10 @@ describe('Artisan Academy', function() {
                 expect(this.player1).toHavePrompt('Choose a card');
 
                 this.dojiWhisperer = this.player1.clickCard('doji-whisperer');
-                expect(this.dojiWhisperer.attachments.toArray()).toContain(this.ornateFan);
+                expect(this.dojiWhisperer.attachments).toContain(this.ornateFan);
             });
 
-            it('should make the top card playable if it\'s a character', function() {
+            it('should make the top card playable if it\'s a character', function () {
                 this.steward = this.player1.moveCard('steward-of-law', 'conflict deck');
                 this.player1.clickCard(this.artisanAcademy);
                 this.player2.clickPrompt('Pass');
@@ -54,7 +54,7 @@ describe('Artisan Academy', function() {
                 expect(this.steward.location).toBe('play area');
             });
 
-            it('should stop the top card being visible once it has been played', function() {
+            it('should stop the top card being visible once it has been played', function () {
                 this.ornateFan = this.player1.moveCard('ornate-fan', 'conflict deck');
                 expect(this.player1.player.conflictDeck.first()).toBe(this.ornateFan);
                 this.player1.clickCard(this.artisanAcademy);
@@ -63,12 +63,12 @@ describe('Artisan Academy', function() {
                 expect(this.player1).toHavePrompt('Choose a card');
 
                 this.dojiWhisperer = this.player1.clickCard('doji-whisperer');
-                expect(this.dojiWhisperer.attachments.toArray()).toContain(this.ornateFan);
+                expect(this.dojiWhisperer.attachments).toContain(this.ornateFan);
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(false);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
-            it('should stop the top card being visible if the deck is shuffled', function() {
+            it('should stop the top card being visible if the deck is shuffled', function () {
                 this.ornateFan = this.player1.moveCard('ornate-fan', 'conflict deck');
                 this.steward = this.player1.moveCard('steward-of-law', 'conflict deck');
                 expect(this.player1.player.conflictDeck.first()).toBe(this.steward);
@@ -83,7 +83,7 @@ describe('Artisan Academy', function() {
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
             });
 
-            it('should stop the top card being visible once the phase ends', function() {
+            it('should stop the top card being visible once the phase ends', function () {
                 this.player1.clickCard(this.artisanAcademy);
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(true);

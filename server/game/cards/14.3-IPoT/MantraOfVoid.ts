@@ -1,24 +1,28 @@
-const DrawCard = require('../../drawcard.js');
-const { CardTypes, Durations } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl');
+import { CardTypes, Durations } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
-class MantraOfVoid extends DrawCard {
+export default class MantraOfVoid extends DrawCard {
+    static id = 'mantra-of-void';
+
     setupCardAbilities() {
         this.reaction({
             title: 'Reduce the cost to attach to a monk by 1',
             when: {
-                onConflictDeclared: (event, context) => event.ring.hasElement('void') && event.conflict.attackingPlayer === context.player.opponent
+                onConflictDeclared: (event, context) =>
+                    event.ring.hasElement('void') && event.conflict.attackingPlayer === context.player.opponent
             },
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: card => card.hasTrait('monk') || card.attachments.any(card => card.hasTrait('monk')),
-                gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                cardCondition: (card) =>
+                    card.hasTrait('monk') || card.attachments.some((card) => card.hasTrait('monk')),
+                gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
                     targetController: context.player,
                     duration: Durations.UntilEndOfConflict,
                     effect: AbilityDsl.effects.reduceCost({
                         amount: 1,
                         cardType: CardTypes.Attachment,
-                        targetCondition: target => target === context.target
+                        targetCondition: (target) => target === context.target
                     })
                 }))
             },
@@ -27,7 +31,3 @@ class MantraOfVoid extends DrawCard {
         });
     }
 }
-
-MantraOfVoid.id = 'mantra-of-void';
-
-module.exports = MantraOfVoid;

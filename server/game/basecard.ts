@@ -23,13 +23,20 @@ import {
     Players
 } from './Constants';
 import { ElementSymbol } from './ElementSymbol';
-import { ActionProps, AttachmentConditionProps, PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces';
+import {
+    ActionProps,
+    AttachmentConditionProps,
+    PersistentEffectProps,
+    TriggeredAbilityProps,
+    TriggeredAbilityWhenProps
+} from './Interfaces';
 import { PlayAttachmentAction } from './PlayAttachmentAction.js';
 import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
 import { PlayCharacterAction } from './PlayCharacterAction.js';
 import { PlayDisguisedCharacterAction } from './PlayDisguisedCharacterAction';
 import { StatusToken } from './StatusToken';
 import Player from './player';
+import type DrawCard = require('./drawcard');
 
 const ValidKeywords = [
     'ancestral',
@@ -45,14 +52,12 @@ const ValidKeywords = [
 ];
 
 class BaseCard extends EffectSource {
-    owner: Player;
     controller: Player;
     game: Game;
-    cardData;
 
     id: string;
     printedName: string;
-    inConflict: boolean = false;
+    inConflict = false;
     type: CardTypes;
     facedown: boolean;
 
@@ -71,20 +76,22 @@ class BaseCard extends EffectSource {
     isDynasty: boolean = false;
     isStronghold: boolean = false;
 
-    constructor(owner: Player, cardData) {
+    attachments = [] as DrawCard[];
+    childCards = [] as DrawCard[];
+    statusTokens = [] as StatusToken[];
+
+    constructor(
+        public owner: Player,
+        public cardData: any
+    ) {
         super(owner.game);
-        this.owner = owner;
         this.controller = owner;
-        this.cardData = cardData;
 
         this.id = cardData.id;
         this.printedName = cardData.name;
         this.printedType = cardData.type;
         this.traits = cardData.traits || [];
         this.printedFaction = cardData.clan || cardData.faction;
-        this.attachments = _([]);
-        this.childCards = [];
-        this.statusTokens = [];
 
         this.setupCardAbilities(AbilityDsl);
         this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
@@ -279,8 +286,10 @@ class BaseCard extends EffectSource {
         this.triggeredAbility(AbilityTypes.ForcedInterrupt, properties);
     }
 
-    duelChallenge(properties: Omit<TriggeredAbilityProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
-        const newProperties: TriggeredAbilityProps = { 
+    duelChallenge(
+        properties: Omit<TriggeredAbilityProps, 'when'> & { duelCondition?: (duel, context) => boolean }
+    ): void {
+        const newProperties: TriggeredAbilityProps = {
             ...properties,
             when: {
                 onDuelChallenge: (event, context) => {
@@ -292,13 +301,15 @@ class BaseCard extends EffectSource {
                     const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
                     return !usedChallenge && conditionMet;
                 }
-            },
+            }
         };
         this.triggeredAbility(AbilityTypes.Reaction, newProperties);
     }
 
-    duelFocus(properties: Omit<TriggeredAbilityWhenProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
-        const newProperties: TriggeredAbilityWhenProps = { 
+    duelFocus(
+        properties: Omit<TriggeredAbilityWhenProps, 'when'> & { duelCondition?: (duel, context) => boolean }
+    ): void {
+        const newProperties: TriggeredAbilityWhenProps = {
             ...properties,
             when: {
                 onDuelFocus: (event, context) => {
@@ -310,13 +321,13 @@ class BaseCard extends EffectSource {
                     const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
                     return !usedChallenge && conditionMet;
                 }
-            },
+            }
         };
         this.triggeredAbility(AbilityTypes.Reaction, newProperties);
     }
 
-    duelStrike(properties: Omit<TriggeredAbilityProps, "when"> & { duelCondition?: (duel, context) => boolean }): void {
-        const newProperties: TriggeredAbilityProps = { 
+    duelStrike(properties: Omit<TriggeredAbilityProps, 'when'> & { duelCondition?: (duel, context) => boolean }): void {
+        const newProperties: TriggeredAbilityProps = {
             ...properties,
             when: {
                 onDuelStrike: (event, context) => {
@@ -328,7 +339,7 @@ class BaseCard extends EffectSource {
                     const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
                     return !usedChallenge && conditionMet;
                 }
-            },
+            }
         };
         this.triggeredAbility(AbilityTypes.Reaction, newProperties);
     }
@@ -1071,7 +1082,7 @@ class BaseCard extends EffectSource {
      * @param {DrawCard} attachment
      */
     removeAttachment(attachment) {
-        this.attachments = _(this.attachments.reject((card) => card.uuid === attachment.uuid));
+        this.attachments = this.attachments.filter((card) => card.uuid !== attachment.uuid);
     }
 
     addChildCard(card, location) {

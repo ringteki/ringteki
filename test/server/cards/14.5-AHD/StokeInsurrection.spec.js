@@ -1,12 +1,22 @@
-describe('Stoke Insurrection', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Stoke Insurrection', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['expert-interpreter', 'seeker-of-knowledge', 'fushicho', 'tainted-hero', 'ikoma-ujiaki'],
                     hand: ['charge', 'forebearer-s-echoes', 'young-harrier', 'shosuro-miyako-2'],
-                    dynastyDiscard: ['isawa-ujina', 'akodo-toturi', 'daidoji-kageyu', 'imperial-storehouse', 'iron-mine', 'favorable-ground', 'city-of-lies', 'moto-youth', 'eager-scout']
+                    dynastyDiscard: [
+                        'isawa-ujina',
+                        'akodo-toturi',
+                        'daidoji-kageyu',
+                        'imperial-storehouse',
+                        'iron-mine',
+                        'favorable-ground',
+                        'city-of-lies',
+                        'moto-youth',
+                        'eager-scout'
+                    ]
                 },
                 player2: {
                     honor: 11,
@@ -31,7 +41,6 @@ describe('Stoke Insurrection', function() {
             this.fushicho = this.player1.placeCardInProvince('fushicho', 'province 4');
             this.youth = this.player1.findCardByName('moto-youth');
             this.scout = this.player1.findCardByName('eager-scout');
-
 
             this.insurrection = this.player2.findCardByName('stoke-insurrection');
             this.jade = this.player2.findCardByName('finger-of-jade');
@@ -63,13 +72,13 @@ describe('Stoke Insurrection', function() {
             });
         });
 
-        it('should cost 2 if your opponent has 4 or more facedown cards', function() {
+        it('should cost 2 if your opponent has 4 or more facedown cards', function () {
             let fate = this.player2.fate;
             this.player2.clickCard(this.insurrection);
             expect(this.player2.fate).toBe(fate - 2);
         });
 
-        it('should cost 4 if your opponent has 4 or more facedown cards', function() {
+        it('should cost 4 if your opponent has 4 or more facedown cards', function () {
             let fate = this.player2.fate;
             this.ujina.facedown = false;
             this.game.checkGameState(true);
@@ -77,7 +86,7 @@ describe('Stoke Insurrection', function() {
             expect(this.player2.fate).toBe(fate - 4);
         });
 
-        it('should flip up all facedown cards in your opponent\'s provinces and not your own', function() {
+        it('should flip up all facedown cards in your opponent\'s provinces and not your own', function () {
             expect(this.ujina.facedown).toBe(true);
             expect(this.fushicho.facedown).toBe(true);
             expect(this.toturi.facedown).toBe(true);
@@ -92,7 +101,7 @@ describe('Stoke Insurrection', function() {
             expect(this.whisperer.facedown).toBe(true);
         });
 
-        it('should let you choose characters in your opponent\'s provinces', function() {
+        it('should let you choose characters in your opponent\'s provinces', function () {
             this.whisperer.facedown = false;
             this.player2.clickCard(this.insurrection);
             expect(this.player2).toHavePrompt('Choose up to two characters');
@@ -103,7 +112,7 @@ describe('Stoke Insurrection', function() {
             expect(this.player2).not.toBeAbleToSelect(this.whisperer);
         });
 
-        it('should let you choose up to 2 characters in your opponent\'s provinces (to a max cost of 6)', function() {
+        it('should let you choose up to 2 characters in your opponent\'s provinces (to a max cost of 6)', function () {
             this.player1.moveCard(this.youth, 'province 4');
             this.player1.moveCard(this.scout, 'province 4');
 
@@ -135,7 +144,7 @@ describe('Stoke Insurrection', function() {
             expect(this.player2.player.promptState.selectedCards).not.toContain(this.toturi);
         });
 
-        it('should put the characters into play', function() {
+        it('should put the characters into play', function () {
             this.player1.moveCard(this.youth, 'province 4');
             this.player2.clickCard(this.insurrection);
             this.player2.clickCard(this.ujina);
@@ -145,11 +154,15 @@ describe('Stoke Insurrection', function() {
             expect(this.game.currentConflict.defenders).toContain(this.ujina);
             expect(this.game.currentConflict.defenders).toContain(this.youth);
 
-            expect(this.getChatLogs(5)).toContain('player2 plays Stoke Insurrection to reveal player1\'s dynasty cards and put up to two of them into play');
-            expect(this.getChatLogs(5)).toContain('player2 puts Isawa Ujina and Moto Youth into play into the conflict');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Stoke Insurrection to reveal player1\'s dynasty cards and put up to two of them into play'
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player2 puts Isawa Ujina and Moto Youth into play into the conflict'
+            );
         });
 
-        it('you should control the characters', function() {
+        it('you should control the characters', function () {
             this.player2.clickCard(this.insurrection);
             this.player2.clickCard(this.ujina);
             this.player2.clickCard(this.fushicho);
@@ -159,10 +172,10 @@ describe('Stoke Insurrection', function() {
             this.player2.clickCard(this.jade);
             expect(this.player2).toBeAbleToSelect(this.ujina);
             this.player2.clickCard(this.ujina);
-            expect(this.ujina.attachments.toArray()).toContain(this.jade);
+            expect(this.ujina.attachments).toContain(this.jade);
         });
 
-        it('you should still control the characters after the conflict', function() {
+        it('you should still control the characters after the conflict', function () {
             this.player2.clickCard(this.insurrection);
             this.player2.clickCard(this.ujina);
             this.player2.clickPrompt('Done');
@@ -175,10 +188,10 @@ describe('Stoke Insurrection', function() {
             this.player2.clickCard(this.jade);
             expect(this.player2).toBeAbleToSelect(this.ujina);
             this.player2.clickCard(this.ujina);
-            expect(this.ujina.attachments.toArray()).toContain(this.jade);
+            expect(this.ujina.attachments).toContain(this.jade);
         });
 
-        it('should work without any facedown', function() {
+        it('should work without any facedown', function () {
             this.ujina.facedown = false;
             this.fushicho.facedown = false;
             this.toturi.facedown = false;
@@ -192,16 +205,16 @@ describe('Stoke Insurrection', function() {
             expect(this.player2).toBeAbleToSelect(this.toturi);
         });
 
-        it('should not work without any characters or facedown cards', function() {
+        it('should not work without any characters or facedown cards', function () {
             this.mine = this.player1.placeCardInProvince('iron-mine', 'province 1');
             this.ground = this.player1.placeCardInProvince('favorable-ground', 'province 3');
             this.lies = this.player1.placeCardInProvince('city-of-lies', 'province 4');
 
             let locations = ['province 1', 'province 2', 'province 3', 'province 4'];
 
-            locations.forEach(location => {
+            locations.forEach((location) => {
                 let cards = this.player1.player.getDynastyCardsInProvince(location);
-                cards.forEach(card => {
+                cards.forEach((card) => {
                     if(card.type !== 'holding') {
                         this.player1.moveCard(card, 'dynasty discard pile');
                     } else {
@@ -216,7 +229,7 @@ describe('Stoke Insurrection', function() {
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
-        it('should not work outside of a conflict', function() {
+        it('should not work outside of a conflict', function () {
             this.noMoreActions();
             this.player1.clickPrompt('No');
             this.player1.clickPrompt('Don\'t Resolve');
@@ -228,15 +241,21 @@ describe('Stoke Insurrection', function() {
     });
 });
 
-
-describe('Stoke Insurrection with Rally', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Stoke Insurrection with Rally', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['isawa-ujina'],
-                    dynastyDiscard: ['a-season-of-war', 'ikoma-tsanuri-2', 'fushicho', 'tainted-hero', 'ikoma-ujiaki', 'kakita-toshimoko']
+                    dynastyDiscard: [
+                        'a-season-of-war',
+                        'ikoma-tsanuri-2',
+                        'fushicho',
+                        'tainted-hero',
+                        'ikoma-ujiaki',
+                        'kakita-toshimoko'
+                    ]
                 },
                 player2: {
                     hand: ['stoke-insurrection']
@@ -269,7 +288,7 @@ describe('Stoke Insurrection with Rally', function() {
             });
         });
 
-        it('should trigger rally before character selection', function() {
+        it('should trigger rally before character selection', function () {
             expect(this.season.facedown).toBe(true);
             expect(this.fushicho.facedown).toBe(true);
             expect(this.tsanuri.facedown).toBe(true);

@@ -33,7 +33,7 @@ describe('Unhallow', function () {
             this.sd4.isBroken = true;
         });
 
-        it('should be able to played on an unbroken province you control', function() {
+        it('should be able to played on an unbroken province you control', function () {
             this.player1.pass();
             this.player2.clickCard(this.unhallow);
             expect(this.player2).toBeAbleToSelect(this.sd1);
@@ -48,7 +48,7 @@ describe('Unhallow', function () {
             expect(this.unhallow.parent).toBe(this.sd1);
         });
 
-        it('should discard if the province is broken', function() {
+        it('should discard if the province is broken', function () {
             this.player1.pass();
             this.player2.clickCard(this.unhallow);
             this.player2.clickCard(this.sd1);
@@ -66,10 +66,12 @@ describe('Unhallow', function () {
             this.noMoreActions();
             this.player1.clickPrompt('No');
             expect(this.unhallow.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('Unhallow is discarded from Shameful Display as it is no longer legally attached');
+            expect(this.getChatLogs(5)).toContain(
+                'Unhallow is discarded from Shameful Display as it is no longer legally attached'
+            );
         });
 
-        it('should give +3 strength', function() {
+        it('should give +3 strength', function () {
             let strength = this.sd1.getStrength();
             this.player1.pass();
             this.player2.clickCard(this.unhallow);
@@ -117,7 +119,9 @@ describe('Unhallow', function () {
                 defenders: [this.adept],
                 province: this.sd2
             });
-            expect(this.getChatLogs(10)).not.toContain('player2 loses 1 honor in order to declare defending characters');
+            expect(this.getChatLogs(10)).not.toContain(
+                'player2 loses 1 honor in order to declare defending characters'
+            );
 
             expect(this.player2.honor).toBe(honor);
         });
@@ -138,7 +142,9 @@ describe('Unhallow', function () {
                 defenders: [],
                 province: this.sd1
             });
-            expect(this.getChatLogs(10)).not.toContain('player2 loses 1 honor in order to declare defending characters');
+            expect(this.getChatLogs(10)).not.toContain(
+                'player2 loses 1 honor in order to declare defending characters'
+            );
 
             expect(this.player2.honor).toBe(honor);
         });
@@ -160,9 +166,9 @@ describe('Unhallow', function () {
             this.player2.clickCard(this.adept);
             this.player2.clickPrompt('1');
 
-            expect(this.sd1.attachments.toArray()).toContain(this.unhallow);
-            expect(this.sd1.attachments.toArray()).toContain(this.unhallow2);
-            expect(this.sd1.attachments.toArray()).toContain(this.unhallow3);
+            expect(this.sd1.attachments).toContain(this.unhallow);
+            expect(this.sd1.attachments).toContain(this.unhallow2);
+            expect(this.sd1.attachments).toContain(this.unhallow3);
 
             let honor = this.player2.honor;
 

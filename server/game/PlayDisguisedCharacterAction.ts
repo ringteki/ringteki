@@ -63,7 +63,10 @@ export enum PlayDisguisedCharacterIntoLocation {
 export class PlayDisguisedCharacterAction extends BaseAction {
     public title = 'Play this character with Disguise';
 
-    constructor(card: BaseCard, private intoLocation = PlayDisguisedCharacterIntoLocation.Any) {
+    constructor(
+        card: BaseCard,
+        private intoLocation = PlayDisguisedCharacterIntoLocation.Any
+    ) {
         super(card, [ChooseDisguisedCharacterCost(intoLocation), new DisguisedReduceableFateCost(false)]);
     }
 
@@ -151,7 +154,7 @@ export class PlayDisguisedCharacterAction extends BaseAction {
                             amount: replacedCharacter.fate
                         })
                         .addEventsToArray(moveEvents, context);
-                    for (const attachment of replacedCharacter.attachments.toArray()) {
+                    for (const attachment of replacedCharacter.attachments) {
                         context.game.actions
                             .attach({ target: context.source, attachment: attachment, viaDisguised: true })
                             .addEventsToArray(moveEvents, context);

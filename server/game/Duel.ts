@@ -10,9 +10,9 @@ import type Player from './player';
  * Used to track whether a player has played a specific type of duel effect yet
  */
 export interface DuelAbilities {
-    challenge: boolean,
-    focus: boolean,
-    strike: boolean,
+    challenge: boolean;
+    focus: boolean;
+    strike: boolean;
 }
 
 enum DuelParticipants {
@@ -96,7 +96,7 @@ export class Duel extends GameObject {
             this.#setLoser(DuelParticipants.Target);
         } else {
             const challengerStats = this.#getStatsTotal([this.challenger]);
-            const targetStats = this.#getStatsTotal(this.targets);    
+            const targetStats = this.#getStatsTotal(this.targets);
             if (challengerStats === InvalidStats) {
                 if (targetStats !== InvalidStats && targetStats > 0) {
                     // Challenger dead, target alive
@@ -156,26 +156,28 @@ export class Duel extends GameObject {
         let baseStatistic = 0;
         let effectModifier = 0;
 
-        rawEffects.forEach(effect => {
+        rawEffects.forEach((effect) => {
             const props = effect.getValue();
             if (props.duel === this) {
                 effectModifier += props.value;
             }
-        })
+        });
 
         if (this.statistic) {
             baseStatistic = this.statistic(card);
         } else {
             switch (this.duelType) {
                 case DuelTypes.Military:
-                    baseStatistic = this.gameModeOpts.duelRules === 'printedSkill'
-                        ? card.printedMilitarySkill
-                        : card.getMilitarySkill();
+                    baseStatistic =
+                        this.gameModeOpts.duelRules === 'printedSkill'
+                            ? card.printedMilitarySkill
+                            : card.getMilitarySkill();
                     break;
                 case DuelTypes.Political:
-                    baseStatistic = this.gameModeOpts.duelRules === 'printedSkill'
-                        ? card.printedPoliticalSkill
-                        : card.getPoliticalSkill();
+                    baseStatistic =
+                        this.gameModeOpts.duelRules === 'printedSkill'
+                            ? card.printedPoliticalSkill
+                            : card.getPoliticalSkill();
                     break;
                 case DuelTypes.Glory:
                     baseStatistic = this.gameModeOpts.duelRules === 'printedSkill' ? card.printedGlory : card.glory;
@@ -255,7 +257,7 @@ export class Duel extends GameObject {
 
         const difference = Math.abs(
             (challengerStats === InvalidStats ? 0 : challengerStats2) -
-            (targetStats === InvalidStats ? 0 : targetStats2)
+                (targetStats === InvalidStats ? 0 : targetStats2)
         );
 
         this.finalDifference = difference;
@@ -267,13 +269,13 @@ export class Duel extends GameObject {
             challenge: false,
             focus: false,
             strike: false
-        })
+        });
         if (challengingPlayer.opponent) {
             this.modifiers.set(challengingPlayer.opponent.id, {
                 challenge: false,
                 focus: false,
                 strike: false
-            })
+            });
         }
     }
 
@@ -284,7 +286,7 @@ export class Duel extends GameObject {
     onCardAbilityTriggered(_event: any) {
         const event = _event.context.event;
 
-        if (event.duel !== this) {
+        if (event?.duel !== this) {
             return;
         }
 

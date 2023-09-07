@@ -1,12 +1,18 @@
-describe('Calling the Storm', function() {
-    integration(function() {
+describe('Calling the Storm', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-kuwanan'],
                     hand: ['calling-the-storm', 'fine-katana', 'warm-welcome'],
-                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'a-new-name', 'ornate-fan', 'way-of-the-scorpion']
+                    conflictDiscard: [
+                        'voice-of-honor',
+                        'soul-beyond-reproach',
+                        'a-new-name',
+                        'ornate-fan',
+                        'way-of-the-scorpion'
+                    ]
                 },
                 player2: {
                     inPlay: ['kitsu-motso'],
@@ -78,7 +84,7 @@ describe('Calling the Storm', function() {
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.ann);
             this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.attachments.toArray()).toContain(this.ann);
+            expect(this.kuwanan.attachments).toContain(this.ann);
             expect(this.player2).toHavePrompt('Action Window');
         });
 
@@ -89,7 +95,7 @@ describe('Calling the Storm', function() {
             this.player2.pass();
             this.player1.clickCard(this.ann);
             this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.attachments.toArray()).toContain(this.ann);
+            expect(this.kuwanan.attachments).toContain(this.ann);
             expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
             expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
         });
@@ -98,7 +104,7 @@ describe('Calling the Storm', function() {
             this.player1.clickCard(this.storm);
             this.player2.clickCard(this.ann);
             this.player2.clickCard(this.motso);
-            expect(this.motso.attachments.toArray()).not.toContain(this.ann);
+            expect(this.motso.attachments).not.toContain(this.ann);
             expect(this.player2).toHavePrompt('Action Window');
         });
 
@@ -117,7 +123,7 @@ describe('Calling the Storm', function() {
 
             this.player1.clickCard(this.ann);
             this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.attachments.toArray()).toContain(this.ann);
+            expect(this.kuwanan.attachments).toContain(this.ann);
 
             expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
             expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -144,7 +150,7 @@ describe('Calling the Storm', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.fan);
             this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.attachments.toArray()).toContain(this.fan);
+            expect(this.kuwanan.attachments).toContain(this.fan);
         });
 
         it('should let you play cards that are put back into your deck', function () {
@@ -203,7 +209,7 @@ describe('Calling the Storm', function() {
 
                 this.player1.clickCard(this.ann);
                 this.player1.clickCard(this.kuwanan);
-                expect(this.kuwanan.attachments.toArray()).toContain(this.ann);
+                expect(this.kuwanan.attachments).toContain(this.ann);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -239,7 +245,7 @@ describe('Calling the Storm', function() {
 
                 this.player1.clickCard(this.ann);
                 this.player1.clickCard(this.kuwanan);
-                expect(this.kuwanan.attachments.toArray()).toContain(this.ann);
+                expect(this.kuwanan.attachments).toContain(this.ann);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -256,7 +262,9 @@ describe('Calling the Storm', function() {
             it('should work if your conflict deck is empty', function () {
                 this.player1.reduceDeckToNumber('conflict deck', 0);
                 this.player1.clickCard(this.storm);
-                expect(this.getChatLogs(5)).toContain('player1 plays Calling the Storm to play cards from their conflict deck this phase');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Calling the Storm to play cards from their conflict deck this phase'
+                );
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',

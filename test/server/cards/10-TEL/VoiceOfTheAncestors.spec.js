@@ -1,6 +1,6 @@
-describe('Voice of the Ancestors', function() {
-    integration(function() {
-        describe('Voice of the Ancestors\' ability', function() {
+describe('Voice of the Ancestors', function () {
+    integration(function () {
+        describe('Voice of the Ancestors\' ability', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
@@ -34,14 +34,14 @@ describe('Voice of the Ancestors', function() {
                 expect(this.player2).toHavePrompt('Action Window');
                 expect(this.matsuBerserker.type).toBe('attachment');
                 expect(this.matsuBerserker.location).toBe('play area');
-                expect(this.akodoToturi.attachments.toArray()).toContain(this.matsuBerserker);
+                expect(this.akodoToturi.attachments).toContain(this.matsuBerserker);
                 expect(this.matsuBerserker.hasTrait('bushi')).toBe(false);
                 expect(this.matsuBerserker.hasTrait('spirit')).toBe(true);
                 expect(this.player1.fate).toBe(4);
                 expect(this.akodoToturi.militarySkill).toBe(9);
             });
 
-            it('should play a character as a spirit, discarding other attached spirits', function() {
+            it('should play a character as a spirit, discarding other attached spirits', function () {
                 this.player1.clickCard(this.voiceOfTheAncestors);
                 expect(this.player1).toHavePrompt('Voice of the Ancestors');
                 expect(this.player1).toBeAbleToSelect(this.akodoToturi);
@@ -71,7 +71,7 @@ describe('Voice of the Ancestors', function() {
                 expect(this.player2).toHavePrompt('Action Window');
                 expect(this.matsuBerserker.type).toBe('character');
                 expect(this.matsuBerserker.location).toBe('dynasty discard pile');
-                expect(this.akodoToturi.attachments.toArray()).toContain(this.ashigaruLevy);
+                expect(this.akodoToturi.attachments).toContain(this.ashigaruLevy);
                 expect(this.matsuBerserker.hasTrait('bushi')).toBe(true);
                 expect(this.matsuBerserker.hasTrait('spirit')).toBe(false);
                 expect(this.ashigaruLevy.type).toBe('attachment');

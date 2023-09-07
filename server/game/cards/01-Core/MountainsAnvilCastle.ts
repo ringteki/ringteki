@@ -12,13 +12,13 @@ export default class MountainsAnvilCastle extends StrongholdCard {
             condition: () => Boolean(this.game.currentConflict),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating() && card.attachments.size() > 0,
+                cardCondition: (card) => card.isParticipating() && card.attachments.length > 0,
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    effect: AbilityDsl.effects.modifyBothSkills(Math.min(context.target.attachments.size(), 2))
+                    effect: AbilityDsl.effects.modifyBothSkills(Math.min(context.target.attachments.length, 2))
                 }))
             },
             effect: 'give {0} +{1}{2}/{1}{3}',
-            effectArgs: (context) => [Math.min(context.target.attachments.size(), 2), 'military', 'political']
+            effectArgs: (context) => [Math.min(context.target.attachments.length, 2), 'military', 'political']
         });
     }
 }

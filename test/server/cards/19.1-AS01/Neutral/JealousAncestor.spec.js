@@ -49,7 +49,7 @@ describe('Jealous Ancestor', function () {
                 this.player2.clickCard(this.jealousAncestor);
                 this.player2.clickPrompt('Play Jealous Ancestor as an attachment');
                 this.player2.clickCard(this.giftedTactician);
-                expect(this.giftedTactician.attachments.size()).toBe(1);
+                expect(this.giftedTactician.attachments.length).toBe(1);
             });
 
             it('should be treated as an attachment in play', function () {
@@ -112,7 +112,7 @@ describe('Jealous Ancestor', function () {
                 this.player1.clickCard(this.giftedTactician);
 
                 expect(this.player1).not.toHavePrompt('Choose any amount of attachments');
-                expect(this.giftedTactician.attachments.size()).toBe(1);
+                expect(this.giftedTactician.attachments.length).toBe(1);
             });
 
             it('adds Haunted trait to parent', function () {

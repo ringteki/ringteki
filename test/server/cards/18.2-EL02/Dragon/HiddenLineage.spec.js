@@ -1,11 +1,18 @@
-describe('Hidden Lineage', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Hidden Lineage', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['doji-kuwanan', 'doomed-shugenja'],
-                    hand: ['fine-katana', 'cloud-the-mind', 'finger-of-jade', 'height-of-fashion', 'force-of-the-river', 'hidden-lineage']
+                    hand: [
+                        'fine-katana',
+                        'cloud-the-mind',
+                        'finger-of-jade',
+                        'height-of-fashion',
+                        'force-of-the-river',
+                        'hidden-lineage'
+                    ]
                 },
                 player2: {
                     inPlay: ['iuchi-rimei', 'hida-kisada'],
@@ -40,7 +47,7 @@ describe('Hidden Lineage', function() {
             this.player2.playAttachment(this.jade2, this.kisada);
         });
 
-        it('should only allow targeting an attachment on a character you control', function() {
+        it('should only allow targeting an attachment on a character you control', function () {
             this.player1.clickCard(this.lineage);
             expect(this.player1).not.toBeAbleToSelect(this.cloud);
             expect(this.player1).toBeAbleToSelect(this.finger);
@@ -51,7 +58,7 @@ describe('Hidden Lineage', function() {
             expect(this.player1).toBeAbleToSelect(this.river);
         });
 
-        it('should allow moving the attachment to a character you control', function() {
+        it('should allow moving the attachment to a character you control', function () {
             this.player1.clickCard(this.lineage);
             this.player1.clickCard(this.fan);
             expect(this.player1).not.toBeAbleToSelect(this.rimei);
@@ -60,19 +67,23 @@ describe('Hidden Lineage', function() {
             expect(this.player1).not.toBeAbleToSelect(this.doomed);
 
             this.player1.clickCard(this.kuwanan);
-            expect(this.kuwanan.attachments.toArray()).toContain(this.fan);
-            expect(this.doomed.attachments.toArray()).not.toContain(this.fan);
+            expect(this.kuwanan.attachments).toContain(this.fan);
+            expect(this.doomed.attachments).not.toContain(this.fan);
 
-            expect(this.getChatLogs(2)).toContain('player1 plays Hidden Lineage to move Ornate Fan to another character they control');
+            expect(this.getChatLogs(2)).toContain(
+                'player1 plays Hidden Lineage to move Ornate Fan to another character they control'
+            );
             expect(this.getChatLogs(1)).toContain('player1 moves Ornate Fan to Doji Kuwanan');
         });
 
-        it('should discard newly illegal attachments', function() {
+        it('should discard newly illegal attachments', function () {
             this.player1.clickCard(this.lineage);
             this.player1.clickCard(this.river);
             this.player1.clickCard(this.kuwanan);
             expect(this.river.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(3)).toContain('player1 plays Hidden Lineage to move Force of the River to another character they control');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays Hidden Lineage to move Force of the River to another character they control'
+            );
             expect(this.getChatLogs(2)).toContain('player1 moves Force of the River to Doji Kuwanan');
         });
     });

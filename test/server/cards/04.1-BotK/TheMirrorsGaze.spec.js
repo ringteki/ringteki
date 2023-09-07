@@ -1,22 +1,36 @@
-describe('The Mirror\'s Gaze', function() {
-    integration(function() {
-        describe('The Mirror\'s Gaze\'s ability', function() {
-            beforeEach(function() {
+describe('The Mirror\'s Gaze', function () {
+    integration(function () {
+        describe('The Mirror\'s Gaze\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         honor: 11,
                         fate: 4,
                         inPlay: ['asahina-storyteller', 'brash-samurai', 'doji-whisperer'],
-                        hand: ['the-mirror-s-gaze', 'the-mirror-s-gaze', 'banzai', 'ready-for-battle', 'fine-katana', 'for-greater-glory'],
+                        hand: [
+                            'the-mirror-s-gaze',
+                            'the-mirror-s-gaze',
+                            'banzai',
+                            'ready-for-battle',
+                            'fine-katana',
+                            'for-greater-glory'
+                        ],
                         conflictDiscardPile: ['banzai']
                     },
                     player2: {
                         fate: 4,
                         inPlay: ['seppun-guardsman'],
                         hand: [
-                            'banzai', 'assassination', 'charge', 'forged-edict', 'the-mirror-s-gaze',
-                            'for-shame', 'the-path-of-man', 'tranquility', 'calling-in-favors'
+                            'banzai',
+                            'assassination',
+                            'charge',
+                            'forged-edict',
+                            'the-mirror-s-gaze',
+                            'for-shame',
+                            'the-path-of-man',
+                            'tranquility',
+                            'calling-in-favors'
                         ],
                         dynastyDeck: ['asako-tsuki', 'isawa-tadaka']
                     }
@@ -35,7 +49,7 @@ describe('The Mirror\'s Gaze', function() {
                 });
             });
 
-            it('should copy an opponent\'s event', function() {
+            it('should copy an opponent\'s event', function () {
                 this.player2.clickCard('banzai');
                 this.player2.clickCard(this.seppunGuardsman);
                 this.player2.clickPrompt('Done');
@@ -46,7 +60,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toBeAbleToSelect(this.brashSaumrai);
             });
 
-            it('shouldn\'t copy my event', function() {
+            it('shouldn\'t copy my event', function () {
                 this.player2.pass();
                 this.player1.clickCard('banzai');
                 this.player1.clickCard(this.brashSaumrai);
@@ -55,7 +69,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('should allow double resolutions from Banzai', function() {
+            it('should allow double resolutions from Banzai', function () {
                 this.player2.clickCard('banzai');
                 this.player2.clickCard(this.seppunGuardsman);
                 this.player2.clickPrompt('Done');
@@ -73,7 +87,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.brashSaumrai.militarySkill).toBe(6);
             });
 
-            it('shouldn\'t be stopped by Tadaka', function() {
+            it('shouldn\'t be stopped by Tadaka', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.isawaTadaka);
                 expect(this.isawaTadaka.location).toBe('play area');
@@ -91,7 +105,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toBeAbleToSelect(this.brashSaumrai);
             });
 
-            it('shouldn\'t trigger if its controller has already hit max', function() {
+            it('shouldn\'t trigger if its controller has already hit max', function () {
                 this.player2.pass();
                 this.player1.clickCard('banzai');
                 this.player1.clickCard(this.brashSaumrai);
@@ -103,7 +117,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should use its controller max for that ability', function() {
+            it('should use its controller max for that ability', function () {
                 this.player2.clickCard('banzai');
                 this.player2.clickCard(this.seppunGuardsman);
                 this.player2.clickPrompt('Done');
@@ -116,7 +130,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be counterable', function() {
+            it('should be counterable', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.asakoTsuki);
                 this.player1.pass();
@@ -138,7 +152,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.brashSaumrai.militarySkill).toBe(2);
             });
 
-            it('should work for actions when its controller doesn\'t meet the play restrictions', function() {
+            it('should work for actions when its controller doesn\'t meet the play restrictions', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.asakoTsuki);
                 this.player1.pass();
@@ -161,7 +175,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should work for reactions when its controller doesn\'t meet the triggering conditions', function() {
+            it('should work for reactions when its controller doesn\'t meet the triggering conditions', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.isawaTadaka);
                 this.player1.pass();
@@ -177,12 +191,12 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1.fate).toBe(4);
             });
 
-            it('should not work for actions which won\'t change the game state', function() {
+            it('should not work for actions which won\'t change the game state', function () {
                 this.player2.clickCard('tranquility');
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should not pay costs', function() {
+            it('should not pay costs', function () {
                 this.player2.clickCard('assassination');
                 this.player2.clickCard(this.brashSaumrai);
                 expect(this.brashSaumrai.location).toBe('dynasty discard pile');
@@ -194,7 +208,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1.honor).toBe(11);
             });
 
-            it('should be able to mirror a mirrored ability', function() {
+            it('should be able to mirror a mirrored ability', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.asakoTsuki);
                 expect(this.asakoTsuki.location).toBe('play area');
@@ -223,7 +237,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should trigger in the same window as other reactions to ability resolution', function() {
+            it('should trigger in the same window as other reactions to ability resolution', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.asakoTsuki);
                 expect(this.asakoTsuki.location).toBe('play area');
@@ -239,7 +253,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toBeAbleToSelect(this.mirrorGaze);
             });
 
-            it('should be able to use multiple mirrors on the same ability', function() {
+            it('should be able to use multiple mirrors on the same ability', function () {
                 this.player2.clickCard('charge');
                 this.player2.clickCard(this.asakoTsuki);
                 expect(this.asakoTsuki.location).toBe('play area');
@@ -272,14 +286,14 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be able to discard attachments when mirroring Calling in Favors', function() {
+            it('should be able to discard attachments when mirroring Calling in Favors', function () {
                 this.player2.pass();
                 this.fineKatana = this.player1.playAttachment('fine-katana', this.brashSaumrai);
                 this.player2.clickCard('calling-in-favors');
                 this.player2.clickCard(this.fineKatana);
                 this.player2.clickCard(this.seppunGuardsman);
                 expect(this.seppunGuardsman.isDishonored).toBe(true);
-                expect(this.seppunGuardsman.attachments.toArray()).toContain(this.fineKatana);
+                expect(this.seppunGuardsman.attachments).toContain(this.fineKatana);
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.mirrorGaze);
                 this.player1.clickCard(this.mirrorGaze);
@@ -290,7 +304,7 @@ describe('The Mirror\'s Gaze', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be able to copy For Greater Glory', function() {
+            it('should be able to copy For Greater Glory', function () {
                 this.player2.pass();
                 this.player1.clickCard('banzai');
                 this.player1.clickCard(this.brashSaumrai);
@@ -311,8 +325,8 @@ describe('The Mirror\'s Gaze', function() {
             });
         });
 
-        describe('Cards which can\'t be mirrored', function() {
-            beforeEach(function() {
+        describe('Cards which can\'t be mirrored', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -335,7 +349,7 @@ describe('The Mirror\'s Gaze', function() {
                 });
             });
 
-            it('should not get a prompt for mirror', function() {
+            it('should not get a prompt for mirror', function () {
                 this.brashSaumrai = this.player2.clickCard('brash-samurai');
                 expect(this.brashSaumrai.isHonored).toBe(true);
                 this.player1.clickCard('banzai');

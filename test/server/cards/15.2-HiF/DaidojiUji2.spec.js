@@ -1,12 +1,22 @@
-describe('Daidoji Uji 2', function() {
-    integration(function() {
-        describe('Daidoji Uji 2\'s reaction', function() {
-            beforeEach(function() {
+describe('Daidoji Uji 2', function () {
+    integration(function () {
+        describe('Daidoji Uji 2\'s reaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
                         dynastyDiscard: ['daidoji-uji-2'],
-                        conflictDiscard: ['assassination', 'let-go', 'a-new-name', 'voice-of-honor', 'ornate-fan', 'fine-katana', 'seal-of-the-crane', 'fine-katana', 'ready-for-battle'],
+                        conflictDiscard: [
+                            'assassination',
+                            'let-go',
+                            'a-new-name',
+                            'voice-of-honor',
+                            'ornate-fan',
+                            'fine-katana',
+                            'seal-of-the-crane',
+                            'fine-katana',
+                            'ready-for-battle'
+                        ],
                         hand: ['way-of-the-crane']
                     }
                 });
@@ -27,13 +37,13 @@ describe('Daidoji Uji 2', function() {
                 this.way = this.player1.findCardByName('way-of-the-crane');
             });
 
-            it('should trigger when played in dynasty', function() {
+            it('should trigger when played in dynasty', function () {
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('0');
                 expect(this.player1).toBeAbleToSelect(this.uji);
             });
 
-            it('should allow you to select cards from your conflict deck when triggered', function() {
+            it('should allow you to select cards from your conflict deck when triggered', function () {
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('0');
                 expect(this.player1).toBeAbleToSelect(this.uji);
@@ -51,7 +61,7 @@ describe('Daidoji Uji 2', function() {
                 expect(this.player1).toHavePromptButton('Take nothing');
             });
 
-            it('should let you select up to 4 cards', function() {
+            it('should let you select up to 4 cards', function () {
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.uji);
@@ -76,7 +86,7 @@ describe('Daidoji Uji 2', function() {
                 expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
             });
 
-            it('cards should be hidden to player2 and not player1', function() {
+            it('cards should be hidden to player2 and not player1', function () {
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.uji);
@@ -92,21 +102,31 @@ describe('Daidoji Uji 2', function() {
             });
         });
 
-        describe('Daidoji Uji 2\'s constant ability', function() {
-            beforeEach(function() {
+        describe('Daidoji Uji 2\'s constant ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         inPlay: ['brash-samurai'],
                         dynastyDiscard: ['daidoji-uji-2'],
-                        conflictDiscard: ['assassination', 'let-go', 'a-new-name', 'voice-of-honor', 'ornate-fan', 'fine-katana', 'seal-of-the-crane', 'fine-katana', 'ready-for-battle', 'defend-your-honor'],
+                        conflictDiscard: [
+                            'assassination',
+                            'let-go',
+                            'a-new-name',
+                            'voice-of-honor',
+                            'ornate-fan',
+                            'fine-katana',
+                            'seal-of-the-crane',
+                            'fine-katana',
+                            'ready-for-battle',
+                            'defend-your-honor'
+                        ],
                         hand: ['way-of-the-crane', 'charge']
                     },
                     player2: {
                         inPlay: ['solemn-scholar'],
                         hand: ['mirumoto-s-fury', 'cloud-the-mind', 'mark-of-shame', 'i-can-swim']
                     }
-
                 });
 
                 this.player1.player.showBid = 1;
@@ -145,14 +165,14 @@ describe('Daidoji Uji 2', function() {
                 });
             });
 
-            it('should trigger when put into play', function() {
+            it('should trigger when put into play', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
                 this.player1.clickCard(this.uji);
                 expect(this.player1).toBeAbleToSelect(this.uji);
             });
 
-            it('should not allow you to play cards from under Uji if he\'s not honored', function() {
+            it('should not allow you to play cards from under Uji if he\'s not honored', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
                 this.player1.clickCard(this.uji);
@@ -169,7 +189,7 @@ describe('Daidoji Uji 2', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should allow you to play cards from under Uji if he\'s honored', function() {
+            it('should allow you to play cards from under Uji if he\'s honored', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
                 this.player1.clickCard(this.uji);
@@ -189,11 +209,11 @@ describe('Daidoji Uji 2', function() {
                 this.player1.clickCard(this.katana);
                 expect(this.player1).toHavePrompt('Fine Katana');
                 this.player1.clickCard(this.uji);
-                expect(this.uji.attachments.toArray()).toContain(this.katana);
+                expect(this.uji.attachments).toContain(this.katana);
                 expect(this.player1.player.additionalPiles[this.uji.uuid].cards).not.toContain(this.katana);
             });
 
-            it('should allow you to play cards from under Uji if he\'s honored - reactions', function() {
+            it('should allow you to play cards from under Uji if he\'s honored - reactions', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
@@ -215,10 +235,12 @@ describe('Daidoji Uji 2', function() {
                 expect(this.player1).toBeAbleToSelect(this.readyForBattle);
                 this.player1.clickCard(this.readyForBattle);
                 expect(this.uji.bowed).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 plays Ready for Battle from their cards set aside by Daidoji Uji');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Ready for Battle from their cards set aside by Daidoji Uji'
+                );
             });
 
-            it('should allow you to play cards from under Uji if he\'s honored - interrupts', function() {
+            it('should allow you to play cards from under Uji if he\'s honored - interrupts', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
@@ -240,10 +262,12 @@ describe('Daidoji Uji 2', function() {
                 expect(this.player1).toBeAbleToSelect(this.voice);
                 this.player1.clickCard(this.voice);
                 expect(this.uji.bowed).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 plays Voice of Honor from their cards set aside by Daidoji Uji');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Voice of Honor from their cards set aside by Daidoji Uji'
+                );
             });
 
-            it('should not allow you to play cards from under Uji if he\'s blanked', function() {
+            it('should not allow you to play cards from under Uji if he\'s blanked', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
@@ -267,7 +291,7 @@ describe('Daidoji Uji 2', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.voice);
             });
 
-            it('should remove cards under Uji from the game if he leaves play', function() {
+            it('should remove cards under Uji from the game if he leaves play', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
                 this.player1.clickCard(this.uji);
@@ -305,10 +329,12 @@ describe('Daidoji Uji 2', function() {
                 expect(this.voice.anyEffect('hideWhenFaceUp')).toBe(false);
                 expect(this.readyForBattle.anyEffect('hideWhenFaceUp')).toBe(false);
 
-                expect(this.getChatLogs(10)).toContain('Fine Katana, Voice of Honor and Ready for Battle are removed from the game due to Daidoji Uji leaving play');
+                expect(this.getChatLogs(10)).toContain(
+                    'Fine Katana, Voice of Honor and Ready for Battle are removed from the game due to Daidoji Uji leaving play'
+                );
             });
 
-            it('should not allow opponent to play cards', function() {
+            it('should not allow opponent to play cards', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.charge);
                 this.player1.clickCard(this.uji);

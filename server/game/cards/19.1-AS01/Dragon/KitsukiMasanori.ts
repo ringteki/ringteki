@@ -1,10 +1,18 @@
-import AbilityContext = require('../../../AbilityContext');
+import AbilityContext from '../../../AbilityContext';
 import { CardTypes, Decks, Durations } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 const selectAttachmentPrompt = 'Select an attachment';
+
+function isSearchableCard(card: BaseCard, context: AbilityContext) {
+    return (
+        card.type === CardTypes.Attachment &&
+        (card.hasTrait('title') || card.hasTrait('technique')) &&
+        card.canAttach(context.source)
+    );
+}
 
 export default class KitsukiMasanori extends DrawCard {
     static id = 'kitsuki-masanori';
@@ -26,7 +34,7 @@ export default class KitsukiMasanori extends DrawCard {
                             action: AbilityDsl.actions.cardMenu((context) => ({
                                 activePromptTitle: selectAttachmentPrompt,
                                 cards: context.player.conflictDiscardPile.filter((card: BaseCard) =>
-                                    this.isSearchableCard(card, context)
+                                    isSearchableCard(card, context)
                                 ),
                                 subActionProperties: (card) => ({
                                     attachment: card,
@@ -45,7 +53,7 @@ export default class KitsukiMasanori extends DrawCard {
                                 activePromptTitle: selectAttachmentPrompt,
                                 deck: Decks.ConflictDeck,
                                 reveal: true,
-                                cardCondition: (card, context) => this.isSearchableCard(card, context),
+                                cardCondition: (card, context) => isSearchableCard(card, context),
                                 selectedCardsHandler: (context, event, cards) => {
                                     const card = cards[0];
                                     if (!card) {
@@ -70,7 +78,7 @@ export default class KitsukiMasanori extends DrawCard {
                     }
                 }),
                 AbilityDsl.actions.cardLastingEffect((context) => {
-                    const fetchedAttachment = context.source.attachments.first();
+                    const [fetchedAttachment] = context.source.attachments;
                     return {
                         target: fetchedAttachment,
                         condition: (context) => fetchedAttachment.parent === context.source,
@@ -84,13 +92,5 @@ export default class KitsukiMasanori extends DrawCard {
                 })
             ])
         });
-    }
-
-    private isSearchableCard(card: BaseCard, context: AbilityContext) {
-        return (
-            card.type === CardTypes.Attachment &&
-            (card.hasTrait('title') || card.hasTrait('technique')) &&
-            card.canAttach(context.source)
-        );
     }
 }

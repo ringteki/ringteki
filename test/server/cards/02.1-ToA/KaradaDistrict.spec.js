@@ -1,17 +1,24 @@
-describe('Karada District', function() {
-    integration(function() {
-        describe('When Activating Karada District', function() {
-            beforeEach(function() {
+describe('Karada District', function () {
+    integration(function () {
+        describe('When Activating Karada District', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        fate:3,
+                        fate: 3,
                         inPlay: ['adept-of-the-waves', 'seppun-guardsman'],
                         dynastyDeck: ['karada-district'],
-                        hand: ['fine-katana', 'watch-commander', 'cloud-the-mind', 'favored-mount', 'born-in-war', 'oni-mask']
+                        hand: [
+                            'fine-katana',
+                            'watch-commander',
+                            'cloud-the-mind',
+                            'favored-mount',
+                            'born-in-war',
+                            'oni-mask'
+                        ]
                     },
                     player2: {
-                        fate:2,
+                        fate: 2,
                         inPlay: ['miya-mystic', 'fire-elemental-guard'],
                         dynastyDeck: ['karada-district']
                     }
@@ -22,58 +29,58 @@ describe('Karada District', function() {
                 this.miyaMystic = this.player2.findCardByName('miya-mystic');
             });
 
-            describe('if costs can be paid', function() {
-                beforeEach(function() {
+            describe('if costs can be paid', function () {
+                beforeEach(function () {
                     this.fineKatana = this.player1.playAttachment('fine-katana', 'adept-of-the-waves');
                     this.player2.clickCard(this.karada2);
                 });
 
-                it('should prompt the player to choose a target', function() {
+                it('should prompt the player to choose a target', function () {
                     expect(this.player2).toHavePrompt('Choose an attachment');
                 });
 
-                it('should allow the player to pay costs first', function() {
+                it('should allow the player to pay costs first', function () {
                     expect(this.player2.currentButtons).toContain('Pay costs first');
                 });
 
-                describe('when a target is chosen', function() {
-                    beforeEach(function() {
+                describe('when a target is chosen', function () {
+                    beforeEach(function () {
                         this.player2.clickCard(this.fineKatana);
                     });
 
-                    it('should transfer fate to the target\'s controller', function() {
+                    it('should transfer fate to the target\'s controller', function () {
                         expect(this.player2.fate).toBe(1);
                         expect(this.player1.fate).toBe(4);
                     });
 
-                    describe ('and there is a valid target to attach to', function() {
-                        it('should prompt the player to choose a character to give the attachment to', function() {
+                    describe('and there is a valid target to attach to', function () {
+                        it('should prompt the player to choose a character to give the attachment to', function () {
                             expect(this.player2).toHavePrompt('Choose a character');
                         });
 
-                        describe('If the player chooses a character to attach to', function() {
-                            beforeEach(function() {
+                        describe('If the player chooses a character to attach to', function () {
+                            beforeEach(function () {
                                 this.player2.clickCard(this.miyaMystic);
                             });
 
-                            it('should transfer control of the attachment', function() {
+                            it('should transfer control of the attachment', function () {
                                 expect(this.fineKatana.controller).toBe(this.player2.player);
                             });
 
-                            it('should attach the target to the character', function() {
-                                expect(this.miyaMystic.attachments.toArray()).toContain(this.fineKatana);
+                            it('should attach the target to the character', function () {
+                                expect(this.miyaMystic.attachments).toContain(this.fineKatana);
                             });
                         });
                     });
                 });
             });
 
-            describe('if costs cannot be paid', function() {
-                beforeEach(function() {
+            describe('if costs cannot be paid', function () {
+                beforeEach(function () {
                     this.player2.fate = 0;
                 });
 
-                it('should not allow the event to be played', function() {
+                it('should not allow the event to be played', function () {
                     this.fineKatana = this.player1.playAttachment('fine-katana', 'adept-of-the-waves');
                     this.player2.clickCard(this.karada2);
 
@@ -82,8 +89,8 @@ describe('Karada District', function() {
                 });
             });
 
-            describe('if there is no target to attach to', function() {
-                it('should discard the attachment', function() {
+            describe('if there is no target to attach to', function () {
+                it('should discard the attachment', function () {
                     this.game.manualMode = true;
                     this.player2.dragCard(this.fireElementalGuard, 'dynasty discard pile');
                     this.player2.dragCard(this.miyaMystic, 'dynasty discard pile');
@@ -91,12 +98,14 @@ describe('Karada District', function() {
                     this.player2.clickCard(this.karada2);
                     this.player2.clickCard(this.fineKatana);
                     expect(this.fineKatana.location).toBe('conflict discard pile');
-                    expect(this.getChatLogs(1)).toContain('player2 uses Karada District, giving 1 fate to player1 to discard Fine Katana');
+                    expect(this.getChatLogs(1)).toContain(
+                        'player2 uses Karada District, giving 1 fate to player1 to discard Fine Katana'
+                    );
                 });
             });
 
-            describe('if no characters can legally hold the attachment', function() {
-                it('should discard the attachment', function() {
+            describe('if no characters can legally hold the attachment', function () {
+                it('should discard the attachment', function () {
                     this.game.manualMode = true;
                     this.player2.dragCard(this.miyaMystic, 'dynasty discard pile');
                     this.fineKatana = this.player1.playAttachment('fine-katana', 'adept-of-the-waves');
@@ -106,8 +115,8 @@ describe('Karada District', function() {
                 });
             });
 
-            describe('if the attachment is already owned', function() {
-                it('should discard the attachment', function() {
+            describe('if the attachment is already owned', function () {
+                it('should discard the attachment', function () {
                     this.cloudTheMind = this.player1.playAttachment('cloud-the-mind', this.fireElementalGuard);
                     this.player2.clickPrompt('Pass');
                     this.player1.clickCard(this.karada1);
@@ -116,22 +125,24 @@ describe('Karada District', function() {
                 });
             });
 
-            describe('if Watch Commander is chosen', function() {
-                it('should be attached to the chosen character, and not discarded', function() {
+            describe('if Watch Commander is chosen', function () {
+                it('should be attached to the chosen character, and not discarded', function () {
                     this.watchCommander = this.player1.playAttachment('watch-commander', 'adept-of-the-waves');
                     this.player2.clickCard(this.karada2);
                     this.player2.clickCard(this.watchCommander);
                     this.player2.clickCard(this.miyaMystic);
 
                     expect(this.watchCommander.controller).toBe(this.player2.player);
-                    expect(this.miyaMystic.attachments.toArray()).toContain(this.watchCommander);
-                    expect(this.getChatLogs(2)).toContain('player2 uses Karada District, giving 1 fate to player1 to choose a target for Watch Commander');
+                    expect(this.miyaMystic.attachments).toContain(this.watchCommander);
+                    expect(this.getChatLogs(2)).toContain(
+                        'player2 uses Karada District, giving 1 fate to player1 to choose a target for Watch Commander'
+                    );
                     expect(this.getChatLogs(1)).toContain('player2 chooses to attach Watch Commander to Miya Mystic');
                 });
             });
 
-            describe('if the attachment has been used already this turn', function() {
-                it('should be usable by the other player', function() {
+            describe('if the attachment has been used already this turn', function () {
+                it('should be usable by the other player', function () {
                     this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
                     this.oniMask = this.player1.playAttachment('oni-mask', 'adept-of-the-waves');
                     this.adeptOfTheWaves.fate = 1;
@@ -149,15 +160,15 @@ describe('Karada District', function() {
                     this.player2.clickCard(this.karada2);
                     this.player2.clickCard(this.oniMask);
                     this.player2.clickCard(this.miyaMystic);
-                    expect(this.miyaMystic.attachments.toArray()).toContain(this.oniMask);
+                    expect(this.miyaMystic.attachments).toContain(this.oniMask);
                     this.player1.clickPrompt('Pass');
                     this.player2.clickCard(this.oniMask);
                     expect(this.player2).toHavePrompt('Oni Mask');
                 });
             });
 
-            describe('when the attachment is removed', function() {
-                it('should discard any now illegally attached attachments', function() {
+            describe('when the attachment is removed', function () {
+                it('should discard any now illegally attached attachments', function () {
                     this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
                     this.favoredMount = this.player1.playAttachment('favored-mount', 'adept-of-the-waves');
                     this.player2.pass();
@@ -166,16 +177,16 @@ describe('Karada District', function() {
                     this.player2.clickCard(this.favoredMount);
                     this.player2.clickCard(this.miyaMystic);
                     expect(this.adeptOfTheWaves.hasTrait('cavalry')).toBe(false);
-                    expect(this.adeptOfTheWaves.attachments.toArray()).not.toContain(this.favoredMount);
-                    expect(this.adeptOfTheWaves.attachments.toArray()).not.toContain(this.bornInWar);
+                    expect(this.adeptOfTheWaves.attachments).not.toContain(this.favoredMount);
+                    expect(this.adeptOfTheWaves.attachments).not.toContain(this.bornInWar);
                     expect(this.bornInWar.location).toBe('conflict discard pile');
-                    expect(this.miyaMystic.attachments.toArray()).toContain(this.favoredMount);
+                    expect(this.miyaMystic.attachments).toContain(this.favoredMount);
                 });
             });
         });
 
-        describe('Karada/Talisman interaction', function() {
-            beforeEach(function() {
+        describe('Karada/Talisman interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -192,7 +203,7 @@ describe('Karada District', function() {
                 this.borderlandsDefender = this.player1.findCardByName('borderlands-defender');
             });
 
-            it('should take control of owned Talisman of the Sun (RRG v1.6)', function() {
+            it('should take control of owned Talisman of the Sun (RRG v1.6)', function () {
                 this.talismanOfTheSun = this.player1.playAttachment('talisman-of-the-sun', 'borderlands-defender');
                 this.player2.clickCard('calling-in-favors');
                 this.player2.clickCard(this.talismanOfTheSun);
@@ -205,12 +216,12 @@ describe('Karada District', function() {
                 this.player1.clickCard(this.borderlandsDefender);
                 expect(this.talismanOfTheSun.location).toBe('play area');
                 expect(this.talismanOfTheSun.parent).toBe(this.borderlandsDefender);
-                expect(this.borderlandsDefender.attachments.toArray()).toContain(this.talismanOfTheSun);
+                expect(this.borderlandsDefender.attachments).toContain(this.talismanOfTheSun);
             });
         });
 
-        describe('Karada District in Manual mode', function() {
-            beforeEach(function() {
+        describe('Karada District in Manual mode', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -228,7 +239,7 @@ describe('Karada District', function() {
                 this.borderlandsDefender = this.player1.findCardByName('borderlands-defender');
             });
 
-            it('should cancel the ability if cancel is selected', function() {
+            it('should cancel the ability if cancel is selected', function () {
                 this.talismanOfTheSun = this.player1.playAttachment('talisman-of-the-sun', 'borderlands-defender');
                 this.player2.clickCard(this.karadaDistrict);
                 expect(this.player2).toHavePromptButton('Pay costs first');

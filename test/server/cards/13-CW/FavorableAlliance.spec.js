@@ -1,12 +1,19 @@
-describe('Favorable Alliance', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Favorable Alliance', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-yoshi'],
                     hand: ['favorable-alliance'],
-                    conflictDiscard: ['voice-of-honor', 'fine-katana', 'height-of-fashion', 'ornate-fan', 'way-of-the-crane', 'political-rival']
+                    conflictDiscard: [
+                        'voice-of-honor',
+                        'fine-katana',
+                        'height-of-fashion',
+                        'ornate-fan',
+                        'way-of-the-crane',
+                        'political-rival'
+                    ]
                 },
                 player2: {
                     inPlay: ['utaku-tetsuko'],
@@ -40,7 +47,7 @@ describe('Favorable Alliance', function() {
             this.player1.moveCard(this.voice, 'conflict deck');
         });
 
-        it('should draw cards equal to the fate spent', function() {
+        it('should draw cards equal to the fate spent', function () {
             this.player1.fate = 4;
             let fate = this.player1.fate;
             expect(this.player1).toHavePrompt('Action Window');
@@ -57,11 +64,13 @@ describe('Favorable Alliance', function() {
 
             expect(this.player1.hand.length).toBe(0);
             expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to set aside 3 cards');
-            expect(this.getChatLogs(10)).toContain('player1 sets aside the top 3 cards from their conflict deck: Voice of Honor, Fine Katana and Height of Fashion');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 sets aside the top 3 cards from their conflict deck: Voice of Honor, Fine Katana and Height of Fashion'
+            );
             expect(this.player1.fate).toBe(fate - 3);
         });
 
-        it('should work with Yoshi', function() {
+        it('should work with Yoshi', function () {
             this.player1.fate = 2;
             this.player1.player.imperialFavor = 'military';
             this.noMoreActions();
@@ -98,11 +107,13 @@ describe('Favorable Alliance', function() {
 
             expect(this.player1.hand.length).toBe(0);
             expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to set aside 3 cards');
-            expect(this.getChatLogs(10)).toContain('player1 sets aside the top 3 cards from their conflict deck: Voice of Honor, Fine Katana and Height of Fashion');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 sets aside the top 3 cards from their conflict deck: Voice of Honor, Fine Katana and Height of Fashion'
+            );
             expect(this.player1.fate).toBe(fate - 1);
         });
 
-        it('should work with Blood of Onnotangu & Yoshi', function() {
+        it('should work with Blood of Onnotangu & Yoshi', function () {
             this.player1.fate = 6;
             this.player1.player.imperialFavor = 'military';
             this.noMoreActions();
@@ -142,11 +153,13 @@ describe('Favorable Alliance', function() {
 
             expect(this.player1.hand.length).toBe(0);
             expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to set aside 2 cards');
-            expect(this.getChatLogs(10)).toContain('player1 sets aside the top 2 cards from their conflict deck: Voice of Honor and Fine Katana');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 sets aside the top 2 cards from their conflict deck: Voice of Honor and Fine Katana'
+            );
             expect(this.player1.fate).toBe(fate);
         });
 
-        it('should work with Tetsuko - able to afford to play the card', function() {
+        it('should work with Tetsuko - able to afford to play the card', function () {
             this.player1.fate = 2;
             this.player1.player.imperialFavor = 'military';
             this.noMoreActions();
@@ -169,11 +182,13 @@ describe('Favorable Alliance', function() {
             expect(this.voice.location).toBe('removed from game');
             expect(this.player1.hand.length).toBe(0);
             expect(this.getChatLogs(10)).toContain('player1 plays Favorable Alliance to set aside 1 card');
-            expect(this.getChatLogs(10)).toContain('player1 sets aside the top 1 card from their conflict deck: Voice of Honor');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 sets aside the top 1 card from their conflict deck: Voice of Honor'
+            );
             expect(this.player1.fate).toBe(fate - 2);
         });
 
-        it('should work with Tetsuko - unable to afford to play the card', function() {
+        it('should work with Tetsuko - unable to afford to play the card', function () {
             this.player1.fate = 1;
             this.player1.player.imperialFavor = 'military';
             this.noMoreActions();
@@ -189,7 +204,7 @@ describe('Favorable Alliance', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should only let you pick cards up to the amount in your discard', function() {
+        it('should only let you pick cards up to the amount in your discard', function () {
             this.player1.fate = 14;
             let fate = this.player1.fate;
             expect(this.player1).toHavePrompt('Action Window');
@@ -209,7 +224,7 @@ describe('Favorable Alliance', function() {
             expect(this.player1.fate).toBe(fate - 6);
         });
 
-        it('should work with Yoshi and a maximum deck size', function() {
+        it('should work with Yoshi and a maximum deck size', function () {
             this.player1.fate = 12;
             this.player1.player.imperialFavor = 'military';
             this.noMoreActions();
@@ -249,8 +264,8 @@ describe('Favorable Alliance', function() {
             expect(this.player1.fate).toBe(fate - 4);
         });
 
-        describe('Playing cards from RFG', function() {
-            beforeEach(function() {
+        describe('Playing cards from RFG', function () {
+            beforeEach(function () {
                 this.player1.fate = 10;
                 this.player1.player.imperialFavor = 'military';
                 this.noMoreActions();
@@ -270,35 +285,35 @@ describe('Favorable Alliance', function() {
                 this.player1.clickPrompt('3');
             });
 
-            it('should not be able to play cards removed from the game by other means', function() {
+            it('should not be able to play cards removed from the game by other means', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.crane);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should allow playing cards from RFG that were put there by Favorable Alliance', function() {
+            it('should allow playing cards from RFG that were put there by Favorable Alliance', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.katana);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.yoshi);
-                expect(this.yoshi.attachments.toArray()).toContain(this.katana);
+                expect(this.yoshi.attachments).toContain(this.katana);
             });
 
-            it('should not be able to play cards removed from the game by opponent', function() {
+            it('should not be able to play cards removed from the game by opponent', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.katana);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('should not allow re-playing cards that get moved back into RFG after being played', function() {
+            it('should not allow re-playing cards that get moved back into RFG after being played', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.katana);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.yoshi);
-                expect(this.yoshi.attachments.toArray()).toContain(this.katana);
+                expect(this.yoshi.attachments).toContain(this.katana);
                 this.player1.moveCard(this.katana, 'removed from game');
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -306,7 +321,7 @@ describe('Favorable Alliance', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should allow triggering reactions', function() {
+            it('should allow triggering reactions', function () {
                 this.player2.clickCard(this.fury);
                 this.player2.clickCard(this.yoshi);
                 expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -317,7 +332,7 @@ describe('Favorable Alliance', function() {
                 expect(this.yoshi.bowed).toBe(false);
             });
 
-            it('should still let you play cards from RFG next turn', function() {
+            it('should still let you play cards from RFG next turn', function () {
                 this.noMoreActions();
                 this.player1.clickPrompt('No');
                 this.player1.clickPrompt('Don\'t Resolve');
@@ -344,7 +359,7 @@ describe('Favorable Alliance', function() {
                 expect(this.katana.location).toBe('removed from game');
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.yoshi);
-                expect(this.yoshi.attachments.toArray()).toContain(this.katana);
+                expect(this.yoshi.attachments).toContain(this.katana);
             });
         });
     });

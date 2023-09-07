@@ -1,5 +1,5 @@
-describe('Togashi Acolyte', function() {
-    integration(function() {
+describe('Togashi Acolyte', function () {
+    integration(function () {
         describe('Togashi Acolyte as an attachment', function () {
             beforeEach(function () {
                 this.setupTest({
@@ -25,14 +25,14 @@ describe('Togashi Acolyte', function() {
                 this.letGo = this.player2.findCardByName('let-go');
             });
 
-            it('can be played as an attachment', function() {
+            it('can be played as an attachment', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
-                expect(this.whisperer.attachments.size()).toBe(1);
+                expect(this.whisperer.attachments.length).toBe(1);
             });
 
-            it('should be treated as an attachment in play', function() {
+            it('should be treated as an attachment in play', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
@@ -54,7 +54,7 @@ describe('Togashi Acolyte', function() {
                 expect(this.player2).toBeAbleToSelect(this.acolyte);
             });
 
-            it('should be treated as a character if it goes to the discard pile', function() {
+            it('should be treated as a character if it goes to the discard pile', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
@@ -76,7 +76,7 @@ describe('Togashi Acolyte', function() {
                 expect(this.acolyte.location).toBe('play area');
             });
 
-            it('should give +1/+1', function() {
+            it('should give +1/+1', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
@@ -98,10 +98,12 @@ describe('Togashi Acolyte', function() {
                 expect(this.whisperer.getMilitarySkill()).toBe(mil + 1);
                 expect(this.whisperer.getPoliticalSkill()).toBe(pol + 1);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
-                expect(this.getChatLogs(3)).toContain('player1 uses Togashi Acolyte to give +1political and +1military to Doji Whisperer');
+                expect(this.getChatLogs(3)).toContain(
+                    'player1 uses Togashi Acolyte to give +1political and +1military to Doji Whisperer'
+                );
             });
 
-            it('should not trigger off opponent cards', function() {
+            it('should not trigger off opponent cards', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
@@ -124,7 +126,7 @@ describe('Togashi Acolyte', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should not be usable if holder is not participating', function() {
+            it('should not be usable if holder is not participating', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play Togashi Acolyte as an attachment');
                 this.player1.clickCard(this.whisperer);
@@ -146,7 +148,7 @@ describe('Togashi Acolyte', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('should trigger off itself', function() {
+            it('should trigger off itself', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'political',
@@ -162,14 +164,14 @@ describe('Togashi Acolyte', function() {
                 expect(this.player1).toBeAbleToSelect(this.acolyte);
             });
 
-            it('can be played as a character', function() {
+            it('can be played as a character', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play this character');
                 this.player1.clickPrompt('0');
                 expect(this.acolyte.location).toBe('play area');
             });
 
-            it('should not give +1/+1 as a character', function() {
+            it('should not give +1/+1 as a character', function () {
                 this.player1.clickCard(this.acolyte);
                 this.player1.clickPrompt('Play this character');
                 this.player1.clickPrompt('0');

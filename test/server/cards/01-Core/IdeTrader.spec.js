@@ -1,7 +1,7 @@
-describe('Ide Trader', function() {
-    integration(function() {
-        describe('Ide Trader ability', function() {
-            beforeEach(function() {
+describe('Ide Trader', function () {
+    integration(function () {
+        describe('Ide Trader ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -20,7 +20,7 @@ describe('Ide Trader', function() {
                 this.noMoreActions();
             });
 
-            it('should trigger when another character joins the conflict', function() {
+            it('should trigger when another character joins the conflict', function () {
                 this.initiateConflict({
                     attackers: [this.ideTrader],
                     defenders: []
@@ -31,7 +31,7 @@ describe('Ide Trader', function() {
                 expect(this.player1).toBeAbleToSelect(this.ideTrader);
             });
 
-            it('should give the player the choice between fate or a card', function() {
+            it('should give the player the choice between fate or a card', function () {
                 this.initiateConflict({
                     attackers: [this.ideTrader],
                     defenders: []
@@ -46,7 +46,7 @@ describe('Ide Trader', function() {
                 expect(this.player1.fate).toBe(8);
             });
 
-            it('should draw a card when the player chooses that option', function() {
+            it('should draw a card when the player chooses that option', function () {
                 this.initiateConflict({
                     attackers: [this.ideTrader],
                     defenders: []
@@ -61,7 +61,7 @@ describe('Ide Trader', function() {
                 expect(this.player1.player.hand.size()).toBe(2);
             });
 
-            it('should trigger when an opposing character joins the conflict', function() {
+            it('should trigger when an opposing character joins the conflict', function () {
                 this.initiateConflict({
                     attackers: [this.ideTrader],
                     defenders: []
@@ -71,7 +71,7 @@ describe('Ide Trader', function() {
                 expect(this.player1).toBeAbleToSelect(this.ideTrader);
             });
 
-            it('should trigger when ide trader joins a conflict', function() {
+            it('should trigger when ide trader joins a conflict', function () {
                 this.initiateConflict({
                     attackers: ['iuchi-wayfinder'],
                     defenders: []
@@ -83,7 +83,7 @@ describe('Ide Trader', function() {
                 expect(this.player1).toBeAbleToSelect(this.ideTrader);
             });
 
-            it('should trigger in the same window as spyglass', function() {
+            it('should trigger in the same window as spyglass', function () {
                 this.initiateConflict({
                     attackers: ['iuchi-wayfinder'],
                     defenders: []
@@ -99,8 +99,8 @@ describe('Ide Trader', function() {
             });
         });
 
-        describe('Ide Trader/Charge interaction', function() {
-            beforeEach(function() {
+        describe('Ide Trader/Charge interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -118,7 +118,7 @@ describe('Ide Trader', function() {
                 this.player2.pass();
             });
 
-            it('should not trigger Ide Trader when it is Charged', function() {
+            it('should not trigger Ide Trader when it is Charged', function () {
                 this.player1.clickCard('charge');
                 this.player1.clickCard(this.ideTrader);
                 expect(this.ideTrader.inConflict).toBe(true);
@@ -127,8 +127,8 @@ describe('Ide Trader', function() {
             });
         });
 
-        describe('when multiple characters move to the conflict', function() {
-            beforeEach(function() {
+        describe('when multiple characters move to the conflict', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -151,9 +151,9 @@ describe('Ide Trader', function() {
                 this.player2.pass();
             });
 
-            it('if they move separately, Ide Trader\'s ability should trigger twice', function() {
-                expect(this.ideTrader.attachments.toArray()).toContain(this.sealOfTheDragon);
-                expect(this.ideTrader.attachments.toArray()).toContain(this.wayOfTheDragon);
+            it('if they move separately, Ide Trader\'s ability should trigger twice', function () {
+                expect(this.ideTrader.attachments).toContain(this.sealOfTheDragon);
+                expect(this.ideTrader.attachments).toContain(this.wayOfTheDragon);
                 expect(this.player1.fate).toBe(0);
                 this.player1.clickCard(this.favorableGround);
                 this.player1.clickCard(this.ideTrader);
@@ -179,9 +179,9 @@ describe('Ide Trader', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('Ide Trader\'s ability should only trigger once', function() {
-                expect(this.ideTrader.attachments.toArray()).toContain(this.sealOfTheDragon);
-                expect(this.ideTrader.attachments.toArray()).toContain(this.wayOfTheDragon);
+            it('Ide Trader\'s ability should only trigger once', function () {
+                expect(this.ideTrader.attachments).toContain(this.sealOfTheDragon);
+                expect(this.ideTrader.attachments).toContain(this.wayOfTheDragon);
                 expect(this.player1.fate).toBe(0);
                 this.shinjoTatsuo = this.player1.clickCard('shinjo-tatsuo');
                 expect(this.player1).toHavePrompt('Shinjo Tatsuo');

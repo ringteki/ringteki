@@ -1,7 +1,7 @@
-describe('Togashi Mitsu', function() {
-    integration(function() {
-        describe('Togashi Mitsu\'s ability', function() {
-            beforeEach(function() {
+describe('Togashi Mitsu', function () {
+    integration(function () {
+        describe('Togashi Mitsu\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -21,7 +21,7 @@ describe('Togashi Mitsu', function() {
                 this.player2.clickPrompt('Done');
             });
 
-            it('should allow playing a monk character', function() {
+            it('should allow playing a monk character', function () {
                 this.player2.pass();
                 this.togashiMitsu = this.player1.clickCard('togashi-mitsu');
                 expect(this.player1).toHavePrompt('Togashi Mitsu');
@@ -33,7 +33,7 @@ describe('Togashi Mitsu', function() {
                 expect(this.tattooedWanderer.inConflict).toBe(true);
             });
 
-            it('should allow playing a kiho', function() {
+            it('should allow playing a kiho', function () {
                 this.player2.pass();
                 this.togashiMitsu = this.player1.clickCard('togashi-mitsu');
                 this.hurricanePunch = this.player1.clickCard('hurricane-punch');
@@ -43,7 +43,7 @@ describe('Togashi Mitsu', function() {
                 expect(this.player1.player.conflictDeck.last()).toBe(this.hurricanePunch);
             });
 
-            it('should allow playing a tattoo', function() {
+            it('should allow playing a tattoo', function () {
                 this.player2.pass();
                 this.togashiMitsu = this.player1.clickCard('togashi-mitsu');
                 this.hawkTattoo = this.player1.clickCard('hawk-tattoo');
@@ -54,7 +54,7 @@ describe('Togashi Mitsu', function() {
                 expect(this.player1).toBeAbleToSelect(this.hawkTattoo);
             });
 
-            it('should allow playing an attachmonk as an attachment', function() {
+            it('should allow playing an attachmonk as an attachment', function () {
                 this.player2.pass();
                 this.togashiMitsu = this.player1.clickCard('togashi-mitsu');
                 expect(this.player1).toHavePrompt('Togashi Mitsu');
@@ -63,11 +63,11 @@ describe('Togashi Mitsu', function() {
                 this.player1.clickPrompt('Play Tattooed Wanderer as an attachment');
                 expect(this.player1).toHavePrompt('Tattooed Wanderer');
                 this.nitenMaster = this.player1.clickCard('niten-master');
-                expect(this.nitenMaster.attachments.toArray()).toContain(this.tattooedWanderer);
+                expect(this.nitenMaster.attachments).toContain(this.tattooedWanderer);
                 expect(this.nitenMaster.isCovert()).toBe(true);
             });
 
-            it('should not move an event to the bottom of the deck if it is cancelled', function() {
+            it('should not move an event to the bottom of the deck if it is cancelled', function () {
                 this.player2.clickCard('way-of-the-crane');
                 this.dojiWhisperer = this.player2.clickCard('doji-whisperer');
                 expect(this.dojiWhisperer.isHonored).toBe(true);

@@ -15,27 +15,21 @@ export default class SapperSchool extends DrawCard {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province
             },
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.moveCard((context) => ({
-                    destination: Locations.DynastyDiscardPile,
-                    target: this.#cardsInProvince(context.target)
-                })),
-                AbilityDsl.actions.discardFromPlay((context) => ({
-                    target: this.#cardsAttachedToProvince(context.target)
-                }))
-            ]),
+            gameAction: AbilityDsl.actions.multipleContext((context) => ({
+                gameActions: [
+                    AbilityDsl.actions.moveCard({
+                        destination: Locations.DynastyDiscardPile,
+                        target: this.#cardsInProvince(context.target)
+                    }),
+                    AbilityDsl.actions.discardFromPlay({ target: context.target.attachments })
+                ]
+            })),
             effect: 'discard {1}',
-            effectArgs: (context) => [
-                this.#cardsInProvince(context.target).concat(this.#cardsAttachedToProvince(context.target))
-            ]
+            effectArgs: (context) => [this.#cardsInProvince(context.target).concat(context.target.attachments)]
         });
     }
 
     #cardsInProvince(targetProvince: ProvinceCard) {
         return targetProvince.controller.getDynastyCardsInProvince(targetProvince.location);
-    }
-
-    #cardsAttachedToProvince(targetProvince: ProvinceCard) {
-        return targetProvince.attachments.toArray();
     }
 }

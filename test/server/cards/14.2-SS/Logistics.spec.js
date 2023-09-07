@@ -1,12 +1,20 @@
-describe('Logistics', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Logistics', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     hand: ['total-warfare', 'logistics', 'fine-katana'],
                     inPlay: ['bayushi-shoju'],
-                    dynastyDiscard: ['imperial-storehouse', 'favorable-ground', 'kakita-toshimoko', 'dispatch-to-nowhere', 'kakita-yoshi', 'doji-whisperer', 'city-of-lies'],
+                    dynastyDiscard: [
+                        'imperial-storehouse',
+                        'favorable-ground',
+                        'kakita-toshimoko',
+                        'dispatch-to-nowhere',
+                        'kakita-yoshi',
+                        'doji-whisperer',
+                        'city-of-lies'
+                    ],
                     provinces: ['dishonorable-assault'],
                     stronghold: 'kyuden-kakita'
                 },
@@ -69,7 +77,7 @@ describe('Logistics', function() {
             this.player2.playAttachment(this.ambush, this.p2);
         });
 
-        it('should allow you to select a card in or attached to a province, whether or not it is facedown', function() {
+        it('should allow you to select a card in or attached to a province, whether or not it is facedown', function () {
             this.player1.clickCard(this.logistics);
             expect(this.player1).toHavePrompt('Choose a card');
             expect(this.player1).toBeAbleToSelect(this.storehouse);
@@ -87,7 +95,7 @@ describe('Logistics', function() {
             expect(this.player1).not.toBeAbleToSelect(this.katana);
         });
 
-        it('should not work if there are no eligible provinces', function() {
+        it('should not work if there are no eligible provinces', function () {
             this.assault.isBroken = true;
             this.p2.isBroken = true;
             this.p3.isBroken = true;
@@ -103,7 +111,7 @@ describe('Logistics', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should limit selection if there are very few eligible provinces', function() {
+        it('should limit selection if there are very few eligible provinces', function () {
             this.assault.isBroken = true;
             this.p2.isBroken = true;
             this.p3.isBroken = false;
@@ -127,8 +135,8 @@ describe('Logistics', function() {
             expect(this.player1).toBeAbleToSelect(this.ambush);
         });
 
-        describe('Selecting a card in a province', function() {
-            it('should allow you to choose an unbroken non-stronghold province controlled by the same player', function() {
+        describe('Selecting a card in a province', function () {
+            it('should allow you to choose an unbroken non-stronghold province controlled by the same player', function () {
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.yoshi);
@@ -146,7 +154,7 @@ describe('Logistics', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.pStronghold_2);
             });
 
-            it('should move the card', function() {
+            it('should move the card', function () {
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.yoshi);
@@ -155,7 +163,7 @@ describe('Logistics', function() {
                 expect(this.yoshi.location).toBe('province 2');
             });
 
-            it('should cause the province to refill', function() {
+            it('should cause the province to refill', function () {
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.toshimoko);
@@ -166,7 +174,7 @@ describe('Logistics', function() {
                 expect(this.whisperer.location).toBe('province 3');
             });
 
-            it('should not draw a card if a battlefield is not in play', function() {
+            it('should not draw a card if a battlefield is not in play', function () {
                 this.player1.moveCard(this.totalWarfare, 'conflict discard pile');
                 this.player2.moveCard(this.ambush, 'conflict discard pile');
                 let hand = this.player1.hand.length;
@@ -181,7 +189,7 @@ describe('Logistics', function() {
                 expect(this.player1.hand.length).toBe(hand - 1); //-1 from Logistics
             });
 
-            it('should draw a card if a battlefield is in play', function() {
+            it('should draw a card if a battlefield is in play', function () {
                 let hand = this.player1.hand.length;
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
@@ -194,23 +202,27 @@ describe('Logistics', function() {
                 expect(this.player1.hand.length).toBe(hand); //-1 from Logistics
             });
 
-            it('chat message - facedown card in province, facedown target, battlefield in play', function() {
+            it('chat message - facedown card in province, facedown target, battlefield in play', function () {
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.toshimoko);
                 this.player1.clickCard(this.assault);
-                expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move a facedown card to province 1 and draw a card');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Logistics to move a facedown card to province 1 and draw a card'
+                );
             });
 
-            it('chat message - faceup card in province, faceup target, battlefield in play', function() {
+            it('chat message - faceup card in province, faceup target, battlefield in play', function () {
                 this.assault.facedown = false;
                 this.toshimoko.facedown = false;
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.toshimoko);
                 this.player1.clickCard(this.assault);
-                expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move Kakita Toshimoko to Dishonorable Assault and draw a card');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Logistics to move Kakita Toshimoko to Dishonorable Assault and draw a card'
+                );
             });
 
-            it('chat message - facedown target, battlefield not in play', function() {
+            it('chat message - facedown target, battlefield not in play', function () {
                 this.player1.moveCard(this.totalWarfare, 'conflict discard pile');
                 this.player2.moveCard(this.ambush, 'conflict discard pile');
                 this.player1.clickCard(this.logistics);
@@ -220,8 +232,8 @@ describe('Logistics', function() {
             });
         });
 
-        describe('Selecting an attachment', function() {
-            it('should allow you to choose an unbroken non-stronghold province controlled by the same player (attachment & province controlled by same player)', function() {
+        describe('Selecting an attachment', function () {
+            it('should allow you to choose an unbroken non-stronghold province controlled by the same player (attachment & province controlled by same player)', function () {
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.heimin);
@@ -239,7 +251,7 @@ describe('Logistics', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.pStronghold_2);
             });
 
-            it('should allow you to choose an unbroken non-stronghold province controlled by the same player (attachment & province not controlled by same player)', function() {
+            it('should allow you to choose an unbroken non-stronghold province controlled by the same player (attachment & province not controlled by same player)', function () {
                 this.player1.clickCard(this.logistics);
                 expect(this.player1).toHavePrompt('Choose a card');
                 this.player1.clickCard(this.ambush);
@@ -257,17 +269,17 @@ describe('Logistics', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.pStronghold_2);
             });
 
-            it('should attach the card to the new province', function() {
+            it('should attach the card to the new province', function () {
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.heimin);
-                expect(this.pStronghold_2.attachments.toArray()).toContain(this.heimin);
-                expect(this.p2_2.attachments.toArray()).not.toContain(this.heimin);
+                expect(this.pStronghold_2.attachments).toContain(this.heimin);
+                expect(this.p2_2.attachments).not.toContain(this.heimin);
                 this.player1.clickCard(this.p2_2);
-                expect(this.pStronghold_2.attachments.toArray()).not.toContain(this.heimin);
-                expect(this.p2_2.attachments.toArray()).toContain(this.heimin);
+                expect(this.pStronghold_2.attachments).not.toContain(this.heimin);
+                expect(this.p2_2.attachments).toContain(this.heimin);
             });
 
-            it('should not draw a card if a battlefield is not in play', function() {
+            it('should not draw a card if a battlefield is not in play', function () {
                 this.player1.moveCard(this.totalWarfare, 'conflict discard pile');
                 this.player2.moveCard(this.ambush, 'conflict discard pile');
                 let hand = this.player1.hand.length;
@@ -277,7 +289,7 @@ describe('Logistics', function() {
                 expect(this.player1.hand.length).toBe(hand - 1); //-1 from Logistics
             });
 
-            it('should draw a card if a battlefield is in play', function() {
+            it('should draw a card if a battlefield is in play', function () {
                 let hand = this.player1.hand.length;
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.heimin);
@@ -285,14 +297,16 @@ describe('Logistics', function() {
                 expect(this.player1.hand.length).toBe(hand); //-1 from Logistics
             });
 
-            it('chat message - facedown target, battlefield in play', function() {
+            it('chat message - facedown target, battlefield in play', function () {
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.heimin);
                 this.player1.clickCard(this.p2_2);
-                expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move Educated Heimin to province 2 and draw a card');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Logistics to move Educated Heimin to province 2 and draw a card'
+                );
             });
 
-            it('chat message - facedown target, battlefield not in play', function() {
+            it('chat message - facedown target, battlefield not in play', function () {
                 this.player1.moveCard(this.totalWarfare, 'conflict discard pile');
                 this.player2.moveCard(this.ambush, 'conflict discard pile');
                 this.player1.clickCard(this.logistics);
@@ -301,16 +315,18 @@ describe('Logistics', function() {
                 expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move Educated Heimin to province 2');
             });
 
-            it('chat message - faceup target, battlefield in play', function() {
+            it('chat message - faceup target, battlefield in play', function () {
                 this.p2_2.facedown = false;
                 this.player1.clickCard(this.logistics);
                 this.player1.clickCard(this.heimin);
                 this.player1.clickCard(this.p2_2);
-                expect(this.getChatLogs(10)).toContain('player1 plays Logistics to move Educated Heimin to Shameful Display and draw a card');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Logistics to move Educated Heimin to Shameful Display and draw a card'
+                );
             });
         });
 
-        it('should not allow using a holding twice', function() {
+        it('should not allow using a holding twice', function () {
             this.player1.placeCardInProvince(this.lies, 'province 1');
             this.player1.clickCard(this.lies);
             expect(this.player2).toHavePrompt('Action Window');
