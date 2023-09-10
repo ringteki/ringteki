@@ -1,4 +1,4 @@
-describe('Crane Box', function () {
+describe('Influential Actor', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

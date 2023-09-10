@@ -75,12 +75,6 @@ describe('One Man, One Strike', function() {
         });
 
         it('should bow & dishonor the loser & stop them from readying', function() {
-            // this.noMoreActions();
-            // this.initiateConflict({
-            //     attackers: [this.zinkae, this.brash],
-            //     defenders: [this.toshimoko, this.whisperer]
-            // });
-
             this.player1.clickCard(this.strike);
             this.player1.clickCard(this.zinkae);
             this.player1.clickCard(this.atsuko);
