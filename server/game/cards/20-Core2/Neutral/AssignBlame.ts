@@ -12,7 +12,6 @@ export default class AssignBlame extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move a status token',
-            condition: (context) => context.source.isParticipating(),
             targets: {
                 [TOKEN]: {
                     activePromptTitle: 'Choose the status token to move',
@@ -48,5 +47,12 @@ export default class AssignBlame extends DrawCard {
             effect: 'move a status token to {1}',
             effectArgs: (context) => [context.targets[RECIPIENT]]
         });
+    }
+
+    canPlay(context, playType) {
+        if(context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('courtier'))) {
+            return super.canPlay(context, playType);
+        }
+        return false;
     }
 }

@@ -10,9 +10,15 @@ export default class PathOfTheCrane extends DrawCard {
             title: 'Honor a character',
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isFaction('crane') && !card.isParticipating(),
                 gameAction: AbilityDsl.actions.honor()
             }
         });
+    }
+
+    canPlay(context, playType) {
+        if(context.player.anyCardsInPlay((card: DrawCard) => card.isFaction('crane'))) {
+            return super.canPlay(context, playType);
+        }
+        return false;
     }
 }
