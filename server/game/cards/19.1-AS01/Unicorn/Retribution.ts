@@ -1,9 +1,9 @@
-import { CardTypes, ConflictTypes, Durations, Players } from '../../../Constants';
-import type TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import type BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
-import type Player = require('../../../player');
+import { CardTypes, Players, Durations, ConflictTypes } from '../../../Constants';
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
+import type Player from '../../../player';
 
 export default class Retribution extends DrawCard {
     static id = 'retribution-';
@@ -19,7 +19,7 @@ export default class Retribution extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card, context) => this.characterCanBeAttacker(card, context),
+                cardCondition: (card: DrawCard, context) => this.characterCanBeAttacker(card, context),
                 gameAction: AbilityDsl.actions.sequentialContext((context) => ({
                     gameActions: [
                         AbilityDsl.actions.cardLastingEffect({
@@ -62,7 +62,7 @@ export default class Retribution extends DrawCard {
         );
     }
 
-    private characterCanBeAttacker(card: BaseCard, context: TriggeredAbilityContext) {
+    private characterCanBeAttacker(card: DrawCard, context: TriggeredAbilityContext) {
         return (
             // honored or battlemaiden
             (card.isHonored || card.hasTrait('battle-maiden')) &&

@@ -4,12 +4,13 @@ import type { Cost, Result } from '../Costs';
 import Event from '../Events/Event';
 import { removeFate } from '../GameActions/GameActions';
 import BaseCard from '../basecard';
+import DrawCard from '../drawcard';
 import Ring from '../ring';
 
 const CANCELLED = 'CANCELLED';
 const STOP = 'STOP';
 
-type PoolOption = BaseCard | Ring | typeof CANCELLED | typeof STOP;
+type PoolOption = DrawCard | Ring | typeof CANCELLED | typeof STOP;
 type Props = {
     reducedCost: number;
     remainingPoolTotal: number;
@@ -42,18 +43,18 @@ export class ReduceableFateCost implements Cost {
     }
 
     public resolve(context: AbilityContext, result: Result): void {
-        const alternatePools = new Set<BaseCard | Ring>(
+        const alternatePools = new Set<DrawCard | Ring>(
             context.player.getAlternateFatePools(context.playType, context.source, context)
         );
 
         const ringPool = new Set<Ring>();
-        const cardPool = new Set<BaseCard>();
+        const cardPool = new Set<DrawCard>();
         let alternatePoolTotal = 0;
         for (const pool of alternatePools) {
-            if (pool.printedType === 'ring') {
-                ringPool.add(pool as Ring);
+            if (pool instanceof Ring) {
+                ringPool.add(pool);
             } else {
-                cardPool.add(pool as BaseCard);
+                cardPool.add(pool);
             }
             alternatePoolTotal += pool.getFate();
         }

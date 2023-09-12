@@ -1,6 +1,7 @@
 import { CardTypes, Elements } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
+import type DrawCard from '../../../drawcard';
 
 export default class GrandCanyon extends ProvinceCard {
     static id = 'grand-canyon';
@@ -16,7 +17,7 @@ export default class GrandCanyon extends ProvinceCard {
                 context.game.currentConflict?.hasElement?.(this.getCurrentElementSymbol(this.#conflictElement)),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating() && !card.hasDash(),
+                cardCondition: (card: DrawCard) => card.isParticipating() && !card.hasDash(),
                 gameAction: AbilityDsl.actions.cardLastingEffect({ effect: AbilityDsl.effects.switchBaseSkills() })
             },
             effect: "switch {0}'s military and political skill"

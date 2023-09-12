@@ -1,8 +1,8 @@
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-
-import BaseCard = require('../basecard');
-import AbilityContext = require('../AbilityContext');
-import { Locations, CardTypes, EventNames } from '../Constants';
+import type AbilityContext from '../AbilityContext';
+import { EventNames, CardTypes, Locations } from '../Constants';
+import type BaseCard from '../basecard';
+import DrawCard from '../drawcard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface ReadyProperties extends CardActionProperties {}
 
@@ -14,7 +14,10 @@ export class ReadyAction extends CardGameAction {
     targetType = [CardTypes.Character, CardTypes.Attachment, CardTypes.Stronghold];
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(card.location !== Locations.PlayArea && card.type !== CardTypes.Stronghold || !card.bowed) {
+        if (
+            (card.location !== Locations.PlayArea && card.type !== CardTypes.Stronghold) ||
+            (card instanceof DrawCard && !card.bowed)
+        ) {
             return false;
         }
         return super.canAffect(card, context);

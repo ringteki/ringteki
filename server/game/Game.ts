@@ -1,76 +1,116 @@
-const _ = require('underscore');
-const EventEmitter = require('events');
+import Event from './Events/Event';
+import EventEmitter from 'events';
+import { GameModes } from '../GameModes';
+import AbilityContext from './AbilityContext';
+import { Locations, ConflictTypes, Phases, EventNames, EffectNames } from './Constants';
+import EventWindow from './Events/EventWindow';
+import InitiateAbilityEventWindow from './Events/InitiateAbilityEventWindow';
+import InitiateCardAbilityEvent from './Events/InitiateCardAbilityEvent';
+import ThenEventWindow from './Events/ThenEventWindow';
+import { GamePipeline } from './GamePipeline';
+import AnonymousSpectator from './anonymousspectator';
+import SpiritOfTheRiver from './cards/SpiritOfTheRiver';
+import ChatCommands from './chatcommands';
+import { Conflict } from './conflict';
+import EffectEngine from './effectengine';
+import GameChat from './gamechat';
+import { ConflictPhase } from './gamesteps/ConflictPhase';
+import { DrawPhase } from './gamesteps/DrawPhase';
+import { DynastyPhase } from './gamesteps/DynastyPhase';
+import { FatePhase } from './gamesteps/FatePhase';
+import GameWonPrompt from './gamesteps/GameWonPrompt';
+import { SetupPhase } from './gamesteps/SetupPhase';
+import { SimpleStep } from './gamesteps/SimpleStep';
+import SimultaneousEffectWindow from './gamesteps/SimultaneousEffectWindow';
+import AbilityResolver from './gamesteps/abilityresolver';
+import ConflictFlow from './gamesteps/conflict/conflictflow';
+import HandlerMenuPrompt from './gamesteps/handlermenuprompt';
+import HonorBidPrompt from './gamesteps/honorbidprompt';
+import MenuPrompt from './gamesteps/menuprompt';
+import EndRoundPrompt from './gamesteps/regroup/endroundprompt';
+import SelectCardPrompt from './gamesteps/selectcardprompt';
+import SelectRingPrompt from './gamesteps/selectringprompt';
+import Player from './player';
+import Ring from './ring';
+import { ClockConfig } from './Clocks/ClockSelector';
+import type DrawCard from './drawcard';
+import { Spectator } from './Spectator';
+import BaseCard from './basecard';
+import { ProvinceCard } from './ProvinceCard';
 
-const ChatCommands = require('./chatcommands.js');
-const GameChat = require('./gamechat.js');
-const EffectEngine = require('./effectengine.js');
-const Player = require('./player.js');
-const Spectator = require('./spectator.js');
-const AnonymousSpectator = require('./anonymousspectator.js');
-const { GamePipeline } = require('./GamePipeline.js');
-const { SetupPhase } = require('./gamesteps/SetupPhase.js');
-const { DynastyPhase } = require('./gamesteps/DynastyPhase.js');
-const { DrawPhase } = require('./gamesteps/DrawPhase.js');
-const { ConflictPhase } = require('./gamesteps/ConflictPhase.js');
-const { FatePhase } = require('./gamesteps/FatePhase.js');
-const EndRoundPrompt = require('./gamesteps/regroup/endroundprompt.js');
-const { SimpleStep } = require('./gamesteps/SimpleStep.js');
-const MenuPrompt = require('./gamesteps/menuprompt.js');
-const HandlerMenuPrompt = require('./gamesteps/handlermenuprompt.js');
-const HonorBidPrompt = require('./gamesteps/honorbidprompt.js');
-const SelectCardPrompt = require('./gamesteps/selectcardprompt.js');
-const SelectRingPrompt = require('./gamesteps/selectringprompt.js');
-const GameWonPrompt = require('./gamesteps/GameWonPrompt');
-const GameActions = require('./GameActions/GameActions');
-const Event = require('./Events/Event');
-const InitiateCardAbilityEvent = require('./Events/InitiateCardAbilityEvent');
-const EventWindow = require('./Events/EventWindow.js');
-const ThenEventWindow = require('./Events/ThenEventWindow');
-const InitiateAbilityEventWindow = require('./Events/InitiateAbilityEventWindow.js');
-const AbilityResolver = require('./gamesteps/abilityresolver.js');
-const SimultaneousEffectWindow = require('./gamesteps/SimultaneousEffectWindow');
-const AbilityContext = require('./AbilityContext.js');
-const Ring = require('./ring.js');
-const { Conflict } = require('./conflict.js');
-const ConflictFlow = require('./gamesteps/conflict/conflictflow.js');
-const MenuCommands = require('./MenuCommands');
-const SpiritOfTheRiver = require('./cards/SpiritOfTheRiver');
+type GameDetails = {
+    allowSpectators: boolean;
+    clocks: ClockConfig;
+    gameMode: GameModes;
+    gameType: string;
+    id: string;
+    name: string;
+    owner: string;
+    password: string;
+    players: Array<any>;
+    savedGameId: string;
+    spectators: Array<any>;
+    spectatorSquelch: boolean;
+};
 
-const { EffectNames, Phases, EventNames, Locations, ConflictTypes } = require('./Constants');
-const { GameModes } = require('../GameModes.js');
+type GameOptions = {
+    router: unknown;
+    shortCardData: Array<unknown>;
+};
 
-class Game extends EventEmitter {
-    constructor(details, options = {}) {
+export class Game extends EventEmitter {
+    started = false;
+    playStarted = false;
+    createdAt = new Date();
+    currentAbilityWindow = null;
+    currentActionWindow = null;
+    currentEventWindow = null;
+    currentConflict = null;
+    currentDuel = null;
+    manualMode = false;
+    currentPhase = '';
+    roundNumber = 0;
+    initialFirstPlayer = null;
+
+    players: Map<string, Player>;
+    spectators: Map<string, Spectator>;
+
+    owner: string;
+    effectEngine: EffectEngine;
+    gameChat = new GameChat();
+    chatCommands: ChatCommands;
+    pipeline = new GamePipeline();
+    id: string;
+    name: string;
+    allowSpectators: boolean;
+    spectatorSquelch: boolean;
+    password: string;
+    rings: { air: Ring; earth: Ring; fire: Ring; void: Ring; water: Ring };
+    savedGameId: string;
+    gameType: string;
+    gameMode: GameModes;
+    conflictRecord: Array<{ attackingPlayer: Player; declaredType: ConflictTypes; passed: boolean; uuid: string }> = [];
+    shortCardData?: Array<unknown>;
+    router: any;
+    startedAt: Date;
+    allCards: Map<string, BaseCard>;
+    provinceCards: Array<ProvinceCard>;
+
+    constructor(details: GameDetails, options?: GameOptions) {
         super();
 
         this.effectEngine = new EffectEngine(this);
-        this.playersAndSpectators = {};
-        this.gameChat = new GameChat();
         this.chatCommands = new ChatCommands(this);
-        this.pipeline = new GamePipeline();
         this.id = details.id;
         this.name = details.name;
         this.allowSpectators = details.allowSpectators;
         this.spectatorSquelch = details.spectatorSquelch;
         this.owner = details.owner;
-        this.started = false;
-        this.playStarted = false;
-        this.createdAt = new Date();
         this.savedGameId = details.savedGameId;
         this.gameType = details.gameType;
-        this.currentAbilityWindow = null;
-        this.currentActionWindow = null;
-        this.currentEventWindow = null;
-        this.currentConflict = null;
-        this.currentDuel = null;
-        this.manualMode = false;
         this.gameMode = details.gameMode;
-        this.currentPhase = '';
         this.password = details.password;
-        this.roundNumber = 0;
-        this.initialFirstPlayer = null;
 
-        this.conflictRecord = [];
         this.rings = {
             air: new Ring(this, 'air', 'military'),
             earth: new Ring(this, 'earth', 'political'),
@@ -80,199 +120,237 @@ class Game extends EventEmitter {
         };
         this.shortCardData = options.shortCardData || [];
 
-        _.each(details.players, (player) => {
-            this.playersAndSpectators[player.user.username] = new Player(
-                player.id,
-                player.user,
-                this.owner === player.user.username,
-                this,
-                details.clocks
-            );
-        });
-
-        _.each(details.spectators, (spectator) => {
-            this.playersAndSpectators[spectator.user.username] = new Spectator(spectator.id, spectator.user);
-        });
+        this.players = new Map(
+            details.players.map((player) => [
+                player.user.username,
+                new Player(player.id, player.user, this.owner === player.user.username, this, details.clocks)
+            ])
+        );
+        this.spectators = new Map(
+            details.spectators.map((spectator) => [
+                spectator.user.username,
+                new Spectator(spectator.id, spectator.user)
+            ])
+        );
 
         this.setMaxListeners(0);
 
         this.router = options.router;
     }
+
+    /*
+     * Sets up Player objects, creates allCards, checks each player has a stronghold
+     * and starts the game pipeline
+     */
+    public initialise(): void {
+        const playersMissingStronghold = new Set();
+        for (const [username, player] of this.players) {
+            if (player.left) {
+                this.players.delete(username);
+                continue;
+            }
+
+            player.initialise();
+            if (this.gameMode !== GameModes.Skirmish && !player.stronghold) {
+                playersMissingStronghold.add(player);
+            }
+
+            for (const card of player.preparedDeck.allCards) {
+                this.allCards.set(card.uuid, card);
+                if (card instanceof ProvinceCard) {
+                    this.provinceCards.push(card);
+                }
+            }
+        }
+
+        if (this.gameMode !== GameModes.Skirmish) {
+            if (playersMissingStronghold.size > 0) {
+                this.queueSimpleStep(() => {
+                    this.addMessage(
+                        'Invalid Deck Detected: {0} does not have a stronghold in their decklist',
+                        Array.from(playersMissingStronghold.entries())
+                    );
+                    return false;
+                });
+                this.continue();
+                return;
+            }
+
+            for (const player of this.players.values()) {
+                const numProvinces = this.provinceCards.filter((prov) => prov.controller === player);
+                if (numProvinces.length !== 5) {
+                    this.queueSimpleStep(() => {
+                        this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
+                        return false;
+                    });
+                    this.continue();
+                    return;
+                }
+            }
+        }
+
+        this.pipeline.initialise([new SetupPhase(this), new SimpleStep(this, () => this.beginRound())]);
+
+        this.playStarted = true;
+        this.startedAt = new Date();
+
+        this.continue();
+    }
+
     /*
      * Reports errors from the game engine back to the router
-     * @param {type} e
-     * @returns {undefined}
      */
-    reportError(e) {
+    public reportError(e: unknown): void {
         this.router.handleError(this, e);
     }
 
     /**
      * Adds a message to the in-game chat e.g 'Jadiel draws 1 card'
-     * @param {String} message to display (can include {i} references to args)
-     * @param {Array} args to match the references in @string
      */
-    addMessage() {
-        this.gameChat.addMessage(...arguments);
+    public addMessage(message: string, ...args: any[]): void {
+        this.gameChat.addMessage(message, args);
     }
 
     /**
      * Adds a message to in-game chat with a graphical icon
-     * @param {String} one of: 'endofround', 'success', 'info', 'danger', 'warning'
-     * @param {String} message to display (can include {i} references to args)
-     * @param {Array} args to match the references in @string
      */
-    addAlert() {
-        this.gameChat.addAlert(...arguments);
+    public addAlert(
+        alertType: 'endofround' | 'success' | 'info' | 'danger' | 'warning',
+        message: string,
+        ...args: any[]
+    ): void {
+        this.gameChat.addAlert(alertType, message, args);
     }
 
-    get messages() {
+    get messages(): Array<{ date: Date; message: unknown }> {
         return this.gameChat.messages;
     }
 
     /**
      * Checks if a player is a spectator
-     * @param {Object} player
-     * @returns {Boolean}
      */
-    isSpectator(player) {
-        return player.constructor === Spectator;
+    public isSpectator(player: Player | Spectator): boolean {
+        return player instanceof Spectator;
     }
 
     /**
      * Checks whether a player/spectator is still in the game
-     * @param {String} playerName
-     * @returns {Boolean}
      */
-    hasActivePlayer(playerName) {
-        return this.playersAndSpectators[playerName] && !this.playersAndSpectators[playerName].left;
+    public hasActivePlayer(playerName: string): boolean {
+        const player = this.players.get(playerName);
+        return !player ? false : !player.left;
     }
 
     /**
      * Get all players (not spectators) in the game
-     * @returns {Player[]}
      */
-    getPlayers() {
-        return Object.values(this.playersAndSpectators).filter((player) => !this.isSpectator(player));
+    public getPlayers(): Player[] {
+        return Array.from(this.players.values());
     }
 
     /**
      * Returns the Player object (not spectator) for a name
-     * @param {String} playerName
-     * @returns {Player}
      */
-    getPlayerByName(playerName) {
-        let player = this.playersAndSpectators[playerName];
-        if (player && !this.isSpectator(player)) {
-            return player;
-        }
+    public getPlayerByName(playerName: string): undefined | Player {
+        return this.players.get(playerName);
     }
 
     /**
      * Get all players (not spectators) with the first player at index 0
-     * @returns {Player[]} Array of Player objects
      */
-    getPlayersInFirstPlayerOrder() {
+    public getPlayersInFirstPlayerOrder(): Array<Player> {
         return this.getPlayers().sort((a) => (a.firstPlayer ? -1 : 1));
     }
 
     /**
      * Get all players and spectators in the game
-     * @returns {Object} {name1: Player, name2: Player, name3: Spectator}
      */
-    getPlayersAndSpectators() {
-        return this.playersAndSpectators;
-    }
-
-    /**
-     * Get all spectators in the game
-     * @returns {Spectator[]} {name1: Spectator, name2: Spectator}
-     */
-    getSpectators() {
-        return Object.values(this.playersAndSpectators).filter((player) => this.isSpectator(player));
-    }
-
-    /**
-     * Gets the current First Player
-     * @returns {Player}
-     */
-    getFirstPlayer() {
-        return this.getPlayers().find((p) => p.firstPlayer);
-    }
-
-    /**
-     * Gets a player other than the one passed (usually their opponent)
-     * @param {Player} player
-     * @returns {Player}
-     */
-    getOtherPlayer(player) {
-        var otherPlayer = this.getPlayers().find((p) => {
-            return p.name !== player.name;
-        });
-
-        return otherPlayer;
-    }
-
-    /**
-     * Returns the card (i.e. character) with matching uuid from either players
-     * 'in play' area.
-     * @param {String} cardId
-     * @returns DrawCard
-     */
-    findAnyCardInPlayByUuid(cardId) {
-        return _.reduce(
-            this.getPlayers(),
-            (card, player) => {
-                if (card) {
-                    return card;
-                }
-                return player.findCardInPlayByUuid(cardId);
-            },
-            null
+    public getPlayersAndSpectators(): { [playerName: string]: Player | Spectator } {
+        return Object.fromEntries(
+            (Array.from(this.players.entries()) as Array<[string, Player | Spectator]>).concat(
+                Array.from(this.spectators.entries())
+            )
         );
     }
 
     /**
-     * Returns the card with matching uuid from anywhere in the game
-     * @param {String} cardId
-     * @returns BaseCard
+     * Get all spectators in the game
      */
-    findAnyCardInAnyList(cardId) {
-        return this.allCards.find((card) => card.uuid === cardId);
+    public getSpectators(): { [k: string]: Spectator } {
+        return Object.fromEntries(this.spectators.entries());
+    }
+
+    /**
+     * Gets the current First Player
+     */
+    public getFirstPlayer(): Player | undefined {
+        for (const player of this.players.values()) {
+            if (player.firstPlayer) {
+                return player;
+            }
+        }
+    }
+
+    /**
+     * Gets a player other than the one passed (usually their opponent)
+     */
+    public getOtherPlayer(player: Player): Player | undefined {
+        for (const opponent of this.players.values()) {
+            if (opponent !== player) {
+                return opponent;
+            }
+        }
+    }
+
+    /**
+     * Returns the card (i.e. character) with matching uuid from either players 'in play' area.
+     */
+    public findAnyCardInPlayByUuid(cardId: string): DrawCard | undefined {
+        for (const player of this.players.values()) {
+            const card = player.findCardInPlayByUuid(cardId);
+            if (card) {
+                return card;
+            }
+        }
+    }
+
+    /**
+     * Returns the card with matching uuid from anywhere in the game
+     */
+    public findAnyCardInAnyList(cardId: string): BaseCard | undefined {
+        return this.allCards.get(cardId);
     }
 
     /**
      * Returns all cards from anywhere in the game matching the passed predicate
-     * @param {Function} predicate - card => Boolean
-     * @returns {Array} Array of DrawCard objects
      */
-    findAnyCardsInAnyList(predicate) {
-        return this.allCards.filter(predicate);
+    public findAnyCardsInAnyList(predicate: (card: BaseCard) => boolean): Array<BaseCard> {
+        return Array.from(this.allCards.values()).filter(predicate);
     }
 
     /**
-     * Returns all cards (i.e. characters) which matching the passed predicated
-     * function from either players 'in play' area.
-     * @param {Function} predicate - card => Boolean
-     * @returns {Array} Array of DrawCard objects
+     * Returns all cards (i.e. characters) which matching the passed predicated function from either players 'in play' area.
      */
-    findAnyCardsInPlay(predicate) {
-        var foundCards = [];
-
-        _.each(this.getPlayers(), (player) => {
-            foundCards = foundCards.concat(player.findCards(player.cardsInPlay, predicate));
-        });
-
-        return foundCards;
+    public findAnyCardsInPlay(predicate: (card: DrawCard) => boolean): Array<DrawCard> {
+        const charactersInPlay: Array<DrawCard> = [];
+        for (const player of this.players.values()) {
+            for (const character of player.findCards(player.cardsInPlay, predicate)) {
+                charactersInPlay.push(character);
+            }
+        }
+        return charactersInPlay;
     }
 
     /**
      * Returns if a card is in play (characters, attachments, provinces, holdings) that has the passed trait
-     * @param {string} trait
-     * @returns {boolean} true/false if the trait is in pay
      */
-    isTraitInPlay(trait) {
-        return this.getPlayers().some((player) => player.isTraitInPlay(trait));
+    public isTraitInPlay(trait: string): boolean {
+        for (const player of this.players.values()) {
+            if (player.isTraitInPlay(trait)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getProvinceArray(includeStronghold = true) {
@@ -294,10 +372,6 @@ class Game extends EventEmitter {
         }
         this.allCards.push(token);
         return token;
-    }
-
-    get actions() {
-        return GameActions;
     }
 
     isDuringConflict(types = null) {
@@ -802,76 +876,6 @@ class Game extends EventEmitter {
 
     toggleManualMode(playerName) {
         this.chatCommands.manual(playerName);
-    }
-
-    /*
-     * Sets up Player objects, creates allCards, checks each player has a stronghold
-     * and starts the game pipeline
-     * @returns {undefined}
-     */
-    initialise() {
-        var players = {};
-
-        _.each(this.playersAndSpectators, (player) => {
-            if (!player.left) {
-                players[player.name] = player;
-            }
-        });
-
-        this.playersAndSpectators = players;
-
-        let playerWithNoStronghold = null;
-
-        for (let player of this.getPlayers()) {
-            player.initialise();
-            if (this.gameMode !== GameModes.Skirmish && !player.stronghold) {
-                playerWithNoStronghold = player;
-            }
-        }
-
-        this.allCards = _(
-            _.reduce(
-                this.getPlayers(),
-                (cards, player) => {
-                    return cards.concat(player.preparedDeck.allCards);
-                },
-                []
-            )
-        );
-        this.provinceCards = this.allCards.filter((card) => card.isProvince);
-
-        if (this.gameMode !== GameModes.Skirmish) {
-            if (playerWithNoStronghold) {
-                this.queueSimpleStep(() => {
-                    this.addMessage(
-                        'Invalid Deck Detected: {0} does not have a stronghold in their decklist',
-                        playerWithNoStronghold
-                    );
-                    return false;
-                });
-                this.continue();
-                return false;
-            }
-
-            for (let player of this.getPlayers()) {
-                let numProvinces = this.provinceCards.filter((a) => a.controller === player);
-                if (numProvinces.length !== 5) {
-                    this.queueSimpleStep(() => {
-                        this.addMessage('Invalid Deck Detected: {0} has {1} provinces', player, numProvinces.length);
-                        return false;
-                    });
-                    this.continue();
-                    return false;
-                }
-            }
-        }
-
-        this.pipeline.initialise([new SetupPhase(this), new SimpleStep(this, () => this.beginRound())]);
-
-        this.playStarted = true;
-        this.startedAt = new Date();
-
-        this.continue();
     }
 
     /*
@@ -1418,5 +1422,3 @@ class Game extends EventEmitter {
         };
     }
 }
-
-module.exports = Game;

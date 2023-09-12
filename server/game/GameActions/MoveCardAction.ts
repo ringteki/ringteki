@@ -1,8 +1,8 @@
-import { CardGameAction, CardActionProperties} from './CardGameAction';
-import { CardTypes, Locations, EffectNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-import DrawCard = require('../drawcard');
+import type AbilityContext from '../AbilityContext';
+import { Locations, CardTypes, EffectNames } from '../Constants';
+import type BaseCard from '../basecard';
+import DrawCard from '../drawcard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface MoveCardProperties extends CardActionProperties {
     destination?: Locations;
@@ -33,60 +33,74 @@ export class MoveCardAction extends CardGameAction {
     }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as MoveCardProperties;        
+        const properties = this.getProperties(context) as MoveCardProperties;
         return ['shuffling {0} into their deck', [properties.target]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as MoveCardProperties;
-        let destinationController = Array.isArray(properties.target) ?
-            (properties.changePlayer ? properties.target[0].controller.opponent : properties.target[0].controller) :
-            (properties.changePlayer ? properties.target.controller.opponent : properties.target.controller);
-        if(properties.shuffle) {
-            return ['shuffle {0} into {1}\'s {2}', [properties.target, destinationController, properties.destination]]
+        const properties = this.getProperties(context) as MoveCardProperties;
+        const destinationController = Array.isArray(properties.target)
+            ? properties.changePlayer
+                ? properties.target[0].controller.opponent
+                : properties.target[0].controller
+            : properties.changePlayer
+            ? properties.target.controller.opponent
+            : properties.target.controller;
+        if (properties.shuffle) {
+            return ["shuffle {0} into {1}'s {2}", [properties.target, destinationController, properties.destination]];
         }
         return [
-            'move {0} to ' + (properties.bottom ? 'the bottom of ' : '') + '{1}\'s {2}',
+            'move {0} to ' + (properties.bottom ? 'the bottom of ' : '') + "{1}'s {2}",
             [properties.target, destinationController, properties.destination]
         ];
     }
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
+        if (!(card instanceof DrawCard)) {
+            return false;
+        }
+
         const { changePlayer, destination } = this.getProperties(context, additionalProperties) as MoveCardProperties;
-        return (!changePlayer || card.checkRestrictions(EffectNames.TakeControl, context) && 
-                !card.anotherUniqueInPlay(context.player)) &&
-                (!destination || context.player.isLegalLocationForCard(card, destination)) &&
-                card.location !== Locations.PlayArea && 
-                super.canAffect(card, context);
+        return (
+            (!changePlayer ||
+                (card.checkRestrictions(EffectNames.TakeControl, context) &&
+                    !card.anotherUniqueInPlay(context.player))) &&
+            (!destination || context.player.isLegalLocationForCard(card, destination)) &&
+            card.location !== Locations.PlayArea &&
+            super.canAffect(card, context)
+        );
     }
 
     eventHandler(event, additionalProperties = {}): void {
-        let context = event.context;
-        let card = event.card;
+        const context = event.context;
+        const card = event.card;
         event.cardStateWhenMoved = card.createSnapshot();
-        let properties = this.getProperties(context, additionalProperties) as MoveCardProperties;        
-        if(properties.switch && properties.switchTarget) {
-            let otherCard = properties.switchTarget;
+        const properties = this.getProperties(context, additionalProperties) as MoveCardProperties;
+        if (properties.switch && properties.switchTarget) {
+            const otherCard = properties.switchTarget;
             card.owner.moveCard(otherCard, card.location);
         } else {
             this.checkForRefillProvince(card, event, additionalProperties);
         }
         const player = properties.changePlayer && card.controller.opponent ? card.controller.opponent : card.controller;
-        if(properties.discardDestinationCards && context.game.getProvinceArray(false).includes(properties.destination)) {
-            let cardsToDiscard = player.getSourceList(properties.destination).filter(card => card.isDynasty);
-            for(const card of cardsToDiscard) {
+        if (
+            properties.discardDestinationCards &&
+            context.game.getProvinceArray(false).includes(properties.destination)
+        ) {
+            const cardsToDiscard = player.getSourceList(properties.destination).filter((card) => card.isDynasty);
+            for (const card of cardsToDiscard) {
                 player.moveCard(card, Locations.DynastyDiscardPile);
             }
         }
         player.moveCard(card, properties.destination, { bottom: !!properties.bottom });
-        let target = properties.target;
-        if(properties.shuffle && (target.length === 0 || card === target[target.length - 1])) {
-            if(properties.destination === Locations.ConflictDeck) {
+        const targets = Array.isArray(properties.target) ? properties.target : Array.of(properties.target);
+        if (properties.shuffle && (targets.length === 0 || card === targets[targets.length - 1])) {
+            if (properties.destination === Locations.ConflictDeck) {
                 card.owner.shuffleConflictDeck();
-            } else if(properties.destination === Locations.DynastyDeck) {
+            } else if (properties.destination === Locations.DynastyDeck) {
                 card.owner.shuffleDynastyDeck();
             }
-        } else if(properties.faceup) {
+        } else if (properties.faceup) {
             card.facedown = false;
         }
         card.checkForIllegalAttachments();

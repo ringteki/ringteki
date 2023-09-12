@@ -17,7 +17,8 @@ export default class ParanoidHososhi extends DrawCard {
             target: {
                 controller: Players.Any,
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) => card.getCost() === this.getHighestCostOfCharactersInPlay(context),
+                cardCondition: (card: DrawCard, context) =>
+                    card.getCost() === this.getHighestCostOfCharactersInPlay(context),
                 gameAction: AbilityDsl.actions.removeFate((context) => ({
                     amount: 1,
                     recipient: context.player

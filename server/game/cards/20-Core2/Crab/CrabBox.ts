@@ -9,6 +9,7 @@ export default class CrabBox extends StrongholdCard {
     static id = 'crab-box';
 
     private playersWhoDidFirstAction = new Set<string>();
+    private abilityRegistrar: EventRegistrar;
 
     setupCardAbilities() {
         this.abilityRegistrar = new EventRegistrar(this.game, this);

@@ -26,7 +26,8 @@ export default class ToConnectThePeople extends DrawCard {
                     controller: Players.Opponent,
                     location: [Locations.ConflictDiscardPile, Locations.DynastyDiscardPile],
                     targets: true,
-                    cardCondition: (card, context) => !card.isUnique() && card.glory <= this.maxMerchantGlory(context),
+                    cardCondition: (card: DrawCard, context) =>
+                        !card.isUnique() && card.glory <= this.maxMerchantGlory(context),
                     mode: TargetModes.Single,
                     gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.cardLastingEffect({
@@ -44,7 +45,7 @@ export default class ToConnectThePeople extends DrawCard {
     }
 
     private maxMerchantGlory(context) {
-        return (context.player.cardsInPlay as BaseCard[]).reduce(
+        return (context.player.cardsInPlay as DrawCard[]).reduce(
             (maxGlory, card) =>
                 card.getType() === CardTypes.Character && card.hasTrait('merchant') && card.glory > maxGlory
                     ? card.glory

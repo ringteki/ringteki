@@ -10,7 +10,7 @@ export default class DeadEyesSensei extends DrawCard {
             title: 'Ready a character and give them Berserker',
             cost: AbilityDsl.costs.removeFate({
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.bowed || !card.hasTrait('berserker')
+                cardCondition: (card: DrawCard) => card.bowed || !card.hasTrait('berserker')
             }),
             effect: 'ready {1} and give them Berserker',
             effectArgs: (context) => context.costs.removeFate,

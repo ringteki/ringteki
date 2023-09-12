@@ -12,7 +12,7 @@ export default class LancerOfThe9thLegion extends DrawCard {
                 context.game.isDuringConflict(ConflictTypes.Military) && context.source.isAttacking(),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) =>
+                cardCondition: (card: DrawCard, context) =>
                     card.isParticipating() && card.getMilitarySkill() <= context.source.getMilitarySkill(),
                 gameAction: AbilityDsl.actions.bow()
             }

@@ -205,7 +205,7 @@ export interface PersistentEffectProps {
     condition?: (context: AbilityContext) => boolean;
     match?: (card: BaseCard, context?: AbilityContext) => boolean;
     targetController?: Players;
-    targetLocation?: Locations;
+    targetLocation?: Locations | string;
     effect: Function | Function[];
 }
 

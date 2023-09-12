@@ -2,6 +2,7 @@ import { CardTypes, CharacterStatus, EffectNames } from './Constants';
 import EffectSource from './EffectSource';
 import AbilityDsl from './abilitydsl';
 import type BaseCard from './basecard';
+import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
 
@@ -10,7 +11,12 @@ export class StatusToken extends EffectSource {
     printedType = 'token';
     overrideStatus?: CharacterStatus;
 
-    constructor(public game: Game, public card: BaseCard, private initialStatus: CharacterStatus, title: string) {
+    constructor(
+        public game: Game,
+        public card: BaseCard,
+        private initialStatus: CharacterStatus,
+        title: string
+    ) {
         super(game, title);
         this.applyEffects();
     }
@@ -65,7 +71,7 @@ export class StatusToken extends EffectSource {
         }
         const effect = {
             match: this.card,
-            effect: AbilityDsl.effects.modifyBothSkills((card: BaseCard) => -card.getGlory()),
+            effect: AbilityDsl.effects.modifyBothSkills((card: DrawCard) => -card.getGlory()),
             ref: []
         };
         this.persistentEffects.push(effect);

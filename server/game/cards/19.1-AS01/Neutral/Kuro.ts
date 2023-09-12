@@ -22,7 +22,7 @@ export default class Kuro extends DrawCard {
                 controller: Players.Opponent,
                 cardType: CardTypes.Attachment,
                 mode: TargetModes.Single,
-                cardCondition: (card) =>
+                cardCondition: (card: DrawCard) =>
                     card.printedCost >= 1 && card.canAttach(this, { ignoreType: false, controller: this.controller }),
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.playerLastingEffect((context) => ({

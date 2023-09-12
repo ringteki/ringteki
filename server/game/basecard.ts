@@ -1,17 +1,7 @@
-import _ = require('underscore');
-
-const AbilityDsl = require('./abilitydsl.js');
-const CustomPlayAction = require('./customplayaction.js');
-const Effects = require('./effects');
-const EffectSource = require('./EffectSource.js');
-import CardAbility = require('./CardAbility');
-import TriggeredAbility = require('./triggeredability');
-import Game = require('./game');
-import DynastyCardAction = require('./dynastycardaction');
-
 import { GameModes } from '../GameModes';
 import AbilityContext from './AbilityContext';
-import { CardAction } from './CardAction.js';
+import CardAbility from './CardAbility';
+import { CardAction } from './CardAction';
 import {
     AbilityTypes,
     CardTypes,
@@ -22,6 +12,7 @@ import {
     Locations,
     Players
 } from './Constants';
+import EffectSource from './EffectSource';
 import { ElementSymbol } from './ElementSymbol';
 import {
     ActionProps,
@@ -30,26 +21,49 @@ import {
     TriggeredAbilityProps,
     TriggeredAbilityWhenProps
 } from './Interfaces';
-import { PlayAttachmentAction } from './PlayAttachmentAction.js';
-import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction.js';
-import { PlayCharacterAction } from './PlayCharacterAction.js';
+import { PlayAttachmentAction } from './PlayAttachmentAction';
+import { PlayAttachmentToRingAction } from './PlayAttachmentToRingAction';
+import { PlayCharacterAction } from './PlayCharacterAction';
 import { PlayDisguisedCharacterAction } from './PlayDisguisedCharacterAction';
 import { StatusToken } from './StatusToken';
+import AbilityDsl from './abilitydsl';
+import CustomPlayAction from './customplayaction';
+import type DrawCard from './drawcard';
+import DynastyCardAction from './dynastycardaction';
+import Effects from './effects';
+import Game from './game';
 import Player from './player';
-import type DrawCard = require('./drawcard');
+import TriggeredAbility from './triggeredability';
 
-const ValidKeywords = [
-    'ancestral',
-    'restricted',
-    'limited',
-    'sincerity',
-    'courtesy',
-    'pride',
-    'covert',
-    'corrupted',
-    'rally',
-    'eminent'
-];
+type ValidKeyword =
+    | 'ancestral'
+    | 'corrupted'
+    | 'courtesy'
+    | 'covert'
+    | 'eminent'
+    | 'limited'
+    | 'pride'
+    | 'rally'
+    | 'restricted'
+    | 'sincerity';
+
+function isValidKeyword(str: string | ValidKeyword): str is ValidKeyword {
+    switch (str) {
+        case 'ancestral':
+        case 'restricted':
+        case 'limited':
+        case 'sincerity':
+        case 'courtesy':
+        case 'pride':
+        case 'covert':
+        case 'corrupted':
+        case 'rally':
+        case 'eminent':
+            return true;
+        default:
+            return false;
+    }
+}
 
 class BaseCard extends EffectSource {
     controller: Player;
@@ -58,6 +72,7 @@ class BaseCard extends EffectSource {
     id: string;
     printedName: string;
     inConflict = false;
+    // @ts-ignore
     type: CardTypes;
     facedown: boolean;
 
@@ -79,6 +94,10 @@ class BaseCard extends EffectSource {
     attachments = [] as DrawCard[];
     childCards = [] as DrawCard[];
     statusTokens = [] as StatusToken[];
+    printedKeywords = [] as ValidKeyword[];
+    allowedAttachmentTraits = [] as string[];
+    disguisedKeywordTraits = [] as string[];
+    parent?: BaseCard;
 
     constructor(
         public owner: Player,
@@ -98,6 +117,7 @@ class BaseCard extends EffectSource {
         this.applyAttachmentBonus();
     }
 
+    // @ts-ignore
     get name(): string {
         let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
         return copyEffect ? copyEffect.printedName : this.printedName;
@@ -110,9 +130,11 @@ class BaseCard extends EffectSource {
     _getActions(ignoreDynamicGains = false): CardAction[] {
         let actions = this.abilities.actions;
         if (this.anyEffect(EffectNames.CopyCharacter)) {
-            let mostRecentEffect = _.last(
-                this.getRawEffects().filter((effect) => effect.type === EffectNames.CopyCharacter)
+            const copyCharacterEffects = this.getRawEffects().filter(
+                (effect) => effect.type === EffectNames.CopyCharacter
             );
+
+            let mostRecentEffect = copyCharacterEffects[copyCharacterEffects.length - 1];
             actions = mostRecentEffect.value.getActions(this);
         }
         let effectActions = this.getEffects(EffectNames.GainAbility).filter(
@@ -157,9 +179,10 @@ class BaseCard extends EffectSource {
         ];
         let reactions = this.abilities.reactions;
         if (this.anyEffect(EffectNames.CopyCharacter)) {
-            let mostRecentEffect = _.last(
-                this.getRawEffects().filter((effect) => effect.type === EffectNames.CopyCharacter)
+            const copyCharacterEffects = this.getRawEffects().filter(
+                (effect) => effect.type === EffectNames.CopyCharacter
             );
+            let mostRecentEffect = copyCharacterEffects[copyCharacterEffects.length - 1];
             reactions = mostRecentEffect.value.getReactions(this);
         }
         let effectReactions = this.getEffects(EffectNames.GainAbility).filter((ability) =>
@@ -199,9 +222,10 @@ class BaseCard extends EffectSource {
             (ability) => ability.abilityType === AbilityTypes.Persistent
         );
         if (this.anyEffect(EffectNames.CopyCharacter)) {
-            let mostRecentEffect = _.last(
-                this.getRawEffects().filter((effect) => effect.type === EffectNames.CopyCharacter)
+            const copyCharacterEffects = this.getRawEffects().filter(
+                (effect) => effect.type === EffectNames.CopyCharacter
             );
+            let mostRecentEffect = copyCharacterEffects[copyCharacterEffects.length - 1];
             return gainedPersistentEffects.concat(mostRecentEffect.value.getPersistentEffects());
         }
         if (this.anyEffect(EffectNames.GainAllAbilities)) {
@@ -373,9 +397,7 @@ class BaseCard extends EffectSource {
         if (!allowedLocations.includes(location)) {
             throw new Error(`'${location}' is not a supported effect location.`);
         }
-        this.abilities.persistentEffects.push(
-            _.extend({ duration: Durations.Persistent, location: location }, properties)
-        );
+        this.abilities.persistentEffects.push({ duration: Durations.Persistent, location: location, ...properties });
     }
 
     attachmentConditions(properties: AttachmentConditionProps): void {
@@ -468,7 +490,7 @@ class BaseCard extends EffectSource {
         return false;
     }
 
-    hasKeyword(keyword) {
+    hasKeyword(keyword: string) {
         let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(
             (effectValue) => effectValue === keyword.toLowerCase()
         );
@@ -536,23 +558,27 @@ class BaseCard extends EffectSource {
     }
 
     applyAnyLocationPersistentEffects(): void {
-        _.each(this.persistentEffects, (effect) => {
+        for (const effect of this.persistentEffects) {
             if (effect.location === Locations.Any) {
                 effect.ref = this.addEffectToEngine(effect);
             }
-        });
+        }
     }
 
     leavesPlay(destination?: Locations): void {
         this.tokens = {};
-        _.each(this.abilities.actions, (action) => action.limit.reset());
-        _.each(this.abilities.reactions, (reaction) => reaction.limit.reset());
+        for (const action of this.abilities.actions) {
+            action.limit.reset();
+        }
+        for (const reaction of this.abilities.reactions) {
+            reaction.limit.reset();
+        }
         this.controller = this.owner;
         this.inConflict = false;
     }
 
     updateAbilityEvents(from: Locations, to: Locations, reset: boolean = true) {
-        _.each(this.reactions, (reaction) => {
+        for (const reaction of this.reactions) {
             if (reset) {
                 reaction.limit.reset();
             }
@@ -571,9 +597,11 @@ class BaseCard extends EffectSource {
             } else if (!reaction.location.includes(to) && reaction.location.includes(from)) {
                 reaction.unregisterEvents();
             }
-        });
+        }
         if (reset) {
-            _.each(this.abilities.actions, (action) => action.limit.reset());
+            for (const action of this.abilities.actions) {
+                action.limit.reset();
+            }
         }
     }
 
@@ -590,7 +618,7 @@ class BaseCard extends EffectSource {
             this.removeLastingEffects();
         }
         this.updateStatusTokenEffects();
-        _.each(this.persistentEffects, (effect) => {
+        for (const effect of this.persistentEffects) {
             if (effect.location !== Locations.Any) {
                 if (activeLocations[effect.location].includes(to) && !activeLocations[effect.location].includes(from)) {
                     effect.ref = this.addEffectToEngine(effect);
@@ -602,7 +630,7 @@ class BaseCard extends EffectSource {
                     effect.ref = [];
                 }
             }
-        });
+        }
     }
 
     updateEffectContexts() {
@@ -770,18 +798,11 @@ class BaseCard extends EffectSource {
     }
 
     addToken(type: string, number: number = 1): void {
-        if (_.isUndefined(this.tokens[type])) {
-            this.tokens[type] = 0;
-        }
-
-        this.tokens[type] += number;
+        this.tokens[type] = (this.tokens[type] ?? 0) + number;
     }
 
     getTokenCount(type: string): number {
-        if (_.isUndefined(this.tokens[type])) {
-            return 0;
-        }
-        return this.tokens[type];
+        return this.tokens[type] ?? 0;
     }
 
     hasToken(type: string): boolean {
@@ -829,20 +850,21 @@ class BaseCard extends EffectSource {
         return {};
     }
 
-    parseKeywords(text) {
-        var lines = text.split('\n');
-        var potentialKeywords = [];
-        _.each(lines, (line) => {
-            line = line.slice(0, -1);
-            _.each(line.split('.'), (k) => potentialKeywords.push(k.trim()));
-        });
+    parseKeywords(text: string) {
+        var potentialKeywords: string[] = [];
+
+        for (const paragraph of text.split('\n')) {
+            for (const sentence of paragraph.slice(0, -1).split('.')) {
+                potentialKeywords.push(sentence.trim());
+            }
+        }
 
         this.printedKeywords = [];
         this.allowedAttachmentTraits = [];
         this.disguisedKeywordTraits = [];
 
-        _.each(potentialKeywords, (keyword) => {
-            if (_.contains(ValidKeywords, keyword)) {
+        for (const keyword of potentialKeywords) {
+            if (isValidKeyword(keyword)) {
                 this.printedKeywords.push(keyword);
             } else if (keyword.startsWith('disguised ')) {
                 this.disguisedKeywordTraits.push(keyword.replace('disguised ', ''));
@@ -854,13 +876,11 @@ class BaseCard extends EffectSource {
             } else if (keyword.startsWith('no attachments')) {
                 this.allowedAttachmentTraits = ['none'];
             }
-        });
+        }
 
-        this.printedKeywords.forEach((keyword) => {
-            this.persistentEffect({
-                effect: AbilityDsl.effects.addKeyword(keyword)
-            });
-        });
+        for (const keyword of this.printedKeywords) {
+            this.persistentEffect({ effect: AbilityDsl.effects.addKeyword(keyword) });
+        }
     }
 
     applyAttachmentBonus() {
@@ -925,7 +945,7 @@ class BaseCard extends EffectSource {
                 illegalAttachments = illegalAttachments.concat(matchingAttachments.slice(0, -object[trait]));
             }
         }
-        illegalAttachments = _.uniq(illegalAttachments);
+        illegalAttachments = Array.from(new Set(illegalAttachments));
         let maximumRestricted = 2 + this.sumEffects(EffectNames.ModifyRestrictedAttachmentAmount);
         if (this.attachments.filter((card) => card.isRestricted()).length > maximumRestricted) {
             this.game.promptForSelect(this.controller, {
@@ -988,12 +1008,14 @@ class BaseCard extends EffectSource {
      * Checks 'no attachment' restrictions for this card when attempting to
      * attach the passed attachment card.
      */
-    allowAttachment(attachment) {
-        if (_.any(this.allowedAttachmentTraits, (trait) => attachment.hasTrait(trait))) {
-            return true;
+    allowAttachment(attachment: DrawCard) {
+        for (const allowedTrait of this.allowedAttachmentTraits) {
+            if (attachment.hasTrait(allowedTrait)) {
+                return true;
+            }
         }
 
-        return this.isBlank() || this.allowedAttachmentTraits.length === 0;
+        return this.allowedAttachmentTraits.length === 0 || this.isBlank();
     }
 
     /**

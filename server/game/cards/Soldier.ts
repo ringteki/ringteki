@@ -8,7 +8,7 @@ export default class Soldier<D extends DrawCard> extends DrawCard {
         return new Soldier(dummyCard);
     }
 
-    constructor(facedownCard: D) {
+    constructor(public facedownCard: D) {
         super(facedownCard.owner, {
             clan: 'neutral',
             cost: null,
@@ -26,7 +26,6 @@ export default class Soldier<D extends DrawCard> extends DrawCard {
             is_unique: false,
             attachment_allow_duplicates: true
         });
-        this.facedownCard = facedownCard;
     }
 
     leavesPlay(destination = Locations.ConflictDiscardPile): void {

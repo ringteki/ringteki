@@ -1,8 +1,8 @@
 import { AbilityTypes, CardTypes, Players } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class KagiNawa extends DrawCard {
     static id = 'kagi-nawa';
@@ -17,7 +17,7 @@ export default class KagiNawa extends DrawCard {
                     cardType: CardTypes.Character,
                     controller: Players.Any,
                     activePromptTitle: 'Choose a character with printed cost 2 or lower to move in',
-                    cardCondition: (card: BaseCard) => !card.isParticipating() && card.printedCost <= 2,
+                    cardCondition: (card: DrawCard) => !card.isParticipating() && card.printedCost <= 2,
                     gameAction: AbilityDsl.actions.moveToConflict()
                 },
                 effect: 'hook {0} and drag them into the conflict'

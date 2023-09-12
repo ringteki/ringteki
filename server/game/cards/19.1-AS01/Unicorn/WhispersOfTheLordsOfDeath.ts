@@ -1,8 +1,7 @@
-import { CardTypes, FavorTypes, Locations, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
-import Player = require('../../../player');
+import { Players, Locations, CardTypes, FavorTypes } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
+import type Player from '../../../player';
 
 export default class WhispersOfTheLordsOfDeath extends DrawCard {
     static id = 'whispers-of-the-lords-of-death';
@@ -32,7 +31,7 @@ export default class WhispersOfTheLordsOfDeath extends DrawCard {
     }
 
     private highestMilitaryForPlayer(player: Player) {
-        return (player.cardsInPlay as BaseCard[]).reduce((maxMil, card) => {
+        return (player.cardsInPlay as DrawCard[]).reduce((maxMil, card) => {
             if (card.type !== CardTypes.Character) {
                 return maxMil;
             }

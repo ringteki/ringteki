@@ -1,7 +1,7 @@
 import { CardTypes } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class MountRoraima extends ProvinceCard {
     static id = 'mount-roraima';
@@ -12,7 +12,7 @@ export default class MountRoraima extends ProvinceCard {
             when: { onCardRevealed: (event, context) => event.card === context.source },
             gameAction: AbilityDsl.actions.bow(() => ({
                 target: this.game.findAnyCardsInPlay(
-                    (card: BaseCard) => card.getType() === CardTypes.Character && card.costLessThan(3)
+                    (card: DrawCard) => card.getType() === CardTypes.Character && card.costLessThan(3)
                 )
             }))
         });

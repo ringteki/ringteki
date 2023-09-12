@@ -1,12 +1,10 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import BaseCard = require('../basecard');
-import Player = require('../player');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, EventNames, CardTypes }  from '../Constants';
+import type AbilityContext from '../AbilityContext';
+import { EventNames, CardTypes } from '../Constants';
+import { ProvinceCard } from '../ProvinceCard';
+import type BaseCard from '../basecard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface MoveConflictProperties extends CardActionProperties {
-}
+export interface MoveConflictProperties extends CardActionProperties {}
 
 export class MoveConflictAction extends CardGameAction {
     name = 'moveConflict';
@@ -14,27 +12,33 @@ export class MoveConflictAction extends CardGameAction {
     targetType = [CardTypes.Province];
     effect = 'move the conflict to {0}';
     cost = 'moves the conflict to {0}';
-    defaultProperties: MoveConflictProperties = { };
+    defaultProperties: MoveConflictProperties = {};
     constructor(properties: ((context: AbilityContext) => MoveConflictProperties) | MoveConflictProperties) {
         super(properties);
     }
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card || !context.game.isDuringConflict() || card.type !== CardTypes.Province || card.isConflictProvince() || !card.canBeAttacked() || !context.game.currentConflict.getConflictProvinces().some(a => a.controller === card.controller)) {
-            return false;
-        }
-        return super.canAffect(card, context);
+        return (
+            card instanceof ProvinceCard &&
+            !card.isConflictProvince() &&
+            card.canBeAttacked() &&
+            context.game.isDuringConflict() &&
+            context.game.currentConflict.getConflictProvinces().some((a) => a.controller === card.controller) &&
+            super.canAffect(card, context)
+        );
     }
 
     eventHandler(event, additionalProperties): void {
-        let context = event.context;
-        let newProvince = event.card;
+        const context = event.context;
+        const newProvince = event.card;
 
         newProvince.inConflict = true;
         context.game.currentConflict.conflictProvince.inConflict = false;
         context.game.currentConflict.conflictProvince = newProvince;
-        if(newProvince.isFacedown()) {
-            const revealEvent = event.context.game.actions.reveal().getEvent(newProvince, event.context.game.getFrameworkContext());
+        if (newProvince.isFacedown()) {
+            const revealEvent = event.context.game.actions
+                .reveal()
+                .getEvent(newProvince, event.context.game.getFrameworkContext());
             event.context.game.openThenEventWindow(revealEvent);
         }
     }

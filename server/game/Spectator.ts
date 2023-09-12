@@ -1,13 +1,16 @@
-class Spectator {
-    constructor(id, user) {
-        this.user = user;
+export class Spectator {
+    lobbyId = null;
+    buttons = [];
+    menuTitle = 'Spectator mode';
+    name: string;
+    emailHash: string;
+
+    constructor(
+        public id: string,
+        public user: { username: string; emailHash: string }
+    ) {
         this.name = this.user.username;
         this.emailHash = this.user.emailHash;
-        this.id = id;
-        this.lobbyId = null;
-
-        this.buttons = [];
-        this.menuTitle = 'Spectator mode';
     }
 
     getCardSelectionState() {
@@ -26,5 +29,3 @@ class Spectator {
         };
     }
 }
-
-module.exports = Spectator;

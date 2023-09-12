@@ -1,10 +1,12 @@
 import { Locations } from './Constants';
+import { ProvinceCard } from './ProvinceCard';
+import type BaseCard from './basecard';
 import { Conflict } from './conflict';
-import type BaseCard = require('./basecard');
-import type Game = require('./game');
-import ConflictFlow = require('./gamesteps/conflict/conflictflow');
-import type Player = require('./player');
-import type Ring = require('./ring');
+import DrawCard from './drawcard';
+import type Game from './game';
+import ConflictFlow from './gamesteps/conflict/conflictflow';
+import type Player from './player';
+import type Ring from './ring';
 
 type MenuItem = {
     command: string;
@@ -15,15 +17,6 @@ type MenuItem = {
 
 export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, card: BaseCard) {
     switch (menuItem.command) {
-        case 'bow':
-            if (card.bowed) {
-                game.addMessage('{0} readies {1}', player, card);
-                card.ready();
-            } else {
-                game.addMessage('{0} bows {1}', player, card);
-                card.bow();
-            }
-            return;
         case 'honor':
             game.addMessage('{0} honors {1}', player, card);
             card.honor();
@@ -41,14 +34,6 @@ export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, ca
                 card.taint();
             }
             return;
-        case 'addfate':
-            game.addMessage('{0} adds a fate to {1}', player, card);
-            card.modifyFate(1);
-            return;
-        case 'remfate':
-            game.addMessage('{0} removes a fate from {1}', player, card);
-            card.modifyFate(-1);
-            return;
         case 'move':
             if (game.currentConflict) {
                 if (card.isParticipating()) {
@@ -64,12 +49,6 @@ export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, ca
                 }
             }
             return;
-        case 'control':
-            if (player.opponent) {
-                game.addMessage('{0} gives {1} control of {2}', player, player.opponent, card);
-                card.setDefaultController(player.opponent);
-            }
-            return;
         case 'reveal':
             game.addMessage('{0} reveals {1}', player, card);
             card.facedown = false;
@@ -78,13 +57,7 @@ export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, ca
             game.addMessage('{0} flips {1} facedown', player, card);
             card.facedown = true;
             return;
-        case 'break':
-            game.addMessage('{0} {1} {2}', player, card.isBroken ? 'unbreaks' : 'breaks', card);
-            card.isBroken = card.isBroken ? false : true;
-            if (card.location === Locations.StrongholdProvince && card.isBroken) {
-                game.recordWinner(player.opponent, 'conquest');
-            }
-            return;
+
         case 'move_conflict':
             game.addMessage('{0} moves the conflict to {1}', player, card);
             card.inConflict = true;
@@ -95,6 +68,46 @@ export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, ca
         case 'refill':
             game.addMessage('{0} refills {1}', player, card.isFacedown() ? card.location : card);
             card.controller.replaceDynastyCard(card.location);
+            return;
+        case 'bow':
+            if (card instanceof DrawCard) {
+                if (card.bowed) {
+                    game.addMessage('{0} readies {1}', player, card);
+                    card.ready();
+                } else {
+                    game.addMessage('{0} bows {1}', player, card);
+                    card.bow();
+                }
+            }
+            return;
+        case 'addfate':
+            if (card instanceof DrawCard) {
+                game.addMessage('{0} adds a fate to {1}', player, card);
+                card.modifyFate(1);
+            }
+            return;
+        case 'remfate':
+            if (card instanceof DrawCard) {
+                game.addMessage('{0} removes a fate from {1}', player, card);
+                card.modifyFate(-1);
+            }
+            return;
+        case 'control':
+            if (card instanceof DrawCard) {
+                if (player.opponent) {
+                    game.addMessage('{0} gives {1} control of {2}', player, player.opponent, card);
+                    card.setDefaultController(player.opponent);
+                }
+            }
+            return;
+        case 'break':
+            if (card instanceof ProvinceCard) {
+                game.addMessage('{0} {1} {2}', player, card.isBroken ? 'unbreaks' : 'breaks', card);
+                card.isBroken = card.isBroken ? false : true;
+                if (card.location === Locations.StrongholdProvince && card.isBroken) {
+                    game.recordWinner(player.opponent, 'conquest');
+                }
+            }
             return;
     }
 }

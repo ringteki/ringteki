@@ -1,9 +1,10 @@
 import { CardTypes, Players, Locations, TargetModes } from '../../../Constants';
 import { PlayCharacterAsIfFromHand } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHand } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class ToSowTheEarth extends DrawCard {
     static id = 'to-sow-the-earth';
@@ -42,7 +43,7 @@ export default class ToSowTheEarth extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Any,
-                cardCondition: (card) => card.isBroken === false,
+                cardCondition: (card: ProvinceCard) => card.isBroken === false,
                 gameAction: AbilityDsl.actions.turnFacedown()
             },
             max: AbilityDsl.limit.perRound(1)

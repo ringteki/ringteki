@@ -1,6 +1,6 @@
 import { v1 as uuidV1 } from 'uuid';
 
-import { EffectNames, Stages } from './Constants';
+import { CardTypes, EffectNames, Stages } from './Constants';
 import * as GameActions from './GameActions/GameActions';
 import type Game = require('./game');
 import type Player = require('./player');
@@ -8,18 +8,30 @@ import type AbilityContext = require('./AbilityContext');
 import type DrawCard = require('./drawcard');
 import { GameAction } from './GameActions/GameAction';
 
+type GameObjectSummary = {
+    id?: string;
+    label?: string;
+    name?: string;
+    facedown: boolean;
+    type?: string;
+    uuid?: string;
+};
+
 export class GameObject {
     public uuid = uuidV1();
     protected id: string;
     protected printedType = '';
-    private facedown = false;
-    private effects = [];
+    public facedown = false;
+    public effects = [];
 
-    public constructor(public game: Game, public name: string) {
+    public constructor(
+        public game: Game,
+        public name: string
+    ) {
         this.id = name;
     }
 
-    public get type() {
+    public get type(): string {
         return this.getType();
     }
 
@@ -46,9 +58,9 @@ export class GameObject {
     }
 
     public allowGameAction(actionType: string, context = this.game.getFrameworkContext()) {
-        const gameActionFactory = GameActions[actionType]
+        const gameActionFactory = GameActions[actionType];
         if (gameActionFactory) {
-            const gameAction: GameAction = gameActionFactory()
+            const gameAction: GameAction = gameActionFactory();
             return gameAction.canAffect(this, context);
         }
         return this.checkRestrictions(actionType, context);
@@ -75,11 +87,11 @@ export class GameObject {
         return null;
     }
 
-    public hasKeyword() {
+    public hasKeyword(keyword: string) {
         return false;
     }
 
-    public hasTrait() {
+    public hasTrait(trait: string) {
         return false;
     }
 
@@ -87,11 +99,11 @@ export class GameObject {
         return [];
     }
 
-    public isFaction() {
+    public isFaction(faction: string) {
         return false;
     }
 
-    public hasToken() {
+    public hasToken(type: string) {
         return false;
     }
 
@@ -149,7 +161,7 @@ export class GameObject {
         return true;
     }
 
-    public getShortSummaryForControls(activePlayer: Player) {
+    public getShortSummaryForControls(activePlayer: Player): GameObjectSummary {
         return this.getShortSummary();
     }
 
@@ -170,7 +182,7 @@ export class GameObject {
         return effects[effects.length - 1];
     }
 
-    protected getRawEffects() {
+    public getRawEffects() {
         const suppressEffects = this.effects.filter((effect) => effect.type === EffectNames.SuppressEffects);
         const suppressedEffects = suppressEffects.reduce((array, effect) => array.concat(effect.getValue(this)), []);
         return this.effects.filter((effect) => !suppressedEffects.includes(effect));
