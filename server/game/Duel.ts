@@ -42,7 +42,7 @@ export class Duel extends GameObject {
         public game: Game,
         public challenger: DrawCard,
         public targets: DrawCard[],
-        private duelType: DuelTypes,
+        public duelType: DuelTypes,
         private statistic?: (card: DrawCard) => number,
         private challengingPlayer = challenger.controller
     ) {

@@ -28,21 +28,6 @@ export default class StrikeOfFlowingWater extends DrawCard {
                     };
                 })
             })),
-            // target: {
-            //     cardType: CardTypes.Character,
-            //     controller: Players.Self,
-            //     cardCondition: (card, context) => {
-            //         const isInvolved = context.event.duel.isInvolved(card);
-            //         return isInvolved;
-            //     },
-            //     gameAction: AbilityDsl.actions.cardLastingEffect(context => {
-            //         const value = Math.abs(context.player.honorBid - context.player.opponent.honorBid);
-            //         return {
-            //             effect: AbilityDsl.effects.modifyDuelSkill(value, context.event.duel),
-            //             duration: Durations.UntilEndOfDuel
-            //         };
-            //     })
-            // },
             effect: 'get {1} bonus skill for duel resolution',
             effectArgs: context => [Math.abs(context.player.honorBid - context.player.opponent.honorBid)]
         });
