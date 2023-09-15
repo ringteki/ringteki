@@ -1,5 +1,5 @@
-import type AbilityContext from '../../../AbilityContext';
-import { CardTypes, EventNames } from '../../../Constants';
+import AbilityContext from '../../../AbilityContext';
+import { CardTypes, EventNames, Locations, Players } from '../../../Constants';
 import { EventRegistrar } from '../../../EventRegistrar';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
@@ -7,12 +7,24 @@ import DrawCard from '../../../drawcard';
 export default class NewCensure extends DrawCard {
     static id = 'new-censure';
 
-    private censuresPlayedDuringPhase = 0;
+    private copiesPlayedDuringPhase = new Array<string>();
     private eventRegistrar?: EventRegistrar;
 
     setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([EventNames.OnPhaseStarted]);
+        this.eventRegistrar.register([EventNames.OnPhaseStarted, EventNames.OnCardPlayed]);
+
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            // increaseCost doesn't take a variable argument so we use a negative reduce cost
+            effect: AbilityDsl.effects.reduceCost({
+                amount: (card, player) => {
+                    return -this.copiesPlayedDuringPhase.filter(uuid => uuid === player.uuid).length;
+                },
+                match: (card, source) => card === source
+            })
+        });
 
         this.wouldInterrupt({
             title: 'Cancel an event',
@@ -20,11 +32,7 @@ export default class NewCensure extends DrawCard {
                 onInitiateAbilityEffects: (event) => event.card.type === CardTypes.Event
             },
             cannotBeMirrored: true,
-            cost: AbilityDsl.costs.payFate(() => this.censuresPlayedDuringPhase),
             gameAction: AbilityDsl.actions.cancel(),
-            then: () => {
-                this.censuresPlayedDuringPhase += 1;
-            }
         });
     }
 
@@ -32,7 +40,13 @@ export default class NewCensure extends DrawCard {
         return context.player.imperialFavor !== '' && super.canPlay(context, playType);
     }
 
+    onCardPlayed(event: any) {
+        if (event.card.name === this.name) {
+            this.copiesPlayedDuringPhase.push(event.player.uuid);
+        }
+    }
+
     onPhaseStarted() {
-        this.censuresPlayedDuringPhase = 0;
+        this.copiesPlayedDuringPhase.length = 0;
     }
 }

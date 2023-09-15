@@ -15,7 +15,9 @@ export default class DojiShigenobu extends DrawCard {
             }),
             target: {
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.bow()
+                controller: Players.Opponent,
+                cardCondition: card => card.isParticipating(),
+                gameAction: AbilityDsl.actions.bow(),
             },
             then: {
                 gameAction: AbilityDsl.actions.menuPrompt(context => ({

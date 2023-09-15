@@ -13,10 +13,10 @@ export default class KakitaRusumi extends DrawCard {
                 activePromptTitle: 'Choose a character to put into play',
                 amount: 4,
                 deck: Decks.DynastyDeck,
-                cardCondition: (card) => card.type === CardTypes.Character && card.printedCost <= 2 && card.hasTrait('courtier') && card.hasFaction('crane'),
+                cardCondition: (card) => card.type === CardTypes.Character && card.printedCost <= 2 && card.hasTrait('courtier') && card.isFaction('crane'),
                 message: '{0} puts {1} into play honored',
-                shuffle: true,
                 messageArgs: (context, cards) => [context.player, cards],
+                shuffle: true,
                 gameAction: AbilityDsl.actions.putIntoConflict({ status: 'honored' })
             })),
             effect: 'search their dynasty deck for a character to put into play'

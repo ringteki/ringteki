@@ -265,7 +265,7 @@ export class DeckSearchAction extends PlayerAction {
         selectedCards: Set<DrawCard>
     ): void {
         const choosingPlayer = properties.choosingPlayer || event.player;
-        if (properties.message) {
+        if (selectedCards.size > 0 && properties.message) {
             const args = properties.messageArgs ? properties.messageArgs(context, Array.from(selectedCards)) : [];
             return context.game.addMessage(properties.message, ...args);
         }
