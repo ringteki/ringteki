@@ -37,6 +37,8 @@ import { PlayDisguisedCharacterAction } from './PlayDisguisedCharacterAction';
 import { StatusToken } from './StatusToken';
 import Player from './player';
 import type DrawCard = require('./drawcard');
+import Ring = require('./ring');
+import { CardEffect } from './Effects/types';
 
 const ValidKeywords = [
     'ancestral',
@@ -407,14 +409,14 @@ class BaseCard extends EffectSource {
                 effects.push(Effects.attachmentRestrictTraitAmount({ [trait]: traitLimit[trait] }));
             });
         }
+        if (properties.cardCondition) {
+            effects.push(Effects.attachmentCardCondition(properties.cardCondition));
+        }
         if (effects.length > 0) {
             this.persistentEffect({
                 location: Locations.Any,
                 effect: effects
             });
-        }
-        if (properties.cardCondition) {
-            effects.push(Effects.attachmentCardCondition(properties.cardCondition));
         }
     }
 
@@ -1016,40 +1018,55 @@ class BaseCard extends EffectSource {
      * Checks whether the passed card meets the attachment restrictions (e.g.
      * Opponent cards only, specific factions, etc) for this card.
      */
-    canAttach(parent, properties = { ignoreType: false, controller: this.controller }) {
-        const attachmentController = properties.controller || this.controller;
+    canAttach(parent: BaseCard | Ring, properties = { ignoreType: false, controller: this.controller }) {
+        if (parent instanceof Ring) {
+            return false;
+        }
+
         if (
-            !parent ||
             parent.getType() !== CardTypes.Character ||
             (!properties.ignoreType && this.getType() !== CardTypes.Attachment)
         ) {
             return false;
         }
-        if (this.anyEffect(EffectNames.AttachmentMyControlOnly) && attachmentController !== parent.controller) {
-            return false;
-        } else if (
-            this.anyEffect(EffectNames.AttachmentOpponentControlOnly) &&
-            attachmentController === parent.controller
-        ) {
-            return false;
-        } else if (this.anyEffect(EffectNames.AttachmentUniqueRestriction) && !parent.isUnique()) {
-            return false;
-        } else if (
-            this.getEffects(EffectNames.AttachmentFactionRestriction).some(
-                (factions) => !factions.some((faction) => parent.isFaction(faction))
-            )
-        ) {
-            return false;
-        } else if (
-            this.getEffects(EffectNames.AttachmentTraitRestriction).some(
-                (traits) => !traits.some((trait) => parent.hasTrait(trait))
-            )
-        ) {
-            return false;
-        } else if (
-            this.getEffects(EffectNames.AttachmentCardCondition).some((cardCondition) => !cardCondition(parent))
-        ) {
-            return false;
+
+        const attachmentController = properties.controller ?? this.controller;
+        for (const effect of this.getRawEffects() as CardEffect[]) {
+            switch (effect.type) {
+                case EffectNames.AttachmentMyControlOnly: {
+                    if (attachmentController !== parent.controller) {
+                        return false;
+                    }
+                }
+                case EffectNames.AttachmentOpponentControlOnly: {
+                    if (attachmentController === parent.controller) {
+                        return false;
+                    }
+                }
+                case EffectNames.AttachmentUniqueRestriction: {
+                    if (!parent.isUnique()) {
+                        return false;
+                    }
+                }
+                case EffectNames.AttachmentFactionRestriction: {
+                    const factions = effect.getValue<string[]>(this as any);
+                    if (!factions.some((faction) => parent.isFaction(faction))) {
+                        return false;
+                    }
+                }
+                case EffectNames.AttachmentTraitRestriction: {
+                    const traits = effect.getValue<string[]>(this as any);
+                    if (!traits.some((trait) => parent.hasTrait(trait))) {
+                        return false;
+                    }
+                }
+                case EffectNames.AttachmentCardCondition: {
+                    const cardCondition = effect.getValue<(card: BaseCard) => boolean>(this as any);
+                    if (!cardCondition(parent)) {
+                        return false;
+                    }
+                }
+            }
         }
         return true;
     }

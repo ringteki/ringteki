@@ -7,15 +7,19 @@ import type Player = require('./player');
 import type AbilityContext = require('./AbilityContext');
 import type DrawCard = require('./drawcard');
 import { GameAction } from './GameActions/GameAction';
+import type { CardEffect } from './Effects/types';
 
 export class GameObject {
     public uuid = uuidV1();
     protected id: string;
     protected printedType = '';
     private facedown = false;
-    private effects = [];
+    private effects = [] as CardEffect[];
 
-    public constructor(public game: Game, public name: string) {
+    public constructor(
+        public game: Game,
+        public name: string
+    ) {
         this.id = name;
     }
 
@@ -23,11 +27,11 @@ export class GameObject {
         return this.getType();
     }
 
-    public addEffect(effect: unknown) {
+    public addEffect(effect: CardEffect) {
         this.effects.push(effect);
     }
 
-    public removeEffect(effect: unknown) {
+    public removeEffect(effect: CardEffect) {
         this.effects = this.effects.filter((e) => e !== effect);
     }
 
@@ -46,9 +50,9 @@ export class GameObject {
     }
 
     public allowGameAction(actionType: string, context = this.game.getFrameworkContext()) {
-        const gameActionFactory = GameActions[actionType]
+        const gameActionFactory = GameActions[actionType];
         if (gameActionFactory) {
-            const gameAction: GameAction = gameActionFactory()
+            const gameAction: GameAction = gameActionFactory();
             return gameAction.canAffect(this, context);
         }
         return this.checkRestrictions(actionType, context);
