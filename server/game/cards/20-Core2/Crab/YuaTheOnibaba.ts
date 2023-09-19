@@ -2,8 +2,8 @@ import { Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class HidaDurden extends DrawCard {
-    static id = 'hida-durden';
+export default class YuaTheOnibaba extends DrawCard {
+    static id = 'yua-the-onibaba';
 
     public setupCardAbilities() {
         this.action({
