@@ -1,8 +1,8 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class AttendTheHerd extends DrawCard {
-    static id = 'attend-the-herd';
+export default class DayOfBrotherHorse extends DrawCard {
+    static id = 'day-of-brother-horse';
 
     setupCardAbilities() {
         this.reaction({
@@ -12,7 +12,7 @@ export default class AttendTheHerd extends DrawCard {
             },
             max: AbilityDsl.limit.perConflict(1),
             gameAction: AbilityDsl.actions.draw({ amount: 3 }),
-            effect: 'draw 3 cards, take it easy and attend the horses. It\'s a beautiful day after all.'
+            effect: "draw 3 cards, take it easy and attend the horses. It's a beautiful day after all."
         });
     }
 }

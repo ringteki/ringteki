@@ -1,9 +1,9 @@
-import { CardTypes, TargetModes } from '../../../Constants';
+import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
 export default class AsakoKousuke extends DrawCard {
-    static id = 'asako-zatanna';
+    static id = 'asako-kousuke';
 
     setupCardAbilities() {
         this.action({

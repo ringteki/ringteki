@@ -3,7 +3,7 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
 export default class KaitoYoshiaki extends DrawCard {
-    static id = 'kaito-constantine';
+    static id = 'kaito-yoshiaki';
 
     setupCardAbilities() {
         this.action({

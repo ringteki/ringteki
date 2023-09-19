@@ -2,8 +2,8 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class RejuvenatingVapors extends DrawCard {
-    static id = 'rejuvenating-vapors';
+export default class BreathOfSuitengu extends DrawCard {
+    static id = 'breath-of-suitengu';
 
     setupCardAbilities() {
         this.action({
