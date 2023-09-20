@@ -7,7 +7,7 @@ export default class IntegratedWatchtower extends DrawCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Move a cavalry character to the conflict',
+            title: 'Move a character to the conflict',
             condition: (context) => context.player.isDefendingPlayer(),
             target: {
                 cardType: CardTypes.Character,
