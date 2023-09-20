@@ -485,7 +485,17 @@ class BaseCard extends EffectSource {
     }
 
     hasTrait(trait: string): boolean {
-        return this.getTraitSet().has(trait.toLowerCase());
+        return this.hasSomeTrait(trait);
+    }
+
+    hasSomeTrait(...traits: string[]): boolean {
+        const cardTraits = this.getTraitSet();
+        for (const trait of traits) {
+            if (cardTraits.has(trait.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getTraits(): string[] {
@@ -725,8 +735,11 @@ class BaseCard extends EffectSource {
         return this.game.currentConflict && this.game.currentConflict.isDefending(this);
     }
 
-    isParticipating(): boolean {
-        return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
+    isParticipating(conflictType?: 'military' | 'political'): boolean {
+        return (
+            this.game.currentConflict?.isParticipating(this) &&
+            (!conflictType || this.game.isDuringConflict(conflictType))
+        );
     }
 
     isInConflict(): boolean {
