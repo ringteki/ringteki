@@ -2,6 +2,9 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
+const ATTACHMENT = 'attachment';
+const RECEIVER = 'receiver';
+
 export default class JakIthith extends DrawCard {
     static id = 'jak-ithith';
 
@@ -19,26 +22,28 @@ export default class JakIthith extends DrawCard {
                 afterConflict: (event, context) =>
                     event.conflict.winner === context.source.controller && context.source.isDefending()
             },
-            target: {
-                cardType: CardTypes.Attachment,
-                cardCondition: (card) =>
-                    card.parent && card.parent.type === CardTypes.Character && card.parent.isParticipating(),
-                gameAction: AbilityDsl.actions.ifAble((context) => ({
-                    ifAbleAction: AbilityDsl.actions.selectCard({
-                        target: context.target,
-                        cardType: CardTypes.Character,
-                        controller: Players.Self,
-                        cardCondition: (card) => card.isDefending(),
-                        gameAction: AbilityDsl.actions.attach({
-                            attachment: context.target,
+            targets: {
+                [ATTACHMENT]: {
+                    cardType: CardTypes.Attachment,
+                    cardCondition: (card) =>
+                        card.parent && card.parent.type === CardTypes.Character && card.parent.isParticipating()
+                },
+                [RECEIVER]: {
+                    dependsOn: ATTACHMENT,
+                    cardType: CardTypes.Character,
+                    controller: Players.Self,
+                    cardCondition: (card) => card.isDefending(),
+                    gameAction: AbilityDsl.actions.ifAble((context) => ({
+                        ifAbleAction: AbilityDsl.actions.attach({
+                            attachment: context.targets[ATTACHMENT],
+                            target: context.targets[RECEIVER],
                             takeControl: true
                         }),
-                        message: '{0} chooses to attach {1} to {2}',
-                        messageArgs: (cards, player) => [player, context.target, cards]
-                    }),
-                    otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.target })
-                }))
-            }
+                        otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.targets[ATTACHMENT] })
+                    }))
+                }
+            },
+            effect: 'take an attachment from the attacker'
         });
     }
 }

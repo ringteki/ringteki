@@ -1050,34 +1050,40 @@ class BaseCard extends EffectSource {
                     if (attachmentController !== parent.controller) {
                         return false;
                     }
+                    break;
                 }
                 case EffectNames.AttachmentOpponentControlOnly: {
                     if (attachmentController === parent.controller) {
                         return false;
                     }
+                    break;
                 }
                 case EffectNames.AttachmentUniqueRestriction: {
                     if (!parent.isUnique()) {
                         return false;
                     }
+                    break;
                 }
                 case EffectNames.AttachmentFactionRestriction: {
                     const factions = effect.getValue<string[]>(this as any);
                     if (!factions.some((faction) => parent.isFaction(faction))) {
                         return false;
                     }
+                    break;
                 }
                 case EffectNames.AttachmentTraitRestriction: {
                     const traits = effect.getValue<string[]>(this as any);
                     if (!traits.some((trait) => parent.hasTrait(trait))) {
                         return false;
                     }
+                    break;
                 }
                 case EffectNames.AttachmentCardCondition: {
                     const cardCondition = effect.getValue<(card: BaseCard) => boolean>(this as any);
                     if (!cardCondition(parent)) {
                         return false;
                     }
+                    break;
                 }
             }
         }
