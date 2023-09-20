@@ -1,4 +1,4 @@
-import { CardTypes, Players } from '../../../Constants';
+import { CardTypes, ConflictTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -25,6 +25,20 @@ export default class WayOfTheCrab extends DrawCard {
                 gameAction: AbilityDsl.actions.sacrifice()
             })),
             max: AbilityDsl.limit.perGame(1)
+        });
+
+        this.action({
+            title: 'Move an attacker home',
+            condition: (context) => context.game.isDuringConflict(ConflictTypes.Military),
+            cost: AbilityDsl.costs.sacrifice({
+                cardType: CardTypes.Character,
+                cardCondition: (card) => card.isDefending()
+            }),
+            target: {
+                cardType: CardTypes.Character,
+                cardCondition: (card) => card.isAttacking(),
+                gameAction: AbilityDsl.actions.sendHome()
+            }
         });
     }
 }
