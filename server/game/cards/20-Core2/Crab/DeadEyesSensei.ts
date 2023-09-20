@@ -12,18 +12,18 @@ export default class DeadEyesSensei extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.bowed || !card.hasTrait('berserker')
             }),
+            handler: (context) =>
+                AbilityDsl.actions
+                    .multiple([
+                        AbilityDsl.actions.ready(),
+                        AbilityDsl.actions.cardLastingEffect({
+                            duration: Durations.UntilEndOfPhase,
+                            effect: AbilityDsl.effects.addTrait('berserker')
+                        })
+                    ])
+                    .resolve(context.costs.removeFate, context),
             effect: 'ready {1} and give them Berserker',
-            effectArgs: (context) => context.costs.removeFate,
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.ready((context) => ({
-                    target: context.costs.removeFate
-                })),
-                AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.costs.removeFate,
-                    duration: Durations.UntilEndOfPhase,
-                    effect: AbilityDsl.effects.addTrait('creature')
-                }))
-            ])
+            effectArgs: (context) => context.costs.removeFate
         });
     }
 }
