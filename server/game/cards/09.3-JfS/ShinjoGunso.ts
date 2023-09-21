@@ -1,10 +1,11 @@
-const DrawCard = require('../../drawcard.js');
-const { Locations, Decks, PlayTypes, CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
+import { PlayTypes, Decks, CardTypes, Locations } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
-class ShinjoGunso extends DrawCard {
+export default class ShinjoGunso extends DrawCard {
+    static id = 'shinjo-gunso';
+
     setupCardAbilities() {
-        this.chosenCard = null;
         this.reaction({
             title: 'Put a character into play',
             when: {
@@ -15,7 +16,7 @@ class ShinjoGunso extends DrawCard {
             },
             effect: 'search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play',
             gameAction: AbilityDsl.actions.sequentialContext((context) => {
-                let topFive = context.player.dynastyDeck.first(5);
+                const topFive = context.player.dynastyDeck.first(5);
                 return {
                     gameActions: [
                         AbilityDsl.actions.deckSearch(() => ({
@@ -26,16 +27,16 @@ class ShinjoGunso extends DrawCard {
                             message: '{0} puts {1} into play{2}{3}',
                             shuffle: false,
                             messageArgs: (context, cards) => {
-                                let discards = topFive.filter((a) => !cards.includes(a));
-                                let card = cards.length > 0 ? cards : 'nothing';
+                                const discards = topFive.filter((a) => !cards.includes(a));
+                                const card = cards.length > 0 ? cards : 'nothing';
                                 return [context.player, card, discards.length > 0 ? ' and discards ' : '', discards];
                             },
                             gameAction: AbilityDsl.actions.putIntoPlay()
                         })),
                         AbilityDsl.actions.moveCard((context2) => ({
                             target: topFive.filter((a) => {
-                                let events = context2.events.filter((a) => a.name === 'onDeckSearch' && !a.cancelled);
-                                if(events.length > 0 && events[0].selectedCards) {
+                                const events = context2.events.filter((a) => a.name === 'onDeckSearch' && !a.cancelled);
+                                if (events.length > 0 && events[0].selectedCards) {
                                     return !events[0].selectedCards.includes(a);
                                 }
                                 return true;
@@ -49,7 +50,3 @@ class ShinjoGunso extends DrawCard {
         });
     }
 }
-
-ShinjoGunso.id = 'shinjo-gunso';
-
-module.exports = ShinjoGunso;
