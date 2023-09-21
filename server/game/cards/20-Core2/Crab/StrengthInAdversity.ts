@@ -27,10 +27,8 @@ export default class StrengthInAdversity extends DrawCard {
 
     #bonus(context: AbilityContext): number {
         const conflict = context.game.currentConflict as Conflict;
-        return Math.max(
-            0,
-            conflict.getNumberOfParticipantsFor(context.player.opponent) -
-                conflict.getNumberOfParticipantsFor(context.player)
-        );
+        const opponentCount = conflict.getNumberOfParticipantsFor(context.player.opponent);
+        const playerCount = conflict.getNumberOfParticipantsFor(context.player);
+        return Math.max(0, 2 * (opponentCount - playerCount));
     }
 }
