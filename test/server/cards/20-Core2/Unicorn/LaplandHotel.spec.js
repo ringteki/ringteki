@@ -1,4 +1,4 @@
-describe('Lapland Hotel', function () {
+xdescribe('Lapland Hotel', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

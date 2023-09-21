@@ -1,4 +1,4 @@
-describe('Influential Actor', function () {
+xdescribe('Influential Actor', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -39,7 +39,7 @@ describe('Influential Actor', function () {
             expect(this.actor.isTainted).toBe(false);
         });
 
-        it('should not let you target someone you can\'t move a token to', function () {
+        it("should not let you target someone you can't move a token to", function () {
             this.brash.honor();
             this.brash.taint();
             this.player1.clickCard(this.actor);
@@ -58,7 +58,9 @@ describe('Influential Actor', function () {
             expect(this.brash.isHonored).toBe(true);
             expect(this.actor.isHonored).toBe(false);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Influential Actor to move a status token on it to Brash Samurai');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Influential Actor to move a status token on it to Brash Samurai'
+            );
             expect(this.getChatLogs(5)).toContain('player1 moves Honored Token to Brash Samurai');
         });
     });

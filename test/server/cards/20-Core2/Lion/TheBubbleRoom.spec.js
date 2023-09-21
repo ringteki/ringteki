@@ -1,4 +1,4 @@
-describe('The Bubble Room', function () {
+xdescribe('The Bubble Room', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

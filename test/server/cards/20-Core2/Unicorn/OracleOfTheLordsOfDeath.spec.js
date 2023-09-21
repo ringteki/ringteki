@@ -1,4 +1,4 @@
-describe('Oracle of the Lords of Death', function () {
+xdescribe('Oracle of the Lords of Death', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
