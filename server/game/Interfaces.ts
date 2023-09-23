@@ -46,6 +46,7 @@ interface TargetAbility extends BaseTarget {
 
 interface TargetToken extends BaseTarget {
     mode: TargetModes.Token;
+    optional?: boolean;
     location?: Locations | Locations[];
     cardType?: CardTypes | CardTypes[];
     singleToken?: boolean;
