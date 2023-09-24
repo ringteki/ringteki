@@ -3,7 +3,7 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
 export default class PavilionOfTomorrow extends DrawCard {
-    static id = 'pavilion-of-tomorrow';
+    static id = 'pavillion-of-tomorrow';
 
     setupCardAbilities() {
         this.action({
