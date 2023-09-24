@@ -34,21 +34,4 @@ export default class WebisusBlessing extends DrawCard {
             }
         });
     }
-
-    getStatusTokenPrompts(targets) {
-        let actions = [];
-        targets.forEach((target) => {
-            actions.push(
-                AbilityDsl.actions.selectToken(() => ({
-                    card: target,
-                    activePromptTitle: `Which token do you wish to discard from ${target.name}?`,
-                    message: '{0} discards {1} from {2}',
-                    messageArgs: (token, player) => [player, token, target],
-                    gameAction: AbilityDsl.actions.discardStatusToken()
-                }))
-            );
-        });
-
-        return actions;
-    }
 }
