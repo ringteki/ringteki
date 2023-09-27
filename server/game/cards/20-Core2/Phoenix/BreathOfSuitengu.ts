@@ -1,4 +1,5 @@
-import { CardTypes, Players } from '../../../Constants';
+import { Locations, CardTypes, Players } from '../../../Constants';
+import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -12,29 +13,30 @@ export default class BreathOfSuitengu extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.hasTrait('shugenja'),
                 controller: Players.Self,
-                gameAction: [
-                    AbilityDsl.actions.ready(),
-                    AbilityDsl.actions.conditional({
-                        condition: (context) => context.target.hasTrait('water'),
-                        trueGameAction: AbilityDsl.actions.chooseAction({
-                            activePromptTitle: 'Move 1 fate from your pool to the shugenja?',
-                            player: Players.Self,
-                            options: {
-                                Yes: {
-                                    action: AbilityDsl.actions.placeFate((context) => ({
-                                        origin: context.target.controller
-                                    })),
-                                    message: '{0} chooses to gain place 1 fate from their pool on {1}'
-                                },
-                                No: {
-                                    action: AbilityDsl.actions.noAction()
-                                }
-                            }
+                gameAction: AbilityDsl.actions.ready()
+            },
+            then: {
+                gameAction: AbilityDsl.actions.onAffinity({
+                    trait: 'water',
+                    promptTitleForConfirmingAffinity: 'Discard all cards from a province?',
+                    gameAction: AbilityDsl.actions.selectCard({
+                        targets: true,
+                        location: Locations.Provinces,
+                        cardType: CardTypes.Province,
+                        subActionProperties: (card: ProvinceCard) => ({
+                            destination: Locations.DynastyDiscardPile,
+                            target: this.#cardsInProvince(card)
                         }),
-                        falseGameAction: AbilityDsl.actions.noAction()
+                        gameAction: AbilityDsl.actions.moveCard({}),
+                        message: '{0} discards {1}',
+                        messageArgs: (card: ProvinceCard, player, properties) => [player, this.#cardsInProvince(card)]
                     })
-                ]
+                })
             }
         });
+    }
+
+    #cardsInProvince(card: ProvinceCard): Array<DrawCard> {
+        return card.controller.getDynastyCardsInProvince(card.location);
     }
 }
