@@ -23,17 +23,17 @@ export default class AssembleTheCouncil extends DrawCard {
                 numCards: 2,
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                gameAction: AbilityDsl.actions.sequentialContext((context) => ({
-                    gameActions: [
-                        AbilityDsl.actions.ready({ target: context.target }),
-                        AbilityDsl.actions.moveCard({
-                            target: context.source,
-                            destination: Locations.ConflictDeck,
-                            bottom: true
-                        })
-                    ]
-                }))
+                gameAction: AbilityDsl.actions.ready()
             },
+            then: (context) => ({
+                gameAction: [
+                    AbilityDsl.actions.moveCard({
+                        target: context.source,
+                        destination: Locations.ConflictDeck,
+                        bottom: true
+                    })
+                ]
+            }),
             max: AbilityDsl.limit.perConflictOpportunity(1)
         });
     }
