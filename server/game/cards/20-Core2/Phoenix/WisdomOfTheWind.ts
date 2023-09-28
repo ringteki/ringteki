@@ -2,9 +2,6 @@ import { CardTypes, Durations, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-const CHARACTER = 'character';
-const EFFECT = 'effect';
-
 export default class WisdomOfTheWind extends DrawCard {
     static id = 'wisdom-of-the-wind';
 
@@ -32,36 +29,21 @@ export default class WisdomOfTheWind extends DrawCard {
                 })
             },
             then: {
-                gameAction: AbilityDsl.actions.conditional({
-                    condition: (context) =>
-                        context.player.anyCardsInPlay(
-                            (card: DrawCard) => card.hasTrait('shugenja') && card.hasTrait('air')
-                        ),
-                    // TODO: This needs to be a lasting effect on the conflict, not only the current participating characters
-                    trueGameAction: AbilityDsl.actions.chooseAction({
-                        activePromptTitle: 'Make other status tokens be ignored?',
-                        player: Players.Self,
-                        options: {
-                            Yes: {
-                                action: AbilityDsl.actions.cardLastingEffect((context) => ({
-                                    target: context.game.currentConflict.getAttackers().concat(context.game.currentConflict.getDefenders()).filter(
-                                        (card: DrawCard) => card !== context.target
-                                    ),
-                                    effect: [
-                                        AbilityDsl.effects.honorStatusDoesNotModifySkill(),
-                                        AbilityDsl.effects.honorStatusDoesNotAffectLeavePlay(),
-                                        AbilityDsl.effects.taintedStatusDoesNotCostHonor()
-                                    ],
-                                    duration: Durations.UntilEndOfConflict
-                                })),
-                                message: '{0} chooses to make other status tokens be ignored'
-                            },
-                            No: {
-                                action: AbilityDsl.actions.noAction()
-                            }
-                        }
-                    }),
-                    falseGameAction: AbilityDsl.actions.noAction()
+                gameAction: AbilityDsl.actions.onAffinity({
+                    trait: 'air',
+                    promptTitleForConfirmingAffinity: 'Make other status tokens be ignored?',
+                    gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
+                        target: context.game.currentConflict
+                            .getAttackers()
+                            .concat(context.game.currentConflict.getDefenders())
+                            .filter((card: DrawCard) => card !== context.target),
+                        effect: [
+                            AbilityDsl.effects.honorStatusDoesNotModifySkill(),
+                            AbilityDsl.effects.honorStatusDoesNotAffectLeavePlay(),
+                            AbilityDsl.effects.taintedStatusDoesNotCostHonor()
+                        ],
+                        duration: Durations.UntilEndOfConflict
+                    }))
                 })
             }
         });
