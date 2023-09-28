@@ -3,6 +3,50 @@ import { EventNames } from './Constants';
 import Player from './player';
 import type CardAbility from './CardAbility';
 
+class UnlimitedAbilityLimit {
+    public ability?: CardAbility;
+    public currentUser: null | string = null;
+    #useCount = new Map<string, number>();
+
+    constructor() {}
+
+    public clone() {
+        return new UnlimitedAbilityLimit();
+    }
+
+    public isRepeatable(): boolean {
+        return true;
+    }
+
+    public isAtMax(player: Player): boolean {
+        return false;
+    }
+
+    public increment(player: Player): void {
+        const key = this.#getKey(player.name);
+        this.#useCount.set(key, this.currentForPlayer(player) + 1);
+    }
+
+    public reset(): void {
+        this.#useCount.clear();
+    }
+
+    public registerEvents(eventEmitter: EventEmitter): void {}
+
+    public unregisterEvents(eventEmitter: EventEmitter): void {}
+
+    public currentForPlayer(player: Player) {
+        return this.#useCount.get(this.#getKey(player.name)) ?? 0;
+    }
+
+    #getKey(player: string): string {
+        if (this.currentUser) {
+            return player + this.currentUser;
+        }
+        return player;
+    }
+}
+
 class FixedAbilityLimit {
     public ability?: CardAbility;
     public currentUser: null | string = null;
@@ -113,5 +157,5 @@ export function unlimitedPerConflict() {
 }
 
 export function unlimited() {
-    return new RepeatableAbilityLimit(Infinity, new Set([EventNames.OnRoundEnded]));
+    return new UnlimitedAbilityLimit();
 }
