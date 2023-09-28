@@ -53,19 +53,14 @@ export class AffinityAction extends GameAction {
         }
 
         if (!properties.promptTitleForConfirmingAffinity) {
-            return properties.gameAction.addEventsToArray(events, context, additionalProperties);
+            return this.#resolveAffinity(properties, events, context, additionalProperties);
         }
 
         context.player.game.promptWithHandlerMenu(context.player, {
             activePromptTitle: properties.promptTitleForConfirmingAffinity,
             source: context.source,
             choices: ['Yes', 'No'],
-            handlers: [
-                () => {
-                    properties.gameAction.addEventsToArray(events, context, additionalProperties);
-                },
-                () => {}
-            ]
+            handlers: [() => this.#resolveAffinity(properties, events, context, additionalProperties), () => {}]
         });
     }
 
@@ -77,5 +72,18 @@ export class AffinityAction extends GameAction {
         return (
             properties.noAffinityGameAction?.hasTargetsChosenByInitiatingPlayer(context, additionalProperties) ?? false
         );
+    }
+
+    #resolveAffinity(
+        properties: AffinityActionProperties,
+        events: any[],
+        context: AbilityContext,
+        additionalProperties = {}
+    ) {
+        properties.gameAction.addEventsToArray(events, context, additionalProperties);
+        const [msg, args] = properties.gameAction.getEffectMessage(context, additionalProperties);
+        const nextArg = args.length;
+        const affinityMsg = `{${nextArg}} channels their ${properties.trait} affinity to ${msg}`;
+        context.game.addMessage(affinityMsg, args, context.player);
     }
 }
