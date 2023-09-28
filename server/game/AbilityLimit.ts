@@ -111,3 +111,7 @@ export function perGame(max: number) {
 export function unlimitedPerConflict() {
     return new RepeatableAbilityLimit(Infinity, new Set([EventNames.OnConflictFinished]));
 }
+
+export function unlimited() {
+    return new RepeatableAbilityLimit(Infinity, new Set([EventNames.OnRoundEnded]));
+}
