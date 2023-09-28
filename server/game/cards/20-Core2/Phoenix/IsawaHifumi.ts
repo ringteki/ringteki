@@ -25,7 +25,7 @@ export default class IsawaHifumi extends DrawCard {
                     }
                 })
             })),
-            max: AbilityDsl.limit.unlimitedPerConflict()
+            max: AbilityDsl.limit.unlimited()
         });
     }
 }
