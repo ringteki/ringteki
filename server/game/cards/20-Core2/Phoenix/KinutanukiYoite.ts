@@ -11,7 +11,7 @@ export default class KinutanukiYoite extends DrawCard {
             when: {
                 onCardPlayed: (event, context) =>
                     event.player === context.player &&
-                    this.game.isDuringConflict() &&
+                    context.source.isParticipating() &&
                     event.card.hasTrait('fire') &&
                     event.card.hasTrait('spell')
             },

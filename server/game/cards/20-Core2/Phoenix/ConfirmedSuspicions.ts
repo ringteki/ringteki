@@ -1,4 +1,4 @@
-import { CardTypes, ConflictTypes, Players } from '../../../Constants';
+import { CardTypes, ConflictTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -14,26 +14,13 @@ export default class ConfirmedSuspicions extends DrawCard {
                 cardCondition: (card) => card.isParticipating(),
                 gameAction: AbilityDsl.actions.taint()
             },
-            then: {
-                condition: (context) =>
-                    context.player.anyCardsInPlay(
-                        (card: DrawCard) =>
-                            card.isParticipating() && card.hasTrait('shugenja') && card.hasTrait('earth')
-                    ),
-                gameAction: AbilityDsl.actions.chooseAction({
-                    activePromptTitle: 'Bow that character?',
-                    player: Players.Self,
-                    options: {
-                        Yes: {
-                            action: AbilityDsl.actions.bow((context) => ({ target: context.target })),
-                            message: '{0} chooses to bow {1}'
-                        },
-                        No: {
-                            action: AbilityDsl.actions.noAction()
-                        }
-                    }
+            then: (context) => ({
+                gameAction: AbilityDsl.actions.onAffinity({
+                    trait: 'earth',
+                    promptTitleForConfirmingAffinity: 'Bow that character?',
+                    gameAction: AbilityDsl.actions.bow({ target: context.target })
                 })
-            }
+            })
         });
     }
 }

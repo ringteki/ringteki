@@ -1,4 +1,4 @@
-import { CardTypes, TargetModes } from '../../../Constants';
+import { CardTypes, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
@@ -13,23 +13,21 @@ export default class HeartOfTheInferno extends DrawCard {
                 context.player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')),
             target: {
                 mode: TargetModes.Single,
-                cardCondition: (card: BaseCard) => card.attachments.length === 0 && card.isParticipating(),
-                gameAction: [
-                    AbilityDsl.actions.bow(),
-                    AbilityDsl.actions.conditional({
-                        condition: (context) =>
-                            context.player.anyCardsInPlay(
-                                (card: DrawCard) =>
-                                    card.isParticipating() &&
-                                    card.hasTrait('shugenja') &&
-                                    card.hasTrait('fire') &&
-                                    (context.target as DrawCard).type === CardTypes.Attachment
-                            ),
-                        trueGameAction: AbilityDsl.actions.discardFromPlay(),
+                controller: Players.Opponent,
+                cardCondition: (card: BaseCard) =>
+                    card.attachments.length === 0 && (card.isParticipating() || card.parent?.isParticipating()),
+                gameAction: AbilityDsl.actions.bow()
+            },
+            then: (context) => ({
+                gameAction: AbilityDsl.actions.onAffinity({
+                    trait: 'fire',
+                    gameAction: AbilityDsl.actions.conditional({
+                        condition: () => (context.target as DrawCard).type === CardTypes.Attachment,
+                        trueGameAction: AbilityDsl.actions.discardFromPlay({ target: context.target }),
                         falseGameAction: AbilityDsl.actions.noAction()
                     })
-                ]
-            }
+                })
+            })
         });
     }
 }

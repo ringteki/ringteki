@@ -7,39 +7,28 @@ export default class SanctifiedEarth extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: 'Give attached character a skill bonus',
-            condition: (context) => context.game.isDuringConflict() && context.source.parent?.isParticipating(),
-            gameAction: AbilityDsl.actions.multipleContext((context) => {
-                const gameActions = [
-                    AbilityDsl.actions.cardLastingEffect({
-                        target: context.source.parent,
-                        effect: AbilityDsl.effects.modifyBothSkills(2)
+            condition: (context) => context.source.parent?.isParticipating() ?? false,
+            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
+                target: context.source.parent,
+                effect: AbilityDsl.effects.modifyBothSkills(2)
+            })),
+            then: {
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
+                    target: context.source.parent,
+                    effect: AbilityDsl.effects.cardCannot({
+                        cannot: 'sendHome',
+                        restricts: 'opponentsCardEffects'
                     })
-                ];
-                if (this.#hasKicker(context.source.parent)) {
-                    gameActions.push(
-                        AbilityDsl.actions.cardLastingEffect({
-                            target: context.source.parent,
-                            effect: AbilityDsl.effects.cardCannot({
-                                cannot: 'sendHome',
-                                restricts: 'opponentsCardEffects'
-                            })
-                        })
-                    );
-                }
+                }))
+            },
 
-                return { gameActions };
-            }),
-            effect: 'give +2{1} and +2{2} to {3}{4}',
+            effect: 'give +2{1} and +2{2} to {3}',
             effectArgs: (context) => [
                 'military',
                 'political',
-                context.source.parent,
-                this.#hasKicker(context.source.parent) ? ' and protect them from being moved home by the opponent' : ''
+                context.source.parent
+                // this.#hasKicker(context.source.parent) ? ' and protect them from being moved home by the opponent' : ''
             ]
         });
-    }
-
-    #hasKicker(character: DrawCard) {
-        return character.hasTrait('shugenja') && character.hasTrait('earth');
     }
 }

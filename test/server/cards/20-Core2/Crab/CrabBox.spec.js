@@ -1,4 +1,4 @@
-xdescribe('Crab Box', function () {
+describe('Crab Box', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -24,7 +24,7 @@ xdescribe('Crab Box', function () {
             this.crabBox = this.player2.findCardByName('crab-box');
         });
 
-        it('cancels the first action from the attacker', function () {
+        it('cancels the action from the attacker', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brashSamurai],
@@ -38,12 +38,10 @@ xdescribe('Crab Box', function () {
 
             this.player2.clickCard(this.crabBox);
             expect(this.brashSamurai.isHonored).toBe(false);
-            expect(this.getChatLogs(3)).toContain(
-                "player2 uses Crab Box to cancel the effects of Brash Samurai's ability"
-            );
+            expect(this.getChatLogs(3)).toContain("player2 uses Crab Box, bowing Crab Box and spending 1 fate to cancel the effects of Brash Samurai's ability");
         });
 
-        it('does not cancel the first action from the attacker if no defenders', function () {
+        it('does not cancel the action from the attacker if no defenders', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brashSamurai],
@@ -55,26 +53,6 @@ xdescribe('Crab Box', function () {
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).not.toBeAbleToSelect(this.crabBox);
             expect(this.brashSamurai.isHonored).toBe(true);
-        });
-
-        it('does not cancel the later actions from the attacker', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.brashSamurai],
-                defenders: [this.tattooedWanderer]
-            });
-
-            this.player2.pass();
-            this.player1.clickCard(this.brashSamurai);
-            this.player2.clickPrompt('Pass');
-            expect(this.brashSamurai.isHonored).toBe(true);
-
-            this.player2.pass();
-            this.player1.clickCard(this.aPerfectCut);
-            this.player1.clickCard(this.brashSamurai);
-
-            expect(this.player2).not.toHavePrompt('Triggered Abilities');
-            expect(this.player2).not.toBeAbleToSelect(this.crabBox);
         });
     });
 });

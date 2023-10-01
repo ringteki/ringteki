@@ -1,5 +1,6 @@
 import type TriggeredAbilityContext = require('../TriggeredAbilityContext');
 import { AddTokenAction, AddTokenProperties } from './AddTokenAction';
+import { AffinityAction, AffinityActionProperties } from './AffinityAction';
 import { AttachAction, AttachActionProperties } from './AttachAction';
 import { AttachToRingAction, AttachToRingActionProperties } from './AttachToRingAction';
 import { BowAction, BowActionProperties } from './BowAction';
@@ -97,7 +98,6 @@ import { TriggerAbilityAction, TriggerAbilityProperties } from './TriggerAbility
 import { TurnCardFacedownAction, TurnCardFacedownProperties } from './TurnCardFacedownAction';
 
 type PropsFactory<Props> = Props | ((context: TriggeredAbilityContext) => Props);
-
 
 //////////////
 // CARD
@@ -459,6 +459,9 @@ export function chooseAction(propertyFactory: PropsFactory<ChooseActionPropertie
 } // choices, activePromptTitle = 'Select one'
 export function conditional(propertyFactory: PropsFactory<ConditionalActionProperties>): GameAction {
     return new ConditionalAction(propertyFactory);
+}
+export function onAffinity(propertyFactory: PropsFactory<AffinityActionProperties>): GameAction {
+    return new AffinityAction(propertyFactory);
 }
 export function ifAble(propertyFactory: PropsFactory<IfAbleActionProperties>): GameAction {
     return new IfAbleAction(propertyFactory);
