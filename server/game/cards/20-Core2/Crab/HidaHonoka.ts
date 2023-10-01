@@ -1,4 +1,4 @@
-import { CardTypes, Locations, TokenTypes } from '../../../Constants';
+import { CardTypes, Durations, Locations, Players, TokenTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -15,10 +15,14 @@ export default class HidaHonoka extends DrawCard {
                 cardCondition: (card) => card.isBroken,
                 gameAction: AbilityDsl.actions.restoreProvince()
             },
-            gameAction: AbilityDsl.actions.addToken((context) => ({
-                tokenType: TokenTypes.Honor,
-                target: context.player.stronghold
-            }))
+            gameAction: AbilityDsl.actions.playerLastingEffect({
+                targetController: Players.Self,
+                duration: Durations.Custom,
+                effect: AbilityDsl.effects.playerCannot({
+                    cannot: 'restoreProvince'
+                })
+            })
+
         });
     }
 }
