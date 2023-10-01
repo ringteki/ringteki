@@ -140,6 +140,8 @@ const Effects = {
     unlessActionCost: (properties) => EffectBuilder.card.static(EffectNames.UnlessActionCost, properties),
     replacePrintedElement: (value) => EffectBuilder.card.static(EffectNames.ReplacePrintedElement, value),
     winDuel: (duel) => EffectBuilder.card.static(EffectNames.WinDuel, duel),
+    winDuelTies: () => EffectBuilder.card.static(EffectNames.WinDuelTies),
+    ignoreDuelSkill: () => EffectBuilder.card.static(EffectNames.IgnoreDuelSkill),
     // Ring effects
     addElement: (element) => EffectBuilder.ring.flexible(EffectNames.AddElement, element),
     cannotBidInDuels: num => EffectBuilder.player.static(EffectNames.CannotBidInDuels, num),

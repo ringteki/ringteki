@@ -62,6 +62,10 @@ export class Duel extends GameObject {
         return this.loser?.[0].controller;
     }
 
+    get participants(): undefined | DrawCard[] {
+        return [...[this.challenger], ...this.targets];
+    }
+
     isInvolved(card: DrawCard): boolean {
         return card.location === Locations.PlayArea && (card === this.challenger || this.targets.includes(card));
     }
@@ -88,6 +92,8 @@ export class Duel extends GameObject {
 
     determineResult(): void {
         const challengerWins = this.challenger.mostRecentEffect(EffectNames.WinDuel) === this;
+        const challengerWinsTies = this.challenger.anyEffect(EffectNames.WinDuelTies);
+        const targetWinsTies = this.targets.filter(target => target.anyEffect(EffectNames.WinDuelTies)).length > 0;
 
         this.#setDuelDifference();
 
@@ -119,6 +125,20 @@ export class Duel extends GameObject {
                     // Both alive, target wins
                     this.#setWinner(DuelParticipants.Target);
                     this.#setLoser(DuelParticipants.Challenger);
+                } else {
+                    // tie
+                    if (challengerWinsTies || targetWinsTies) {
+                        if (challengerWinsTies) {
+                            this.#setWinner(DuelParticipants.Challenger);
+                        } else {
+                            this.#setLoser(DuelParticipants.Challenger);
+                        }
+                        if (targetWinsTies) {
+                            this.#setWinner(DuelParticipants.Target);
+                        } else {
+                            this.#setLoser(DuelParticipants.Target);
+                        }    
+                    }
                 }
             }
         }
@@ -142,18 +162,22 @@ export class Duel extends GameObject {
 
     #getStatsTotal(charactersOnSameSide: DrawCard[]): StatisticTotal {
         let result = 0;
+        const ignoreSkill = this.participants.filter(card => card.anyEffect(EffectNames.IgnoreDuelSkill)).length > 0;        
+
         for (const card of charactersOnSameSide) {
             if (card.location !== Locations.PlayArea) {
                 return InvalidStats;
             }
-            result += this.#getSkillStatistic(card);
+            if (!ignoreSkill) {
+                result += this.#getSkillStatistic(card);
+            }
+            result += this.#getDuelModifiers(card);
         }
         return result;
     }
 
-    #getSkillStatistic(card: DrawCard): number {
+    #getDuelModifiers(card: DrawCard): number {
         const rawEffects = card.getRawEffects().filter((effect) => effect.type === EffectNames.ModifyDuelSkill);
-        let baseStatistic = 0;
         let effectModifier = 0;
 
         rawEffects.forEach((effect) => {
@@ -162,6 +186,12 @@ export class Duel extends GameObject {
                 effectModifier += props.value;
             }
         });
+        
+        return effectModifier;
+    }
+
+    #getSkillStatistic(card: DrawCard): number {
+        let baseStatistic = 0;
 
         if (this.statistic) {
             baseStatistic = this.statistic(card);
@@ -185,7 +215,7 @@ export class Duel extends GameObject {
             }
         }
 
-        return baseStatistic + effectModifier;
+        return baseStatistic;
     }
 
     #getTotals(challengerStats: number, targetStats: number): [number, number] {

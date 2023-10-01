@@ -178,6 +178,8 @@ export enum EffectNames {
     ConsideredLessHonorable = 'consideredLessHonorable',
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
+    WinDuelTies = "winDuelTies",
+    IgnoreDuelSkill = "ignoreDuelSkill",
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
     LimitLegalAttackers = 'limitLegalAttackers',
     ModifyHonorTransferGiven = 'modifyHonorTransferGiven',
