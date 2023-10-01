@@ -12,11 +12,21 @@ export default class SawakitensBlessing extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                gameAction: AbilityDsl.actions.cardLastingEffect({
-                    effect: AbilityDsl.effects.doesNotBow()
-                }),
+                gameAction: [
+                    AbilityDsl.actions.cardLastingEffect({
+                        condition: () => this.game.isDuringConflict(),
+                        effect: AbilityDsl.effects.doesNotBow()
+                    }),
+                    AbilityDsl.actions.cardLastingEffect((context) => ({
+                        effect: AbilityDsl.effects.cardCannot({
+                            cannot: 'bow',
+                            restricts: 'opponentsCardEffects',
+                            applyingPlayer: context.player
+                        })
+                    }))
+                ]
             },
-            effect: 'prevent {0} from bowing at the end of the conflict',
+            effect: 'prevent opponents\' actions from bowing {0} and stop it bowing at the end of the conflict',
             max: AbilityDsl.limit.perRound(1),
         });
     }

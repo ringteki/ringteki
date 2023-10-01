@@ -9,7 +9,10 @@ export default class DaidojiBigguBosu extends DrawCard {
         this.action({
             title: 'Bow and dishonor a character',
             condition: context => context.game.isDuringConflict(),
-            cost: AbilityDsl.costs.sacrifice({ cardType: CardTypes.Character }),
+            cost: AbilityDsl.costs.sacrifice({
+                cardType: CardTypes.Character,
+                cardCondition: card => card.isParticipating()
+            }),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Opponent,

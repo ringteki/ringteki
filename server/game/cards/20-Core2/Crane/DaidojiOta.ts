@@ -8,12 +8,15 @@ export default class DaidojiOta extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             targetController: Players.Opponent,
-            condition: (context) => context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.costLessThan(3)),
+            condition: (context) => context.player.cardsInPlay.any(card => card.getType() === CardTypes.Character && card.isParticipating()),
             effect: AbilityDsl.effects.reduceCost({
                 amount: (card, player) => {
                     const dynastyMatchesByName = player.dynastyDiscardPile.filter(a => a.name === card.name);
                     const conflictMatchesByName = player.conflictDiscardPile.filter(a => a.name === card.name);
-                    return -1 * (dynastyMatchesByName.length + conflictMatchesByName.length);
+                    if (dynastyMatchesByName.length + conflictMatchesByName.length > 0) {
+                        return -1;
+                    }
+                    return 0;
                 },
                 match: card => card.type === CardTypes.Event
             })

@@ -5,7 +5,7 @@ describe('Daidoji Ota', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['daidoji-ota', 'brash-samurai'],
-                    hand: ['a-perfect-cut', 'a-perfect-cut', 'a-perfect-cut', 'a-perfect-cut']
+                    hand: ['a-perfect-cut', 'a-perfect-cut', 'a-perfect-cut', 'a-perfect-cut', 'retreat']
                 },
                 player2: {
                     inPlay: ['togashi-mitsu'],
@@ -25,6 +25,7 @@ describe('Daidoji Ota', function() {
             this.tactics = this.player2.findCardByName('ujik-tactics');
             this.djinn = this.player2.findCardByName('unleash-the-djinn');
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
+            this.retreat = this.player1.findCardByName('retreat');
         });
 
         describe('action ability', function() {
@@ -122,7 +123,7 @@ describe('Daidoji Ota', function() {
         });
 
         describe('tax', function() {
-            it('should tax copies based on number in discard pile', function() {
+            it('should tax copies if copy in a discard pile', function() {
                 this.noMoreActions();
 
                 this.initiateConflict({
@@ -151,7 +152,7 @@ describe('Daidoji Ota', function() {
 
                 this.player2.clickCard(this.punches[2]);
                 this.player2.clickCard(this.mitsu);
-                expect(this.player2.fate).toBe(fate2 - 3);
+                expect(this.player2.fate).toBe(fate2 - 2);
 
                 this.player1.clickCard(this.cuts[2]);
                 this.player1.clickCard(this.ota);
@@ -176,7 +177,7 @@ describe('Daidoji Ota', function() {
                 expect(this.player2.fate).toBe(fate2);
             });
 
-            it('should not tax if no cheap character', function() {
+            it('should not tax if no participating character', function() {
                 this.player1.moveCard(this.brash, 'dynasty discard pile');
                 this.noMoreActions();
 
@@ -188,109 +189,26 @@ describe('Daidoji Ota', function() {
                 let fate = this.player1.fate;
                 let fate2 = this.player2.fate;
 
+                this.player2.pass();
+                this.player1.clickCard(this.retreat);
+                this.player1.clickCard(this.ota);
+
                 this.player2.clickCard(this.punches[0]);
                 this.player2.clickCard(this.mitsu);
                 expect(this.player2.fate).toBe(fate2);
 
-                this.player1.clickCard(this.cuts[0]);
-                this.player1.clickCard(this.ota);
-                expect(this.player1.fate).toBe(fate);
+                this.player1.pass();
 
                 this.player2.clickCard(this.punches[1]);
                 this.player2.clickCard(this.mitsu);
                 expect(this.player2.fate).toBe(fate2);
 
-                this.player1.clickCard(this.cuts[1]);
-                this.player1.clickCard(this.ota);
-                expect(this.player1.fate).toBe(fate);
+                this.player1.pass();
 
                 this.player2.clickCard(this.punches[2]);
                 this.player2.clickCard(this.mitsu);
                 expect(this.player2.fate).toBe(fate2);
-
-                this.player1.clickCard(this.cuts[2]);
-                this.player1.clickCard(this.ota);
-                expect(this.player1.fate).toBe(fate);
             });
         });
-
-        // it('should search your top 4 cards', function() {
-        //     this.noMoreActions();
-
-        //     this.initiateConflict({
-        //         attackers: [this.rusumi],
-        //         defenders: [],
-        //         type: 'military'
-        //     });
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.rusumi);
-        //     expect(this.player1).toHavePrompt('Choose a character to put into play');
-        //     expect(this.player1).toHaveDisabledPromptButton('Brash Samurai');
-        //     expect(this.player1).toHaveDisabledPromptButton('Paragon of Grace');
-        //     expect(this.player1).toHaveDisabledPromptButton('Otomo Sycophant');
-        //     expect(this.player1).toHavePromptButton('Doji Whisperer');
-        //     expect(this.player1).toHavePromptButton('Take nothing');
-        // });
-
-        // it('should put the chosen character into the conflict', function() {
-        //     this.noMoreActions();
-
-        //     this.initiateConflict({
-        //         attackers: [this.rusumi],
-        //         defenders: [],
-        //         type: 'military'
-        //     });
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.rusumi);
-        //     this.player1.clickPrompt('Doji Whisperer');
-        //     expect(this.game.currentConflict.attackers).toContain(this.whisperer);
-        //     expect(this.whisperer.isHonored).toBe(true);
-        // });
-
-        // it('chat messages', function() {
-        //     this.noMoreActions();
-
-        //     this.initiateConflict({
-        //         attackers: [this.rusumi],
-        //         defenders: [],
-        //         type: 'military'
-        //     });
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.rusumi);
-        //     this.player1.clickPrompt('Doji Whisperer');
-
-        //     expect(this.getChatLogs(6)).toContain('player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play');
-        //     expect(this.getChatLogs(6)).toContain('player1 puts Doji Whisperer into play honored');
-        // });
-
-        // it('chat messages - taking nothing', function() {
-        //     this.noMoreActions();
-
-        //     this.initiateConflict({
-        //         attackers: [this.rusumi],
-        //         defenders: [],
-        //         type: 'military'
-        //     });
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.rusumi);
-        //     this.player1.clickPrompt('Take nothing');
-
-        //     expect(this.getChatLogs(6)).toContain('player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play');
-        //     expect(this.getChatLogs(6)).toContain('player1 takes nothing');
-        // });
-
-        // it('should shuffle your dynasty deck', function() {
-        //     this.noMoreActions();
-
-        //     this.initiateConflict({
-        //         attackers: [this.rusumi],
-        //         defenders: [],
-        //         type: 'military'
-        //     });
-        //     this.player2.pass();
-        //     this.player1.clickCard(this.rusumi);
-        //     this.player1.clickPrompt('Doji Whisperer');
-        //     expect(this.getChatLogs(6)).toContain('player1 is shuffling their dynasty deck');
-        // });
     });
 });

@@ -21,44 +21,44 @@ describe('Dinner in the Sky', function () {
             this.dinnerInTheSky = this.player2.findCardByName('dinner-in-the-sky', 'province 1');
         });
 
-        it('bows a character with low political during a political conflict', function () {
+        it('if no defenders, readies & moves a character you control to the conflict', function () {
+            this.yokuni.bow();
+
             this.noMoreActions();
             this.initiateConflict({
                 type: 'political',
-                attackers: [this.aggressiveMoto, this.giverOfGifts],
-                defenders: [this.yokuni, this.initiate],
+                attackers: [this.aggressiveMoto],
+                defenders: [],
                 province: this.dinnerInTheSky
             });
 
+            expect(this.yokuni.bowed).toBe(true);
+            expect(this.game.currentConflict.defenders).not.toContain(this.yokuni);
+
             this.player2.clickCard(this.dinnerInTheSky);
-            expect(this.player2).toBeAbleToSelect(this.aggressiveMoto);
+            expect(this.player2).not.toBeAbleToSelect(this.aggressiveMoto);
             expect(this.player2).toBeAbleToSelect(this.initiate);
-            expect(this.player2).not.toBeAbleToSelect(this.yokuni);
+            expect(this.player2).toBeAbleToSelect(this.yokuni);
             expect(this.player2).not.toBeAbleToSelect(this.giverOfGifts);
 
-            this.player2.clickCard(this.aggressiveMoto);
-            expect(this.aggressiveMoto.bowed).toBe(true);
-            expect(this.getChatLogs(3)).toContain('player2 uses Dinner in the Sky to bow Aggressive Moto');
+            this.player2.clickCard(this.yokuni);
+            expect(this.yokuni.bowed).toBe(false);
+            expect(this.game.currentConflict.defenders).toContain(this.yokuni);
+            expect(this.getChatLogs(3)).toContain('player2 uses Dinner in the Sky to ready Togashi Yokuni and move it into the conflict');
         });
 
-        it('bows a character with low political during a military conflict', function () {
+        it('if defenders, should not trigger', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
                 attackers: [this.aggressiveMoto, this.giverOfGifts],
-                defenders: [this.yokuni, this.initiate],
+                defenders: [this.initiate],
                 province: this.dinnerInTheSky
             });
 
+            expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.dinnerInTheSky);
-            expect(this.player2).toBeAbleToSelect(this.aggressiveMoto);
-            expect(this.player2).toBeAbleToSelect(this.initiate);
-            expect(this.player2).not.toBeAbleToSelect(this.yokuni);
-            expect(this.player2).not.toBeAbleToSelect(this.giverOfGifts);
-
-            this.player2.clickCard(this.aggressiveMoto);
-            expect(this.aggressiveMoto.bowed).toBe(true);
-            expect(this.getChatLogs(3)).toContain('player2 uses Dinner in the Sky to bow Aggressive Moto');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
     });
 });
