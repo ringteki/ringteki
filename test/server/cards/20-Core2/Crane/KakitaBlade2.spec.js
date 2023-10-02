@@ -9,7 +9,7 @@ describe('Kakita Blade 2', function () {
                 },
                 player2: {
                     inPlay: ['bayushi-dairu', 'doji-challenger'],
-                    hand: ['kakita-blade-2', 'kakita-blade-2'],
+                    hand: ['kakita-blade-2', 'kakita-blade-2', 'way-of-the-crane'],
                 }
             });
             this.ambusher = this.player1.findCardByName('daidoji-ambusher');
@@ -18,6 +18,7 @@ describe('Kakita Blade 2', function () {
             this.dairu = this.player2.findCardByName('bayushi-dairu');
             this.cut = this.player1.findCardByName('a-perfect-cut');
             this.challenger = this.player2.findCardByName('doji-challenger');
+            this.crane = this.player2.findCardByName('way-of-the-crane');
 
             this.blade1 = this.player1.filterCardsByName('kakita-blade-2')[0];
             this.blade2 = this.player1.filterCardsByName('kakita-blade-2')[1];
@@ -66,16 +67,16 @@ describe('Kakita Blade 2', function () {
             expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher\'s gained ability from Kakita Blade to take an action at the start of the conflict');
             expect(this.getChatLogs(10)).toContain('player1 uses Brash Samurai\'s gained ability from Kakita Blade to take an action at the start of the conflict');
 
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // Attacker first trigger
             this.player1.clickCard(this.ambusher);
             this.player1.clickCard(this.dairu);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // Attacker second trigger
             this.player1.clickCard(this.cut);
             this.player1.clickCard(this.brash);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.player2).toHavePrompt('Conflict Action Window'); // Normal conflict flow
         });
 
-        it('each player triggers, should still give first action to player1', function () {
+        it('each player triggers, should still give first "extra" action to defender', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.ambusher],
@@ -89,7 +90,73 @@ describe('Kakita Blade 2', function () {
             expect(this.player2).toBeAbleToSelect(this.challenger);
             this.player2.clickCard(this.challenger);
 
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+        });
+
+        it('multiple triggers from different players - defender gets all their "extra" ones first, then attacker extra ones, then normal ones', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash, this.ambusher],
+                defenders: [this.challenger]
+            });
+
+            this.player1.clickCard(this.ambusher);
+            this.player2.clickCard(this.challenger);
+            this.player1.clickCard(this.brash);
+
+            expect(this.player2).toHavePrompt('Conflict Action Window'); // defender's only trigger
+            this.player2.clickCard(this.crane);
+            this.player2.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // attacker's first trigger
+            this.player1.clickCard(this.ambusher);
+            this.player1.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // attacker's second trigger
+            this.player1.clickCard(this.cut);
+            this.player1.clickCard(this.brash);
+            expect(this.player2).toHavePrompt('Conflict Action Window'); // normal conflict window starts
+        });
+
+        it('switching attacker & defender', function () {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.brash, this.ambusher]
+            });
+
+            this.player1.clickCard(this.ambusher);
+            this.player2.clickCard(this.challenger);
+            this.player1.clickCard(this.brash);
+
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // defender's first trigger
+            this.player1.clickCard(this.ambusher);
+            this.player1.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // defender's second trigger
+            this.player1.clickCard(this.cut);
+            this.player1.clickCard(this.brash);
+            expect(this.player2).toHavePrompt('Conflict Action Window'); // attacker's only trigger
+            this.player2.clickCard(this.crane);
+            this.player2.clickCard(this.challenger);
+            expect(this.player1).toHavePrompt('Conflict Action Window'); // normal conflict window starts
+        });
+
+        it('on defense, should give you two actions in a row', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whisperer],
+                defenders: [this.challenger]
+            });
+
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.challenger);
+            this.player2.clickCard(this.challenger);
+
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            this.player2.clickCard(this.crane);
+            this.player2.clickCard(this.challenger);
+
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
     });
 });

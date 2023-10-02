@@ -195,6 +195,7 @@ export enum Durations {
     UntilEndOfRound = 'untilEndOfRound',
     UntilPassPriority = 'untilPassPriority',
     UntilOpponentPassPriority = 'untilOpponentPassPriority',
+    UntilSelfPassPriority = 'untilSelfPassPriority',
     UntilNextPassPriority = 'untilNextPassPriority',
     Persistent = 'persistent',
     Custom = 'lastingEffect'

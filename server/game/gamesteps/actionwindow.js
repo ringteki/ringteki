@@ -61,14 +61,28 @@ class ActionWindow extends UiPrompt {
     postResolutionUpdate(resolver) { // eslint-disable-line no-unused-vars
         this.currentPlayerConsecutiveActions += 1;
         this.prevPlayerPassed = false;
-        if(this.currentPlayerConsecutiveActions > this.currentPlayer.sumEffects(EffectNames.AdditionalAction)) {
+        let allowableConsecutiveActions = this.currentPlayer.sumEffects(EffectNames.AdditionalAction);
+        if (this.currentPlayer.actionPhasePriority) {
+            if (allowableConsecutiveActions > 0) {
+                allowableConsecutiveActions--;
+            }
+        }
+
+        if(this.currentPlayerConsecutiveActions > allowableConsecutiveActions) {
             this.nextPlayer();
         }
     }
 
     continue() {
-        if(this.currentPlayer.opponent && this.currentPlayer.opponent.actionPhasePriority) {
-            this.currentPlayer = this.currentPlayer.opponent;
+        if (this.currentPlayer.opponent) {
+            if (this.currentPlayer.opponent.actionPhasePriority && this.currentPlayer.actionPhasePriority) {
+                // Both players have action phase priority, don't do anything, it'll clear on its own
+            } else if (this.currentPlayer.opponent.actionPhasePriority && !this.currentPlayer.actionPhasePriority) {
+                this.currentPlayer = this.currentPlayer.opponent;
+            } else if (this.currentPlayer.isDefendingPlayer()) {
+                this.currentPlayer.actionPhasePriority = false;
+            }
+        } else {
             this.currentPlayer.actionPhasePriority = false;
         }
 
@@ -136,7 +150,13 @@ class ActionWindow extends UiPrompt {
         }
 
         this.currentPlayerConsecutiveActions += 1;
-        if(this.currentPlayerConsecutiveActions > this.currentPlayer.sumEffects(EffectNames.AdditionalAction)) {
+        let allowableConsecutiveActions = this.currentPlayer.sumEffects(EffectNames.AdditionalAction);
+        if (this.currentPlayer.actionPhasePriority) {
+            if (allowableConsecutiveActions > 0) {
+                allowableConsecutiveActions--;
+            }
+        }
+        if(this.currentPlayerConsecutiveActions > allowableConsecutiveActions) {
             this.prevPlayerPassed = true;
             this.nextPlayer();
         }
@@ -144,6 +164,8 @@ class ActionWindow extends UiPrompt {
 
     nextPlayer() {
         let otherPlayer = this.game.getOtherPlayer(this.currentPlayer);
+
+        this.currentPlayer.actionPhasePriority = false;
 
         if(this.currentPlayer.anyEffect(EffectNames.ResolveConflictEarly)) {
             this.complete();

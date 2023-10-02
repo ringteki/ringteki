@@ -22,10 +22,11 @@ export default class KakitaBlade2 extends DrawCard {
                 },
                 gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
                     targetController: context.player,
-                    duration: Durations.UntilPassPriority,
-                    effect: context.player.actionPhasePriority ?
-                        AbilityDsl.effects.additionalAction() :
+                    duration: Durations.UntilSelfPassPriority,
+                    effect: [
                         AbilityDsl.effects.gainActionPhasePriority(),
+                        AbilityDsl.effects.additionalAction(),
+                    ],
                 })),
                 effect: 'take an action at the start of the conflict'
             })

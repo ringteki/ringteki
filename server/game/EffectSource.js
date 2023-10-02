@@ -61,6 +61,11 @@ class EffectSource extends GameObject {
         this.addEffectToEngine(Object.assign({ duration: Durations.UntilNextPassPriority, location: Locations.Any }, properties));
     }
 
+    untilSelfPassPriority(propertyFactory) {
+        var properties = propertyFactory(AbilityDsl);
+        this.addEffectToEngine(Object.assign({ duration: Durations.UntilSelfPassPriority, location: Locations.Any }, properties));
+    }
+
     /**
      * Applies a lasting effect which lasts until an event contained in the
      * `until` property for the effect has occurred.
