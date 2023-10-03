@@ -11,8 +11,8 @@ export default class AnkokusBlessing extends DrawCard {
             phase: Phases.Fate,
             cost: AbilityDsl.costs.discardCard({ location: Locations.Hand }),
             gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.draw(context => ({ target: context.player, amount: 2 })),
-                AbilityDsl.actions.gainFate(context => ({ target: context.player, amount: 2 }))
+                AbilityDsl.actions.draw((context) => ({ target: context.player, amount: 2 })),
+                AbilityDsl.actions.gainFate((context) => ({ target: context.player, amount: 2 }))
             ]),
             max: AbilityDsl.limit.perRound(1),
             effect: 'draw 2 cards and gain 2 fate'
