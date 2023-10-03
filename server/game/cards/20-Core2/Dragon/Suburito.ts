@@ -11,7 +11,7 @@ export default class Suburito extends DrawCard {
                 title: 'Initiate a military duel',
                 initiateDuel: {
                     type: DuelTypes.Military,
-                    gameAction: duel => AbilityDsl.actions.honor({ target: duel.winner }),
+                    gameAction: (duel) => AbilityDsl.actions.honor({ target: duel.winner })
                 },
                 printedAbility: false
             })

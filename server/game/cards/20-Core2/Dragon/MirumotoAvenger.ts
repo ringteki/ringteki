@@ -8,14 +8,15 @@ export default class MirumotoAvenger extends DrawCard {
     public setupCardAbilities() {
         this.interrupt({
             when: {
-                onCardLeavesPlay: (event, context) => event.card === context.source && event.context.player === context.player.opponent
+                onCardLeavesPlay: (event, context) =>
+                    event.card === context.source && event.context.player === context.player.opponent
             },
             title: 'Initiate a military duel, discarding the loser',
             initiateDuel: {
                 type: DuelTypes.Military,
                 requiresConflict: false,
-                gameAction: duel => AbilityDsl.actions.discardFromPlay({ target: duel.loser })
-            },
+                gameAction: (duel) => AbilityDsl.actions.discardFromPlay({ target: duel.loser })
+            }
         });
     }
 }

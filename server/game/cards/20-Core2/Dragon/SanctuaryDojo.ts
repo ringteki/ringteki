@@ -8,11 +8,11 @@ export default class SanctuaryDojo extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: 'Ready character and move to conflict',
-            condition: context => context.player.isDefendingPlayer(),
+            condition: (context) => context.player.isDefendingPlayer(),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => card.hasTrait('duelist'),
+                cardCondition: (card) => card.hasTrait('duelist'),
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.ready(),
                     AbilityDsl.actions.moveToConflict()

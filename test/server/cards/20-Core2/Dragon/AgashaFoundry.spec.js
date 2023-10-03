@@ -44,7 +44,7 @@ describe('Agasha Foundry', function() {
 
             this.player1.clickCard(this.bastion)
             this.player1.clickCard(this.doomed)
-            expect(this.player1).toHavePrompt('Any interrupts to Portable Bastion being played?');
+            expect(this.player1).toHavePrompt('Any interrupts?');
             expect(this.player1).toBeAbleToSelect(this.agashaFoundry);
 
             this.player1.clickCard(this.agashaFoundry)
