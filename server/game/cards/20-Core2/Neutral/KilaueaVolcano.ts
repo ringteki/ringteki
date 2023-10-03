@@ -7,15 +7,12 @@ export default class KilaueaVolcano extends ProvinceCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Discard all attachments from a character',
+            title: 'Discard an attachment',
             target: {
-                cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating() && card.attachments.length > 0
-            },
-            effect: 'remove all attachments from {0}',
-            gameAction: AbilityDsl.actions.discardFromPlay((context) => ({
-                target: context.target.attachments
-            }))
+                cardType: CardTypes.Attachment,
+                cardCondition: (card) =>  card.parent?.type === CardTypes.Character && card.parent.isParticipating(),
+                gameAction: AbilityDsl.actions.discardFromPlay()
+            }
         });
     }
 }
