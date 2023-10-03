@@ -14,7 +14,7 @@ class AkodoRecruit extends DrawCard {
             side: 'dynasty',
             text: '',
             type: CardTypes.Character,
-            traits: ['bushi'],
+            traits: ['peasant'],
             is_unique: false
         });
         this.facedownCard = facedownCard;
