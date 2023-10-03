@@ -2,8 +2,8 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class AkodoLeslie extends DrawCard {
-    static id = 'akodo-leslie';
+export default class AkodoAsuka extends DrawCard {
+    static id = 'akodo-asuka';
 
     setupCardAbilities() {
         this.reaction({
