@@ -1,4 +1,4 @@
-import { Locations } from '../../../Constants';
+import { Locations, Phases } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -8,6 +8,7 @@ export default class AnkokusBlessing extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Gain 2 fate and draw 2 cards',
+            phase: Phases.Fate,
             cost: AbilityDsl.costs.discardCard({ location: Locations.Hand }),
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.draw(context => ({ target: context.player, amount: 2 })),
