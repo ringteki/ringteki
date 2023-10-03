@@ -11,7 +11,9 @@ export default class CollectorOfFavors extends DrawCard {
                 title: 'Gain a fate',
                 when: {
                     afterConflict: (event, context) =>
-                        event.conflict.winner === context.source.controller && context.source.isParticipating() && context.source.hasTrait('courtier')
+                        event.conflict.winner === context.source.controller &&
+                        context.source.isParticipating() &&
+                        context.source.hasTrait('courtier')
                 },
                 gameAction: AbilityDsl.actions.gainFate()
             })

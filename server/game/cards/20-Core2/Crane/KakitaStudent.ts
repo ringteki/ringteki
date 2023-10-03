@@ -13,7 +13,7 @@ export default class KakitaStudent extends DrawCard {
                 hidePromptIfSingleCard: true,
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => {
+                cardCondition: (card) => {
                     const isInvolved = context.event.duel.isInvolved(card);
                     const higherCost = card.printedCost > context.source.printedCost;
 
@@ -21,7 +21,7 @@ export default class KakitaStudent extends DrawCard {
                 },
                 message: '{0} gives {1} 2 bonus skill for this duel',
                 messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     effect: AbilityDsl.effects.modifyDuelSkill(2, context.event.duel),
                     duration: Durations.UntilEndOfDuel
                 }))

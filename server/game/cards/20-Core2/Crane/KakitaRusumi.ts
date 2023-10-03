@@ -8,12 +8,16 @@ export default class KakitaRusumi extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Put a character into play',
-            condition: context => context.game.isDuringConflict(),
+            condition: (context) => context.game.isDuringConflict(),
             gameAction: AbilityDsl.actions.deckSearch(() => ({
                 activePromptTitle: 'Choose a character to put into play',
                 amount: 4,
                 deck: Decks.DynastyDeck,
-                cardCondition: (card) => card.type === CardTypes.Character && card.printedCost <= 2 && card.hasTrait('courtier') && card.isFaction('crane'),
+                cardCondition: (card) =>
+                    card.type === CardTypes.Character &&
+                    card.printedCost <= 2 &&
+                    card.hasTrait('courtier') &&
+                    card.isFaction('crane'),
                 message: '{0} puts {1} into play honored',
                 messageArgs: (context, cards) => [context.player, cards],
                 shuffle: true,

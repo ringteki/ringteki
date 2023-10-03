@@ -15,16 +15,22 @@ export default class TwiceRemovedCousin extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: card => card.location !== 'stronghold province',
+                cardCondition: (card) => card.location !== 'stronghold province',
                 gameAction: AbilityDsl.actions.deckSearch({
-                    cardCondition: card => card.type === CardTypes.Character && card.printedCost >= 4 && card.isFaction('crane'),
+                    cardCondition: (card) =>
+                        card.type === CardTypes.Character && card.printedCost >= 4 && card.isFaction('crane'),
                     amount: 4,
                     deck: Decks.DynastyDeck,
                     shuffle: true,
                     selectedCardsHandler: (context, event, cards) => {
-                        if(cards.length > 0) {
-                            this.game.addMessage('{0} selects {1} and puts it into {2}', event.player, cards, context.target.facedown ? context.target.location : context.target);
-                            cards.forEach(card => {
+                        if (cards.length > 0) {
+                            this.game.addMessage(
+                                '{0} selects {1} and puts it into {2}',
+                                event.player,
+                                cards,
+                                context.target.facedown ? context.target.location : context.target
+                            );
+                            cards.forEach((card) => {
                                 event.player.moveCard(card, context.target.location);
                                 card.facedown = false;
                             });
@@ -35,6 +41,6 @@ export default class TwiceRemovedCousin extends DrawCard {
                 })
             },
             effect: 'put a character from their deck into a province'
-        })
+        });
     }
 }
