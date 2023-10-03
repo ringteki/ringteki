@@ -237,6 +237,7 @@ const Effects = {
         apply: (player, context) => player.addCostReducer(context.source, { amount: amount, match: match, limit: AbilityLimit.fixed(1) }),
         unapply: (player, context, reducer) => player.removeCostReducer(reducer)
     }),
+    satisfyAffinity: (traits) => EffectBuilder.player.static(EffectNames.SatisfyAffinity, traits),
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
     provideConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ProvideConflictDeclarationType, type),
     forceConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ForceConflictDeclarationType, type),

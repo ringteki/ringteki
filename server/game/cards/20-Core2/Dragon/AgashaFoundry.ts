@@ -1,4 +1,4 @@
-import { Locations } from '../../../Constants';
+import { Durations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,17 +6,18 @@ export default class AgashaFoundry extends DrawCard {
     static id = 'agasha-foundry';
 
     public setupCardAbilities() {
-        this.action({
-            title: 'Search for a card',
-            cost: AbilityDsl.costs.payFateToRing(),
-            gameAction: AbilityDsl.actions.deckSearch({
-                amount: 5,
-                cardCondition: (card, context) => card.hasTrait('spell') || card.hasTrait('kiho'),
-                shuffle: true,
-                gameAction: AbilityDsl.actions.moveCard({
-                    destination: Locations.Hand
-                })
-            })
+        this.interrupt({
+            title: 'Satisfy Affinity for the next Spell',
+            when: {
+                onCardPlayed: (event, context) => event.player === context.player && (event.card as DrawCard).hasTrait('spell')
+            },
+            gameAction: AbilityDsl.actions.playerLastingEffect(({
+                targetController: Players.Self,
+                duration: Durations.UntilSelfPassPriority,
+                effect: AbilityDsl.effects.satisfyAffinity(['air', 'earth', 'fire', 'water', 'void'])
+            })),
+            effect: "satisfy all elemental affinities"
         });
+
     }
 }

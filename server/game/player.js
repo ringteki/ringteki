@@ -994,9 +994,9 @@ class Player extends GameObject {
                     (!cardCostToTarget.targetPlayer ||
                         // or match player restriction
                         abilitySource.controller ===
-                            (cardCostToTarget.targetPlayer === Players.Self
-                                ? target.controller
-                                : target.controller.opponent))
+                        (cardCostToTarget.targetPlayer === Players.Self
+                            ? target.controller
+                            : target.controller.opponent))
                 ) {
                     targetCost += cardCostToTarget.amount;
                 }
@@ -1407,6 +1407,12 @@ class Player extends GameObject {
     }
 
     hasAffinity(trait) {
+        for (const cheatedAffinities of this.getEffects(EffectNames.SatisfyAffinity)) {
+            if (cheatedAffinities.includes(trait)) {
+                return true
+            }
+        }
+
         return this.cardsInPlay.some((card) => card.type === CardTypes.Character && card.hasTrait(trait));
     }
 
