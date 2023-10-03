@@ -1,6 +1,6 @@
-xdescribe('007 at Court', function () {
-    integration(function () {
-        beforeEach(function () {
+describe('007 at Court', function() {
+    integration(function() {
+        beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -22,10 +22,10 @@ xdescribe('007 at Court', function () {
             this.noMoreActions();
         });
 
-        it('forces chosen discard without dishonoring a character', function () {
+        it('forces chosen discard without dishonoring a character', function() {
             this.initiateConflict({
                 type: 'political',
-                attackers: [this.bayushiLiar, this.miyaMystic],
+                attackers: [this.bayushiLiar],
                 defenders: [],
                 jumpTo: 'afterConflict'
             });
@@ -39,19 +39,19 @@ xdescribe('007 at Court', function () {
             expect(this.player1).toHavePromptButton('Done');
 
             this.player1.clickPrompt('Done');
-            expect(this.player2).toHavePrompt('Choose 3 cards to discard');
+            expect(this.player2).toHavePrompt('Choose 2 cards to discard');
 
             this.player2.clickCard(this.katana);
             this.player2.clickCard(this.fan);
             this.player2.clickCard(this.finger);
             this.player2.clickPrompt('Done');
-            expect(this.getChatLogs(5)).toContain('player1 plays 007 at court to make player2 discard 3 cards');
+            expect(this.getChatLogs(5)).toContain('player1 plays 007 at court to make player2 discard 2 cards');
         });
 
-        it('forces random discard by dishonoring a courtier', function () {
+        it('forces random discard by dishonoring a courtier', function() {
             this.initiateConflict({
                 type: 'political',
-                attackers: [this.bayushiLiar, this.miyaMystic],
+                attackers: [this.bayushiLiar],
                 defenders: [],
                 jumpTo: 'afterConflict'
             });
@@ -66,7 +66,7 @@ xdescribe('007 at Court', function () {
 
             this.player1.clickCard(this.bayushiLiar);
             expect(this.getChatLogs(5)).toContain(
-                'player1 plays 007 at court, dishonoring Bayushi Liar to make player2 discard 3 cards at random'
+                'player1 plays 007 at court, dishonoring Bayushi Liar to make player2 discard 2 cards at random'
             );
         });
     });
