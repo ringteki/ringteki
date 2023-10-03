@@ -21,7 +21,8 @@ export default class ProvinceBuff extends DrawCard {
                     targetLocation: Locations.Provinces,
                     effect: AbilityDsl.effects.modifyProvinceStrength(4)
                 })
-            }))
+            })),
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 }
