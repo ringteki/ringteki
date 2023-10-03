@@ -1,4 +1,4 @@
-import { CardTypes, Locations, Durations, DuelTypes, Phases } from '../../../Constants';
+import { Locations, Durations, Phases } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -7,7 +7,7 @@ export default class MirumotoHitori extends DrawCard {
 
     public setupCardAbilities() {
         this.interrupt({
-            title: '',
+            title: 'A new incarnation awaits',
             when: {
                 onCardLeavesPlay: (event, context) =>
                     event.card === context.source && context.game.currentPhase === Phases.Fate

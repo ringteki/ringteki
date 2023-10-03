@@ -2,8 +2,8 @@ import { CardTypes, Locations, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class ShosuroElektra extends DrawCard {
-    static id = 'shosuro-elektra';
+export default class BayushiKentaro extends DrawCard {
+    static id = 'bayushi-kentaro';
 
     setupCardAbilities() {
         this.action({

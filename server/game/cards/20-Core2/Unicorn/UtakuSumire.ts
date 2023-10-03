@@ -2,8 +2,8 @@ import { CardTypes, Durations, PlayTypes, Players, TargetModes } from '../../../
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class UtakuJoan extends DrawCard {
-    static id = 'utaku-joan';
+export default class UtakuSumire extends DrawCard {
+    static id = 'utaku-sumire';
 
     setupCardAbilities() {
         this.reaction({
