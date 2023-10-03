@@ -5,11 +5,10 @@ import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
-import type Player from '../../../player';
 
 const CAPTURED_ORIGINAL_PROVINCE = Symbol('Capture Province');
 
-type WithCapturedOriginalProvince<T> = T & { [CAPTURED_ORIGINAL_PROVINCE]?: ProvinceCard };
+type WithCapturedOriginalProvince<T> = T & { [CAPTURED_ORIGINAL_PROVINCE]: ProvinceCard };
 
 function captureOriginalProvince(): Cost {
     return {
@@ -30,11 +29,10 @@ export default class AllDistancesAreOne extends DrawCard {
         this.action({
             title: 'Move conflict to a different province',
             condition: (context) =>
-                context.game.isDuringConflict() &&
-                this.#hasBaseReq(context.player) &&
                 (context.game.currentConflict as Conflict | undefined)
                     ?.getConflictProvinces()
-                    .every((province) => province.location !== Locations.StrongholdProvince),
+                    .every((province) => province.location !== Locations.StrongholdProvince) &&
+                context.player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')),
             cost: captureOriginalProvince(),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 cardType: CardTypes.Province,
@@ -44,35 +42,15 @@ export default class AllDistancesAreOne extends DrawCard {
                 messageArgs: (card) => [context.player, card]
             })),
             effect: 'move the conflict to another eligible province',
-            then: (context: WithCapturedOriginalProvince<AbilityContext>) =>
-                this.#hasKickerReq(context.player) && context[CAPTURED_ORIGINAL_PROVINCE] instanceof ProvinceCard
-                    ? {
-                          gameAction: AbilityDsl.actions.chooseAction({
-                              options: {
-                                  Yes: {
-                                      action: AbilityDsl.actions.turnFacedown({
-                                          target: context[CAPTURED_ORIGINAL_PROVINCE]
-                                      }),
-                                      message: 'Flip the original province facedown'
-                                  },
-                                  No: {
-                                      action: AbilityDsl.actions.noAction(),
-                                      message: 'Leave it faceup'
-                                  }
-                              }
-                          })
-                      }
-                    : { gameAction: [] }
+            then: (context: WithCapturedOriginalProvince<AbilityContext>) => ({
+                gameAction: AbilityDsl.actions.onAffinity({
+                    trait: 'water',
+                    promptTitleForConfirmingAffinity: 'Flip the original province facedown?',
+                    gameAction: AbilityDsl.actions.turnFacedown({
+                        target: context[CAPTURED_ORIGINAL_PROVINCE] as ProvinceCard
+                    })
+                })
+            })
         });
-    }
-
-    #hasBaseReq(player: Player) {
-        return player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja'));
-    }
-
-    #hasKickerReq(player: Player) {
-        return player.anyCardsInPlay(
-            (card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja') && card.hasTrait('water')
-        );
     }
 }
