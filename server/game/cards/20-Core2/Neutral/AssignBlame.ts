@@ -2,6 +2,7 @@ import { CardTypes, CharacterStatus, Players, TargetModes } from '../../../Const
 import type { StatusToken } from '../../../StatusToken';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import AbilityContext from '../../../AbilityContext';
 
 const TOKEN = 'token';
 const RECIPIENT = 'recipient';
@@ -12,6 +13,7 @@ export default class AssignBlame extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Move a status token',
+            condition: context => context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('courtier')),
             targets: {
                 [TOKEN]: {
                     activePromptTitle: 'Choose the status token to move',
@@ -28,12 +30,11 @@ export default class AssignBlame extends DrawCard {
                     gameAction: AbilityDsl.actions.sequentialContext((context) => ({
                         gameActions: [
                             AbilityDsl.actions.moveStatusToken({
-                                target: context.targets[TOKEN],
+                                target: context.tokens[TOKEN],
                                 recipient: context.targets[RECIPIENT]
                             }),
                             AbilityDsl.actions.conditional({
-                                condition: (context) =>
-                                    context.targets[RECIPIENT].controller !== context.source.controller,
+                                condition: (context) => this.#triggerCardDraw(context),
                                 trueGameAction: AbilityDsl.actions.draw((context) => ({
                                     amount: 1,
                                     target: context.targets[RECIPIENT].controller
@@ -41,18 +42,16 @@ export default class AssignBlame extends DrawCard {
                                 falseGameAction: AbilityDsl.actions.noAction()
                             })
                         ]
-                    }))
+                    })
+                    )
                 }
             },
-            effect: 'move a status token to {1}',
-            effectArgs: (context) => [context.targets[RECIPIENT]]
+            effect: 'move a status token to {1}{2}',
+            effectArgs: (context) => [context.targets[RECIPIENT], this.#triggerCardDraw(context) ? ', their controller draws a card' : '']
         });
     }
 
-    canPlay(context, playType) {
-        if (context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('courtier'))) {
-            return super.canPlay(context, playType);
-        }
-        return false;
+    #triggerCardDraw(context: AbilityContext) {
+        return context.targets[RECIPIENT].controller !== context.source.controller
     }
 }
