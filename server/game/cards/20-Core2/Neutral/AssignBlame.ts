@@ -50,7 +50,7 @@ export default class AssignBlame extends DrawCard {
     }
 
     canPlay(context, playType) {
-        if(context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('courtier'))) {
+        if (context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('courtier'))) {
             return super.canPlay(context, playType);
         }
         return false;

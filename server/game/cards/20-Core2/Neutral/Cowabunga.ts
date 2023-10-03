@@ -28,7 +28,7 @@ export default class Cowabunga extends DrawCard {
                         'Gain +4 skill, and get discarded when the conflict ends': AbilityDsl.actions.multiple([
                             AbilityDsl.actions.cardLastingEffect((context) => ({
                                 target: context.targets[CHARACTER],
-                                effect: AbilityDsl.effects.modifyMilitarySkill(4),
+                                effect: AbilityDsl.effects.modifyMilitarySkill(4)
                             })),
                             AbilityDsl.actions.cardLastingEffect((context) => ({
                                 target: context.targets[CHARACTER],
@@ -49,12 +49,16 @@ export default class Cowabunga extends DrawCard {
                 }
             },
             effect: '{1}{2}{3}',
-            effectArgs: context => {
+            effectArgs: (context) => {
                 if (context.selects.select.choice === 'Gain +2 skill') {
-                    return ["grant 2 military skill to ", context.targets[CHARACTER], ""]
+                    return ['grant 2 military skill to ', context.targets[CHARACTER], ''];
                 }
-                return ["grant 4 military skill to ", context.targets[CHARACTER], ", discarding them at the end of the conflict"]
-            },
+                return [
+                    'grant 4 military skill to ',
+                    context.targets[CHARACTER],
+                    ', discarding them at the end of the conflict'
+                ];
+            }
         });
     }
 }

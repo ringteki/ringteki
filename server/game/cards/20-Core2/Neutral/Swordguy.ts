@@ -6,13 +6,9 @@ export default class Swordguy extends DrawCard {
 
     public setupCardAbilities() {
         this.persistentEffect({
-            condition: context => 
-                context.game.currentDuel &&
-                context.game.currentDuel.participants.includes(context.source),
-            effect: [
-                AbilityDsl.effects.ignoreDuelSkill(),
-                AbilityDsl.effects.winDuelTies()
-            ]
+            condition: (context) =>
+                context.game.currentDuel && context.game.currentDuel.participants.includes(context.source),
+            effect: [AbilityDsl.effects.ignoreDuelSkill(), AbilityDsl.effects.winDuelTies()]
         });
     }
 }

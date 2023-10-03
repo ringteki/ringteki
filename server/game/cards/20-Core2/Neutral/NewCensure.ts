@@ -20,7 +20,7 @@ export default class NewCensure extends DrawCard {
             // increaseCost doesn't take a variable argument so we use a negative reduce cost
             effect: AbilityDsl.effects.reduceCost({
                 amount: (card, player) => {
-                    return -this.copiesPlayedDuringPhase.filter(uuid => uuid === player.uuid).length;
+                    return -this.copiesPlayedDuringPhase.filter((uuid) => uuid === player.uuid).length;
                 },
                 match: (card, source) => card === source
             })
@@ -32,7 +32,7 @@ export default class NewCensure extends DrawCard {
                 onInitiateAbilityEffects: (event) => event.card.type === CardTypes.Event
             },
             cannotBeMirrored: true,
-            gameAction: AbilityDsl.actions.cancel(),
+            gameAction: AbilityDsl.actions.cancel()
         });
     }
 
