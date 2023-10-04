@@ -12,6 +12,7 @@ export default class BlessedShrine extends DrawCard {
                 onCardPlayed: (event, context) =>
                     event.card.type === CardTypes.Event &&
                     event.player === context.player &&
+                    !context.player.getProvinceCardInProvince(context.source.location).isBroken &&
                     event.context.ability.getReducedCost(event.context) > 0
             },
             effect: 'reduce the cost of their next event by 1',
