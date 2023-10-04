@@ -13,7 +13,7 @@ export default class DrawingTheVoid extends DrawCard {
                 cardType: CardTypes.Character,
                 gameAction: AbilityDsl.actions.onAffinity({
                     trait: 'void',
-                    promptTitleForConfirmingAffinity: 'Bow that character?',
+                    promptTitleForConfirmingAffinity: 'Add fate from a ring instead?',
                     noAffinityGameAction: AbilityDsl.actions.placeFate((context) => ({
                         amount: 1,
                         origin: context.source.controller
@@ -37,7 +37,7 @@ export default class DrawingTheVoid extends DrawCard {
                                 }))
                             }
                         }
-                    }))
+                    })),
                 })
             }
         });

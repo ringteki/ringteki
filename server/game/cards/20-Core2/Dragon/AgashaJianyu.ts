@@ -30,17 +30,21 @@ export default class AgashaJianyu extends DrawCard {
                 mode: TargetModes.Ring,
                 activePromptTitle: 'Choose an unclaimed ring',
                 ringCondition: (ring: Ring) => ring.isUnclaimed() && ring.fate > 0,
-                gameAction: AbilityDsl.actions.sequentialContext(context => ({
+                gameAction: AbilityDsl.actions.sequentialContext((context) => ({
                     gameActions: [
                         AbilityDsl.actions.takeFate({ target: context.target }),
-                        AbilityDsl.actions.ringLastingEffect(({
+                        AbilityDsl.actions.ringLastingEffect({
                             duration: Durations.UntilEndOfPhase,
-                            target: (context.ring.getElements() as Element[]).map((element) => this.game.rings[element]),
-                            effect: AbilityDsl.effects.cannotDeclareRing((player: Player) => player === context.player.opponent)
-                        }))
+                            target: (context.ring.getElements() as Element[]).map(
+                                (element) => this.game.rings[element]
+                            ),
+                            effect: AbilityDsl.effects.cannotDeclareRing(
+                                (player: Player) => player === context.player.opponent
+                            )
+                        })
                     ]
                 }))
-            },
+            }
         });
     }
 

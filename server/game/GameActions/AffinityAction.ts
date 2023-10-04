@@ -1,9 +1,12 @@
 import type AbilityContext from '../AbilityContext';
 import type { GameObject } from '../GameObject';
+import { Derivable, derive } from '../Utils/helpers';
 import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface AffinityActionProperties extends GameActionProperties {
     gameAction: GameAction;
+    effect?: string
+    effectArgs?: Derivable<Array<any>, AbilityContext>
     trait: string;
     noAffinityGameAction?: GameAction;
     promptTitleForConfirmingAffinity?: string;
@@ -60,7 +63,7 @@ export class AffinityAction extends GameAction {
             activePromptTitle: properties.promptTitleForConfirmingAffinity,
             source: context.source,
             choices: ['Yes', 'No'],
-            handlers: [() => this.#resolveAffinity(properties, events, context, additionalProperties), () => {}]
+            handlers: [() => this.#resolveAffinity(properties, events, context, additionalProperties), () => { }]
         });
     }
 
@@ -81,9 +84,9 @@ export class AffinityAction extends GameAction {
         additionalProperties = {}
     ) {
         properties.gameAction.addEventsToArray(events, context, additionalProperties);
-        const [msg, args] = properties.gameAction.getEffectMessage(context, additionalProperties);
+        const args = properties.effectArgs ? derive(properties.effectArgs, context) : []
         const nextArg = args.length;
-        const affinityMsg = `{${nextArg}} channels their ${properties.trait} affinity to ${msg}`;
-        context.game.addMessage(affinityMsg, args, context.player);
+        const affinityMsg = `{${nextArg}} channels their ${properties.trait} affinity to ${properties.effect ?? ""}`;
+        context.game.addMessage(affinityMsg, ...args, context.player);
     }
 }

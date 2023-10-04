@@ -43,7 +43,8 @@ export default class WisdomOfTheWind extends DrawCard {
                             AbilityDsl.effects.taintedStatusDoesNotCostHonor()
                         ],
                         duration: Durations.UntilEndOfConflict
-                    }))
+                    })),
+                    effect: "make all other status be ignored during this conflict"
                 })
             }
         });
