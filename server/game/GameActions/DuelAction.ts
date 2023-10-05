@@ -16,6 +16,7 @@ export interface DuelProperties extends CardActionProperties {
     statistic?: (card: DrawCard) => number;
     challengerEffect?;
     targetEffect?;
+    swapChallengerAndTarget?: boolean
     refuseGameAction?: GameAction;
     refusalMessage?: string;
     refusalMessageArgs?: (context: AbilityContext) => any | any[];
@@ -28,7 +29,8 @@ export class DuelAction extends CardGameAction {
 
     defaultProperties: DuelProperties = {
         type: undefined,
-        gameAction: null
+        gameAction: null,
+        swapChallengerAndTarget: false,
     };
 
     getProperties(context: AbilityContext, additionalProperties = {}): DuelProperties {
@@ -141,6 +143,27 @@ export class DuelAction extends CardGameAction {
         if (!Array.isArray(cards)) {
             cards = [cards];
         }
+        const swapChallengerAndTarget = properties.swapChallengerAndTarget;
+
+        if (swapChallengerAndTarget) {
+            event.cards = cards;
+            event.context = context;
+            event.duelType = properties.type;
+            event.challenger = properties.target;
+            event.duelTarget = properties.challenger;
+    
+            const duel = new Duel(
+                context.game,
+                cards[0],
+                [properties.challenger],
+                properties.type,
+                properties.statistic,
+                context.player
+            );
+            event.duel = duel;
+            return;
+        }
+
         event.cards = cards;
         event.context = context;
         event.duelType = properties.type;

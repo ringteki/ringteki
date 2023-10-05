@@ -8,7 +8,7 @@ describe('Kakita Zinkae', function() {
                     inPlay: ['kakita-zinkae', 'brash-samurai'],
                 },
                 player2: {
-                    inPlay: ['kakita-toshimoko', 'doji-whisperer'],
+                    inPlay: ['kakita-toshimoko', 'doji-whisperer', 'bayushi-liar'],
                 }
             });
 
@@ -16,9 +16,10 @@ describe('Kakita Zinkae', function() {
             this.brash = this.player1.findCardByName('brash-samurai');
             this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
             this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.liar = this.player2.findCardByName('bayushi-liar');
         });
 
-        it('if you win duel should move home everyone else', function() {
+        it('should give opponent a chance to decline the duel', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zinkae, this.brash],
@@ -27,20 +28,12 @@ describe('Kakita Zinkae', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.zinkae);
-            this.player1.clickCard(this.toshimoko);
-
-            expect(this.player1).toHavePrompt('Honor Bid');
-            this.player1.clickPrompt('5');
-            this.player2.clickPrompt('1');
-
-            expect(this.getChatLogs(10)).toContain('Duel Effect: send Brash Samurai and Doji Whisperer home');
-            expect(this.zinkae.isParticipating()).toBe(true);
-            expect(this.brash.isParticipating()).toBe(false);
-            expect(this.toshimoko.isParticipating()).toBe(true);
-            expect(this.whisperer.isParticipating()).toBe(false);
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('Give opponent +3 skill');
+            expect(this.player2).toHavePromptButton('Duel to try and cancel');
         });
 
-        it('if you lose duel should move home you home', function() {
+        it('should give opponent a chance to decline the duel', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zinkae, this.brash],
@@ -49,17 +42,121 @@ describe('Kakita Zinkae', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.zinkae);
-            this.player1.clickCard(this.toshimoko);
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('Give opponent +3 skill');
+            expect(this.player2).toHavePromptButton('Duel to try and cancel');
+        });
 
-            expect(this.player1).toHavePrompt('Honor Bid');
+        it('decline duel', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.zinkae, this.brash],
+                defenders: [this.toshimoko, this.whisperer]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.zinkae);
+            this.player2.clickPrompt('Give opponent +3 skill');
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Zinkae to add 3 to their side for this conflict');
+            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 8 Defender: 4');
+        });
+
+        it('lose duel - should do nothing', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.zinkae, this.brash],
+                defenders: [this.toshimoko]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.zinkae);
+            this.player2.clickPrompt('Duel to try and cancel');
+
+            expect(this.player2).toBeAbleToSelect(this.toshimoko)
+            expect(this.player2).not.toBeAbleToSelect(this.whisperer)
+            this.player2.clickCard(this.toshimoko);
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Zinkae to initiate a duel');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to challenge Kakita Zinkae using Kakita Toshimoko');
+
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('1');
 
-            expect(this.getChatLogs(10)).toContain('Duel Effect: send Kakita Zinkae home');
-            expect(this.zinkae.isParticipating()).toBe(false);
-            expect(this.brash.isParticipating()).toBe(true);
-            expect(this.toshimoko.isParticipating()).toBe(true);
-            expect(this.whisperer.isParticipating()).toBe(true);
+            expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 5 vs 4: Kakita Zinkae');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: no effect');
+            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 5 Defender: 4');
+        });
+
+        it('win duel - should give +3', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.zinkae, this.brash],
+                defenders: [this.toshimoko]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.zinkae);
+            this.player2.clickPrompt('Duel to try and cancel');
+
+            expect(this.player2).toBeAbleToSelect(this.toshimoko)
+            this.player2.clickCard(this.toshimoko);
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Zinkae to initiate a duel');
+            expect(this.getChatLogs(10)).toContain('player2 chooses to challenge Kakita Zinkae using Kakita Toshimoko');
+
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('3');
+
+            expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 5 vs 6: Kakita Zinkae');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: add 3 to player1\'s side for this conflict');
+            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 8 Defender: 4');
+        });
+
+        it('should trigger from home', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash],
+                defenders: [this.toshimoko, this.whisperer]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.zinkae);
+            this.player2.clickPrompt('Give opponent +3 skill');
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Zinkae to add 3 to their side for this conflict');
+            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 5 Defender: 4');
+        });
+
+        it('should not trigger if opponent has no participating characters', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash],
+                defenders: []
+            });
+
+            this.player2.pass();
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.zinkae);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('should force the +3 if opponent can\'t duel', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.zinkae, this.brash],
+                defenders: [this.liar],
+                type: 'political'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.zinkae);
+            expect(this.player2).not.toHavePrompt('Select one');
+            expect(this.player2).not.toHavePromptButton('Give opponent +3 skill');
+            expect(this.player2).not.toHavePromptButton('Duel to try and cancel');
+
+            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Zinkae to add 3 to their side for this conflict');
+            expect(this.getChatLogs(10)).toContain('Political Air conflict - Attacker: 7 Defender: 3');
         });
     });
 });
