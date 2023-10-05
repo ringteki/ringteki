@@ -1,5 +1,5 @@
 const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
-const AllPlayerPrompt = require('./allplayerprompt.js');
+const { AllPlayerPrompt } = require('./AllPlayerPrompt.js');
 const { TransferHonorAction } = require('../GameActions/TransferHonorAction');
 const { EventNames, EffectNames } = require('../Constants');
 const { GameModes } = require('../../GameModes.js');

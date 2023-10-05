@@ -25,6 +25,7 @@ import { DishonorAction, DishonorProperties } from './DishonorAction';
 import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
+import { FateBidAction, FateBidProperties } from './FateBidAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
 import { FlipFavorAction, FlipFavorProperties } from './FlipFavorAction';
@@ -337,6 +338,9 @@ export function gainHonor(propertyFactory: PropsFactory<GainHonorProperties> = {
  */
 export function honorBid(propertyFactory: PropsFactory<HonorBidProperties> = {}): GameAction {
     return new HonorBidAction(propertyFactory);
+}
+export function fateBid(propertyFactory: PropsFactory<FateBidProperties> = {}): GameAction {
+    return new FateBidAction(propertyFactory);
 }
 export function initiateConflict(propertyFactory: PropsFactory<InitiateConflictProperties> = {}): GameAction {
     return new InitiateConflictAction(propertyFactory);
