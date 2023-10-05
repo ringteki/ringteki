@@ -17,9 +17,8 @@ export default class DaidojiBigguBosu extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Opponent,
                 cardCondition: (card) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.multiple([AbilityDsl.actions.bow(), AbilityDsl.actions.dishonor()])
-            },
-            effect: 'bow and dishonor {0}'
+                gameAction: AbilityDsl.actions.sendHome()
+            }
         });
     }
 }
