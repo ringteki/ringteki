@@ -1,6 +1,6 @@
-describe('Mirumoto Avenger', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Mirumoto Avenger', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -25,11 +25,11 @@ describe('Mirumoto Avenger', function() {
             this.yoshi.fate = 2;
         });
 
-        it('should duel after being discarded by opponents card effects and discard the duel loser', function() {
+        it('should duel after being discarded by opponents card effects and discard the duel loser', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [],
+                defenders: []
             });
 
             this.player2.pass();
@@ -45,21 +45,26 @@ describe('Mirumoto Avenger', function() {
             expect(this.player2).toBeAbleToSelect(this.uji);
 
             this.player2.clickCard(this.yoshi);
-            
+
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('1');
 
-            expect(this.getChatLogs(10)).toContain('player2 uses Mirumoto Avenger to initiate a military duel : Mirumoto Avenger vs. Kakita Yoshi');
-            expect(this.getChatLogs(10)).toContain('Mirumoto Avenger: 4 vs 3: Kakita Yoshi', 'Duel Effect: discard Kakita Yoshi');
+            expect(this.getChatLogs(10)).toContain(
+                'player2 uses Mirumoto Avenger to initiate a military duel : Mirumoto Avenger vs. Kakita Yoshi'
+            );
+            expect(this.getChatLogs(10)).toContain(
+                'Mirumoto Avenger: 4 vs 3: Kakita Yoshi',
+                'Duel Effect: discard Kakita Yoshi'
+            );
 
             expect(this.yoshi.location).toBe('dynasty discard pile');
         });
 
-        it('should not trigger if you kill yourself', function() {
+        it('should not trigger if you kill yourself', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [],
+                defenders: []
             });
 
             this.player2.clickCard(this.assassination2);

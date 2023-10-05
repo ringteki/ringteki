@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
 
-export default class Glitterhoof extends DrawCard {
-    static id = 'glitterhoof';
+export default class Hayate extends DrawCard {
+    static id = 'hayate';
 
     setupCardAbilities() {
         this.persistentEffect({

@@ -1,14 +1,14 @@
-describe('Togashi Naname', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Togashi Naname', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
-                    inPlay: ['doji-challenger', 'kakita-yoshi', 'daidoji-uji'],
+                    inPlay: ['doji-challenger', 'kakita-yoshi', 'daidoji-uji']
                 },
                 player2: {
-                    inPlay: ['togashi-naname', 'shiba-tsukune'],
+                    inPlay: ['togashi-naname', 'shiba-tsukune']
                 }
             });
 
@@ -22,7 +22,7 @@ describe('Togashi Naname', function() {
             this.yoshi.fate = 2;
         });
 
-        it('should target a participating character and a ring and give opponent a choice', function() {
+        it('should target a participating character and a ring and give opponent a choice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi, this.uji],
@@ -59,10 +59,12 @@ describe('Togashi Naname', function() {
             expect(this.yoshi.fate).toBe(cfate - 1);
             expect(this.game.rings.air.fate).toBe(rFate + 1);
 
-            expect(this.getChatLogs(10)).toContain('player2 uses Togashi Naname to move 1 fate from Kakita Yoshi to Air Ring');
+            expect(this.getChatLogs(10)).toContain(
+                'player2 uses Togashi Naname to move 1 fate from Kakita Yoshi to Air Ring'
+            );
         });
 
-        it('resolving ring', function() {
+        it('resolving ring', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi, this.uji],
@@ -90,7 +92,7 @@ describe('Togashi Naname', function() {
             expect(this.getChatLogs(10)).toContain('player2 resolves the air ring, gaining 2 honor');
         });
 
-        it('should force the ring if target has no fate', function() {
+        it('should force the ring if target has no fate', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi, this.uji],

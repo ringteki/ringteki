@@ -6,8 +6,8 @@ import DrawCard from '../../../drawcard';
 import type Game from '../../../game';
 import type Ring from '../../../ring';
 
-export default class ShinjoDora extends DrawCard {
-    static id = 'shinjo-dora';
+export default class ShinjoIsamu extends DrawCard {
+    static id = 'shinjo-isamu';
 
     setupCardAbilities() {
         this.reaction({

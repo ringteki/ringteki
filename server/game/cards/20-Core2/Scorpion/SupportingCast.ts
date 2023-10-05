@@ -8,7 +8,7 @@ export default class SupportingCast extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow a character to give another +3 military',
-            condition: context => context.game.isDuringConflict(ConflictTypes.Military),
+            condition: (context) => context.game.isDuringConflict(ConflictTypes.Military),
             cost: AbilityDsl.costs.bow({
                 cardType: CardTypes.Character,
                 controller: Players.Self

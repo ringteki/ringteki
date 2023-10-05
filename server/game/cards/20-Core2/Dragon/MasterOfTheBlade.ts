@@ -7,11 +7,11 @@ export default class MasterOfTheBlade extends DrawCard {
 
     public setupCardAbilities() {
         this.reaction({
-            title: 'Don\'t bow during resolution',
+            title: "Don't bow during resolution",
             when: {
                 onDuelFinished: (event, context) => event.duel.isInvolved(context.source)
             },
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
                 condition: (context) => context.game.isDuringConflict(),
                 duration: Durations.UntilEndOfConflict,

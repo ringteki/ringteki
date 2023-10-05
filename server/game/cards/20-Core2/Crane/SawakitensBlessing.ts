@@ -7,7 +7,7 @@ export default class SawakitensBlessing extends DrawCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Character doesn\'t bow during resolution',
+            title: "Character doesn't bow during resolution",
             condition: () => this.game.isDuringConflict('military'),
             target: {
                 cardType: CardTypes.Character,
@@ -26,8 +26,8 @@ export default class SawakitensBlessing extends DrawCard {
                     }))
                 ]
             },
-            effect: 'prevent opponents\' actions from bowing {0} and stop it bowing at the end of the conflict',
-            max: AbilityDsl.limit.perRound(1),
+            effect: "prevent opponents' actions from bowing {0} and stop it bowing at the end of the conflict",
+            max: AbilityDsl.limit.perRound(1)
         });
     }
 }

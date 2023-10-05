@@ -13,7 +13,7 @@ export default class ServeYourBetters extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Opponent,
                 cardCondition: (card, context) => !card.anotherUniqueInPlay(context.player) && card.costLessThan(3),
-                gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     effect: AbilityDsl.effects.takeControl(context.player)
                 }))
             },
@@ -22,7 +22,7 @@ export default class ServeYourBetters extends DrawCard {
     }
 
     canPlay(context, playType) {
-        if(context.player.opponent && context.player.isMoreHonorable()) {
+        if (context.player.opponent && context.player.isMoreHonorable()) {
             return super.canPlay(context, playType);
         }
         return false;

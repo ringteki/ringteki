@@ -1,4 +1,4 @@
-describe('Phoenix Box', function () {
+describe('Dragon Box', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

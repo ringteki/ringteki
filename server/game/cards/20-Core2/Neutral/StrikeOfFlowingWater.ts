@@ -19,8 +19,12 @@ export default class StrikeOfFlowingWater extends DrawCard {
                 controller: Players.Self,
                 cardCondition: (card) => context.event.duel.isInvolved(card),
                 message: '{0} gives {1} {2} bonus skill for this duel',
-                messageArgs: (cards) => [context.player, cards, Math.abs(context.player.honorBid - context.player.opponent.honorBid)],
-                gameAction: AbilityDsl.actions.cardLastingEffect(context => {
+                messageArgs: (cards) => [
+                    context.player,
+                    cards,
+                    Math.abs(context.player.honorBid - context.player.opponent.honorBid)
+                ],
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => {
                     const value = Math.abs(context.player.honorBid - context.player.opponent.honorBid);
                     return {
                         effect: AbilityDsl.effects.modifyDuelSkill(value, context.event.duel),
@@ -29,15 +33,18 @@ export default class StrikeOfFlowingWater extends DrawCard {
                 })
             })),
             effect: 'get {1} bonus skill for duel resolution',
-            effectArgs: context => [Math.abs(context.player.honorBid - context.player.opponent.honorBid)]
+            effectArgs: (context) => [Math.abs(context.player.honorBid - context.player.opponent.honorBid)]
         });
 
         this.action({
             title: 'Blank printed text for conflict',
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) => card.isParticipating() && context.game.currentConflict.getCharacters(context.player).some(myCard =>
-                    myCard.hasTrait('duelist')),
+                cardCondition: (card, context) =>
+                    card.isParticipating() &&
+                    context.game.currentConflict
+                        .getCharacters(context.player)
+                        .some((myCard) => myCard.hasTrait('duelist')),
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     effect: AbilityDsl.effects.blank(),
                     duration: Durations.UntilEndOfConflict

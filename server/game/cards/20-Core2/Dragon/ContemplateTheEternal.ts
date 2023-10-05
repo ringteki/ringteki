@@ -12,11 +12,11 @@ export default class ContemplateTheEternal extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: card => card.hasTrait('monk'),
-                gameAction: AbilityDsl.actions.placeFate(context => ({
+                cardCondition: (card) => card.hasTrait('monk'),
+                gameAction: AbilityDsl.actions.placeFate((context) => ({
                     amount: context.costs.returnRing ? context.costs.returnRing.length : 1
                 }))
-            },
+            }
         });
     }
 }

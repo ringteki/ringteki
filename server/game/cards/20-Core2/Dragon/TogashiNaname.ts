@@ -18,26 +18,29 @@ export default class TogashiNaname extends DrawCard {
                 character: {
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
-                    cardCondition: card => card.isParticipating(),
+                    cardCondition: (card) => card.isParticipating()
                 },
                 ring: {
                     dependsOn: 'character',
                     mode: TargetModes.Ring,
-                    ringCondition: (ring) => ring.isUnclaimed(), 
+                    ringCondition: (ring) => ring.isUnclaimed()
                 },
                 select: {
                     mode: TargetModes.Select,
                     dependsOn: 'ring',
                     player: Players.Opponent,
-                    choices: context => ({
-                        [`Move a fate from ${context.targets.character.name} to the ${RingEffects.getRingName(context.rings.ring.element)}`]: AbilityDsl.actions.placeFateOnRing(context => ({
+                    choices: (context) => ({
+                        [`Move a fate from ${context.targets.character.name} to the ${RingEffects.getRingName(
+                            context.rings.ring.element
+                        )}`]: AbilityDsl.actions.placeFateOnRing((context) => ({
                             target: context.rings.ring,
                             origin: context.targets.character
                         })),
-                        [`Let Opponent Resolve the ${RingEffects.getRingName(context.rings.ring.element)}`]: AbilityDsl.actions.resolveRingEffect(context => ({
-                            player: context.player,
-                            target: context.rings.ring,
-                        }))
+                        [`Let Opponent Resolve the ${RingEffects.getRingName(context.rings.ring.element)}`]:
+                            AbilityDsl.actions.resolveRingEffect((context) => ({
+                                player: context.player,
+                                target: context.rings.ring
+                            }))
                     })
                 }
             }

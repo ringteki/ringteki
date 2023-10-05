@@ -19,7 +19,7 @@ export default class InfluentialActor extends DrawCard {
                     gameAction: AbilityDsl.actions.moveStatusToken(() => ({
                         recipient: context.target
                     }))
-                })),
+                }))
             },
             effect: 'move a status token on it to {0}'
         });

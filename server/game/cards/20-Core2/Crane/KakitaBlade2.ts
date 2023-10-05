@@ -18,15 +18,13 @@ export default class KakitaBlade2 extends DrawCard {
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Gain a fate',
                 when: {
-                    onConflictStarted: (event, context) => context.source.isParticipating() && context.source.hasTrait('bushi')
+                    onConflictStarted: (event, context) =>
+                        context.source.isParticipating() && context.source.hasTrait('bushi')
                 },
-                gameAction: AbilityDsl.actions.playerLastingEffect(context => ({
+                gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
                     targetController: context.player,
                     duration: Durations.UntilSelfPassPriority,
-                    effect: [
-                        AbilityDsl.effects.gainActionPhasePriority(),
-                        AbilityDsl.effects.additionalAction(),
-                    ],
+                    effect: [AbilityDsl.effects.gainActionPhasePriority(), AbilityDsl.effects.additionalAction()]
                 })),
                 effect: 'take an action at the start of the conflict'
             })

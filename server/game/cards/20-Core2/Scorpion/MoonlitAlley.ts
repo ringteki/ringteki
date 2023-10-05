@@ -15,20 +15,23 @@ export default class MoonlitAlley extends DrawCard {
                 character: {
                     mode: TargetModes.Single,
                     cardType: CardTypes.Character,
-                    cardCondition: (card: DrawCard) => card.isParticipating() &&
-                        ((card.militarySkill === 0 && !isNaN(parseInt(card.cardData.military))) || (card.politicalSkill === 0 && !isNaN(parseInt(card.cardData.political))))
+                    cardCondition: (card: DrawCard) =>
+                        card.isParticipating() &&
+                        ((card.militarySkill === 0 && !isNaN(parseInt(card.cardData.military))) ||
+                            (card.politicalSkill === 0 && !isNaN(parseInt(card.cardData.political))))
                 },
                 select: {
                     activePromptTitle: `Choose one`,
                     mode: TargetModes.Select,
                     dependsOn: 'character',
-                    player: context => context.targets.character.controller,
-                    choices: context => ({
-                        [`Discard ${this.getNumberOfParticipatingShinobi(context)} cards`]: AbilityDsl.actions.chosenDiscard(context => ({
-                            amount: this.getNumberOfParticipatingShinobi(context),
-                            target: context.targets.character.controller
-                        })),
-                        [`Discard ${context.target.name}`]: AbilityDsl.actions.discardFromPlay(context => ({
+                    player: (context) => context.targets.character.controller,
+                    choices: (context) => ({
+                        [`Discard ${this.getNumberOfParticipatingShinobi(context)} cards`]:
+                            AbilityDsl.actions.chosenDiscard((context) => ({
+                                amount: this.getNumberOfParticipatingShinobi(context),
+                                target: context.targets.character.controller
+                            })),
+                        [`Discard ${context.target.name}`]: AbilityDsl.actions.discardFromPlay((context) => ({
                             target: context.targets.character
                         }))
                     })
@@ -38,6 +41,8 @@ export default class MoonlitAlley extends DrawCard {
     }
 
     getNumberOfParticipatingShinobi(context: AbilityContext): number {
-        return context.game.currentConflict.getParticipants(card => card.controller === context.player.opponent && card.hasTrait('shinobi')).length;
+        return context.game.currentConflict.getParticipants(
+            (card) => card.controller === context.player.opponent && card.hasTrait('shinobi')
+        ).length;
     }
 }

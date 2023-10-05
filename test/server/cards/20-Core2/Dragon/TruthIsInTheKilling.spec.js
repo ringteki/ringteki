@@ -1,12 +1,12 @@
-describe('Truth is in the Killing', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Truth is in the Killing', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'daidoji-uji'],
-                    hand: ['truth-is-in-the-killing'],
+                    hand: ['truth-is-in-the-killing']
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'doji-diplomat'],
@@ -25,7 +25,7 @@ describe('Truth is in the Killing', function() {
         });
 
         describe('Duel Strike', function () {
-            it('should react if you have a duelist and win and discard the loser', function() {
+            it('should react if you have a duelist and win and discard the loser', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger, this.yoshi],
@@ -45,11 +45,13 @@ describe('Truth is in the Killing', function() {
                 expect(this.tsukune.location).toBe('dynasty discard pile');
                 expect(this.player1).toHavePrompt('Policy Debate');
 
-                expect(this.getChatLogs(10)).toContain('player1 plays Truth Is In the Killing to discard a loser of the duel');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Truth Is In the Killing to discard a loser of the duel'
+                );
                 expect(this.getChatLogs(10)).toContain('player1 discards Shiba Tsukune');
             });
 
-            it('should react if you have a duelist and lose', function() {
+            it('should react if you have a duelist and lose', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger, this.yoshi],
@@ -67,11 +69,13 @@ describe('Truth is in the Killing', function() {
                 expect(this.player1).toBeAbleToSelect(this.truth);
                 this.player1.clickCard(this.truth);
 
-                expect(this.getChatLogs(10)).toContain('player1 plays Truth Is In the Killing to discard a loser of the duel');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Truth Is In the Killing to discard a loser of the duel'
+                );
                 expect(this.getChatLogs(10)).toContain('player1 discards Doji Challenger');
             });
 
-            it('should not react if you don\'t have a duelist', function() {
+            it("should not react if you don't have a duelist", function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger, this.yoshi],

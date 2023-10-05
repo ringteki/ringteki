@@ -16,7 +16,7 @@ export default class PathOfTheCrane extends DrawCard {
     }
 
     canPlay(context, playType) {
-        if(context.player.anyCardsInPlay((card: DrawCard) => card.isFaction('crane'))) {
+        if (context.player.anyCardsInPlay((card: DrawCard) => card.isFaction('crane'))) {
             return super.canPlay(context, playType);
         }
         return false;
