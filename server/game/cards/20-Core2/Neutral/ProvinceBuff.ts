@@ -8,7 +8,7 @@ export default class ProvinceBuff extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Add Province Strength',
-            condition: () => this.game.isDuringConflict(),
+            condition: (context) => context.game.isDuringConflict(),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 activePromptTitle: 'Choose an attacked province',
                 hidePromptIfSingleCard: true,
