@@ -5,8 +5,8 @@ import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface AffinityActionProperties extends GameActionProperties {
     gameAction: GameAction;
-    effect?: string
-    effectArgs?: Derivable<Array<any>, AbilityContext>
+    effect?: string;
+    effectArgs?: Derivable<Array<any>, AbilityContext>;
     trait: string;
     noAffinityGameAction?: GameAction;
     promptTitleForConfirmingAffinity?: string;
@@ -24,7 +24,7 @@ export class AffinityAction extends GameAction {
 
     getEffectMessage(context: AbilityContext, additionalProperties = {}): [string, any[]] {
         let properties = this.getProperties(context, additionalProperties);
-        if (context.player.hasAffinity(properties.trait)) {
+        if (context.player.hasAffinity(properties.trait, context)) {
             return properties.gameAction.getEffectMessage(context);
         }
 
@@ -33,7 +33,7 @@ export class AffinityAction extends GameAction {
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}) {
         let properties = this.getProperties(context, additionalProperties);
-        if (context.player.hasAffinity(properties.trait)) {
+        if (context.player.hasAffinity(properties.trait, context)) {
             return properties.gameAction.hasLegalTarget(context, additionalProperties);
         }
 
@@ -42,7 +42,7 @@ export class AffinityAction extends GameAction {
 
     canAffect(target: GameObject, context: AbilityContext, additionalProperties = {}) {
         let properties = this.getProperties(context, additionalProperties);
-        if (context.player.hasAffinity(properties.trait)) {
+        if (context.player.hasAffinity(properties.trait, context)) {
             return properties.gameAction.canAffect(target, context, additionalProperties);
         }
 
@@ -51,7 +51,7 @@ export class AffinityAction extends GameAction {
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties);
-        if (!context.player.hasAffinity(properties.trait)) {
+        if (!context.player.hasAffinity(properties.trait, context)) {
             return properties.noAffinityGameAction?.addEventsToArray(events, context, additionalProperties);
         }
 
@@ -63,13 +63,13 @@ export class AffinityAction extends GameAction {
             activePromptTitle: properties.promptTitleForConfirmingAffinity,
             source: context.source,
             choices: ['Yes', 'No'],
-            handlers: [() => this.#resolveAffinity(properties, events, context, additionalProperties), () => { }]
+            handlers: [() => this.#resolveAffinity(properties, events, context, additionalProperties), () => {}]
         });
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}) {
         let properties = this.getProperties(context, additionalProperties);
-        if (context.player.hasAffinity(properties.trait)) {
+        if (context.player.hasAffinity(properties.trait, context)) {
             return properties.gameAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties);
         }
         return (
@@ -84,9 +84,9 @@ export class AffinityAction extends GameAction {
         additionalProperties = {}
     ) {
         properties.gameAction.addEventsToArray(events, context, additionalProperties);
-        const args = properties.effectArgs ? derive(properties.effectArgs, context) : []
+        const args = properties.effectArgs ? derive(properties.effectArgs, context) : [];
         const nextArg = args.length;
-        const affinityMsg = `{${nextArg}} channels their ${properties.trait} affinity to ${properties.effect ?? ""}`;
+        const affinityMsg = `{${nextArg}} channels their ${properties.trait} affinity to ${properties.effect ?? ''}`;
         context.game.addMessage(affinityMsg, ...args, context.player);
     }
 }

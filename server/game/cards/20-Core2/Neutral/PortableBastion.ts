@@ -15,7 +15,7 @@ export default class PortableBastion extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: (target: BaseCard) => target.controller.hasAffinity('earth'),
+                targetCondition: (target: BaseCard, context) => target.controller.hasAffinity('earth', context),
                 match: (card: BaseCard, source: any) => card === source
             })
         });
