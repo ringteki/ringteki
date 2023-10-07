@@ -39,9 +39,8 @@ export default class CompositeYumi extends DrawCard {
         return (
             context.source.parent &&
             card.type === CardTypes.Character &&
-            card.isParticipating() &&
-            context.source.parent.isParticipating() &&
-            context.game.isDuringConflict('military')
+            card.isParticipating('military') &&
+            context.source.parent.isParticipating('military')
         );
     }
 }
