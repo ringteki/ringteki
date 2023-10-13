@@ -1,23 +1,39 @@
-import { CardTypes, Players } from '../../../Constants';
+import { CardTypes, Locations, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import DrawCard from '../../../drawcard';
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type Ring from '../../../ring';
 
 export default class IthaaUnderseaRestaurant extends ProvinceCard {
     static id = 'ithaa-undersea-restaurant';
 
     public setupCardAbilities() {
-        this.action({
-            title: 'Increase province strength',
-            target: {
-                cardType: CardTypes.Character,
-                player: Players.Self,
-                cardCondition: (card: DrawCard) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.source,
-                    effect: AbilityDsl.effects.modifyProvinceStrength((context.target as DrawCard).militarySkill)
-                }))
-            }
+        this.persistentEffect({
+            targetLocation: Locations.Provinces,
+            targetController: Players.Self,
+            condition: () => true,
+            match: (card, context) =>
+                card.type === CardTypes.Province && card !== context.source && card.controller === context.player,
+            effect: AbilityDsl.effects.modifyProvinceStrength(1)
         });
+
+        this.reaction({
+            title: 'Resolve the ring effect',
+            when: {
+                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.getConflictProvinces().some((a: ProvinceCard) => a === context.source)
+            },
+            gameAction: AbilityDsl.actions.resolveRingEffect(context => ({
+                target: this.#ringForRole(context),
+                player: context.player
+            }))
+        });
+    }
+
+    #ringForRole(context: TriggeredAbilityContext): Ring | undefined {
+        for (const trait of context.player.role.traits) {
+            if (trait in context.game.rings) {
+                return context.game.rings[trait]
+            }
+        }
     }
 }
