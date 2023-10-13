@@ -2,8 +2,8 @@ import { CardTypes, TargetModes, Players, DuelTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class KakitaZinkae extends DrawCard {
-    static id = 'kakita-zinkae';
+export default class DojiAsa extends DrawCard {
+    static id = 'doji-asa';
 
     setupCardAbilities() {
         this.action({
