@@ -15,10 +15,6 @@ export default class BorderlandsDefender extends DrawCard {
                 AbilityDsl.effects.cardCannot({
                     cannot: 'bow',
                     restricts: 'opponentsCardEffects'
-                }),
-                AbilityDsl.effects.cardCannot({
-                    cannot: 'dishonor',
-                    restricts: 'opponentsCardEffects'
                 })
             ]
         });
