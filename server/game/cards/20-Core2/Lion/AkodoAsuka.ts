@@ -9,10 +9,7 @@ export default class AkodoAsuka extends DrawCard {
         this.reaction({
             title: 'Honor a participating character',
             when: {
-                afterConflict: (event, context) =>
-                    context.source.isParticipating() &&
-                    event.conflict.winner === context.source.controller &&
-                    context.player.isDefendingPlayer()
+                afterConflict: (event, context) => event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             target: {
                 cardType: CardTypes.Character,

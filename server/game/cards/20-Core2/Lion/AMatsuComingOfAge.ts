@@ -1,5 +1,5 @@
 import AbilityDsl from '../../../abilitydsl';
-import { Conflict } from '../../../conflict';
+import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
 
 export default class AMatsuComingOfAge extends DrawCard {
@@ -10,11 +10,11 @@ export default class AMatsuComingOfAge extends DrawCard {
             title: 'Prove yourself worthy of a Matsu name',
             when: {
                 onConflictDeclared: (event, context) =>
+                    context.player === context.game.currentConflict.attackingPlayer &&
                     context.game.currentConflict.getNumberOfParticipantsFor(context.player) === 1 &&
                     context.game.currentConflict.getParticipants(
                         (participant) => participant.hasTrait('bushi') && participant.controller === context.player
-                    ).length === 1 &&
-                    context.player === context.game.currentConflict.attackingPlayer
+                    ).length === 1
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => {
                 const target = (context.game.currentConflict as Conflict).getParticipants(
