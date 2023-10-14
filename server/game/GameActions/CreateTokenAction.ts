@@ -1,12 +1,11 @@
-import { CardGameAction, CardActionProperties } from "./CardGameAction";
-
-import { Locations, CardTypes, Durations } from '../Constants';
-import AbilityContext = require("../AbilityContext");
-import BaseCard = require('../basecard');
-import Effects = require('../effects');
+import type AbilityContext from '../AbilityContext';
+import type BaseCard from '../basecard';
+import { CardTypes, Durations, Locations } from '../Constants';
+import Effects from '../effects';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface CreateTokenProperties extends CardActionProperties {
-    atHome?: boolean
+    atHome?: boolean;
 }
 
 export class CreateTokenAction extends CardGameAction {
@@ -40,16 +39,18 @@ export class CreateTokenAction extends CardGameAction {
                 context.game.currentConflict.addDefender(token);
             }
         }
-        context.game.actions.cardLastingEffect({
-            duration: Durations.UntilEndOfPhase,
-            effect: Effects.delayedEffect({
-                when: {
-                    onConflictFinished: () => true
-                },
-                message: '{0} returns to the deep',
-                messageArgs: [token],
-                gameAction: context.game.actions.discardFromPlay()
+        context.game.actions
+            .cardLastingEffect({
+                duration: Durations.UntilEndOfPhase,
+                effect: Effects.delayedEffect({
+                    when: {
+                        onConflictFinished: () => true
+                    },
+                    message: '{0} returns to the deep',
+                    messageArgs: [token],
+                    gameAction: context.game.actions.discardFromPlay()
+                })
             })
-        }).resolve(token, context);
+            .resolve(token, context);
     }
 }

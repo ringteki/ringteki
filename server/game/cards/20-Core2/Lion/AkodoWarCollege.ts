@@ -1,14 +1,15 @@
-import { CardTypes } from '../../../Constants';
+import { CardTypes, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import AkodoRecruit from '../../AkodoRecruit';
 
 export default class AkodoWarCollege extends DrawCard {
     static id = 'akodo-war-college';
 
     setupCardAbilities() {
         this.action({
-            title: 'Recruit a fresh Bushi',
-            effect: 'recruits {1}!',
+            title: 'Recruit a fresh Ashigaru',
+            effect: 'recruit {1}!',
             effectArgs: {
                 id: 'akodo-recruit',
                 label: 'Akodo Recruit',
@@ -16,7 +17,18 @@ export default class AkodoWarCollege extends DrawCard {
                 facedown: false,
                 type: CardTypes.Character
             },
-            gameAction: AbilityDsl.actions.createToken((context) => ({ target: context.player.dynastyDeck.first() }))
+            gameAction: AbilityDsl.actions.handler({
+                handler: (context) => {
+                    const card = context.player.dynastyDeck.first();
+                    const token = context.game.createToken(card, AkodoRecruit);
+                    card.owner.removeCardFromPile(card);
+                    card.moveTo(Locations.RemovedFromGame);
+                    const moveEvents = [];
+                    context.game.actions.putIntoPlay({ target: token }).addEventsToArray(moveEvents, context);
+                    context.game.openThenEventWindow(moveEvents);
+                    return true;
+                }
+            })
         });
     }
 }
