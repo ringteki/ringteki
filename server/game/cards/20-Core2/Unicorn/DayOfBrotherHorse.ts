@@ -8,11 +8,13 @@ export default class DayOfBrotherHorse extends DrawCard {
         this.reaction({
             title: 'Draw three card',
             when: {
-                onConflictPass: (event, context) => context.player === event.conflict.attackingPlayer
+                onConflictPass: (event, context) =>
+                    context.player === event.conflict.attackingPlayer &&
+                    context.player.anyCardsInPlay((card: DrawCard) => !card.bowed)
             },
             max: AbilityDsl.limit.perConflict(1),
             gameAction: AbilityDsl.actions.draw({ amount: 3 }),
-            effect: "draw 3 cards, take it easy and attend the horses. It's a beautiful day after all."
+            effect: 'draw 3 cards - they take a break to celebrate their prized steeds'
         });
     }
 }
