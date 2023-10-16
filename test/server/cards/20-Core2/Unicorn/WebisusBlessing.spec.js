@@ -8,8 +8,8 @@ describe('Webisus Blessing', function () {
                     hand: ['webisu-s-blessing']
                 },
                 player2: {
-                    inPlay:['doji-kuwanan']
-                },
+                    inPlay: ['doji-kuwanan']
+                }
             });
 
             this.whisperer = this.player1.findCardByName('doji-whisperer');
@@ -41,7 +41,9 @@ describe('Webisus Blessing', function () {
             expect(this.player1).not.toBeAbleToSelect(this.scholar);
 
             this.player1.clickCard(this.kuwanan);
-            expect(this.getChatLogs(10)).toContain('player1 plays Webisu\'s Blessing to discard Doji Whisperer\'s Tainted Token and Doji Kuwanan\'s Honored Token');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 plays Webisu's Blessing to discard Doji Whisperer's Tainted Token and Doji Kuwanan's Honored Token"
+            );
         });
 
         it('two tokens from the same character', function () {
@@ -58,7 +60,9 @@ describe('Webisus Blessing', function () {
 
             this.player1.clickPrompt('Tainted Token');
             this.player1.clickCard(this.whisperer);
-            expect(this.getChatLogs(10)).toContain('player1 plays Webisu\'s Blessing to discard Doji Whisperer\'s Tainted Token and Doji Whisperer\'s Dishonored Token');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 plays Webisu's Blessing to discard Doji Whisperer's Tainted Token and Doji Whisperer's Dishonored Token"
+            );
         });
 
         it('only one token', function () {
@@ -79,7 +83,9 @@ describe('Webisus Blessing', function () {
             expect(this.player1).toHavePromptButton('Done');
             this.player1.clickPrompt('Done');
 
-            expect(this.getChatLogs(10)).toContain('player1 plays Webisu\'s Blessing to discard Doji Whisperer\'s Tainted Token');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 plays Webisu's Blessing to discard Doji Whisperer's Tainted Token"
+            );
         });
     });
 });

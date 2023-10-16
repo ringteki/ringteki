@@ -18,16 +18,23 @@ export default class UtakuStableMaster extends DrawCard {
 
         this.action({
             title: 'Bow participating character with lower glory than participating cavalry.',
-            condition: context => context.game.currentConflict.getParticipants(card => card.controller === context.player && card.hasTrait('cavalry')),
+            condition: (context) =>
+                context.game.currentConflict.getParticipants(
+                    (card) => card.controller === context.player && card.hasTrait('cavalry')
+                ),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Opponent,
                 mode: TargetModes.Single,
                 cardCondition: (card: DrawCard, context) =>
-                    card.glory < Math.max(...context.game.currentConflict.getParticipants(card =>
-                        card.controller === context.player && card.hasTrait('cavalry')).map(x => x.glory)),
+                    card.glory <
+                    Math.max(
+                        ...context.game.currentConflict
+                            .getParticipants((card) => card.controller === context.player && card.hasTrait('cavalry'))
+                            .map((x) => x.glory)
+                    ),
                 gameAction: AbilityDsl.actions.bow()
             }
-        })
+        });
     }
 }

@@ -16,7 +16,7 @@ export default class ShinjoTakame extends DrawCard {
             when: {
                 onCharacterEntersPlay: (event, context) => event.card === context.source
             },
-            gameAction: AbilityDsl.actions.conditional(context => ({
+            gameAction: AbilityDsl.actions.conditional((context) => ({
                 condition: context.player.firstPlayer,
                 trueGameAction: AbilityDsl.actions.placeFate({
                     amount: 1,
@@ -24,7 +24,7 @@ export default class ShinjoTakame extends DrawCard {
                 }),
                 falseGameAction: AbilityDsl.actions.handler({
                     handler: (context) => {
-                        this.game.setFirstPlayer(context.source.controller)
+                        this.game.setFirstPlayer(context.source.controller);
                     }
                 })
             }))

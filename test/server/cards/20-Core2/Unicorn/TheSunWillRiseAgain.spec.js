@@ -8,8 +8,8 @@ describe('The Sun Will Rise Again', function () {
                     hand: ['the-sun-will-rise-again']
                 },
                 player2: {
-                    inPlay:['doji-kuwanan']
-                },
+                    inPlay: ['doji-kuwanan']
+                }
             });
 
             this.whisperer = this.player1.findCardByName('doji-whisperer');
@@ -37,7 +37,9 @@ describe('The Sun Will Rise Again', function () {
             expect(this.player1).toBeAbleToSelect(this.sun);
             this.player1.clickCard(this.sun);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays The Sun Will Rise Again to gain an additional military conflict this round. They will not forget this defeat.');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 plays The Sun Will Rise Again to gain an additional military conflict this round. They will not forget this defeat.'
+            );
 
             expect(this.player1.player.getConflictOpportunities()).toBe(2);
             expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
@@ -64,7 +66,9 @@ describe('The Sun Will Rise Again', function () {
             expect(this.player1).toBeAbleToSelect(this.sun);
             this.player1.clickCard(this.sun);
 
-            expect(this.getChatLogs(10)).toContain('player1 plays The Sun Will Rise Again to gain an additional political conflict this round. They will not forget this defeat.');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 plays The Sun Will Rise Again to gain an additional political conflict this round. They will not forget this defeat.'
+            );
 
             expect(this.player1.player.getConflictOpportunities()).toBe(2);
             expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(1);
