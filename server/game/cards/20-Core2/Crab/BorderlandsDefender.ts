@@ -1,10 +1,12 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-class BorderlandsDefender extends DrawCard {
+export default class BorderlandsDefender extends DrawCard {
+    static id = 'borderlands-defender';
+
     setupCardAbilities() {
         this.persistentEffect({
-            condition: context => context.source.isDefending(),
+            condition: (context) => context.source.isDefending(),
             effect: [
                 AbilityDsl.effects.cardCannot({
                     cannot: 'sendHome',
@@ -18,7 +20,3 @@ class BorderlandsDefender extends DrawCard {
         });
     }
 }
-
-BorderlandsDefender.id = 'borderlands-defender';
-
-module.exports = BorderlandsDefender;

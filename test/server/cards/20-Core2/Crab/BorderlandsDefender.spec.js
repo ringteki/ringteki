@@ -1,4 +1,4 @@
-describe('Borderlands Defender 2', function () {
+describe('Borderlands Defender', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -8,7 +8,7 @@ describe('Borderlands Defender 2', function () {
                     hand: ['admit-defeat', 'rout', 'mirumoto-s-fury']
                 },
                 player2: {
-                    inPlay: ['borderlands-defender-2'],
+                    inPlay: ['borderlands-defender'],
                     hand: ['retreat']
                 }
             });
@@ -17,7 +17,7 @@ describe('Borderlands Defender 2', function () {
             this.admitDefeat = this.player1.findCardByName('admit-defeat');
             this.rout = this.player1.findCardByName('rout');
             this.mirumotosFury = this.player1.findCardByName('mirumoto-s-fury');
-            this.borderlandsDefender = this.player2.findCardByName('borderlands-defender-2');
+            this.borderlandsDefender = this.player2.findCardByName('borderlands-defender');
             this.retreat = this.player2.findCardByName('retreat');
             this.noMoreActions();
         });
