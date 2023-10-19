@@ -1,13 +1,13 @@
-describe('Confirmed Suspicions', function () {
-    integration(function () {
-        beforeEach(function () {
+describe("Earth's Examination", function() {
+    integration(function() {
+        beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['prodigy-of-the-waves', 'kaito-kosori', 'keeper-initiate']
                 },
                 player2: {
-                    hand: ['confirmed-suspicions'],
+                    hand: ['earth-s-examination'],
                     inPlay: ['adept-of-the-waves', 'solemn-scholar']
                 }
             });
@@ -17,7 +17,7 @@ describe('Confirmed Suspicions', function () {
             this.kosoriTainted = this.player1.findCardByName('kaito-kosori');
             this.kosoriTainted.taint();
 
-            this.suspicions = this.player2.findCardByName('confirmed-suspicions');
+            this.examination = this.player2.findCardByName('earth-s-examination');
             this.adept = this.player2.findCardByName('adept-of-the-waves');
             this.solemn = this.player2.findCardByName('solemn-scholar');
 
@@ -29,8 +29,8 @@ describe('Confirmed Suspicions', function () {
             });
         });
 
-        it('taints a participating character', function () {
-            this.player2.clickCard(this.suspicions);
+        it('taints a participating character', function() {
+            this.player2.clickCard(this.examination);
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.prodigy);
             expect(this.player2).not.toBeAbleToSelect(this.kosoriTainted);
@@ -40,11 +40,11 @@ describe('Confirmed Suspicions', function () {
 
             this.player2.clickCard(this.prodigy);
             expect(this.prodigy.isTainted).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 plays Confirmed Suspicions to taint Prodigy of the Waves');
+            expect(this.getChatLogs(5)).toContain(`player2 plays Earth's Examination to taint Prodigy of the Waves`);
         });
 
-        it('with affinity, it can bow that character', function () {
-            this.player2.clickCard(this.suspicions);
+        it('with affinity, it can bow that character', function() {
+            this.player2.clickCard(this.examination);
             this.player2.clickCard(this.prodigy);
             expect(this.player2).toHavePrompt('Bow that character?');
             expect(this.player2).toHavePromptButton('Yes');

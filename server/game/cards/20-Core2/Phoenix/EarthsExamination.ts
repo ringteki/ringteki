@@ -2,12 +2,12 @@ import { CardTypes, ConflictTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class ConfirmedSuspicions extends DrawCard {
-    static id = 'confirmed-suspicions';
+export default class EarthsExamination extends DrawCard {
+    static id = 'earth-s-examination';
 
     setupCardAbilities() {
         this.action({
-            title: 'Ready a shugenja',
+            title: 'Taint a character',
             condition: (context) => context.game.isDuringConflict(ConflictTypes.Political),
             target: {
                 cardType: CardTypes.Character,
