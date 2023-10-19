@@ -1,12 +1,12 @@
-describe('One Man, One Strike', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Unyielding Terms', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
                     inPlay: ['kakita-zinkae', 'brash-samurai', 'doji-challenger'],
-                    hand: ['one-man-one-strike']
+                    hand: ['unyielding-terms']
                 },
                 player2: {
                     inPlay: ['isawa-atsuko', 'solemn-scholar'],
@@ -17,7 +17,7 @@ describe('One Man, One Strike', function() {
             this.zinkae = this.player1.findCardByName('kakita-zinkae');
             this.brash = this.player1.findCardByName('brash-samurai');
             this.challenger = this.player1.findCardByName('doji-challenger');
-            this.strike = this.player1.findCardByName('one-man-one-strike');
+            this.unyieldingTerms = this.player1.findCardByName('unyielding-terms');
 
             this.atsuko = this.player2.findCardByName('isawa-atsuko');
             this.scholar = this.player2.findCardByName('solemn-scholar');
@@ -30,15 +30,15 @@ describe('One Man, One Strike', function() {
             this.challenger.bow();
         });
 
-        it('should require you to choose a ready duelist as the challenger', function() {
-            this.player1.clickCard(this.strike);
+        it('should require you to choose a ready duelist as the challenger', function () {
+            this.player1.clickCard(this.unyieldingTerms);
             expect(this.player1).toBeAbleToSelect(this.zinkae);
             expect(this.player1).not.toBeAbleToSelect(this.brash);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
         });
 
-        it('should give opportunity to refuse', function() {
-            this.player1.clickCard(this.strike);
+        it('should give opportunity to refuse', function () {
+            this.player1.clickCard(this.unyieldingTerms);
             this.player1.clickCard(this.zinkae);
             this.player1.clickCard(this.atsuko);
             expect(this.player2).toHavePrompt('Do you wish to refuse the duel?');
@@ -46,8 +46,8 @@ describe('One Man, One Strike', function() {
             expect(this.player2).toHavePromptButton('No');
         });
 
-        it('should discard half your hand rounded down to refuse', function() {
-            this.player1.clickCard(this.strike);
+        it('should discard half your hand rounded down to refuse', function () {
+            this.player1.clickCard(this.unyieldingTerms);
             this.player1.clickCard(this.zinkae);
             this.player1.clickCard(this.atsuko);
 
@@ -59,7 +59,9 @@ describe('One Man, One Strike', function() {
             expect(this.player2).toBeAbleToSelect(this.atw);
 
             expect(this.player2).toHavePrompt('Choose 2 cards to discard');
-            expect(this.getChatLogs(5)).toContain('player2 chooses to refuse the duel and discard 2 cards from their hand');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 chooses to refuse the duel and discard 2 cards from their hand'
+            );
 
             this.player2.clickCard(this.letgo);
             expect(this.player2).not.toHavePromptButton('Done');
@@ -74,8 +76,8 @@ describe('One Man, One Strike', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should bow & dishonor the loser & stop them from readying', function() {
-            this.player1.clickCard(this.strike);
+        it('should bow & dishonor the loser & stop them from readying', function () {
+            this.player1.clickCard(this.unyieldingTerms);
             this.player1.clickCard(this.zinkae);
             this.player1.clickCard(this.atsuko);
             this.player2.clickPrompt('No');
@@ -84,7 +86,9 @@ describe('One Man, One Strike', function() {
             this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
 
-            expect(this.getChatLogs(10)).toContain('Duel Effect: bow and dishonor Isawa Atsuko, preventing them from readying for the rest of the phase');
+            expect(this.getChatLogs(10)).toContain(
+                'Duel Effect: bow and dishonor Isawa Atsuko, preventing them from readying for the rest of the phase'
+            );
             expect(this.atsuko.bowed).toBe(true);
             expect(this.atsuko.isDishonored).toBe(true);
 
@@ -93,7 +97,7 @@ describe('One Man, One Strike', function() {
             expect(this.player2).not.toBeAbleToSelect(this.atsuko);
         });
 
-        it('during a conflict should let you pick a mix of participating and not', function() {
+        it('during a conflict should let you pick a mix of participating and not', function () {
             this.challenger.ready();
             this.noMoreActions();
             this.initiateConflict({
@@ -103,7 +107,7 @@ describe('One Man, One Strike', function() {
 
             this.player2.pass();
 
-            this.player1.clickCard(this.strike);
+            this.player1.clickCard(this.unyieldingTerms);
             expect(this.player1).toBeAbleToSelect(this.zinkae);
             expect(this.player1).toBeAbleToSelect(this.challenger);
             this.player1.clickCard(this.zinkae);

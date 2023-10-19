@@ -1,12 +1,12 @@
-describe('Kakita Student', function() {
-    integration(function() {
+describe('Promising Kōhai', function () {
+    integration(function () {
         describe('Duel Challenge', function () {
-            beforeEach(function() {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         fate: 20,
-                        inPlay: ['doji-challenger', 'kakita-student', 'doji-whisperer'],
+                        inPlay: ['doji-challenger', 'promising-kohai', 'doji-whisperer'],
                         hand: ['a-fate-worse-than-death', 'desolation'],
                         dynastyDiscard: ['awakened-tsukumogami']
                     },
@@ -17,13 +17,13 @@ describe('Kakita Student', function() {
                 });
 
                 this.whisperer = this.player1.findCardByName('doji-whisperer');
-                this.student = this.player1.findCardByName('kakita-student');
+                this.student = this.player1.findCardByName('promising-kohai');
                 this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
                 this.challenger = this.player1.findCardByName('doji-challenger');
                 this.pd = this.player2.findCardByName('policy-debate');
             });
 
-            it('should react appropriately', function() {
+            it('should react appropriately', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger, this.whisperer],
@@ -38,7 +38,7 @@ describe('Kakita Student', function() {
                 expect(this.player1).toBeAbleToSelect(this.student);
             });
 
-            it('should apply +2 to the duel result', function() {
+            it('should apply +2 to the duel result', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -55,12 +55,12 @@ describe('Kakita Student', function() {
                 this.player2.clickPrompt('1');
 
                 expect(this.player1).toHavePrompt('Policy Debate');
-                expect(this.getChatLogs(10)).toContain('player1 uses Kakita Student to help win a duel');
+                expect(this.getChatLogs(10)).toContain('player1 uses Promising Kōhai to help win a duel');
                 expect(this.getChatLogs(10)).toContain('player1 gives Doji Challenger 2 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 4 vs 6: Doji Challenger');
             });
 
-            it('should not react if your duelist costs 1', function() {
+            it('should not react if your duelist costs 1', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger, this.whisperer],
@@ -74,7 +74,6 @@ describe('Kakita Student', function() {
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
                 expect(this.player1).toHavePrompt('Honor Bid');
             });
-
         });
     });
 });

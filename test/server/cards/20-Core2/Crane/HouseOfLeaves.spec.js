@@ -1,17 +1,17 @@
-describe('Crane Box', function () {
+describe('House of Leaves', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    stronghold: 'crane-box',
+                    stronghold: 'house-of-leaves',
                     inPlay: ['fushicho']
                 },
                 player2: {
                     inPlay: ['bayushi-liar']
                 }
             });
-            this.craneBox = this.player1.findCardByName('crane-box');
+            this.craneBox = this.player1.findCardByName('house-of-leaves');
             this.fushicho = this.player1.findCardByName('fushicho');
             this.bayushiLiar = this.player2.findCardByName('bayushi-liar');
         });

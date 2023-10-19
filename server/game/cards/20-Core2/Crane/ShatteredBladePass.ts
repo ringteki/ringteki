@@ -2,8 +2,8 @@ import { CardTypes, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class DinnerInTheSky extends ProvinceCard {
-    static id = 'dinner-in-the-sky';
+export default class ShatteredBladePass extends ProvinceCard {
+    static id = 'shattered-blade-pass';
 
     public setupCardAbilities() {
         this.action({

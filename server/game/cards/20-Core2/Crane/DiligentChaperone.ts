@@ -1,9 +1,9 @@
-import { CardTypes, Durations, CharacterStatus, Players } from '../../../Constants';
+import { CardTypes, CharacterStatus } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class DignifiedYojimbo extends DrawCard {
-    static id = 'dignified-yojimbo';
+export default class DiligentChaperone extends DrawCard {
+    static id = 'diligent-chaperone';
 
     setupCardAbilities() {
         this.wouldInterrupt({

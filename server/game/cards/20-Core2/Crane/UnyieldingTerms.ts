@@ -2,8 +2,8 @@ import { DuelTypes, Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class OneManOneStrike extends DrawCard {
-    static id = 'one-man-one-strike';
+export default class UnyieldingTerms extends DrawCard {
+    static id = 'unyielding-terms';
 
     setupCardAbilities() {
         this.action({

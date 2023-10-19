@@ -2,8 +2,8 @@ import { CardTypes, Players, Decks, Locations, TargetModes } from '../../../Cons
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class TwiceRemovedCousin extends DrawCard {
-    static id = 'twice-removed-cousin';
+export default class AsahinaEnvoy extends DrawCard {
+    static id = 'asahina-envoy';
 
     setupCardAbilities() {
         this.interrupt({
@@ -19,7 +19,7 @@ export default class TwiceRemovedCousin extends DrawCard {
                 gameAction: AbilityDsl.actions.deckSearch({
                     cardCondition: (card) =>
                         card.type === CardTypes.Character && card.printedCost >= 4 && card.isFaction('crane'),
-                    amount: 4,
+                    amount: 6,
                     deck: Decks.DynastyDeck,
                     shuffle: true,
                     selectedCardsHandler: (context, event, cards) => {

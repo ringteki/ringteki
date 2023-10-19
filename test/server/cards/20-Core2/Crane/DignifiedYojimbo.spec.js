@@ -1,17 +1,17 @@
-describe('Dignified Yojimbo', function () {
+describe('Diligent Chaperone', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['dignified-yojimbo', 'doji-whisperer', 'brash-samurai']
+                    inPlay: ['diligent-chaperone', 'doji-whisperer', 'brash-samurai']
                 },
                 player2: {
                     inPlay: ['bayushi-dairu'],
                     hand: ['way-of-the-scorpion']
                 }
             });
-            this.yojimbo = this.player1.findCardByName('dignified-yojimbo');
+            this.yojimbo = this.player1.findCardByName('diligent-chaperone');
             this.brash = this.player1.findCardByName('brash-samurai');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.dairu = this.player2.findCardByName('bayushi-dairu');
@@ -37,7 +37,9 @@ describe('Dignified Yojimbo', function () {
             expect(this.scorp.location).toBe('conflict discard pile');
             expect(this.yojimbo.bowed).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Dignified Yōjimbō to prevent Brash Samurai from losing their status token');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
+            );
         });
 
         it('should not cancel trying to dishonor a normal character', function () {
@@ -71,7 +73,9 @@ describe('Dignified Yojimbo', function () {
             expect(this.dairu.isHonored).toBe(false);
             expect(this.yojimbo.bowed).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Dignified Yōjimbō to prevent Brash Samurai from losing their status token');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
+            );
         });
 
         it('should cancel dishonoring via fire ring', function () {
@@ -87,7 +91,7 @@ describe('Dignified Yojimbo', function () {
             this.noMoreActions();
 
             this.player2.clickCard(this.brash);
-            this.player2.clickPrompt("Dishonor Brash Samurai");
+            this.player2.clickPrompt('Dishonor Brash Samurai');
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.yojimbo);
             this.player1.clickCard(this.yojimbo);
@@ -95,7 +99,9 @@ describe('Dignified Yojimbo', function () {
             expect(this.brash.isHonored).toBe(true);
             expect(this.yojimbo.bowed).toBe(true);
 
-            expect(this.getChatLogs(5)).toContain('player1 uses Dignified Yōjimbō to prevent Brash Samurai from losing their status token');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
+            );
         });
     });
 });

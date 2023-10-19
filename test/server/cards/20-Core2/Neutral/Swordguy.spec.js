@@ -1,14 +1,14 @@
-describe('Swordguy', function() {
-    integration(function() {
+describe('Swordguy', function () {
+    integration(function () {
         describe('Ignore skill', function () {
-            beforeEach(function() {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         fate: 20,
                         inPlay: ['doji-challenger', 'doji-whisperer', 'kakita-yoshi'],
                         hand: ['a-fate-worse-than-death', 'desolation'],
-                        dynastyDiscard: ['awakened-tsukumogami', 'kakita-student']
+                        dynastyDiscard: ['awakened-tsukumogami', 'promising-kohai']
                     },
                     player2: {
                         inPlay: ['swordguy', 'kakita-toshimoko'],
@@ -18,14 +18,14 @@ describe('Swordguy', function() {
 
                 this.yoshi = this.player1.findCardByName('kakita-yoshi');
                 this.whisperer = this.player1.findCardByName('doji-whisperer');
-                this.student = this.player1.findCardByName('kakita-student');
+                this.student = this.player1.findCardByName('promising-kohai');
                 this.swordguy = this.player2.findCardByName('swordguy');
                 this.challenger = this.player1.findCardByName('doji-challenger');
                 this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
                 this.pd = this.player2.findCardByName('policy-debate');
             });
 
-            it('should only use printed skill and win ties', function() {
+            it('should only use printed skill and win ties', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.yoshi],
@@ -44,7 +44,7 @@ describe('Swordguy', function() {
                 expect(this.getChatLogs(10)).toContain('Swordguy: 1 vs 1: Kakita Yoshi');
             });
 
-            it('should not matter if not in the duel', function() {
+            it('should not matter if not in the duel', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.yoshi],

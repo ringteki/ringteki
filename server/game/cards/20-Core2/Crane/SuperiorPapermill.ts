@@ -2,8 +2,8 @@ import { TargetModes, Players, Locations, Phases } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class PavilionOfTomorrow extends DrawCard {
-    static id = 'pavillion-of-tomorrow';
+export default class SuperiorPapermill extends DrawCard {
+    static id = 'superior-papermill';
 
     setupCardAbilities() {
         this.action({

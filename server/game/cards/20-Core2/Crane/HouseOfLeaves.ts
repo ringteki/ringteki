@@ -2,8 +2,8 @@ import { CardTypes, Durations, Phases } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class CraneBox extends StrongholdCard {
-    static id = 'crane-box';
+export default class HouseOfLeaves extends StrongholdCard {
+    static id = 'house-of-leaves';
 
     setupCardAbilities() {
         this.action({

@@ -2,8 +2,8 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class ServeYourBetters extends DrawCard {
-    static id = 'serve-your-betters';
+export default class ObligationsOfHospitality extends DrawCard {
+    static id = 'obligations-of-hospitality';
 
     setupCardAbilities() {
         this.action({
@@ -22,9 +22,6 @@ export default class ServeYourBetters extends DrawCard {
     }
 
     canPlay(context, playType) {
-        if (context.player.opponent && context.player.isMoreHonorable()) {
-            return super.canPlay(context, playType);
-        }
-        return false;
+        return context.player.opponent && context.player.isMoreHonorable() && super.canPlay(context, playType);
     }
 }

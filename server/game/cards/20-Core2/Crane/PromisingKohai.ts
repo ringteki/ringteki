@@ -2,8 +2,8 @@ import { CardTypes, Durations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class KakitaStudent extends DrawCard {
-    static id = 'kakita-student';
+export default class PromisingKohai extends DrawCard {
+    static id = 'promising-kohai';
 
     setupCardAbilities() {
         this.duelChallenge({

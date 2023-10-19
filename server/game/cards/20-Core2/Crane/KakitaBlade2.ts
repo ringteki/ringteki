@@ -6,14 +6,6 @@ export default class KakitaBlade2 extends DrawCard {
     static id = 'kakita-blade-2';
 
     setupCardAbilities() {
-        this.persistentEffect({
-            effect: AbilityDsl.effects.cardCannot({
-                cannot: 'target',
-                restricts: 'opponentsEvents',
-                source: this
-            })
-        });
-
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                 title: 'Gain a fate',
