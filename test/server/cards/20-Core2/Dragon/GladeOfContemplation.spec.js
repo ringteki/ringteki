@@ -1,4 +1,4 @@
-describe('Redwoods Treehouse', function () {
+describe('Glade of Contemplation', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -9,13 +9,13 @@ describe('Redwoods Treehouse', function () {
                 },
                 player2: {
                     hand: ['adopted-kin', 'ancestral-daisho'],
-                    provinces: ['redwoods-treehouse']
+                    provinces: ['glade-of-contemplation']
                 }
             });
 
             this.aggressiveMoto = this.player1.findCardByName('aggressive-moto');
 
-            this.redwoodsTreehouse = this.player2.findCardByName('redwoods-treehouse', 'province 1');
+            this.redwoodsTreehouse = this.player2.findCardByName('glade-of-contemplation', 'province 1');
         });
 
         it('can draw cards', function () {
@@ -35,7 +35,7 @@ describe('Redwoods Treehouse', function () {
             this.player2.clickPrompt('Draw cards');
             expect(this.player2.hand.length).toBe(4);
             expect(this.player2.hand.length).toBe(this.player1.hand.length);
-            expect(this.getChatLogs(3)).toContain('player2 uses Redwoods Treehouse to draw cards');
+            expect(this.getChatLogs(3)).toContain('player2 uses Glade of Contemplation to draw cards');
         });
 
         it('can force discard cards', function () {
@@ -53,7 +53,9 @@ describe('Redwoods Treehouse', function () {
             expect(this.player2).toHavePromptButton('Force opponent to discard cards');
 
             this.player2.clickPrompt('Force opponent to discard cards');
-            expect(this.getChatLogs(3)).toContain('player2 uses Redwoods Treehouse to force opponent to discard cards');
+            expect(this.getChatLogs(3)).toContain(
+                'player2 uses Glade of Contemplation to force opponent to discard cards'
+            );
             expect(this.player1).toHavePrompt('Choose 2 cards to discard');
             expect(this.player1).toBeAbleToSelect('bonds-of-blood');
             expect(this.player1).toBeAbleToSelect('breakthrough');

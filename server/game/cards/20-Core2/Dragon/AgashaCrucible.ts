@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import { PlayAttachmentAction } from '../../../PlayAttachmentAction';
 
-export default class AgashaFoundry extends DrawCard {
-    static id = 'agasha-foundry';
+export default class AgashaCrucible extends DrawCard {
+    static id = 'agasha-crucible';
 
     public setupCardAbilities() {
         this.interrupt({

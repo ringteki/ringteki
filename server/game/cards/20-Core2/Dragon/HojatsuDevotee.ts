@@ -1,9 +1,9 @@
-import { CardTypes, Players, Durations, DuelTypes } from '../../../Constants';
+import { DuelTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class MirumotoAvenger extends DrawCard {
-    static id = 'mirumoto-avenger';
+export default class HojatsuDevotee extends DrawCard {
+    static id = 'hojatsu-devotee';
 
     public setupCardAbilities() {
         this.interrupt({

@@ -1,8 +1,8 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class RevealerOfOmens extends DrawCard {
-    static id = 'revealer-of-omens';
+export default class StudentOfTheMethod extends DrawCard {
+    static id = 'student-of-the-method';
 
     public setupCardAbilities() {
         this.persistentEffect({

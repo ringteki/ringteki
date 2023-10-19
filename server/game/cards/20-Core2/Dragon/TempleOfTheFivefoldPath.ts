@@ -2,8 +2,8 @@ import { TargetModes } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class DragonBox extends StrongholdCard {
-    static id = 'dragon-box';
+export default class TempleOfTheFivefoldPath extends StrongholdCard {
+    static id = 'temple-of-the-fivefold-path';
 
     setupCardAbilities() {
         this.action({

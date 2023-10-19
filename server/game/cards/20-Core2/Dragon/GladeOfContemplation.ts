@@ -3,8 +3,8 @@ import { ProvinceCard } from '../../../ProvinceCard';
 import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class RedwoodsTreehouse extends ProvinceCard {
-    static id = 'redwoods-treehouse';
+export default class GladeOfContemplation extends ProvinceCard {
+    static id = 'glade-of-contemplation';
 
     public setupCardAbilities() {
         this.reaction({

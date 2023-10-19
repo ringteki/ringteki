@@ -1,4 +1,4 @@
-describe('Mirumoto Avenger', function () {
+describe('Hojatsu Devotee', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -9,7 +9,7 @@ describe('Mirumoto Avenger', function () {
                     hand: ['assassination']
                 },
                 player2: {
-                    inPlay: ['mirumoto-avenger'],
+                    inPlay: ['hojatsu-devotee'],
                     hand: ['assassination']
                 }
             });
@@ -18,7 +18,7 @@ describe('Mirumoto Avenger', function () {
             this.yoshi = this.player1.findCardByName('kakita-yoshi');
             this.challenger = this.player1.findCardByName('doji-challenger');
 
-            this.avenger = this.player2.findCardByName('mirumoto-avenger');
+            this.hojatsuDevotee = this.player2.findCardByName('hojatsu-devotee');
             this.assassination = this.player1.findCardByName('assassination');
             this.assassination2 = this.player2.findCardByName('assassination');
 
@@ -34,12 +34,12 @@ describe('Mirumoto Avenger', function () {
 
             this.player2.pass();
             this.player1.clickCard(this.assassination);
-            this.player1.clickCard(this.avenger);
+            this.player1.clickCard(this.hojatsuDevotee);
 
             expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.avenger);
+            expect(this.player2).toBeAbleToSelect(this.hojatsuDevotee);
 
-            this.player2.clickCard(this.avenger);
+            this.player2.clickCard(this.hojatsuDevotee);
             expect(this.player2).toBeAbleToSelect(this.yoshi);
             expect(this.player2).toBeAbleToSelect(this.challenger);
             expect(this.player2).toBeAbleToSelect(this.uji);
@@ -50,10 +50,10 @@ describe('Mirumoto Avenger', function () {
             this.player2.clickPrompt('1');
 
             expect(this.getChatLogs(10)).toContain(
-                'player2 uses Mirumoto Avenger to initiate a military duel : Mirumoto Avenger vs. Kakita Yoshi'
+                'player2 uses Hojatsu Devotee to initiate a military duel : Hojatsu Devotee vs. Kakita Yoshi'
             );
             expect(this.getChatLogs(10)).toContain(
-                'Mirumoto Avenger: 4 vs 3: Kakita Yoshi',
+                'Hojatsu Devotee: 4 vs 3: Kakita Yoshi',
                 'Duel Effect: discard Kakita Yoshi'
             );
 
@@ -68,7 +68,7 @@ describe('Mirumoto Avenger', function () {
             });
 
             this.player2.clickCard(this.assassination2);
-            this.player2.clickCard(this.avenger);
+            this.player2.clickCard(this.hojatsuDevotee);
 
             expect(this.player2).not.toHavePrompt('Triggered Abilities');
             expect(this.player1).toHavePrompt('Conflict Action Window');
