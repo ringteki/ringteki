@@ -4,7 +4,7 @@ describe('Assemble the Council', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    hand: ['assemble-the-council'],
+                    hand: ['meditations-on-orthodoxy'],
                     inPlay: ['adept-of-the-waves', 'solemn-scholar', 'miya-mystic']
                 },
                 player2: {
@@ -12,7 +12,7 @@ describe('Assemble the Council', function () {
                 }
             });
 
-            this.assembleTheCouncil = this.player1.findCardByName('assemble-the-council');
+            this.meditationsOnOrthodoxy = this.player1.findCardByName('meditations-on-orthodoxy');
             this.adept = this.player1.findCardByName('adept-of-the-waves');
             this.solemn = this.player1.findCardByName('solemn-scholar');
             this.mystic = this.player1.findCardByName('miya-mystic');
@@ -25,14 +25,14 @@ describe('Assemble the Council', function () {
             this.player1.clickPrompt('Pass Conflict');
             this.player1.clickPrompt('Yes');
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.assembleTheCouncil);
+            expect(this.player1).toBeAbleToSelect(this.meditationsOnOrthodoxy);
         });
 
         it('if triggered, readies 2 characters', function () {
             this.noMoreActions();
             this.player1.clickPrompt('Pass Conflict');
             this.player1.clickPrompt('Yes');
-            this.player1.clickCard(this.assembleTheCouncil);
+            this.player1.clickCard(this.meditationsOnOrthodoxy);
             expect(this.player1).toHavePrompt('Choose characters');
             expect(this.player1).not.toHavePromptButton('Done');
             expect(this.player1).toBeAbleToSelect(this.adept);
@@ -46,7 +46,7 @@ describe('Assemble the Council', function () {
             expect(this.player1).toHavePromptButton('Done');
 
             this.player1.clickPrompt('Done');
-            expect(this.assembleTheCouncil.location).toBe('conflict deck');
+            expect(this.meditationsOnOrthodoxy.location).toBe('conflict deck');
             expect(this.getChatLogs(5)).toContain(
                 'player1 plays Assemble the Council to ready Adept of the Waves and Solemn Scholar'
             );

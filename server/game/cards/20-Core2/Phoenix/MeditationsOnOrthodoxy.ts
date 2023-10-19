@@ -2,8 +2,8 @@ import { CardTypes, Locations, PlayTypes, Players, TargetModes } from '../../../
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class AssembleTheCouncil extends DrawCard {
-    static id = 'assemble-the-council';
+export default class MeditationsOnOrthodoxy extends DrawCard {
+    static id = 'meditations-on-orthodoxy';
 
     setupCardAbilities() {
         this.persistentEffect({
