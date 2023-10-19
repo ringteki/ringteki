@@ -5,8 +5,8 @@ import type Player from '../../../player';
 
 type Element = 'air' | 'earth' | 'fire' | 'void' | 'water';
 
-export default class TribunalOfTheElders extends DrawCard {
-    static id = 'tribunal-of-the-elders';
+export default class ReligiousConclave extends DrawCard {
+    static id = 'religious-conclave';
 
     public setupCardAbilities() {
         this.action({

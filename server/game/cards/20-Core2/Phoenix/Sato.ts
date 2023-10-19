@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
-export default class UnderSurveillance extends DrawCard {
-    static id = 'under-surveillance';
+export default class Sato extends DrawCard {
+    static id = 'sato';
 
     public setupCardAbilities() {
         this.attachmentConditions({ opponentControlOnly: true });
