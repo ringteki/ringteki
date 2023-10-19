@@ -4,8 +4,8 @@ import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type Ring from '../../../ring';
 
-export default class PhoenixBox extends StrongholdCard {
-    static id = 'phoenix-box';
+export default class PalaceOfKnowledge extends StrongholdCard {
+    static id = 'palace-of-knowledge';
 
     setupCardAbilities() {
         this.reaction({

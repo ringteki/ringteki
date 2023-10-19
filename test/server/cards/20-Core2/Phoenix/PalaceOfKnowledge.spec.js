@@ -1,16 +1,16 @@
-describe('Phoenix Box', function () {
+describe('Palace of Knowledge', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    stronghold: 'phoenix-box',
+                    stronghold: 'palace-of-knowledge',
                     inPlay: ['fushicho'],
                     hand: ['court-games']
                 },
                 player2: {}
             });
-            this.phoenixBox = this.player1.findCardByName('phoenix-box');
+            this.palaceOfKnowledge = this.player1.findCardByName('palace-of-knowledge');
             this.fushicho = this.player1.findCardByName('fushicho');
             this.courtGames = this.player1.findCardByName('court-games');
         });
@@ -29,7 +29,7 @@ describe('Phoenix Box', function () {
             expect(this.getChatLogs(3)).toContain('player1 resolves the air ring, gaining 2 honor');
             expect(this.player1).toHavePrompt('Any reactions?');
 
-            this.player1.clickCard(this.phoenixBox);
+            this.player1.clickCard(this.palaceOfKnowledge);
             expect(this.player1).toHavePrompt('Choose a ring');
 
             this.player1.clickRing('fire');
@@ -37,7 +37,7 @@ describe('Phoenix Box', function () {
 
             this.player1.clickCard(this.courtGames);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Phoenix Box, bowing Phoenix Box and discarding Court Games to resolve Fire Ring effect'
+                'player1 uses Palace of Knowledge, bowing Palace of Knowledge and discarding Court Games to resolve Fire Ring effect'
             );
             expect(this.player1).toHavePrompt('Choose character to honor or dishonor');
 
