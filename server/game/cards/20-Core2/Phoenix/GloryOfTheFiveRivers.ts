@@ -3,24 +3,24 @@ import DrawCard from '../../../drawcard';
 import type { GameAction } from '../../../GameActions/GameAction';
 import type { Result } from '../../../gamesteps/FateBidPrompt';
 
-export default class CollectionOfAlms extends DrawCard {
-    static id = 'collection-of-alms';
+export default class GloryOfTheFiveRivers extends DrawCard {
+    static id = 'glory-of-the-five-rivers';
 
     public setupCardAbilities() {
         this.action({
             title: 'Collect donations for those in need',
             condition: (context) => context.player.isTraitInPlay('courtier'),
             gameAction: AbilityDsl.actions.fateBid({
-                postBidAction: AbilityDsl.actions.sequentialContext(context => {
-                    const result: Result = (context as any).fateBidResult
-                    console.log(1, context)
-                    const gameActions: Array<GameAction> = []
+                postBidAction: AbilityDsl.actions.sequentialContext((context) => {
+                    const result: Result = (context as any).fateBidResult;
+                    console.log(1, context);
+                    const gameActions: Array<GameAction> = [];
                     for (const player of result.highest.players) {
-                        gameActions.push(AbilityDsl.actions.gainHonor({ target: player }))
+                        gameActions.push(AbilityDsl.actions.gainHonor({ target: player }));
                     }
 
-                    return { gameActions }
-                }),
+                    return { gameActions };
+                })
             }),
             effect: 'collect donations for those in need'
         });

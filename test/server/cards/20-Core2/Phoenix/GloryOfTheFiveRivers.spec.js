@@ -1,10 +1,10 @@
-describe('Collection of Alms', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Glory of the Five Rivers', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    hand: ['collection-of-alms'],
+                    hand: ['glory-of-the-five-rivers'],
                     inPlay: ['fire-tensai-initiate', 'solemn-scholar', 'seppun-truthseeker']
                 },
                 player2: {
@@ -12,7 +12,7 @@ describe('Collection of Alms', function() {
                 }
             });
 
-            this.collectionOfAlms = this.player1.findCardByName('collection-of-alms');
+            this.collectionOfAlms = this.player1.findCardByName('glory-of-the-five-rivers');
             this.fireTensai = this.player1.findCardByName('fire-tensai-initiate');
             this.solemn = this.player1.findCardByName('solemn-scholar');
 
@@ -20,12 +20,11 @@ describe('Collection of Alms', function() {
             this.whisperer = this.player2.findCardByName('doji-whisperer');
         });
 
-        fit('does a thing', function() {
-            const p1InitialFate = this.player1.fate
-            const p2InitialFate = this.player2.fate
+        fit('does a thing', function () {
+            const p1InitialFate = this.player1.fate;
+            const p2InitialFate = this.player2.fate;
 
-
-            this.player1.clickCard(this.collectionOfAlms)
+            this.player1.clickCard(this.collectionOfAlms);
             expect(this.player1).toHavePrompt('Choose an amount of fate');
             expect(this.player1).toHavePromptButton('0');
             expect(this.player1).toHavePromptButton('1');
@@ -50,14 +49,12 @@ describe('Collection of Alms', function() {
             this.player1.clickPrompt('0');
             this.player2.clickPrompt('2');
 
-            expect(this.player1.fate).toBe(p1InitialFate - 0)
-            expect(this.player2.fate).toBe(p2InitialFate - 2)
+            expect(this.player1.fate).toBe(p1InitialFate - 0);
+            expect(this.player2.fate).toBe(p2InitialFate - 2);
             expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
-        })
+        });
 
-
-
-        it('without affinity, bow a character without attachment', function() {
+        it('without affinity, bow a character without attachment', function () {
             this.player1.moveCard(this.fireTensai, 'dynasty discard pile');
 
             this.player2.pass();
@@ -75,7 +72,7 @@ describe('Collection of Alms', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
         });
 
-        it('with affinity, bow a character without attachment', function() {
+        it('with affinity, bow a character without attachment', function () {
             this.player2.pass();
             this.player1.clickCard(this.heartOfTheInferno);
             expect(this.player1).toHavePrompt('Choose a card');
@@ -91,7 +88,7 @@ describe('Collection of Alms', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
         });
 
-        it('with affinity, discard an attachment', function() {
+        it('with affinity, discard an attachment', function () {
             this.player2.pass();
             this.player1.clickCard(this.heartOfTheInferno);
             expect(this.player1).toHavePrompt('Choose a card');
@@ -109,4 +106,3 @@ describe('Collection of Alms', function() {
         });
     });
 });
-
