@@ -1,4 +1,4 @@
-describe('Favorable Ground', function () {
+describe(`Border's Edge Barracks`, function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -7,13 +7,13 @@ describe('Favorable Ground', function () {
                     inPlay: ['bayushi-manipulator']
                 },
                 player2: {
-                    dynastyDiscard: ['integrated-watchtower'],
+                    dynastyDiscard: ['border-s-edge-barracks'],
                     inPlay: ['adept-of-the-waves', 'asako-diplomat', 'naive-student']
                 }
             });
             this.bayushiManipulatorr = this.player1.findCardByName('bayushi-manipulator');
 
-            this.integratedWatchtower = this.player2.placeCardInProvince('integrated-watchtower', 'province 1');
+            this.bordersEdgeBarracks = this.player2.placeCardInProvince('border-s-edge-barracks', 'province 1');
             this.adeptOfTheWaves = this.player2.findCardByName('adept-of-the-waves');
             this.asakoDiplomat = this.player2.findCardByName('asako-diplomat');
             this.naiveStudent = this.player2.findCardByName('naive-student');
@@ -24,7 +24,7 @@ describe('Favorable Ground', function () {
                 attackers: [this.bayushiManipulatorr],
                 defenders: []
             });
-            this.player2.clickCard(this.integratedWatchtower);
+            this.player2.clickCard(this.bordersEdgeBarracks);
         });
 
         it('moves a character into the defense', function () {

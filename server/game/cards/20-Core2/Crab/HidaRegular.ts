@@ -2,8 +2,8 @@ import { CardTypes, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class KamakrazeeWarBoy extends DrawCard {
-    static id = 'kamakrazee-war-boy';
+export default class HidaRegular extends DrawCard {
+    static id = 'hida-regular';
 
     public setupCardAbilities() {
         this.interrupt({

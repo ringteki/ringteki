@@ -4,8 +4,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
 
-export default class StrengthInAdversity extends DrawCard {
-    static id = 'strength-in-adversity';
+export default class TillTheLastOneFalls extends DrawCard {
+    static id = 'till-the-last-one-falls-';
 
     public setupCardAbilities() {
         this.action({

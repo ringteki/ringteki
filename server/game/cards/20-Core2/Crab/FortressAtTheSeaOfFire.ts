@@ -3,14 +3,14 @@ import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 
-export default class CrabBox extends StrongholdCard {
-    static id = 'crab-box';
+export default class FortressAtTheSeaOfFire extends StrongholdCard {
+    static id = 'fortress-at-the-sea-of-fire';
 
     setupCardAbilities() {
         this.wouldInterrupt({
             title: 'Cancel triggered ability',
             when: {
-                onInitiateAbilityEffects: (event, context) => 
+                onInitiateAbilityEffects: (event, context) =>
                     (event.context.ability as BaseAction).abilityType === 'action' &&
                     context.player.anyCardsInPlay((card: DrawCard) => card.isDefending())
             },

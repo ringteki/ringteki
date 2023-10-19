@@ -4,8 +4,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import type Ring from '../../../ring';
 
-export default class IthaaUnderseaRestaurant extends ProvinceCard {
-    static id = 'ithaa-undersea-restaurant';
+export default class OnsenQuarters extends ProvinceCard {
+    static id = 'onsen-quarters';
 
     public setupCardAbilities() {
         this.persistentEffect({
@@ -20,9 +20,11 @@ export default class IthaaUnderseaRestaurant extends ProvinceCard {
         this.reaction({
             title: 'Resolve the ring effect',
             when: {
-                afterConflict: (event, context) => event.conflict.winner === context.player && event.conflict.getConflictProvinces().some((a: ProvinceCard) => a === context.source)
+                afterConflict: (event, context) =>
+                    event.conflict.winner === context.player &&
+                    event.conflict.getConflictProvinces().some((a: ProvinceCard) => a === context.source)
             },
-            gameAction: AbilityDsl.actions.resolveRingEffect(context => ({
+            gameAction: AbilityDsl.actions.resolveRingEffect((context) => ({
                 target: this.#ringForRole(context),
                 player: context.player
             }))
@@ -32,7 +34,7 @@ export default class IthaaUnderseaRestaurant extends ProvinceCard {
     #ringForRole(context: TriggeredAbilityContext): Ring | undefined {
         for (const trait of context.player.role.traits) {
             if (trait in context.game.rings) {
-                return context.game.rings[trait]
+                return context.game.rings[trait];
             }
         }
     }

@@ -1,4 +1,4 @@
-describe('Crab Box', function () {
+describe('Fortress at the Sea of Fire', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -11,7 +11,7 @@ describe('Crab Box', function () {
                 player2: {
                     inPlay: ['tattooed-wanderer'],
                     hand: ['banzai'],
-                    stronghold: ['crab-box']
+                    stronghold: ['fortress-at-the-sea-of-fire']
                 }
             });
 
@@ -21,7 +21,7 @@ describe('Crab Box', function () {
             this.tattooedWanderer = this.player2.findCardByName('tattooed-wanderer');
             this.banzai = this.player2.findCardByName('banzai');
 
-            this.crabBox = this.player2.findCardByName('crab-box');
+            this.crabBox = this.player2.findCardByName('fortress-at-the-sea-of-fire');
         });
 
         it('cancels the action from the attacker', function () {
@@ -38,7 +38,9 @@ describe('Crab Box', function () {
 
             this.player2.clickCard(this.crabBox);
             expect(this.brashSamurai.isHonored).toBe(false);
-            expect(this.getChatLogs(3)).toContain("player2 uses Crab Box, bowing Crab Box and spending 1 fate to cancel the effects of Brash Samurai's ability");
+            expect(this.getChatLogs(3)).toContain(
+                "player2 uses Fortress at the Sea of Fire, bowing Fortress at the Sea of Fire and spending 1 fate to cancel the effects of Brash Samurai's ability"
+            );
         });
 
         it('does not cancel the action from the attacker if no defenders', function () {

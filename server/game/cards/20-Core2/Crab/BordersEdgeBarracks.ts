@@ -2,8 +2,8 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class IntegratedWatchtower extends DrawCard {
-    static id = 'integrated-watchtower';
+export default class BordersEdgeBarracks extends DrawCard {
+    static id = 'border-s-edge-barracks';
 
     setupCardAbilities() {
         this.action({

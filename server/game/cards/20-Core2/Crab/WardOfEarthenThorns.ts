@@ -1,9 +1,11 @@
+import type AbilityContext from '../../../AbilityContext';
 import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
-export default class WardOfThorns extends DrawCard {
-    static id = 'ward-of-thorns';
+export default class WardOfEarthenThorns extends DrawCard {
+    static id = 'ward-of-earthen-thorns';
 
     public setupCardAbilities() {
         this.attachmentConditions({
@@ -31,23 +33,23 @@ export default class WardOfThorns extends DrawCard {
         });
     }
 
-    canPlay(context, playType) {
+    canPlay(context: AbilityContext, playType: string) {
         return (
             context.player.cardsInPlay.any(
-                (card) => card.getType() === CardTypes.Character && card.hasTrait('shugenja')
+                (card: DrawCard) => card.getType() === CardTypes.Character && card.hasTrait('shugenja')
             ) && super.canPlay(context, playType)
         );
     }
 
-    canPlayOn(source) {
+    canPlayOn(source: BaseCard) {
         return this.#isAllowedToAttach(source);
     }
 
-    canAttach(parent) {
+    canAttach(parent: BaseCard) {
         return this.#isAllowedToAttach(parent);
     }
 
-    #isAllowedToAttach(source) {
+    #isAllowedToAttach(source: BaseCard) {
         return (
             source &&
             source.controller === this.controller &&

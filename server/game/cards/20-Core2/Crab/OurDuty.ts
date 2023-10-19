@@ -2,13 +2,13 @@ import { CardTypes, ConflictTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class WayOfTheCrab extends DrawCard {
-    static id = 'path-of-the-crab';
+export default class OurDuty extends DrawCard {
+    static id = 'our-duty-';
 
     public setupCardAbilities() {
         this.action({
             title: 'Make your opponent sacrifice a character',
-            condition: (context) => context.player.opponent !== undefined,
+            condition: (context) => Boolean(context.player.opponent),
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
                 cardCondition: (card: DrawCard) => card.isFaction('crab')
