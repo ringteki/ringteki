@@ -2,8 +2,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
 
-export default class AMatsuComingOfAge extends DrawCard {
-    static id = 'a-matsu-coming-of-age';
+export default class AMatsuProvesTheirWorth extends DrawCard {
+    static id = 'a-matsu-proves-their-worth';
 
     setupCardAbilities() {
         this.reaction({

@@ -3,8 +3,8 @@ import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 
-export default class RabbitBeach extends ProvinceCard {
-    static id = 'rabbit-beach';
+export default class HoneypotVillage extends ProvinceCard {
+    static id = 'honeypot-village';
 
     setupCardAbilities() {
         this.action({

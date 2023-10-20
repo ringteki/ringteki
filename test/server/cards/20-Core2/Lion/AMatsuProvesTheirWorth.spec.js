@@ -1,11 +1,11 @@
-describe("A Matsu's Coming of Age", function () {
+describe('A Matsu Proves Their Worth', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['matsu-berserker', 'ikoma-prodigy'],
-                    hand: ['a-matsu-coming-of-age']
+                    hand: ['a-matsu-proves-their-worth']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan']
@@ -14,7 +14,7 @@ describe("A Matsu's Coming of Age", function () {
 
             this.berserker = this.player1.findCardByName('matsu-berserker');
             this.prodigy = this.player1.findCardByName('ikoma-prodigy');
-            this.comingOfAge = this.player1.findCardByName('a-matsu-coming-of-age');
+            this.comingOfAge = this.player1.findCardByName('a-matsu-proves-their-worth');
 
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
             this.shameful = this.player2.findCardByName('shameful-display', 'province 1');

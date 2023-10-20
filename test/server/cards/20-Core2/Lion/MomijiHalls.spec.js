@@ -1,10 +1,10 @@
-describe('Lion Box', function () {
+describe('Momiji Halls', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    stronghold: 'lion-box',
+                    stronghold: 'momiji-halls',
                     inPlay: ['fushicho'],
                     hand: ['ornate-fan']
                 },
@@ -12,7 +12,7 @@ describe('Lion Box', function () {
                     inPlay: ['bayushi-manipulator']
                 }
             });
-            this.lionBox = this.player1.findCardByName('lion-box');
+            this.lionBox = this.player1.findCardByName('momiji-halls');
             this.fushicho = this.player1.findCardByName('fushicho');
             this.ornateFan = this.player1.findCardByName('ornate-fan');
             this.bayushiManipulator = this.player2.findCardByName('bayushi-manipulator');
@@ -34,7 +34,7 @@ describe('Lion Box', function () {
             this.player1.clickCard(this.ornateFan);
             expect(this.player1.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Lion Box, bowing Lion Box and discarding Ornate Fan to draw 2 cards'
+                'player1 uses Momiji Halls, bowing Momiji Halls and discarding Ornate Fan to draw 2 cards'
             );
         });
 
@@ -56,7 +56,7 @@ describe('Lion Box', function () {
             this.player1.clickCard(this.ornateFan);
             expect(this.player1.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Lion Box, bowing Lion Box and discarding Ornate Fan to draw 2 cards'
+                'player1 uses Momiji Halls, bowing Momiji Halls and discarding Ornate Fan to draw 2 cards'
             );
         });
 

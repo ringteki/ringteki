@@ -1,6 +1,6 @@
-import { CardTypes } from '../../Constants';
-import AbilityDsl from '../../abilitydsl';
-import DrawCard from '../../drawcard';
+import { CardTypes } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class NitenAdept extends DrawCard {
     static id = 'niten-adept';

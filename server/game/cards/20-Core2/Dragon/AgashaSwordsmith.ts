@@ -1,8 +1,10 @@
-const DrawCard = require('../../drawcard.js');
-const { CardTypes, Locations } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
+import { CardTypes, Locations } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-class AgashaSwordsmith extends DrawCard {
+export default class AgashaSwordsmith extends DrawCard {
+    static id = 'agasha-swordsmith';
+
     setupCardAbilities() {
         this.action({
             title: 'Search top 5 card for attachment',
@@ -10,7 +12,7 @@ class AgashaSwordsmith extends DrawCard {
             effect: 'look at the top five cards of their deck',
             gameAction: AbilityDsl.actions.deckSearch({
                 amount: 5,
-                cardCondition: card => card.type === CardTypes.Attachment,
+                cardCondition: (card) => card.type === CardTypes.Attachment,
                 gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 })
@@ -18,8 +20,3 @@ class AgashaSwordsmith extends DrawCard {
         });
     }
 }
-
-AgashaSwordsmith.id = 'agasha-swordsmith';
-
-module.exports = AgashaSwordsmith;
-

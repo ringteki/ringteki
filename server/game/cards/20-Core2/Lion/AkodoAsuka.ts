@@ -1,4 +1,3 @@
-import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -7,17 +6,12 @@ export default class AkodoAsuka extends DrawCard {
 
     setupCardAbilities() {
         this.reaction({
-            title: 'Honor a participating character',
+            title: 'Draw a card',
             when: {
                 afterConflict: (event, context) =>
                     event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
-            target: {
-                cardType: CardTypes.Character,
-                controller: Players.Any,
-                cardCondition: (card, context) => card.isParticipating() && card !== context.source,
-                gameAction: AbilityDsl.actions.honor()
-            }
+            gameAction: AbilityDsl.actions.draw()
         });
     }
 }

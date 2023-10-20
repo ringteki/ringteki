@@ -1,8 +1,9 @@
-const AbilityDsl = require('../../abilitydsl.js');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-const DrawCard = require('../../drawcard.js');
+export default class IkomaProdigy extends DrawCard {
+    static id = 'ikoma-prodigy';
 
-class IkomaProdigy extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             title: 'Gain 1 honor',
@@ -14,7 +15,3 @@ class IkomaProdigy extends DrawCard {
         });
     }
 }
-
-IkomaProdigy.id = 'ikoma-prodigy';
-
-module.exports = IkomaProdigy;

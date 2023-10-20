@@ -2,8 +2,8 @@ import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 
-export default class LionBox extends StrongholdCard {
-    static id = 'lion-box';
+export default class MomijiHalls extends StrongholdCard {
+    static id = 'momiji-halls';
 
     setupCardAbilities() {
         this.action({

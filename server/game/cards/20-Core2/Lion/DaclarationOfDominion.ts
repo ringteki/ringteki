@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 import { BattlefieldAttachment } from '../../BattlefieldAttachment';
 
-export default class UnearthedClaims extends BattlefieldAttachment {
-    static id = 'unearthed-claims';
+export default class DaclarationOfDominion extends BattlefieldAttachment {
+    static id = 'declaration-of-dominion';
 
     public setupCardAbilities() {
         super.setupCardAbilities();
