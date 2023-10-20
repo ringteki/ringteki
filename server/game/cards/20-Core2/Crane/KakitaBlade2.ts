@@ -8,7 +8,7 @@ export default class KakitaBlade2 extends DrawCard {
     setupCardAbilities() {
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
-                title: 'Gain a fate',
+                title: 'Gain an additional action',
                 when: {
                     onConflictStarted: (event, context) =>
                         context.source.isParticipating() && context.source.hasTrait('bushi')

@@ -37,7 +37,7 @@ describe('Kakita Rusumi', function() {
             this.player2.pass();
             this.player1.clickCard(this.rusumi);
             expect(this.player1).toHavePrompt('Choose a character to put into play');
-            expect(this.player1).toHaveDisabledPromptButton('Brash Samurai');
+            expect(this.player1).toHavePromptButton('Brash Samurai');
             expect(this.player1).toHaveDisabledPromptButton('Paragon of Grace');
             expect(this.player1).toHaveDisabledPromptButton('Otomo Sycophant');
             expect(this.player1).toHavePromptButton('Doji Whisperer');

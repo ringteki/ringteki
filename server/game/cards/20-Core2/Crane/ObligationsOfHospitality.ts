@@ -1,4 +1,4 @@
-import { CardTypes, Players } from '../../../Constants';
+import { CardTypes, Players, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,6 +6,13 @@ export default class ObligationsOfHospitality extends DrawCard {
     static id = 'obligations-of-hospitality';
 
     setupCardAbilities() {
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            match: player => player.imperialFavor !== '',
+            effect: AbilityDsl.effects.reduceCost({ match: (card, source) => card === source })
+        });
+
         this.action({
             title: 'Take control of a character',
             condition: () => this.game.isDuringConflict(),

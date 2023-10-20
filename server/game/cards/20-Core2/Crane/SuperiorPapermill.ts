@@ -1,4 +1,4 @@
-import { TargetModes, Players, Locations, Phases } from '../../../Constants';
+import { TargetModes, Players, Locations, Phases, CardTypes, Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,17 +6,43 @@ export default class SuperiorPapermill extends DrawCard {
     static id = 'superior-papermill';
 
     setupCardAbilities() {
-        this.action({
-            title: 'Flip up to 2 dynasty cards',
-            phase: Phases.Dynasty,
+        this.reaction({
+            title: 'Give characters courtesy',
+            when: {
+                onPhaseStarted: (event) => event.phase === Phases.Fate
+            },
             target: {
                 mode: TargetModes.UpTo,
                 numCards: 2,
                 activePromptTitle: 'Choose up to 2 cards',
-                location: Locations.Provinces,
+                cardType: CardTypes.Character,
+                cardCondition: card => card.isHonored,
                 controller: Players.Self,
-                gameAction: AbilityDsl.actions.flipDynasty()
-            }
+                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                    effect: AbilityDsl.effects.addKeyword('courtesy'),
+                    duration: Durations.UntilEndOfPhase
+                }))
+            },
+            effect: 'give {0} courtesy'
+        });
+
+        this.reaction({
+            title: 'Place a card in this province',
+            when: {
+                onPhaseStarted: (event) => event.phase === Phases.Dynasty
+            },
+            gameAction: AbilityDsl.actions.handler({
+                handler: (context) => {
+                    const province = context.source.location;
+                    this.game.queueSimpleStep(() => context.player.putTopDynastyCardInProvince(province));
+                }
+            }),
+            effect: "place {1} faceup in {2}",
+            effectArgs: (context) => [context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
+                context.player.getProvinceCardInProvince(context.source.location).isFacedown()
+                    ? context.source.location
+                    : context.player.getProvinceCardInProvince(context.source.location),
+            ]
         });
     }
 }
