@@ -3,8 +3,8 @@ import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class BreathOfSuitengu extends DrawCard {
-    static id = 'breath-of-suitengu';
+export default class RejuvenatingVapors extends DrawCard {
+    static id = 'rejuvenating-vapors';
 
     setupCardAbilities() {
         this.action({

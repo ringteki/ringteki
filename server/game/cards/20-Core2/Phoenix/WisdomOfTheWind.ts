@@ -1,4 +1,4 @@
-import { CardTypes, Durations, Players, TargetModes } from '../../../Constants';
+import { CardTypes, Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -44,7 +44,7 @@ export default class WisdomOfTheWind extends DrawCard {
                         ],
                         duration: Durations.UntilEndOfConflict
                     })),
-                    effect: "make all other status be ignored during this conflict"
+                    effect: 'make all other status be ignored during this conflict'
                 })
             }
         });

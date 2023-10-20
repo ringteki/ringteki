@@ -6,7 +6,7 @@ describe('Darbuka of Banishment', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['miya-mystic', 'adept-of-the-waves'],
-                        hand: ['breath-of-suitengu', 'portable-bastion']
+                        hand: ['rejuvenating-vapors', 'portable-bastion']
                     },
                     player2: {
                         inPlay: ['moto-youth'],
@@ -15,7 +15,7 @@ describe('Darbuka of Banishment', function () {
                     }
                 });
 
-                this.suitengu = this.player1.findCardByName('breath-of-suitengu');
+                this.suitengu = this.player1.findCardByName('rejuvenating-vapors');
                 this.bastion = this.player1.findCardByName('portable-bastion');
                 this.mystic = this.player1.findCardByName('miya-mystic');
                 this.mystic.bow();
@@ -34,7 +34,7 @@ describe('Darbuka of Banishment', function () {
                 console.log(this.darbuka.location);
                 this.player1.clickCard(this.suitengu);
                 this.player1.clickCard(this.mystic);
-                expect(this.getChatLogs(5)).toContain('player1 plays Breath of Suitengu to ready Miya Mystic');
+                expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Miya Mystic');
                 expect(this.player1).not.toHavePrompt('Discard all cards from a province?');
             });
 

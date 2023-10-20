@@ -1,10 +1,10 @@
-describe('Breath of Suitengu', function () {
+describe('Rejuvenating Vapors', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    hand: ['breath-of-suitengu', 'stride-the-waves'],
+                    hand: ['rejuvenating-vapors', 'stride-the-waves'],
                     inPlay: ['adept-of-the-waves', 'solemn-scholar']
                 },
                 player2: {
@@ -13,7 +13,7 @@ describe('Breath of Suitengu', function () {
                 }
             });
 
-            this.breathOfSuitengu = this.player1.findCardByName('breath-of-suitengu');
+            this.breathOfSuitengu = this.player1.findCardByName('rejuvenating-vapors');
             this.strideTheWaves = this.player1.findCardByName('stride-the-waves');
             this.adept = this.player1.findCardByName('adept-of-the-waves');
             this.solemn = this.player1.findCardByName('solemn-scholar');
@@ -36,7 +36,7 @@ describe('Breath of Suitengu', function () {
 
             this.player1.clickCard(this.adept);
             expect(this.adept.bowed).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Breath of Suitengu to ready Adept of the Waves');
+            expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Adept of the Waves');
             expect(this.player1).toHavePrompt('Discard all cards from a province?');
             expect(this.player1).toHavePromptButton('Yes');
             expect(this.player1).toHavePromptButton('No');
@@ -61,7 +61,7 @@ describe('Breath of Suitengu', function () {
 
             this.player1.clickCard(this.solemn);
             expect(this.solemn.bowed).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Breath of Suitengu to ready Solemn Scholar');
+            expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Solemn Scholar');
             expect(this.player1).not.toHavePrompt('Discard all cards from a province?');
             expect(this.player1).not.toHavePromptButton('Yes');
             expect(this.player1).not.toHavePromptButton('No');

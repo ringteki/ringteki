@@ -1,10 +1,12 @@
-const DrawCard = require('../../drawcard.js');
-const { Durations, CardTypes, Elements } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl.js');
+import { CardTypes, Durations, Elements } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-const elementKey = 'adept-of-the-waves-water';
+const COVERT_ELEMENT = 'adept-of-the-waves-water';
 
-class AdeptOfTheWaves extends DrawCard {
+export default class AdeptOfTheWaves extends DrawCard {
+    static id = 'adept-of-the-waves';
+
     setupCardAbilities() {
         this.action({
             title: 'Grant Covert to a character',
@@ -13,7 +15,7 @@ class AdeptOfTheWaves extends DrawCard {
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.handler({
                         handler: () => {
-                            this.elementWhenTriggered = this.getCurrentElementSymbol(elementKey);
+                            this.elementWhenTriggered = this.getCurrentElementSymbol(COVERT_ELEMENT);
                         }
                     }),
                     AbilityDsl.actions.cardLastingEffect(() => ({
@@ -24,21 +26,17 @@ class AdeptOfTheWaves extends DrawCard {
                 ])
             },
             effect: 'grant Covert during {1} conflicts to {0}',
-            effectArgs: () => [this.getCurrentElementSymbol(elementKey)]
+            effectArgs: () => [this.getCurrentElementSymbol(COVERT_ELEMENT)]
         });
     }
 
     getPrintedElementSymbols() {
-        let symbols = super.getPrintedElementSymbols();
+        const symbols = super.getPrintedElementSymbols();
         symbols.push({
-            key: elementKey,
+            key: COVERT_ELEMENT,
             prettyName: 'Contested Ring',
             element: Elements.Water
         });
         return symbols;
     }
 }
-
-AdeptOfTheWaves.id = 'adept-of-the-waves';
-
-module.exports = AdeptOfTheWaves;

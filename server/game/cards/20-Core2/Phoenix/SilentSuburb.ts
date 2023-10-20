@@ -1,8 +1,8 @@
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class KayabukiyaTavern extends ProvinceCard {
-    static id = 'kayabukiya-tavern';
+export default class SilentSuburb extends ProvinceCard {
+    static id = 'silent-suburb';
 
     setupCardAbilities() {
         this.reaction({
