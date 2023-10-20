@@ -2,8 +2,8 @@ import { CardTypes, Durations } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 
-export default class ScorpionBox extends StrongholdCard {
-    static id = 'scorpion-box';
+export default class ThunderboltTower extends StrongholdCard {
+    static id = 'thunderbolt-tower';
 
     setupCardAbilities() {
         this.action({

@@ -1,8 +1,10 @@
-const DrawCard = require('../../drawcard.js');
-const { Players, CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl');
+import { CardTypes, Players } from '../../../Constants';
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-class CallingInFavors extends DrawCard {
+export default class CallingInFavors extends DrawCard {
+    static id = 'calling-in-favors';
+
     setupCardAbilities() {
         this.action({
             title: 'Take control of an attachment',
@@ -11,7 +13,7 @@ class CallingInFavors extends DrawCard {
                 cardType: CardTypes.Attachment,
                 controller: Players.Opponent
             },
-            gameAction: AbilityDsl.actions.ifAble(context => ({
+            gameAction: AbilityDsl.actions.ifAble((context) => ({
                 ifAbleAction: AbilityDsl.actions.attach({
                     target: context.costs.dishonor,
                     attachment: context.target,
@@ -22,7 +24,3 @@ class CallingInFavors extends DrawCard {
         });
     }
 }
-
-CallingInFavors.id = 'calling-in-favors';
-
-module.exports = CallingInFavors;

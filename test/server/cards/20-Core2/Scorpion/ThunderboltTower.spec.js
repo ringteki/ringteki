@@ -1,17 +1,17 @@
-describe('Scorpion Box', function () {
+describe('Thunderbolt Tower', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    stronghold: 'scorpion-box',
+                    stronghold: 'thunderbolt-tower',
                     inPlay: ['bayushi-manipulator']
                 },
                 player2: {
                     inPlay: ['fushicho']
                 }
             });
-            this.scorpionBox = this.player1.findCardByName('scorpion-box');
+            this.scorpionBox = this.player1.findCardByName('thunderbolt-tower');
             this.bayushiManipulator = this.player1.findCardByName('bayushi-manipulator');
             this.fushicho = this.player2.findCardByName('fushicho');
         });
@@ -26,7 +26,7 @@ describe('Scorpion Box', function () {
             expect(this.fushicho.militarySkill).toBe(4);
             expect(this.fushicho.politicalSkill).toBe(4);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Scorpion Box, bowing Scorpion Box to give Fushichō -2military/-2political for the phase'
+                'player1 uses Thunderbolt Tower, bowing Thunderbolt Tower to give Fushichō -2military/-2political for the phase'
             );
         });
 
@@ -48,7 +48,7 @@ describe('Scorpion Box', function () {
             expect(this.fushicho.militarySkill).toBe(4);
             expect(this.fushicho.politicalSkill).toBe(4);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Scorpion Box, bowing Scorpion Box to give Fushichō -2military/-2political for the phase'
+                'player1 uses Thunderbolt Tower, bowing Thunderbolt Tower to give Fushichō -2military/-2political for the phase'
             );
         });
 

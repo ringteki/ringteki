@@ -1,8 +1,8 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class EagerOperative extends DrawCard {
-    static id = 'eager-operative';
+export default class RogueUnderstudy extends DrawCard {
+    static id = 'rogue-understudy';
 
     setupCardAbilities() {
         this.action({

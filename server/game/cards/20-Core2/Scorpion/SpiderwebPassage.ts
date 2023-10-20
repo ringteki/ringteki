@@ -3,8 +3,8 @@ import { CardTypes, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class MoonlitAlley extends DrawCard {
-    static id = 'moonlit-alley';
+export default class SpiderwebPassage extends DrawCard {
+    static id = 'spiderweb-passage';
 
     setupCardAbilities() {
         this.action({

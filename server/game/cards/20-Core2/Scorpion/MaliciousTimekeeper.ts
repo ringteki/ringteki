@@ -1,8 +1,8 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class ShosuroCourtClerk extends DrawCard {
-    static id = 'shosuro-court-clerk';
+export default class MaliciousTimekeeper extends DrawCard {
+    static id = 'malicious-timekeeper';
 
     setupCardAbilities() {
         this.persistentEffect({

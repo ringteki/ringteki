@@ -1,4 +1,4 @@
-describe('Scorpion Box', function () {
+describe('Thunderbolt Tower', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -30,7 +30,9 @@ describe('Scorpion Box', function () {
             expect(this.player1.hand.length).toBe(hand);
             expect(this.letGo.location).toBe('conflict discard pile');
 
-            expect(this.getChatLogs(5)).toContain('player1 plays Ankoku\'s Blessing, discarding Let Go to draw 2 cards and gain 2 fate');
+            expect(this.getChatLogs(5)).toContain(
+                "player1 plays Ankoku's Blessing, discarding Let Go to draw 2 cards and gain 2 fate"
+            );
         });
     });
 });
