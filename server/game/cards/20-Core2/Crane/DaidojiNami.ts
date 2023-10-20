@@ -2,12 +2,12 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class DaidojiBigguBosu extends DrawCard {
-    static id = 'daidoji-biggu-bosu';
+export default class DaidojiNami extends DrawCard {
+    static id = 'daidoji-nami';
 
     setupCardAbilities() {
         this.action({
-            title: 'Bow and dishonor a character',
+            title: 'Send a character home',
             condition: (context) => context.game.isDuringConflict(),
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,

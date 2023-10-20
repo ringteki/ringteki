@@ -1,7 +1,9 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl.js');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
-class AboveQuestion extends DrawCard {
+export default class AboveQuestion extends DrawCard {
+    static id = 'above-question';
+
     setupCardAbilities() {
         this.whileAttached({
             effect: AbilityDsl.effects.cardCannot({
@@ -12,7 +14,3 @@ class AboveQuestion extends DrawCard {
         });
     }
 }
-
-AboveQuestion.id = 'above-question';
-
-module.exports = AboveQuestion;

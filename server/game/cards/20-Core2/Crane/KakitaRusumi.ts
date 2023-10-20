@@ -14,9 +14,7 @@ export default class KakitaRusumi extends DrawCard {
                 amount: 4,
                 deck: Decks.DynastyDeck,
                 cardCondition: (card) =>
-                    card.type === CardTypes.Character &&
-                    card.printedCost <= 2 &&
-                    card.isFaction('crane'),
+                    card.type === CardTypes.Character && card.printedCost <= 2 && card.isFaction('crane'),
                 message: '{0} puts {1} into play honored',
                 messageArgs: (context, cards) => [context.player, cards],
                 shuffle: true,
