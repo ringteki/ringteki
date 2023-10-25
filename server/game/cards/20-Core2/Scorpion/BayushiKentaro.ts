@@ -7,14 +7,14 @@ export default class BayushiKentaro extends DrawCard {
 
     setupCardAbilities() {
         this.action({
-            title: '',
+            title: 'Put a character into play',
             condition: (context) => context.source.isParticipating(),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.reveal((context) => ({
                     target: context.player.getDynastyCardsInProvince(Locations.Provinces)
                 })),
                 AbilityDsl.actions.selectCard((context) => ({
-                    activePromptTitle: 'Choose a character to put into the conflict.',
+                    activePromptTitle: 'Choose a character to put into the conflict',
                     numCards: 1,
                     targets: true,
                     mode: TargetModes.Exactly,
@@ -22,9 +22,12 @@ export default class BayushiKentaro extends DrawCard {
                     cardType: CardTypes.Character,
                     location: [Locations.Provinces],
                     controller: Players.Self,
-                    cardCondition: (card) => !card.facedown && card.allowGameAction('putIntoConflict', context),
-                    message: '{0} puts {1} into play into the conflict, aiding Elektra with their mission.',
-                    messageArgs: (card) => [context.player, card],
+                    cardCondition: (card) =>
+                        !card.facedown &&
+                        card.isFaction('scorpion') &&
+                        card.allowGameAction('putIntoConflict', context),
+                    message: '{0} puts {1} into play into the conflict, aiding {2} with their mission.',
+                    messageArgs: (card) => [context.player, card, context.source],
                     gameAction: AbilityDsl.actions.multiple([
                         AbilityDsl.actions.putIntoConflict(),
                         AbilityDsl.actions.cardLastingEffect((context) => ({
@@ -33,9 +36,10 @@ export default class BayushiKentaro extends DrawCard {
                                 when: {
                                     onConflictFinished: () => context.target.location === Locations.PlayArea
                                 },
-                                message: '{0} retreats back into the shadows of the bottom of the deck.',
-                                messageArgs: (context) => [context.source],
-                                gameAction: AbilityDsl.actions.returnToDeck({ target: context.target, shuffle: false })
+                                message:
+                                    '{1} returns to the bottom of the dynasty deck due to the delayed effect of {0}',
+                                messageArgs: () => [context.source, context.target],
+                                gameAction: AbilityDsl.actions.returnToDeck({ shuffle: false, bottom: true })
                             })
                         }))
                     ])
