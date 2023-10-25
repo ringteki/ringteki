@@ -8,8 +8,9 @@ const SincerityAbility = require('./KeywordAbilities/SincerityAbility');
 const { RallyAbility } = require('./KeywordAbilities/RallyAbility.js');
 const StatModifier = require('./StatModifier');
 
-const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes } = require('./Constants');
+const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes, EventNames } = require('./Constants');
 const { GameModes } = require('../GameModes');
+const { EventRegistrar } = require('./EventRegistrar');
 
 class DrawCard extends BaseCard {
     menu = [
@@ -58,8 +59,20 @@ class DrawCard extends BaseCard {
             this.abilities.reactions.push(new CourtesyAbility(this.game, this));
             this.abilities.reactions.push(new SincerityAbility(this.game, this));
         }
+        if (cardData.type === CardTypes.Event && this.hasEphemeral()) {
+            this.eventRegistrarForEphemeral = new EventRegistrar(this.game, this);
+            this.eventRegistrarForEphemeral.register([{ [EventNames.OnCardPlayed]: 'handleEphemeral' }]);
+        }
         if (this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this.game, this));
+        }
+    }
+
+    handleEphemeral(event) {
+        if (event.card === this) {
+            if (this.location !== Locations.RemovedFromGame) {
+                this.owner.moveCard(this, Locations.RemovedFromGame);
+            }
         }
     }
 
@@ -105,6 +118,10 @@ class DrawCard extends BaseCard {
 
     hasCourtesy() {
         return this.hasKeyword('courtesy');
+    }
+
+    hasEphemeral() {
+        return this.hasPrintedKeyword('ephemeral');
     }
 
     isDire() {

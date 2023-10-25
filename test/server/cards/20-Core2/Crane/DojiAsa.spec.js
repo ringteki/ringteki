@@ -1,14 +1,14 @@
-describe('Dōji Asa', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Dōji Asa', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
-                    inPlay: ['doji-asa', 'brash-samurai'],
+                    inPlay: ['doji-asa', 'brash-samurai']
                 },
                 player2: {
-                    inPlay: ['kakita-toshimoko', 'doji-whisperer', 'bayushi-liar'],
+                    inPlay: ['kakita-toshimoko', 'doji-whisperer', 'bayushi-liar']
                 }
             });
 
@@ -19,7 +19,7 @@ describe('Dōji Asa', function() {
             this.liar = this.player2.findCardByName('bayushi-liar');
         });
 
-        it('should give opponent a chance to decline the duel', function() {
+        it('should give opponent a chance to decline the duel', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],
@@ -33,7 +33,7 @@ describe('Dōji Asa', function() {
             expect(this.player2).toHavePromptButton('Duel to try and cancel');
         });
 
-        it('should give opponent a chance to decline the duel', function() {
+        it('should give opponent a chance to decline the duel', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],
@@ -47,7 +47,7 @@ describe('Dōji Asa', function() {
             expect(this.player2).toHavePromptButton('Duel to try and cancel');
         });
 
-        it('decline duel', function() {
+        it('decline duel', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],
@@ -62,7 +62,7 @@ describe('Dōji Asa', function() {
             expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 8 Defender: 4');
         });
 
-        it('lose duel - should do nothing', function() {
+        it('lose duel - should do nothing', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],
@@ -73,8 +73,8 @@ describe('Dōji Asa', function() {
             this.player1.clickCard(this.dojiAsa);
             this.player2.clickPrompt('Duel to try and cancel');
 
-            expect(this.player2).toBeAbleToSelect(this.toshimoko)
-            expect(this.player2).not.toBeAbleToSelect(this.whisperer)
+            expect(this.player2).toBeAbleToSelect(this.toshimoko);
+            expect(this.player2).not.toBeAbleToSelect(this.whisperer);
             this.player2.clickCard(this.toshimoko);
 
             expect(this.getChatLogs(10)).toContain('player1 uses Dōji Asa to initiate a duel');
@@ -88,7 +88,7 @@ describe('Dōji Asa', function() {
             expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 5 Defender: 4');
         });
 
-        it('win duel - should give +3', function() {
+        it('win duel - should give +3', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],
@@ -99,7 +99,7 @@ describe('Dōji Asa', function() {
             this.player1.clickCard(this.dojiAsa);
             this.player2.clickPrompt('Duel to try and cancel');
 
-            expect(this.player2).toBeAbleToSelect(this.toshimoko)
+            expect(this.player2).toBeAbleToSelect(this.toshimoko);
             this.player2.clickCard(this.toshimoko);
 
             expect(this.getChatLogs(10)).toContain('player1 uses Dōji Asa to initiate a duel');
@@ -109,11 +109,11 @@ describe('Dōji Asa', function() {
             this.player2.clickPrompt('3');
 
             expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 5 vs 6: Dōji Asa');
-            expect(this.getChatLogs(10)).toContain('Duel Effect: add 3 to player1\'s side for this conflict');
+            expect(this.getChatLogs(10)).toContain("Duel Effect: add 3 to player1's side for this conflict");
             expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 8 Defender: 4');
         });
 
-        it('should trigger from home', function() {
+        it('should trigger from home', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
@@ -128,7 +128,7 @@ describe('Dōji Asa', function() {
             expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 5 Defender: 4');
         });
 
-        it('should not trigger if opponent has no participating characters', function() {
+        it('should not trigger if opponent has no participating characters', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash],
@@ -141,7 +141,7 @@ describe('Dōji Asa', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should force the +3 if opponent can\'t duel', function() {
+        it("should force the +3 if opponent can't duel", function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.dojiAsa, this.brash],

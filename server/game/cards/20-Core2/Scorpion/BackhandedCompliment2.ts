@@ -15,11 +15,11 @@ export default class BackhandedCompliment2 extends DrawCard {
                 choices: Object.fromEntries(
                     (this.game as Game)
                         .getPlayers()
-                        .map((player) => [
-                            player.name,
+                        .map((target) => [
+                            target.name,
                             AbilityDsl.actions.multiple([
-                                AbilityDsl.actions.loseHonor({ target: player }),
-                                AbilityDsl.actions.draw({ target: player })
+                                AbilityDsl.actions.loseHonor({ target }),
+                                AbilityDsl.actions.draw({ target })
                             ])
                         ])
                 )

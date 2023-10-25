@@ -16,7 +16,7 @@ export default class SuperiorPapermill extends DrawCard {
                 numCards: 2,
                 activePromptTitle: 'Choose up to 2 cards',
                 cardType: CardTypes.Character,
-                cardCondition: card => card.isHonored,
+                cardCondition: (card) => card.isHonored,
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     effect: AbilityDsl.effects.addKeyword('courtesy'),
@@ -37,11 +37,12 @@ export default class SuperiorPapermill extends DrawCard {
                     this.game.queueSimpleStep(() => context.player.putTopDynastyCardInProvince(province));
                 }
             }),
-            effect: "place {1} faceup in {2}",
-            effectArgs: (context) => [context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
+            effect: 'place {1} faceup in {2}',
+            effectArgs: (context) => [
+                context.player.dynastyDeck.first() ? context.player.dynastyDeck.first() : 'a card',
                 context.player.getProvinceCardInProvince(context.source.location).isFacedown()
                     ? context.source.location
-                    : context.player.getProvinceCardInProvince(context.source.location),
+                    : context.player.getProvinceCardInProvince(context.source.location)
             ]
         });
     }

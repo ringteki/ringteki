@@ -12,7 +12,8 @@ export default class ContemplateTheEternal extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card: DrawCard) => !card.bowed && !card.attachments.some(attachment => !attachment.hasTrait('tattoo')),
+                cardCondition: (card: DrawCard) =>
+                    !card.bowed && !card.attachments.some((attachment) => !attachment.hasTrait('tattoo')),
                 gameAction: AbilityDsl.actions.placeFate((context) => ({
                     amount: context.costs.returnRing ? context.costs.returnRing.length : 1
                 }))

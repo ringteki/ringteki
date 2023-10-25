@@ -22,7 +22,6 @@ export default class HidaHonoka extends DrawCard {
                     cannot: 'restoreProvince'
                 })
             })
-
         });
     }
 }

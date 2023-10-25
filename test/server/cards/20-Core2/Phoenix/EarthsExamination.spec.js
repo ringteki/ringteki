@@ -1,6 +1,6 @@
-describe("Earth's Examination", function() {
-    integration(function() {
-        beforeEach(function() {
+describe("Earth's Examination", function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -29,7 +29,7 @@ describe("Earth's Examination", function() {
             });
         });
 
-        it('taints a participating character', function() {
+        it('taints a participating character', function () {
             this.player2.clickCard(this.examination);
             expect(this.player2).toHavePrompt('Choose a character');
             expect(this.player2).toBeAbleToSelect(this.prodigy);
@@ -43,7 +43,7 @@ describe("Earth's Examination", function() {
             expect(this.getChatLogs(5)).toContain(`player2 plays Earth's Examination to taint Prodigy of the Waves`);
         });
 
-        it('with affinity, it can bow that character', function() {
+        it('with affinity, it can bow that character', function () {
             this.player2.clickCard(this.examination);
             this.player2.clickCard(this.prodigy);
             expect(this.player2).toHavePrompt('Bow that character?');

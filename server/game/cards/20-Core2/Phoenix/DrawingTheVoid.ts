@@ -37,7 +37,7 @@ export default class DrawingTheVoid extends DrawCard {
                                 }))
                             }
                         }
-                    })),
+                    }))
                 })
             }
         });

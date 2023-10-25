@@ -9,7 +9,7 @@ describe('Kakita Blade 2', function () {
                 },
                 player2: {
                     inPlay: ['bayushi-dairu', 'doji-challenger'],
-                    hand: ['kakita-blade-2', 'kakita-blade-2', 'way-of-the-crane'],
+                    hand: ['kakita-blade-2', 'kakita-blade-2', 'way-of-the-crane']
                 }
             });
             this.ambusher = this.player1.findCardByName('daidoji-ambusher');
@@ -50,7 +50,7 @@ describe('Kakita Blade 2', function () {
             expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
-        it('two when attacking - should give you two actions', function () {            
+        it('two when attacking - should give you two actions', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.brash, this.ambusher],
@@ -64,8 +64,12 @@ describe('Kakita Blade 2', function () {
             this.player1.clickCard(this.ambusher);
             this.player1.clickCard(this.brash);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Daidōji Ambusher\'s gained ability from Kakita Blade to take an action at the start of the conflict');
-            expect(this.getChatLogs(10)).toContain('player1 uses Brash Samurai\'s gained ability from Kakita Blade to take an action at the start of the conflict');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Daidōji Ambusher's gained ability from Kakita Blade to take an action at the start of the conflict"
+            );
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Brash Samurai's gained ability from Kakita Blade to take an action at the start of the conflict"
+            );
 
             expect(this.player1).toHavePrompt('Conflict Action Window'); // Attacker first trigger
             this.player1.clickCard(this.ambusher);

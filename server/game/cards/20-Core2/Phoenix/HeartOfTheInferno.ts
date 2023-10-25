@@ -26,7 +26,7 @@ export default class HeartOfTheInferno extends DrawCard {
                         trueGameAction: AbilityDsl.actions.discardFromPlay({ target: context.target }),
                         falseGameAction: AbilityDsl.actions.noAction()
                     }),
-                    effect: ""
+                    effect: ''
                 })
             })
         });

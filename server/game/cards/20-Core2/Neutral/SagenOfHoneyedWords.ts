@@ -12,13 +12,12 @@ export default class SagenOfHoneyedWords extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card) => card.isParticipating(),
+                cardCondition: (card) => card.isParticipating()
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
                 effect: AbilityDsl.effects.modifyMilitarySkill({ amount: context.target.printedGlory })
-            })),
+            }))
         });
     }
 }
-

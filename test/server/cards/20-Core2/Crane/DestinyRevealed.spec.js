@@ -1,12 +1,12 @@
-describe('Destiny Revealed', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Destiny Revealed', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'daidoji-uji'],
-                    hand: ['destiny-revealed'],
+                    hand: ['destiny-revealed']
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'doji-diplomat'],
@@ -25,7 +25,7 @@ describe('Destiny Revealed', function() {
         });
 
         describe('Duel Strike', function () {
-            it('should react if you win', function() {
+            it('should react if you win', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -43,7 +43,7 @@ describe('Destiny Revealed', function() {
                 expect(this.player1).toBeAbleToSelect(this.destiny);
             });
 
-            it('should react if you win', function() {
+            it('should react if you win', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -62,11 +62,13 @@ describe('Destiny Revealed', function() {
                 expect(this.challenger.fate).toBe(fate + 1);
                 expect(this.player1).toHavePrompt('Policy Debate');
 
-                expect(this.getChatLogs(5)).toContain('player1 plays Destiny Revealed to place a fate on their duelist');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Destiny Revealed to place a fate on their duelist'
+                );
                 expect(this.getChatLogs(5)).toContain('player1 places a fate on Doji Challenger');
             });
 
-            it('if you win by 4 or more against a unique should put fate on two things', function() {
+            it('if you win by 4 or more against a unique should put fate on two things', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.yoshi],
@@ -84,7 +86,9 @@ describe('Destiny Revealed', function() {
                 this.player1.clickCard(this.destiny);
                 expect(this.yoshi.fate).toBe(fate + 1);
 
-                expect(this.getChatLogs(10)).toContain('player1 plays Destiny Revealed to place a fate on their duelist');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Destiny Revealed to place a fate on their duelist'
+                );
                 expect(this.getChatLogs(10)).toContain('player1 places a fate on Kakita Yoshi');
 
                 expect(this.player1).toHavePrompt('Choose another character');
@@ -101,7 +105,7 @@ describe('Destiny Revealed', function() {
                 expect(this.getChatLogs(10)).toContain('player1 places a fate on Daidoji Uji');
             });
 
-            it('should not react on a tie', function() {
+            it('should not react on a tie', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -118,7 +122,7 @@ describe('Destiny Revealed', function() {
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
             });
 
-            it('should not react if you lose', function() {
+            it('should not react if you lose', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -138,9 +142,9 @@ describe('Destiny Revealed', function() {
     });
 });
 
-describe('Destiny Revealed Ring Stuff', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Destiny Revealed Ring Stuff', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -156,7 +160,7 @@ describe('Destiny Revealed Ring Stuff', function() {
             this.destiny = this.player2.findCardByName('destiny-revealed');
         });
 
-        it('void ring', function() {
+        it('void ring', function () {
             this.daidojiUji.fate = 1;
             this.noMoreActions();
             this.initiateConflict({
@@ -171,10 +175,12 @@ describe('Destiny Revealed Ring Stuff', function() {
             expect(this.player2).toBeAbleToSelect(this.destiny);
             this.player2.clickCard(this.destiny);
             expect(this.daidojiUji.fate).toBe(1);
-            expect(this.getChatLogs(5)).toContain('player2 plays Destiny Revealed to cancel the effects of the Void Ring');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Destiny Revealed to cancel the effects of the Void Ring'
+            );
         });
 
-        it('fire ring - honor', function() {
+        it('fire ring - honor', function () {
             this.daidojiUji.fate = 1;
             this.noMoreActions();
             this.initiateConflict({
@@ -190,10 +196,12 @@ describe('Destiny Revealed Ring Stuff', function() {
             expect(this.player2).toBeAbleToSelect(this.destiny);
             this.player2.clickCard(this.destiny);
             expect(this.daidojiUji.isHonored).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 plays Destiny Revealed to cancel the effects of the Fire Ring');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Destiny Revealed to cancel the effects of the Fire Ring'
+            );
         });
 
-        it('fire ring - dishonor', function() {
+        it('fire ring - dishonor', function () {
             this.daidojiUji.fate = 1;
             this.noMoreActions();
             this.initiateConflict({
@@ -209,10 +217,12 @@ describe('Destiny Revealed Ring Stuff', function() {
             expect(this.player2).toBeAbleToSelect(this.destiny);
             this.player2.clickCard(this.destiny);
             expect(this.daidojiUji.isDishonored).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 plays Destiny Revealed to cancel the effects of the Fire Ring');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Destiny Revealed to cancel the effects of the Fire Ring'
+            );
         });
 
-        it('water ring - bow', function() {
+        it('water ring - bow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.togashiInitiate],
@@ -226,10 +236,12 @@ describe('Destiny Revealed Ring Stuff', function() {
             expect(this.player2).toBeAbleToSelect(this.destiny);
             this.player2.clickCard(this.destiny);
             expect(this.daidojiUji.bowed).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player2 plays Destiny Revealed to cancel the effects of the Water Ring');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Destiny Revealed to cancel the effects of the Water Ring'
+            );
         });
 
-        it('water ring - ready', function() {
+        it('water ring - ready', function () {
             this.daidojiUji.bow();
             this.noMoreActions();
             this.initiateConflict({
@@ -244,7 +256,9 @@ describe('Destiny Revealed Ring Stuff', function() {
             expect(this.player2).toBeAbleToSelect(this.destiny);
             this.player2.clickCard(this.destiny);
             expect(this.daidojiUji.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player2 plays Destiny Revealed to cancel the effects of the Water Ring');
+            expect(this.getChatLogs(5)).toContain(
+                'player2 plays Destiny Revealed to cancel the effects of the Water Ring'
+            );
         });
     });
 });

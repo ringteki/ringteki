@@ -1,11 +1,17 @@
-describe('Kakita Rusumi', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Kakita Rusumi', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-rusumi'],
-                    dynastyDiscard: ['brash-samurai', 'paragon-of-grace', 'doji-whisperer', 'otomo-sycophant', 'imperial-storehouse']
+                    dynastyDiscard: [
+                        'brash-samurai',
+                        'paragon-of-grace',
+                        'doji-whisperer',
+                        'otomo-sycophant',
+                        'imperial-storehouse'
+                    ]
                 }
             });
 
@@ -20,13 +26,13 @@ describe('Kakita Rusumi', function() {
             this.rusumi = this.player1.findCardByName('kakita-rusumi');
         });
 
-        it('should not work outside of a conflict', function() {
+        it('should not work outside of a conflict', function () {
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.rusumi);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should search your top 4 cards', function() {
+        it('should search your top 4 cards', function () {
             this.noMoreActions();
 
             this.initiateConflict({
@@ -44,7 +50,7 @@ describe('Kakita Rusumi', function() {
             expect(this.player1).toHavePromptButton('Take nothing');
         });
 
-        it('should put the chosen character into the conflict', function() {
+        it('should put the chosen character into the conflict', function () {
             this.noMoreActions();
 
             this.initiateConflict({
@@ -59,7 +65,7 @@ describe('Kakita Rusumi', function() {
             expect(this.whisperer.isHonored).toBe(true);
         });
 
-        it('chat messages', function() {
+        it('chat messages', function () {
             this.noMoreActions();
 
             this.initiateConflict({
@@ -71,11 +77,13 @@ describe('Kakita Rusumi', function() {
             this.player1.clickCard(this.rusumi);
             this.player1.clickPrompt('Doji Whisperer');
 
-            expect(this.getChatLogs(6)).toContain('player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play');
+            expect(this.getChatLogs(6)).toContain(
+                'player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play'
+            );
             expect(this.getChatLogs(6)).toContain('player1 puts Doji Whisperer into play honored');
         });
 
-        it('chat messages - taking nothing', function() {
+        it('chat messages - taking nothing', function () {
             this.noMoreActions();
 
             this.initiateConflict({
@@ -87,11 +95,13 @@ describe('Kakita Rusumi', function() {
             this.player1.clickCard(this.rusumi);
             this.player1.clickPrompt('Take nothing');
 
-            expect(this.getChatLogs(6)).toContain('player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play');
+            expect(this.getChatLogs(6)).toContain(
+                'player1 uses Kakita Rusumi to search their dynasty deck for a character to put into play'
+            );
             expect(this.getChatLogs(6)).toContain('player1 takes nothing');
         });
 
-        it('should shuffle your dynasty deck', function() {
+        it('should shuffle your dynasty deck', function () {
             this.noMoreActions();
 
             this.initiateConflict({

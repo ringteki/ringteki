@@ -7,7 +7,7 @@ describe('Doji Shigenobu', function () {
                     inPlay: ['doji-shigenobu', 'doji-whisperer', 'brash-samurai']
                 },
                 player2: {
-                    inPlay: ['bayushi-dairu'],
+                    inPlay: ['bayushi-dairu']
                 }
             });
             this.shigenobu = this.player1.findCardByName('doji-shigenobu');
@@ -40,7 +40,9 @@ describe('Doji Shigenobu', function () {
             expect(this.player1).toBeAbleToSelect(this.shigenobu);
 
             this.player1.clickCard(this.whisperer);
-            expect(this.getChatLogs(5)).toContain('player1 uses Dōji Shigenobu, bowing Doji Whisperer to bow Bayushi Dairu');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Dōji Shigenobu, bowing Doji Whisperer to bow Bayushi Dairu'
+            );
 
             expect(this.player1).toHavePrompt('Do you want to move home?');
             expect(this.player1).toHavePromptButton('Yes');

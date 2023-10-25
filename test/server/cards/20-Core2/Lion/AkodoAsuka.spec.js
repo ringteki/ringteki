@@ -1,6 +1,6 @@
-describe('Akodo Asuka', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Akodo Asuka', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -20,7 +20,7 @@ describe('Akodo Asuka', function() {
             this.scout = this.player2.findCardByName('shinjo-scout');
         });
 
-        it('should trigger after she wins a conflict', function() {
+        it('should trigger after she wins a conflict', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],
@@ -30,7 +30,7 @@ describe('Akodo Asuka', function() {
             expect(this.player1).toBeAbleToSelect(this.akodoAsuka);
         });
 
-        it('should allow you to honor another pariticipating character', function() {
+        it('should allow you to honor another pariticipating character', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],
@@ -41,7 +41,7 @@ describe('Akodo Asuka', function() {
             expect(this.player1).toBeAbleToSelect(this.adept);
         });
 
-        it('should honor the chosen character', function() {
+        it('should honor the chosen character', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],
@@ -53,7 +53,7 @@ describe('Akodo Asuka', function() {
             expect(this.adept.isHonored).toBe(true);
         });
 
-        it('should not let her honor herself', function() {
+        it('should not let her honor herself', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],
@@ -64,7 +64,7 @@ describe('Akodo Asuka', function() {
             expect(this.player1).not.toBeAbleToSelect(this.akodoAsuka);
         });
 
-        it('should not let you honor characters at home', function() {
+        it('should not let you honor characters at home', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],
@@ -75,7 +75,7 @@ describe('Akodo Asuka', function() {
             expect(this.player1).not.toBeAbleToSelect(this.scholar);
         });
 
-        it('should let you honor your opponent characters', function() {
+        it('should let you honor your opponent characters', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.akodoAsuka, this.adept],

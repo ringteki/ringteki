@@ -1,13 +1,19 @@
 describe('Superior Papermill', () => {
-    describe('Refill option', function() {
-        integration(function() {
-            beforeEach(function() {
+    describe('Refill option', function () {
+        integration(function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'fate',
                     player1: {
                         inPlay: [],
                         dynastyDeck: [],
-                        dynastyDiscard: ['superior-papermill', 'doji-challenger', 'prodigy-of-the-waves', 'favorable-ground', 'hida-kisada']
+                        dynastyDiscard: [
+                            'superior-papermill',
+                            'doji-challenger',
+                            'prodigy-of-the-waves',
+                            'favorable-ground',
+                            'hida-kisada'
+                        ]
                     },
                     player2: {
                         inPlay: []
@@ -26,7 +32,7 @@ describe('Superior Papermill', () => {
                 this.papermill.facedown = true;
             });
 
-            it('when revealed in dynasty, should not trigger', function() {
+            it('when revealed in dynasty, should not trigger', function () {
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
                 this.player1.moveCard(this.challenger, 'dynasty deck');
                 this.player1.moveCard(this.prodigy, 'dynasty deck');
@@ -51,7 +57,7 @@ describe('Superior Papermill', () => {
                 expect(this.player2).toHavePrompt('Play cards from provinces');
             });
 
-            it('if already revealed, should trigger', function() {
+            it('if already revealed, should trigger', function () {
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
                 this.player1.moveCard(this.challenger, 'dynasty deck');
                 this.player1.moveCard(this.prodigy, 'dynasty deck');
@@ -79,10 +85,12 @@ describe('Superior Papermill', () => {
                 expect(this.papermill.facedown).toBe(false);
                 expect(this.kisada.location).toBe('province 1');
                 expect(this.kisada.facedown).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 uses Superior Papermill to place Hida Kisada faceup in province 1');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 uses Superior Papermill to place Hida Kisada faceup in province 1'
+                );
             });
 
-            it('message test - revealed province', function() {
+            it('message test - revealed province', function () {
                 this.shameful.facedown = false;
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
                 this.player1.moveCard(this.prodigy, 'dynasty deck');
@@ -108,10 +116,12 @@ describe('Superior Papermill', () => {
                 expect(this.papermill.facedown).toBe(false);
                 expect(this.challenger.location).toBe('province 1');
                 expect(this.challenger.facedown).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 uses Superior Papermill to place Doji Challenger faceup in Shameful Display');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 uses Superior Papermill to place Doji Challenger faceup in Shameful Display'
+                );
             });
 
-            it('should work if your deck is empty', function() {
+            it('should work if your deck is empty', function () {
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
 
                 this.papermill.facedown = false;
@@ -131,16 +141,20 @@ describe('Superior Papermill', () => {
                 expect(this.papermill.location).toBe('province 1');
                 expect(this.papermill.facedown).toBe(false);
                 expect(this.player1.player.getDynastyCardsInProvince('province 1').length).toBe(2);
-                expect(this.getChatLogs(10)).toContain('player1 uses Superior Papermill to place a card faceup in province 1');
-                expect(this.getChatLogs(10)).toContain('player1\'s dynasty deck has run out of cards, so they lose 5 honor');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 uses Superior Papermill to place a card faceup in province 1'
+                );
+                expect(this.getChatLogs(10)).toContain(
+                    "player1's dynasty deck has run out of cards, so they lose 5 honor"
+                );
                 expect(this.getChatLogs(10)).toContain('player1 is shuffling their dynasty deck');
             });
         });
     });
 
-    describe('Courtesy option', function() {
-        integration(function() {
-            beforeEach(function() {
+    describe('Courtesy option', function () {
+        integration(function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -172,7 +186,7 @@ describe('Superior Papermill', () => {
                 this.whisperer.honor();
             });
 
-            it('should react to fate phase beginning and give Courtesy to up to two characters', function() {
+            it('should react to fate phase beginning and give Courtesy to up to two characters', function () {
                 let fate = this.player1.fate;
                 this.nextPhase(); // fate phase
                 expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -191,7 +205,9 @@ describe('Superior Papermill', () => {
                 this.player1.clickCard(this.yoshi);
                 this.player1.clickPrompt('Done');
 
-                expect(this.getChatLogs(5)).toContain('player1 uses Superior Papermill to give Brash Samurai and Doji Challenger courtesy');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Superior Papermill to give Brash Samurai and Doji Challenger courtesy'
+                );
 
                 this.player1.clickPrompt('Done');
                 this.player2.clickPrompt('Done');

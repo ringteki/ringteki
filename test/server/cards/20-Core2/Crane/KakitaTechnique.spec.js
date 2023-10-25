@@ -1,7 +1,7 @@
-describe('Kakita Technique', function() {
-    integration(function() {
+describe('Kakita Technique', function () {
+    integration(function () {
         describe('Duel Focus', function () {
-            beforeEach(function() {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -18,12 +18,12 @@ describe('Kakita Technique', function() {
 
                 this.whisperer = this.player1.findCardByName('doji-whisperer');
                 this.kuwanan = this.player1.findCardByName('doji-kuwanan');
-                this.technique = this.player1.findCardByName('kakita-technique')
+                this.technique = this.player1.findCardByName('kakita-technique');
                 this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
                 this.pd = this.player2.findCardByName('policy-debate');
             });
 
-            it('should react appropriately', function() {
+            it('should react appropriately', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.kuwanan, this.whisperer],
@@ -41,7 +41,7 @@ describe('Kakita Technique', function() {
                 expect(this.player1).toBeAbleToSelect(this.technique);
             });
 
-            it('should apply +glory to the duel result and prompt opponent to do the same', function() {
+            it('should apply +glory to the duel result and prompt opponent to do the same', function () {
                 let honor = this.player1.honor;
 
                 this.noMoreActions();
@@ -65,8 +65,12 @@ describe('Kakita Technique', function() {
 
                 this.player2.clickPrompt('Yes');
 
-                expect(this.getChatLogs(10)).toContain('player2 chooses to resolve Kakita Technique. player1 will gain 2 honor');
-                expect(this.getChatLogs(10)).toContain('player1 plays Kakita Technique to focus, adding glory to their duel total');
+                expect(this.getChatLogs(10)).toContain(
+                    'player2 chooses to resolve Kakita Technique. player1 will gain 2 honor'
+                );
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Kakita Technique to focus, adding glory to their duel total'
+                );
                 expect(this.getChatLogs(10)).toContain('player1 gives Doji Kuwanan 3 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('player2 gives Kakita Toshimoko 2 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 6 vs 8: Doji Kuwanan');
@@ -75,7 +79,7 @@ describe('Kakita Technique', function() {
                 expect(this.player1.honor).toBe(honor + 2);
             });
 
-            it('choosing no', function() {
+            it('choosing no', function () {
                 let honor = this.player1.honor;
 
                 this.noMoreActions();
@@ -97,7 +101,9 @@ describe('Kakita Technique', function() {
                 this.player2.clickPrompt('No');
 
                 expect(this.getChatLogs(10)).toContain('player2 chooses not to resolve Kakita Technique');
-                expect(this.getChatLogs(10)).toContain('player1 plays Kakita Technique to focus, adding glory to their duel total');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Kakita Technique to focus, adding glory to their duel total'
+                );
                 expect(this.getChatLogs(10)).toContain('player1 gives Doji Kuwanan 3 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 4 vs 8: Doji Kuwanan');
 
@@ -107,7 +113,7 @@ describe('Kakita Technique', function() {
         });
 
         describe('Non duel effect', function () {
-            beforeEach(function() {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -124,12 +130,12 @@ describe('Kakita Technique', function() {
 
                 this.whisperer = this.player1.findCardByName('doji-whisperer');
                 this.kuwanan = this.player1.findCardByName('doji-kuwanan');
-                this.technique = this.player1.findCardByName('kakita-technique')
+                this.technique = this.player1.findCardByName('kakita-technique');
                 this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
                 this.pd = this.player2.findCardByName('policy-debate');
             });
 
-            it('should give +2/+2 if you dont outnumber the opponent', function() {
+            it('should give +2/+2 if you dont outnumber the opponent', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.kuwanan],
@@ -140,10 +146,12 @@ describe('Kakita Technique', function() {
                 this.player1.clickCard(this.technique);
                 this.player1.clickCard(this.kuwanan);
 
-                expect(this.getChatLogs(5)).toContain('player1 plays Kakita Technique to give Doji Kuwanan +2military and +2political');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Kakita Technique to give Doji Kuwanan +2military and +2political'
+                );
             });
 
-            it('should not give +2/+2 if you outnumber the opponent', function() {
+            it('should not give +2/+2 if you outnumber the opponent', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.kuwanan, this.whisperer],

@@ -1,12 +1,12 @@
-describe('Show Me Your Stance', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Show Me Your Stance', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 20,
                     inPlay: ['doji-challenger', 'kakita-yoshi'],
-                    hand: ['show-me-your-stance'],
+                    hand: ['show-me-your-stance']
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune'],
@@ -23,7 +23,7 @@ describe('Show Me Your Stance', function() {
         });
 
         describe('Duel Strike', function () {
-            it('should react on a tie', function() {
+            it('should react on a tie', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -41,7 +41,7 @@ describe('Show Me Your Stance', function() {
                 expect(this.player1).toBeAbleToSelect(this.stance);
             });
 
-            it('should do a bit of everything', function() {
+            it('should do a bit of everything', function () {
                 let fate = this.player1.fate;
                 let honor = this.player1.honor;
                 let cards = this.player1.hand.length;
@@ -66,11 +66,13 @@ describe('Show Me Your Stance', function() {
                 expect(this.player1.hand.length).toBe(cards); // -1 from playing card, +1 from drawing
                 expect(this.challenger.isHonored).toBe(true);
 
-                expect(this.getChatLogs(5)).toContain('player1 plays Show Me Your Stance to draw a card, gain a fate, gain an honor, and honor one of their duelists');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Show Me Your Stance to draw a card, gain a fate, gain an honor, and honor one of their duelists'
+                );
                 expect(this.getChatLogs(5)).toContain('player1 honors Doji Challenger');
             });
 
-            it('should not react if you win', function() {
+            it('should not react if you win', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -87,7 +89,7 @@ describe('Show Me Your Stance', function() {
                 expect(this.player1).toHavePrompt('Policy Debate');
             });
 
-            it('should not react if you lose', function() {
+            it('should not react if you lose', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -106,7 +108,7 @@ describe('Show Me Your Stance', function() {
         });
 
         describe('Send Home', function () {
-            it('should let you pick someone with glory equal to or less than a participating duelist you control and send them home', function() {
+            it('should let you pick someone with glory equal to or less than a participating duelist you control and send them home', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.challenger],
@@ -122,10 +124,12 @@ describe('Show Me Your Stance', function() {
                 this.player1.clickCard(this.toshimoko);
 
                 expect(this.toshimoko.isParticipating()).toBe(false);
-                expect(this.getChatLogs(5)).toContain('player1 plays Show Me Your Stance to send Kakita Toshimoko home');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Show Me Your Stance to send Kakita Toshimoko home'
+                );
             });
 
-            it('should not work without a participating duelist', function() {
+            it('should not work without a participating duelist', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.yoshi],

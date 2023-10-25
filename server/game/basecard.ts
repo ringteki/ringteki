@@ -48,7 +48,8 @@ const ValidKeywords = new Set([
     'covert',
     'corrupted',
     'rally',
-    'eminent'
+    'eminent',
+    'ephemeral'
 ]);
 
 class BaseCard extends EffectSource {
@@ -507,8 +508,8 @@ class BaseCard extends EffectSource {
             copyEffect
                 ? (copyEffect.traits as string[])
                 : this.getEffects(EffectNames.Blank).some((blankTraits: boolean) => blankTraits)
-                    ? []
-                    : this.traits
+                ? []
+                : this.traits
         );
 
         for (const gainedTrait of this.getEffects(EffectNames.AddTrait)) {
@@ -733,11 +734,15 @@ class BaseCard extends EffectSource {
     }
 
     isAttacking(conflictType?: 'military' | 'political'): boolean {
-        return this.game.currentConflict?.isAttacking(this) && (!conflictType || this.game.isDuringConflict(conflictType))
+        return (
+            this.game.currentConflict?.isAttacking(this) && (!conflictType || this.game.isDuringConflict(conflictType))
+        );
     }
 
     isDefending(conflictType?: 'military' | 'political'): boolean {
-        return this.game.currentConflict?.isDefending(this) && (!conflictType || this.game.isDuringConflict(conflictType))
+        return (
+            this.game.currentConflict?.isDefending(this) && (!conflictType || this.game.isDuringConflict(conflictType))
+        );
     }
 
     isParticipating(conflictType?: 'military' | 'political'): boolean {
