@@ -1,8 +1,8 @@
-describe('Thunderbolt Tower', function () {
+describe("Ankoku's Blessing", function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
-                phase: 'conflict',
+                phase: 'fate',
                 player1: {
                     hand: ['ankoku-s-blessing', 'let-go', 'fine-katana']
                 },

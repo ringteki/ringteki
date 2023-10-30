@@ -17,7 +17,7 @@ describe('Bayushi Kentaro', function () {
             this.shibaTsukune.facedown = false;
         });
 
-        it('reveals all the scorp cards in provinces and put a scorp character in play', function () {
+        it('reveals all the cards in scorp provinces and put a scorp character in play', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.kentaro],

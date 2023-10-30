@@ -13,16 +13,20 @@ export default class AwakeTheFearfulHeart extends DrawCard {
                 context.player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.sendHome((context) => ({
-                    target: (context.game.currentConflict as Conflict | null)
-                        ?.getCharacters(context.player.opponent)
-                        .filter((character) => character.fate === 0)
+                    target:
+                        (context.game.currentConflict as Conflict | null)?.getParticipants(
+                            (character) => character.fate === 0
+                        ) ?? []
                 })),
                 AbilityDsl.actions.onAffinity({
                     trait: 'air',
                     gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                        target: context.game.findAnyCardsInPlay((card) => card.getType() === CardTypes.Character),
+                        target: context.game.findAnyCardsInPlay(
+                            (card: DrawCard) => card.getType() === CardTypes.Character
+                        ),
                         effect: AbilityDsl.effects.cardCannot('moveToConflict')
-                    }))
+                    })),
+                    effect: 'forbid all players from moving characters into the conflict'
                 })
             ])
         });
