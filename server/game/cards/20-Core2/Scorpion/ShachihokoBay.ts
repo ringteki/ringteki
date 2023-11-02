@@ -20,8 +20,8 @@ class Process {
     }
 }
 
-export default class HeartAttackGrill extends ProvinceCard {
-    static id = 'heart-attack-grill';
+export default class ShachihokoBay extends ProvinceCard {
+    static id = 'shachihoko-bay';
 
     setupCardAbilities() {
         this.interrupt({

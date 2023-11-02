@@ -930,6 +930,55 @@ export function optionalGiveFateCost(amount: number): Cost {
     };
 }
 
+export function optionalOpponentLoseHonor(canPayFunc = (context: TriggeredAbilityContext) => true): Cost {
+    const NAME = 'optionalOpponentLoseHonorPaid';
+    return {
+        promptsPlayer: true,
+        canPay() {
+            return true;
+        },
+        resolve(context: TriggeredAbilityContext, result) {
+            context.costs[NAME] = false;
+
+            if (!canPayFunc(context)) {
+                return;
+            }
+
+            if (!context.player.opponent) {
+                return;
+            }
+
+            let honorAvailable = true;
+            if (!context.game.actions.loseHonor().canAffect(context.player.opponent, context)) {
+                honorAvailable = false;
+            }
+
+            if (honorAvailable) {
+                context.game.promptWithHandlerMenu(context.player.opponent, {
+                    activePromptTitle: 'Lose 1 honor?',
+                    source: context.source,
+                    choices: ['Yes', 'No'],
+                    handlers: [() => (context.costs[NAME] = true), () => (context.costs[NAME] = false)]
+                });
+            }
+        },
+        payEvent(context: TriggeredAbilityContext) {
+            if (context.costs[NAME]) {
+                let events = [];
+
+                context.game.addMessage('{0} chooses to lose 1 honor', context.player.opponent);
+                let honorAction = context.game.actions.loseHonor({ target: context.player.opponent });
+                events.push(honorAction.getEvent(context.player.opponent, context));
+
+                return events;
+            }
+
+            const doNothing = new HandlerAction();
+            return doNothing.getEvent(context.player, context);
+        }
+    };
+}
+
 export function optionalHonorTransferFromOpponentCost(canPayFunc = (context: TriggeredAbilityContext) => true): Cost {
     return {
         promptsPlayer: true,
