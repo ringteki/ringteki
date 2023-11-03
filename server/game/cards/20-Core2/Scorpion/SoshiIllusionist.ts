@@ -1,15 +1,17 @@
-const DrawCard = require('../../drawcard.js');
-const { CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl');
+import AbilityDsl from '../../../abilitydsl';
+import { CardTypes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
-class SoshiIllusionist extends DrawCard {
+export default class SoshiIllusionist extends DrawCard {
+    static id = 'soshi-illusionist';
+
     setupCardAbilities() {
         this.action({
             title: 'Discard status from character',
             cost: AbilityDsl.costs.payFate(1),
             target: {
                 cardType: CardTypes.Character,
-                gameAction: AbilityDsl.actions.selectToken(context => ({
+                gameAction: AbilityDsl.actions.selectToken((context) => ({
                     card: context.target,
                     activePromptTitle: 'Which token do you wish to discard?',
                     message: '{0} discards {1}',
@@ -21,7 +23,3 @@ class SoshiIllusionist extends DrawCard {
         });
     }
 }
-
-SoshiIllusionist.id = 'soshi-illusionist';
-
-module.exports = SoshiIllusionist;
