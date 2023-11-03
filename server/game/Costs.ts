@@ -930,51 +930,42 @@ export function optionalGiveFateCost(amount: number): Cost {
     };
 }
 
-export function optionalOpponentLoseHonor(canPayFunc = (context: TriggeredAbilityContext) => true): Cost {
+export function optionalOpponentLoseHonor(
+    prompt = 'Lose 1 honor?',
+    canPayFunc?: (context: TriggeredAbilityContext) => boolean
+): Cost {
     const NAME = 'optionalOpponentLoseHonorPaid';
     return {
         promptsPlayer: true,
-        canPay() {
-            return true;
-        },
-        resolve(context: TriggeredAbilityContext, result) {
+        canPay: () => true,
+        resolve: (context: TriggeredAbilityContext) => {
             context.costs[NAME] = false;
 
-            if (!canPayFunc(context)) {
+            if ((typeof canPayFunc === 'function' && !canPayFunc(context)) || !context.player.opponent) {
                 return;
             }
 
-            if (!context.player.opponent) {
-                return;
-            }
-
-            let honorAvailable = true;
-            if (!context.game.actions.loseHonor().canAffect(context.player.opponent, context)) {
-                honorAvailable = false;
-            }
-
+            const honorAvailable = context.game.actions.loseHonor().canAffect(context.player.opponent, context);
             if (honorAvailable) {
                 context.game.promptWithHandlerMenu(context.player.opponent, {
-                    activePromptTitle: 'Lose 1 honor?',
+                    activePromptTitle: prompt,
                     source: context.source,
                     choices: ['Yes', 'No'],
                     handlers: [() => (context.costs[NAME] = true), () => (context.costs[NAME] = false)]
                 });
             }
         },
-        payEvent(context: TriggeredAbilityContext) {
+        payEvent: (context: TriggeredAbilityContext) => {
             if (context.costs[NAME]) {
-                let events = [];
-
-                context.game.addMessage('{0} chooses to lose 1 honor', context.player.opponent);
-                let honorAction = context.game.actions.loseHonor({ target: context.player.opponent });
-                events.push(honorAction.getEvent(context.player.opponent, context));
-
-                return events;
+                context.game.addMessage('{0} chooses to lose 1 honor', context.player.opponent, context.player);
+                return [
+                    context.game.actions
+                        .loseHonor({ target: context.player.opponent })
+                        .getEvent(context.player.opponent, context)
+                ];
             }
 
-            const doNothing = new HandlerAction();
-            return doNothing.getEvent(context.player, context);
+            return context.game.actions.noAction().getEvent(context.player, context);
         }
     };
 }
