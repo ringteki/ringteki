@@ -1,11 +1,11 @@
-describe('Assign Blame', function () {
+describe('White Lotus Method', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['alibi-artist', 'bayushi-liar', 'bayushi-manipulator'],
-                    hand: ['assign-blame']
+                    hand: ['white-lotus-method']
                 },
                 player2: {
                     inPlay: ['doji-whisperer', 'doji-hotaru'],
@@ -13,7 +13,7 @@ describe('Assign Blame', function () {
                 }
             });
 
-            this.assignBlame = this.player1.findCardByName('assign-blame');
+            this.whiteLotusMethod = this.player1.findCardByName('white-lotus-method');
             this.bayushiLiar = this.player1.findCardByName('bayushi-liar');
             this.bayushiManipulator = this.player1.findCardByName('bayushi-manipulator');
             this.bayushiManipulator.dishonor();
@@ -26,7 +26,7 @@ describe('Assign Blame', function () {
         });
 
         it('moves token around own characters', function () {
-            this.player1.clickCard(this.assignBlame);
+            this.player1.clickCard(this.whiteLotusMethod);
             expect(this.player1).toHavePrompt('Choose the status token to move');
             expect(this.player1).not.toBeAbleToSelect(this.bayushiLiar);
             expect(this.player1).toBeAbleToSelect(this.bayushiManipulator);
@@ -46,11 +46,11 @@ describe('Assign Blame', function () {
             expect(this.bayushiManipulator.isDishonored).toBe(false);
             expect(this.bayushiLiar.isDishonored).toBe(true);
             expect(this.player1.hand.length).toBe(0);
-            expect(this.getChatLogs(5)).toContain('player1 plays Assign Blame to move a status token to Bayushi Liar');
+            expect(this.getChatLogs(5)).toContain('player1 plays White Lotus Method to move a status token to Bayushi Liar');
         });
 
         it('moves token to opponents characters', function () {
-            this.player1.clickCard(this.assignBlame);
+            this.player1.clickCard(this.whiteLotusMethod);
             expect(this.player1).toHavePrompt('Choose the status token to move');
             expect(this.player1).not.toBeAbleToSelect(this.bayushiLiar);
             expect(this.player1).toBeAbleToSelect(this.bayushiManipulator);
@@ -71,7 +71,7 @@ describe('Assign Blame', function () {
             expect(this.dojiWhisperer.isDishonored).toBe(true);
             expect(this.player2.hand.length).toBe(1);
             expect(this.getChatLogs(5)).toContain(
-                'player1 plays Assign Blame to move a status token to Doji Whisperer, their controller draws a card'
+                'player1 plays White Lotus Method to move a status token to Doji Whisperer, their controller draws a card'
             );
         });
     });

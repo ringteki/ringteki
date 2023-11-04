@@ -11,8 +11,8 @@ function doesCardDraw(context: AbilityContext) {
     return context.targets[RECIPIENT].controller !== context.source.controller;
 }
 
-export default class AssignBlame extends DrawCard {
-    static id = 'assign-blame';
+export default class WhiteLotusMethod extends DrawCard {
+    static id = 'white-lotus-method';
 
     setupCardAbilities() {
         this.action({
