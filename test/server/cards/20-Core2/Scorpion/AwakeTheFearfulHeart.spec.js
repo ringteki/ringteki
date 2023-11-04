@@ -4,7 +4,7 @@ describe('Awake the Fearful Heart', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    hand: ['awake-the-fearful-heart'],
+                    hand: ['awake-the-fearful-heart', 'one-with-the-sea'],
                     inPlay: ['bayushi-manipulator', 'cursecatcher']
                 },
                 player2: {
@@ -45,6 +45,12 @@ describe('Awake the Fearful Heart', function () {
             expect(this.getChatLogs(5)).toContain(
                 'player1 channels their air affinity to forbid all players from moving characters into the conflict'
             );
+        });
+
+        it('with affinity, it prevents character movement', function () {
+            this.player1.clickCard(this.awake);
+            this.player2.clickCard(this.oneWithTheSea);
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
     });
 });
