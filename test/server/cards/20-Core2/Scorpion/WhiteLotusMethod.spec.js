@@ -46,7 +46,9 @@ describe('White Lotus Method', function () {
             expect(this.bayushiManipulator.isDishonored).toBe(false);
             expect(this.bayushiLiar.isDishonored).toBe(true);
             expect(this.player1.hand.length).toBe(0);
-            expect(this.getChatLogs(5)).toContain('player1 plays White Lotus Method to move a status token to Bayushi Liar');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 plays White Lotus Method to move a status token to Bayushi Liar'
+            );
         });
 
         it('moves token to opponents characters', function () {
