@@ -92,7 +92,7 @@ const checkRestrictions = {
     opponentsCharacterAbilitiesWithLowerGlory: (context, effect) =>
         context.source.type === CardTypes.Character &&
         context.source.controller === getApplyingPlayer(effect).opponent &&
-        context.source.glory < effect.source.glory,
+        context.source.glory < effect.context.source.parent.glory,
     provinces: (context) => context.source.type === CardTypes.Province,
     reactions: (context) => context.ability.abilityType === AbilityTypes.Reaction,
     source: (context, effect) => context.source === effect.context.source,

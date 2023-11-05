@@ -6,12 +6,12 @@ export default class UnwaveringDevotion extends DrawCard {
 
     setupCardAbilities() {
         this.persistentEffect({
-            match: (card, context) => card === context.source && !card.isDishonored,
+            match: (card, context) => card === context.source.parent && !card.isDishonored,
             effect: AbilityDsl.effects.modifyGlory(1)
         });
 
         this.persistentEffect({
-            match: (card, context) => card === context.source,
+            match: (card, context) => card === context.source.parent,
             effect: AbilityDsl.effects.cardCannot({
                 cannot: 'target',
                 restricts: 'opponentsCharacterAbilitiesWithLowerGlory'
