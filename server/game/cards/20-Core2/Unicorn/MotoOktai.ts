@@ -1,7 +1,10 @@
 import { CardTypes, Durations, Locations, Players } from '../../../Constants';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+
+function skillBonus(card: DrawCard) {
+    return card.getMilitarySkill();
+}
 
 export default class MotoOktai extends DrawCard {
     static id = 'moto-oktai';
@@ -13,14 +16,13 @@ export default class MotoOktai extends DrawCard {
                 onCardLeavesPlay: ({ card }, context) =>
                     card.location === Locations.PlayArea &&
                     card.type === CardTypes.Character &&
-                    card.controller === context.player &&
-                    this.game.isDuringConflict()
+                    context.game.isDuringConflict()
             },
-            effect: 'get +{1} {2}',
-            effectArgs: (context) => [this.#skillBonus(context), 'military'],
+            effect: 'get +{1} {2} for this phase - he is emboldened by justice, but unburdened by mercy!',
+            effectArgs: (context) => [skillBonus(context.event.card), 'military'],
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 duration: Durations.UntilEndOfPhase,
-                effect: AbilityDsl.effects.modifyMilitarySkill(this.#skillBonus(context))
+                effect: AbilityDsl.effects.modifyMilitarySkill(skillBonus(context.event.card))
             }))
         });
 
@@ -29,13 +31,11 @@ export default class MotoOktai extends DrawCard {
             condition: (context) => context.source.isParticipatingFor(context.player),
             target: {
                 cardType: CardTypes.Character,
-                controller: Players.Any,
+                controller: Players.Self,
                 gameAction: AbilityDsl.actions.discardFromPlay()
-            }
+            },
+            effect: 'discard {1} - purge the weak!',
+            effectArgs: (context) => [context.target]
         });
-    }
-
-    #skillBonus(context: TriggeredAbilityContext) {
-        return (context.event.card as DrawCard).getMilitarySkill();
     }
 }
