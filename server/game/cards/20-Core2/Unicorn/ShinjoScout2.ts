@@ -20,10 +20,10 @@ export default class ShinjoScout2 extends DrawCard {
                 cardCondition: (card) => card.isConflictProvince(),
                 message: '{0} prevents {1} from triggering its abilities',
                 messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                gameAction: AbilityDsl.actions.cardLastingEffect({
                     targetLocation: Locations.Provinces,
                     effect: AbilityDsl.effects.cardCannot('triggerAbilities')
-                }))
+                })
             }))
         });
     }

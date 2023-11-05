@@ -14,7 +14,7 @@ export default class PassionatePoet extends DrawCard {
                 effect: AbilityDsl.effects.modifyBothSkills(-1),
                 duration: Durations.UntilEndOfConflict
             })),
-            effect: 'recite a poem, giving all participating enemies -1{1}/-1{2} until the end of the conflict. They look less than excited.',
+            effect: 'give all participating enemies -1{1}/-1{2} until the end of the conflict',
             effectArgs: ['military', 'political']
         });
     }
