@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 import { StrongholdCard } from '../../../StrongholdCard';
 
-export default class UnicornBox extends StrongholdCard {
-    static id = 'unicorn-box';
+export default class BreezeOfDawnLodge extends StrongholdCard {
+    static id = 'breeze-of-dawn-lodge';
 
     stealFirstPlayerDuringSetup = true;
 

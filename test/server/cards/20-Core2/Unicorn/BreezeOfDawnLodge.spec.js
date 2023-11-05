@@ -1,16 +1,16 @@
-describe('Unicorn Box', function () {
+describe('Breeze of Dawn Lodge', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    stronghold: 'unicorn-box',
+                    stronghold: 'breeze-of-dawn-lodge',
                     inPlay: ['bayushi-manipulator', 'fushicho', 'solemn-scholar', 'iuchi-rimei']
                 },
                 player2: {},
                 skipAutoFirstPlayer: true
             });
-            this.unicornBox = this.player1.findCardByName('unicorn-box');
+            this.breezeOfDawnLodge = this.player1.findCardByName('breeze-of-dawn-lodge');
             this.bayushiManipulator = this.player1.findCardByName('bayushi-manipulator');
             this.fushicho = this.player1.findCardByName('fushicho');
             this.solemnScholar = this.player1.findCardByName('solemn-scholar');
@@ -29,7 +29,7 @@ describe('Unicorn Box', function () {
             this.solemnScholar.bowed = true;
 
             this.player2.pass();
-            this.player1.clickCard(this.unicornBox);
+            this.player1.clickCard(this.breezeOfDawnLodge);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.bayushiManipulator);
             expect(this.player1).toBeAbleToSelect(this.iuchiRimei);
@@ -39,7 +39,7 @@ describe('Unicorn Box', function () {
             this.player1.clickCard(this.iuchiRimei);
             expect(this.iuchiRimei.isParticipating()).toBe(true);
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Unicorn Box, bowing Unicorn Box to move Iuchi Rimei into the conflict'
+                'player1 uses Breeze of Dawn Lodge, bowing Breeze of Dawn Lodge to move Iuchi Rimei into the conflict'
             );
         });
 
@@ -53,7 +53,7 @@ describe('Unicorn Box', function () {
             this.solemnScholar.bowed = true;
 
             this.player2.pass();
-            this.player1.clickCard(this.unicornBox);
+            this.player1.clickCard(this.breezeOfDawnLodge);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.bayushiManipulator);
             expect(this.player1).toBeAbleToSelect(this.iuchiRimei);
@@ -63,7 +63,7 @@ describe('Unicorn Box', function () {
             this.player1.clickCard(this.bayushiManipulator);
             expect(this.bayushiManipulator.isParticipating()).toBe(false);
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Unicorn Box, bowing Unicorn Box to send Bayushi Manipulator home'
+                'player1 uses Breeze of Dawn Lodge, bowing Breeze of Dawn Lodge to send Bayushi Manipulator home'
             );
         });
     });
