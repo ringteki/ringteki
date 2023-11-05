@@ -1,28 +1,26 @@
-const DrawCard = require('../../drawcard.js');
-const { Locations, Players, TargetModes, CardTypes } = require('../../Constants');
-const AbilityDsl = require('../../abilitydsl');
+import AbilityDsl from '../../../abilitydsl';
+import { CardTypes, Locations, Players, TargetModes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
-class CavalryReserves extends DrawCard {
+export default class CavalryReserves extends DrawCard {
+    static id = 'cavalry-reserves';
+
     setupCardAbilities() {
         this.action({
             title: 'Put Cavalry into play from your discard',
-            condition: () => this.game.isDuringConflict('military'),
+            condition: (context) => context.game.isDuringConflict('military'),
             target: {
                 mode: TargetModes.MaxStat,
                 activePromptTitle: 'Choose characters',
-                cardStat: card => card.getCost(),
+                cardStat: (card) => card.getCost(),
                 maxStat: () => 6,
                 numCards: 0,
                 cardType: CardTypes.Character,
                 location: Locations.DynastyDiscardPile,
                 controller: Players.Self,
-                cardCondition: card => card.hasTrait('cavalry'),
+                cardCondition: (card) => card.hasTrait('cavalry'),
                 gameAction: AbilityDsl.actions.putIntoConflict()
             }
         });
     }
 }
-
-CavalryReserves.id = 'cavalry-reserves';
-
-module.exports = CavalryReserves;
