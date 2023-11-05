@@ -1,7 +1,7 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Durations, Locations } from '../../../Constants';
 import DrawCard from '../../../drawcard';
-import { ProvinceCard } from '../../../ProvinceCard';
+import type { ProvinceCard } from '../../../ProvinceCard';
 
 function adjacentProvinces(centralProvince: ProvinceCard): Array<ProvinceCard> {
     return centralProvince.controller.getProvinces((province: ProvinceCard) =>
