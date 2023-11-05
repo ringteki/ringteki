@@ -1,7 +1,7 @@
 import { CardTypes, Locations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import { Duel } from '../../../Duel';
+import type { Duel } from '../../../Duel';
 
 export default class ForeignCustoms extends DrawCard {
     static id = 'foreign-customs';
