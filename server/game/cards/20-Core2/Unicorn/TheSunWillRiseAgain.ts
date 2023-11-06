@@ -12,7 +12,7 @@ export default class TheSunWillRiseAgain extends DrawCard {
                 onConflictFinished: (event, context) =>
                     event.conflict.attackingPlayer === context.player &&
                     event.conflict.winner === context.player.opponent &&
-                    event.conflict.skillDifference >= 5
+                    event.conflict.skillDifference >= 4
             },
             gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
                 targetController: context.player,

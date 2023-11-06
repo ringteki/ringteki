@@ -7,7 +7,7 @@ export default class UtakuSumire extends DrawCard {
 
     setupCardAbilities() {
         this.reaction({
-            title: "Don't play cards. Place fate on up to 3 characters on win",
+            title: "Don't play cards. Place fate on up to 2 characters on win",
             when: {
                 onConflictStarted: (_, context) => context.source.isAttacking()
             },
@@ -30,7 +30,7 @@ export default class UtakuSumire extends DrawCard {
                             controller: Players.Self,
                             player: Players.Self,
                             mode: TargetModes.UpTo,
-                            numCards: 3,
+                            numCards: 2,
                             gameAction: AbilityDsl.actions.placeFate()
                         })
                     })

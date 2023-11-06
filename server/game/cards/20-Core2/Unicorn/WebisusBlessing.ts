@@ -24,20 +24,17 @@ export default class WebisusBlessing extends DrawCard {
                 }
             },
             effect: "discard {1}'s {2}{3}{4}{5}{6}",
-            effectArgs: (context) => {
-                if (context.tokens.second) {
-                    return [
-                        context.tokens.first[0].card,
-                        context.tokens.first,
-                        ' and ',
-                        context.tokens.second[0].card,
-                        "'s ",
-                        context.tokens.second
-                    ];
-                } else {
-                    return [context.tokens.first[0].card, context.tokens.first, '', '', '', ''];
-                }
-            }
+            effectArgs: (context) =>
+                context.tokens.second
+                    ? [
+                          context.tokens.first[0].card,
+                          context.tokens.first,
+                          ' and ',
+                          context.tokens.second[0].card,
+                          "'s ",
+                          context.tokens.second
+                      ]
+                    : [context.tokens.first[0].card, context.tokens.first, '', '', '', '']
         });
     }
 }
