@@ -169,7 +169,7 @@ export class Duel extends GameObject {
                 return InvalidStats;
             }
             if (!ignoreSkill) {
-                result += this.#getSkillStatistic(card);
+                result += this.getSkillStatistic(card);
             }
             result += this.#getDuelModifiers(card);
         }
@@ -190,7 +190,7 @@ export class Duel extends GameObject {
         return effectModifier;
     }
 
-    #getSkillStatistic(card: DrawCard): number {
+    getSkillStatistic(card: DrawCard): number {
         let baseStatistic = 0;
 
         if (this.statistic) {
