@@ -28,29 +28,16 @@ describe('Dead Eyes Sensei', function () {
             this.butcherFated.bow();
         });
 
-        it('only works on characters with fate', function () {
+        it('works on anyone', function () {
             this.player1.clickCard(this.deadEyesSensei);
-            expect(this.player1).toHavePrompt('Select character to discard a fate from');
-            expect(this.player1).not.toBeAbleToSelect(this.deadEyesSensei);
-            expect(this.player1).not.toBeAbleToSelect(this.forgottenFateless);
-            expect(this.player1).not.toBeAbleToSelect(this.gallantFateless);
+            expect(this.player1).toBeAbleToSelect(this.deadEyesSensei);
+            expect(this.player1).toBeAbleToSelect(this.forgottenFateless);
+            expect(this.player1).toBeAbleToSelect(this.gallantFateless);
             expect(this.player1).toBeAbleToSelect(this.shrewdFated);
             expect(this.player1).toBeAbleToSelect(this.butcherFated);
         });
 
-        it('readies a character', function () {
-            this.player1.clickCard(this.deadEyesSensei);
-            this.player1.clickCard(this.butcherFated);
-
-            expect(this.butcherFated.fate).toBe(0);
-            expect(this.butcherFated.bowed).toBe(false);
-            expect(this.butcherFated.hasTrait('berserker')).toBe(true);
-            expect(this.getChatLogs(5)).toContain(
-                'player1 uses Dead Eyes Sensei, removing 1 fate from Butcher of the Fallen to ready Butcher of the Fallen and give them Berserker'
-            );
-        });
-
-        it('makes the character berserker', function () {
+        it('readies a character, removes a fate, and makes the character a berserker', function () {
             this.player1.clickCard(this.deadEyesSensei);
             this.player1.clickCard(this.shrewdFated);
 
@@ -58,7 +45,7 @@ describe('Dead Eyes Sensei', function () {
             expect(this.shrewdFated.bowed).toBe(false);
             expect(this.shrewdFated.hasTrait('berserker')).toBe(true);
             expect(this.getChatLogs(5)).toContain(
-                'player1 uses Dead Eyes Sensei, removing 1 fate from Shrewd Yasuki to ready Shrewd Yasuki and give them Berserker'
+                'player1 uses Dead Eyes Sensei to ready and remove a fate from Shrewd Yasuki, giving them the Berserker trait'
             );
         });
     });
