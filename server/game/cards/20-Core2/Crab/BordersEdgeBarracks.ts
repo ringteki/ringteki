@@ -13,7 +13,8 @@ export default class BordersEdgeBarracks extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.moveToConflict()
-            }
+            },
+            limit: AbilityDsl.limit.perConflict(1),
         });
     }
 }
