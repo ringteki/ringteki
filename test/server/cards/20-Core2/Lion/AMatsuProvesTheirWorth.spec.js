@@ -36,7 +36,7 @@ describe('A Matsu Proves Their Worth', function () {
             this.noMoreActions();
 
             expect(this.getChatLogs(5)).toContain(
-                'Matsu Berserker is discarded from play due to failing at A Matsu Coming of Age!'
+                'Matsu Berserker is discarded from play due to failing at A Matsu Proves Their Worth!'
             );
         });
 
@@ -53,7 +53,7 @@ describe('A Matsu Proves Their Worth', function () {
             this.noMoreActions();
 
             expect(this.getChatLogs(5)).toContain(
-                'Matsu Berserker is honored and receives 1 fate, and player1 gains 1 fate and draw 1 card due to Matsu Berserker succeeding at A Matsu Coming of Age!'
+                'Matsu Berserker is honored and receives 1 fate, and player1 gains 1 fate and draw 1 card due to Matsu Berserker succeeding at A Matsu Proves Their Worth!'
             );
         });
 
