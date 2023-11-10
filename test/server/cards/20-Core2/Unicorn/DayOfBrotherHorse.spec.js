@@ -8,7 +8,7 @@ describe('Day of Brother Horse', function () {
                     inPlay: ['adept-of-the-waves', 'solemn-scholar', 'miya-mystic']
                 },
                 player2: {
-                    inPlay: []
+                    inPlay: ['miya-mystic']
                 }
             });
 
@@ -37,16 +37,28 @@ describe('Day of Brother Horse', function () {
             expect(this.player1).not.toBeAbleToSelect(this.dayofBrotherHorse);
         });
 
-        it('if triggered, draw 3 cards', function () {
+        it('if triggered, draw 3 cards and protects a ring', function () {
             const initialHandSize = this.player1.hand.length;
             this.noMoreActions();
             this.player1.clickPrompt('Pass Conflict');
             this.player1.clickPrompt('Yes');
             this.player1.clickCard(this.dayofBrotherHorse);
+            expect(this.player1).toHavePrompt('Choose a ring');
+
+            this.player1.clickRing('fire');
             expect(this.player1.hand.length).toBe(initialHandSize - 1 + 3);
             expect(this.getChatLogs(5)).toContain(
-                'player1 plays Day of Brother Horse to draw 3 cards - they take a break to celebrate their prized steeds'
+                "player1 plays Day of Brother Horse to prevent player2 from declaring Fire Ring conflicts, and draw 3 cards - it's a sunny day filled with celebration. The Moto share tales of the desert!"
             );
+
+            this.noMoreActions();
+            expect(this.player2).toHavePrompt('Initiate Conflict');
+
+            this.player2.clickRing('fire');
+            expect(this.game.rings.fire.contested).toBe(false);
+
+            this.player2.clickRing('air');
+            expect(this.game.rings.air.contested).toBe(true);
         });
     });
 });
