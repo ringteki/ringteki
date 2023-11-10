@@ -10,13 +10,13 @@ export default class FerociousBanshee extends DrawCard {
         this.persistentEffect({
             condition: (context) =>
                 context.source.isParticipating() &&
-                context.player.anyCardsInPlay(
+                context.game.findAnyCardsInPlay(
                     (otherCard: BaseCard) =>
                         otherCard !== context.source &&
                         otherCard.type === CardTypes.Character &&
                         otherCard.hasTrait('berserker') &&
-                        otherCard.isInConflict()
-                ),
+                        otherCard.isParticipating()
+                ).length > 0,
             effect: AbilityDsl.effects.modifyMilitarySkill(3)
         });
     }

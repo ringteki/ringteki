@@ -1,23 +1,20 @@
-import type BaseAction from '../../../BaseAction';
+import { CardTypes } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
-import type DrawCard from '../../../drawcard';
 
 export default class FortressAtTheSeaOfFire extends StrongholdCard {
     static id = 'fortress-at-the-sea-of-fire';
 
     setupCardAbilities() {
-        this.wouldInterrupt({
-            title: 'Cancel triggered ability',
-            when: {
-                onInitiateAbilityEffects: (event, context) =>
-                    (event.context.ability as BaseAction).abilityType === 'action' &&
-                    context.player.anyCardsInPlay((card: DrawCard) => card.isDefending())
-            },
-            cost: [AbilityDsl.costs.bowSelf(), AbilityDsl.costs.payFate(1)],
-            effect: "cancel the effects of {1}'s ability",
-            effectArgs: (context) => context.event.card,
-            gameAction: AbilityDsl.actions.cancel()
+        this.reaction({
+            title: 'Bow a character',
+            cost: AbilityDsl.costs.bowSelf(),
+            when: { afterConflict: (event, context) => context.player.isDefendingPlayer() && event.conflict.winner === context.player },
+            target: {
+                cardType: CardTypes.Character,
+                cardCondition: card => !card.isParticipating(),
+                gameAction: [AbilityDsl.actions.bow(), AbilityDsl.actions.ready()]
+            }
         });
     }
 }

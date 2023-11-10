@@ -8,20 +8,21 @@ export default class HidaHonoka extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Restore a province',
-            condition: (context) => !context.player.stronghold.hasToken(TokenTypes.Honor),
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
                 cardCondition: (card) => card.isBroken,
                 gameAction: AbilityDsl.actions.restoreProvince()
             },
-            gameAction: AbilityDsl.actions.playerLastingEffect({
-                targetController: Players.Self,
-                duration: Durations.Custom,
-                effect: AbilityDsl.effects.playerCannot({
-                    cannot: 'restoreProvince'
+            then: {
+                gameAction: AbilityDsl.actions.playerLastingEffect({
+                    targetController: Players.Self,
+                    duration: Durations.Persistent,
+                    effect: AbilityDsl.effects.playerCannot({
+                        cannot: 'restoreProvince'
+                    })
                 })
-            })
+            }
         });
     }
 }
