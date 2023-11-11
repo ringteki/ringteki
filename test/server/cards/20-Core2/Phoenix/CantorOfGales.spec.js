@@ -26,7 +26,7 @@ describe('Cantor of Gales', function () {
             expect(this.game.currentConflict.attackerSkill).toBe(1);
         });
 
-        it('contributes base skill from home with conroller has honorale char in conflict', function () {
+        it('contributes base skill from home when controller has honorale char in conflict', function () {
             this.initiateConflict({
                 attackers: [this.adeptHonorable],
                 defenders: [],
@@ -35,7 +35,18 @@ describe('Cantor of Gales', function () {
             expect(this.game.currentConflict.attackerSkill).toBe(6);
         });
 
-        it('contributes base skill twice in the conflict if conroller has honorale char in conflict', function () {
+        it('contributes base skill from home when controller has honorale char in conflict, even while bowed', function () {
+            this.cantor.bow();
+
+            this.initiateConflict({
+                attackers: [this.adeptHonorable],
+                defenders: [],
+                type: 'military'
+            });
+            expect(this.game.currentConflict.attackerSkill).toBe(6);
+        });
+
+        it('contributes base skill twice in the conflict when controller has honorale char in conflict', function () {
             this.initiateConflict({
                 attackers: [this.cantor, this.adeptHonorable],
                 defenders: [],
