@@ -86,6 +86,7 @@ describe('Asako Kousuke', function () {
                 "Asako Kousuke's wisdom and wit clarifies what it means to be honored. For this conflict, Solemn Scholar is treated as honored"
             );
         });
+
         it('changes status to dishonorable', function () {
             this.player1.clickCard(this.kousukeHonorable);
             this.player1.clickCard(this.adeptHonorable);
@@ -96,6 +97,7 @@ describe('Asako Kousuke', function () {
                 "Asako Kousuke's wisdom and wit clarifies what it means to be dishonored. For this conflict, Adept of the Waves is treated as dishonored"
             );
         });
+
         it('changes status to tainted', function () {
             this.player1.clickCard(this.kousukeHonorable);
             this.player1.clickCard(this.adeptHonorable);
@@ -105,6 +107,23 @@ describe('Asako Kousuke', function () {
             expect(this.getChatLogs(5)).toContain(
                 "Asako Kousuke's wisdom and wit clarifies what it means to be tainted. For this conflict, Adept of the Waves is treated as tainted"
             );
+        });
+
+        it('status restored after the conflict', function () {
+            this.player1.clickCard(this.kousukeHonorable);
+            this.player1.clickCard(this.adeptHonorable);
+            this.player1.clickPrompt('Turn it into Tainted');
+            expect(this.adeptHonorable.isHonored).toBe(false);
+            expect(this.adeptHonorable.isTainted).toBe(true);
+            expect(this.getChatLogs(5)).toContain(
+                "Asako Kousuke's wisdom and wit clarifies what it means to be tainted. For this conflict, Adept of the Waves is treated as tainted"
+            );
+
+            this.noMoreActions();
+            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('Gain 2 honor');
+            expect(this.adeptHonorable.isHonored).toBe(true);
+            expect(this.adeptHonorable.isTainted).toBe(false);
         });
     });
 });
