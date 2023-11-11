@@ -31,7 +31,7 @@ export default class JadeInfusedArrows extends DrawCard {
             (card: DrawCard) =>
                 card.getType() === CardTypes.Character &&
                 card.isParticipating() &&
-                (card.isTainted || card.hasSomeTrait('shadowlands', 'haunted'))
+                (card.isTainted || card.hasTrait('shadowlands'))
         );
     }
 

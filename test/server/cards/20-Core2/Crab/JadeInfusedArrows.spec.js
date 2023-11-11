@@ -37,7 +37,7 @@ describe('Jade Infused Arrows', function () {
             this.player2.clickCard(this.arrows);
             expect(this.borderlands.getMilitarySkill()).toBe(borderlandsMilInit + 2);
             expect(this.getChatLogs(5)).toContain(
-                'player2 uses Jade Infused Arrows, spending 1 fate to give +2military to Borderlands Defender'
+                'player2 uses Jade-Infused Arrows, spending 1 fate to give +2military to Borderlands Defender'
             );
         });
 
@@ -52,7 +52,7 @@ describe('Jade Infused Arrows', function () {
             this.player2.clickCard(this.arrows);
             expect(this.borderlands.getMilitarySkill()).toBe(borderlandsMilInit + 4);
             expect(this.getChatLogs(5)).toContain(
-                'player2 uses Jade Infused Arrows, spending 1 fate to give +4military to Borderlands Defender - the jade is potent against the spawns of jigoku!'
+                'player2 uses Jade-Infused Arrows, spending 1 fate to give +4military to Borderlands Defender - the jade is potent against the spawns of jigoku!'
             );
         });
 
@@ -67,7 +67,7 @@ describe('Jade Infused Arrows', function () {
             this.player2.clickCard(this.arrows);
             expect(this.borderlands.getMilitarySkill()).toBe(borderlandsMilInit + 4);
             expect(this.getChatLogs(5)).toContain(
-                'player2 uses Jade Infused Arrows, spending 1 fate to give +4military to Borderlands Defender - the jade is potent against the spawns of jigoku!'
+                'player2 uses Jade-Infused Arrows, spending 1 fate to give +4military to Borderlands Defender - the jade is potent against the spawns of jigoku!'
             );
         });
     });
