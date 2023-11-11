@@ -1,4 +1,4 @@
-import { CardTypes, Players } from '../../../Constants';
+import { CardTypes, Players, Durations } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 
@@ -14,10 +14,15 @@ export default class ShatteredBladePass extends ProvinceCard {
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.ready(),
-                    AbilityDsl.actions.moveToConflict()
+                    AbilityDsl.actions.moveToConflict(),
+                    AbilityDsl.actions.playerLastingEffect(context => ({
+                        targetController: context.player,
+                        duration: Durations.UntilPassPriority,
+                        effect: AbilityDsl.effects.additionalAction()
+                    }))
                 ])
             },
-            effect: 'ready {0} and move it into the conflict'
+            effect: 'ready {0} and move it into the conflict, taking an additional action'
         });
     }
 }

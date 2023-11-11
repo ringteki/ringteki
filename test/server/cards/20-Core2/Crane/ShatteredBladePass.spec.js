@@ -21,7 +21,7 @@ describe('Shattered Blade Pass', function () {
             this.shatteredBladePass = this.player2.findCardByName('shattered-blade-pass', 'province 1');
         });
 
-        it('if no defenders, readies & moves a character you control to the conflict', function () {
+        it('if no defenders, readies & moves a character you control to the conflict and give you another action', function () {
             this.yokuni.bow();
 
             this.noMoreActions();
@@ -35,6 +35,7 @@ describe('Shattered Blade Pass', function () {
             expect(this.yokuni.bowed).toBe(true);
             expect(this.game.currentConflict.defenders).not.toContain(this.yokuni);
 
+            expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.shatteredBladePass);
             expect(this.player2).not.toBeAbleToSelect(this.aggressiveMoto);
             expect(this.player2).toBeAbleToSelect(this.initiate);
@@ -45,8 +46,9 @@ describe('Shattered Blade Pass', function () {
             expect(this.yokuni.bowed).toBe(false);
             expect(this.game.currentConflict.defenders).toContain(this.yokuni);
             expect(this.getChatLogs(3)).toContain(
-                'player2 uses Shattered Blade Pass to ready Togashi Yokuni and move it into the conflict'
+                'player2 uses Shattered Blade Pass to ready Togashi Yokuni and move it into the conflict, taking an additional action'
             );
+            expect(this.player2).toHavePrompt('Conflict Action Window');
         });
 
         it('if defenders, should not trigger', function () {
