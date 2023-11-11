@@ -1,15 +1,16 @@
-const DrawCard = require('../drawcard.js');
-const { Locations, CardTypes } = require('../Constants');
+import { CardTypes, Locations } from '../Constants';
+import DrawCard from '../drawcard';
+import type Player from '../player';
 
-class AkodoRecruit extends DrawCard {
-    constructor(facedownCard) {
+export class AshigaruRecruit extends DrawCard {
+    constructor(public facedownCard: DrawCard) {
         super(facedownCard.owner, {
             clan: 'lion',
             cost: null,
             glory: 1,
-            id: 'akodo-recruit',
+            id: 'ashigaru-recruit',
             military: 1,
-            name: 'Akodo Recruit',
+            name: 'Ashigaru Recruit',
             political: 0,
             side: 'dynasty',
             text: '',
@@ -17,7 +18,6 @@ class AkodoRecruit extends DrawCard {
             traits: ['peasant'],
             is_unique: false
         });
-        this.facedownCard = facedownCard;
     }
 
     leavesPlay() {
@@ -29,14 +29,12 @@ class AkodoRecruit extends DrawCard {
         super.leavesPlay();
     }
 
-    getSummary(activePlayer, hideWhenFaceup) {
-        let summary = super.getSummary(activePlayer, hideWhenFaceup);
-        let tokenProps = { isToken: true };
-        if (activePlayer === this.controller) {
-            tokenProps.id = this.facedownCard.cardData.id;
-        }
+    getSummary(activePlayer: Player, hideWhenFaceup: boolean) {
+        const summary = super.getSummary(activePlayer, hideWhenFaceup);
+        const tokenProps =
+            activePlayer === this.controller
+                ? { id: this.facedownCard.cardData.id as string, isToken: true }
+                : { isToken: true };
         return Object.assign(summary, tokenProps);
     }
 }
-
-module.exports = AkodoRecruit;
