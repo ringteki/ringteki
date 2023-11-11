@@ -48,7 +48,7 @@ describe('Assemble the Council', function () {
             this.player1.clickPrompt('Done');
             expect(this.meditationsOnOrthodoxy.location).toBe('conflict deck');
             expect(this.getChatLogs(5)).toContain(
-                'player1 plays Assemble the Council to ready Adept of the Waves and Solemn Scholar'
+                'player1 plays Meditations on Orthodoxy to ready Adept of the Waves and Solemn Scholar'
             );
         });
     });
