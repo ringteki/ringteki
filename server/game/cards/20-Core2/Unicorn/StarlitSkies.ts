@@ -1,5 +1,25 @@
+import type AbilityContext from '../../../AbilityContext';
 import { Locations, TargetModes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
+
+const choice = {
+    'Your Dynasty Deck': {
+        condition: (context: AbilityContext) => (context.player?.dynastyDeck.size() ?? 0) > 0,
+        cards: (context: AbilityContext): Array<DrawCard> => context.player.dynastyDeck.first(3)
+    },
+    'Your Conflict Deck': {
+        condition: (context: AbilityContext) => (context.player?.conflictDeck.size() ?? 0) > 0,
+        cards: (context: AbilityContext): Array<DrawCard> => context.player.conflictDeck.first(3)
+    },
+    "Opponent's Dynasty Deck": {
+        condition: (context: AbilityContext) => (context.player?.opponent?.dynastyDeck.size() ?? 0) > 0,
+        cards: (context: AbilityContext): Array<DrawCard> => context.player.opponent.dynastyDeck.first(3)
+    },
+    "Opponent's Conflict Deck": {
+        condition: (context: AbilityContext) => (context.player?.opponent?.conflictDeck.size() ?? 0) > 0,
+        cards: (context: AbilityContext): Array<DrawCard> => context.player.opponent.conflictDeck.first(3)
+    }
+} as const;
 
 export default class StarlitSkies extends DrawCard {
     static id = 'starlit-skies';
@@ -10,19 +30,12 @@ export default class StarlitSkies extends DrawCard {
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Choose which deck to look at:',
-                choices: {
-                    'Dynasty Deck': (context) => context.player && context.player.dynastyDeck.size() > 0,
-                    'Conflict Deck': (context) => context.player && context.player.conflictDeck.size() > 0
-                }
+                choices: Object.fromEntries(Object.entries(choice).map(([name, { condition }]) => [name, condition]))
             },
             effect: "look at the top 3 cards of {1}'s {2}",
             effectArgs: (context) => [context.player, context.select.toLowerCase()],
             handler: (context) => {
-                const topThree: DrawCard[] =
-                    context.select === 'Dynasty Deck'
-                        ? context.player.dynastyDeck.first(3)
-                        : context.player.conflictDeck.first(3);
-
+                const topThree = choice[context.select as keyof typeof choice].cards(context);
                 const messages = ['{0} places a card on the bottom of the deck', '{0} chooses to discard {1}'];
                 const destinations = [
                     topThree[0].isDynasty ? 'dynasty deck bottom' : 'conflict deck bottom',
