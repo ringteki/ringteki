@@ -1,19 +1,28 @@
-describe('Kakita Taneharu', function() {
-    integration(function() {
-        describe('Constant ability', function() {
-            beforeEach(function() {
+describe('Kakita Taneharu', function () {
+    integration(function () {
+        describe('Constant ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         inPlay: ['brash-samurai', 'kakita-taneharu'],
-                        conflictDiscard: ['assassination', 'let-go', 'a-new-name', 'voice-of-honor', 'ornate-fan', 'seal-of-the-crane', 'fine-katana', 'ready-for-battle', 'defend-your-honor'],
+                        conflictDiscard: [
+                            'assassination',
+                            'let-go',
+                            'a-new-name',
+                            'voice-of-honor',
+                            'ornate-fan',
+                            'seal-of-the-crane',
+                            'fine-katana',
+                            'ready-for-battle',
+                            'defend-your-honor'
+                        ],
                         hand: ['way-of-the-crane', 'charge']
                     },
                     player2: {
                         inPlay: ['solemn-scholar'],
                         hand: ['mirumoto-s-fury', 'cloud-the-mind', 'mark-of-shame', 'i-can-swim']
                     }
-
                 });
 
                 this.player1.player.showBid = 1;
@@ -50,7 +59,7 @@ describe('Kakita Taneharu', function() {
                 });
             });
 
-            it('should put a card underneath himself', function() {
+            it('should put a card underneath himself', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 expect(this.player1).toHavePromptButton('Voice of Honor');
@@ -62,7 +71,7 @@ describe('Kakita Taneharu', function() {
                 expect(this.getChatLogs(5)).toContain('player1 puts a card underneath Kakita Taneharu');
             });
 
-            it('should allow you to play cards from under Uji', function() {
+            it('should allow you to play cards from under Uji', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Fine Katana');
@@ -72,11 +81,11 @@ describe('Kakita Taneharu', function() {
                 this.player1.clickCard(this.katana);
                 expect(this.player1).toHavePrompt('Fine Katana');
                 this.player1.clickCard(this.uji);
-                expect(this.uji.attachments.toArray()).toContain(this.katana);
+                expect(this.uji.attachments).toContain(this.katana);
                 expect(this.player1.player.additionalPiles[this.uji.uuid].cards).not.toContain(this.katana);
             });
 
-            it('should allow you to play cards from under Uji - reactions', function() {
+            it('should allow you to play cards from under Uji - reactions', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
@@ -88,10 +97,12 @@ describe('Kakita Taneharu', function() {
                 expect(this.player1).toBeAbleToSelect(this.readyForBattle);
                 this.player1.clickCard(this.readyForBattle);
                 expect(this.uji.bowed).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 plays Ready for Battle from their cards set aside by Kakita Taneharu');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Ready for Battle from their cards set aside by Kakita Taneharu'
+                );
             });
 
-            it('should allow you to play cards from under Uji - interrupts', function() {
+            it('should allow you to play cards from under Uji - interrupts', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
@@ -106,10 +117,12 @@ describe('Kakita Taneharu', function() {
                 expect(this.player1).toBeAbleToSelect(this.voice);
                 this.player1.clickCard(this.voice);
                 expect(this.uji.bowed).toBe(false);
-                expect(this.getChatLogs(10)).toContain('player1 plays Voice of Honor from their cards set aside by Kakita Taneharu');
+                expect(this.getChatLogs(10)).toContain(
+                    'player1 plays Voice of Honor from their cards set aside by Kakita Taneharu'
+                );
             });
 
-            it('should not allow you to play cards from under Uji if he\'s blanked', function() {
+            it('should not allow you to play cards from under Uji if he\'s blanked', function () {
                 this.game.rings.earth.claimRing(this.player2);
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
@@ -117,7 +130,7 @@ describe('Kakita Taneharu', function() {
                 this.player2.playAttachment(this.cloud, this.uji);
                 this.player1.clickCard(this.way);
                 this.player1.clickCard(this.uji);
-                expect(this.uji.attachments.toArray()).toContain(this.cloud);
+                expect(this.uji.attachments).toContain(this.cloud);
                 this.player2.clickCard(this.fury);
                 this.player2.clickCard(this.uji);
                 expect(this.uji.bowed).toBe(true);
@@ -125,7 +138,7 @@ describe('Kakita Taneharu', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.voice);
             });
 
-            it('should remove cards under Uji from the game if he leaves play', function() {
+            it('should remove cards under Uji from the game if he leaves play', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Ready for Battle');
@@ -147,10 +160,12 @@ describe('Kakita Taneharu', function() {
                 expect(this.readyForBattle.location).toBe('removed from game');
                 expect(this.readyForBattle.anyEffect('hideWhenFaceUp')).toBe(false);
 
-                expect(this.getChatLogs(10)).toContain('Ready for Battle is removed from the game due to Kakita Taneharu leaving play');
+                expect(this.getChatLogs(10)).toContain(
+                    'Ready for Battle is removed from the game due to Kakita Taneharu leaving play'
+                );
             });
 
-            it('should not allow opponent to play cards', function() {
+            it('should not allow opponent to play cards', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.uji);
                 this.player1.clickPrompt('Fine Katana');
@@ -164,7 +179,7 @@ describe('Kakita Taneharu', function() {
                 expect(this.player2).not.toHavePrompt('Fine Katana');
             });
 
-            it('should not work outside of a conflict', function() {
+            it('should not work outside of a conflict', function () {
                 this.noMoreActions();
                 this.player1.clickPrompt('No');
                 this.player1.clickPrompt('Don\'t resolve');

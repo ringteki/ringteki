@@ -1,11 +1,11 @@
-import AbilityContext = require('../../AbilityContext');
-import { CardTypes, Locations, Players } from '../../Constants';
+import type AbilityContext from '../../AbilityContext';
+import { Locations, Players, CardTypes } from '../../Constants';
 import { PlayCharacterAsIfFromHand } from '../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHand } from '../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
-import ProvinceCard = require('../../provincecard');
+import type { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
+import DrawCard from '../../drawcard';
 
 export default class ThirdWhiskerWarrens extends DrawCard {
     static id = 'third-whisker-warrens';

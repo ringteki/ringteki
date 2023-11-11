@@ -3,8 +3,19 @@ const EffectSource = require('./EffectSource');
 const { EffectNames } = require('./Constants');
 
 class Ring extends EffectSource {
+    menu = [
+        { command: 'flip', text: 'Flip' },
+        { command: 'claim', text: 'Claim' },
+        { command: 'contested', text: 'Switch this ring to contested' },
+        { command: 'unclaimed', text: 'Set to unclaimed' },
+        { command: 'addfate', text: 'Add 1 fate' },
+        { command: 'remfate', text: 'Remove 1 fate' },
+        { command: 'takefate', text: 'Take all fate' },
+        { command: 'conflict', text: 'Initiate Conflict' }
+    ];
+
     constructor(game, element, type) {
-        super(game, element.replace(/\b\w/g, l => l.toUpperCase()) + ' Ring');
+        super(game, element.replace(/\b\w/g, (l) => l.toUpperCase()) + ' Ring');
         this.printedType = 'ring';
         this.claimed = false;
         this.claimedBy = '';
@@ -14,25 +25,16 @@ class Ring extends EffectSource {
         this.fate = 0;
         this.attachments = [];
         this.removedFromGame = false;
-
-        this.menu = _([
-            { command: 'flip', text: 'Flip' },
-            { command: 'claim', text: 'Claim' },
-            { command: 'contested', text: 'Switch this ring to contested' },
-            { command: 'unclaimed', text: 'Set to unclaimed' },
-            { command: 'addfate', text: 'Add 1 fate' },
-            { command: 'remfate', text: 'Remove 1 fate' },
-            { command: 'takefate', text: 'Take all fate' },
-            { command: 'conflict', text: 'Initiate Conflict' }
-        ]);
     }
 
     isConsideredClaimed(player = null) {
-        let check = player => (this.getEffects(EffectNames.ConsiderRingAsClaimed).some(match => match(player)) || this.claimedBy === player.name);
-        if(player) {
+        let check = (player) =>
+            this.getEffects(EffectNames.ConsiderRingAsClaimed).some((match) => match(player)) ||
+            this.claimedBy === player.name;
+        if (player) {
             return check(player);
         }
-        return this.game.getPlayers().some(player => check(player));
+        return this.game.getPlayers().some((player) => check(player));
     }
 
     isConflictType(type) {
@@ -40,7 +42,11 @@ class Ring extends EffectSource {
     }
 
     canDeclare(player) {
-        return !this.getEffects(EffectNames.CannotDeclareRing).some(match => match(player)) && !this.claimed && !this.removedFromGame;
+        return (
+            !this.getEffects(EffectNames.CannotDeclareRing).some((match) => match(player)) &&
+            !this.claimed &&
+            !this.removedFromGame
+        );
     }
 
     isUnclaimed() {
@@ -60,7 +66,7 @@ class Ring extends EffectSource {
     }
 
     flipConflictType() {
-        if(this.conflictType === 'military') {
+        if (this.conflictType === 'military') {
             this.conflictType = 'political';
         } else {
             this.conflictType = 'military';
@@ -69,14 +75,19 @@ class Ring extends EffectSource {
 
     getElements() {
         let elements = this.getEffects(EffectNames.AddElement).concat([this.element]);
-        if(this.game.isDuringConflict()) {
-            if(this.isContested()) {
-                elements = elements.concat(...this.game.currentConflict.getAttackers().map(card =>
-                    card.attachments.reduce(
-                        (array, attachment) => array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
-                        card.getEffects(EffectNames.AddElementAsAttacker)
-                    )
-                ));
+        if (this.game.isDuringConflict()) {
+            if (this.isContested()) {
+                elements = elements.concat(
+                    ...this.game.currentConflict
+                        .getAttackers()
+                        .map((card) =>
+                            card.attachments.reduce(
+                                (array, attachment) =>
+                                    array.concat(attachment.getEffects(EffectNames.AddElementAsAttacker)),
+                                card.getEffects(EffectNames.AddElementAsAttacker)
+                            )
+                        )
+                );
             }
         }
         return _.uniq(_.flatten(elements));
@@ -91,16 +102,11 @@ class Ring extends EffectSource {
     }
 
     getMenu() {
-        var menu = [];
-
-        if(this.menu.isEmpty() || !this.game.manualMode) {
+        if (this.menu.length === 0 || !this.game.manualMode) {
             return undefined;
         }
 
-        menu.push({ command: 'click', text: 'Select Ring' });
-        menu = menu.concat(this.menu.value());
-
-        return menu;
+        return [{ command: 'click', text: 'Select Ring' }, ...this.menu];
     }
 
     /**
@@ -134,10 +140,9 @@ class Ring extends EffectSource {
     }
 
     getState(activePlayer) {
-
         let selectionState = {};
 
-        if(activePlayer) {
+        if (activePlayer) {
             selectionState = activePlayer.getRingSelectionState(this);
         }
 
@@ -152,7 +157,7 @@ class Ring extends EffectSource {
             menu: this.getMenu(),
             removedFromGame: this.removedFromGame,
             attachments: this.attachments.length
-                ? this.attachments.map(attachment => attachment.getSummary(activePlayer, false))
+                ? this.attachments.map((attachment) => attachment.getSummary(activePlayer, false))
                 : this.attachments
         };
 
@@ -164,7 +169,7 @@ class Ring extends EffectSource {
     }
 
     removeAttachment(card) {
-        this.attachments = this.attachments.filter(attachment => attachment.uuid !== card.uuid);
+        this.attachments = this.attachments.filter((attachment) => attachment.uuid !== card.uuid);
     }
 }
 

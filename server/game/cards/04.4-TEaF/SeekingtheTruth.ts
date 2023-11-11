@@ -1,6 +1,6 @@
-import { CardTypes, Locations } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import ProvinceCard = require('../../provincecard');
+import { Locations, CardTypes } from '../../Constants';
+import { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
 
 export default class SeekingtheTruth extends ProvinceCard {
     static id = 'seeking-the-truth';

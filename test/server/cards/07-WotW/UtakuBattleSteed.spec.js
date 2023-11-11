@@ -1,11 +1,11 @@
-describe('Utaku Battle Steed', function() {
-    integration(function() {
-        describe('Utaku Battle Steed\'s ability', function() {
-            beforeEach(function() {
+describe('Utaku Battle Steed', function () {
+    integration(function () {
+        describe('Utaku Battle Steed\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['shiba-tsukune','utaku-yumino','iuchi-shahai'],
+                        inPlay: ['shiba-tsukune', 'utaku-yumino', 'iuchi-shahai'],
                         hand: ['utaku-battle-steed']
                     },
                     player2: {
@@ -33,7 +33,7 @@ describe('Utaku Battle Steed', function() {
                 });
             });
 
-            it('should only attach to a unicorn character', function() {
+            it('should only attach to a unicorn character', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.battleSteed);
                 expect(this.player1).toBeAbleToSelect(this.yumino);
@@ -41,17 +41,17 @@ describe('Utaku Battle Steed', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.tsukune);
                 expect(this.player1).not.toBeAbleToSelect(this.warrior);
                 this.player1.clickCard(this.yumino);
-                expect(this.yumino.attachments.toArray()).toContain(this.battleSteed);
+                expect(this.yumino.attachments).toContain(this.battleSteed);
             });
 
-            it('should give attached character the cavalry trait', function() {
+            it('should give attached character the cavalry trait', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.battleSteed);
                 this.player1.clickCard(this.shahai);
                 expect(this.shahai.getTraits()).toContain('cavalry');
             });
 
-            it('should trigger after winning a military conflict', function() {
+            it('should trigger after winning a military conflict', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.battleSteed);
                 this.player1.clickCard(this.yumino);
@@ -61,7 +61,7 @@ describe('Utaku Battle Steed', function() {
                 expect(this.player1).toBeAbleToSelect(this.battleSteed);
             });
 
-            it('should honor attached character after winning a military conflict', function() {
+            it('should honor attached character after winning a military conflict', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.battleSteed);
                 this.player1.clickCard(this.yumino);
@@ -71,7 +71,7 @@ describe('Utaku Battle Steed', function() {
                 expect(this.yumino.isHonored).toBe(true);
             });
 
-            it('should not trigger after winning a political conflict', function() {
+            it('should not trigger after winning a political conflict', function () {
                 this.player2.clickCard(this.kuroiMori);
                 this.player2.clickPrompt('Switch the conflict type');
                 this.player1.clickCard(this.battleSteed);
@@ -81,7 +81,7 @@ describe('Utaku Battle Steed', function() {
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
             });
 
-            it('should not trigger after losing a military conflict', function() {
+            it('should not trigger after losing a military conflict', function () {
                 this.player2.clickCard(this.favorableGround);
                 this.player2.clickCard(this.warrior);
                 this.player1.clickCard(this.battleSteed);

@@ -1,5 +1,5 @@
-describe('Master Tactician', function() {
-    integration(function() {
+describe('Master Tactician', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
@@ -34,7 +34,7 @@ describe('Master Tactician', function() {
             this.player1.moveCard(this.tactical, 'conflict deck');
         });
 
-        describe('Looking at the top card', function() {
+        describe('Looking at the top card', function () {
             it('should let you look at the top card while a battlefield is in play and this is participating', function () {
                 this.player1.clickCard(this.ambush);
                 this.player1.clickCard(this.province);
@@ -93,7 +93,7 @@ describe('Master Tactician', function() {
             });
         });
 
-        describe('Playing the top card', function() {
+        describe('Playing the top card', function () {
             it('should let you play the top card while a battlefield is in play and this is participating', function () {
                 this.player1.clickCard(this.ambush);
                 this.player1.clickCard(this.province);
@@ -107,7 +107,7 @@ describe('Master Tactician', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.tactician.attachments).toContain(this.tactical);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
@@ -122,7 +122,7 @@ describe('Master Tactician', function() {
                 });
                 this.player2.clickCard(this.tactical);
                 this.player2.clickCard(this.tacticianp2);
-                expect(this.tacticianp2.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.tacticianp2.attachments).not.toContain(this.tactical);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
@@ -137,7 +137,7 @@ describe('Master Tactician', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.tactician.attachments).not.toContain(this.tactical);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
@@ -154,12 +154,12 @@ describe('Master Tactician', function() {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).not.toContain(this.tactical);
+                expect(this.tactician.attachments).not.toContain(this.tactical);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
         });
 
-        describe('Max 3 cards', function() {
+        describe('Max 3 cards', function () {
             it('should let you play three cards, but look at the fourth', function () {
                 this.player1.clickCard(this.ambush);
                 this.player1.clickCard(this.province);
@@ -176,7 +176,7 @@ describe('Master Tactician', function() {
 
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.tactician.attachments).toContain(this.tactical);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -223,7 +223,7 @@ describe('Master Tactician', function() {
 
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.tactician.attachments).toContain(this.tactical);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -260,7 +260,7 @@ describe('Master Tactician', function() {
 
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.tactician.attachments).toContain(this.tactical);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -306,7 +306,7 @@ describe('Master Tactician', function() {
 
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.tactician);
-                expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+                expect(this.tactician.attachments).toContain(this.tactical);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -349,23 +349,29 @@ describe('Master Tactician', function() {
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.tactician);
             expect(this.getChatLogs(5)).not.toContain('player1 plays Tactical Ingenuity from their conflict deck');
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)'
+            );
 
             this.player2.pass();
 
             this.player1.clickCard(this.soul);
             this.player1.clickCard(this.tactician);
             expect(this.getChatLogs(5)).toContain('player1 plays Soul Beyond Reproach from their conflict deck');
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)'
+            );
 
             this.player2.clickCard(this.fury);
             this.player2.clickCard(this.tactician);
             this.player1.clickCard(this.voice);
             expect(this.getChatLogs(5)).toContain('player1 plays Voice of Honor from their conflict deck');
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)'
+            );
         });
 
-        it('Should not let you see the card until after you commit to the conflict', function() {
+        it('Should not let you see the card until after you commit to the conflict', function () {
             this.player1.clickCard(this.ambush);
             this.player1.clickCard(this.province);
             this.noMoreActions();
@@ -376,16 +382,23 @@ describe('Master Tactician', function() {
     });
 });
 
-
-describe('Two Master Tacticians', function() {
-    integration(function() {
+describe('Two Master Tacticians', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['master-tactician', 'master-tactician'],
                     hand: ['prepared-ambush', 'fine-katana'],
-                    conflictDiscard: ['voice-of-honor', 'soul-beyond-reproach', 'tactical-ingenuity', 'ornate-fan', 'seal-of-the-crane', 'seal-of-the-lion', 'seal-of-the-dragon']
+                    conflictDiscard: [
+                        'voice-of-honor',
+                        'soul-beyond-reproach',
+                        'tactical-ingenuity',
+                        'ornate-fan',
+                        'seal-of-the-crane',
+                        'seal-of-the-lion',
+                        'seal-of-the-dragon'
+                    ]
                 },
                 player2: {
                     hand: ['mirumoto-s-fury']
@@ -437,7 +450,7 @@ describe('Two Master Tacticians', function() {
             expect(this.player1).toHavePrompt('Order Simultaneous effects');
             this.player1.clickPromptButtonIndex(0);
 
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
             expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
             expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -469,10 +482,10 @@ describe('Two Master Tacticians', function() {
             this.player1.clickCard(this.lion);
             this.player1.clickCard(this.tactician2);
 
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
-            expect(this.tactician2.attachments.toArray()).toContain(this.fan);
-            expect(this.tactician2.attachments.toArray()).toContain(this.crane);
-            expect(this.tactician2.attachments.toArray()).toContain(this.lion);
+            expect(this.tactician.attachments).toContain(this.tactical);
+            expect(this.tactician2.attachments).toContain(this.fan);
+            expect(this.tactician2.attachments).toContain(this.crane);
+            expect(this.tactician2.attachments).toContain(this.lion);
         });
 
         it('should let first player pick which tactician gets credited the card - mixing it up', function () {
@@ -483,7 +496,7 @@ describe('Two Master Tacticians', function() {
             expect(this.player1).toHavePrompt('Order Simultaneous effects');
             this.player1.clickPromptButtonIndex(0);
 
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
             this.player2.pass();
             this.player1.clickCard(this.soul);
@@ -519,7 +532,7 @@ describe('Two Master Tacticians', function() {
             expect(this.player1).toHavePrompt('Order Simultaneous effects');
             this.player1.clickPromptButtonIndex(0);
 
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
             this.player2.pass();
             this.player1.clickCard(this.soul);
@@ -558,7 +571,7 @@ describe('Two Master Tacticians', function() {
 
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.tactician);
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
             this.player2.pass();
             this.player1.clickCard(this.soul);
@@ -574,15 +587,15 @@ describe('Two Master Tacticians', function() {
 
             this.player1.clickCard(this.fan);
             this.player1.clickCard(this.tactician2);
-            expect(this.tactician2.attachments.toArray()).toContain(this.fan);
+            expect(this.tactician2.attachments).toContain(this.fan);
             this.player2.pass();
             this.player1.clickCard(this.crane);
             this.player1.clickCard(this.tactician2);
-            expect(this.tactician2.attachments.toArray()).toContain(this.crane);
+            expect(this.tactician2.attachments).toContain(this.crane);
             this.player2.pass();
             this.player1.clickCard(this.lion);
             this.player1.clickCard(this.tactician2);
-            expect(this.tactician2.attachments.toArray()).toContain(this.lion);
+            expect(this.tactician2.attachments).toContain(this.lion);
 
             this.player2.pass();
             expect(this.player1).toHavePrompt('Conflict Action Window');
@@ -592,8 +605,8 @@ describe('Two Master Tacticians', function() {
     });
 });
 
-describe('Master Tactician - Edge Cases', function() {
-    integration(function() {
+describe('Master Tactician - Edge Cases', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
@@ -644,15 +657,15 @@ describe('Master Tactician - Edge Cases', function() {
 
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.tactician);
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
             expect(this.player1.fate).toBe(fate - 1); //tetsuko tax
         });
     });
 });
 
-describe('Master Tactician - Pillow Book', function() {
-    integration(function() {
+describe('Master Tactician - Pillow Book', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
@@ -724,15 +737,17 @@ describe('Master Tactician - Pillow Book', function() {
 
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.tactician);
-            expect(this.tactician.attachments.toArray()).toContain(this.tactical);
+            expect(this.tactician.attachments).toContain(this.tactical);
 
-            expect(this.getChatLogs(3)).not.toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
+            expect(this.getChatLogs(3)).not.toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)'
+            );
         });
     });
 });
 
-describe('Master Tactician - Copying', function() {
-    integration(function() {
+describe('Master Tactician - Copying', function () {
+    integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
@@ -765,7 +780,7 @@ describe('Master Tactician - Copying', function() {
             this.player1.moveCard(this.tactical, 'conflict deck');
         });
 
-        describe('Max 3 cards', function() {
+        describe('Max 3 cards', function () {
             it('should let you play three cards, but look at the fourth', function () {
                 this.player1.clickCard(this.ambush);
                 this.player1.clickCard(this.province);
@@ -789,7 +804,7 @@ describe('Master Tactician - Copying', function() {
 
                 this.player1.clickCard(this.tactical);
                 this.player1.clickCard(this.actor);
-                expect(this.actor.attachments.toArray()).toContain(this.tactical);
+                expect(this.actor.attachments).toContain(this.tactical);
 
                 expect(this.player1.player.isTopConflictCardShown(this.player1.player)).toBe(true);
                 expect(this.player1.player.isTopConflictCardShown(this.player2.player)).toBe(false);
@@ -835,18 +850,24 @@ describe('Master Tactician - Copying', function() {
 
             this.player1.clickCard(this.tactical);
             this.player1.clickCard(this.actor);
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (2 uses remaining)'
+            );
 
             this.player2.pass();
 
             this.player1.clickCard(this.soul);
             this.player1.clickCard(this.actor);
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (1 use remaining)'
+            );
 
             this.player2.clickCard(this.fury);
             this.player2.clickCard(this.actor);
             this.player1.clickCard(this.voice);
-            expect(this.getChatLogs(3)).toContain('player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 plays a card from their conflict deck due to the ability of Master Tactician (0 uses remaining)'
+            );
         });
     });
 });

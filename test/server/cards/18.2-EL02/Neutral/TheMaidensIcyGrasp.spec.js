@@ -1,11 +1,25 @@
-describe('The Maidens Icy Grasp', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('The Maidens Icy Grasp', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['seeker-of-knowledge', 'fushicho', 'tainted-hero', 'ikoma-ujiaki', 'moto-beastmaster', 'miya-mystic'],
-                    hand: ['charge', 'forebearer-s-echoes', 'young-harrier', 'shosuro-miyako-2', 'the-maiden-s-icy-grasp', 'the-maiden-s-icy-grasp'],
+                    inPlay: [
+                        'seeker-of-knowledge',
+                        'fushicho',
+                        'tainted-hero',
+                        'ikoma-ujiaki',
+                        'moto-beastmaster',
+                        'miya-mystic'
+                    ],
+                    hand: [
+                        'charge',
+                        'forebearer-s-echoes',
+                        'young-harrier',
+                        'shosuro-miyako-2',
+                        'the-maiden-s-icy-grasp',
+                        'the-maiden-s-icy-grasp'
+                    ],
                     dynastyDiscard: ['isawa-ujina', 'akodo-toturi', 'daidoji-kageyu']
                 },
                 player2: {
@@ -49,7 +63,7 @@ describe('The Maidens Icy Grasp', function() {
             this.player1.playAttachment(this.grasp2, this.mystic);
         });
 
-        it('should trigger when attached character is declared as an attacker', function() {
+        it('should trigger when attached character is declared as an attacker', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -61,7 +75,7 @@ describe('The Maidens Icy Grasp', function() {
             expect(this.player1).toBeAbleToSelect(this.beastmaster);
         });
 
-        it('should not trigger when attached character is not declared as an attacker', function() {
+        it('should not trigger when attached character is not declared as an attacker', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -73,7 +87,7 @@ describe('The Maidens Icy Grasp', function() {
             expect(this.player1).toBeAbleToSelect(this.beastmaster);
         });
 
-        it('should trigger when attached character is declared as a defender', function() {
+        it('should trigger when attached character is declared as a defender', function () {
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
@@ -87,7 +101,7 @@ describe('The Maidens Icy Grasp', function() {
             expect(this.player1).not.toBeAbleToSelect(this.grasp2);
         });
 
-        it('should cost 1 fate if not attached to a shugenja', function() {
+        it('should cost 1 fate if not attached to a shugenja', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -96,11 +110,13 @@ describe('The Maidens Icy Grasp', function() {
             });
             let fate = this.player1.fate;
             this.player1.clickCard(this.grasp);
-            expect(this.getChatLogs(5)).toContain('player1 uses The Maiden\'s Icy Grasp, bowing The Maiden\'s Icy Grasp and spending 1 fate to prevent characters from entering play this conflict');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Maiden\'s Icy Grasp, bowing The Maiden\'s Icy Grasp and spending 1 fate to prevent characters from entering play this conflict'
+            );
             expect(this.player1.fate).toBe(fate - 1);
         });
 
-        it('should not cost 1 fate if attached to a shugenja', function() {
+        it('should not cost 1 fate if attached to a shugenja', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -109,12 +125,14 @@ describe('The Maidens Icy Grasp', function() {
             });
             let fate = this.player1.fate;
             this.player1.clickCard(this.grasp2);
-            expect(this.getChatLogs(5)).toContain('player1 uses The Maiden\'s Icy Grasp, bowing The Maiden\'s Icy Grasp to prevent characters from entering play this conflict');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses The Maiden\'s Icy Grasp, bowing The Maiden\'s Icy Grasp to prevent characters from entering play this conflict'
+            );
             expect(this.player1.fate).toBe(fate);
         });
 
-        describe('Should stop characters from entering play during the conflict', function() {
-            beforeEach(function() {
+        describe('Should stop characters from entering play during the conflict', function () {
+            beforeEach(function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -126,46 +144,46 @@ describe('The Maidens Icy Grasp', function() {
                 this.player2.clickPrompt('Done');
             });
 
-            it('playing characters from discard (meido)', function() {
+            it('playing characters from discard (meido)', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.challenger);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('playing characters from province (uji)', function() {
+            it('playing characters from province (uji)', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.whisperer);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('charge', function() {
+            it('charge', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.chargeP2);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('monk attachments', function() {
+            it('monk attachments', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.wanderer);
                 this.player2.clickCard(this.uji);
                 expect(this.wanderer.location).toBe('play area');
-                expect(this.uji.attachments.size()).toBe(1);
+                expect(this.uji.attachments.length).toBe(1);
             });
 
-            it('echoes', function() {
+            it('echoes', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.echoes);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('spiritcaller', function() {
+            it('spiritcaller', function () {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
                 this.player2.clickCard(this.spiritcaller);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('fushicho', function() {
+            it('fushicho', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.hero);
@@ -173,7 +191,7 @@ describe('The Maidens Icy Grasp', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('ujiaki', function() {
+            it('ujiaki', function () {
                 this.kageyu.facedown = true;
                 this.player1.player.imperialFavor = 'military';
                 this.player2.pass();
@@ -185,21 +203,21 @@ describe('The Maidens Icy Grasp', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.kageyu);
             });
 
-            it('character from hand', function() {
+            it('character from hand', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.harrier);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('disguised character from hand', function() {
+            it('disguised character from hand', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.miyako);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('disguised character from province', function() {
+            it('disguised character from province', function () {
                 this.player2.pass();
                 expect(this.player1).toHavePrompt('Conflict Action Window');
                 this.player1.clickCard(this.kageyu);

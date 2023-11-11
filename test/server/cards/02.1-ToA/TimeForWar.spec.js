@@ -1,7 +1,7 @@
-describe('Time For War', function() {
-    integration(function() {
-        describe('Time For War\'s ability', function() {
-            beforeEach(function() {
+describe('Time For War', function () {
+    integration(function () {
+        describe('Time For War\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -20,7 +20,7 @@ describe('Time For War', function() {
                 });
             });
 
-            it('should trigger after losing a political conflict', function() {
+            it('should trigger after losing a political conflict', function () {
                 this.noMoreActions();
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 expect(this.player2).toBeAbleToSelect('time-for-war');
@@ -31,7 +31,7 @@ describe('Time For War', function() {
                 expect(this.player2).toHavePrompt('Choose an attachment');
                 expect(this.player2).toBeAbleToSelect('kamayari');
                 this.kamayari = this.player2.clickCard('kamayari');
-                expect(this.matsuBerserker.attachments.toArray()).toContain(this.kamayari);
+                expect(this.matsuBerserker.attachments).toContain(this.kamayari);
             });
         });
     });

@@ -1,12 +1,12 @@
-describe('Bayushi Collector', function() {
-    integration(function() {
-        describe('Bayushi Collector\'s ability', function() {
-            beforeEach(function() {
+describe('Bayushi Collector', function () {
+    integration(function () {
+        describe('Bayushi Collector\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['bayushi-collector','bayushi-liar'],
-                        hand: ['fine-katana','ornate-fan']
+                        inPlay: ['bayushi-collector', 'bayushi-liar'],
+                        hand: ['fine-katana', 'ornate-fan']
                     },
                     player2: {
                         inPlay: []
@@ -16,14 +16,13 @@ describe('Bayushi Collector', function() {
                 this.liar = this.player1.findCardByName('bayushi-liar');
                 this.katana = this.player1.findCardByName('fine-katana');
                 this.fan = this.player1.findCardByName('ornate-fan');
-
             });
 
-            it('should only target attachments of dishonored characters', function() {
+            it('should only target attachments of dishonored characters', function () {
                 this.liar.dishonor();
                 this.player1.clickCard(this.fan);
                 this.player1.clickCard(this.liar);
-                expect(this.liar.attachments.toArray()).toContain(this.fan);
+                expect(this.liar.attachments).toContain(this.fan);
                 this.player2.pass();
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.collector);
@@ -35,7 +34,7 @@ describe('Bayushi Collector', function() {
                 expect(this.liar.isDishonored).toBe(false);
             });
 
-            it('should correctly discard attachment and status token', function() {
+            it('should correctly discard attachment and status token', function () {
                 this.liar.dishonor();
                 this.player1.clickCard(this.fan);
                 this.player1.clickCard(this.liar);

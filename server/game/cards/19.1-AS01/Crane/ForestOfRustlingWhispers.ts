@@ -1,6 +1,6 @@
 import { CardTypes } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import ProvinceCard from '../../../provincecard';
 
 export default class ForestOfRustlingWhispers extends ProvinceCard {
     static id = 'forest-of-rustling-whispers';

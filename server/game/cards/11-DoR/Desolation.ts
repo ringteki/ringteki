@@ -1,7 +1,7 @@
 import { Durations } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
-import type ProvinceCard = require('../../provincecard');
+import { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
 export default class Desolation extends DrawCard {
     static id = 'desolation';

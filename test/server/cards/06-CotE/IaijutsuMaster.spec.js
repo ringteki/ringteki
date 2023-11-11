@@ -1,7 +1,7 @@
-describe('Iaijutsu Master', function() {
-    integration(function() {
-        describe('During the draw phase,', function() {
-            beforeEach(function() {
+describe('Iaijutsu Master', function () {
+    integration(function () {
+        describe('During the draw phase,', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'fate',
                     player1: {
@@ -10,7 +10,7 @@ describe('Iaijutsu Master', function() {
                     },
                     player2: {
                         honor: 11,
-                        inPlay: ['doji-challenger','doji-whisperer'],
+                        inPlay: ['doji-challenger', 'doji-whisperer'],
                         hand: ['iaijutsu-master']
                     }
                 });
@@ -28,8 +28,8 @@ describe('Iaijutsu Master', function() {
                 this.noMoreActions(); // dynasty phase
             });
 
-            it('should not trigger', function() {
-                expect(this.challenger.attachments.toArray()).toContain(this.iaijutsu);
+            it('should not trigger', function () {
+                expect(this.challenger.attachments).toContain(this.iaijutsu);
                 this.player1.clickPrompt('3');
                 this.player2.clickPrompt('1');
                 expect(this.player2).not.toHavePrompt('Triggered Abilities');
@@ -38,8 +38,8 @@ describe('Iaijutsu Master', function() {
             });
         });
 
-        describe('Iaijutsu Master\'s ability, if previous duel canceled with Stay Your Hand,', function() {
-            beforeEach(function() {
+        describe('Iaijutsu Master\'s ability, if previous duel canceled with Stay Your Hand,', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -67,7 +67,7 @@ describe('Iaijutsu Master', function() {
                 });
             });
 
-            it('should not count as being part of the next duel', function() {
+            it('should not count as being part of the next duel', function () {
                 this.player2.playAttachment(this.iaijutsuMaster, this.dojiChallenger);
                 this.player1.clickCard(this.mirumotoRaitsugu);
                 this.player1.clickCard(this.dojiChallenger);
@@ -88,8 +88,8 @@ describe('Iaijutsu Master', function() {
             });
         });
 
-        describe('During a duel,', function() {
-            beforeEach(function() {
+        describe('During a duel,', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -98,7 +98,7 @@ describe('Iaijutsu Master', function() {
                     },
                     player2: {
                         honor: 11,
-                        inPlay: ['doji-challenger','doji-whisperer'],
+                        inPlay: ['doji-challenger', 'doji-whisperer'],
                         hand: ['iaijutsu-master']
                     }
                 });
@@ -113,13 +113,13 @@ describe('Iaijutsu Master', function() {
                 });
             });
 
-            it('should not be playable on a non-duelist', function() {
+            it('should not be playable on a non-duelist', function () {
                 this.player2.clickCard(this.iaijutsu);
                 expect(this.player2).toBeAbleToSelect(this.challenger);
                 expect(this.player2).not.toBeAbleToSelect('doji-whisperer');
             });
 
-            it('should trigger after dials are revealed', function() {
+            it('should trigger after dials are revealed', function () {
                 this.player2.playAttachment(this.iaijutsu, this.challenger);
                 this.player1.clickCard(this.raitsugu);
                 this.player1.clickCard(this.challenger);
@@ -129,7 +129,7 @@ describe('Iaijutsu Master', function() {
                 expect(this.player2).toBeAbleToSelect(this.iaijutsu);
             });
 
-            it('should be able to change dial value to 0', function() {
+            it('should be able to change dial value to 0', function () {
                 this.player2.playAttachment(this.iaijutsu, this.challenger);
                 this.player1.clickCard(this.raitsugu);
                 this.player1.clickCard(this.challenger);
@@ -137,13 +137,13 @@ describe('Iaijutsu Master', function() {
                 this.player2.clickPrompt('1');
                 this.player2.clickCard(this.iaijutsu);
                 expect(this.player2).toHavePrompt('Select one');
-                expect(this.player2.currentButtons).toContain('Increase honor bid','Decrease honor bid');
+                expect(this.player2.currentButtons).toContain('Increase honor bid', 'Decrease honor bid');
                 this.player2.clickPrompt('Decrease honor bid');
                 expect(this.player2.honor).toBe(12);
                 expect(this.player1.honor).toBe(10);
             });
 
-            it('should correctly modify the value', function() {
+            it('should correctly modify the value', function () {
                 this.player2.playAttachment(this.iaijutsu, this.challenger);
                 this.player1.clickCard(this.raitsugu);
                 this.player1.clickCard(this.challenger);

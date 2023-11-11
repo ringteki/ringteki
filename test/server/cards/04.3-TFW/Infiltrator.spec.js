@@ -1,13 +1,17 @@
-describe('Infiltrator', function() {
-    integration(function() {
-        describe('Infiltrator\'s ability', function() {
-            beforeEach(function() {
+describe('Infiltrator', function () {
+    integration(function () {
+        describe('Infiltrator\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         inPlay: ['matsu-berserker'],
                         conflictDiscard: [
-                            'assassination', 'honored-blade', 'master-of-the-spear', 'ready-for-battle', 'captive-audience'
+                            'assassination',
+                            'honored-blade',
+                            'master-of-the-spear',
+                            'ready-for-battle',
+                            'captive-audience'
                         ]
                     },
                     player2: {
@@ -86,7 +90,7 @@ describe('Infiltrator', function() {
                     this.player2.clickCard(this.matsuBerserker);
                     expect(this.honoredBlade.location).toBe('play area');
                     expect(this.honoredBlade.controller).toBe(this.player2.player);
-                    expect(this.matsuBerserker.attachments.toArray()).toContain(this.honoredBlade);
+                    expect(this.matsuBerserker.attachments).toContain(this.honoredBlade);
                     expect(this.player2.fate).toBe(2);
                 });
 
@@ -107,7 +111,7 @@ describe('Infiltrator', function() {
                     expect(this.player2.fate).toBe(0);
                 });
 
-                it('should not be triggerable if your opponent\'s deck is empty', function() {
+                it('should not be triggerable if your opponent\'s deck is empty', function () {
                     this.player1.reduceDeckToNumber('conflict deck', 0);
                     this.infiltrator = this.player2.playAttachment('infiltrator', this.matsuBerserker);
                     this.player1.pass();

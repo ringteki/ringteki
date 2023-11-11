@@ -1,5 +1,5 @@
 import AbilityDsl = require('../../abilitydsl');
-import { BaseOni } from './BaseOni';
+import { BaseOni } from './_BaseOni';
 
 export default class BogHag extends BaseOni {
     static id = 'bog-hag';

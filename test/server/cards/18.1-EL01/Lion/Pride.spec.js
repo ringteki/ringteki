@@ -1,6 +1,6 @@
-describe('Pride', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Pride', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -38,7 +38,7 @@ describe('Pride', function() {
             this.player2.pass();
         });
 
-        it('should prompt you to select a character who can attach the card and has no followers', function() {
+        it('should prompt you to select a character who can attach the card and has no followers', function () {
             this.player1.clickCard(this.pride);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).not.toBeAbleToSelect(this.yoshi);
@@ -47,7 +47,7 @@ describe('Pride', function() {
             expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
         });
 
-        it('should put the top card of your deck into a +1/+1 attachment', function() {
+        it('should put the top card of your deck into a +1/+1 attachment', function () {
             this.player1.reduceDeckToNumber('conflict deck', 0);
             this.player1.moveCard(this.crane, 'conflict deck');
             this.player1.moveCard(this.katana, 'conflict deck');
@@ -56,20 +56,21 @@ describe('Pride', function() {
             this.player1.clickCard(this.challenger);
 
             expect(this.katana.location).toBe('removed from game');
-            expect(this.challenger.attachments.size()).toBe(2);
+            expect(this.challenger.attachments.length).toBe(2);
             expect(this.challenger.getMilitarySkill()).toBe(5);
             expect(this.challenger.getPoliticalSkill()).toBe(5);
-            expect(this.getChatLogs(5)).toContain('player1 uses Pride, bowing Pride to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Pride, bowing Pride to attach the top card of their conflict deck to Doji Challenger as a +1/+1 attachment'
+            );
         });
 
-        it('if let go should turn back into the original card', function() {
+        it('if let go should turn back into the original card', function () {
             this.player1.reduceDeckToNumber('conflict deck', 0);
             this.player1.moveCard(this.crane, 'conflict deck');
             this.player1.clickCard(this.pride);
             this.player1.clickCard(this.challenger);
 
-            const attachment = this.challenger.attachments.last();
-
+            const attachment = this.challenger.attachments[this.challenger.attachments.length - 1];
             expect(this.crane.location).toBe('removed from game');
             this.player2.clickCard(this.letGo);
             expect(this.player2).toBeAbleToSelect(attachment);

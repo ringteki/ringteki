@@ -1,6 +1,6 @@
-describe('Treasured Gift', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Treasured Gift', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -21,14 +21,14 @@ describe('Treasured Gift', function() {
             this.player1.pass();
         });
 
-        it('should only be playable on an opponent\'s character', function() {
+        it('should only be playable on an opponent\'s character', function () {
             this.player2.clickCard(this.gift);
             expect(this.player2).toBeAbleToSelect(this.togashiKazue);
             expect(this.player2).toBeAbleToSelect(this.guardsman);
             expect(this.player2).not.toBeAbleToSelect(this.scholar);
         });
 
-        it('should prevent attached character from assigning as an attacker', function() {
+        it('should prevent attached character from assigning as an attacker', function () {
             this.player2.clickCard(this.gift);
             this.player2.clickCard(this.togashiKazue);
 
@@ -42,7 +42,7 @@ describe('Treasured Gift', function() {
             expect(this.game.currentConflict.attackers).not.toContain(this.togashiKazue);
         });
 
-        it('should let the character move in', function() {
+        it('should let the character move in', function () {
             this.player2.clickCard(this.gift);
             this.player2.clickCard(this.togashiKazue);
             this.noMoreActions();
@@ -58,7 +58,7 @@ describe('Treasured Gift', function() {
             expect(this.togashiKazue.inConflict).toBe(true);
         });
 
-        it('should let the character be declared as a defender', function() {
+        it('should let the character be declared as a defender', function () {
             this.player2.clickCard(this.gift);
             this.player2.clickCard(this.togashiKazue);
 
@@ -74,7 +74,7 @@ describe('Treasured Gift', function() {
             expect(this.game.currentConflict.defenders).toContain(this.togashiKazue);
         });
 
-        it('should fall off if you take control of the character', function() {
+        it('should fall off if you take control of the character', function () {
             this.player2.clickCard(this.gift);
             this.player2.clickCard(this.guardsman);
 
@@ -90,12 +90,14 @@ describe('Treasured Gift', function() {
                 attackers: [this.scholar]
             });
 
-            expect(this.guardsman.attachments.toArray()).toContain(this.gift);
+            expect(this.guardsman.attachments).toContain(this.gift);
             this.player1.pass();
             this.player2.clickCard(this.blackmail);
             this.player2.clickCard(this.guardsman);
-            expect(this.guardsman.attachments.toArray()).not.toContain(this.gift);
-            expect(this.getChatLogs(5)).toContain('Treasured Gift is discarded from Seppun Guardsman as it is no longer legally attached');
+            expect(this.guardsman.attachments).not.toContain(this.gift);
+            expect(this.getChatLogs(5)).toContain(
+                'Treasured Gift is discarded from Seppun Guardsman as it is no longer legally attached'
+            );
         });
     });
 });

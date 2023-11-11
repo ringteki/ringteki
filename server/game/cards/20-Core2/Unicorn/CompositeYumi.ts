@@ -1,29 +1,17 @@
-import { CardTypes, Locations, Players } from '../../../Constants';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
 export default class CompositeYumi extends DrawCard {
     static id = 'composite-yumi';
 
-    public setupCardAbilities() {
-        this.persistentEffect({
-            location: Locations.Any,
-            targetController: Players.Any,
-            effect: AbilityDsl.effects.reduceCost({
-                amount: 1,
-                targetCondition: (target: BaseCard) =>
-                    target.type === CardTypes.Character && target.hasTrait('cavalry'),
-                match: (card: BaseCard, source: BaseCard) => card === source
-            })
-        });
-
+    setupCardAbilities() {
         this.reaction({
             title: 'Give attached character +1/+0',
             when: {
-                onMoveToConflict: (event, context) => this.#matchCondition(event.card, context),
-                onCharacterEntersPlay: (event, context) => this.#matchCondition(event.card, context)
+                onMoveToConflict: (event, context) => Boolean(context.source.parent),
+                onSendHome: (event, context) => Boolean(context.source.parent),
+                onCharacterEntersPlay: (event, context) =>
+                    Boolean(context.source.parent) && context.game.isDuringConflict()
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source.parent,
@@ -33,15 +21,5 @@ export default class CompositeYumi extends DrawCard {
             effectArgs: (context) => ['military', context.source.parent],
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
-    }
-
-    #matchCondition(card: DrawCard, context: TriggeredAbilityContext) {
-        return (
-            context.source.parent &&
-            card.type === CardTypes.Character &&
-            card.isParticipating() &&
-            context.source.parent.isParticipating() &&
-            context.game.isDuringConflict('military')
-        );
     }
 }

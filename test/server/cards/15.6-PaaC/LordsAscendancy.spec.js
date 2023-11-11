@@ -1,4 +1,4 @@
-describe('The Eternal Watch', function() {
+describe("Lord's Ascendancy", function() {
     integration(function() {
         beforeEach(function() {
             this.setupTest({

@@ -1,15 +1,22 @@
-describe('Stolen Secrets', function() {
-    integration(function() {
-        describe('Stolen Secret\'s ability', function() {
-            beforeEach(function() {
+describe('Stolen Secrets', function () {
+    integration(function () {
+        describe('Stolen Secret\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
                         inPlay: ['favored-niece', 'soshi-illusionist'],
-                        hand: ['stolen-secrets','stolen-secrets']
+                        hand: ['stolen-secrets', 'stolen-secrets']
                     },
                     player2: {
-                        hand: ['assassination', 'finger-of-jade', 'tattooed-wanderer', 'kami-unleashed','censure', 'levy']
+                        hand: [
+                            'assassination',
+                            'finger-of-jade',
+                            'tattooed-wanderer',
+                            'kami-unleashed',
+                            'censure',
+                            'levy'
+                        ]
                     }
                 });
 
@@ -116,11 +123,11 @@ describe('Stolen Secrets', function() {
                 });
 
                 describe('if there are exactly 2 cards in deck', function () {
-                    beforeEach(function() {
+                    beforeEach(function () {
                         this.player2.reduceDeckToNumber('conflict deck', 2);
                     });
 
-                    it('should not prompt to place the remaining card', function() {
+                    it('should not prompt to place the remaining card', function () {
                         expect(this.player2.conflictDeck.length).toBe(2);
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
@@ -130,11 +137,11 @@ describe('Stolen Secrets', function() {
                 });
 
                 describe('if there are exactly 3 cards in deck', function () {
-                    beforeEach(function() {
+                    beforeEach(function () {
                         this.player2.reduceDeckToNumber('conflict deck', 3);
                     });
 
-                    it('should prompt to place the top card only', function() {
+                    it('should prompt to place the top card only', function () {
                         expect(this.player2.conflictDeck.length).toBe(3);
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
@@ -164,7 +171,7 @@ describe('Stolen Secrets', function() {
                         expect(this.assassination.location).toBe('removed from game');
                     });
 
-                    it('the chosen card should be hidden from your opponent', function() {
+                    it('the chosen card should be hidden from your opponent', function () {
                         expect(this.assassination.anyEffect('hideWhenFaceUp')).toBe(true);
                     });
 
@@ -184,8 +191,8 @@ describe('Stolen Secrets', function() {
                     });
                 });
 
-                describe('if it resolves (with an attachment as chosen card)', function() {
-                    beforeEach(function() {
+                describe('if it resolves (with an attachment as chosen card)', function () {
+                    beforeEach(function () {
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
                         this.player1.clickPrompt(this.fingerOfJade.name);
@@ -193,19 +200,19 @@ describe('Stolen Secrets', function() {
                         this.player1.clickPrompt(this.tattooedWanderer.name);
                     });
 
-                    it('it should change control of the card', function() {
+                    it('it should change control of the card', function () {
                         expect(this.fingerOfJade.controller).toBe(this.player1.player);
                     });
 
-                    it('it should remove the chosen card from the game', function() {
+                    it('it should remove the chosen card from the game', function () {
                         expect(this.fingerOfJade.location).toBe('removed from game');
                     });
 
-                    it('the chosen card should be hidden from your opponent', function() {
+                    it('the chosen card should be hidden from your opponent', function () {
                         expect(this.fingerOfJade.anyEffect('hideWhenFaceUp')).toBe(true);
                     });
 
-                    it('it should allow the removed card to be played', function() {
+                    it('it should allow the removed card to be played', function () {
                         this.player2.pass();
                         this.player1.clickCard(this.fingerOfJade);
                         expect(this.player1).toHavePrompt('Finger of Jade');
@@ -214,8 +221,8 @@ describe('Stolen Secrets', function() {
                     });
                 });
 
-                describe('if it resolves (with a character as chosen card)', function() {
-                    beforeEach(function() {
+                describe('if it resolves (with a character as chosen card)', function () {
+                    beforeEach(function () {
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
                         this.player1.clickPrompt(this.kamiUnleashed.name);
@@ -223,19 +230,19 @@ describe('Stolen Secrets', function() {
                         this.player1.clickPrompt(this.assassination.name);
                     });
 
-                    it('it should change control of the card', function() {
+                    it('it should change control of the card', function () {
                         expect(this.kamiUnleashed.controller).toBe(this.player1.player);
                     });
 
-                    it('it should remove the chosen card from the game', function() {
+                    it('it should remove the chosen card from the game', function () {
                         expect(this.kamiUnleashed.location).toBe('removed from game');
                     });
 
-                    it('the chosen card should be hidden from your opponent', function() {
+                    it('the chosen card should be hidden from your opponent', function () {
                         expect(this.kamiUnleashed.anyEffect('hideWhenFaceUp')).toBe(true);
                     });
 
-                    it('it should allow the removed card to be played', function() {
+                    it('it should allow the removed card to be played', function () {
                         this.player2.pass();
                         this.player1.clickCard(this.kamiUnleashed);
                         expect(this.player1).toHavePrompt('Kami Unleashed');
@@ -249,8 +256,8 @@ describe('Stolen Secrets', function() {
                     });
                 });
 
-                describe('if it resolves (with a Tattooed Wanderer as chosen card)', function() {
-                    beforeEach(function() {
+                describe('if it resolves (with a Tattooed Wanderer as chosen card)', function () {
+                    beforeEach(function () {
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
                         this.player1.clickPrompt(this.tattooedWanderer.name);
@@ -258,7 +265,7 @@ describe('Stolen Secrets', function() {
                         this.player1.clickPrompt(this.assassination.name);
                     });
 
-                    it('it should allow Tattooed Wanderer to be played as an attachment', function() {
+                    it('it should allow Tattooed Wanderer to be played as an attachment', function () {
                         this.player2.pass();
                         this.player1.clickCard(this.tattooedWanderer);
                         expect(this.player1).toHavePrompt('Tattooed Wanderer');
@@ -267,11 +274,11 @@ describe('Stolen Secrets', function() {
                         expect(this.player1).toBeAbleToSelect(this.soshiIllusionist);
                         this.player1.clickCard(this.soshiIllusionist);
                         expect(this.tattooedWanderer.location).toBe('play area');
-                        expect(this.soshiIllusionist.attachments.toArray()).toContain(this.tattooedWanderer);
+                        expect(this.soshiIllusionist.attachments).toContain(this.tattooedWanderer);
                         expect(this.player1).toHavePrompt('Waiting for opponent to take an action or pass');
                     });
 
-                    it('it should allow Tattooed Wanderer to be played as a character', function() {
+                    it('it should allow Tattooed Wanderer to be played as a character', function () {
                         this.player2.pass();
                         this.player1.clickCard(this.tattooedWanderer);
                         expect(this.player1).toHavePrompt('Tattooed Wanderer');
@@ -288,8 +295,8 @@ describe('Stolen Secrets', function() {
                     });
                 });
 
-                describe('if it resolves (with an interrupt event as chosen card)', function() {
-                    beforeEach(function() {
+                describe('if it resolves (with an interrupt event as chosen card)', function () {
+                    beforeEach(function () {
                         this.player1.player.imperialFavor = 'political';
                         this.player2.moveCard(this.tattooedWanderer, 'hand');
                         this.player1.clickCard(this.stolenSecrets);
@@ -299,7 +306,7 @@ describe('Stolen Secrets', function() {
                         this.player1.clickPrompt(this.assassination.name);
                     });
 
-                    it('it should allow the event to be played', function() {
+                    it('it should allow the event to be played', function () {
                         expect(this.player2).toHavePrompt('Conflict Action Window');
                         this.player2.clickCard(this.levy);
                         expect(this.player1).toHavePrompt('Levy');
@@ -315,8 +322,8 @@ describe('Stolen Secrets', function() {
                     });
                 });
 
-                describe('if a second Stolen Secrets is played', function() {
-                    beforeEach(function() {
+                describe('if a second Stolen Secrets is played', function () {
+                    beforeEach(function () {
                         this.player1.clickCard(this.stolenSecrets);
                         this.player1.clickCard(this.favoredNiece);
                         this.player1.clickPrompt(this.assassination.name);
@@ -330,7 +337,7 @@ describe('Stolen Secrets', function() {
                         this.player1.clickPrompt(this.censure.name);
                     });
 
-                    it('it should allow both chosen cards to be played', function() {
+                    it('it should allow both chosen cards to be played', function () {
                         this.player2.pass();
                         this.player1.clickCard(this.assassination);
                         expect(this.player1).toHavePrompt('Choose a character');
@@ -343,7 +350,7 @@ describe('Stolen Secrets', function() {
                         expect(this.player1).toBeAbleToSelect(this.favoredNiece);
                         this.player1.clickCard(this.favoredNiece);
                         expect(this.fingerOfJade.location).toBe('play area');
-                        expect(this.favoredNiece.attachments.toArray()).toContain(this.fingerOfJade);
+                        expect(this.favoredNiece.attachments).toContain(this.fingerOfJade);
                         expect(this.player1).toHavePrompt('Waiting for opponent to take an action or pass');
                     });
                 });

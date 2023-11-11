@@ -14,12 +14,11 @@ export default class DaiTsuchi extends DrawCard {
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
                 title: 'Return attachment to owners hand',
-                condition: (context: AbilityContext) =>
-                    this.game.isDuringConflict('military') && context.source.isParticipating(),
+                condition: (context: AbilityContext) => (context.source as DrawCard).isParticipating('military'),
                 target: {
                     cardType: CardTypes.Attachment,
                     cardCondition: (card: DrawCard) =>
-                        card.parent && card.parent.type === CardTypes.Character && card.parent.isParticipating(),
+                        card.parent?.type === CardTypes.Character && (card.parent as DrawCard).isParticipating(),
                     gameAction: AbilityDsl.actions.returnToHand()
                 },
                 gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({

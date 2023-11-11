@@ -1,6 +1,20 @@
-import { CardTypes, Players, TargetModes } from '../../../Constants';
+import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import type { Conflict } from '../../../conflict';
+import type Player from '../../../player';
+
+/**
+ * Returns -1 in case there are no cavalry characters. It is not exactly correct, but it works fine
+ */
+function participatingCavGlory(conflict: Conflict, player: Player): number {
+    return Math.max(
+        -1,
+        ...conflict
+            .getParticipants((card) => card.controller === player && card.hasTrait('cavalry'))
+            .map((x) => x.glory)
+    );
+}
 
 export default class UtakuStableMaster extends DrawCard {
     static id = 'utaku-stable-master';
@@ -11,23 +25,16 @@ export default class UtakuStableMaster extends DrawCard {
             effect: AbilityDsl.effects.modifyGlory(1)
         });
 
-        this.persistentEffect({
-            match: (card, context) => card.controller === context.player && card.isDishonored,
-            effect: AbilityDsl.effects.modifyGlory(-1)
-        });
-
         this.action({
             title: 'Bow participating character with lower glory than participating cavalry.',
-            condition: context => context.game.currentConflict.getParticipants(card => card.controller === context.player && card.hasTrait('cavalry')),
+            condition: (context) => context.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,
-                controller: Players.Opponent,
-                mode: TargetModes.Single,
                 cardCondition: (card: DrawCard, context) =>
-                    card.glory < Math.max(...context.game.currentConflict.getParticipants(card =>
-                        card.controller === context.player && card.hasTrait('cavalry')).map(x => x.glory)),
+                    card.isParticipating() &&
+                    card.glory < participatingCavGlory(context.game.currentConflict, context.player),
                 gameAction: AbilityDsl.actions.bow()
             }
-        })
+        });
     }
 }

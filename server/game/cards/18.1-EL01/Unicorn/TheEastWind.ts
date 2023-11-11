@@ -1,7 +1,7 @@
 import { Locations } from '../../../Constants';
+import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
-import StrongholdCard from '../../../strongholdcard';
 
 export default class TheEastWind extends StrongholdCard {
     static id = 'the-east-wind';

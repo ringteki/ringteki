@@ -1,8 +1,13 @@
 import { CardTypes, Locations } from '../Constants';
-import DrawCard = require('../drawcard');
-import Player = require('../player');
+import DrawCard from '../drawcard';
+import Player from '../player';
 
 export default class Soldier<D extends DrawCard> extends DrawCard {
+    static createDummy(owner: Player) {
+        const dummyCard = new DrawCard(owner, {});
+        return new Soldier(dummyCard);
+    }
+
     constructor(facedownCard: D) {
         super(facedownCard.owner, {
             clan: 'neutral',

@@ -1,7 +1,7 @@
-describe('A Fate Worse Than Death', function() {
-    integration(function() {
-        describe('A Fate Worse Than Death\'s ability', function() {
-            beforeEach(function() {
+describe('A Fate Worse Than Death', function () {
+    integration(function () {
+        describe('A Fate Worse Than Death\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -25,37 +25,37 @@ describe('A Fate Worse Than Death', function() {
                 });
             });
 
-            describe('When played, it', function() {
-                beforeEach(function() {
+            describe('When played, it', function () {
+                beforeEach(function () {
                     this.player2.moveCard('ready-for-battle', 'conflict discard pile');
                     this.player2.clickPrompt('Pass');
                     this.player1.clickCard('a-fate-worse-than-death');
                     this.player1.clickCard(this.witchHunter);
                 });
 
-                it('should dishonor its target', function() {
+                it('should dishonor its target', function () {
                     expect(this.witchHunter.isDishonored).toBe(true);
                 });
 
-                it('should remove fate', function() {
+                it('should remove fate', function () {
                     expect(this.witchHunter.fate).toBe(0);
                 });
 
-                it('should send its target home', function() {
+                it('should send its target home', function () {
                     expect(this.witchHunter.inConflict).toBe(false);
                 });
 
-                it('should bow its target', function() {
+                it('should bow its target', function () {
                     expect(this.witchHunter.bowed).toBe(true);
                 });
 
-                it('should blank its target', function() {
+                it('should blank its target', function () {
                     expect(this.witchHunter.isBlank()).toBe(true);
                     this.player2.clickCard(this.witchHunter);
                     expect(this.player2).toHavePrompt('Conflict Action Window');
                 });
 
-                it('should no longer be blanked once the fate phase begins', function() {
+                it('should no longer be blanked once the fate phase begins', function () {
                     this.noMoreActions();
                     this.flow.finishConflictPhase();
                     expect(this.game.currentPhase).toBe('fate');
@@ -64,8 +64,8 @@ describe('A Fate Worse Than Death', function() {
                 });
             });
 
-            describe('Ready For Battle', function() {
-                it('should be playable to ready the target', function() {
+            describe('Ready For Battle', function () {
+                it('should be playable to ready the target', function () {
                     this.ready = this.player2.findCardByName('ready-for-battle');
                     this.player2.clickPrompt('Pass');
                     this.player1.clickCard('a-fate-worse-than-death');
@@ -78,8 +78,8 @@ describe('A Fate Worse Than Death', function() {
                 });
             });
 
-            describe('All events', function() {
-                it('should share interrupt windows', function() {
+            describe('All events', function () {
+                it('should share interrupt windows', function () {
                     this.rumormonger = this.player2.placeCardInProvince('young-rumormonger', 'province 1');
                     this.player2.putIntoPlay(this.rumormonger);
                     this.embrace = this.player2.playAttachment('embrace-the-void', this.witchHunter);
@@ -92,51 +92,51 @@ describe('A Fate Worse Than Death', function() {
                 });
             });
 
-            describe('A target who cannot be affected by some of the effets', function() {
-                beforeEach(function() {
+            describe('A target who cannot be affected by some of the effets', function () {
+                beforeEach(function () {
                     this.player2.clickPrompt('Pass');
                     this.player1.clickCard('a-fate-worse-than-death');
                     this.player1.clickCard(this.defender);
                 });
 
-                it('should not be affected by effects which cannot affect them', function() {
+                it('should not be affected by effects which cannot affect them', function () {
                     expect(this.defender.bowed).toBe(false);
                     expect(this.defender.inConflict).toBe(true);
                 });
 
-                it('should still be affected by the other effects', function() {
+                it('should still be affected by the other effects', function () {
                     expect(this.defender.isDishonored).toBe(true);
                     expect(this.defender.fate).toBe(0);
                     expect(this.defender.isBlank()).toBe(true);
                 });
             });
 
-            describe('This event', function() {
-                beforeEach(function() {
+            describe('This event', function () {
+                beforeEach(function () {
                     this.player2.moveCard('ready-for-battle', 'conflict discard pile');
                     this.watchCommander = this.player2.playAttachment('watch-commander', this.witchHunter);
                     this.player1.clickCard('a-fate-worse-than-death');
                     this.player1.clickCard(this.witchHunter);
                 });
 
-                it('should not remove Watch Commander when it is played', function() {
-                    expect(this.witchHunter.attachments.toArray()).toContain(this.watchCommander);
+                it('should not remove Watch Commander when it is played', function () {
+                    expect(this.witchHunter.attachments).toContain(this.watchCommander);
                     expect(this.watchCommander.location).toBe('play area');
                 });
 
-                it('should not remove Watch Commander when the blank effect ends', function() {
+                it('should not remove Watch Commander when the blank effect ends', function () {
                     this.noMoreActions();
                     this.flow.finishConflictPhase();
                     expect(this.game.currentPhase).toBe('fate');
                     expect(this.witchHunter.location).toBe('play area');
-                    expect(this.witchHunter.attachments.toArray()).toContain(this.watchCommander);
+                    expect(this.witchHunter.attachments).toContain(this.watchCommander);
                     expect(this.watchCommander.location).toBe('play area');
                 });
             });
         });
 
-        describe('AFWtD / Clarity of Purpose interaction', function() {
-            beforeEach(function() {
+        describe('AFWtD / Clarity of Purpose interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -156,7 +156,7 @@ describe('A Fate Worse Than Death', function() {
                 });
             });
 
-            it('should send the character with Clarity of Purpose home dishonored, but not bow it', function() {
+            it('should send the character with Clarity of Purpose home dishonored, but not bow it', function () {
                 this.player2.clickCard('clarity-of-purpose');
                 this.fushicho = this.player2.clickCard('fushicho');
                 this.player1.clickCard('a-fate-worse-than-death');

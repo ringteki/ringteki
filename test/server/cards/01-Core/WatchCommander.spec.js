@@ -30,7 +30,7 @@ describe('Watch Commander', function () {
                 expect(this.player1).toBeAbleToSelect(this.wanderingRonin);
                 expect(this.player1).not.toBeAbleToSelect(this.adeptOfTheWaves);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander);
+                expect(this.wanderingRonin.attachments).toContain(this.watchCommander);
             });
 
             it('should deatch if a second Watch Commander is attached to a character you control', function () {
@@ -39,9 +39,8 @@ describe('Watch Commander', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.watchCommander2);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander2);
+                expect(this.wanderingRonin.attachments).toContain(this.watchCommander2);
                 expect(this.player1.conflictDiscard).toContain(this.watchCommander);
-
             });
 
             it('should trigger when your opponent plays a card when attached character is participating', function () {
@@ -53,7 +52,7 @@ describe('Watch Commander', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.watchCommander);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander);
+                expect(this.wanderingRonin.attachments).toContain(this.watchCommander);
                 this.player2.clickCard(this.banzai);
                 this.player2.clickCard(this.adeptOfTheWaves);
                 this.player2.clickPrompt('Done');
@@ -70,7 +69,7 @@ describe('Watch Commander', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.watchCommander);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander);
+                expect(this.wanderingRonin.attachments).toContain(this.watchCommander);
                 let honor = this.player2.player.honor;
                 this.player2.clickCard(this.banzai);
                 this.player2.clickCard(this.adeptOfTheWaves);
@@ -88,13 +87,12 @@ describe('Watch Commander', function () {
                 this.player2.pass();
                 this.player1.clickCard(this.watchCommander);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.watchCommander);
+                expect(this.wanderingRonin.attachments).toContain(this.watchCommander);
                 this.player2.clickCard(this.letGo);
                 this.player2.clickCard(this.watchCommander);
                 expect(this.watchCommander.location).toBe('conflict discard pile');
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
-
         });
     });
 });

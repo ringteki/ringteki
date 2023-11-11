@@ -1,6 +1,6 @@
-describe('Compromised Secrets', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Compromised Secrets', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -32,7 +32,7 @@ describe('Compromised Secrets', function() {
             this.rider2.bowed = true;
         });
 
-        it('should make you give an honor to your opponent to trigger ability', function() {
+        it('should make you give an honor to your opponent to trigger ability', function () {
             this.player1.playAttachment(this.secrets1, this.rider2);
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
@@ -43,7 +43,7 @@ describe('Compromised Secrets', function() {
             expect(this.player2.honor).toBe(p2Honor - 1);
         });
 
-        it('should not make you give an honor to your opponent to trigger ability on non-attached character', function() {
+        it('should not make you give an honor to your opponent to trigger ability on non-attached character', function () {
             this.player1.playAttachment(this.secrets1, this.rider2);
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
@@ -55,7 +55,7 @@ describe('Compromised Secrets', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not be allowed to trigger if you attach this to a character you control (you cannot give honor to yourself)', function() {
+        it('should not be allowed to trigger if you attach this to a character you control (you cannot give honor to yourself)', function () {
             this.player1.playAttachment(this.secrets1, this.rider1);
             this.player2.pass();
             let p1Honor = this.player1.honor;
@@ -69,7 +69,7 @@ describe('Compromised Secrets', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should make you give an honor each time you trigger', function() {
+        it('should make you give an honor each time you trigger', function () {
             this.player1.playAttachment(this.secrets1, this.rider2);
             let p1Honor = this.player1.honor;
             let p2Honor = this.player2.honor;
@@ -84,7 +84,7 @@ describe('Compromised Secrets', function() {
             expect(this.player2.honor).toBe(p2Honor - 2);
         });
 
-        it('should stack', function() {
+        it('should stack', function () {
             this.player1.playAttachment(this.secrets1, this.rider2);
             this.player2.pass();
             this.player1.playAttachment(this.secrets2, this.rider2);
@@ -101,33 +101,33 @@ describe('Compromised Secrets', function() {
             expect(this.player2.honor).toBe(p2Honor - 4);
         });
 
-        it('should not be playable if you are equally honorable', function() {
+        it('should not be playable if you are equally honorable', function () {
             this.player1.honor = 10;
             this.player2.honor = 10;
             this.player1.clickCard(this.secrets1);
             this.player1.clickCard(this.rider2);
 
-            expect(this.rider2.attachments.toArray()).not.toContain(this.secrets1);
+            expect(this.rider2.attachments).not.toContain(this.secrets1);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not be playable if you are more honorable', function() {
+        it('should not be playable if you are more honorable', function () {
             this.player1.honor = 11;
             this.player2.honor = 10;
             this.player1.clickCard(this.secrets1);
             this.player1.clickCard(this.rider2);
 
-            expect(this.rider2.attachments.toArray()).not.toContain(this.secrets1);
+            expect(this.rider2.attachments).not.toContain(this.secrets1);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should be playable if you are less honorable', function() {
+        it('should be playable if you are less honorable', function () {
             this.player1.honor = 10;
             this.player2.honor = 11;
             this.player1.clickCard(this.secrets1);
             this.player1.clickCard(this.rider2);
 
-            expect(this.rider2.attachments.toArray()).toContain(this.secrets1);
+            expect(this.rider2.attachments).toContain(this.secrets1);
             expect(this.player2).toHavePrompt('Action Window');
         });
     });

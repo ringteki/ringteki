@@ -7,34 +7,34 @@ export default class WebisusBlessing extends DrawCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Choose up to to status tokens to discard',
-            target: {
-                mode: TargetModes.UpTo,
-                numCards: 2,
-                cardCondition: card => card.hasStatusTokens,
-                gameAction: AbilityDsl.actions.multipleContext((context) => {
-                    return {
-                        gameActions: this.getStatusTokenPrompts(context.target)
-                    };
-                })
-            }
-        })
-    }
-
-    getStatusTokenPrompts(targets) {
-        let actions = [];
-        targets.forEach((target) => {
-            actions.push(
-                AbilityDsl.actions.selectToken(() => ({
-                    card: target,
-                    activePromptTitle: `Which token do you wish to discard from ${target.name}?`,
-                    message: '{0} discards {1} from {2}',
-                    messageArgs: (token, player) => [player, token, target],
+            title: 'Discard status tokens',
+            targets: {
+                first: {
+                    activePromptTitle: 'Choose a status token',
+                    mode: TargetModes.Token,
                     gameAction: AbilityDsl.actions.discardStatusToken()
-                }))
-            );
+                },
+                second: {
+                    activePromptTitle: 'Choose a status token',
+                    dependsOn: 'first',
+                    mode: TargetModes.Token,
+                    optional: true,
+                    tokenCondition: (token, context) => token !== context.tokens.first[0],
+                    gameAction: AbilityDsl.actions.discardStatusToken()
+                }
+            },
+            effect: "discard {1}'s {2}{3}{4}{5}{6}",
+            effectArgs: (context) =>
+                context.tokens.second
+                    ? [
+                          context.tokens.first[0].card,
+                          context.tokens.first,
+                          ' and ',
+                          context.tokens.second[0].card,
+                          "'s ",
+                          context.tokens.second
+                      ]
+                    : [context.tokens.first[0].card, context.tokens.first, '', '', '', '']
         });
-
-        return actions;
     }
 }

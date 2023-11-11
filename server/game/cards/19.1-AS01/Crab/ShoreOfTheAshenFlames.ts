@@ -1,13 +1,13 @@
 import { CardTypes, ConflictTypes, EffectNames, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import type { Conflict } from '../../../conflict';
-import ProvinceCard = require('../../../provincecard');
 
 export default class ShoreOfTheAshenFlames extends ProvinceCard {
     static id = 'shore-of-the-ashen-flames';
 
-    public setupCardAbilities() {
+    setupCardAbilities() {
         this.persistentEffect({
             condition: (context) => context.source.isConflictProvince(),
             targetController: Players.Opponent,

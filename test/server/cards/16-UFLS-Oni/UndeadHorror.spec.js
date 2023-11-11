@@ -32,10 +32,12 @@ describe('Undead Horror', function () {
             this.player1.clickCard(this.horror);
             expect(this.toshimoko.location).toBe('play area');
             expect(this.toshimoko.type).toBe('attachment');
-            expect(this.horror.attachments.toArray()).toContain(this.toshimoko);
+            expect(this.horror.attachments).toContain(this.toshimoko);
             expect(this.horror.getMilitarySkill()).toBe(6);
             expect(this.horror.getPoliticalSkill()).toBe(5);
-            expect(this.getChatLogs(5)).toContain('player1 uses Undead Horror to attach a random character from player2\'s dynasty discard pile to Undead Horror');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Undead Horror to attach a random character from player2\'s dynasty discard pile to Undead Horror'
+            );
             expect(this.getChatLogs(5)).toContain('Kakita Toshimoko is attached to Undead Horror');
         });
 
@@ -50,11 +52,13 @@ describe('Undead Horror', function () {
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.horror);
             this.player1.clickCard(this.horror);
-            const hasTosh = this.horror.attachments.toArray().includes(this.toshimoko);
-            const hasOni = this.horror.attachments.toArray().includes(this.maraudingOni);
-            const hasChallenger = this.horror.attachments.toArray().includes(this.challenger);
+            const hasTosh = this.horror.attachments.includes(this.toshimoko);
+            const hasOni = this.horror.attachments.includes(this.maraudingOni);
+            const hasChallenger = this.horror.attachments.includes(this.challenger);
             expect(hasTosh || hasOni || hasChallenger).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Undead Horror to attach a random character from player2\'s dynasty discard pile to Undead Horror');
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Undead Horror to attach a random character from player2\'s dynasty discard pile to Undead Horror'
+            );
         });
 
         it('should not trigger if not participating', function () {

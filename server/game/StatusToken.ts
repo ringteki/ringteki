@@ -10,7 +10,12 @@ export class StatusToken extends EffectSource {
     printedType = 'token';
     overrideStatus?: CharacterStatus;
 
-    constructor(public game: Game, public card: BaseCard, private initialStatus: CharacterStatus, title: string) {
+    constructor(
+        public game: Game,
+        public card: BaseCard,
+        private initialStatus: CharacterStatus,
+        title: string
+    ) {
         super(game, title);
         this.applyEffects();
     }
@@ -32,6 +37,17 @@ export class StatusToken extends EffectSource {
 
     get grantedStatus() {
         return this.overrideStatus ?? this.initialStatus;
+    }
+
+    get grantedStatusName(): string {
+        switch (this.grantedStatus) {
+            case CharacterStatus.Honored:
+                return 'Honorable';
+            case CharacterStatus.Dishonored:
+                return 'Dishonorable';
+            case CharacterStatus.Tainted:
+                return 'Tainter';
+        }
     }
 
     applyEffects(): void {

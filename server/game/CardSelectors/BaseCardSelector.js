@@ -23,7 +23,15 @@ class BaseCardSelector {
         }
         let index = location.indexOf(Locations.Provinces);
         if(index > -1) {
-            location.splice(index, 1, Locations.ProvinceOne, Locations.ProvinceTwo, Locations.ProvinceThree, Locations.ProvinceFour, Locations.StrongholdProvince);
+            location.splice(
+                index,
+                1,
+                Locations.ProvinceOne,
+                Locations.ProvinceTwo,
+                Locations.ProvinceThree,
+                Locations.ProvinceFour,
+                Locations.StrongholdProvince
+            );
         }
         return location;
     }
@@ -36,35 +44,42 @@ class BaseCardSelector {
 
         if(this.location.includes(Locations.Any)) {
             if(controllerProp === Players.Self) {
-                return context.game.allCards.filter(card => card.controller === context.player);
+                return context.game.allCards.filter((card) => card.controller === context.player);
             } else if(controllerProp === Players.Opponent) {
-                return context.game.allCards.filter(card => card.controller === context.player.opponent);
+                return context.game.allCards.filter((card) => card.controller === context.player.opponent);
             }
             return context.game.allCards.toArray();
         }
-        let attachments = context.player.cardsInPlay.reduce((array, card) => array.concat(card.attachments.toArray()), []);
-        let allProvinceAttachments = context.player.getProvinces().reduce((array, card) => array.concat(card.attachments.toArray()), []);
+        let attachments = context.player.cardsInPlay.reduce((array, card) => array.concat(card.attachments), []);
+        let allProvinceAttachments = context.player
+            .getProvinces()
+            .reduce((array, card) => array.concat(card.attachments), []);
 
         if(context.player.opponent) {
-            allProvinceAttachments = allProvinceAttachments.concat(context.player.opponent.getProvinces().reduce((array, card) => array.concat(card.attachments.toArray()), []));
+            allProvinceAttachments = allProvinceAttachments.concat(
+                context.player.opponent.getProvinces().reduce((array, card) => array.concat(card.attachments), [])
+            );
         }
 
         attachments = attachments.concat(allProvinceAttachments);
 
         if(context.source.game.rings) {
             let rings = Object.values(context.source.game.rings);
-            let allRingAttachments = _.flatten(rings.map(ring => ring.attachments));
+            let allRingAttachments = _.flatten(rings.map((ring) => ring.attachments));
             attachments = attachments.concat(allRingAttachments);
         }
         if(context.player.opponent) {
-            attachments = attachments.concat(...context.player.opponent.cardsInPlay.map(card => card.attachments.toArray()));
+            attachments = attachments.concat(...context.player.opponent.cardsInPlay.map((card) => card.attachments));
         }
         let possibleCards = [];
         if(controllerProp !== Players.Opponent) {
             possibleCards = this.location.reduce((array, location) => {
                 let cards = context.player.getSourceList(location).toArray();
                 if(location === Locations.PlayArea) {
-                    return array.concat(cards, attachments.filter(card => card.controller === context.player));
+                    return array.concat(
+                        cards,
+                        attachments.filter((card) => card.controller === context.player)
+                    );
                 }
                 return array.concat(cards);
             }, possibleCards);
@@ -73,7 +88,10 @@ class BaseCardSelector {
             possibleCards = this.location.reduce((array, location) => {
                 let cards = context.player.opponent.getSourceList(location).toArray();
                 if(location === Locations.PlayArea) {
-                    return array.concat(cards, attachments.filter(card => card.controller === context.player.opponent));
+                    return array.concat(
+                        cards,
+                        attachments.filter((card) => card.controller === context.player.opponent)
+                    );
                 }
                 return array.concat(cards);
             }, possibleCards);
@@ -114,34 +132,40 @@ class BaseCardSelector {
     }
 
     getAllLegalTargets(context, choosingPlayer) {
-        return this.findPossibleCards(context).filter(card => this.canTarget(card, context, choosingPlayer));
+        return this.findPossibleCards(context).filter((card) => this.canTarget(card, context, choosingPlayer));
     }
 
-    hasEnoughSelected(selectedCards, context) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    hasEnoughSelected(selectedCards, context) {
         return this.optional || selectedCards.length > 0;
     }
 
     hasEnoughTargets(context, choosingPlayer) {
-        return this.findPossibleCards(context).some(card => this.canTarget(card, context, choosingPlayer));
+        return this.findPossibleCards(context).some((card) => this.canTarget(card, context, choosingPlayer));
     }
 
-    defaultActivePromptTitle(context) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    defaultActivePromptTitle(context) {
         return 'Choose cards';
     }
 
-    automaticFireOnSelect(context) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    automaticFireOnSelect(context) {
         return false;
     }
 
-    wouldExceedLimit(selectedCards, card) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    wouldExceedLimit(selectedCards, card) {
         return false;
     }
 
-    hasReachedLimit(selectedCards, context) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    hasReachedLimit(selectedCards, context) {
         return false;
     }
 
-    hasExceededLimit(selectedCards, context) { // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
+    hasExceededLimit(selectedCards, context) {
         return false;
     }
 

@@ -8,19 +8,23 @@ class MasterOfManyLifetimes extends DrawCard {
             title: 'Return a character and attachments',
             when: {
                 onCardLeavesPlay: (event, context) => {
-                    return event.card.controller === context.player && event.card.type === CardTypes.Character && event.card.location === Locations.PlayArea;
+                    return (
+                        event.card.controller === context.player &&
+                        event.card.type === CardTypes.Character &&
+                        event.card.location === Locations.PlayArea
+                    );
                 }
             },
             target: {
                 cardType: CardTypes.Province,
                 controller: Players.Self,
                 location: Locations.Provinces,
-                cardCondition: card => card.facedown
+                cardCondition: (card) => card.facedown
             },
-            gameAction: AbilityDsl.actions.cancel(context => ({
+            gameAction: AbilityDsl.actions.cancel((context) => ({
                 replacementGameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.returnToHand(context => ({
-                        target: context.event.card.attachments.toArray()
+                    AbilityDsl.actions.returnToHand((context) => ({
+                        target: context.event.card.attachments
                     })),
                     AbilityDsl.actions.putIntoProvince({
                         target: context.event.card,
@@ -30,7 +34,7 @@ class MasterOfManyLifetimes extends DrawCard {
                 ])
             })),
             effect: 'prevent {1} from leaving play, putting it into {2} instead',
-            effectArgs: context => [context.event.card, context.target.location]
+            effectArgs: (context) => [context.event.card, context.target.location]
         });
     }
 }

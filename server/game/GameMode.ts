@@ -2,7 +2,7 @@ import type AbilityContext from './AbilityContext';
 import type { CardAction } from './CardAction';
 import { AbilityTypes, Locations, Phases } from './Constants';
 import type BaseCard from './basecard';
-import type ProvinceCard from './provincecard';
+import type { ProvinceCard } from './ProvinceCard';
 
 type RingChoices = Record<string, (context: AbilityContext) => boolean>;
 

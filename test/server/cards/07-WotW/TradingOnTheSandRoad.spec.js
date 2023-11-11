@@ -58,11 +58,11 @@ describe('Trading on the Sand Road', function () {
                 expect(this.player2.conflictDeck.length).toBe(player2DeckSize - 4);
                 expect(this.getChatLogs(3)).toContain(
                     'player1 removes the top 4 cards from their conflict deck from the game: ' +
-                    'Iuchi Wayfinder, Supernatural Storm, Supernatural Storm and Supernatural Storm'
+                        'Iuchi Wayfinder, Supernatural Storm, Supernatural Storm and Supernatural Storm'
                 );
                 expect(this.getChatLogs(3)).toContain(
                     'player2 removes the top 4 cards from their conflict deck from the game: ' +
-                    'Feral Ningyo, Fine Katana, Supernatural Storm and Supernatural Storm'
+                        'Feral Ningyo, Fine Katana, Supernatural Storm and Supernatural Storm'
                 );
             });
 
@@ -71,7 +71,7 @@ describe('Trading on the Sand Road', function () {
                 this.player1.clickCard(this.tradingOnTheSandRoad);
                 this.player1.clickCard(this.fineKatana);
                 this.player1.clickCard(this.wanderingRonin);
-                expect(this.wanderingRonin.attachments.toArray()).toContain(this.fineKatana);
+                expect(this.wanderingRonin.attachments).toContain(this.fineKatana);
                 expect(this.fineKatana.owner).toBe(this.player2.player);
                 expect(this.fineKatana.controller).toBe(this.player1.player);
             });
@@ -93,7 +93,7 @@ describe('Trading on the Sand Road', function () {
                 expect(this.player2).toHavePrompt('Action Window');
                 this.player2.clickCard(this.fineKatana);
                 this.player2.clickCard(this.guardianKami);
-                expect(this.guardianKami.attachments.toArray()).toContain(this.fineKatana);
+                expect(this.guardianKami.attachments).toContain(this.fineKatana);
                 expect(this.fineKatana.owner).toBe(this.player2.player);
                 expect(this.fineKatana.controller).toBe(this.player2.player);
             });
@@ -185,7 +185,7 @@ describe('Trading on the Sand Road', function () {
                 expect(this.letGo.location).toBe('conflict discard pile');
             });
 
-            it('should let you play your opponents court games', function() {
+            it('should let you play your opponents court games', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'political',
@@ -201,7 +201,7 @@ describe('Trading on the Sand Road', function () {
                 expect(this.courtGames.location).toBe('conflict discard pile');
             });
 
-            it('should let you play your opponents banzai', function() {
+            it('should let you play your opponents banzai', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     type: 'military',
@@ -274,4 +274,3 @@ describe('Trading on the Sand Road', function () {
         });
     });
 });
-

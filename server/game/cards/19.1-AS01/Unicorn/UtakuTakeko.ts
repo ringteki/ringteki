@@ -1,9 +1,8 @@
-import { CardTypes, Decks } from '../../../Constants';
+import { CardTypes, Decks, PlayTypes } from '../../../Constants';
 import { PlayCharacterAsIfFromHandAtHome } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandAtHome } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class UtakuTakeko extends DrawCard {
     static id = 'utaku-takeko';
@@ -11,43 +10,49 @@ export default class UtakuTakeko extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: 'Play character from your discard pile',
-
             gameAction: AbilityDsl.actions.deckSearch(() => ({
                 activePromptTitle: 'Select a character to play',
                 amount: 8,
                 deck: Decks.DynastyDeck,
-                cardCondition: (card, context) =>
+                cardCondition: (card) =>
                     card.type === CardTypes.Character &&
                     card.glory >= 1 &&
                     card.isFaction('unicorn') &&
-                    !card.isUnique() &&
-                    AbilityDsl.actions.putIntoPlay().canAffect(card, context),
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.cardLastingEffect((context) => ({
-                        target: context.target,
-                        effect: [
-                            AbilityDsl.effects.gainPlayAction(PlayCharacterAsIfFromHandAtHome),
-                            AbilityDsl.effects.gainPlayAction(PlayDisguisedCharacterAsIfFromHandAtHome)
-                        ]
-                    })),
-                    AbilityDsl.actions.playCard((context) => ({ target: context.target }))
-                ]),
-                shuffle: true
-            })),
-            effect: 'recall a {1} relative who is {2} {3}',
-            effectArgs: (context) => [
-                this.#msgDistance(context.target),
-                this.#msgArticle(context.target),
-                context.target
-            ]
+                    !card.isUnique(),
+                gameAction: AbilityDsl.actions.playCard((context) => {
+                    const target = context.targets[0];
+                    return {
+                        target,
+                        source: this,
+                        resetOnCancel: false,
+                        playType: PlayTypes.PlayFromHand,
+                        playAction: target
+                            ? [
+                                  new PlayCharacterAsIfFromHandAtHome(target),
+                                  new PlayDisguisedCharacterAsIfFromHandAtHome(target)
+                              ]
+                            : undefined,
+                        ignoredRequirements: ['phase']
+                    };
+                }),
+
+                shuffle: true,
+                message: '{0} recalls a {1} relative who is {2} {3}',
+                messageArgs: (context, cards) => [
+                    context.source,
+                    this.#msgDistance(cards[0]),
+                    this.#msgArticle(cards[0]),
+                    cards[0]
+                ]
+            }))
         });
     }
 
-    #msgDistance(card: BaseCard): string {
+    #msgDistance(card: DrawCard): string {
         return card.hasTrait('gaijin') ? 'very distant' : 'distant';
     }
 
-    #msgArticle(card: BaseCard): string {
+    #msgArticle(card: DrawCard): string {
         if (card.hasTrait('army')) {
             return 'in the';
         }

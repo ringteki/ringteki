@@ -1,9 +1,9 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import { Durations, Players, EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import { WhenType } from '../Interfaces';
-import BaseAbility = require('../baseability');
-import Player = require('../player');
+import type AbilityContext from "../AbilityContext";
+import type BaseAbility from "../baseability";
+import { Durations, EventNames, Players } from "../Constants";
+import type { WhenType } from "../Interfaces";
+import type Player from "../player";
+import { GameAction, type GameActionProperties } from "./GameAction";
 
 export interface LastingEffectGeneralProperties extends GameActionProperties {
     duration?: Durations;
@@ -27,8 +27,8 @@ export class LastingEffectAction extends GameAction {
         ability: null
     };
 
-    getProperties(context: AbilityContext, additionalProperties = {}): LastingEffectProperties {
-        let properties = super.getProperties(context, additionalProperties) as LastingEffectProperties;
+    getProperties(context: AbilityContext, additionalProperties = {}): LastingEffectProperties & { effect?: Array<any> } {
+        let properties = super.getProperties(context, additionalProperties) as LastingEffectProperties & { effect: Array<any> }
         if(!Array.isArray(properties.effect)) {
             properties.effect = [properties.effect];
         }
@@ -40,14 +40,13 @@ export class LastingEffectAction extends GameAction {
         return properties.effect.length > 0;
     }
 
-    addEventsToArray(events: any[], context: AbilityContext, additionalProperties): void {
-        let properties = this.getProperties(context, additionalProperties);
+    addEventsToArray(events: any[], context: AbilityContext, additionalProperties: any): void {
         if(this.hasLegalTarget(context, additionalProperties)) {
             events.push(this.getEvent(null, context, additionalProperties));
         }
     }
 
-    eventHandler(event, additionalProperties): void {
+    eventHandler(event: any, additionalProperties: any): void {
         let properties = this.getProperties(event.context, additionalProperties);
         if (!properties.ability) {
             properties.ability = event.context.ability;

@@ -1,12 +1,21 @@
-describe('Togashi Hoshi', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Togashi Hoshi', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     fate: 100,
                     inPlay: ['togashi-hoshi', 'mirumoto-raitsugu'],
-                    hand: ['fiery-madness', 'banzai', 'talisman-of-the-sun', 'ancestral-daisho', 'greater-understanding', 'jade-tetsubo', 'ornate-fan', 'togashi-kazue'],
+                    hand: [
+                        'fiery-madness',
+                        'banzai',
+                        'talisman-of-the-sun',
+                        'ancestral-daisho',
+                        'greater-understanding',
+                        'jade-tetsubo',
+                        'ornate-fan',
+                        'togashi-kazue'
+                    ],
                     dynastyDiscard: ['ancestral-armory']
                 },
                 player2: {
@@ -54,7 +63,7 @@ describe('Togashi Hoshi', function() {
             this.player2.pass();
         });
 
-        it('should only allow you to target attachments on characters you control', function() {
+        it('should only allow you to target attachments on characters you control', function () {
             this.player1.clickCard(this.hoshi);
             expect(this.player1).toBeAbleToSelect(this.madness);
             expect(this.player1).toBeAbleToSelect(this.cloud);
@@ -66,18 +75,18 @@ describe('Togashi Hoshi', function() {
             expect(this.player1).not.toBeAbleToSelect(this.greater);
         });
 
-        it('should detatch and turn the attachment into a character', function() {
-            expect(this.mirumotoRaitsugu.attachments.toArray()).toContain(this.jadeTetsubo);
+        it('should detatch and turn the attachment into a character', function () {
+            expect(this.mirumotoRaitsugu.attachments).toContain(this.jadeTetsubo);
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.jadeTetsubo);
-            expect(this.mirumotoRaitsugu.attachments.toArray()).not.toContain(this.jadeTetsubo);
+            expect(this.mirumotoRaitsugu.attachments).not.toContain(this.jadeTetsubo);
             expect(this.jadeTetsubo.location).toBe('play area');
             expect(this.jadeTetsubo.type).toBe('character');
             expect(this.jadeTetsubo.bowed).toBe(false);
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should be able to assigned into a conflict', function() {
+        it('should be able to assigned into a conflict', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.jadeTetsubo);
             expect(this.player2).toHavePrompt('Action Window');
@@ -92,7 +101,7 @@ describe('Togashi Hoshi', function() {
             expect(this.jadeTetsubo.inConflict).toBe(true);
         });
 
-        it('should contribute skill equal to printed modifiers (mil)', function() {
+        it('should contribute skill equal to printed modifiers (mil)', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.talisman);
             expect(this.player2).toHavePrompt('Action Window');
@@ -107,7 +116,7 @@ describe('Togashi Hoshi', function() {
             expect(this.getChatLogs(2)).toContain('player1 has initiated a military conflict with skill 1');
         });
 
-        it('should contribute skill equal to printed modifiers (pol)', function() {
+        it('should contribute skill equal to printed modifiers (pol)', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.talisman);
             expect(this.player2).toHavePrompt('Action Window');
@@ -122,7 +131,7 @@ describe('Togashi Hoshi', function() {
             expect(this.getChatLogs(2)).toContain('player1 has initiated a political conflict with skill 1');
         });
 
-        it('should be able to have negative base skill', function() {
+        it('should be able to have negative base skill', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.madness);
             expect(this.player2).toHavePrompt('Action Window');
@@ -144,7 +153,7 @@ describe('Togashi Hoshi', function() {
             expect(this.getChatLogs(2)).toContain('Military Air conflict - Attacker: 2 Defender: 0');
         });
 
-        it('should not allow using abilities that refer to the parent', function() {
+        it('should not allow using abilities that refer to the parent', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.jadeTetsubo);
             expect(this.player2).toHavePrompt('Action Window');
@@ -162,7 +171,7 @@ describe('Togashi Hoshi', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should allow using abilities that don\'t refer to the parent', function() {
+        it('should allow using abilities that don\'t refer to the parent', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.talisman);
             expect(this.player2).toHavePrompt('Action Window');
@@ -180,7 +189,7 @@ describe('Togashi Hoshi', function() {
             expect(this.player1).toHavePrompt('Talisman of the Sun');
         });
 
-        it('should not be targetable by let go', function() {
+        it('should not be targetable by let go', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.talisman);
             expect(this.player2).toHavePrompt('Action Window');
@@ -190,7 +199,7 @@ describe('Togashi Hoshi', function() {
             expect(this.player2).not.toBeAbleToSelect(this.talisman);
         });
 
-        it('should be able to be assassinated', function() {
+        it('should be able to be assassinated', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.jadeTetsubo);
             expect(this.player2).toHavePrompt('Action Window');
@@ -208,7 +217,7 @@ describe('Togashi Hoshi', function() {
             expect(this.jadeTetsubo.location).toBe('conflict discard pile');
         });
 
-        it('should revert back to an attachment', function() {
+        it('should revert back to an attachment', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.jadeTetsubo);
             expect(this.player2).toHavePrompt('Action Window');
@@ -232,11 +241,11 @@ describe('Togashi Hoshi', function() {
             this.player1.clickCard(this.jadeTetsubo);
             let mil = this.mirumotoRaitsugu.getMilitarySkill();
             this.player1.clickCard(this.mirumotoRaitsugu);
-            expect(this.mirumotoRaitsugu.attachments.toArray()).toContain(this.jadeTetsubo);
+            expect(this.mirumotoRaitsugu.attachments).toContain(this.jadeTetsubo);
             expect(this.mirumotoRaitsugu.getMilitarySkill()).toBe(mil + 3);
         });
 
-        it('ancestral attachments should not return to hand if detatched', function() {
+        it('ancestral attachments should not return to hand if detatched', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.ancestralDaisho);
             expect(this.player2).toHavePrompt('Action Window');
@@ -254,7 +263,7 @@ describe('Togashi Hoshi', function() {
             expect(this.ancestralDaisho.location).toBe('conflict discard pile');
         });
 
-        it('should turn backpack monks back into characters', function() {
+        it('should turn backpack monks back into characters', function () {
             this.player1.clickCard(this.hoshi);
             this.player1.clickCard(this.kazue);
             expect(this.player2).toHavePrompt('Action Window');

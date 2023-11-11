@@ -1,17 +1,45 @@
-describe('Kunshu', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Kunshu', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-toshimoko', 'doji-challenger', 'bayushi-kachiko-2'],
                     hand: ['kunshu', 'daimyo-s-gunbai'],
-                    conflictDeck: ['a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name'],
+                    conflictDeck: [
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name',
+                        'a-new-name'
+                    ],
                     conflictDiscard: ['way-of-the-crane']
                 },
                 player2: {
                     inPlay: ['bayushi-kachiko'],
-                    conflictDiscard: ['way-of-the-dragon', 'a-fate-worse-than-death', 'storied-defeat', 'ancient-master', 'display-of-power', 'favorable-alliance']
+                    conflictDiscard: [
+                        'way-of-the-dragon',
+                        'a-fate-worse-than-death',
+                        'storied-defeat',
+                        'ancient-master',
+                        'display-of-power',
+                        'favorable-alliance'
+                    ]
                 }
             });
 
@@ -31,14 +59,14 @@ describe('Kunshu', function() {
             this.dop = this.player2.findCardByName('display-of-power');
         });
 
-        it('should allow you to attach to a unique character you control', function() {
+        it('should allow you to attach to a unique character you control', function () {
             this.player1.clickCard(this.kunshu);
             expect(this.player1).toBeAbleToSelect(this.toshimoko);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
             expect(this.player1).not.toBeAbleToSelect(this.kachiko);
         });
 
-        it('should allow you to choose an event in your opponent\'s discard pile', function() {
+        it('should allow you to choose an event in your opponent\'s discard pile', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -59,7 +87,7 @@ describe('Kunshu', function() {
             expect(this.player1).not.toBeAbleToSelect(this.dop);
         });
 
-        it('ability should not be on the sword', function() {
+        it('ability should not be on the sword', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -74,7 +102,7 @@ describe('Kunshu', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should play the card, ignoring fate cost - attachment', function() {
+        it('should play the card, ignoring fate cost - attachment', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -91,12 +119,14 @@ describe('Kunshu', function() {
             this.player1.clickCard(this.dragon);
             this.player1.clickCard(this.toshimoko);
 
-            expect(this.toshimoko.attachments.toArray()).toContain(this.dragon);
+            expect(this.toshimoko.attachments).toContain(this.dragon);
             expect(this.player1.fate).toBe(fate);
-            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Toshimoko\'s gained ability from Kunshu, discarding the Imperial Favor to play Way of the Dragon');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Kakita Toshimoko\'s gained ability from Kunshu, discarding the Imperial Favor to play Way of the Dragon'
+            );
         });
 
-        it('should play the card, ignoring fate cost - event', function() {
+        it('should play the card, ignoring fate cost - event', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -116,10 +146,12 @@ describe('Kunshu', function() {
             expect(this.kachiko.bowed).toBe(true);
             expect(this.kachiko.isDishonored).toBe(true);
             expect(this.player1.fate).toBe(fate);
-            expect(this.getChatLogs(10)).toContain('player1 uses Kakita Toshimoko\'s gained ability from Kunshu, discarding the Imperial Favor to play A Fate Worse Than Death');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Kakita Toshimoko\'s gained ability from Kunshu, discarding the Imperial Favor to play A Fate Worse Than Death'
+            );
         });
 
-        it('should discard the favor', function() {
+        it('should discard the favor', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -142,7 +174,7 @@ describe('Kunshu', function() {
             expect(this.player1.player.imperialFavor).toBe('');
         });
 
-        it('should pay fate costs in the text', function() {
+        it('should pay fate costs in the text', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -172,7 +204,7 @@ describe('Kunshu', function() {
             expect(this.player1.fate).toBe(fate - 1);
         });
 
-        it('should play the card even if you can\'t afford it', function() {
+        it('should play the card even if you can\'t afford it', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -197,7 +229,7 @@ describe('Kunshu', function() {
             expect(this.player1.fate).toBe(fate);
         });
 
-        it('should do nothing if you don\'t have the favor', function() {
+        it('should do nothing if you don\'t have the favor', function () {
             this.player1.player.imperialFavor = '';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -213,7 +245,7 @@ describe('Kunshu', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should do nothing if not participating', function() {
+        it('should do nothing if not participating', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -229,7 +261,7 @@ describe('Kunshu', function() {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should do nothing if not in a conflict', function() {
+        it('should do nothing if not in a conflict', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -239,7 +271,7 @@ describe('Kunshu', function() {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('favorable alliance', function() {
+        it('favorable alliance', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.toshimoko);
@@ -266,7 +298,7 @@ describe('Kunshu', function() {
             expect(this.player1.conflictDeck.length).toBe(0);
         });
 
-        it('Kachiko 2 - should not use up a Kachiko usage', function() {
+        it('Kachiko 2 - should not use up a Kachiko usage', function () {
             this.player1.player.imperialFavor = 'political';
             this.player1.clickCard(this.kunshu);
             this.player1.clickCard(this.kachiko2);
@@ -282,7 +314,9 @@ describe('Kunshu', function() {
             this.player1.clickCard(this.afwtd);
             this.player1.clickCard(this.kachiko);
 
-            expect(this.getChatLogs(5)).not.toContain('player1 plays a card from their opponent\'s conflict discard pile due to the ability of Bayushi Kachiko (2 uses remaining)');
+            expect(this.getChatLogs(5)).not.toContain(
+                'player1 plays a card from their opponent\'s conflict discard pile due to the ability of Bayushi Kachiko (2 uses remaining)'
+            );
         });
     });
 });

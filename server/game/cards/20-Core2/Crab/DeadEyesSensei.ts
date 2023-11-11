@@ -1,4 +1,4 @@
-import { CardTypes, Durations } from '../../../Constants';
+import { CardTypes, Durations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -8,22 +8,19 @@ export default class DeadEyesSensei extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: 'Ready a character and give them Berserker',
-            cost: AbilityDsl.costs.removeFate({
+            target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card) => card.bowed || !card.hasTrait('berserker')
-            }),
-            effect: 'ready {1} and give them Berserker',
-            effectArgs: (context) => context.costs.removeFate,
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.ready((context) => ({
-                    target: context.costs.removeFate
-                })),
-                AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.costs.removeFate,
-                    duration: Durations.UntilEndOfPhase,
-                    effect: AbilityDsl.effects.addTrait('creature')
-                }))
-            ])
+                controller: Players.Self,
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.ready(),
+                    AbilityDsl.actions.removeFate(),
+                    AbilityDsl.actions.cardLastingEffect({
+                        duration: Durations.UntilEndOfPhase,
+                        effect: AbilityDsl.effects.addTrait('berserker')
+                    })
+                ])
+            },
+            effect: 'ready and remove a fate from {0}, giving them the Berserker trait',
         });
     }
 }

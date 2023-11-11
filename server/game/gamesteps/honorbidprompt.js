@@ -1,5 +1,5 @@
 const { CalculateHonorLimit } = require('../GameActions/Shared/HonorLogic.js');
-const AllPlayerPrompt = require('./allplayerprompt.js');
+const { AllPlayerPrompt } = require('./AllPlayerPrompt.js');
 const { TransferHonorAction } = require('../GameActions/TransferHonorAction');
 const { EventNames, EffectNames } = require('../Constants');
 const { GameModes } = require('../../GameModes.js');
@@ -37,6 +37,9 @@ class HonorBidPrompt extends AllPlayerPrompt {
                         .resolve(player, this.game.getFrameworkContext());
                 }
             });
+            if (this.duel) {
+                this.game.raiseEvent(EventNames.OnDuelFocus, eventProps);
+            }
             if(this.costHandler) {
                 this.game.queueSimpleStep(() => this.costHandler(this));
             } else {

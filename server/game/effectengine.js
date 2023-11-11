@@ -121,10 +121,16 @@ class EffectEngine {
         this.newEffect = this.unapplyAndRemove(effect => effect.duration === Durations.UntilEndOfRound);
     }
 
-    onPassActionPhasePriority() {
+    onPassActionPhasePriority(event) {
+        for(const effect of this.effects) {
+            if(effect.duration === Durations.UntilSelfPassPriority && event.player === effect.targetController) {
+                effect.duration = Durations.UntilPassPriority;
+            }
+        }
+
         this.newEffect = this.unapplyAndRemove(effect => effect.duration === Durations.UntilPassPriority);
         for(const effect of this.effects) {
-            if(effect.duration === Durations.UntilOpponentPassPriority) {
+            if(effect.duration === Durations.UntilOpponentPassPriority || effect.duration === Durations.UntilSelfPassPriority) {
                 effect.duration = Durations.UntilPassPriority;
             } else if(effect.duration === Durations.UntilNextPassPriority) {
                 effect.duration = Durations.UntilOpponentPassPriority;

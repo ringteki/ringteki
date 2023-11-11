@@ -1,7 +1,7 @@
-describe('Illustrious Forge', function() {
-    integration(function() {
-        describe('Illustrious Forge\'s ability', function() {
-            beforeEach(function() {
+describe('Illustrious Forge', function () {
+    integration(function () {
+        describe('Illustrious Forge\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -9,7 +9,14 @@ describe('Illustrious Forge', function() {
                     },
                     player2: {
                         inPlay: ['border-rider', 'battle-maiden-recruit'],
-                        hand: ['fine-katana', 'finger-of-jade', 'tattooed-wanderer', 'force-of-the-river', 'censure', 'talisman-of-the-sun'],
+                        hand: [
+                            'fine-katana',
+                            'finger-of-jade',
+                            'tattooed-wanderer',
+                            'force-of-the-river',
+                            'censure',
+                            'talisman-of-the-sun'
+                        ],
                         provinces: ['illustrious-forge']
                     }
                 });
@@ -35,7 +42,7 @@ describe('Illustrious Forge', function() {
                 this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 2');
             });
 
-            it('should trigger when province is revealed', function() {
+            it('should trigger when province is revealed', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves]
@@ -44,7 +51,7 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).toBeAbleToSelect(this.illustriousForge);
             });
 
-            it('should prompt to choose an eligible attachment', function() {
+            it('should prompt to choose an eligible attachment', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves]
@@ -59,7 +66,7 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).toHavePromptButton('Take nothing');
             });
 
-            it('should prompt to choose to take nothing', function() {
+            it('should prompt to choose to take nothing', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves]
@@ -73,7 +80,7 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).toHavePrompt('Choose defenders');
             });
 
-            it('should prompt to choose a character to attach to controlled by the player', function() {
+            it('should prompt to choose a character to attach to controlled by the player', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves]
@@ -86,7 +93,7 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).not.toBeAbleToSelect(this.adeptOfTheWaves);
             });
 
-            it('should attach the chosen attachment to the chosen character and shuffle the deck', function() {
+            it('should attach the chosen attachment to the chosen character and shuffle the deck', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.adeptOfTheWaves]
@@ -94,13 +101,13 @@ describe('Illustrious Forge', function() {
                 this.player2.clickCard(this.illustriousForge);
                 this.player2.clickPrompt('Fine Katana');
                 this.player2.clickCard(this.borderRider);
-                expect(this.borderRider.attachments.toArray()).toContain(this.fineKatana);
+                expect(this.borderRider.attachments).toContain(this.fineKatana);
                 expect(this.player2).toHavePrompt('Choose defenders');
                 expect(this.getChatLogs(3)).toContain('player2 chooses to attach Fine Katana to Border Rider');
                 expect(this.getChatLogs(2)).toContain('player2 is shuffling their conflict deck');
             });
 
-            it('should still prompt and shuffle the deck if there are no attachments in the top 5', function() {
+            it('should still prompt and shuffle the deck if there are no attachments in the top 5', function () {
                 this.player2.player.moveCard(this.censure, 'hand');
                 this.player2.player.moveCard(this.fineKatana, 'hand');
                 this.player2.player.moveCard(this.fingerOfJade, 'hand');
@@ -116,13 +123,15 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).toHavePrompt('Choose an attachment');
                 expect(this.player2).toHavePromptButton('Take nothing');
                 expect(this.player2).toHaveDisabledPromptButton('Supernatural Storm (5)');
-                expect(this.getChatLogs(1)).toContain('player2 uses Illustrious Forge to search the top 5 cards of their conflict deck for an attachment and put it into play');
+                expect(this.getChatLogs(1)).toContain(
+                    'player2 uses Illustrious Forge to search the top 5 cards of their conflict deck for an attachment and put it into play'
+                );
                 this.player2.clickPrompt('Take nothing');
                 expect(this.getChatLogs(3)).toContain('player2 takes nothing');
                 expect(this.getChatLogs(2)).toContain('player2 is shuffling their conflict deck');
             });
 
-            it('should interact with Talisman correctly', function() {
+            it('should interact with Talisman correctly', function () {
                 this.player2.player.moveCard(this.censure, 'hand');
                 this.player2.player.moveCard(this.fineKatana, 'hand');
                 this.player2.player.moveCard(this.fingerOfJade, 'hand');
@@ -146,7 +155,9 @@ describe('Illustrious Forge', function() {
                 expect(this.player2).toHavePrompt('Choose an attachment');
                 expect(this.player2).toHavePromptButton('Take nothing');
                 expect(this.player2).toHaveDisabledPromptButton('Supernatural Storm (5)');
-                expect(this.getChatLogs(1)).toContain('player2 uses Illustrious Forge to search the top 5 cards of their conflict deck for an attachment and put it into play');
+                expect(this.getChatLogs(1)).toContain(
+                    'player2 uses Illustrious Forge to search the top 5 cards of their conflict deck for an attachment and put it into play'
+                );
                 this.player2.clickPrompt('Take nothing');
                 expect(this.getChatLogs(4)).toContain('player2 takes nothing');
                 expect(this.getChatLogs(3)).toContain('player2 is shuffling their conflict deck');

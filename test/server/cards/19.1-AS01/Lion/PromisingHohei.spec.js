@@ -107,7 +107,8 @@ describe('Promising Hohei', function () {
             it('returns soldier tokens to hand', function () {
                 this.player1.clickCard(this.pride);
                 this.player1.clickCard(this.relentlessGloryseeker);
-                const soldier = this.relentlessGloryseeker.attachments.last();
+                const soldier =
+                    this.relentlessGloryseeker.attachments[this.relentlessGloryseeker.attachments.length - 1];
 
                 this.player2.pass();
                 this.player1.clickCard(this.promisingHohei1);

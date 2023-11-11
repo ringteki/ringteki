@@ -1,10 +1,10 @@
-import AbilityContext from '../../../AbilityContext';
+import type AbilityContext from '../../../AbilityContext';
 import { CardTypes } from '../../../Constants';
+import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import BaseCard from '../../../basecard';
-import { Conflict } from '../../../conflict';
+import type BaseCard from '../../../basecard';
+import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
-import ProvinceCard from '../../../provincecard';
 
 export default class DeployedGarrison extends DrawCard {
     static id = 'deployed-garrison';
@@ -18,7 +18,7 @@ export default class DeployedGarrison extends DrawCard {
         });
 
         this.reaction({
-            title: 'Prevent a character from bowing at the end of the conflict',
+            title: 'Does not bow at the end of the conflict',
             when: {
                 afterConflict: (event, context) =>
                     context.player.isDefendingPlayer() &&
@@ -29,7 +29,8 @@ export default class DeployedGarrison extends DrawCard {
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
                 effect: AbilityDsl.effects.doesNotBow()
-            }))
+            })),
+            effect: 'not bow during the conflict resolution'
         });
     }
 

@@ -30,7 +30,7 @@ describe('Dynasty - Emerald', function () {
         it('should not let you play attachments in dynasty', function () {
             this.player1.clickCard(this.katana1);
             this.player1.clickCard(this.mitsu);
-            expect(this.mitsu.attachments.toArray()).not.toContain(this.katana1);
+            expect(this.mitsu.attachments).not.toContain(this.katana1);
         });
 
         it('should not let you play conflict characters in dynasty', function () {

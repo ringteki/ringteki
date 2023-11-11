@@ -18,7 +18,7 @@ export enum Locations {
     OutsideTheGame = 'outside the game',
     BeingPlayed = 'being played',
     Role = 'role'
-};
+}
 
 export enum CharacterStatus {
     Honored = 'honored',
@@ -29,7 +29,7 @@ export enum CharacterStatus {
 export enum Decks {
     ConflictDeck = 'conflict deck',
     DynastyDeck = 'dynasty deck'
-};
+}
 
 export enum EffectNames {
     AbilityRestrictions = 'abilityRestrictions',
@@ -68,7 +68,7 @@ export enum EffectNames {
     DelayedEffect = 'delayedEffect',
     DoesNotBow = 'doesNotBow',
     DoesNotReady = 'doesNotReady',
-    EntersPlayWithStatus = "entersPlayWithStatus",
+    EntersPlayWithStatus = 'entersPlayWithStatus',
     EntersPlayForOpponent = 'entersPlayForOpponent',
     FateCostToAttack = 'fateCostToAttack',
     HonorCostToDeclare = 'honorCostToDeclare',
@@ -93,6 +93,7 @@ export enum EffectNames {
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
     ModifyBaseProvinceStrength = 'modifyBaseProvinceStrength',
     ModifyBothSkills = 'modifyBothSkills',
+    ModifyDuelSkill = 'modifyDuelSkill',
     ModifyGlory = 'modifyGlory',
     ModifyMilitarySkill = 'modifyMilitarySkill',
     AttachmentMilitarySkillModifier = 'attachmentMilitarySkillModifier',
@@ -113,6 +114,7 @@ export enum EffectNames {
     SetBaseMilitarySkill = 'setBaseMilitarySkill',
     SetBasePoliticalSkill = 'setBasePoliticalSkill',
     SetBaseProvinceStrength = 'setBaseProvinceStrength',
+    SatisfyAffinity = 'satisfyAffinity',
     SetConflictDeclarationType = 'setConflictDeclarationType',
     ProvideConflictDeclarationType = 'provideConflictDeclarationType',
     ForceConflictDeclarationType = 'forceConflictDeclarationType',
@@ -142,7 +144,7 @@ export enum EffectNames {
     CanPlayFromOwn = 'canPlayFromOwn',
     CanPlayFromOutOfPlay = 'canPlayFromOutOfPlay',
     CanPlayFromOpponents = 'canPlayFromOpponents',
-    CannotResolveRings = "cannotResolveRings",
+    CannotResolveRings = 'cannotResolveRings',
     ChangePlayerGloryModifier = 'gloryModifier',
     ChangePlayerSkillModifier = 'conflictSkillModifier',
     GainActionPhasePriority = 'actionPhasePriority',
@@ -158,7 +160,7 @@ export enum EffectNames {
     ModifyConflictElementsToResolve = 'modifyConflictElementsToResolve',
     RestrictNumberOfDefenders = 'restrictNumberOfDefenders',
     ResolveConflictEarly = 'resolveConflictEarly',
-    SetBaseGlory = "setBaseGlory",
+    SetBaseGlory = 'setBaseGlory',
     EventsCannotBeCancelled = 'eventsCannotBeCancelled',
     ForceConflictUnopposed = 'forceConflictUnopposed',
     MustDeclareMaximumAttackers = 'mustDeclareMaximumAttackers',
@@ -166,8 +168,8 @@ export enum EffectNames {
     RestartDynastyPhase = 'restartDynastyPhase',
     StrongholdCanBeAttacked = 'strongholdCanBeAttacked',
     DefendersChosenFirstDuringConflict = 'defendersChosenFirstDuringConflict',
-    LimitHonorGainPerPhase = "limitHonorGainPerPhase",
-    RegisterToPlayFromOutOfPlay = "registerToPlayFromOutOfPlay",
+    LimitHonorGainPerPhase = 'limitHonorGainPerPhase',
+    RegisterToPlayFromOutOfPlay = 'registerToPlayFromOutOfPlay',
     CostToDeclareAnyParticipants = 'costToDeclareAnyParticipants',
     LoseAllNonKeywordAbilities = 'loseAllNonKeywordAbilities',
     ParticipatesFromHome = 'participatesFromHome',
@@ -177,13 +179,15 @@ export enum EffectNames {
     ConsideredLessHonorable = 'consideredLessHonorable',
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
+    WinDuelTies = "winDuelTies",
+    IgnoreDuelSkill = "ignoreDuelSkill",
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
     LimitLegalAttackers = 'limitLegalAttackers',
-    ModifyHonorTransferGiven = "modifyHonorTransferGiven",
-    ModifyHonorTransferReceived = "modifyHonorTransferReceived",
-    ModifyUnopposedHonorLoss = "modifyUnopposedHonorLoss",
-    TriggersAbilitiesFromHome = "triggersAbilitiesFromHome"
-};
+    ModifyHonorTransferGiven = 'modifyHonorTransferGiven',
+    ModifyHonorTransferReceived = 'modifyHonorTransferReceived',
+    ModifyUnopposedHonorLoss = 'modifyUnopposedHonorLoss',
+    TriggersAbilitiesFromHome = 'triggersAbilitiesFromHome'
+}
 
 export enum Durations {
     UntilEndOfDuel = 'untilEndOfDuel',
@@ -192,23 +196,24 @@ export enum Durations {
     UntilEndOfRound = 'untilEndOfRound',
     UntilPassPriority = 'untilPassPriority',
     UntilOpponentPassPriority = 'untilOpponentPassPriority',
+    UntilSelfPassPriority = 'untilSelfPassPriority',
     UntilNextPassPriority = 'untilNextPassPriority',
     Persistent = 'persistent',
     Custom = 'lastingEffect'
-};
+}
 
 export enum Stages {
     Cost = 'cost',
     Effect = 'effect',
     PreTarget = 'pretarget',
     Target = 'target'
-};
+}
 
 export enum Players {
     Self = 'self',
     Opponent = 'opponent',
     Any = 'any'
-};
+}
 
 export enum TargetModes {
     Ring = 'ring',
@@ -224,7 +229,7 @@ export enum TargetModes {
     Unlimited = 'unlimited',
     UpTo = 'upTo',
     UpToVariable = 'upToVariable'
-};
+}
 
 export enum Phases {
     Setup = 'setup',
@@ -233,7 +238,7 @@ export enum Phases {
     Conflict = 'conflict',
     Fate = 'fate',
     Regroup = 'regroup'
-};
+}
 
 export enum CardTypes {
     Stronghold = 'stronghold',
@@ -243,13 +248,13 @@ export enum CardTypes {
     Holding = 'holding',
     Event = 'event',
     Attachment = 'attachment'
-};
+}
 
 export enum PlayTypes {
     PlayFromHand = 'playFromHand',
     PlayFromProvince = 'playFromProvince',
     Other = 'other'
-};
+}
 
 export enum EventNames {
     OnMoveFate = 'onMoveFate',
@@ -306,6 +311,9 @@ export enum EventNames {
     OnDeckShuffled = 'onDeckShuffled',
     AfterDuel = 'afterDuel',
     OnDuelStarted = 'onDuelStarted',
+    OnDuelChallenge = 'onDuelChallenge',
+    OnDuelFocus = 'onDuelFocus',
+    OnDuelStrike = 'onDuelStrike',
     OnDuelResolution = 'onDuelResolution',
     OnDuelFinished = 'onDuelFinished',
     OnDynastyCardTurnedFaceup = 'onDynastyCardTurnedFaceup',
@@ -340,7 +348,7 @@ export enum EventNames {
     OnTheCrashingWave = 'onTheCrashingWave',
     Unnamed = 'unnamedEvent',
     OnAbilityResolverInitiated = 'onAbilityResolverInitiated'
-};
+}
 
 export enum AbilityTypes {
     Action = 'action',
@@ -353,35 +361,40 @@ export enum AbilityTypes {
     Reaction = 'reaction',
     Persistent = 'persistent',
     OtherEffects = 'OtherEffects'
-};
+}
 
 export enum DuelTypes {
     Military = 'military',
     Political = 'political',
     Glory = 'glory'
-};
+}
 
 export enum Elements {
     Fire = 'fire',
     Earth = 'earth',
     Air = 'air',
     Water = 'water',
-    Void = 'void',
-};
+    Void = 'void'
+}
 
 export enum ConflictTypes {
     Military = 'military',
     Political = 'political',
     Passed = 'passed',
     Forced = 'forced'
-};
+}
 
 export enum TokenTypes {
     Honor = 'honor'
-};
+}
 
 export enum FavorTypes {
     Military = 'military',
     Political = 'political',
     Both = 'both'
-};
+}
+
+export enum SkillType {
+    Military = 'military',
+    Political = 'political'
+}

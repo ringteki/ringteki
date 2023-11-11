@@ -16,7 +16,10 @@ export interface DuelProperties extends CardActionProperties {
     statistic?: (card: DrawCard) => number;
     challengerEffect?;
     targetEffect?;
+    swapChallengerAndTarget?: boolean
     refuseGameAction?: GameAction;
+    refusalMessage?: string;
+    refusalMessageArgs?: (context: AbilityContext) => any | any[];
 }
 
 export class DuelAction extends CardGameAction {
@@ -26,7 +29,8 @@ export class DuelAction extends CardGameAction {
 
     defaultProperties: DuelProperties = {
         type: undefined,
-        gameAction: null
+        gameAction: null,
+        swapChallengerAndTarget: false,
     };
 
     getProperties(context: AbilityContext, additionalProperties = {}): DuelProperties {
@@ -94,7 +98,7 @@ export class DuelAction extends CardGameAction {
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
-        const { target, refuseGameAction } = this.getProperties(context, additionalProperties);
+        const { target, refuseGameAction, refusalMessage, refusalMessageArgs } = this.getProperties(context, additionalProperties);
         const addDuelEventsHandler = () => {
             const cards = (target as DrawCard[]).filter((card) => this.canAffect(card, context));
             if (cards.length === 0) {
@@ -111,11 +115,16 @@ export class DuelAction extends CardGameAction {
                 choices: ['Yes', 'No'],
                 handlers: [
                     () => {
-                        context.game.addMessage(
-                            '{0} chooses to refuse the duel and {1}',
-                            context.player.opponent,
-                            refuseGameAction.getEffectMessage(context)
-                        );
+                        if (refusalMessage) {
+                            const refusalArgs = refusalMessageArgs ? [].concat(refusalMessageArgs(context)) : [];
+                            context.game.addMessage(refusalMessage, ...refusalArgs);
+                        } else {
+                            context.game.addMessage(
+                                '{0} chooses to refuse the duel and {1}',
+                                context.player.opponent,
+                                refuseGameAction.getEffectMessage(context)
+                            );
+                        }
                         refuseGameAction.addEventsToArray(events, context, additionalProperties);
                     },
                     addDuelEventsHandler
@@ -134,6 +143,27 @@ export class DuelAction extends CardGameAction {
         if (!Array.isArray(cards)) {
             cards = [cards];
         }
+        const swapChallengerAndTarget = properties.swapChallengerAndTarget;
+
+        if (swapChallengerAndTarget) {
+            event.cards = cards;
+            event.context = context;
+            event.duelType = properties.type;
+            event.challenger = properties.target;
+            event.duelTarget = properties.challenger;
+    
+            const duel = new Duel(
+                context.game,
+                cards[0],
+                [properties.challenger],
+                properties.type,
+                properties.statistic,
+                context.player
+            );
+            event.duel = duel;
+            return;
+        }
+
         event.cards = cards;
         event.context = context;
         event.duelType = properties.type;

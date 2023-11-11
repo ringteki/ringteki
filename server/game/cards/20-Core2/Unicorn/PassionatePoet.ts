@@ -8,13 +8,13 @@ export default class PassionatePoet extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Give all participating enemies -1/-1',
-            condition: context => context.source.isAttacking(),
-            gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
+            condition: (context) => (context.source as DrawCard).isParticipating(),
+            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.game.currentConflict.getCharacters(context.player.opponent),
                 effect: AbilityDsl.effects.modifyBothSkills(-1),
                 duration: Durations.UntilEndOfConflict
             })),
-            effect: 'recite a poem, giving all participating enemies -1{1}/-1{2} until the end of the conflict. They look less than excited.',
+            effect: 'give all participating enemies -1{1}/-1{2} until the end of the conflict',
             effectArgs: ['military', 'political']
         });
     }

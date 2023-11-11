@@ -26,11 +26,6 @@ export default class EarthsStagnation extends DrawCard {
     }
 
     #penaltyAmount(context: TriggeredAbilityContext): number {
-        return context.player.cardsInPlay.any(
-            (card: DrawCard) =>
-                card.getType() === CardTypes.Character && card.hasTrait('shugenja') && card.hasTrait('earth')
-        )
-            ? -2
-            : -1;
+        return context.player.hasAffinity('earth', context) ? -2 : -1;
     }
 }

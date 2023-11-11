@@ -1,13 +1,19 @@
-describe('Ancient Master', function() {
-    integration(function() {
-        describe('Ancient Master', function() {
-            beforeEach(function() {
+describe('Ancient Master', function () {
+    integration(function () {
+        describe('Ancient Master', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['niten-master','agasha-swordsmith'],
+                        inPlay: ['niten-master', 'agasha-swordsmith'],
                         hand: ['ancient-master'],
-                        conflictDeck: ['hurricane-punch', 'centipede-tattoo', 'mantra-of-fire', 'censure', 'ornate-fan'],
+                        conflictDeck: [
+                            'hurricane-punch',
+                            'centipede-tattoo',
+                            'mantra-of-fire',
+                            'censure',
+                            'ornate-fan'
+                        ],
                         conflictDeckSize: 5
                     },
                     player2: {
@@ -20,14 +26,14 @@ describe('Ancient Master', function() {
                 this.assassination = this.player2.findCardByName('assassination');
             });
 
-            it('can be played as an attachment', function() {
+            it('can be played as an attachment', function () {
                 this.player1.clickCard(this.ancientMaster);
                 this.player1.clickPrompt('Play Ancient Master as an attachment');
                 this.player1.clickCard(this.nitenMaster);
-                expect(this.nitenMaster.attachments.size()).toBe(1);
+                expect(this.nitenMaster.attachments.length).toBe(1);
             });
 
-            it('can be played as an attachment, cancelled and then played as a character', function() {
+            it('can be played as an attachment, cancelled and then played as a character', function () {
                 this.player1.clickCard(this.ancientMaster);
                 expect(this.player1).toHavePromptButton('Play Ancient Master as an attachment');
                 expect(this.player1).toHavePromptButton('Play this character');
@@ -38,7 +44,7 @@ describe('Ancient Master', function() {
                 expect(this.player1).toHavePromptButton('Play this character');
             });
 
-            it('should trigger its reaction and find kihos', function() {
+            it('should trigger its reaction and find kihos', function () {
                 this.player1.clickCard(this.ancientMaster);
                 this.player1.clickPrompt('Play Ancient Master as an attachment');
                 this.player1.clickCard(this.nitenMaster);
@@ -55,7 +61,7 @@ describe('Ancient Master', function() {
                 expect(this.player1.player.hand.size()).toBe(handsize + 1);
             });
 
-            it('should trigger its reaction and find tattoos', function() {
+            it('should trigger its reaction and find tattoos', function () {
                 this.player1.clickCard(this.ancientMaster);
                 this.player1.clickPrompt('Play Ancient Master as an attachment');
                 this.player1.clickCard(this.nitenMaster);
@@ -70,10 +76,9 @@ describe('Ancient Master', function() {
                 expect(this.player1).toHavePrompt('Ancient Master');
                 this.player1.clickPrompt('Centipede Tattoo');
                 expect(this.player1.player.hand.size()).toBe(handsize + 1);
-
             });
 
-            it('should not trigger the reaction when not played as an attachment', function() {
+            it('should not trigger the reaction when not played as an attachment', function () {
                 this.player1.clickCard(this.ancientMaster);
                 this.player1.clickPrompt('Play this character');
                 this.player1.clickPrompt('0');
@@ -86,7 +91,7 @@ describe('Ancient Master', function() {
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
-            it('should return to a character after it leaves play', function() {
+            it('should return to a character after it leaves play', function () {
                 this.chat = spyOn(this.game, 'addMessage');
                 this.player1.clickCard(this.ancientMaster);
                 this.player1.clickPrompt('Play Ancient Master as an attachment');

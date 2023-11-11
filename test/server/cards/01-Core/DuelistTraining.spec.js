@@ -1,7 +1,7 @@
-describe('Duelist Training', function() {
-    integration(function() {
-        describe('Duelist Training', function() {
-            beforeEach(function() {
+describe('Duelist Training', function () {
+    integration(function () {
+        describe('Duelist Training', function () {
+            beforeEach(function () {
                 //this.spy = spyOn(this.game, 'reportError')
                 this.setupTest({
                     phase: 'conflict',
@@ -31,7 +31,7 @@ describe('Duelist Training', function() {
                 this.player2.pass();
             });
 
-            it('should initiate a duel', function() {
+            it('should initiate a duel', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 expect(this.player1).toHavePrompt('Giver of Gifts');
@@ -39,10 +39,12 @@ describe('Duelist Training', function() {
                 this.player1.clickCard(this.seppunGuardsman);
                 expect(this.player1).toHavePrompt('Honor Bid');
                 expect(this.player2).toHavePrompt('Honor Bid');
-                expect(this.getChatLogs(1)).toContain('player1 uses Giver of Gifts\'s gained ability from Duelist Training to initiate a military duel : Giver of Gifts vs. Seppun Guardsman');
+                expect(this.getChatLogs(1)).toContain(
+                    'player1 uses Giver of Gifts\'s gained ability from Duelist Training to initiate a military duel : Giver of Gifts vs. Seppun Guardsman'
+                );
             });
 
-            it('should offer players a choice of how to pay the difference in bids', function() {
+            it('should offer players a choice of how to pay the difference in bids', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -53,7 +55,7 @@ describe('Duelist Training', function() {
                 expect(this.player1.honor).toBe(10);
             });
 
-            it('should allow players to pay with cards when they have sufficient to do so', function() {
+            it('should allow players to pay with cards when they have sufficient to do so', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -66,7 +68,7 @@ describe('Duelist Training', function() {
                 expect(this.seppunGuardsman.bowed).toBe(true);
             });
 
-            it('should not offer players the choice if they don\'t have sufficent cards', function() {
+            it('should not offer players the choice if they don\'t have sufficent cards', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -76,19 +78,19 @@ describe('Duelist Training', function() {
                 expect(this.seppunGuardsman.bowed).toBe(true);
             });
 
-            it('should be removed if the attachment is removed from the character', function() {
+            it('should be removed if the attachment is removed from the character', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Move an attachment');
                 this.player1.clickCard(this.duelistTraining1);
                 this.shinjoOutrider = this.player1.clickCard('shinjo-outrider');
-                expect(this.giverOfGifts1.attachments.toArray()).not.toContain(this.duelistTraining1);
-                expect(this.shinjoOutrider.attachments.toArray()).toContain(this.duelistTraining1);
+                expect(this.giverOfGifts1.attachments).not.toContain(this.duelistTraining1);
+                expect(this.shinjoOutrider.attachments).toContain(this.duelistTraining1);
                 this.player2.pass();
                 this.player1.clickCard(this.giverOfGifts1);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be usable by another character, even if it has been used by this one', function() {
+            it('should be usable by another character, even if it has been used by this one', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -107,7 +109,7 @@ describe('Duelist Training', function() {
                 expect(this.player1).toHavePrompt('Shinjo Outrider');
             });
 
-            it('should not be usable if it is used and moved and then moved back', function() {
+            it('should not be usable if it is used and moved and then moved back', function () {
                 // Initiate a duel with GoG1
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
@@ -126,8 +128,8 @@ describe('Duelist Training', function() {
                 expect(this.player1).toHavePrompt('Choose an attachment');
                 this.player1.clickCard(this.duelistTraining1);
                 this.player1.clickCard(this.giverOfGifts2);
-                expect(this.giverOfGifts1.attachments.toArray()).not.toContain(this.duelistTraining1);
-                expect(this.giverOfGifts2.attachments.toArray()).toContain(this.duelistTraining1);
+                expect(this.giverOfGifts1.attachments).not.toContain(this.duelistTraining1);
+                expect(this.giverOfGifts2.attachments).toContain(this.duelistTraining1);
                 this.player2.pass();
                 // Initiate a duel with GoG2
                 this.player1.clickCard(this.giverOfGifts2);
@@ -142,15 +144,15 @@ describe('Duelist Training', function() {
                 expect(this.player1).toHavePrompt('Choose an attachment');
                 this.player1.clickCard(this.duelistTraining1);
                 this.player1.clickCard(this.giverOfGifts1);
-                expect(this.giverOfGifts2.attachments.toArray()).not.toContain(this.duelistTraining1);
-                expect(this.giverOfGifts1.attachments.toArray()).toContain(this.duelistTraining1);
+                expect(this.giverOfGifts2.attachments).not.toContain(this.duelistTraining1);
+                expect(this.giverOfGifts1.attachments).toContain(this.duelistTraining1);
                 this.player2.pass();
                 // Try to trigger DT again
                 this.player1.clickCard(this.giverOfGifts1);
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('a second copy of DT should allow the ability to be used twice', function() {
+            it('a second copy of DT should allow the ability to be used twice', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -167,7 +169,7 @@ describe('Duelist Training', function() {
                 expect(this.player1).toBeAbleToSelect(this.seppunGuardsman);
             });
 
-            it('should reset the limit of the abilitiy if DT leaves play', function() {
+            it('should reset the limit of the abilitiy if DT leaves play', function () {
                 this.player1.clickCard(this.giverOfGifts1);
                 this.player1.clickPrompt('Initiate a duel to bow');
                 this.player1.clickCard(this.seppunGuardsman);
@@ -180,7 +182,7 @@ describe('Duelist Training', function() {
                 this.player1.playAttachment(this.duelistTraining1, this.giverOfGifts1);
                 this.player2.pass();
                 expect(this.duelistTraining1.location).toBe('play area');
-                expect(this.giverOfGifts1.attachments.toArray()).toContain(this.duelistTraining1);
+                expect(this.giverOfGifts1.attachments).toContain(this.duelistTraining1);
                 this.player1.clickCard(this.giverOfGifts1);
                 expect(this.player1).toHavePrompt('Choose an ability:');
             });

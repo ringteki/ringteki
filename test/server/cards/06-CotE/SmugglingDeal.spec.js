@@ -1,7 +1,7 @@
-describe('Smuggling Deal', function() {
-    integration(function() {
-        describe('Smuggling Deal\'s ability', function() {
-            beforeEach(function() {
+describe('Smuggling Deal', function () {
+    integration(function () {
+        describe('Smuggling Deal\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -26,7 +26,7 @@ describe('Smuggling Deal', function() {
                 this.blackmail = this.player2.findCardByName('blackmail');
             });
 
-            it('should prompt to choose a triggered ability on a character you control', function() {
+            it('should prompt to choose a triggered ability on a character you control', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 expect(this.player1).toHavePrompt('Smuggling Deal');
                 expect(this.player1).toBeAbleToSelect(this.kudaka);
@@ -36,7 +36,7 @@ describe('Smuggling Deal', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.adeptOfShadows);
             });
 
-            it('should give 1 honor to your opponent as a cost', function() {
+            it('should give 1 honor to your opponent as a cost', function () {
                 let player1honor = this.player1.player.honor;
                 let player2honor = this.player2.player.honor;
                 this.player1.clickCard(this.smugglingDeal);
@@ -45,11 +45,11 @@ describe('Smuggling Deal', function() {
                 expect(this.player2.player.honor).toBe(player2honor + 1);
             });
 
-            it('should handle more than one ability on a character', function() {
+            it('should handle more than one ability on a character', function () {
                 this.player1.clickCard(this.duelistTraining);
                 expect(this.player1).toHavePrompt('Duelist Training');
                 this.player1.clickCard(this.kudaka);
-                expect(this.kudaka.attachments.toArray()).toContain(this.duelistTraining);
+                expect(this.kudaka.attachments).toContain(this.duelistTraining);
                 this.player2.pass();
                 this.player1.clickCard(this.smugglingDeal);
                 expect(this.player1).toHavePrompt('Smuggling Deal');
@@ -57,7 +57,7 @@ describe('Smuggling Deal', function() {
                 expect(this.player1).toHavePrompt('Choose an ability');
             });
 
-            it('should allow you to trigger that ability an additional time', function() {
+            it('should allow you to trigger that ability an additional time', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 this.player1.clickCard(this.daringChallenger);
                 this.noMoreActions();
@@ -77,7 +77,7 @@ describe('Smuggling Deal', function() {
                 expect(this.player1).toHavePrompt('Daring Challenger');
             });
 
-            it('should allow you to trigger that ability an additional time (original limit \'twice\')', function() {
+            it('should allow you to trigger that ability an additional time (original limit \'twice\')', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 this.player1.clickCard(this.kudaka);
                 this.noMoreActions();
@@ -123,7 +123,7 @@ describe('Smuggling Deal', function() {
                 expect(this.player1).toHavePrompt('Action Window');
             });
 
-            it('should not allow your opponent to trigger that ability an additional time (if control is transferred)', function() {
+            it('should not allow your opponent to trigger that ability an additional time (if control is transferred)', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 this.player1.clickCard(this.daringChallenger);
                 this.noMoreActions();
@@ -156,8 +156,8 @@ describe('Smuggling Deal', function() {
             });
         });
 
-        describe('Smuggling Deal & Young Rumormonger & Kitsuki Shomon interaction', function() {
-            beforeEach(function() {
+        describe('Smuggling Deal & Young Rumormonger & Kitsuki Shomon interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -179,7 +179,7 @@ describe('Smuggling Deal', function() {
                 this.kitsukiShomon.bowed = true;
             });
 
-            it('should allow Kitsuki Shomon to trigger a second time', function() {
+            it('should allow Kitsuki Shomon to trigger a second time', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 this.player1.clickCard(this.kitsukiShomon);
                 this.player2.clickCard(this.markOfShame);
@@ -203,8 +203,8 @@ describe('Smuggling Deal', function() {
             });
         });
 
-        describe('Smuggling Deal\'s ability if target leaves play during resolution', function() {
-            beforeEach(function() {
+        describe('Smuggling Deal\'s ability if target leaves play during resolution', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -221,7 +221,7 @@ describe('Smuggling Deal', function() {
                 this.player2.pass();
             });
 
-            it('should resolve without error (without effect)', function() {
+            it('should resolve without error (without effect)', function () {
                 this.player1.clickCard(this.smugglingDeal);
                 this.player1.clickCard(this.obstinateRecruit);
                 expect(this.obstinateRecruit.location).toBe('dynasty discard pile');

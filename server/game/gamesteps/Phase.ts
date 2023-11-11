@@ -7,7 +7,10 @@ import type { Step } from './Step';
 export class Phase extends BaseStepWithPipeline {
     public steps: Step[] = [];
 
-    constructor(game: Game, private name: Phases | 'setup') {
+    constructor(
+        game: Game,
+        private name: Phases | 'setup'
+    ) {
         super(game);
     }
 

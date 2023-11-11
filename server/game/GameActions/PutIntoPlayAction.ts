@@ -1,15 +1,15 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames, Players }  from '../Constants';
-import Player = require('../player');
+import type AbilityContext from '../AbilityContext';
+import { CardTypes, EventNames, Locations, Players } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Player from '../player';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface PutIntoPlayProperties extends CardActionProperties {
-    fate?: number,
-    status?: string,
-    controller?: Players,
-    side?: Player,
-    overrideLocation?: Locations
+    fate?: number;
+    status?: 'honored' | 'ordinary' | 'dishonored';
+    controller?: Players;
+    side?: Player;
+    overrideLocation?: Locations;
 }
 
 export class PutIntoPlayAction extends CardGameAction {
@@ -18,23 +18,26 @@ export class PutIntoPlayAction extends CardGameAction {
     cost = 'putting {0} into play';
     targetType = [CardTypes.Character];
     intoConflict: boolean;
-    defaultProperties: PutIntoPlayProperties = { 
+    defaultProperties: PutIntoPlayProperties = {
         fate: 0,
         status: 'ordinary',
         controller: Players.Self,
         side: null,
         overrideLocation: null
     };
-    constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
+    constructor(
+        properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties,
+        intoConflict = true
+    ) {
         super(properties);
         this.intoConflict = intoConflict;
     }
 
-    getDefaultSide(context) {
+    getDefaultSide(context: AbilityContext) {
         return context.player;
     }
 
-    getPutIntoPlayPlayer(context) {
+    getPutIntoPlayPlayer(context: AbilityContext) {
         return context.player;
     }
 
@@ -45,36 +48,38 @@ export class PutIntoPlayAction extends CardGameAction {
 
     canAffect(card: DrawCard, context: AbilityContext): boolean {
         let properties = this.getProperties(context) as PutIntoPlayProperties;
-        let contextCopy = context.copy( { source: card });
+        let contextCopy = context.copy({ source: card });
         let player = this.getPutIntoPlayPlayer(contextCopy);
         let targetSide = properties.side || this.getDefaultSide(contextCopy);
 
-        if(!context || !super.canAffect(card, context)) {
+        if (!context || !super.canAffect(card, context)) {
             return false;
-        } else if(!player || card.anotherUniqueInPlay(player)) {
+        } else if (!player || card.anotherUniqueInPlay(player)) {
             return false;
-        } else if(card.location === Locations.PlayArea || card.isFacedown()) {
+        } else if (card.location === Locations.PlayArea || card.isFacedown()) {
             return false;
-        } else if(!card.checkRestrictions('putIntoPlay', context)) {
+        } else if (!card.checkRestrictions('putIntoPlay', context)) {
             return false;
         } else if (!player.checkRestrictions('enterPlay', contextCopy)) {
             return false;
-        } else if(this.intoConflict) {
+        } else if (this.intoConflict) {
             // There is no current conflict, or no context (cards must be put into play by a player, not a framework event)
-            if(!context.game.currentConflict) {
+            if (!context.game.currentConflict) {
                 return false;
             }
             // card cannot participate in this conflict type
-            if(card.hasDash(context.game.currentConflict.conflictType)) {
+            if (card.hasDash(context.game.currentConflict.conflictType)) {
                 return false;
             }
-            if(!card.checkRestrictions('putIntoConflict', context)) {
+            if (!card.checkRestrictions('putIntoConflict', context)) {
                 return false;
             }
-            
+
             // its being put into play for its controller, & controller is attacking and character can't attack, or controller is defending and character can't defend
-            if((targetSide.isAttackingPlayer() && !card.canParticipateAsAttacker()) ||
-                (targetSide.isDefendingPlayer() && !card.canParticipateAsDefender())) {
+            if (
+                (targetSide.isAttackingPlayer() && !card.canParticipateAsAttacker()) ||
+                (targetSide.isDefendingPlayer() && !card.canParticipateAsDefender())
+            ) {
                 return false;
             }
         }
@@ -82,7 +87,10 @@ export class PutIntoPlayAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { fate, status, controller, side, overrideLocation } = this.getProperties(context, additionalProperties) as PutIntoPlayProperties;
+        let { fate, status, controller, side, overrideLocation } = this.getProperties(
+            context,
+            additionalProperties
+        ) as PutIntoPlayProperties;
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.fate = fate;
         event.status = status;
@@ -96,23 +104,23 @@ export class PutIntoPlayAction extends CardGameAction {
         let player = this.getPutIntoPlayPlayer(event.context);
         this.checkForRefillProvince(event.card, event, additionalProperties);
         event.card.new = true;
-        if(event.fate) {
+        if (event.fate) {
             event.card.fate = event.fate;
         }
 
         let finalController = event.context.player;
-        if(event.controller === Players.Opponent) {
+        if (event.controller === Players.Opponent) {
             finalController = finalController.opponent;
         }
 
         let targetSide = event.side;
 
-        if(event.status === 'honored') {
+        if (event.status === 'honored') {
             event.card.honor();
-        } else if(event.status === 'dishonored') {
+        } else if (event.status === 'dishonored') {
             event.card.dishonor();
         }
-        if(event.card.hasPrintedKeyword('corrupted')) {
+        if (event.card.hasPrintedKeyword('corrupted')) {
             event.card.taint();
         }
 
@@ -126,12 +134,12 @@ export class PutIntoPlayAction extends CardGameAction {
             event.card.controller.cardsInPlay.push(event.card);
         }
 
-        if(event.intoConflict) {
-            if(targetSide.isAttackingPlayer()) {
+        if (event.intoConflict) {
+            if (targetSide.isAttackingPlayer()) {
                 event.context.game.currentConflict.addAttacker(event.card);
             } else {
                 event.context.game.currentConflict.addDefender(event.card);
-            }        
+            }
         }
     }
 }

@@ -13,8 +13,12 @@ export class ClaimFavorAction extends PlayerAction {
     eventName = EventNames.OnClaimFavor;
     effect = "claim the Emperor's favor";
 
-    hasLegalTarget(): boolean {
-        return true;
+    hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
+        const properties = this.getProperties(context, additionalProperties) as ClaimFavorProperties;
+        if (Array.isArray(properties.target)) {
+            return !!properties.target[0];
+        }
+        return !!properties.target;
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {

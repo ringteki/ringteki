@@ -1,11 +1,11 @@
-import AbilityContext = require("../AbilityContext");
+import AbilityContext = require('../AbilityContext');
 import BaseCard = require('../basecard');
 
 import { CardGameAction, CardActionProperties } from './CardGameAction';
 import { Locations, CardTypes, EventNames } from '../Constants';
 
 export interface RemoveFromGameProperties extends CardActionProperties {
-    location?: Locations
+    location?: Locations | Locations[];
 }
 
 export class RemoveFromGameAction extends CardGameAction {
@@ -13,27 +13,33 @@ export class RemoveFromGameAction extends CardGameAction {
     eventName = EventNames.OnCardLeavesPlay;
     cost = 'removing {0} from the game';
     targetType = [CardTypes.Character, CardTypes.Attachment, CardTypes.Holding, CardTypes.Event];
-    effect = 'remove {0} from the game'
+    effect = 'remove {0} from the game';
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties): boolean {
-        let properties = this.getProperties(context, additionalProperties) as RemoveFromGameProperties;
-        if(properties.location) {
-            if(properties.location === Locations.Any) {
-                return true;
-            }
-            if(properties.location !== card.location) {
-                return false;
-            }
-        }
-        else {
-            if(card.type === CardTypes.Holding) {
-                if(!card.location.includes('province')) {
-                    return false;
+        const properties = this.getProperties(context, additionalProperties) as RemoveFromGameProperties;
+        const propValidLocations = Array.isArray(properties.location)
+            ? properties.location
+            : properties.location
+            ? [properties.location]
+            : undefined;
+
+        if (propValidLocations) {
+            for (const validLocation of propValidLocations) {
+                if (validLocation === Locations.Any || card.location === validLocation) {
+                    return true;
                 }
-            } else if(card.location !== Locations.PlayArea) {
+            }
+            return false;
+        }
+
+        if (card.type === CardTypes.Holding) {
+            if (!card.location.includes('province')) {
                 return false;
             }
+        } else if (card.location !== Locations.PlayArea) {
+            return false;
         }
+
         return super.canAffect(card, context);
     }
 

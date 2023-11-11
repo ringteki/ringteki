@@ -8,7 +8,7 @@ class DisparagingChallenge extends DrawCard {
             title: 'Initiate a political duel',
             initiateDuel: {
                 type: DuelTypes.Political,
-                duelTargetMustBeAtHome: true,
+                targetCondition: card => !card.isParticipating(),
                 gameAction: duel => AbilityDsl.actions.multiple([
                     AbilityDsl.actions.sendHome({ target: duel.loser }),
                     AbilityDsl.actions.moveToConflict({ target: duel.loser })

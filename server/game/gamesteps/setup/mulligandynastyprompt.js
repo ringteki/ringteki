@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const AllPlayerPrompt = require('../allplayerprompt.js');
+const { AllPlayerPrompt } = require('../AllPlayerPrompt.js');
 
 class MulliganDynastyPrompt extends AllPlayerPrompt {
     constructor(game) {

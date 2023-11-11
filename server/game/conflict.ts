@@ -1,11 +1,11 @@
+import * as Settings from '../settings';
 import { CardTypes, ConflictTypes, EffectNames, Elements, EventNames, Locations } from './Constants';
 import { GameObject } from './GameObject';
-import BaseCard = require('./basecard');
+import { ProvinceCard } from './ProvinceCard';
+import BaseCard from './basecard';
 import Game = require('./game');
 import Player = require('./player');
-import type ProvinceCard = require('./provincecard');
 import type Ring = require('./ring');
-import * as Settings from '../settings';
 import DrawCard = require('./drawcard');
 
 type Predicate = (card: DrawCard) => boolean;

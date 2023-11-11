@@ -1,6 +1,6 @@
 import { AbilityTypes, EventNames } from '../../Constants';
 import { EventRegistrar } from '../../EventRegistrar';
-import ProvinceCard = require('../../provincecard');
+import { ProvinceCard } from '../../ProvinceCard';
 
 export default class Pilgrimage extends ProvinceCard {
     static id = 'pilgrimage';

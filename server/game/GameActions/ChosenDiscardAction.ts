@@ -1,5 +1,6 @@
 import AbilityContext = require('../AbilityContext');
 import Player = require('../player');
+import BaseCard = require('../basecard');
 
 import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 import { Locations, Players, TargetModes, EventNames } from '../Constants';
@@ -7,12 +8,14 @@ import { Locations, Players, TargetModes, EventNames } from '../Constants';
 export interface ChosenDiscardProperties extends PlayerActionProperties {
     amount?: number;
     targets?: boolean;
+    cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
 }
 
 export class ChosenDiscardAction extends PlayerAction {
     defaultProperties: ChosenDiscardProperties = {
         amount: 1,
         targets: true,
+        cardCondition: () => true,
     };
     name = 'discard';
     eventName = EventNames.OnCardsDiscardedFromHand;
@@ -24,7 +27,9 @@ export class ChosenDiscardAction extends PlayerAction {
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as ChosenDiscardProperties;
-        if(player.hand.size() === 0 || properties.amount === 0) {
+        const availableHand = player.hand.filter(card => properties.cardCondition(card, context));
+
+        if(availableHand.length === 0 || properties.amount === 0) {
             return false;
         }
         return super.canAffect(player, context);
@@ -33,18 +38,19 @@ export class ChosenDiscardAction extends PlayerAction {
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties) as ChosenDiscardProperties;
         for(let player of properties.target as Player[]) {
-            let amount = Math.min(player.hand.size(), properties.amount);
+            const availableHand = player.hand.filter(card => properties.cardCondition(card, context));
+            let amount = Math.min(availableHand.length, properties.amount);
             if(amount > 0) {
-                if(amount === player.hand.size()) {
+                if(amount >= availableHand.length) {
                     let event = this.getEvent(player, context) as any;
-                    event.cards = player.hand.slice(0, amount);
+                    event.cards = availableHand;
                     events.push(event);
                     return;
                 }
 
                 if(properties.targets && context.choosingPlayerOverride && context.choosingPlayerOverride !== player) {
                     let event = this.getEvent(player, context) as any;
-                    event.cards = player.hand.shuffle().slice(0, amount);
+                    event.cards = availableHand.slice(0, amount);
                     events.push(event);
                     return;
                 }
@@ -55,6 +61,7 @@ export class ChosenDiscardAction extends PlayerAction {
                     numCards: amount,
                     location: Locations.Hand,
                     controller: player === context.player ? Players.Self : Players.Opponent,
+                    cardCondition: card => properties.cardCondition(card, context),
                     onSelect: (player, cards) => {
                         let event = this.getEvent(player, context) as any;
                         event.cards = cards;

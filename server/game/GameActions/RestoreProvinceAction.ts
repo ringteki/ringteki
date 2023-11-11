@@ -1,11 +1,10 @@
-import { CardGameAction, CardActionProperties } from './CardGameAction';
+import type AbilityContext from '../AbilityContext';
 import { CardTypes, EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-import ProvinceCard = require('../provincecard');
+import type { ProvinceCard } from '../ProvinceCard';
+import type BaseCard from '../basecard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface RestoreProvinceProperties extends CardActionProperties {
-}
+export interface RestoreProvinceProperties extends CardActionProperties {}
 
 export class RestoreProvinceAction extends CardGameAction {
     name = 'restoreProvince';
@@ -15,10 +14,10 @@ export class RestoreProvinceAction extends CardGameAction {
     effect = 'restore {0}';
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card.isProvince) {
+        if (!card.isProvince) {
             return false;
         }
-        if(!card.isBroken) {
+        if (!card.isBroken) {
             return false;
         }
         return super.canAffect(card, context);

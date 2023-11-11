@@ -1,6 +1,6 @@
-describe('Agasha Prodigy', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Agasha Prodigy', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -29,7 +29,7 @@ describe('Agasha Prodigy', function() {
             this.player2.reduceDeckToNumber('conflict deck', 0);
         });
 
-        it('should allow each player to choose a character', function() {
+        it('should allow each player to choose a character', function () {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player2.moveCard(this.katana2, 'conflict deck');
 
@@ -50,7 +50,7 @@ describe('Agasha Prodigy', function() {
             expect(this.player2).toBeAbleToSelect(this.magistrate);
         });
 
-        it('should allow opponent to choose not to select a character', function() {
+        it('should allow opponent to choose not to select a character', function () {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player2.moveCard(this.katana2, 'conflict deck');
 
@@ -64,7 +64,7 @@ describe('Agasha Prodigy', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should discard the top card of each deck then try to attach it', function() {
+        it('should discard the top card of each deck then try to attach it', function () {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player2.moveCard(this.katana2, 'conflict deck');
 
@@ -76,13 +76,15 @@ describe('Agasha Prodigy', function() {
             expect(this.player1.honor).toBe(11);
             expect(this.player2.honor).toBe(9);
 
-            expect(this.agashaProdigy.attachments.toArray()).toContain(this.katana);
-            expect(this.magistrate.attachments.toArray()).toContain(this.katana2);
+            expect(this.agashaProdigy.attachments).toContain(this.katana);
+            expect(this.magistrate.attachments).toContain(this.katana2);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy.  player2 gives player1 1 honor to discard the top card of their deck and attempt to attach it to Righteous Magistrate');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy.  player2 gives player1 1 honor to discard the top card of their deck and attempt to attach it to Righteous Magistrate'
+            );
         });
 
-        it('should not make the opponent pay the honor or discard the card if they choose not to select a character', function() {
+        it('should not make the opponent pay the honor or discard the card if they choose not to select a character', function () {
             this.player1.moveCard(this.wanderer, 'conflict deck');
             this.player2.moveCard(this.katana2, 'conflict deck');
 
@@ -95,10 +97,12 @@ describe('Agasha Prodigy', function() {
 
             expect(this.wanderer.location).toBe('conflict discard pile');
             expect(this.katana2.location).toBe('conflict deck');
-            expect(this.getChatLogs(10)).toContain('player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy'
+            );
         });
 
-        it('should fail to attach if the top card cannot legally attach', function() {
+        it('should fail to attach if the top card cannot legally attach', function () {
             this.player1.moveCard(this.missive, 'conflict deck');
             this.player2.moveCard(this.fury, 'conflict deck');
 
@@ -113,21 +117,23 @@ describe('Agasha Prodigy', function() {
             expect(this.missive.location).toBe('conflict discard pile');
             expect(this.fury.location).toBe('conflict discard pile');
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy.  player2 gives player1 1 honor to discard the top card of their deck and attempt to attach it to Righteous Magistrate');
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy.  player2 gives player1 1 honor to discard the top card of their deck and attempt to attach it to Righteous Magistrate'
+            );
         });
 
-        it('should not be able to be triggered if both decks are empty', function() {
+        it('should not be able to be triggered if both decks are empty', function () {
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should not be able to be triggered if your deck is empty', function() {
+        it('should not be able to be triggered if your deck is empty', function () {
             this.player2.moveCard(this.fury, 'conflict deck');
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should be able to be triggered if your opponent\'s deck is empty, but they shouldn\'t be allowed to choose to give you an honor', function() {
+        it('should be able to be triggered if your opponent\'s deck is empty, but they shouldn\'t be allowed to choose to give you an honor', function () {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player1).toHavePrompt('Choose a character');
@@ -135,7 +141,7 @@ describe('Agasha Prodigy', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should not allow choosing a character if you cannot give the honor', function() {
+        it('should not allow choosing a character if you cannot give the honor', function () {
             this.player1.moveCard(this.katana, 'conflict deck');
             this.player2.moveCard(this.katana2, 'conflict deck');
             this.noMoreActions();
@@ -150,9 +156,11 @@ describe('Agasha Prodigy', function() {
             expect(this.player1).toHavePrompt('Choose a character');
             this.player1.clickCard(this.agashaProdigy);
             expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.getChatLogs(3)).toContain('player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy');
+            expect(this.getChatLogs(3)).toContain(
+                'player1 uses Agasha Prodigy to discard the top card of their deck and attempt to attach it to Agasha Prodigy'
+            );
 
-            expect(this.agashaProdigy.attachments.toArray()).toContain(this.katana);
+            expect(this.agashaProdigy.attachments).toContain(this.katana);
             expect(this.katana2.location).toBe('conflict deck');
             expect(this.player1.honor).toBe(10);
             expect(this.player2.honor).toBe(10);

@@ -66,7 +66,7 @@ describe('Agasha Shunsen', function () {
                 this.player1.clickRing('earth');
                 this.player1.clickPrompt('Fine Katana');
                 this.fineKatana = this.player1.findCardByName('fine-katana');
-                expect(this.agashaShunsen.attachments.toArray()).toContain(this.fineKatana);
+                expect(this.agashaShunsen.attachments).toContain(this.fineKatana);
                 expect(this.player2).toHavePrompt('Conflict Action Window');
             });
 
@@ -77,7 +77,11 @@ describe('Agasha Shunsen', function () {
                 this.player1.clickRing('earth');
                 this.chat = spyOn(this.game, 'addMessage');
                 this.player1.clickPrompt('Don\'t attach a card');
-                expect(this.chat).toHaveBeenCalledWith('{0} chooses not to attach anything to {1}', this.player1.player, this.agashaShunsen);
+                expect(this.chat).toHaveBeenCalledWith(
+                    '{0} chooses not to attach anything to {1}',
+                    this.player1.player,
+                    this.agashaShunsen
+                );
                 expect(this.chat).toHaveBeenCalledWith('{0} is shuffling their conflict deck', this.player1.player);
             });
         });

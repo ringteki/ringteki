@@ -1,6 +1,6 @@
-describe('Fire Elemental Guard', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Fire Elemental Guard', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -25,28 +25,28 @@ describe('Fire Elemental Guard', function() {
             this.taintedKoku = this.player2.findCardByName('tainted-koku');
         });
 
-        describe('Fire Elemental Guard\'s constant abililty', function() {
-            it('should allow spell attachments', function() {
+        describe('Fire Elemental Guard\'s constant abililty', function () {
+            it('should allow spell attachments', function () {
                 this.player1.playAttachment(this.embraceTheVoid, this.fireElementalGuard);
                 expect(this.embraceTheVoid.location).toBe('play area');
-                expect(this.fireElementalGuard.attachments.toArray()).toContain(this.embraceTheVoid);
+                expect(this.fireElementalGuard.attachments).toContain(this.embraceTheVoid);
                 this.player2.playAttachment(this.cloudTheMind, this.fireElementalGuard);
                 expect(this.cloudTheMind.location).toBe('play area');
-                expect(this.fireElementalGuard.attachments.toArray()).toContain(this.cloudTheMind);
+                expect(this.fireElementalGuard.attachments).toContain(this.cloudTheMind);
             });
 
-            it('should prevent non-spell attachments', function() {
+            it('should prevent non-spell attachments', function () {
                 this.player1.playAttachment(this.fineKatana, this.fireElementalGuard);
                 expect(this.fineKatana.location).not.toBe('play area');
-                expect(this.fireElementalGuard.attachments.toArray()).not.toContain(this.fineKatana);
+                expect(this.fireElementalGuard.attachments).not.toContain(this.fineKatana);
                 this.player2.playAttachment(this.taintedKoku, this.fireElementalGuard);
                 expect(this.taintedKoku.location).not.toBe('play area');
-                expect(this.fireElementalGuard.attachments.toArray()).not.toContain(this.taintedKoku);
+                expect(this.fireElementalGuard.attachments).not.toContain(this.taintedKoku);
             });
         });
 
-        describe('Fire Elemental Guard\'s ability', function() {
-            it('should not be triggerable outside of a conflict', function() {
+        describe('Fire Elemental Guard\'s ability', function () {
+            it('should not be triggerable outside of a conflict', function () {
                 this.player1.playAttachment(this.embraceTheVoid, this.fireElementalGuard);
                 this.player2.pass();
                 this.player1.clickCard(this.againstTheWaves);
@@ -59,8 +59,8 @@ describe('Fire Elemental Guard', function() {
                 expect(this.player1).toHavePrompt('Action Window');
             });
 
-            describe('during a conflict', function() {
-                beforeEach(function() {
+            describe('during a conflict', function () {
+                beforeEach(function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.fireElementalGuard],
@@ -68,8 +68,8 @@ describe('Fire Elemental Guard', function() {
                     });
                 });
 
-                describe('if 3 spell cards have been played by its controller', function() {
-                    beforeEach(function() {
+                describe('if 3 spell cards have been played by its controller', function () {
+                    beforeEach(function () {
                         this.player2.pass();
                         this.player1.playAttachment(this.embraceTheVoid, this.fireElementalGuard);
                         this.player2.pass();
@@ -80,26 +80,26 @@ describe('Fire Elemental Guard', function() {
                         this.player2.pass();
                     });
 
-                    it('should be triggerable', function() {
+                    it('should be triggerable', function () {
                         expect(this.player1).toHavePrompt('Conflict Action Window');
                         this.player1.clickCard(this.fireElementalGuard);
                         expect(this.player1).toHavePrompt('Fire Elemental Guard');
                     });
 
-                    it('should allow selection of an attachment', function() {
+                    it('should allow selection of an attachment', function () {
                         this.player1.clickCard(this.fireElementalGuard);
                         expect(this.player1).toBeAbleToSelect(this.embraceTheVoid);
                         expect(this.player1).toBeAbleToSelect(this.cloudTheMind);
                         expect(this.player1).toBeAbleToSelect(this.graspOfEarth);
                     });
 
-                    it('should discard the chosen attachment from play', function() {
+                    it('should discard the chosen attachment from play', function () {
                         this.player1.clickCard(this.fireElementalGuard);
                         this.player1.clickCard(this.cloudTheMind);
                         expect(this.cloudTheMind.location).toBe('conflict discard pile');
                     });
 
-                    it('should not be triggerable after the conflict ends', function() {
+                    it('should not be triggerable after the conflict ends', function () {
                         this.player1.pass();
                         expect(this.player1).toHavePrompt('Action Window');
                         this.player1.clickCard(this.fireElementalGuard);
@@ -107,7 +107,7 @@ describe('Fire Elemental Guard', function() {
                     });
                 });
 
-                it('should not be triggerable if 3 spell cards have not been played by its controller', function() {
+                it('should not be triggerable if 3 spell cards have not been played by its controller', function () {
                     this.player2.pass();
                     this.player1.playAttachment(this.embraceTheVoid, this.fireElementalGuard);
                     this.player2.pass();

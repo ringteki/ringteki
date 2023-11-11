@@ -14,9 +14,9 @@ export interface SelectTokenProperties extends TokenActionProperties {
     singleToken?: boolean;
     tokenCondition?: (token: StatusToken, context: AbilityContext) => boolean;
     cancelHandler?: () => void;
-    subActionProperties?: (token: StatusToken) => any;
+    subActionProperties?: (token: StatusToken | StatusToken[]) => any;
     message?: string;
-    messageArgs?: (token: StatusToken, player: Player) => any[];
+    messageArgs?: (token: StatusToken | StatusToken[], player: Player) => any[];
     gameAction: GameAction;
     effect?: string;
     effectArgs?: (context) => string[];

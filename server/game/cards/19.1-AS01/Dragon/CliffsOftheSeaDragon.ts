@@ -1,8 +1,8 @@
 import AbilityContext = require('../../../AbilityContext');
 import { ConflictTypes, Players } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl = require('../../../abilitydsl');
 import Player = require('../../../player');
-import ProvinceCard = require('../../../provincecard');
 
 type ConflictRecord = {
     attackingPlayer: Player;

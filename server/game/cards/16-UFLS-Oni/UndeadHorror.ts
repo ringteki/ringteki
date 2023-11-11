@@ -1,5 +1,5 @@
 import { AbilityTypes, CardTypes, Durations, Players } from '../../Constants';
-import { BaseOni } from './BaseOni';
+import { BaseOni } from './_BaseOni';
 import AbilityDsl = require('../../abilitydsl');
 import BaseCard = require('../../basecard');
 import DrawCard = require('../../drawcard');

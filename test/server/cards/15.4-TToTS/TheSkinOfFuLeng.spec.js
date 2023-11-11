@@ -1,7 +1,7 @@
-describe('The Skin of Fu Leng', function() {
-    integration(function() {
-        describe('Attaching Restriction', function() {
-            beforeEach(function() {
+describe('The Skin of Fu Leng', function () {
+    integration(function () {
+        describe('Attaching Restriction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -19,7 +19,7 @@ describe('The Skin of Fu Leng', function() {
                 this.kachiko = this.player2.findCardByName('bayushi-kachiko');
             });
 
-            it('should allow you to attach to a unique character you control', function() {
+            it('should allow you to attach to a unique character you control', function () {
                 this.player1.clickCard(this.skin);
                 expect(this.player1).toBeAbleToSelect(this.toshimoko);
                 expect(this.player1).not.toBeAbleToSelect(this.challenger);
@@ -27,9 +27,9 @@ describe('The Skin of Fu Leng', function() {
             });
         });
 
-        describe('Opponent cannot trigger characters', function() {
-            describe('Actions', function() {
-                beforeEach(function() {
+        describe('Opponent cannot trigger characters', function () {
+            describe('Actions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -48,7 +48,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with fate', function() {
+                it('Should be able to trigger characters with fate', function () {
                     this.brawler.fate = 1;
                     this.noMoreActions();
                     this.player1.passConflict();
@@ -66,7 +66,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.toshimoko.bowed).toBe(true);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -82,8 +82,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Reactions', function() {
-                beforeEach(function() {
+            describe('Reactions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -104,7 +104,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with fate', function() {
+                it('Should be able to trigger characters with fate', function () {
                     this.ardent.fate = 1;
                     this.noMoreActions();
                     this.initiateConflict({
@@ -124,7 +124,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player2.honor).toBe(p2 + 2);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -139,8 +139,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Interrupts', function() {
-                beforeEach(function() {
+            describe('Interrupts', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -161,7 +161,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with fate', function() {
+                it('Should be able to trigger characters with fate', function () {
                     this.callow.fate = 1;
                     this.noMoreActions();
                     this.initiateConflict({
@@ -181,7 +181,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.whisperer.isHonored).toBe(true);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -197,9 +197,9 @@ describe('The Skin of Fu Leng', function() {
             });
         });
 
-        describe('Can Trigger opponent\'s characters', function() {
-            describe('Actions', function() {
-                beforeEach(function() {
+        describe('Can Trigger opponent\'s characters', function () {
+            describe('Actions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -218,7 +218,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with no fate', function() {
+                it('Should be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -234,7 +234,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.toshimoko.bowed).toBe(true);
                 });
 
-                it('Should not be able to trigger characters with fate', function() {
+                it('Should not be able to trigger characters with fate', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -250,8 +250,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Reactions', function() {
-                beforeEach(function() {
+            describe('Reactions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -272,7 +272,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with no fate', function() {
+                it('Should be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -290,7 +290,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player2.honor).toBe(p2 - 2);
                 });
 
-                it('Should not be able to trigger characters with fate', function() {
+                it('Should not be able to trigger characters with fate', function () {
                     this.ardent.fate = 1;
                     this.noMoreActions();
                     this.initiateConflict({
@@ -305,8 +305,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Interrupts', function() {
-                beforeEach(function() {
+            describe('Interrupts', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -327,7 +327,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Should be able to trigger characters with no fate', function() {
+                it('Should be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -346,7 +346,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.toshimoko.isHonored).toBe(true);
                 });
 
-                it('Should not be able to trigger characters with fate', function() {
+                it('Should not be able to trigger characters with fate', function () {
                     this.callow.fate = 1;
                     this.noMoreActions();
                     this.initiateConflict({
@@ -361,14 +361,14 @@ describe('The Skin of Fu Leng', function() {
             });
         });
 
-        describe('Testing Specific ability interactions', function() {
+        describe('Testing Specific ability interactions', function () {
             /*
                 Brash Samurai (I have no participating characters, my opponent just has Brash) - Should not trigger
                 Brash Samurai (I have a character, my opponent just has Brash) - Should not trigger
                 Brash Samurai (I have no participating characters, my opponent has Brash + something) - Should not trigger
             */
-            describe('Participating Alone', function() {
-                beforeEach(function() {
+            describe('Participating Alone', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -388,7 +388,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should not allow you to trigger if you control a character', function() {
+                it('should not allow you to trigger if you control a character', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -402,7 +402,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.brash.isHonored).toBe(false);
                 });
 
-                it('should not allow you to trigger if it is participating alone', function() {
+                it('should not allow you to trigger if it is participating alone', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -417,7 +417,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.brash.isHonored).toBe(false);
                 });
 
-                it('should not allow you to trigger if it is not participating alone if you have no characters', function() {
+                it('should not allow you to trigger if it is not participating alone if you have no characters', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -437,8 +437,8 @@ describe('The Skin of Fu Leng', function() {
                 Doji Challenger (defending) - While this character is attacking: no trigger.
                 Doji Challenger (attacking) - While this character is attacking: should trigger.  I should choose their character
             */
-            describe('While this character is attacking', function() {
-                beforeEach(function() {
+            describe('While this character is attacking', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -458,7 +458,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should not allow you to trigger if it is defending', function() {
+                it('should not allow you to trigger if it is defending', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -471,7 +471,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
 
-                it('should allow you to trigger if it is attacking', function() {
+                it('should allow you to trigger if it is attacking', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -490,7 +490,9 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.clickCard(this.brash);
                     expect(this.game.currentConflict.attackers).toContain(this.brash);
 
-                    expect(this.getChatLogs(5)).toContain('player1 uses Doji Challenger to move Brash Samurai into the conflict');
+                    expect(this.getChatLogs(5)).toContain(
+                        'player1 uses Doji Challenger to move Brash Samurai into the conflict'
+                    );
                 });
             });
 
@@ -498,8 +500,8 @@ describe('The Skin of Fu Leng', function() {
                 Guardian Kami (defending) (sacrifice cost) - Should trigger
                 Guardian Kami (attacking) - no trigger
             */
-            describe('While this character is defending (+ sacrifice cost)', function() {
-                beforeEach(function() {
+            describe('While this character is defending (+ sacrifice cost)', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -518,7 +520,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should allow you to trigger if it is defending', function() {
+                it('should allow you to trigger if it is defending', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -533,10 +535,12 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Air Ring');
                     this.player1.clickPrompt('Gain 2 honor');
                     expect(this.player1.honor).toBe(honor + 2);
-                    expect(this.getChatLogs(5)).toContain('player1 uses Guardian Kami, sacrificing Guardian Kami to resolve Air Ring');
+                    expect(this.getChatLogs(5)).toContain(
+                        'player1 uses Guardian Kami, sacrificing Guardian Kami to resolve Air Ring'
+                    );
                 });
 
-                it('should not allow you to trigger if it is attacking', function() {
+                it('should not allow you to trigger if it is attacking', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -557,8 +561,8 @@ describe('The Skin of Fu Leng', function() {
                 Hida O-Ushi (attacking, opponent wins conflict) - no trigger
                 Hida O-Ushi (attacking, I win conflict) - should trigger, I get the extra conflict
             */
-            describe('After you win a conflict as the defending player', function() {
-                beforeEach(function() {
+            describe('After you win a conflict as the defending player', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -579,7 +583,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should not allow you to trigger if you lose as the attacker', function() {
+                it('should not allow you to trigger if you lose as the attacker', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.whisperer],
@@ -590,7 +594,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Action Window');
                 });
 
-                it('should not allow you to trigger if you win as the attacker', function() {
+                it('should not allow you to trigger if you win as the attacker', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.toshimoko],
@@ -602,7 +606,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Action Window');
                 });
 
-                it('should not allow you to trigger if you lose as the defender', function() {
+                it('should not allow you to trigger if you lose as the defender', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -616,7 +620,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Action Window');
                 });
 
-                it('should allow you to trigger if you win as the defender', function() {
+                it('should allow you to trigger if you win as the defender', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -636,13 +640,19 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Triggered Abilities');
                     expect(this.player1).toBeAbleToSelect(this.oushi);
                     this.player1.clickCard(this.oushi);
-                    expect(this.getChatLogs(5)).toContain('player1 uses Hida O-Ushi to allow player1 to declare an additional military conflict this phase');
+                    expect(this.getChatLogs(5)).toContain(
+                        'player1 uses Hida O-Ushi to allow player1 to declare an additional military conflict this phase'
+                    );
 
                     expect(this.player1.player.getConflictOpportunities()).toBe(conflicts + 1);
-                    expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts + 1);
+                    expect(this.player1.player.getRemainingConflictOpportunitiesForType('military')).toBe(
+                        milConflicts + 1
+                    );
 
                     expect(this.player2.player.getConflictOpportunities()).toBe(conflicts2);
-                    expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(milConflicts2);
+                    expect(this.player2.player.getRemainingConflictOpportunitiesForType('military')).toBe(
+                        milConflicts2
+                    );
                 });
             });
 
@@ -651,8 +661,8 @@ describe('The Skin of Fu Leng', function() {
                 Inferno Guard Invoker (Choose a character you control) - should not be able to choose itself
                 Honored General (via charge) - I should get to choose whether to trigger
             */
-            describe('Some general stuff', function() {
-                beforeEach(function() {
+            describe('Some general stuff', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -679,7 +689,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should use your own resources if they aren\'t elements on the card', function() {
+                it('should use your own resources if they aren\'t elements on the card', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.toshimoko],
@@ -697,7 +707,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.charge.location).toBe('conflict discard pile');
                 });
 
-                it('Choose a character you control - should not allow you to choose the character triggering the ability', function() {
+                it('Choose a character you control - should not allow you to choose the character triggering the ability', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.toshimoko],
@@ -713,7 +723,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.toshimoko.isHonored).toBe(true);
                 });
 
-                it('should work on characters entering play without fate', function() {
+                it('should work on characters entering play without fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         attackers: [this.toshimoko],
@@ -728,7 +738,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Conflict Action Window');
                 });
 
-                it('should not work on characters entering play with fate', function() {
+                it('should not work on characters entering play with fate', function () {
                     this.uji.honor();
                     this.noMoreActions();
                     this.initiateConflict({
@@ -749,8 +759,8 @@ describe('The Skin of Fu Leng', function() {
             /*
                 Ujina - Should trigger.  I should not get to choose the target.
             */
-            describe('Forced Abilities', function() {
-                beforeEach(function() {
+            describe('Forced Abilities', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -768,7 +778,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('should not let you pick targets for forced abilities (they are triggered by the game)', function() {
+                it('should not let you pick targets for forced abilities (they are triggered by the game)', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -781,12 +791,14 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player2).toBeAbleToSelect(this.ujina);
                     expect(this.player2).toBeAbleToSelect(this.toshimoko);
                     this.player2.clickCard(this.ujina);
-                    expect(this.getChatLogs(5)).toContain('player2 uses Isawa Ujina to remove Isawa Ujina from the game');
+                    expect(this.getChatLogs(5)).toContain(
+                        'player2 uses Isawa Ujina to remove Isawa Ujina from the game'
+                    );
                 });
             });
 
-            describe('Auras', function() {
-                beforeEach(function() {
+            describe('Auras', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -805,7 +817,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Auras should not fall off because control never actually switches', function() {
+                it('Auras should not fall off because control never actually switches', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -830,17 +842,31 @@ describe('The Skin of Fu Leng', function() {
                 Kageyu - should check the number of cards my opponent has played, not myself
                 Pious Guardian - should check my provinces, not my opponents
             */
-            describe('Game State Interactions', function() {
-                beforeEach(function() {
+            describe('Game State Interactions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
                             inPlay: ['kakita-toshimoko'],
-                            hand: ['the-skin-of-fu-leng', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name']
+                            hand: [
+                                'the-skin-of-fu-leng',
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name'
+                            ]
                         },
                         player2: {
                             inPlay: ['pious-guardian', 'togashi-mitsu-2', 'daidoji-kageyu', 'matsu-agetoki'],
-                            hand: ['a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'a-new-name', 'way-of-the-scorpion']
+                            hand: [
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name',
+                                'a-new-name',
+                                'way-of-the-scorpion'
+                            ]
                         }
                     });
 
@@ -857,7 +883,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.playAttachment(this.skin, this.toshimoko);
                 });
 
-                it('Mitsu2 - should care how many cards you have played', function() {
+                it('Mitsu2 - should care how many cards you have played', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -890,7 +916,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player1).toHavePrompt('Choose a ring effect to resolve');
                 });
 
-                it('Agetoki - should care how your honor', function() {
+                it('Agetoki - should care how your honor', function () {
                     this.player1.honor = 15;
                     this.player2.honor = 10;
 
@@ -911,8 +937,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.sd2.inConflict).toBe(true);
                 });
 
-                it('Kageyu - should care how many cards my opponent has plays', function() {
-
+                it('Kageyu - should care how many cards my opponent has plays', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'political',
@@ -924,7 +949,10 @@ describe('The Skin of Fu Leng', function() {
                     for(let i = 0; i < 5; i++) {
                         this.player2.playAttachment(this.player2.filterCardsByName('a-new-name')[i], this.kageyu);
                         if(i === 0) {
-                            this.player1.playAttachment(this.player1.filterCardsByName('a-new-name')[1], this.toshimoko);
+                            this.player1.playAttachment(
+                                this.player1.filterCardsByName('a-new-name')[1],
+                                this.toshimoko
+                            );
                         } else if(i !== 4) {
                             this.player1.pass();
                         }
@@ -937,7 +965,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.getChatLogs(5)).toContain('player1 uses Daidoji Kageyu to draw 5 cards');
                 });
 
-                it('Pious Guardian - should care how many of my provinces are broken (testing no trigger)', function() {
+                it('Pious Guardian - should care how many of my provinces are broken (testing no trigger)', function () {
                     this.sd1.isBroken = true;
                     this.sd2.isBroken = true;
 
@@ -956,7 +984,7 @@ describe('The Skin of Fu Leng', function() {
                     expect(this.player2).not.toHavePrompt('Triggered Abilities');
                 });
 
-                it('Pious Guardian - should care how many of my provinces are broken (testing trigger)', function() {
+                it('Pious Guardian - should care how many of my provinces are broken (testing trigger)', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -980,8 +1008,8 @@ describe('The Skin of Fu Leng', function() {
             /*
                 Gained abilities.
             */
-            describe('Gained Abilities', function() {
-                beforeEach(function() {
+            describe('Gained Abilities', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -1002,7 +1030,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player2.playAttachment(this.ti, this.agetoki);
                 });
 
-                it('should let you trigger gained abilities', function() {
+                it('should let you trigger gained abilities', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -1017,19 +1045,21 @@ describe('The Skin of Fu Leng', function() {
                     this.player1.clickCard(this.agetoki);
                     expect(this.player1).toHavePrompt('Select a card to reveal');
                     this.player1.clickPrompt('Supernatural Storm (4)');
-                    expect(this.getChatLogs(5)).toContain('player1 uses Matsu Agetoki\'s gained ability from Tactical Ingenuity to look at the top four cards of their deck');
+                    expect(this.getChatLogs(5)).toContain(
+                        'player1 uses Matsu Agetoki\'s gained ability from Tactical Ingenuity to look at the top four cards of their deck'
+                    );
                 });
             });
 
             /*
                 Duels.
             */
-            describe('Duels', function() {
+            describe('Duels', function () {
                 /*
                     Normal targeting - I should be able to choose a character my opponent controls that is not Raitsugu
                 */
-                describe('Raitsugu', function() {
-                    beforeEach(function() {
+                describe('Raitsugu', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1048,7 +1078,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('basic duel targeting', function() {
+                    it('basic duel targeting', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1062,7 +1092,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player1).not.toBeAbleToSelect(this.toshimoko);
                     });
 
-                    it('duel resolution - adding bids', function() {
+                    it('duel resolution - adding bids', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1084,8 +1114,8 @@ describe('The Skin of Fu Leng', function() {
                     Duel - my bid should apply to Kaezin, my opponent's should apply to their character
                     Duel resolution - if I win should move everyone except the two characters.  If they win should move Kaezin home.
                 */
-                describe('Kaezin', function() {
-                    beforeEach(function() {
+                describe('Kaezin', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1104,7 +1134,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('opponent chooses duel targeting', function() {
+                    it('opponent chooses duel targeting', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1118,7 +1148,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player2).not.toBeAbleToSelect(this.toshimoko);
                     });
 
-                    it('duel resolution - adding bids', function() {
+                    it('duel resolution - adding bids', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1140,8 +1170,8 @@ describe('The Skin of Fu Leng', function() {
                 /*
                     Kyuden Kakita - opponent\'s should trigger and let them choose either character.  Mine should not
                 */
-                describe('Kyuden Kakita', function() {
-                    beforeEach(function() {
+                describe('Kyuden Kakita', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1164,7 +1194,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('duel resolution - Kyuden Kakita', function() {
+                    it('duel resolution - Kyuden Kakita', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1194,8 +1224,8 @@ describe('The Skin of Fu Leng', function() {
                 /*
                     Yakamo with Duelist Training - Should use opponent's honor to determine the "cannot lose a duel"
                 */
-                describe('Hida Yakamo', function() {
-                    beforeEach(function() {
+                describe('Hida Yakamo', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1217,7 +1247,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player2.playAttachment(this.duelist, this.yakamo);
                     });
 
-                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function() {
+                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1238,7 +1268,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.yakamo.bowed).toBe(false);
                     });
 
-                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function() {
+                    it('Yakamo Should use opponent\'s honor to determine "cannot lose a duel"', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1263,8 +1293,8 @@ describe('The Skin of Fu Leng', function() {
                 /*
                     Distinguished Dojo - After you win a duel, should not trigger if your character wins but it was your opponents duelist
                 */
-                describe('Distinguished Dojo', function() {
-                    beforeEach(function() {
+                describe('Distinguished Dojo', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1286,7 +1316,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('should not react if "my character" wins the duel', function() {
+                    it('should not react if "my character" wins the duel', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1303,7 +1333,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player2).toHavePrompt('Conflict Action Window');
                     });
 
-                    it('should not react if "my character" loses the duel', function() {
+                    it('should not react if "my character" loses the duel', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1327,8 +1357,8 @@ describe('The Skin of Fu Leng', function() {
                 /*
                     Cunning Negotiator - Should always let opponent resolve the province (they always control the winner of the duel)
                 */
-                describe('Cunning Negotiator', function() {
-                    beforeEach(function() {
+                describe('Cunning Negotiator', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1347,7 +1377,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('should allow the "controller of the winning character" to trigger the province', function() {
+                    it('should allow the "controller of the winning character" to trigger the province', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1363,7 +1393,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player2).toHavePrompt('Do you want to trigger a province ability?');
                     });
 
-                    it('should allow the "controller of the winning character" to trigger the province', function() {
+                    it('should allow the "controller of the winning character" to trigger the province', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1381,7 +1411,6 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-
             /*
                 Weird Interactions
                 ==================
@@ -1390,9 +1419,9 @@ describe('The Skin of Fu Leng', function() {
                 Uji2 - Should put your cards under their Uji and let them play them
                 Compromised Secrets - Should not allow you to trigger abilities (because you can't give yourself honor)
             */
-            describe('Weird Interactions', function() {
-                describe('Kazue 2', function() {
-                    beforeEach(function() {
+            describe('Weird Interactions', function () {
+                describe('Kazue 2', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1416,7 +1445,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('should not let you trigger characters twice if your opponent has kazue', function() {
+                    it('should not let you trigger characters twice if your opponent has kazue', function () {
                         this.player2.moveCard(this.kazueP2, 'play area');
                         this.noMoreActions();
                         this.initiateConflict({
@@ -1436,7 +1465,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player1).toHavePrompt('Conflict Action Window');
                     });
 
-                    it('should not let you trigger characters twice if you have kazue', function() {
+                    it('should not let you trigger characters twice if you have kazue', function () {
                         this.player1.moveCard(this.kazueP1, 'play area');
                         this.noMoreActions();
                         this.initiateConflict({
@@ -1457,8 +1486,8 @@ describe('The Skin of Fu Leng', function() {
                     });
                 });
 
-                describe('Way of the Dragon', function() {
-                    beforeEach(function() {
+                describe('Way of the Dragon', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1481,7 +1510,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player2.playAttachment(this.dragon, this.raitsugu);
                     });
 
-                    it('should not let you trigger characters twice if your opponent has way of the dragon', function() {
+                    it('should not let you trigger characters twice if your opponent has way of the dragon', function () {
                         this.noMoreActions();
                         this.initiateConflict({
                             type: 'military',
@@ -1501,8 +1530,8 @@ describe('The Skin of Fu Leng', function() {
                     });
                 });
 
-                describe('Uji2', function() {
-                    beforeEach(function() {
+                describe('Uji2', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1544,14 +1573,14 @@ describe('The Skin of Fu Leng', function() {
                         this.player2.clickCard(this.uji);
                     });
 
-                    it('should let you pick cards from your deck', function() {
+                    it('should let you pick cards from your deck', function () {
                         expect(this.player1).toHavePrompt('Triggered Abilities');
                         expect(this.player1).toBeAbleToSelect(this.uji);
                         this.player1.clickCard(this.uji);
                         expect(this.player1).toHavePromptButton('Fine Katana');
                     });
 
-                    it('should put the cards under Uji', function() {
+                    it('should put the cards under Uji', function () {
                         this.player1.clickCard(this.uji);
                         this.player1.clickPrompt('Fine Katana');
                         this.player1.clickPrompt('A New Name');
@@ -1568,7 +1597,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
                     });
 
-                    it('cards should be hidden to player1 and not player2', function() {
+                    it('cards should be hidden to player1 and not player2', function () {
                         this.player1.clickCard(this.uji);
                         this.player1.clickPrompt('Fine Katana');
                         this.player1.clickPrompt('A New Name');
@@ -1581,7 +1610,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.seal.anyEffect('hideWhenFaceUp')).toBe(true);
                     });
 
-                    it('cards should be playable by player2', function() {
+                    it('cards should be playable by player2', function () {
                         this.player1.clickCard(this.uji);
                         this.player1.clickPrompt('Fine Katana');
                         this.player1.clickPrompt('A New Name');
@@ -1596,10 +1625,10 @@ describe('The Skin of Fu Leng', function() {
                         this.player2.clickCard(this.katana);
                         this.player2.clickCard(this.uji);
                         expect(this.player1).toHavePrompt('Conflict Action Window');
-                        expect(this.uji.attachments.toArray()).toContain(this.katana);
+                        expect(this.uji.attachments).toContain(this.katana);
                     });
 
-                    it('cards should not be playable by player1', function() {
+                    it('cards should not be playable by player1', function () {
                         this.player1.clickCard(this.uji);
                         this.player1.clickPrompt('Fine Katana');
                         this.player1.clickPrompt('A New Name');
@@ -1612,12 +1641,12 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.clickCard(this.katana);
                         this.player1.clickCard(this.uji);
                         expect(this.player1).toHavePrompt('Conflict Action Window');
-                        expect(this.uji.attachments.toArray()).not.toContain(this.katana);
+                        expect(this.uji.attachments).not.toContain(this.katana);
                     });
                 });
 
-                describe('Compromised Secrets', function() {
-                    beforeEach(function() {
+                describe('Compromised Secrets', function () {
+                    beforeEach(function () {
                         this.setupTest({
                             phase: 'conflict',
                             player1: {
@@ -1641,7 +1670,7 @@ describe('The Skin of Fu Leng', function() {
                         this.player1.playAttachment(this.skin, this.toshimoko);
                     });
 
-                    it('should not let you trigger characters when you control Compromised Secrets because you can\'t force your opponent to give you an honor', function() {
+                    it('should not let you trigger characters when you control Compromised Secrets because you can\'t force your opponent to give you an honor', function () {
                         this.player2.pass();
                         this.player1.playAttachment(this.secrets, this.raitsugu);
                         this.noMoreActions();
@@ -1656,7 +1685,7 @@ describe('The Skin of Fu Leng', function() {
                         expect(this.player1).toHavePrompt('Conflict Action Window');
                     });
 
-                    it('should not let you trigger characters when your opponent controls Compromised Secrets', function() {
+                    it('should not let you trigger characters when your opponent controls Compromised Secrets', function () {
                         this.player1.honor = 15;
                         this.player2.honor = 10;
                         this.game.checkGameState(true);
@@ -1676,9 +1705,9 @@ describe('The Skin of Fu Leng', function() {
             });
         });
 
-        describe('Double Skin - no one should be able to trigger at 0 fate', function() {
-            describe('Actions', function() {
-                beforeEach(function() {
+        describe('Double Skin - no one should be able to trigger at 0 fate', function () {
+            describe('Actions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -1701,7 +1730,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player2.playAttachment(this.skin2, this.toturi);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.player1.passConflict();
                     this.noMoreActions();
@@ -1720,8 +1749,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Reactions', function() {
-                beforeEach(function() {
+            describe('Reactions', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -1745,7 +1774,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player2.playAttachment(this.skin2, this.toturi);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',
@@ -1763,8 +1792,8 @@ describe('The Skin of Fu Leng', function() {
                 });
             });
 
-            describe('Interrupts', function() {
-                beforeEach(function() {
+            describe('Interrupts', function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -1788,7 +1817,7 @@ describe('The Skin of Fu Leng', function() {
                     this.player2.playAttachment(this.skin2, this.toturi);
                 });
 
-                it('Should not be able to trigger characters with no fate', function() {
+                it('Should not be able to trigger characters with no fate', function () {
                     this.noMoreActions();
                     this.initiateConflict({
                         type: 'military',

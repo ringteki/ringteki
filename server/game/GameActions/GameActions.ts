@@ -1,5 +1,6 @@
 import type TriggeredAbilityContext = require('../TriggeredAbilityContext');
 import { AddTokenAction, AddTokenProperties } from './AddTokenAction';
+import { AffinityAction, AffinityActionProperties } from './AffinityAction';
 import { AttachAction, AttachActionProperties } from './AttachAction';
 import { AttachToRingAction, AttachToRingActionProperties } from './AttachToRingAction';
 import { BowAction, BowActionProperties } from './BowAction';
@@ -24,6 +25,7 @@ import { DishonorAction, DishonorProperties } from './DishonorAction';
 import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
+import { FateBidAction, FateBidProperties } from './FateBidAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
 import { FlipFavorAction, FlipFavorProperties } from './FlipFavorAction';
@@ -97,7 +99,6 @@ import { TriggerAbilityAction, TriggerAbilityProperties } from './TriggerAbility
 import { TurnCardFacedownAction, TurnCardFacedownProperties } from './TurnCardFacedownAction';
 
 type PropsFactory<Props> = Props | ((context: TriggeredAbilityContext) => Props);
-
 
 //////////////
 // CARD
@@ -338,6 +339,9 @@ export function gainHonor(propertyFactory: PropsFactory<GainHonorProperties> = {
 export function honorBid(propertyFactory: PropsFactory<HonorBidProperties> = {}): GameAction {
     return new HonorBidAction(propertyFactory);
 }
+export function fateBid(propertyFactory: PropsFactory<FateBidProperties> = {}): GameAction {
+    return new FateBidAction(propertyFactory);
+}
 export function initiateConflict(propertyFactory: PropsFactory<InitiateConflictProperties> = {}): GameAction {
     return new InitiateConflictAction(propertyFactory);
 } // canPass = true
@@ -459,6 +463,9 @@ export function chooseAction(propertyFactory: PropsFactory<ChooseActionPropertie
 } // choices, activePromptTitle = 'Select one'
 export function conditional(propertyFactory: PropsFactory<ConditionalActionProperties>): GameAction {
     return new ConditionalAction(propertyFactory);
+}
+export function onAffinity(propertyFactory: PropsFactory<AffinityActionProperties>): GameAction {
+    return new AffinityAction(propertyFactory);
 }
 export function ifAble(propertyFactory: PropsFactory<IfAbleActionProperties>): GameAction {
     return new IfAbleAction(propertyFactory);

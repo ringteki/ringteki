@@ -1,8 +1,8 @@
 import { CardTypes, Durations, EventNames, Locations, Players, TargetModes } from '../../../Constants';
 import { EventRegistrar } from '../../../EventRegistrar';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import ProvinceCard = require('../../../provincecard');
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 
 export default class TheEmptyCity extends ProvinceCard {
     static id = 'the-empty-city';
@@ -47,7 +47,7 @@ export default class TheEmptyCity extends ProvinceCard {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
                 location: [Locations.ConflictDiscardPile, Locations.DynastyDiscardPile],
-                cardCondition: (card) => card.hasTrait('spirit') && card.getCost() <= 2,
+                cardCondition: (card) => card.hasTrait('spirit') && card.getCost() <= 3,
                 gameAction: AbilityDsl.actions.joint([
                     AbilityDsl.actions.putIntoPlay(),
                     AbilityDsl.actions.cardLastingEffect((context) => ({

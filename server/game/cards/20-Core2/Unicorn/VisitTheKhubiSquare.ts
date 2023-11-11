@@ -1,6 +1,6 @@
-import { CardTypes, Decks, Locations } from "../../../Constants";
-import AbilityDsl from "../../../abilitydsl";
-import ProvinceCard from "../../../provincecard";
+import { CardTypes, Decks, Locations } from '../../../Constants';
+import { ProvinceCard } from '../../../ProvinceCard';
+import AbilityDsl from '../../../abilitydsl';
 
 export default class VisitTheKhubiSquare extends ProvinceCard {
     static id = 'visit-the-khubi-square';
@@ -47,5 +47,3 @@ export default class VisitTheKhubiSquare extends ProvinceCard {
         });
     }
 }
-
-

@@ -1,7 +1,7 @@
-describe('Liar\'s Mask', function() {
-    integration(function() {
-        describe('Liar\'s Mask\'s ability', function() {
-            beforeEach(function() {
+describe('Liar\'s Mask', function () {
+    integration(function () {
+        describe('Liar\'s Mask\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -17,38 +17,38 @@ describe('Liar\'s Mask', function() {
                 this.liar = this.player1.findCardByName('bayushi-liar');
             });
 
-            it('should not be attachable if honor is above 6', function() {
+            it('should not be attachable if honor is above 6', function () {
                 this.player1.honor = 7;
                 this.player1.clickCard(this.mask);
                 expect(this.player1).not.toBeAbleToSelect(this.liar);
             });
 
-            it('should be attachable if honor is below or at 6', function() {
+            it('should be attachable if honor is below or at 6', function () {
                 this.player1.honor = 5;
                 this.player1.clickCard(this.mask);
                 expect(this.player1).toBeAbleToSelect(this.liar);
                 this.player1.clickCard(this.liar);
-                expect(this.liar.attachments.toArray()).toContain(this.mask);
+                expect(this.liar.attachments).toContain(this.mask);
             });
 
-            it('should correctly discard status token', function() {
+            it('should correctly discard status token', function () {
                 this.player1.honor = 5;
                 this.liar.dishonor();
                 this.player1.clickCard(this.mask);
                 this.player1.clickCard(this.liar);
-                expect(this.liar.attachments.toArray()).toContain(this.mask);
+                expect(this.liar.attachments).toContain(this.mask);
                 this.player2.pass();
                 this.player1.clickCard(this.mask);
                 expect(this.liar.isDishonored).toBe(false);
             });
 
-            it('should prompt you to choose which status token to discard if there are multiples', function() {
+            it('should prompt you to choose which status token to discard if there are multiples', function () {
                 this.player1.honor = 5;
                 this.liar.dishonor();
                 this.liar.taint();
                 this.player1.clickCard(this.mask);
                 this.player1.clickCard(this.liar);
-                expect(this.liar.attachments.toArray()).toContain(this.mask);
+                expect(this.liar.attachments).toContain(this.mask);
                 this.player2.pass();
                 this.player1.clickCard(this.mask);
 
@@ -59,11 +59,13 @@ describe('Liar\'s Mask', function() {
 
                 expect(this.liar.isDishonored).toBe(true);
                 expect(this.liar.isTainted).toBe(false);
-                expect(this.getChatLogs(5)).toContain('player1 uses Liar\'s Mask to discard a status token from Bayushi Liar');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Liar\'s Mask to discard a status token from Bayushi Liar'
+                );
                 expect(this.getChatLogs(5)).toContain('player1 discards Tainted Token');
             });
 
-            it('should work if steward of law is participating in a conflict and attached char is honored', function() {
+            it('should work if steward of law is participating in a conflict and attached char is honored', function () {
                 this.player1.honor = 5;
                 this.liar.honor();
                 this.player1.clickCard(this.mask);

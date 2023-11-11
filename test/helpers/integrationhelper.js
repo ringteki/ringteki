@@ -12,20 +12,30 @@ const GameFlowWrapper = require('./gameflowwrapper.js');
 const deckBuilder = new DeckBuilder();
 
 const ProxiedGameFlowWrapperMethods = [
-    'eachPlayerInFirstPlayerOrder', 'startGame', 'keepDynasty', 'keepConflict', 'skipSetupPhase', 'selectFirstPlayer',
-    'noMoreActions', 'selectStrongholdProvinces', 'advancePhases', 'getPromptedPlayer', 'nextPhase', 'getChatLogs',
+    'eachPlayerInFirstPlayerOrder',
+    'startGame',
+    'keepDynasty',
+    'keepConflict',
+    'skipSetupPhase',
+    'selectFirstPlayer',
+    'noMoreActions',
+    'selectStrongholdProvinces',
+    'advancePhases',
+    'getPromptedPlayer',
+    'nextPhase',
+    'getChatLogs',
     'getChatLog'
 ];
 
 var customMatchers = {
-    toHavePrompt: function() {
+    toHavePrompt: function () {
         return {
-            compare: function(actual, expected) {
+            compare: function (actual, expected) {
                 var result = {};
                 var currentPrompt = actual.currentPrompt();
                 result.pass = actual.hasPrompt(expected);
 
-                if(result.pass) {
+                if (result.pass) {
                     result.message = `Expected ${actual.name} not to have prompt "${expected}" but it did.`;
                 } else {
                     result.message = `Expected ${actual.name} to have prompt "${expected}" but it had menuTitle "${currentPrompt.menuTitle}" and promptTitle "${currentPrompt.promptTitle}".`;
@@ -35,18 +45,24 @@ var customMatchers = {
             }
         };
     },
-    toHavePromptButton: function(util, customEqualityMatchers) {
+    toHavePromptButton: function (util, customEqualityMatchers) {
         return {
-            compare: function(actual, expected) {
+            compare: function (actual, expected) {
                 var buttons = actual.currentPrompt().buttons;
                 var result = {};
 
-                result.pass = _.any(buttons, button => !button.disabled && util.equals(button.text, expected, customEqualityMatchers));
+                result.pass = _.any(
+                    buttons,
+                    (button) => !button.disabled && util.equals(button.text, expected, customEqualityMatchers)
+                );
 
-                if(result.pass) {
+                if (result.pass) {
                     result.message = `Expected ${actual.name} not to have enabled prompt button "${expected}" but it did.`;
                 } else {
-                    var buttonText = _.map(buttons, button => '[' + button.text + (button.disabled ? ' (disabled) ' : '') + ']').join('\n');
+                    var buttonText = _.map(
+                        buttons,
+                        (button) => '[' + button.text + (button.disabled ? ' (disabled) ' : '') + ']'
+                    ).join('\n');
                     result.message = `Expected ${actual.name} to have enabled prompt button "${expected}" but it had buttons:\n${buttonText}`;
                 }
 
@@ -54,18 +70,24 @@ var customMatchers = {
             }
         };
     },
-    toHaveDisabledPromptButton: function(util, customEqualityMatchers) {
+    toHaveDisabledPromptButton: function (util, customEqualityMatchers) {
         return {
-            compare: function(actual, expected) {
+            compare: function (actual, expected) {
                 var buttons = actual.currentPrompt().buttons;
                 var result = {};
 
-                result.pass = _.any(buttons, button => button.disabled && util.equals(button.text, expected, customEqualityMatchers));
+                result.pass = _.any(
+                    buttons,
+                    (button) => button.disabled && util.equals(button.text, expected, customEqualityMatchers)
+                );
 
-                if(result.pass) {
+                if (result.pass) {
                     result.message = `Expected ${actual.name} not to have disabled prompt button "${expected}" but it did.`;
                 } else {
-                    var buttonText = _.map(buttons, button => '[' + button.text + (button.disabled ? ' (disabled) ' : '') + ']').join('\n');
+                    var buttonText = _.map(
+                        buttons,
+                        (button) => '[' + button.text + (button.disabled ? ' (disabled) ' : '') + ']'
+                    ).join('\n');
                     result.message = `Expected ${actual.name} to have disabled prompt button "${expected}" but it had buttons:\n${buttonText}`;
                 }
 
@@ -73,17 +95,17 @@ var customMatchers = {
             }
         };
     },
-    toBeAbleToSelect: function() {
+    toBeAbleToSelect: function () {
         return {
-            compare: function(player, card) {
-                if(_.isString(card)) {
+            compare: function (player, card) {
+                if (_.isString(card)) {
                     card = player.findCardByName(card);
                 }
                 let result = {};
 
                 result.pass = player.currentActionTargets.includes(card);
 
-                if(result.pass) {
+                if (result.pass) {
                     result.message = `Expected ${card.name} not to be selectable by ${player.name} but it was.`;
                 } else {
                     result.message = `Expected ${card.name} to be selectable by ${player.name} but it wasn't.`;
@@ -93,17 +115,17 @@ var customMatchers = {
             }
         };
     },
-    toBeAbleToSelectRing: function() {
+    toBeAbleToSelectRing: function () {
         return {
-            compare: function(player, ring) {
-                if(_.isString(ring)) {
+            compare: function (player, ring) {
+                if (_.isString(ring)) {
                     ring = player.game.rings[ring];
                 }
                 let result = {};
 
                 result.pass = player.currentActionRingTargets.includes(ring);
 
-                if(result.pass) {
+                if (result.pass) {
                     result.message = `Expected ${ring.element} not to be selectable by ${player.name} but it was.`;
                 } else {
                     result.message = `Expected ${ring.element} to be selectable by ${player.name} but it wasn't.`;
@@ -115,13 +137,13 @@ var customMatchers = {
     }
 };
 
-beforeEach(function() {
+beforeEach(function () {
     jasmine.addMatchers(customMatchers);
 });
 
-global.integration = function(definitions) {
-    describe('integration', function() {
-        beforeEach(function() {
+global.integration = function (definitions) {
+    describe('integration', function () {
+        beforeEach(function () {
             this.flow = new GameFlowWrapper();
 
             this.game = this.flow.game;
@@ -130,11 +152,11 @@ global.integration = function(definitions) {
             this.player1 = this.flow.player1;
             this.player2 = this.flow.player2;
 
-            _.each(ProxiedGameFlowWrapperMethods, method => {
+            _.each(ProxiedGameFlowWrapperMethods, (method) => {
                 this[method] = (...args) => this.flow[method].apply(this.flow, args);
             });
 
-            this.buildDeck = function(faction, cards) {
+            this.buildDeck = function (faction, cards) {
                 return deckBuilder.buildDeck(faction, cards);
             };
 
@@ -142,12 +164,12 @@ global.integration = function(definitions) {
              * Factory method. Creates a new simulation of a game.
              * @param {Object} [options = {}] - specifies the state of the game
              */
-            this.setupTest = function(options = {}) {
+            this.setupTest = function (options = {}) {
                 //Set defaults
-                if(!options.player1) {
+                if (!options.player1) {
                     options.player1 = {};
                 }
-                if(!options.player2) {
+                if (!options.player2) {
                     options.player2 = {};
                 }
                 this.game.gameMode = GameModes.Stronghold;
@@ -162,8 +184,10 @@ global.integration = function(definitions) {
                 this.startGame();
 
                 //Setup phase
-                if(!options.skipAutoSetup) {
-                    this.selectFirstPlayer(this.player1);
+                if (!options.skipAutoSetup) {
+                    if (!options.skipAutoFirstPlayer) {
+                        this.selectFirstPlayer(this.player1);
+                    }
 
                     this.selectStrongholdProvinces({
                         player1: options.player1.strongholdProvince,
@@ -176,8 +200,8 @@ global.integration = function(definitions) {
                     this.player2.setupSkirmishProvinces();
                 }
 
-                if(options.phase !== 'setup') {
-                    if(['draw', 'fate'].includes(options.phase)) {
+                if (options.phase !== 'setup') {
+                    if (['draw', 'fate'].includes(options.phase)) {
                         this.player1.player.promptedActionWindows[options.phase] = true;
                         this.player2.player.promptedActionWindows[options.phase] = true;
                     }
@@ -196,11 +220,11 @@ global.integration = function(definitions) {
                 }
 
                 //Set state
-                if(options.player1.rings) {
-                    _.each(options.player1.rings, ring => this.player1.claimRing(ring));
+                if (options.player1.rings) {
+                    _.each(options.player1.rings, (ring) => this.player1.claimRing(ring));
                 }
-                if(options.player2.rings) {
-                    _.each(options.player2.rings, ring => this.player2.claimRing(ring));
+                if (options.player2.rings) {
+                    _.each(options.player2.rings, (ring) => this.player2.claimRing(ring));
                 }
                 //Player stats
                 this.player1.fate = options.player1.fate;
@@ -216,39 +240,41 @@ global.integration = function(definitions) {
                 this.player1.conflictDiscard = options.player1.conflictDiscard;
                 this.player2.conflictDiscard = options.player2.conflictDiscard;
                 //Dynsaty deck related
-                if(!options.skipAutoSetup) {
+                if (!options.skipAutoSetup) {
                     this.player1.provinces = options.player1.provinces;
                     this.player2.provinces = options.player2.provinces;
                 }
                 if (options.phase !== 'setup') {
-                    for(const location of ['province 1', 'province 2', 'province 3', 'province 4']) {
+                    for (const location of ['province 1', 'province 2', 'province 3', 'province 4']) {
                         this.player1.player.replaceDynastyCard(location);
                         this.player2.player.replaceDynastyCard(location);
                     }
                 }
-                if(options.phase !== 'setup') {
+                if (options.phase !== 'setup') {
                     this.game.checkGameState(true);
                 }
             };
 
-            this.initiateConflict = function(options = {}) {
-                if(!options.type) {
+            this.initiateConflict = function (options = {}) {
+                if (!options.type) {
                     options.type = 'military';
                 }
-                if(!options.ring) {
+                if (!options.ring) {
                     options.ring = 'air';
                 }
-                let attackingPlayer = this.getPromptedPlayer('Choose an elemental ring\n(click the ring again to change conflict type)');
-                if(!attackingPlayer) {
+                let attackingPlayer = this.getPromptedPlayer(
+                    'Choose an elemental ring\n(click the ring again to change conflict type)'
+                );
+                if (!attackingPlayer) {
                     throw new Error('Neither player can declare a conflict');
                 }
                 attackingPlayer.declareConflict(options.type, options.province, options.attackers, options.ring);
-                if(!options.defenders) {
+                if (!options.defenders) {
                     return;
                 }
                 let defendingPlayer = this.getPromptedPlayer('Choose defenders');
                 defendingPlayer.assignDefenders(options.defenders);
-                if(!options.jumpTo) {
+                if (!options.jumpTo) {
                     return;
                 }
                 this.noMoreActions();

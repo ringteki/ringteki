@@ -1,8 +1,8 @@
-import { CardTypes, Locations } from '../../Constants';
+import { Locations, CardTypes } from '../../Constants';
 import { PlayCharacterAsIfFromHandIntoConflict } from '../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandIntoConflict } from '../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../abilitydsl');
-import ProvinceCard = require('../../provincecard');
+import { ProvinceCard } from '../../ProvinceCard';
+import AbilityDsl from '../../abilitydsl';
 
 export default class GatewayToMeido extends ProvinceCard {
     static id = 'gateway-to-meido';

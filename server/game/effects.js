@@ -102,6 +102,7 @@ const Effects = {
     modifyBasePoliticalSkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBasePoliticalSkillMultiplier, value),
     modifyBaseProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseProvinceStrength, value),
     modifyBothSkills: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBothSkills, value),
+    modifyDuelSkill: (value, duel) => EffectBuilder.card.flexible(EffectNames.ModifyDuelSkill, { value, duel }),
     modifyGlory: (value) => EffectBuilder.card.flexible(EffectNames.ModifyGlory, value),
     modifyMilitarySkill: (value) => EffectBuilder.card.flexible(EffectNames.ModifyMilitarySkill, value),
     attachmentMilitarySkillModifier: (value) => EffectBuilder.card.flexible(EffectNames.AttachmentMilitarySkillModifier, value),
@@ -139,6 +140,8 @@ const Effects = {
     unlessActionCost: (properties) => EffectBuilder.card.static(EffectNames.UnlessActionCost, properties),
     replacePrintedElement: (value) => EffectBuilder.card.static(EffectNames.ReplacePrintedElement, value),
     winDuel: (duel) => EffectBuilder.card.static(EffectNames.WinDuel, duel),
+    winDuelTies: () => EffectBuilder.card.static(EffectNames.WinDuelTies),
+    ignoreDuelSkill: () => EffectBuilder.card.static(EffectNames.IgnoreDuelSkill),
     // Ring effects
     addElement: (element) => EffectBuilder.ring.flexible(EffectNames.AddElement, element),
     cannotBidInDuels: num => EffectBuilder.player.static(EffectNames.CannotBidInDuels, num),
@@ -234,6 +237,7 @@ const Effects = {
         apply: (player, context) => player.addCostReducer(context.source, { amount: amount, match: match, limit: AbilityLimit.fixed(1) }),
         unapply: (player, context, reducer) => player.removeCostReducer(reducer)
     }),
+    satisfyAffinity: (traits) => EffectBuilder.player.static(EffectNames.SatisfyAffinity, traits),
     setConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.SetConflictDeclarationType, type),
     provideConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ProvideConflictDeclarationType, type),
     forceConflictDeclarationType: (type) => EffectBuilder.player.static(EffectNames.ForceConflictDeclarationType, type),

@@ -41,7 +41,7 @@ class PrepareForWar extends DrawCard {
             effect: '{1}{2} {0}',
             effectArgs: (context) => {
                 let isCommander = context.target.hasTrait('commander');
-                let hasAttachments = context.target.attachments.size() > 0;
+                let hasAttachments = context.target.attachments.length > 0;
                 let hasToken = context.target.isDishonored || context.target.isHonored;
                 let discardMessage = '';
                 if(hasAttachments) {

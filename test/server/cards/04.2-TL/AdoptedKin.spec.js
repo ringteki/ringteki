@@ -1,7 +1,7 @@
-describe('Adopted Kin', function() {
-    integration(function() {
-        describe('Adopted Kin\'s ability', function() {
-            beforeEach(function() {
+describe('Adopted Kin', function () {
+    integration(function () {
+        describe('Adopted Kin\'s ability', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -38,7 +38,7 @@ describe('Adopted Kin', function() {
                 this.player2.clickPrompt('Done');
             });
 
-            it('should return other attachments to hand when attached character is discarded', function() {
+            it('should return other attachments to hand when attached character is discarded', function () {
                 expect(this.player1.player.hand.size()).toBe(1);
                 this.player2.clickCard(this.cloud);
                 this.player2.clickCard(this.adept);
@@ -51,7 +51,7 @@ describe('Adopted Kin', function() {
                 expect(this.player2.player.hand).toContain(this.cloud);
             });
 
-            it('should only give the "ancestral"-keyword to attachments on attached character', function() {
+            it('should only give the "ancestral"-keyword to attachments on attached character', function () {
                 this.player2.clickCard(this.cloud);
                 this.player2.clickCard(this.mystic);
                 this.player1.clickCard(this.reprieve);
@@ -61,8 +61,8 @@ describe('Adopted Kin', function() {
             });
         });
 
-        describe('Adopted Kin', function() {
-            beforeEach(function() {
+        describe('Adopted Kin', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -88,14 +88,14 @@ describe('Adopted Kin', function() {
                 this.player1.clickCard(this.adept);
             });
 
-            it('should give every other attachment the "ancestral"-keyword', function() {
+            it('should give every other attachment the "ancestral"-keyword', function () {
                 expect(this.katana.hasKeyword('ancestral')).toBe(true);
                 expect(this.master.hasKeyword('ancestral')).toBe(true);
                 expect(this.madness.hasKeyword('ancestral')).toBe(true);
                 expect(this.kin.hasKeyword('ancestral')).toBe(false);
             });
 
-            it('should make every other attachment lose the "ancestral"-keyword if removed from character', function() {
+            it('should make every other attachment lose the "ancestral"-keyword if removed from character', function () {
                 this.player2.clickCard(this.letGo);
                 this.player2.clickCard(this.kin);
                 expect(this.katana.hasKeyword('ancestral')).toBe(false);
@@ -104,8 +104,8 @@ describe('Adopted Kin', function() {
             });
         });
 
-        describe('Adopted Kin', function() {
-            beforeEach(function() {
+        describe('Adopted Kin', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -127,20 +127,20 @@ describe('Adopted Kin', function() {
                 this.player2.pass();
             });
 
-            it('should be immeditately discarded if a second copy is attached', function() {
-                expect(this.adept.attachments.toArray()).toContain(this.adoptedKin);
+            it('should be immeditately discarded if a second copy is attached', function () {
+                expect(this.adept.attachments).toContain(this.adoptedKin);
                 expect(this.adoptedKin.location).toBe('play area');
                 this.player1.clickCard(this.kin);
                 expect(this.player1).toBeAbleToSelect(this.shugenja);
                 expect(this.player1).toBeAbleToSelect(this.adept);
                 this.player1.clickCard(this.adept);
-                expect(this.adept.attachments.toArray()).toContain(this.kin);
+                expect(this.adept.attachments).toContain(this.kin);
                 expect(this.kin.location).toBe('play area');
-                expect(this.adept.attachments.toArray()).not.toContain(this.adoptedKin);
+                expect(this.adept.attachments).not.toContain(this.adoptedKin);
                 expect(this.adoptedKin.location).toBe('conflict discard pile');
             });
 
-            it('should also work when attached to opponent\'s character', function() {
+            it('should also work when attached to opponent\'s character', function () {
                 this.player1.playAttachment(this.kin, this.challenger);
                 this.player2.playAttachment(this.training, this.challenger);
                 this.player1.playAttachment(this.cloud, this.challenger);
