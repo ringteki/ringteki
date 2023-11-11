@@ -1,4 +1,4 @@
-import { CardTypes, Durations, Phases } from '../../../Constants';
+import { CardTypes, Durations, Players } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 
@@ -8,10 +8,10 @@ export default class HouseOfLeaves extends StrongholdCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow this stronghold',
-            phase: Phases.Conflict,
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Character,
+                controller: Players.Self,
                 gameAction: AbilityDsl.actions.cardLastingEffect({
                     duration: Durations.UntilEndOfPhase,
                     effect: AbilityDsl.effects.modifyGlory(2)

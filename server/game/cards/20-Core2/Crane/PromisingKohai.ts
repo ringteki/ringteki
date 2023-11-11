@@ -15,9 +15,9 @@ export default class PromisingKohai extends DrawCard {
                 controller: Players.Self,
                 cardCondition: (card) => {
                     const isInvolved = context.event.duel.isInvolved(card);
-                    const higherCost = card.printedCost > context.source.printedCost;
+                    const notSelf = card !== context.source;
 
-                    return higherCost && isInvolved;
+                    return notSelf && isInvolved;
                 },
                 message: '{0} gives {1} 2 bonus skill for this duel',
                 messageArgs: (cards) => [context.player, cards],

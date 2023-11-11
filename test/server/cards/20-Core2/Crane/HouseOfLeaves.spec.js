@@ -22,11 +22,11 @@ describe('House of Leaves', function () {
             expect(this.craneBox.bowed).toBe(true);
         });
 
-        it('should prompt to choose a target character', function () {
+        it('should prompt to choose a target character you control', function () {
             this.player1.clickCard(this.craneBox);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.fushicho);
-            expect(this.player1).toBeAbleToSelect(this.bayushiLiar);
+            expect(this.player1).not.toBeAbleToSelect(this.bayushiLiar);
         });
 
         it('should give the chosen character +2 glory', function () {

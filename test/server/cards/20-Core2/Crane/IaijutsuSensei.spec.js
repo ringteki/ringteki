@@ -55,13 +55,13 @@ describe('Iaijutsu Sensei', function () {
             this.player1.clickCard(this.toshimoko);
 
             expect(this.player1).toHavePrompt('Honor Bid');
-            this.player1.clickPrompt('1');
+            this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
 
             expect(this.getChatLogs(10)).toContain(
                 'Duel Effect: prevent Kakita Toshimoko from contributing to resolution of this conflict'
             );
-            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 7 Defender: 0');
+            expect(this.getChatLogs(10)).toContain('Military Air conflict - Attacker: 6 Defender: 0');
         });
 
         it('duel should prevent contribution from loser', function () {
