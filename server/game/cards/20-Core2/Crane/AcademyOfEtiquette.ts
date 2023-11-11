@@ -2,8 +2,8 @@ import { TargetModes, Players, Locations, Phases, CardTypes, Durations } from '.
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class SuperiorPapermill extends DrawCard {
-    static id = 'superior-papermill';
+export default class AcademyOfEtiquette extends DrawCard {
+    static id = 'academy-of-etiquette';
 
     setupCardAbilities() {
         this.reaction({

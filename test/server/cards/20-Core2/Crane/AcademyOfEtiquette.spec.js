@@ -1,4 +1,4 @@
-describe('Superior Papermill', () => {
+describe('Academy of Etiquette', () => {
     describe('Refill option', function () {
         integration(function () {
             beforeEach(function () {
@@ -8,7 +8,7 @@ describe('Superior Papermill', () => {
                         inPlay: [],
                         dynastyDeck: [],
                         dynastyDiscard: [
-                            'superior-papermill',
+                            'academy-of-etiquette',
                             'doji-challenger',
                             'prodigy-of-the-waves',
                             'favorable-ground',
@@ -20,7 +20,7 @@ describe('Superior Papermill', () => {
                     }
                 });
 
-                this.papermill = this.player1.findCardByName('superior-papermill');
+                this.academy = this.player1.findCardByName('academy-of-etiquette');
                 this.favorable = this.player1.findCardByName('favorable-ground');
                 this.challenger = this.player1.findCardByName('doji-challenger');
                 this.prodigy = this.player1.findCardByName('prodigy-of-the-waves');
@@ -28,8 +28,8 @@ describe('Superior Papermill', () => {
 
                 this.shameful = this.player1.findCardByName('shameful-display', 'province 1');
                 this.shameful.facedown = true;
-                this.player1.placeCardInProvince(this.papermill, 'province 1');
-                this.papermill.facedown = true;
+                this.player1.placeCardInProvince(this.academy, 'province 1');
+                this.academy.facedown = true;
             });
 
             it('when revealed in dynasty, should not trigger', function () {
@@ -51,8 +51,8 @@ describe('Superior Papermill', () => {
                 //Dynasty phase
                 expect(this.game.currentPhase).toBe('dynasty');
 
-                expect(this.papermill.location).toBe('province 1');
-                expect(this.papermill.facedown).toBe(false);
+                expect(this.academy.location).toBe('province 1');
+                expect(this.academy.facedown).toBe(false);
 
                 expect(this.player2).toHavePrompt('Play cards from provinces');
             });
@@ -64,7 +64,7 @@ describe('Superior Papermill', () => {
                 this.player1.moveCard(this.favorable, 'dynasty deck');
                 this.player1.moveCard(this.kisada, 'dynasty deck');
 
-                this.papermill.facedown = false;
+                this.academy.facedown = false;
                 this.player1.pass();
                 this.player2.pass();
 
@@ -78,15 +78,15 @@ describe('Superior Papermill', () => {
                 expect(this.game.currentPhase).toBe('dynasty');
 
                 expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.papermill);
-                this.player1.clickCard(this.papermill);
+                expect(this.player1).toBeAbleToSelect(this.academy);
+                this.player1.clickCard(this.academy);
 
-                expect(this.papermill.location).toBe('province 1');
-                expect(this.papermill.facedown).toBe(false);
+                expect(this.academy.location).toBe('province 1');
+                expect(this.academy.facedown).toBe(false);
                 expect(this.kisada.location).toBe('province 1');
                 expect(this.kisada.facedown).toBe(false);
                 expect(this.getChatLogs(10)).toContain(
-                    'player1 uses Superior Papermill to place Hida Kisada faceup in province 1'
+                    'player1 uses Academy of Etiquette to place Hida Kisada faceup in province 1'
                 );
             });
 
@@ -98,7 +98,7 @@ describe('Superior Papermill', () => {
                 this.player1.moveCard(this.kisada, 'dynasty deck');
                 this.player1.moveCard(this.challenger, 'dynasty deck');
 
-                this.papermill.facedown = false;
+                this.academy.facedown = false;
                 this.player1.pass();
                 this.player2.pass();
 
@@ -110,21 +110,21 @@ describe('Superior Papermill', () => {
 
                 //Dynasty phase
                 expect(this.game.currentPhase).toBe('dynasty');
-                this.player1.clickCard(this.papermill);
+                this.player1.clickCard(this.academy);
 
-                expect(this.papermill.location).toBe('province 1');
-                expect(this.papermill.facedown).toBe(false);
+                expect(this.academy.location).toBe('province 1');
+                expect(this.academy.facedown).toBe(false);
                 expect(this.challenger.location).toBe('province 1');
                 expect(this.challenger.facedown).toBe(false);
                 expect(this.getChatLogs(10)).toContain(
-                    'player1 uses Superior Papermill to place Doji Challenger faceup in Shameful Display'
+                    'player1 uses Academy of Etiquette to place Doji Challenger faceup in Shameful Display'
                 );
             });
 
             it('should work if your deck is empty', function () {
                 this.player1.reduceDeckToNumber('dynasty deck', 0);
 
-                this.papermill.facedown = false;
+                this.academy.facedown = false;
                 this.player1.pass();
                 this.player2.pass();
 
@@ -136,13 +136,13 @@ describe('Superior Papermill', () => {
 
                 //Dynasty phase
                 expect(this.game.currentPhase).toBe('dynasty');
-                this.player1.clickCard(this.papermill);
+                this.player1.clickCard(this.academy);
 
-                expect(this.papermill.location).toBe('province 1');
-                expect(this.papermill.facedown).toBe(false);
+                expect(this.academy.location).toBe('province 1');
+                expect(this.academy.facedown).toBe(false);
                 expect(this.player1.player.getDynastyCardsInProvince('province 1').length).toBe(2);
                 expect(this.getChatLogs(10)).toContain(
-                    'player1 uses Superior Papermill to place a card faceup in province 1'
+                    'player1 uses Academy of Etiquette to place a card faceup in province 1'
                 );
                 expect(this.getChatLogs(10)).toContain(
                     "player1's dynasty deck has run out of cards, so they lose 5 honor"
@@ -160,14 +160,14 @@ describe('Superior Papermill', () => {
                     player1: {
                         inPlay: ['brash-samurai', 'doji-challenger', 'kakita-yoshi', 'kakita-toshimoko'],
                         dynastyDeck: [],
-                        dynastyDiscard: ['superior-papermill']
+                        dynastyDiscard: ['academy-of-etiquette']
                     },
                     player2: {
                         inPlay: ['doji-whisperer']
                     }
                 });
 
-                this.papermill = this.player1.findCardByName('superior-papermill');
+                this.academy = this.player1.findCardByName('academy-of-etiquette');
                 this.brash = this.player1.findCardByName('brash-samurai');
                 this.challenger = this.player1.findCardByName('doji-challenger');
                 this.yoshi = this.player1.findCardByName('kakita-yoshi');
@@ -177,8 +177,8 @@ describe('Superior Papermill', () => {
 
                 this.shameful = this.player1.findCardByName('shameful-display', 'province 1');
                 this.shameful.facedown = false;
-                this.player1.placeCardInProvince(this.papermill, 'province 1');
-                this.papermill.facedown = false;
+                this.player1.placeCardInProvince(this.academy, 'province 1');
+                this.academy.facedown = false;
 
                 this.brash.honor();
                 this.challenger.honor();
@@ -190,8 +190,8 @@ describe('Superior Papermill', () => {
                 let fate = this.player1.fate;
                 this.nextPhase(); // fate phase
                 expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.papermill);
-                this.player1.clickCard(this.papermill);
+                expect(this.player1).toBeAbleToSelect(this.academy);
+                this.player1.clickCard(this.academy);
 
                 expect(this.player1).toBeAbleToSelect(this.brash);
                 expect(this.player1).toBeAbleToSelect(this.challenger);
@@ -206,7 +206,7 @@ describe('Superior Papermill', () => {
                 this.player1.clickPrompt('Done');
 
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Superior Papermill to give Brash Samurai and Doji Challenger courtesy'
+                    'player1 uses Academy of Etiquette to give Brash Samurai and Doji Challenger courtesy'
                 );
 
                 this.player1.clickPrompt('Done');
