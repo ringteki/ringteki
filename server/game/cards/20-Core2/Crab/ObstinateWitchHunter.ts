@@ -18,6 +18,7 @@ export default class ObstinateWitchHunter extends DrawCard {
                             card.type === CardTypes.Character &&
                             card.location === Locations.PlayArea &&
                             card.isFaceup() &&
+                            card !== context.source &&
                             (card.isTainted || card.hasTrait('shadowlands'))
                     )
             },
