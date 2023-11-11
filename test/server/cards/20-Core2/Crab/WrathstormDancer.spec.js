@@ -1,17 +1,17 @@
-describe('Ferocious Banshee', function () {
+describe('Wrathstorm Dancer', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['ferocious-banshee', 'hida-yakamo', 'bayushi-manipulator']
+                    inPlay: ['wrathstorm-dancer', 'hida-yakamo', 'bayushi-manipulator']
                 },
                 player2: {
                     inPlay: ['crisis-breaker', 'hantei-sotorii'],
                 }
             });
 
-            this.banshee = this.player1.findCardByName('ferocious-banshee');
+            this.dancer = this.player1.findCardByName('wrathstorm-dancer');
             this.yakamo = this.player1.findCardByName('hida-yakamo');
             this.manipulator = this.player1.findCardByName('bayushi-manipulator');
 
@@ -21,39 +21,39 @@ describe('Ferocious Banshee', function () {
         });
 
         it('Should get +3 if you control another Berserker', function () {
-            let baseMil = this.banshee.getMilitarySkill();
+            let baseMil = this.dancer.getMilitarySkill();
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.banshee, this.yakamo],
+                attackers: [this.dancer, this.yakamo],
                 defenders: [this.sotorii]
             });
 
-            expect(this.banshee.getMilitarySkill()).toBe(baseMil + 3);
+            expect(this.dancer.getMilitarySkill()).toBe(baseMil + 3);
         });
 
         it('Should get +3 if your opponent controls an Berserker', function () {
-            let baseMil = this.banshee.getMilitarySkill();
+            let baseMil = this.dancer.getMilitarySkill();
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.banshee, this.manipulator],
+                attackers: [this.dancer, this.manipulator],
                 defenders: [this.breaker]
             });
 
-            expect(this.banshee.getMilitarySkill()).toBe(baseMil + 3);
+            expect(this.dancer.getMilitarySkill()).toBe(baseMil + 3);
         });
 
         it('Should not get +3 if no other Berserkers', function () {
-            let baseMil = this.banshee.getMilitarySkill();
+            let baseMil = this.dancer.getMilitarySkill();
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.banshee, this.manipulator],
+                attackers: [this.dancer, this.manipulator],
                 defenders: [this.sotorii]
             });
 
-            expect(this.banshee.getMilitarySkill()).toBe(baseMil);
+            expect(this.dancer.getMilitarySkill()).toBe(baseMil);
         });
     });
 });

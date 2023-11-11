@@ -3,8 +3,8 @@ import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
-export default class FerociousBanshee extends DrawCard {
-    static id = 'ferocious-banshee';
+export default class WrathstormDancer extends DrawCard {
+    static id = 'wrathstorm-dancer';
 
     public setupCardAbilities() {
         this.persistentEffect({
