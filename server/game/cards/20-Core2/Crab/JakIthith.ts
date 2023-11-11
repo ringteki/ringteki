@@ -12,7 +12,8 @@ export default class JakIthith extends DrawCard {
         this.persistentEffect({
             effect: [
                 AbilityDsl.effects.immunity({ restricts: 'maho' }),
-                AbilityDsl.effects.immunity({ restricts: 'shadowlands' })
+                AbilityDsl.effects.immunity({ restricts: 'shadowlands' }),
+                AbilityDsl.effects.cardCannot('receiveTaintedToken')
             ]
         });
 
@@ -42,8 +43,7 @@ export default class JakIthith extends DrawCard {
                         otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.targets[ATTACHMENT] })
                     }))
                 }
-            },
-            effect: 'take an attachment from the attacker'
+            }
         });
     }
 }
