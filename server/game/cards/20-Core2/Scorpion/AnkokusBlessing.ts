@@ -9,7 +9,10 @@ export default class AnkokusBlessing extends DrawCard {
         this.action({
             title: 'Gain 2 fate and draw 2 cards',
             phase: Phases.Fate,
-            cost: AbilityDsl.costs.discardCard({ location: Locations.Hand }),
+            cost: AbilityDsl.costs.discardCard({
+                location: Locations.Hand,
+                cardCondition: (card) => !card.hasTrait('blessing')
+            }),
             gameAction: AbilityDsl.actions.multipleContext((context) => ({
                 gameActions: [
                     AbilityDsl.actions.draw({ target: context.player, amount: 2 }),
