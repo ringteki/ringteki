@@ -20,10 +20,19 @@ export default class Levy2 extends DrawCard {
             then: {
                 gameAction: AbilityDsl.actions.conditional({
                     condition: (context) => context.player.hand.size() < context.player.opponent.hand.size(),
-                    trueGameAction: AbilityDsl.actions.draw(),
+                    trueGameAction: AbilityDsl.actions.draw(context => ({
+                        target: context.player,
+                        amount: 1
+                    })),
                     falseGameAction: AbilityDsl.actions.noAction()
                 })
-            }
+            },
+            effect: 'take 1 {1} from {2}{3}',
+            effectArgs: context => [
+                context.select === 'Give your opponent 1 fate' ? 'fate' : 'honor',
+                context.player.opponent,
+                context.player.hand.size() <= context.player.opponent.hand.size() ? ' and draw a card' : ''
+            ]
         });
     }
 }
