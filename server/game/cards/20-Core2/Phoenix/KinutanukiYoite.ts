@@ -12,13 +12,12 @@ export default class KinutanukiYoite extends DrawCard {
                 onCardPlayed: (event, context) =>
                     event.player === context.player &&
                     context.source.isParticipating() &&
-                    event.card.hasTrait('fire') &&
-                    event.card.hasTrait('spell')
+                    (event.card as DrawCard).hasEveryTrait('fire', 'spell')
             },
             target: {
                 activePromptTitle: 'Choose a character',
                 cardType: CardTypes.Character,
-                controller: Players.Any,
+                controller: Players.Opponent,
                 cardCondition: (card: DrawCard, context) =>
                     card.isParticipating() && card.militarySkill <= (context.source as DrawCard).militarySkill,
                 gameAction: AbilityDsl.actions.conditional({
