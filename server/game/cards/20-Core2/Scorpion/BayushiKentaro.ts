@@ -1,4 +1,4 @@
-import { CardTypes, Locations, Players, TargetModes } from '../../../Constants';
+import { CardTypes, Durations, Locations, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -28,18 +28,15 @@ export default class BayushiKentaro extends DrawCard {
                         card.allowGameAction('putIntoConflict', context),
                     message: '{0} puts {1} into play into the conflict, aiding {2} with their mission.',
                     messageArgs: (card) => [context.player, card, context.source],
-                    gameAction: AbilityDsl.actions.multiple([
+                    subActionProperties: (card) => ({ target: card, x: 11 }),
+                    gameAction: AbilityDsl.actions.sequential([
                         AbilityDsl.actions.putIntoConflict(),
-                        AbilityDsl.actions.cardLastingEffect((context) => ({
-                            target: context.target,
+                        AbilityDsl.actions.cardLastingEffect(() => ({
+                            duration: Durations.UntilEndOfPhase,
+                            location: [Locations.PlayArea],
                             effect: AbilityDsl.effects.delayedEffect({
-                                when: {
-                                    onConflictFinished: () => context.target.location === Locations.PlayArea
-                                },
-                                message:
-                                    '{1} returns to the bottom of the dynasty deck due to the delayed effect of {0}',
-                                messageArgs: () => [context.source, context.target],
-                                gameAction: AbilityDsl.actions.returnToDeck({ shuffle: false, bottom: true })
+                                when: { onConflictFinished: () => true },
+                                gameAction: AbilityDsl.actions.returnToDeck({ bottom: true })
                             })
                         }))
                     ])

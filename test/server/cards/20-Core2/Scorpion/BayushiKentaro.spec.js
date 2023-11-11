@@ -40,6 +40,11 @@ describe('Bayushi Kentaro', function () {
             this.player1.clickCard(this.cursecatcher);
             expect(this.cursecatcher.location).toBe('play area');
             expect(this.game.currentConflict.attackers).toContain(this.cursecatcher);
+
+            this.noMoreActions();
+            this.player1.clickPrompt('Yes');
+            this.player1.clickPrompt('Gain 2 Honor');
+            expect(this.cursecatcher.location).toBe('dynasty deck');
         });
     });
 });
