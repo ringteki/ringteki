@@ -488,6 +488,16 @@ class BaseCard extends EffectSource {
         return this.hasSomeTrait(trait);
     }
 
+    hasEveryTrait(...traits: string[]): boolean {
+        const cardTraits = this.getTraitSet();
+        for (const trait of traits) {
+            if (!cardTraits.has(trait.toLowerCase())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     hasSomeTrait(...traits: string[]): boolean {
         const cardTraits = this.getTraitSet();
         for (const trait of traits) {
