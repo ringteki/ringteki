@@ -32,6 +32,21 @@ describe('Heart of the Inferno', function () {
             });
         });
 
+        it('without affinity, and no valid target', function () {
+            this.player1.moveCard(this.fireTensai, 'dynasty discard pile');
+            this.player2.moveCard(this.whisperer, 'dynasty discard pile');
+
+            this.player2.pass();
+            this.player1.clickCard(this.heartOfTheInferno);
+            expect(this.player1).not.toHavePrompt('Choose a card');
+            expect(this.player1).not.toBeAbleToSelect(this.fireTensai);
+            expect(this.player1).not.toBeAbleToSelect(this.solemn);
+            expect(this.player1).not.toBeAbleToSelect(this.valiant);
+            expect(this.player1).not.toBeAbleToSelect(this.brash);
+            expect(this.player1).not.toBeAbleToSelect(this.katana);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+        });
+
         it('without affinity, bow a character without attachment', function () {
             this.player1.moveCard(this.fireTensai, 'dynasty discard pile');
 
@@ -42,12 +57,12 @@ describe('Heart of the Inferno', function () {
             expect(this.player1).not.toBeAbleToSelect(this.solemn);
             expect(this.player1).not.toBeAbleToSelect(this.valiant);
             expect(this.player1).not.toBeAbleToSelect(this.brash);
-            expect(this.player1).toBeAbleToSelect(this.katana);
+            expect(this.player1).not.toBeAbleToSelect(this.katana);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
 
             this.player1.clickCard(this.whisperer);
             expect(this.whisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
+            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the Inferno to bow Doji Whisperer');
         });
 
         it('with affinity, bow a character without attachment', function () {
@@ -63,7 +78,7 @@ describe('Heart of the Inferno', function () {
 
             this.player1.clickCard(this.whisperer);
             expect(this.whisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
+            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the Inferno to bow Doji Whisperer');
         });
 
         it('with affinity, discard an attachment', function () {
@@ -79,8 +94,7 @@ describe('Heart of the Inferno', function () {
 
             this.player1.clickCard(this.katana);
             expect(this.katana.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Fine Katana');
-            expect(this.getChatLogs(5)).toContain('player1 channels their fire affinity to discard Fine Katana');
+            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the Inferno to discard Fine Katana');
         });
     });
 });

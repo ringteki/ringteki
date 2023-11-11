@@ -2,6 +2,7 @@ import { CardTypes, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
+import type { GameAction } from '../../../GameActions/GameAction';
 
 export default class HeartOfTheInferno extends DrawCard {
     static id = 'heart-of-the-inferno';
@@ -14,21 +15,23 @@ export default class HeartOfTheInferno extends DrawCard {
             target: {
                 mode: TargetModes.Single,
                 controller: Players.Opponent,
-                cardCondition: (card: BaseCard) =>
-                    card.attachments.length === 0 && (card.isParticipating() || card.parent?.isParticipating()),
-                gameAction: AbilityDsl.actions.bow()
-            },
-            then: (context) => ({
-                gameAction: AbilityDsl.actions.onAffinity({
-                    trait: 'fire',
-                    gameAction: AbilityDsl.actions.conditional({
-                        condition: () => (context.target as DrawCard).type === CardTypes.Attachment,
-                        trueGameAction: AbilityDsl.actions.discardFromPlay({ target: context.target }),
-                        falseGameAction: AbilityDsl.actions.noAction()
-                    }),
-                    effect: ''
+                cardCondition: (card: BaseCard) => card.isParticipating() || card.parent?.isParticipating(),
+                gameAction: AbilityDsl.actions.multipleContext((context) => {
+                    if (!(context.target instanceof DrawCard)) {
+                        return { gameActions: [] };
+                    }
+
+                    const gameActions: Array<GameAction> = [];
+                    if (context.target.type === CardTypes.Character && context.target.attachments.length === 0) {
+                        gameActions.push(AbilityDsl.actions.bow({ target: context.target }));
+                    }
+                    if (context.target.type === CardTypes.Attachment && context.player.hasAffinity('fire', context)) {
+                        gameActions.push(AbilityDsl.actions.discardFromPlay({ target: context.target }));
+                    }
+
+                    return { gameActions };
                 })
-            })
+            }
         });
     }
 }
