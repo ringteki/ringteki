@@ -1,6 +1,4 @@
-import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
 export default class Sato extends DrawCard {
@@ -20,9 +18,5 @@ export default class Sato extends DrawCard {
             gameAction: AbilityDsl.actions.loseHonor(),
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
-    }
-
-    canPlayOn(card: BaseCard) {
-        return card.getType() === CardTypes.Character && !card.isAttacking() && super.canPlayOn(card);
     }
 }
