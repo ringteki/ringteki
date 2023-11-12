@@ -38,7 +38,21 @@ import type DrawCard = require('./drawcard');
 import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
 
-const ValidKeywords = new Set([
+type PrintedKeyword =
+    | 'ancestral'
+    | 'restricted'
+    | 'limited'
+    | 'sincerity'
+    | 'courtesy'
+    | 'pride'
+    | 'covert'
+    | 'corrupted'
+    | 'rally'
+    | 'eminent'
+    | 'ephemeral'
+    | 'peaceful';
+
+const ValidKeywords = new Set<PrintedKeyword>([
     'ancestral',
     'restricted',
     'limited',
@@ -49,7 +63,8 @@ const ValidKeywords = new Set([
     'corrupted',
     'rally',
     'eminent',
-    'ephemeral'
+    'ephemeral',
+    'peaceful'
 ]);
 
 class BaseCard extends EffectSource {
@@ -81,7 +96,7 @@ class BaseCard extends EffectSource {
     childCards = [] as DrawCard[];
     statusTokens = [] as StatusToken[];
     allowedAttachmentTraits = [] as string[];
-    printedKeywords = [] as string[];
+    printedKeywords: Array<PrintedKeyword> = [];
     disguisedKeywordTraits = [] as string[];
 
     constructor(
@@ -480,8 +495,8 @@ class BaseCard extends EffectSource {
         return addKeywordEffects.length > loseKeywordEffects.length;
     }
 
-    hasPrintedKeyword(keyword) {
-        return this.printedKeywords.includes(keyword.toLowerCase());
+    hasPrintedKeyword(keyword: string) {
+        return this.printedKeywords.includes(keyword.toLowerCase() as PrintedKeyword);
     }
 
     hasTrait(trait: string): boolean {

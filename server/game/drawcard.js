@@ -124,6 +124,10 @@ class DrawCard extends BaseCard {
         return this.hasPrintedKeyword('ephemeral');
     }
 
+    hasPeaceful() {
+        return this.hasPrintedKeyword('peaceful');
+    }
+
     isDire() {
         return this.getFate() === 0;
     }
@@ -846,7 +850,8 @@ class DrawCard extends BaseCard {
             this.checkRestrictions(type, context) &&
             context.player.checkRestrictions(type, context) &&
             this.checkRestrictions('play', context) &&
-            context.player.checkRestrictions('play', context)
+            context.player.checkRestrictions('play', context) &&
+            (!this.hasPrintedKeyword('peaceful') || !this.game.currentConflict)
         );
     }
 
