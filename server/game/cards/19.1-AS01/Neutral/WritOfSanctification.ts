@@ -16,23 +16,21 @@ export default class WritOfSanctification extends DrawCard {
         this.persistentEffect({
             condition: (context) =>
                 !(context.player.cardsInPlay as BaseCard[]).some(
-                    (card) =>
-                        (card.hasTrait('shadowlands') || card.hasTrait('haunted')) && card.type === CardTypes.Character
+                    (card) => card.hasTrait('shadowlands') && card.type === CardTypes.Character
                 ),
             effect: AbilityDsl.effects.addKeyword('ancestral')
         });
 
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
-                title: 'Bow shadowlands or haunted',
+                title: 'Bow corrupt character',
                 condition: (context: AbilityContext) => context.source.isParticipating(),
                 target: {
                     cardType: CardTypes.Character,
                     controller: Players.Any,
                     mode: TargetModes.Single,
                     cardCondition: (card: BaseCard) =>
-                        card.isParticipating() &&
-                        (card.hasTrait('haunted') || card.hasTrait('shadowlands') || card.isTainted),
+                        card.isParticipating() && (card.hasTrait('shadowlands') || card.isTainted),
                     gameAction: AbilityDsl.actions.bow()
                 }
             })

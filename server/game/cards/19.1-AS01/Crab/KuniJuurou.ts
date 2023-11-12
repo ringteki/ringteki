@@ -10,9 +10,7 @@ export default class KuniJuurou extends DrawCard {
 
         this.persistentEffect({
             targetController: Players.Any,
-            match: (card) =>
-                card.type === CardTypes.Character &&
-                (card.isTainted || card.hasTrait('shadowlands') || card.hasTrait('haunted')),
+            match: (card) => card.type === CardTypes.Character && (card.isTainted || card.hasTrait('shadowlands')),
             effect: AbilityDsl.effects.modifyBothSkills(-2)
         });
 

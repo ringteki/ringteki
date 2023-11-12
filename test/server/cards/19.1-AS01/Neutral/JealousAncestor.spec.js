@@ -115,14 +115,14 @@ describe('Jealous Ancestor', function () {
                 expect(this.giftedTactician.attachments.length).toBe(1);
             });
 
-            it('adds Haunted trait to parent', function () {
+            it('adds Corrupt trait to parent', function () {
                 this.player1.pass();
 
                 this.player2.clickCard(this.jealousAncestor);
                 this.player2.clickPrompt('Play Jealous Ancestor as an attachment');
                 this.player2.clickCard(this.giftedTactician);
 
-                expect(this.giftedTactician.hasTrait('haunted')).toBe(true);
+                expect(this.giftedTactician.hasTrait('shadowlands')).toBe(true);
             });
 
             describe('when parent is participating', function () {
@@ -198,7 +198,7 @@ describe('Jealous Ancestor', function () {
                     this.player2.clickCard(this.teaHouse);
                     this.player2.clickCard(this.ingenuity);
                     expect(this.getChatLogs(5)).toContain(
-                        'player2 uses Esteemed Tea House to return Tactical Ingenuity to player1\'s hand and prevent them from playing copies this phase'
+                        "player2 uses Esteemed Tea House to return Tactical Ingenuity to player1's hand and prevent them from playing copies this phase"
                     );
                     expect(this.ingenuity.location).toBe('hand');
                 });
@@ -279,7 +279,7 @@ describe('Jealous Ancestor', function () {
                     this.player2.clickCard(this.teaHouse);
                     this.player2.clickCard(this.ingenuity);
                     expect(this.getChatLogs(5)).toContain(
-                        'player2 uses Esteemed Tea House to return Tactical Ingenuity to player1\'s hand and prevent them from playing copies this phase'
+                        "player2 uses Esteemed Tea House to return Tactical Ingenuity to player1's hand and prevent them from playing copies this phase"
                     );
                     expect(this.ingenuity.location).toBe('hand');
                 });
@@ -358,7 +358,7 @@ describe('Jealous Ancestor', function () {
                     this.player2.clickCard(this.teaHouse);
                     this.player2.clickCard(this.ingenuity);
                     expect(this.getChatLogs(5)).toContain(
-                        'player2 uses Esteemed Tea House to return Tactical Ingenuity to player1\'s hand and prevent them from playing copies this phase'
+                        "player2 uses Esteemed Tea House to return Tactical Ingenuity to player1's hand and prevent them from playing copies this phase"
                     );
                     expect(this.ingenuity.location).toBe('hand');
                 });

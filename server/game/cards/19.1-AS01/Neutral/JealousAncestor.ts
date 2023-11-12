@@ -12,7 +12,7 @@ export default class JealousAncestor extends DrawCard {
     public setupCardAbilities() {
         this.abilities.playActions.push(new PlayCharacterAsAttachment(this));
 
-        this.whileAttached({ effect: AbilityDsl.effects.addTrait('haunted') });
+        this.whileAttached({ effect: AbilityDsl.effects.addTrait('shadowlands') });
         this.persistentEffect({
             condition: (context) => context.source.parent,
             effect: AbilityDsl.effects.immunity({ restricts: 'events' })

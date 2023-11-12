@@ -22,7 +22,9 @@ describe('Writ of Sanctification', function () {
                 expect(this.player1).toHavePrompt('Choose a card');
 
                 this.player1.clickCard(this.doomedShugenja);
-                expect(this.getChatLogs(5)).toContain('player1 plays Writ of Sanctification, attaching it to Doomed Shugenja');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 plays Writ of Sanctification, attaching it to Doomed Shugenja'
+                );
             });
         });
 
@@ -58,25 +60,6 @@ describe('Writ of Sanctification', function () {
                 this.player2.pass();
 
                 this.player1.clickCard(this.goblinSneak);
-                this.player1.clickPrompt('0');
-                expect(this.writOfSanctification.hasKeyword('ancestral')).toBe(false);
-            });
-
-            it('should only have ancestral while you dont control a haunted character', function () {
-                this.player1.clickCard(this.writOfSanctification);
-                this.player1.clickCard(this.doomedShugenja);
-
-                expect(this.writOfSanctification.hasKeyword('ancestral')).toBe(true);
-                this.player2.pass();
-
-                this.player1.clickCard(this.obsidianTalisman);
-                this.player1.clickCard(this.doomedShugenja);
-
-                expect(this.writOfSanctification.hasKeyword('ancestral')).toBe(true);
-                this.player2.pass();
-
-                this.player1.clickCard(this.jealousAncestor);
-                this.player1.clickPrompt('Play this character');
                 this.player1.clickPrompt('0');
                 expect(this.writOfSanctification.hasKeyword('ancestral')).toBe(false);
             });
@@ -130,7 +113,7 @@ describe('Writ of Sanctification', function () {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should not work when the haunted or shadowlands character arent participating', function () {
+            it('should not work when the corrupt character arent participating', function () {
                 this.player1.clickCard(this.writOfSanctification);
                 this.player1.clickCard(this.doomedShugenja);
 
@@ -146,7 +129,7 @@ describe('Writ of Sanctification', function () {
                 expect(this.player1).toHavePrompt('Conflict Action Window');
             });
 
-            it('should be able to target a haunted, tainted or shadowlands participating character', function () {
+            it('should be able to target a tainted or shadowlands participating character', function () {
                 this.player1.clickCard(this.writOfSanctification);
                 this.player1.clickCard(this.doomedShugenja);
                 this.messageRunner.taint();
