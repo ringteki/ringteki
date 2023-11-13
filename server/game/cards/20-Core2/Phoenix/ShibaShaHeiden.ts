@@ -1,91 +1,70 @@
-import type AbilityContext from '../../../AbilityContext';
-import { Locations, Players, TargetModes } from '../../../Constants';
-import type { GameAction } from '../../../GameActions/GameAction';
+import { EventNames, Phases } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import { EventRegistrar } from '../../../EventRegistrar';
 import type Player from '../../../player';
 
 export default class ShibaShaHeiden extends DrawCard {
     static id = 'shiba-sha-heiden';
 
+    usedResourceTrade = new Set<Player>();
+
     setupCardAbilities() {
+        this.eventRegistrar = new EventRegistrar(this.game, this);
+        this.eventRegistrar.register([EventNames.OnRoundEnded, EventNames.OnCardLeavesPlay]);
+
         this.reaction({
-            title: 'Move this to stronghold province',
+            title: 'Fill this province with a card',
             when: {
-                onCardRevealed: (event, context) =>
-                    event.card === context.source &&
-                    !(event.card.controller as Player)
-                        .getDynastyCardsInProvince(Locations.StrongholdProvince)
-                        .some((card: DrawCard) => card.isFaceup() && card.name === context.source.name)
+                onPhaseStarted: (event) => event.phase === Phases.Dynasty
             },
-            effect: 'move it to their stronghold province',
-            gameAction: AbilityDsl.actions.moveCard({ destination: Locations.StrongholdProvince })
+            gameAction: AbilityDsl.actions.fillProvince((context) => ({
+                location: context.source.location,
+                fillTo: context.source.controller.getDynastyCardsInProvince(context.source.location).length + 1
+            })),
+            effect: 'fill its province with 1 card'
         });
 
+        /**
+         * The card is a single action, but implementing the cost was too much work
+         * Should be fixed later when choice costs are implemented
+         */
         this.action({
-            title: 'Make offering to receive boon',
-            target: {
-                mode: TargetModes.Select,
-                choices: (context) => {
-                    const choices: [string, GameAction][] = [];
-                    if (this.#canPayFate(context)) {
-                        choices.push([
-                            'Spend 1 fate',
-                            this.#createEffect(
-                                context.player,
-                                AbilityDsl.actions.loseFate({ amount: 1, target: context.player })
-                            )
-                        ]);
-                    }
-                    if (this.#canDiscardCards(context)) {
-                        choices.push([
-                            'Discard 1 card',
-                            this.#createEffect(
-                                context.player,
-                                AbilityDsl.actions.chosenDiscard({ amount: 1, target: context.player })
-                            )
-                        ]);
-                    }
-                    return Object.fromEntries(choices);
-                }
+            title: 'Pay 1 fate to draw a card',
+            cost: AbilityDsl.costs.payFate(1),
+            gameAction: AbilityDsl.actions.draw(),
+            condition: (context) => !this.usedResourceTrade.has(context.player),
+            then: (context) => {
+                this.usedResourceTrade.add(context.player);
+            }
+        });
+        this.action({
+            title: 'Discard a card to gain 1 fate',
+            cost: AbilityDsl.costs.discardCard(),
+            gameAction: AbilityDsl.actions.gainFate(),
+            condition: (context) => !this.usedResourceTrade.has(context.player),
+            then: (context) => {
+                this.usedResourceTrade.add(context.player);
+            }
+        });
+        this.action({
+            title: 'Discard a card to draw a card',
+            cost: AbilityDsl.costs.discardCard(),
+            gameAction: AbilityDsl.actions.draw(),
+            condition: (context) => !this.usedResourceTrade.has(context.player),
+            then: (context) => {
+                this.usedResourceTrade.add(context.player);
             }
         });
     }
 
-    #canPayFate(context: AbilityContext) {
-        return (
-            context.player.opponent.fate > 1 &&
-            AbilityDsl.actions.loseFate({ amount: 1, target: context.player }).canAffect(context.player, context)
-        );
+    public onRoundEnded() {
+        this.usedResourceTrade.clear();
     }
 
-    #canDiscardCards(context: AbilityContext) {
-        return (
-            context.player.opponent.hand.size() >= 1 &&
-            AbilityDsl.actions.chosenDiscard({ amount: 1, target: context.player }).canAffect(context.player, context)
-        );
-    }
-
-    #createEffect(player: Player, cost: GameAction) {
-        return AbilityDsl.actions.chooseAction({
-            activePromptTitle: 'Choose your boon',
-            player: Players.Self,
-            options: {
-                'Gain 1 fate': {
-                    action: AbilityDsl.actions.sequential([
-                        cost,
-                        AbilityDsl.actions.gainFate({ amount: 1, target: player })
-                    ]),
-                    message: '{0} chooses to gain 1 fate'
-                },
-                'Draw 1 card': {
-                    action: AbilityDsl.actions.sequential([
-                        cost,
-                        AbilityDsl.actions.draw({ amount: 1, target: player })
-                    ]),
-                    message: '{0} chooses to draw 1 card'
-                }
-            }
-        });
+    public onCardLeavesPlay(event: any) {
+        if (event.card === this) {
+            this.usedResourceTrade.clear();
+        }
     }
 }
