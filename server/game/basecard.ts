@@ -375,7 +375,7 @@ class BaseCard extends EffectSource {
      * Applies an effect that continues as long as the card providing the effect
      * is both in play and not blank.
      */
-    persistentEffect(properties: PersistentEffectProps): void {
+    persistentEffect(properties: PersistentEffectProps<this>): void {
         const allowedLocations = [
             Locations.Any,
             Locations.ConflictDiscardPile,

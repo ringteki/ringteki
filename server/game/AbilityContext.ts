@@ -24,9 +24,9 @@ interface AbilityContextProperties {
     targetAbility?: any;
 }
 
-class AbilityContext {
+class AbilityContext<S = any> {
     game: Game;
-    source: any;
+    source: S;
     player: Player;
     ability: BaseAbility;
     costs: any;
@@ -93,8 +93,8 @@ class AbilityContext {
     }
 
     refill(): void {
-        for(let player of this.game.getPlayersInFirstPlayerOrder()) {
-            for(let refill of this.provincesToRefill.filter(refill => refill.player === player)) {
+        for (let player of this.game.getPlayersInFirstPlayerOrder()) {
+            for (let refill of this.provincesToRefill.filter((refill) => refill.player === player)) {
                 this.game.queueSimpleStep(() => {
                     player.replaceDynastyCard(refill.location);
                     return true;
@@ -102,7 +102,7 @@ class AbilityContext {
             }
         }
         this.game.queueSimpleStep(() => {
-            this.game.checkGameState(true)
+            this.game.checkGameState(true);
         });
     }
 

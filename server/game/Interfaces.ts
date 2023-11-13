@@ -201,9 +201,9 @@ export interface TriggeredAbilityAggregateWhenProps extends AbilityProps<Trigger
 
 export type TriggeredAbilityProps = TriggeredAbilityWhenProps | TriggeredAbilityAggregateWhenProps;
 
-export interface PersistentEffectProps {
+export interface PersistentEffectProps<Source = any> {
     location?: Locations | Locations[];
-    condition?: (context: AbilityContext) => boolean;
+    condition?: (context: AbilityContext<Source>) => boolean;
     match?: (card: BaseCard, context?: AbilityContext) => boolean;
     targetController?: Players;
     targetLocation?: Locations;
