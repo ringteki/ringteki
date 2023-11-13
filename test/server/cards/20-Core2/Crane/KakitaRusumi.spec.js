@@ -114,5 +114,25 @@ describe('Kakita Rusumi', function () {
             this.player1.clickPrompt('Doji Whisperer');
             expect(this.getChatLogs(6)).toContain('player1 is shuffling their dynasty deck');
         });
+
+        it('should discard the character at the end of the conflict', function () {
+            this.noMoreActions();
+
+            this.initiateConflict({
+                attackers: [this.rusumi],
+                defenders: [],
+                type: 'military'
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.rusumi);
+            this.player1.clickPrompt('Doji Whisperer');
+            expect(this.game.currentConflict.attackers).toContain(this.whisperer);
+            expect(this.whisperer.isHonored).toBe(true);
+
+            this.noMoreActions();
+            this.player1.clickPrompt('Don\'t Resolve');
+            expect(this.whisperer.location).toBe('dynasty discard pile');
+            expect(this.getChatLogs(5)).toContain('Doji Whisperer is discarded from play due to Kakita Rusumi\'s effect');
+        });
     });
 });

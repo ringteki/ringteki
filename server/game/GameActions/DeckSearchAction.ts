@@ -188,6 +188,7 @@ export class DeckSearchAction extends PlayerAction {
         allCards: DrawCard[]
     ): void {
         event.selectedCards = Array.from(selectedCards);
+        context.selects['deckSearch'] = Array.from(selectedCards);
         if (properties.selectedCardsHandler === null) {
             this.#defaultHandleDone(properties, context, event, selectedCards);
         } else {
