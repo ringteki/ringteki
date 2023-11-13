@@ -189,7 +189,7 @@ export enum EffectNames {
     TriggersAbilitiesFromHome = 'triggersAbilitiesFromHome',
     // New Duel effects
     ModifyDuelSkill = 'modifyDuelSkill',
-
+    ApplyStatusTokensToDuel = 'applyStatusTokensToDuel',
 }
 
 export enum Durations {

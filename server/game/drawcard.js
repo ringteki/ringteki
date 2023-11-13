@@ -414,6 +414,31 @@ class DrawCard extends BaseCard {
         };
     }
 
+    getStatusTokenSkill() {
+        let modifiers = this.getStatusTokenModifiers();
+        let skill = modifiers.reduce((total, modifier) => total + modifier.amount, 0);
+        if (isNaN(skill)) {
+            return 0;
+        }
+        return skill;
+    }
+
+    getStatusTokenModifiers() {
+        let modifiers = [];
+        let modifierEffects = this.getRawEffects().filter((effect) => effect.type === EffectNames.ModifyBothSkills);
+
+        // skill modifiers
+        modifierEffects.forEach((modifierEffect) => {
+            const value = modifierEffect.getValue(this);
+            modifiers.push(StatModifier.fromEffect(value, modifierEffect));
+        });
+        modifiers = modifiers.filter(modifier => modifier.type === 'token')
+
+        // adjust honor status effects
+        this.adjustHonorStatusModifiers(modifiers);
+        return modifiers;
+    }
+
     getMilitaryModifiers(exclusions) {
         let baseSkillModifiers = this.getBaseSkillModifiers();
         if (isNaN(baseSkillModifiers.baseMilitarySkill)) {

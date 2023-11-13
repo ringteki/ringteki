@@ -223,6 +223,16 @@ export class Duel extends GameObject {
             }
         }
 
+        // Some effects for the new duel framework
+        if (this.gameModeOpts.duelRules === 'printedSkill') {
+            let statusTokenBonus = 0;
+            const useStatusTokens = this.getEffects(EffectNames.ApplyStatusTokensToDuel).length > 0;
+            if (useStatusTokens) {
+                statusTokenBonus = card.getStatusTokenSkill();
+            }
+            return baseStatistic + statusTokenBonus;
+        }
+
         return baseStatistic;
     }
 

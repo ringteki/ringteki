@@ -268,6 +268,7 @@ const Effects = {
     conflictIgnoreStatusTokens: () => EffectBuilder.conflict.static(EffectNames.ConflictIgnoreStatusTokens),
     // Duel effects
     modifyDuelSkill: (properties) => EffectBuilder.duel.flexible(EffectNames.ModifyDuelSkill, Object.assign({ player: properties.player, amount: properties.amount })),
+    applyStatusTokensToDuel: () => EffectBuilder.duel.static(EffectNames.ApplyStatusTokensToDuel),
 };
 
 module.exports = Effects;
