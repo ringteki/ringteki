@@ -15,7 +15,6 @@ export default class AsahinaEnvoy extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Self,
-                cardCondition: (card) => card.location !== 'stronghold province',
                 gameAction: AbilityDsl.actions.deckSearch({
                     cardCondition: (card) =>
                         card.type === CardTypes.Character && card.printedCost >= 4 && card.isFaction('crane'),

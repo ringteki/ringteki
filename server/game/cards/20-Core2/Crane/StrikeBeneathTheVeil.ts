@@ -19,8 +19,8 @@ export default class StrikeBeneathTheVeil extends DrawCard {
                     effect: AbilityDsl.effects.modifyMilitarySkill(this.#penalty(context.target))
                 }))
             },
-            effect: 'give {0} {1} military',
-            effectArgs: (context) => [this.#penalty(context.target)]
+            effect: 'give {0} {1}{2}',
+            effectArgs: (context) => [this.#penalty(context.target), 'military']
         });
     }
 
