@@ -269,6 +269,7 @@ const Effects = {
     // Duel effects
     modifyDuelSkill: (properties) => EffectBuilder.duel.flexible(EffectNames.ModifyDuelSkill, Object.assign({ player: properties.player, amount: properties.amount })),
     applyStatusTokensToDuel: () => EffectBuilder.duel.static(EffectNames.ApplyStatusTokensToDuel),
+    duelIgnorePrintedSkill: () => EffectBuilder.duel.static(EffectNames.DuelIgnorePrintedSkill),
 };
 
 module.exports = Effects;

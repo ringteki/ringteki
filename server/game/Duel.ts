@@ -44,7 +44,7 @@ export class Duel extends GameObject {
         public targets: DrawCard[],
         public duelType: DuelTypes,
         private statistic?: (card: DrawCard) => number,
-        private challengingPlayer = challenger.controller
+        public challengingPlayer = challenger.controller
     ) {
         super(game, 'Duel');
         this.gameModeOpts = parseGameMode(this.game.gameMode);
@@ -224,9 +224,14 @@ export class Duel extends GameObject {
         }
 
         // Some effects for the new duel framework
-        if (this.gameModeOpts.duelRules === 'printedSkill') {
+        if (this.gameModeOpts.duelRules === 'printedSkill' && !this.statistic) {
             let statusTokenBonus = 0;
             const useStatusTokens = this.getEffects(EffectNames.ApplyStatusTokensToDuel).length > 0;
+            const ignorePrintedSkill = this.getEffects(EffectNames.DuelIgnorePrintedSkill).length > 0;
+
+            if (ignorePrintedSkill) {
+                baseStatistic = 0;
+            }
             if (useStatusTokens) {
                 statusTokenBonus = card.getStatusTokenSkill();
             }

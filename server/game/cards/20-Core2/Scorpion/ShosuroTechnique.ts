@@ -6,39 +6,15 @@ export default class ShosuroTechnique extends DrawCard {
     static id = 'shosuro-technique';
 
     setupCardAbilities() {
-        this.reaction({
-            title: 'Set skill for the duel',
-            when: {
-                onDuelInitiated: (event, context) => event.context.targets.some((x) => x.controller === context.player)
-            },
-            targets: {
-                ally: {
-                    activePromptTitle: 'Choose a character you control involved in the duel',
-                    mode: TargetModes.Single,
-                    controller: Players.Self,
-                    cardType: CardTypes.Character,
-                    cardCondition: (card, context) => context.event.targets.includes(card)
-                },
-                enemy: {
-                    activePromptTitle: 'Choose a character your opponent controls involved in the duel',
-                    mode: TargetModes.Single,
-                    controller: Players.Opponent,
-                    cardType: CardTypes.Character,
-                    cardCondition: (card, context) => context.event.targets.includes(card)
-                }
-            },
-            gameAction: AbilityDsl.actions.multiple([
-                AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.targets.ally,
-                    duration: Durations.UntilEndOfDuel,
-                    effect: AbilityDsl.effects.setMilitarySkill(context.targets.enemy.militarySkill)
-                })),
-                AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.targets.ally,
-                    duration: Durations.UntilEndOfDuel,
-                    effect: AbilityDsl.effects.setPoliticalSkill(context.targets.enemy.politicalSkill)
-                }))
-            ])
+        this.duelChallenge({
+            title: 'Apply status tokens to the duel',
+            duelCondition: (duel, context) => duel.challengingPlayer && duel.challengingPlayer.opponent === context.player,
+            gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
+                target: context.event.duel,
+                effect: AbilityDsl.effects.duelIgnorePrintedSkill(),
+                duration: Durations.UntilEndOfDuel
+            })),
+            effect: 'ignore printed skill when resolving this duel'
         });
 
         this.action({
@@ -49,18 +25,17 @@ export default class ShosuroTechnique extends DrawCard {
                     activePromptTitle: 'Choose a Shinobi you control',
                     mode: TargetModes.Single,
                     cardType: CardTypes.Character,
+                    controller: Players.Self,
                     optional: false,
-                    cardCondition: (card, context) =>
-                        card.controller === context.player && card.hasTrait('shinobi') && card.isParticipating()
+                    cardCondition: (card) => card.hasTrait('shinobi') && card.isParticipating()
                 },
                 enemy: {
                     mode: TargetModes.Single,
                     dependsOn: 'shinobi',
-                    player: Players.Self,
+                    controller: Players.Opponent,
                     cardType: CardTypes.Character,
                     optional: false,
-                    cardCondition: (card, context) =>
-                        card.controller === context.player.opponent && card.isParticipating()
+                    cardCondition: (card) => card.isParticipating()
                 }
             },
             gameAction: AbilityDsl.actions.multiple([
@@ -68,15 +43,10 @@ export default class ShosuroTechnique extends DrawCard {
                     duration: Durations.UntilEndOfConflict,
                     target: context.targets.shinobi,
                     effect: AbilityDsl.effects.setMilitarySkill(context.targets.enemy.militarySkill)
-                })),
-                AbilityDsl.actions.cardLastingEffect((context) => ({
-                    duration: Durations.UntilEndOfConflict,
-                    target: context.targets.shinobi,
-                    effect: AbilityDsl.effects.setPoliticalSkill(context.targets.enemy.politicalSkill)
                 }))
             ]),
-            effect: "set the skills of {1} equal to the skills of {2}. There's no blade as keen as surprise.",
-            effectArgs: (context) => [context.targets.shinobi.name, context.targets.enemy.name]
+            effect: "set the {3} of {1} to {4}{3} (equal to {2}). There's no blade as keen as surprise.",
+            effectArgs: (context) => [context.targets.shinobi.name, context.targets.enemy.name, 'military', context.targets.enemy.militarySkill]
         });
     }
 }

@@ -190,6 +190,7 @@ export enum EffectNames {
     // New Duel effects
     ModifyDuelSkill = 'modifyDuelSkill',
     ApplyStatusTokensToDuel = 'applyStatusTokensToDuel',
+    DuelIgnorePrintedSkill = 'duelIgnorePrintedSkill',
 }
 
 export enum Durations {
