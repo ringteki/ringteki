@@ -1,6 +1,7 @@
 import { AbilityTypes, CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityProps } from '../../../Interfaces';
 
 export default class MagariYari extends DrawCard {
     static id = 'magari-yari';
@@ -12,18 +13,13 @@ export default class MagariYari extends DrawCard {
                 title: 'Bow a character',
                 when: {
                     onMoveToConflict: (event, context) =>
+                        (context.source as DrawCard).isParticipating('military') &&
                         event.card.type === CardTypes.Character &&
                         event.card.isParticipating() &&
-                        context.source.isParticipating() &&
-                        context.game.isDuringConflict('military')
+                        event.card.getMilitarySkill() < context.source.getMilitarySkill()
                 },
-                target: {
-                    cardType: CardTypes.Character,
-                    cardCondition: (card, context) =>
-                        card.getMilitarySkill() < context.source.getMilitarySkill() && card.isParticipating(),
-                    gameAction: AbilityDsl.actions.bow()
-                }
-            })
+                gameAction: AbilityDsl.actions.bow((context) => ({ target: context.event.card }))
+            } as TriggeredAbilityProps)
         });
     }
 }
