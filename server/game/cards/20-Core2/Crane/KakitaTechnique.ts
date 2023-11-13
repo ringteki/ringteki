@@ -1,116 +1,68 @@
 import { CardTypes, Durations, Players } from '../../../Constants';
+import { Direction } from '../../../GameActions/ModifyBidAction';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-
-const kakitaTechniqueCost = function () {
-    return {
-        canPay: function () {
-            return true;
-        },
-        resolve: function (context, result) {
-            context.game.promptWithHandlerMenu(context.player.opponent, {
-                activePromptTitle: 'Let opponent gain 2 honor to resolve Kakita Technique?',
-                source: context.source,
-                choices: ['Yes', 'No'],
-                handlers: [
-                    () => (context.costs.kakitaTechniqueCostPaid = true),
-                    () => (context.costs.kakitaTechniqueCostPaid = false)
-                ]
-            });
-        },
-        payEvent: function (context) {
-            if (context.costs.kakitaTechniqueCostPaid) {
-                let events = [];
-                context.game.addMessage(
-                    '{0} chooses to resolve Kakita Technique. {1} will gain 2 honor',
-                    context.player.opponent,
-                    context.player
-                );
-                return events;
-            } else {
-                context.game.addMessage('{0} chooses not to resolve Kakita Technique', context.player.opponent);
-            }
-
-            let action = context.game.actions.handler(); //this is a do-nothing event to allow you to opt out and not scuttle the event
-            return action.getEvent(context.player, context);
-        },
-        promptsPlayer: true
-    };
-};
 
 export default class KakitaTechnique extends DrawCard {
     static id = 'kakita-technique';
 
     setupCardAbilities() {
+        this.duelFocus({
+            title: 'Set bid to 0',
+            gameAction: AbilityDsl.actions.modifyBid(context =>  {
+                const currentBid = context.player.honorBid;
+
+                return {
+                    amount: currentBid,
+                    direction: Direction.Decrease
+                }
+            }),
+        });
+
         this.action({
             title: 'Give character +2/+2',
-            condition: (context) =>
-                context.player.opponent &&
-                context.game.currentConflict.getNumberOfParticipantsFor(context.player) <=
-                    context.game.currentConflict.getNumberOfParticipantsFor(context.player.opponent),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
-                    effect: AbilityDsl.effects.modifyBothSkills(2)
-                }))
+                cardCondition: (card) => card.isParticipating() && (card.hasTrait('bushi') || card.hasTrait('duelist')),
+                gameAction: AbilityDsl.actions.sequential([
+                    AbilityDsl.actions.cardLastingEffect(context => ({
+                        effect: AbilityDsl.effects.delayedEffect({
+                            when: {
+                                onCardPlayed: (event, context) => event.player === context.player && event.card.type === CardTypes.Event
+                            },
+                            message: '{0} gets +{1}{2} and +{1}{3} due to the delayed effect of {4}',
+                            messageArgs: () => [context.target, context.target.isDefending() ? '2' : '1', 'military', 'political', context.source],
+                            multipleTrigger: true,
+                            gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
+                                target: context.target,
+                                effect: AbilityDsl.effects.modifyBothSkills(() => context.target.isDefending() ? 2 : 1)
+                            })) 
+                        })
+                    })),
+                    AbilityDsl.actions.playerLastingEffect(context => ({
+                        targetController: context.player,
+                        duration: Durations.UntilPassPriority,
+                        effect: AbilityDsl.effects.additionalAction(this.getExtraActionCount(context))
+                    }))
+                ])
             },
-            effect: 'give {0} +2{1} and +2{2}',
-            effectArgs: () => ['military', 'political']
-        });
-
-        this.duelFocus({
-            title: 'Add glory to duel result',
-            cost: kakitaTechniqueCost(),
-            gameAction: AbilityDsl.actions.multipleContext((context) => {
-                let gameActions = [this.selectDuelTarget(Players.Self)];
-                if (context.costs.kakitaTechniqueCostPaid) {
-                    gameActions.push(this.selectDuelTarget(Players.Opponent)),
-                        gameActions.push(
-                            AbilityDsl.actions.gainHonor((context) => ({
-                                target: context.player,
-                                amount: 2
-                            }))
-                        );
-                }
-
-                return { gameActions };
-            }),
-            effect: 'focus, adding glory to their duel total'
+            effect: 'give {0} +{1}{2} and +{1}{3} after each event they play{4}{5}{6}{7}',
+            effectArgs: (context) => {
+                const actions = this.getExtraActionCount(context);
+                if (actions > 0)
+                    return  [
+                        context.target.isDefending() ? '2' : '1', 'military', 'political',
+                        ' and take ', actions, ' additional action', (actions > 1 ? 's' : '')
+                    ];
+                return [context.target.isDefending() ? '2' : '1', 'military', 'political', '', '', '', ''];
+            }
         });
     }
 
-    selectDuelTarget(controller) {
-        return AbilityDsl.actions.selectCard((context) => {
-            let duelTarget = undefined;
-            return {
-                activePromptTitle: 'Choose a duel participant',
-                hidePromptIfSingleCard: true,
-                cardType: CardTypes.Character,
-                controller: controller,
-                player: controller,
-                cardCondition: (card) => context.event.duel.isInvolved(card),
-                message: '{0} gives {1} {2} bonus skill for this duel',
-                messageArgs: (card) => [
-                    controller === Players.Self ? context.player : context.player.opponent,
-                    card,
-                    card.glory
-                ],
-                subActionProperties: (card) => {
-                    duelTarget = card;
-                    return { target: card };
-                },
-                gameAction: AbilityDsl.actions.cardLastingEffect((context) => {
-                    return {
-                        effect: AbilityDsl.effects.modifyDuelistSkill(
-                            (duelTarget && duelTarget.glory) || 0,
-                            context.event.duel
-                        ),
-                        duration: Durations.UntilEndOfDuel
-                    };
-                })
-            };
-        });
+    getExtraActionCount(context) {
+        return context.player.isAttackingPlayer() ?
+        context.game.currentConflict.defenders.length : 
+        context.game.currentConflict.attackers.length
     }
 }
