@@ -24,73 +24,78 @@ describe('Truth is in the Killing', function () {
             this.pd = this.player2.findCardByName('policy-debate');
         });
 
-        describe('Duel Strike', function () {
-            it('should react if you have a duelist and win and discard the loser', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.challenger, this.yoshi],
-                    defenders: [this.tsukune, this.toshimoko]
-                });
+        it('should discard the loser and return fate to its controller', function () {
+            let fate1 = this.player1.fate;
+            let fate2 = this.player2.fate;
 
-                this.player2.clickCard(this.pd);
-                this.player2.clickCard(this.tsukune);
-                this.player2.clickCard(this.challenger);
-
-                this.player1.clickPrompt('5');
-                this.player2.clickPrompt('1');
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.truth);
-                this.player1.clickCard(this.truth);
-                expect(this.tsukune.location).toBe('dynasty discard pile');
-                expect(this.player1).toHavePrompt('Policy Debate');
-
-                expect(this.getChatLogs(10)).toContain(
-                    'player1 plays Truth Is In the Killing to discard a loser of the duel'
-                );
-                expect(this.getChatLogs(10)).toContain('player1 discards Shiba Tsukune');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger, this.yoshi],
+                defenders: [this.tsukune, this.toshimoko]
             });
 
-            it('should react if you have a duelist and lose', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.challenger, this.yoshi],
-                    defenders: [this.tsukune, this.toshimoko]
-                });
+            this.toshimoko.fate = 4;
+            this.player2.pass();
 
-                this.player2.clickCard(this.pd);
-                this.player2.clickCard(this.tsukune);
-                this.player2.clickCard(this.challenger);
+            this.player1.clickCard(this.truth);
+            expect(this.player1).toBeAbleToSelect(this.challenger);
+            expect(this.player1).not.toBeAbleToSelect(this.yoshi);
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.toshimoko);
 
-                this.player1.clickPrompt('1');
-                this.player2.clickPrompt('5');
+            this.player1.clickPrompt('5');
+            this.player2.clickPrompt('1');
 
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.truth);
-                this.player1.clickCard(this.truth);
+            expect(this.player1.fate).toBe(fate1 - 1);
+            expect(this.player2.fate).toBe(fate2 + 4);
+            expect(this.toshimoko.location).toBe('dynasty discard pile');
+            expect(this.getChatLogs(10)).toContain('player1 plays Truth Is In the Killing to initiate a military duel : Doji Challenger vs. Kakita Toshimoko');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: discard Kakita Toshimoko, returning all fate on them to player2\'s fate pool');
+        });
 
-                expect(this.getChatLogs(10)).toContain(
-                    'player1 plays Truth Is In the Killing to discard a loser of the duel'
-                );
-                expect(this.getChatLogs(10)).toContain('player1 discards Doji Challenger');
+        it('should discard the loser and return fate to its controller (self losing)', function () {
+            let fate1 = this.player1.fate;
+            let fate2 = this.player2.fate;
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger, this.yoshi],
+                defenders: [this.tsukune, this.toshimoko]
             });
 
-            it("should not react if you don't have a duelist", function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.challenger, this.yoshi],
-                    defenders: [this.tsukune, this.toshimoko]
-                });
+            this.challenger.fate = 3;
+            this.toshimoko.fate = 4;
+            this.player2.pass();
 
-                this.player2.clickCard(this.pd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.yoshi);
+            this.player1.clickCard(this.truth);
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.toshimoko);
 
-                this.player1.clickPrompt('1');
-                this.player2.clickPrompt('1');
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('5');
 
-                expect(this.player1).toHavePrompt('Policy Debate');
+            expect(this.player1.fate).toBe(fate1 + 2);
+            expect(this.player2.fate).toBe(fate2);
+            expect(this.challenger.location).toBe('dynasty discard pile');
+            expect(this.toshimoko.location).toBe('play area');
+            expect(this.toshimoko.fate).toBe(4);
+            expect(this.getChatLogs(10)).toContain('player1 plays Truth Is In the Killing to initiate a military duel : Doji Challenger vs. Kakita Toshimoko');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: discard Doji Challenger, returning all fate on them to player1\'s fate pool');
+        });
+
+        it('should not work in pol conflicts', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger, this.yoshi],
+                defenders: [this.tsukune, this.toshimoko],
+                type: 'political'
             });
+
+            this.player2.pass();
+
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.truth);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

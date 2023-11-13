@@ -1,4 +1,4 @@
-import { CardTypes } from '../../../Constants';
+import { CardTypes, DuelTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,40 +6,29 @@ export default class TruthIsInTheKilling extends DrawCard {
     static id = 'truth-is-in-the-killing';
 
     setupCardAbilities() {
-        this.duelStrike({
-            title: 'Discard a character',
-            duelCondition: (duel, context) => {
-                const allCharacters: DrawCard[] = [duel.challenger, ...duel.targets];
-                const youHaveDuelist =
-                    allCharacters.filter((a) => a.hasTrait('duelist') && a.controller === context.player).length > 0;
-                return youHaveDuelist;
-            },
-            gameAction: AbilityDsl.actions.selectCard((context) => ({
-                activePromptTitle: 'Choose a duel participant',
-                hidePromptIfSingleCard: true,
-                cardType: CardTypes.Character,
-                cardCondition: (card) => context.event.duel.loser.includes(card),
-                message: '{0} discards {1}',
-                messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.discardFromPlay()
-            })),
-            effect: 'discard a loser of the duel'
-        });
-
-        this.reaction({
-            title: 'Discard a character',
-            when: {
-                afterConflict: (event, context) =>
-                    event.conflict.winner === context.player &&
-                    event.conflict.conflictType === 'military' &&
-                    event.conflict.skillDifference >= 5
-            },
-            target: {
-                cardType: CardTypes.Character,
-                cardCondition: (card) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.discardFromPlay()
-            },
-            max: AbilityDsl.limit.perConflict(1)
+        this.action({
+            title: 'Initiate a military duel, discarding the loser',
+            condition: context => context.game.isDuringConflict('military'),
+            initiateDuel: {
+                type: DuelTypes.Military,
+                challengerCondition: (card) => card.hasTrait('duelist') && card.isParticipating(),
+                gameAction: (duel) => duel.loser && AbilityDsl.actions.sequentialContext(() => {
+                    const gameActions = [];
+                    duel.loser.forEach((loser) => {
+                        gameActions.push(AbilityDsl.actions.removeFate({
+                            target: loser,
+                            amount: loser.getFate(),
+                            recipient: loser.controller
+                        })),
+                        gameActions.push(AbilityDsl.actions.discardFromPlay({
+                            target: duel.loser
+                        }))
+                    })
+                    return { gameActions };
+                }),
+                message: 'discard {0}, returning all fate on them to {1}\'s fate pool',
+                messageArgs: (duel) => [duel.loser, duel.losingPlayer],
+            }
         });
     }
 }
