@@ -39,6 +39,7 @@ class EventWindow extends BaseStepWithPipeline {
             new SimpleStep(this.game, () => this.checkKeywordAbilities(AbilityTypes.KeywordReaction)),
             new SimpleStep(this.game, () => this.checkThenAbilities()),
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.ForcedReaction)),
+            new SimpleStep(this.game, () => this.openWindow(AbilityTypes.DuelReaction)), // ONLY USE FOR DUEL CHALLENGE, FOCUS, AND STRIKE
             new SimpleStep(this.game, () => this.openWindow(AbilityTypes.Reaction)),
             new SimpleStep(this.game, () => this.resetCurrentEventWindow())
         ]);

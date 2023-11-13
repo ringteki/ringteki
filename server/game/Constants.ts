@@ -362,6 +362,7 @@ export enum AbilityTypes {
     KeywordReaction = 'forcedreaction',
     ForcedReaction = 'forcedreaction',
     Reaction = 'reaction',
+    DuelReaction = 'duelreaction', // ONLY USE FOR DUEL CHALLENGE, FOCUS, AND STRIKE
     Persistent = 'persistent',
     OtherEffects = 'OtherEffects'
 }

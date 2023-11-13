@@ -322,7 +322,7 @@ class BaseCard extends EffectSource {
                 }
             }
         };
-        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
+        this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
     }
 
     duelFocus(
@@ -342,7 +342,7 @@ class BaseCard extends EffectSource {
                 }
             }
         };
-        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
+        this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
     }
 
     duelStrike(properties: Omit<TriggeredAbilityProps, 'when'> & { duelCondition?: (duel, context) => boolean }): void {
@@ -360,7 +360,7 @@ class BaseCard extends EffectSource {
                 }
             }
         };
-        this.triggeredAbility(AbilityTypes.Reaction, newProperties);
+        this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
     }
 
     /**
