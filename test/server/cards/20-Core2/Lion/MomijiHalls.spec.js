@@ -38,7 +38,7 @@ describe('Momiji Halls', function () {
             );
         });
 
-        it('draws a card on defense', function () {
+        it('does not draw a card on defense', function () {
             const initialHandSize = this.player1.hand.length;
             this.noMoreActions();
             this.player1.passConflict();
@@ -51,11 +51,9 @@ describe('Momiji Halls', function () {
             });
 
             this.player1.clickCard(this.lionBox);
-            expect(this.player1).toHavePrompt('Select card to discard');
-
-            this.player1.clickCard(this.ornateFan);
-            expect(this.player1.hand.length).toBe(initialHandSize + 1);
-            expect(this.getChatLogs(5)).toContain(
+            expect(this.player1).not.toHavePrompt('Select card to discard');
+            expect(this.player1.hand.length).not.toBe(initialHandSize + 1);
+            expect(this.getChatLogs(5)).not.toContain(
                 'player1 uses Momiji Halls, bowing Momiji Halls and discarding Ornate Fan to draw 2 cards'
             );
         });
