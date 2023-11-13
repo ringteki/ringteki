@@ -1,4 +1,4 @@
-import { CardTypes, Durations, Players } from '../../../Constants';
+import { Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -7,26 +7,14 @@ export default class PromisingKohai extends DrawCard {
 
     setupCardAbilities() {
         this.duelChallenge({
-            title: 'Help a character with a duel',
-            gameAction: AbilityDsl.actions.selectCard((context) => ({
-                activePromptTitle: 'Choose a duel participant',
-                hidePromptIfSingleCard: true,
-                cardType: CardTypes.Character,
-                controller: Players.Self,
-                cardCondition: (card) => {
-                    const isInvolved = context.event.duel.isInvolved(card);
-                    const notSelf = card !== context.source;
-
-                    return notSelf && isInvolved;
-                },
-                message: '{0} gives {1} 2 bonus skill for this duel',
-                messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    effect: AbilityDsl.effects.modifyDuelSkill(2, context.event.duel),
-                    duration: Durations.UntilEndOfDuel
-                }))
+            title: 'Add +2 to your duel total',
+            duelCondition: (duel, context) => duel.participants.some(a => a.controller === context.source.controller && a !== context.source),
+            gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
+                target: context.event.duel,
+                effect: AbilityDsl.effects.modifyDuelSkill({ amount: 2, player: context.player }),
+                duration: Durations.UntilEndOfDuel
             })),
-            effect: 'help win a duel'
+            effect: 'add 2 to their duel total'
         });
     }
 }

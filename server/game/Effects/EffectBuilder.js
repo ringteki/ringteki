@@ -4,6 +4,7 @@ const CardEffect = require('./CardEffect');
 const PlayerEffect = require('./PlayerEffect');
 const ConflictEffect = require('./ConflictEffect');
 const RingEffect = require('./RingEffect');
+const DuelEffect = require('./DuelEffect');
 const StaticEffect = require('./StaticEffect');
 const DynamicEffect = require('./DynamicEffect');
 const DetachedEffect = require('./DetachedEffect');
@@ -32,6 +33,12 @@ const EffectBuilder = {
         dynamic: (type, value) => ((game, source, props) => new RingEffect(game, source, props, new DynamicEffect(type, value))),
         detached: (type, value) => ((game, source, props) => new RingEffect(game, source, props, new DetachedEffect(type, value.apply, value.unapply))),
         flexible: (type, value) => _.isFunction(value) ? EffectBuilder.ring.dynamic(type, value) : EffectBuilder.ring.static(type, value)
+    },
+    duel: {
+        static: (type, value) => ((game, source, props) => new DuelEffect(game, source, props, new StaticEffect(type, value))),
+        dynamic: (type, value) => ((game, source, props) => new DuelEffect(game, source, props, new DynamicEffect(type, value))),
+        detached: (type, value) => ((game, source, props) => new DuelEffect(game, source, props, new DetachedEffect(type, value.apply, value.unapply))),
+        flexible: (type, value) => _.isFunction(value) ? EffectBuilder.duel.dynamic(type, value) : EffectBuilder.duel.static(type, value)
     }
 };
 

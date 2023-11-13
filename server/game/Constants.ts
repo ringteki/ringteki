@@ -93,7 +93,7 @@ export enum EffectNames {
     ModifyBasePoliticalSkillMultiplier = 'modifyBasePoliticalSkillMultiplier',
     ModifyBaseProvinceStrength = 'modifyBaseProvinceStrength',
     ModifyBothSkills = 'modifyBothSkills',
-    ModifyDuelSkill = 'modifyDuelSkill',
+    ModifyDuelistSkill = 'modifyDuelistSkill',
     ModifyGlory = 'modifyGlory',
     ModifyMilitarySkill = 'modifyMilitarySkill',
     AttachmentMilitarySkillModifier = 'attachmentMilitarySkillModifier',
@@ -186,7 +186,10 @@ export enum EffectNames {
     ModifyHonorTransferGiven = 'modifyHonorTransferGiven',
     ModifyHonorTransferReceived = 'modifyHonorTransferReceived',
     ModifyUnopposedHonorLoss = 'modifyUnopposedHonorLoss',
-    TriggersAbilitiesFromHome = 'triggersAbilitiesFromHome'
+    TriggersAbilitiesFromHome = 'triggersAbilitiesFromHome',
+    // New Duel effects
+    ModifyDuelSkill = 'modifyDuelSkill',
+
 }
 
 export enum Durations {

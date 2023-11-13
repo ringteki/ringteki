@@ -18,7 +18,7 @@ export default class SeppunRyo extends DrawCard {
                 message: '{0} gives {1} 1 bonus skill for this duel',
                 messageArgs: (cards) => [context.player, cards],
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    effect: AbilityDsl.effects.modifyDuelSkill(1, context.event.duel),
+                    effect: AbilityDsl.effects.modifyDuelistSkill(1, context.event.duel),
                     duration: Durations.UntilEndOfDuel
                 }))
             })),

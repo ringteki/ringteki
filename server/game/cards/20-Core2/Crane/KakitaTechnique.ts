@@ -103,7 +103,7 @@ export default class KakitaTechnique extends DrawCard {
                 },
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => {
                     return {
-                        effect: AbilityDsl.effects.modifyDuelSkill(
+                        effect: AbilityDsl.effects.modifyDuelistSkill(
                             (duelTarget && duelTarget.glory) || 0,
                             context.event.duel
                         ),

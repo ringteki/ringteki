@@ -102,7 +102,7 @@ const Effects = {
     modifyBasePoliticalSkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBasePoliticalSkillMultiplier, value),
     modifyBaseProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBaseProvinceStrength, value),
     modifyBothSkills: (value) => EffectBuilder.card.flexible(EffectNames.ModifyBothSkills, value),
-    modifyDuelSkill: (value, duel) => EffectBuilder.card.flexible(EffectNames.ModifyDuelSkill, { value, duel }),
+    modifyDuelistSkill: (value, duel) => EffectBuilder.card.flexible(EffectNames.ModifyDuelistSkill, { value, duel }),
     modifyGlory: (value) => EffectBuilder.card.flexible(EffectNames.ModifyGlory, value),
     modifyMilitarySkill: (value) => EffectBuilder.card.flexible(EffectNames.ModifyMilitarySkill, value),
     attachmentMilitarySkillModifier: (value) => EffectBuilder.card.flexible(EffectNames.AttachmentMilitarySkillModifier, value),
@@ -265,7 +265,9 @@ const Effects = {
     forceConflictUnopposed: () => EffectBuilder.conflict.static(EffectNames.ForceConflictUnopposed),
     modifyUnopposedHonorLoss: (amount = 1) => EffectBuilder.conflict.static(EffectNames.ModifyUnopposedHonorLoss, amount),
     additionalAttackedProvince: (province) => EffectBuilder.conflict.static(EffectNames.AdditionalAttackedProvince, province),
-    conflictIgnoreStatusTokens: () => EffectBuilder.conflict.static(EffectNames.ConflictIgnoreStatusTokens)
+    conflictIgnoreStatusTokens: () => EffectBuilder.conflict.static(EffectNames.ConflictIgnoreStatusTokens),
+    // Duel effects
+    modifyDuelSkill: (properties) => EffectBuilder.duel.flexible(EffectNames.ModifyDuelSkill, Object.assign({ player: properties.player, amount: properties.amount })),
 };
 
 module.exports = Effects;

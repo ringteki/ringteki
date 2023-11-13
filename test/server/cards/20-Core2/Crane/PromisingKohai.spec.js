@@ -50,26 +50,25 @@ describe('Promising Kōhai', function () {
                 this.player2.clickCard(this.challenger);
                 this.player1.clickCard(this.student);
 
+                expect(this.getChatLogs(10)).toContain('player1 uses Promising Kōhai to add 2 to their duel total');
                 expect(this.player1).toHavePrompt('Honor Bid');
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('1');
 
                 expect(this.player1).toHavePrompt('Policy Debate');
-                expect(this.getChatLogs(10)).toContain('player1 uses Promising Kōhai to help win a duel');
-                expect(this.getChatLogs(10)).toContain('player1 gives Doji Challenger 2 bonus skill for this duel');
                 expect(this.getChatLogs(10)).toContain('Kakita Toshimoko: 4 vs 6: Doji Challenger');
             });
 
-            it('should not react if your duelist costs 1', function () {
+            it('should not react if it is your duelist', function () {
                 this.noMoreActions();
                 this.initiateConflict({
-                    attackers: [this.challenger, this.whisperer],
+                    attackers: [this.challenger, this.student],
                     defenders: [this.toshimoko]
                 });
 
                 this.player2.clickCard(this.pd);
                 this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.whisperer);
+                this.player2.clickCard(this.student);
 
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
                 expect(this.player1).toHavePrompt('Honor Bid');

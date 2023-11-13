@@ -453,6 +453,14 @@ export function immediatelyResolveConflict(): GameAction {
 }
 
 //////////////
+// DUEL
+//////////////
+export function duelLastingEffect(propertyFactory: PropsFactory<LastingEffectProperties>): GameAction {
+    return new LastingEffectAction(propertyFactory);
+} // duration = 'untilEndOfConflict', effect, targetController, condition, until
+
+
+//////////////
 // META
 //////////////
 export function cardMenu(propertyFactory: PropsFactory<CardMenuProperties>): GameAction {

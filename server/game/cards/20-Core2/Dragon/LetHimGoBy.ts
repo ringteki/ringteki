@@ -28,7 +28,7 @@ export default class LetHimGoBy extends DrawCard {
                     this.getAttachmentSkill(card, context) !== 0,
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     target: context.target.parent,
-                    effect: AbilityDsl.effects.modifyDuelSkill(
+                    effect: AbilityDsl.effects.modifyDuelistSkill(
                         this.getAttachmentSkill(context.target, context),
                         context.event.duel
                     ),

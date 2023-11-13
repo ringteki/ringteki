@@ -75,8 +75,8 @@ export class Duel extends GameObject {
     }
 
     getTotalsForDisplay(): string {
-        const rawChallenger = this.#getStatsTotal([this.challenger]);
-        const rawTarget = this.#getStatsTotal(this.targets);
+        const rawChallenger = this.#getStatsTotal([this.challenger], this.challengingPlayer);
+        const rawTarget = this.#getStatsTotal(this.targets, this.challengingPlayer.opponent);
         const [challengerTotal, targetTotal] = this.#getTotals(
             typeof rawChallenger === 'number' ? rawChallenger : 0,
             typeof rawTarget === 'number' ? rawTarget : 0
@@ -101,8 +101,8 @@ export class Duel extends GameObject {
             this.#setWinner(DuelParticipants.Challenger);
             this.#setLoser(DuelParticipants.Target);
         } else {
-            const challengerStats = this.#getStatsTotal([this.challenger]);
-            const targetStats = this.#getStatsTotal(this.targets);
+            const challengerStats = this.#getStatsTotal([this.challenger], this.challengingPlayer);
+            const targetStats = this.#getStatsTotal(this.targets, this.challengingPlayer.opponent);
             if (challengerStats === InvalidStats) {
                 if (targetStats !== InvalidStats && targetStats > 0) {
                     // Challenger dead, target alive
@@ -160,9 +160,17 @@ export class Duel extends GameObject {
         }
     }
 
-    #getStatsTotal(charactersOnSameSide: DrawCard[]): StatisticTotal {
+    #getStatsTotal(charactersOnSameSide: DrawCard[], player: Player): StatisticTotal {
         let result = 0;
-        const ignoreSkill = this.participants.filter(card => card.anyEffect(EffectNames.IgnoreDuelSkill)).length > 0;        
+        const ignoreSkill = this.participants.filter(card => card.anyEffect(EffectNames.IgnoreDuelSkill)).length > 0;
+        const duelLevelModifier = this.getRawEffects().filter(effect => effect.type === EffectNames.ModifyDuelSkill);
+
+        for (const effect of duelLevelModifier) {
+            const effectProps = effect.value.value;
+            if (effectProps.player === player) {
+                result += effectProps.amount;
+            }
+        }
 
         for (const card of charactersOnSameSide) {
             if (card.location !== Locations.PlayArea) {
@@ -177,7 +185,7 @@ export class Duel extends GameObject {
     }
 
     #getDuelModifiers(card: DrawCard): number {
-        const rawEffects = card.getRawEffects().filter((effect) => effect.type === EffectNames.ModifyDuelSkill);
+        const rawEffects = card.getRawEffects().filter((effect) => effect.type === EffectNames.ModifyDuelistSkill);
         let effectModifier = 0;
 
         rawEffects.forEach((effect) => {
@@ -277,8 +285,8 @@ export class Duel extends GameObject {
     }
 
     #setDuelDifference() {
-        const challengerStats = this.#getStatsTotal([this.challenger]);
-        const targetStats = this.#getStatsTotal(this.targets);
+        const challengerStats = this.#getStatsTotal([this.challenger], this.challengingPlayer);
+        const targetStats = this.#getStatsTotal(this.targets, this.challengingPlayer.opponent);
 
         const [challengerStats2, targetStats2] = this.#getTotals(
             challengerStats === InvalidStats ? 0 : challengerStats,
