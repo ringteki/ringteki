@@ -12,18 +12,17 @@ export default class DiligentChaperone extends DrawCard {
                 onStatusTokenMoved: (event, context) =>
                     event.token.grantedStatus === CharacterStatus.Honored &&
                     event.token.card.controller === context.player &&
-                    event.token.card.type === CardTypes.Character,
+                    event.token.card.type === CardTypes.Character &&
+                    !context.source.bowed,
                 onCardDishonored: (event, context) =>
                     event.card.isHonored &&
                     event.card.controller === context.player &&
-                    event.card.type === CardTypes.Character
+                    event.card.type === CardTypes.Character &&
+                    !context.source.bowed
             },
             effect: 'prevent {1} from losing their status token',
             effectArgs: (context) => context.event.token?.card ?? context.event.card,
-            gameAction: AbilityDsl.actions.cancel((context) => ({
-                target: context.source,
-                replacementGameAction: AbilityDsl.actions.bow()
-            }))
+            gameAction: AbilityDsl.actions.cancel()
         });
     }
 }

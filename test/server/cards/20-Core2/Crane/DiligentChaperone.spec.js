@@ -35,11 +35,27 @@ describe('Diligent Chaperone', function () {
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.brash.isHonored).toBe(true);
             expect(this.scorp.location).toBe('conflict discard pile');
-            expect(this.yojimbo.bowed).toBe(true);
+            expect(this.yojimbo.bowed).toBe(false);
 
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
             );
+        });
+
+        it('should not cancel if bowed', function () {
+            this.yojimbo.bow();
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whisperer, this.brash],
+                defenders: [this.dairu]
+            });
+
+            expect(this.brash.isHonored).toBe(true);
+            this.player2.clickCard(this.scorp);
+            this.player2.clickCard(this.brash);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.brash.isHonored).toBe(false);
         });
 
         it('should not cancel trying to dishonor a normal character', function () {
@@ -71,7 +87,7 @@ describe('Diligent Chaperone', function () {
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.brash.isHonored).toBe(true);
             expect(this.dairu.isHonored).toBe(false);
-            expect(this.yojimbo.bowed).toBe(true);
+            expect(this.yojimbo.bowed).toBe(false);
 
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
@@ -97,7 +113,7 @@ describe('Diligent Chaperone', function () {
             this.player1.clickCard(this.yojimbo);
             expect(this.player1).toHavePrompt('Action Window');
             expect(this.brash.isHonored).toBe(true);
-            expect(this.yojimbo.bowed).toBe(true);
+            expect(this.yojimbo.bowed).toBe(false);
 
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
