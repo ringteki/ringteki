@@ -1,4 +1,5 @@
 import { DuelTypes, Durations } from '../../../Constants';
+import { Duel } from '../../../Duel';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -11,7 +12,6 @@ export default class UnyieldingTerms extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Political,
                 requiresConflict: false,
-                challengerCondition: (card) => card.hasTrait('duelist') && !card.bowed,
                 refuseGameAction: AbilityDsl.actions.chosenDiscard((context) => ({
                     targets: false,
                     target: context.player.opponent,
@@ -24,18 +24,17 @@ export default class UnyieldingTerms extends DrawCard {
                 ],
                 gameAction: (duel) =>
                     AbilityDsl.actions.multiple([
-                        AbilityDsl.actions.dishonor({ target: duel.loser }),
                         AbilityDsl.actions.bow({ target: duel.loser }),
-                        AbilityDsl.actions.cardLastingEffect({
-                            target: duel.loser,
-                            duration: Durations.UntilEndOfPhase,
-                            effect: AbilityDsl.effects.cardCannot({ cannot: 'ready' })
-                        })
+                        AbilityDsl.actions.removeFate({ target: this.wonByDuelist(duel) ? duel.loser : undefined })
                     ]),
-                message: 'bow and dishonor {0}, preventing them from readying for the rest of the phase',
-                messageArgs: (duel) => duel.loser
+                message: 'bow{1} {0}',
+                messageArgs: (duel) => [duel.loser, this.wonByDuelist(duel) ? ' and remove 1 fate from' : ''],
             },
             max: AbilityDsl.limit.perRound(1)
         });
+    }
+
+    wonByDuelist(duel: Duel): boolean {
+        return duel.winner?.some((char) => char.hasTrait('duelist')) ?? false;
     }
 }

@@ -26,16 +26,8 @@ describe('Unyielding Terms', function () {
             this.ann = this.player2.findCardByName('a-new-name');
             this.assassination = this.player2.findCardByName('assassination');
             this.atw = this.player2.findCardByName('against-the-waves');
-
-            this.challenger.bow();
         });
 
-        it('should require you to choose a ready duelist as the challenger', function () {
-            this.player1.clickCard(this.unyieldingTerms);
-            expect(this.player1).toBeAbleToSelect(this.zinkae);
-            expect(this.player1).not.toBeAbleToSelect(this.brash);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-        });
 
         it('should give opportunity to refuse', function () {
             this.player1.clickCard(this.unyieldingTerms);
@@ -76,7 +68,9 @@ describe('Unyielding Terms', function () {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should bow & dishonor the loser & stop them from readying', function () {
+        it('should bow the loser & remove a fate if winner is a duelist', function () {
+            this.atsuko.fate = 2;
+
             this.player1.clickCard(this.unyieldingTerms);
             this.player1.clickCard(this.zinkae);
             this.player1.clickCard(this.atsuko);
@@ -86,15 +80,25 @@ describe('Unyielding Terms', function () {
             this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
 
-            expect(this.getChatLogs(10)).toContain(
-                'Duel Effect: bow and dishonor Isawa Atsuko, preventing them from readying for the rest of the phase'
-            );
+            expect(this.getChatLogs(10)).toContain('Duel Effect: bow and remove 1 fate from Isawa Atsuko');
             expect(this.atsuko.bowed).toBe(true);
-            expect(this.atsuko.isDishonored).toBe(true);
+            expect(this.atsuko.fate).toBe(1);
+        });
 
-            this.player2.clickCard(this.atw);
-            expect(this.player2).toBeAbleToSelect(this.scholar);
-            expect(this.player2).not.toBeAbleToSelect(this.atsuko);
+        it('should not remove fate if winner is not a duelist', function () {
+            this.atsuko.fate = 2;
+
+            this.player1.clickCard(this.unyieldingTerms);
+            this.player1.clickCard(this.brash);
+            this.player1.clickCard(this.atsuko);
+            this.player2.clickPrompt('No');
+
+            this.player1.clickPrompt('5');
+            this.player2.clickPrompt('1');
+
+            expect(this.getChatLogs(10)).toContain('Duel Effect: bow Isawa Atsuko');
+            expect(this.atsuko.bowed).toBe(true);
+            expect(this.atsuko.fate).toBe(2);
         });
 
         it('during a conflict should let you pick a mix of participating and not', function () {
