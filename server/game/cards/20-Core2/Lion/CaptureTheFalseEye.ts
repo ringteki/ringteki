@@ -13,10 +13,10 @@ export default class CaptureTheFalseEye extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) =>
                     card.isParticipating() &&
-                    this.game.currentConflict
+                    context.game.currentConflict
                         .getCharacters(context.player)
                         .some(
-                            (myCard: DrawCard) => myCard.hasTrait('bushi') && myCard.militarySkill > card.militarySkill
+                            (myCard: DrawCard) => myCard.hasTrait('bushi') && myCard.militarySkill >= card.militarySkill
                         ),
                 gameAction: [
                     AbilityDsl.actions.bow(),
