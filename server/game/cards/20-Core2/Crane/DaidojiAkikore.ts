@@ -1,4 +1,4 @@
-import { DuelTypes } from '../../../Constants';
+import { DuelTypes, Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,6 +6,17 @@ export default class DaidojiAkikore extends DrawCard {
     static id = 'daidoji-akikore';
 
     setupCardAbilities() {
+        this.duelFocus({
+            title: 'Add +1 to your duel total',
+            duelCondition: (duel, context) => context.game.isDuringConflict('political') && duel.participants.includes(context.source),
+            gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
+                target: context.event.duel,
+                effect: AbilityDsl.effects.modifyDuelSkill({ amount: 1, player: context.player }),
+                duration: Durations.UntilEndOfDuel
+            })),
+            effect: 'add 1 to their duel total'
+        });
+
         this.action({
             title: 'Military duel to add skill',
             initiateDuel: context => ({
