@@ -1,4 +1,4 @@
-import { CardTypes, Locations } from '../../../Constants';
+import { CardTypes, Durations, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,11 +6,6 @@ export default class ShibaYohana extends DrawCard {
     static id = 'shiba-yohana';
 
     public setupCardAbilities() {
-        this.persistentEffect({
-            condition: (context) => (context.source as this).isTainted,
-            effect: [AbilityDsl.effects.addTrait('spirit')]
-        });
-
         this.wouldInterrupt({
             title: 'Prevent this character from leaving play',
             when: {
@@ -22,12 +17,22 @@ export default class ShibaYohana extends DrawCard {
             gameAction: AbilityDsl.actions.cancel((context) => ({
                 target: context.source,
                 replacementGameAction: AbilityDsl.actions.taint()
-            }))
+            })),
+            then: (context) => ({
+                gameAction: AbilityDsl.actions.cardLastingEffect({
+                    target: context.source,
+                    duration: Durations.Custom,
+                    until: {
+                        onCardLeavesPlay: (event) => event.card === context.source
+                    },
+                    effect: AbilityDsl.effects.addTrait('spirit')
+                })
+            })
         });
 
         this.action({
             title: 'Move a character into the conflict',
-            condition: (context) => context.source.isAttacking(),
+            condition: (context) => context.source.isParticipating(),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.isHonored || card.isDishonored,

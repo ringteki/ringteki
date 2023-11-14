@@ -151,8 +151,8 @@ interface AbilityProps<Context> {
     then?: ((context?: AbilityContext) => object) | object;
 }
 
-export interface ActionProps extends AbilityProps<AbilityContext> {
-    condition?: (context?: AbilityContext) => boolean;
+export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> {
+    condition?: (context?: AbilityContext<Source>) => boolean;
     phase?: string;
     anyPlayer?: boolean;
     conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext) => boolean;

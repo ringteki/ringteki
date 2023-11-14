@@ -269,7 +269,7 @@ class BaseCard extends EffectSource {
         // eslint-disable-line no-unused-vars
     }
 
-    action(properties: ActionProps): void {
+    action(properties: ActionProps<this>): void {
         this.abilities.actions.push(this.createAction(properties));
     }
 

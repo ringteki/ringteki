@@ -11,7 +11,7 @@ export default class CompetingInterests extends DrawCard {
             title: 'Bow a character',
             condition: (context) =>
                 (context.game.currentConflict as Conflict | undefined)?.getParticipants(
-                    (card) => card.controller !== context.source && card.isUnique()
+                    (card) => card.controller !== context.player && card.isUnique()
                 ).length >= 2,
             target: {
                 cardType: CardTypes.Character,
