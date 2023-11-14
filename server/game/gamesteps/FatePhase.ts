@@ -7,6 +7,10 @@ import { Phase } from './Phase';
 import { SimpleStep } from './SimpleStep';
 import ActionWindow from './actionwindow';
 
+function characterShouldBeDiscarded(character: DrawCard) {
+    return character.fate === 0 && character.allowGameAction('discardFromPlay');
+}
+
 /**
  * IV. Fate Phase
  * 4.1 Fate phase begins.
@@ -39,34 +43,34 @@ export class FatePhase extends Phase {
     discardCharactersWithNoFate() {
         for (const player of this.game.getPlayersInFirstPlayerOrder()) {
             this.game.queueSimpleStep(() =>
-                this.promptPlayerToDiscard(
-                    player,
-                    player.cardsInPlay.filter(
-                        (card: DrawCard) => card.fate === 0 && card.allowGameAction('discardFromPlay')
-                    )
-                )
+                this.promptPlayerToDiscard(player, new Set(player.cardsInPlay.filter(characterShouldBeDiscarded)))
             );
         }
     }
 
-    promptPlayerToDiscard(player: Player, cardsToDiscard: DrawCard[]) {
-        if (cardsToDiscard.length === 0) {
+    promptPlayerToDiscard(player: Player, cardsToDiscard: Set<DrawCard>) {
+        if (cardsToDiscard.size === 0) {
             return;
         }
         this.game.promptForSelect(player, {
             source: 'Fate Phase',
             activePromptTitle: 'Choose character to discard\n(or click Done to discard all characters with no fate)',
             waitingPromptTitle: 'Waiting for opponent to discard characters with no fate',
-            cardCondition: (card) => cardsToDiscard.includes(card),
+            cardCondition: (card: DrawCard) => cardsToDiscard.has(card),
             cardType: CardTypes.Character,
             controller: Players.Self,
             buttons: [{ text: 'Done', arg: 'cancel' }],
-            onSelect: (player, card) => {
-                this.game.applyGameAction(null, { discardFromPlay: card });
-                this.promptPlayerToDiscard(
-                    player,
-                    cardsToDiscard.filter((c) => c !== card)
-                );
+            onSelect: (player: Player, selectedCard: DrawCard) => {
+                this.game.applyGameAction(null, { discardFromPlay: selectedCard });
+
+                cardsToDiscard.delete(selectedCard);
+                for (const card of cardsToDiscard) {
+                    if (!characterShouldBeDiscarded(card)) {
+                        cardsToDiscard.delete(card);
+                    }
+                }
+
+                this.promptPlayerToDiscard(player, cardsToDiscard);
                 return true;
             },
             onCancel: () => {
