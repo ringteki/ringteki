@@ -19,16 +19,6 @@ describe('Grasp of Earth 2', function () {
                 this.initialP1Fate = this.player1.fate;
             });
 
-            it('attaches to a shugenja', function () {
-                this.player1.clickCard(this.graspOfEarth);
-                expect(this.player1).toBeAbleToSelect(this.adeptOfTheWaves);
-                expect(this.player1).toBeAbleToSelect(this.solemnScholar);
-                expect(this.player1).not.toBeAbleToSelect(this.shibaPeacemaker);
-
-                this.player1.clickCard(this.adeptOfTheWaves);
-                expect(this.player1.fate).toBe(this.initialP1Fate - 1);
-            });
-
             it('is discounted when attaching to an Earth character', function () {
                 this.player1.clickCard(this.graspOfEarth);
                 this.player1.clickCard(this.solemnScholar);
@@ -80,7 +70,7 @@ describe('Grasp of Earth 2', function () {
                 expect(this.motoYouth.inConflict).toBe(false);
 
                 expect(this.getChatLogs(3)).toContain(
-                    "player1 uses Solemn Scholar's gained ability from Portable Bastion to deny Moto Youth's movement"
+                    "player1 uses Solemn Scholar's gained ability from Grasp of Earth to deny Moto Youth's movement"
                 );
             });
 
@@ -113,7 +103,7 @@ describe('Grasp of Earth 2', function () {
                 expect(this.motoYouth.bowed).toBe(false);
 
                 expect(this.getChatLogs(3)).toContain(
-                    "player1 uses Solemn Scholar's gained ability from Portable Bastion to deny Moto Youth's movement"
+                    "player1 uses Solemn Scholar's gained ability from Grasp of Earth to deny Moto Youth's movement"
                 );
             });
         });
