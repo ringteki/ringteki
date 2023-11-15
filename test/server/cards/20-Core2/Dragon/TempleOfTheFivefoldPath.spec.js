@@ -28,12 +28,12 @@ describe('Temple of the Fivefold Path', function () {
 
         it('moves fate to a ring', function () {
             this.player1.clickCard(this.t5p);
-            this.player1.clickRing('water');
             this.player1.clickRing('air');
+            this.player1.clickRing('water');
             expect(this.game.rings.water.fate).toBe(1);
             expect(this.game.rings.air.fate).toBe(3);
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to examine the mysteries of the Water Ring in search for guidance'
+                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to examine the mysteries of the Air Ring in search for guidance'
             );
             expect(this.getChatLogs(3)).toContain('player1 moves 1 fate from the Water Ring to the Air Ring');
         });
