@@ -3,6 +3,10 @@ import { ProvinceCard } from '../../../ProvinceCard';
 import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 
+function cardDifference(context: TriggeredAbilityContext): number {
+    return Math.max(0, Math.min(5, context.player.opponent.hand.size() - context.player.hand.size()));
+}
+
 export default class GladeOfContemplation extends ProvinceCard {
     static id = 'glade-of-contemplation';
 
@@ -19,10 +23,10 @@ export default class GladeOfContemplation extends ProvinceCard {
                 mode: TargetModes.Select,
                 choices: {
                     'Draw cards': AbilityDsl.actions.draw((context) => ({
-                        amount: this.#cardDifference(context)
+                        amount: cardDifference(context)
                     })),
                     'Force opponent to discard cards': AbilityDsl.actions.chosenDiscard((context) => ({
-                        amount: this.#cardDifference(context),
+                        amount: cardDifference(context),
                         target: context.player.opponent
                     }))
                 }
@@ -30,9 +34,5 @@ export default class GladeOfContemplation extends ProvinceCard {
             effect: '{1}',
             effectArgs: (context) => context.select.toLowerCase()
         });
-    }
-
-    #cardDifference(context: TriggeredAbilityContext): number {
-        return Math.max(0, context.player.opponent.hand.size() - context.player.hand.size());
     }
 }
