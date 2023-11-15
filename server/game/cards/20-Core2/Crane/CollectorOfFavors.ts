@@ -1,6 +1,7 @@
 import { AbilityTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityProps } from '../../../Interfaces';
 
 export default class CollectorOfFavors extends DrawCard {
     static id = 'collector-of-favors';
@@ -16,7 +17,7 @@ export default class CollectorOfFavors extends DrawCard {
                         context.source.hasTrait('courtier')
                 },
                 gameAction: AbilityDsl.actions.gainFate()
-            })
+            } as TriggeredAbilityProps)
         });
     }
 }
