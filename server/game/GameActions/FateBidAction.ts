@@ -16,9 +16,9 @@ export interface FateBidProperties extends PlayerActionProperties {
 
 export class FateBidAction extends PlayerAction {
     name = 'fateBid';
-    eventName = EventNames.Unnamed
+    eventName = EventNames.Unnamed;
     defaultProperties: FateBidProperties = {
-        postBidAction: undefined,
+        postBidAction: undefined
     };
 
     constructor(propertyFactory: FateBidProperties | ((context: AbilityContext) => FateBidProperties)) {
@@ -35,25 +35,30 @@ export class FateBidAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event: any, player: Player, context: AbilityContext, additionalProperties: any): void {
-        let { postBidAction, message, messageArgs } = this.getProperties(context, additionalProperties) as FateBidProperties;
+        let { postBidAction, message, messageArgs } = this.getProperties(
+            context,
+            additionalProperties
+        ) as FateBidProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.postBidAction = postBidAction;
         event.message = message;
         event.messageArgs = messageArgs;
     }
 
-    eventHandler(event: { context: AbilityContext } & Pick<FateBidProperties, 'postBidAction' | 'messageArgs' | 'message'>): void {
+    eventHandler(
+        event: { context: AbilityContext } & Pick<FateBidProperties, 'postBidAction' | 'messageArgs' | 'message'>
+    ): void {
         const context = event.context;
         context.game.queueStep(
             new FateBidPrompt(context.game, 'Choose an amount of fate', (result, context) => {
-                const actions: Array<LoseFateAction> = []
+                const actions: Array<LoseFateAction> = [];
                 for (const [player, amount] of result.bids) {
                     context.game.addMessage('{0} spends {1} fate', player, amount);
-                    actions.push(new LoseFateAction({ amount, target: player }))
+                    actions.push(new LoseFateAction({ amount, target: player }));
                 }
-                new JointGameAction(actions).resolve(undefined, context)
+                new JointGameAction(actions).resolve(undefined, context);
                 // @ts-ignore
-                context.fateBidResult = result
+                context.fateBidResult = result;
             })
         );
         context.game.queueStep(

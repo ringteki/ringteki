@@ -20,7 +20,7 @@ describe('Glory of the Five Rivers', function () {
             this.whisperer = this.player2.findCardByName('doji-whisperer');
         });
 
-        fit('does a thing', function () {
+        it('does a thing', function () {
             const p1InitialFate = this.player1.fate;
             const p2InitialFate = this.player2.fate;
 
@@ -51,58 +51,29 @@ describe('Glory of the Five Rivers', function () {
 
             expect(this.player1.fate).toBe(p1InitialFate - 0);
             expect(this.player2.fate).toBe(p2InitialFate - 2);
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
-        });
+            expect(this.getChatLogs(5)).toContain('player1 plays Glory of the Five Rivers to collect offerings');
+            expect(this.getChatLogs(5)).toContain('player1 spends 0 fate');
+            expect(this.getChatLogs(5)).toContain('player2 spends 2 fate');
 
-        it('without affinity, bow a character without attachment', function () {
-            this.player1.moveCard(this.fireTensai, 'dynasty discard pile');
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).not.toBeAbleToSelect(this.fireTensai);
+            expect(this.player2).not.toBeAbleToSelect(this.solemn);
+            expect(this.player2).toBeAbleToSelect(this.brash);
+            expect(this.player2).toBeAbleToSelect(this.whisperer);
 
-            this.player2.pass();
-            this.player1.clickCard(this.heartOfTheInferno);
-            expect(this.player1).toHavePrompt('Choose a card');
-            expect(this.player1).not.toBeAbleToSelect(this.fireTensai);
-            expect(this.player1).not.toBeAbleToSelect(this.solemn);
-            expect(this.player1).not.toBeAbleToSelect(this.valiant);
+            this.player2.clickCard(this.brash);
+
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).toBeAbleToSelect(this.fireTensai);
+            expect(this.player1).toBeAbleToSelect(this.solemn);
             expect(this.player1).not.toBeAbleToSelect(this.brash);
-            expect(this.player1).toBeAbleToSelect(this.katana);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+            this.player1.clickCard(this.solemn);
 
-            this.player1.clickCard(this.whisperer);
-            expect(this.whisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
-        });
-
-        it('with affinity, bow a character without attachment', function () {
-            this.player2.pass();
-            this.player1.clickCard(this.heartOfTheInferno);
-            expect(this.player1).toHavePrompt('Choose a card');
-            expect(this.player1).not.toBeAbleToSelect(this.fireTensai);
-            expect(this.player1).not.toBeAbleToSelect(this.solemn);
-            expect(this.player1).not.toBeAbleToSelect(this.valiant);
-            expect(this.player1).not.toBeAbleToSelect(this.brash);
-            expect(this.player1).toBeAbleToSelect(this.katana);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-
-            this.player1.clickCard(this.whisperer);
-            expect(this.whisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Doji Whisperer');
-        });
-
-        it('with affinity, discard an attachment', function () {
-            this.player2.pass();
-            this.player1.clickCard(this.heartOfTheInferno);
-            expect(this.player1).toHavePrompt('Choose a card');
-            expect(this.player1).not.toBeAbleToSelect(this.fireTensai);
-            expect(this.player1).not.toBeAbleToSelect(this.solemn);
-            expect(this.player1).not.toBeAbleToSelect(this.valiant);
-            expect(this.player1).not.toBeAbleToSelect(this.brash);
-            expect(this.player1).toBeAbleToSelect(this.katana);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-
-            this.player1.clickCard(this.katana);
-            expect(this.katana.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 plays Heart of the inferno to bow Fine Katana');
-            expect(this.getChatLogs(5)).toContain('player1 channels their fire affinity to discard Fine Katana');
+            expect(this.brash.isHonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player2 honors Brash Samurai');
+            expect(this.solemn.isDishonored).toBe(true);
+            expect(this.getChatLogs(5)).toContain('player1 dishonors Solemn Scholar');
         });
     });
 });
