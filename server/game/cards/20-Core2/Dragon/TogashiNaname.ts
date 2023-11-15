@@ -1,4 +1,4 @@
-import { CardTypes, Players, ConflictTypes, TargetModes, Decks } from '../../../Constants';
+import { CardTypes, Players, TargetModes } from '../../../Constants';
 import { RingEffects } from '../../../RingEffects';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
@@ -18,7 +18,7 @@ export default class TogashiNaname extends DrawCard {
                 character: {
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
-                    cardCondition: (card) => card.isParticipating()
+                    cardCondition: (card: DrawCard) => card.isParticipating() && card.fate > 0
                 },
                 ring: {
                     dependsOn: 'character',

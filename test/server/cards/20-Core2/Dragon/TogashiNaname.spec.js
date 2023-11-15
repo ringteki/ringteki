@@ -91,25 +91,5 @@ describe('Togashi Naname', function () {
             expect(this.getChatLogs(10)).toContain('player2 uses Togashi Naname to resolve Air Ring effect');
             expect(this.getChatLogs(10)).toContain('player2 resolves the air ring, gaining 2 honor');
         });
-
-        it('should force the ring if target has no fate', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.yoshi, this.uji],
-                defenders: [this.naname, this.tsukune],
-                ring: 'fire'
-            });
-
-            this.player2.clickCard(this.naname);
-            this.player2.clickCard(this.uji);
-            this.player2.clickRing('air');
-
-            expect(this.player1).not.toHavePrompt('Select one');
-            expect(this.player2).toHavePrompt('Air Ring');
-            this.player2.clickPrompt('Gain 2 honor');
-
-            expect(this.getChatLogs(10)).toContain('player2 uses Togashi Naname to resolve Air Ring effect');
-            expect(this.getChatLogs(10)).toContain('player2 resolves the air ring, gaining 2 honor');
-        });
     });
 });
