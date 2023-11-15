@@ -19,7 +19,7 @@ export default class DesperateDefense extends DrawCard {
                 messageArgs: (cards) => [context.player, cards],
                 gameAction: AbilityDsl.actions.cardLastingEffect({
                     targetLocation: Locations.Provinces,
-                    effect: AbilityDsl.effects.modifyProvinceStrength(4)
+                    effect: AbilityDsl.effects.modifyProvinceStrength(3)
                 })
             })),
             max: AbilityDsl.limit.perConflict(1)
