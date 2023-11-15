@@ -7,6 +7,10 @@ import Player from '../../../player';
 
 type Element = 'air' | 'earth' | 'fire' | 'void' | 'water';
 
+function isSpell(card: DrawCard) {
+    return card.hasTrait('spell');
+}
+
 export default class AgashaJianyu extends DrawCard {
     static id = 'agasha-jianyu';
 
@@ -14,16 +18,13 @@ export default class AgashaJianyu extends DrawCard {
         this.reaction({
             title: 'Take fate from a ring and block it from enemy attacks',
             when: {
-                onCardPlayed: (event, context) =>
-                    event.player === context.player && this.#isSpell(event.card as DrawCard),
+                onCardPlayed: (event, context) => event.player === context.player && isSpell(event.card as DrawCard),
                 onAbilityResolverInitiated: (event, context) => {
                     //might be able to remove the source.type check at some point
                     const isAttachment =
                         event.context.source.type === CardTypes.Attachment ||
                         event.context.ability instanceof PlayAttachmentAction;
-                    return (
-                        event.context.player === context.player && isAttachment && this.#isSpell(event.context.source)
-                    );
+                    return event.context.player === context.player && isAttachment && isSpell(event.context.source);
                 }
             },
             target: {
@@ -46,9 +47,5 @@ export default class AgashaJianyu extends DrawCard {
                 }))
             }
         });
-    }
-
-    #isSpell(card: DrawCard) {
-        return card.hasTrait('spell');
     }
 }
