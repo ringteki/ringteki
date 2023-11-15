@@ -1,4 +1,4 @@
-import { CardTypes, Players, ConflictTypes, TargetModes, Decks } from '../../../Constants';
+import { CardTypes, Players, ConflictTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -17,7 +17,7 @@ export default class ToStormAFortress extends DrawCard {
                     effect: AbilityDsl.effects.modifyMilitarySkill(2)
                 }))
             },
-            effect: 'grant +2{1} to {0} (NOT YET IMPLEMENTED: province discard)',
+            effect: 'grant +2{1} to {0}',
             effectArgs: ['military']
         });
     }
