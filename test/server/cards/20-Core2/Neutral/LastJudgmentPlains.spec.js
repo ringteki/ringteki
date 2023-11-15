@@ -8,7 +8,7 @@ describe('Last Judgement Plains', function () {
                 },
                 player2: {
                     inPlay: ['togashi-initiate', 'doomed-shugenja', 'togashi-yokuni'],
-                    provinces: ['last-judgement-plains']
+                    provinces: ['last-judgment-plains']
                 }
             });
 
@@ -18,7 +18,7 @@ describe('Last Judgement Plains', function () {
             this.initiate = this.player2.findCardByName('togashi-initiate');
             this.doomedShugenja = this.player2.findCardByName('doomed-shugenja');
             this.yokuni = this.player2.findCardByName('togashi-yokuni');
-            this.lastJudgementPlains = this.player2.findCardByName('last-judgement-plains', 'province 1');
+            this.lastJudgementPlains = this.player2.findCardByName('last-judgment-plains', 'province 1');
         });
 
         it('moves fate around', function () {
@@ -62,7 +62,7 @@ describe('Last Judgement Plains', function () {
             expect(this.yokuni.fate).toBe(yokuniStartFate + 2);
 
             expect(this.getChatLogs(3)).toContain(
-                'player2 uses K–Pg boundary to move fate from Togashi Initiate to Togashi Yokuni'
+                'player2 uses Last Judgment Plains to move fate from Togashi Initiate to Togashi Yokuni'
             );
         });
     });

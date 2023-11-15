@@ -6,7 +6,7 @@ const DONOR = 'donor';
 const RECIPIENT = 'recipient';
 
 export default class LastJudgementPlains extends ProvinceCard {
-    static id = 'last-judgement-plains';
+    static id = 'last-judgment-plains';
 
     public setupCardAbilities() {
         this.action({
