@@ -74,7 +74,7 @@ describe('Fortified Lumber Camp', function () {
             expect(this.ballista.facedown).toBe(true);
 
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Sapper School, sacrificing Sapper School to discard Adept of the Waves, Aranat, Daidoji Uji, Imperial Storehouse and Prepared Ambush'
+                'player1 uses Fortified Lumber Camp, sacrificing Fortified Lumber Camp to discard Adept of the Waves, Aranat, Daidoji Uji, Imperial Storehouse and Prepared Ambush'
             );
         });
 
@@ -97,7 +97,7 @@ describe('Fortified Lumber Camp', function () {
             expect(this.uji2.facedown).toBe(true);
 
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Sapper School, sacrificing Sapper School to discard Adept of the Waves, Aranat, Heavy Ballista, Imperial Storehouse and Educated Heimin'
+                'player1 uses Fortified Lumber Camp, sacrificing Fortified Lumber Camp to discard Adept of the Waves, Aranat, Heavy Ballista, Imperial Storehouse and Educated Heimin'
             );
         });
     });
