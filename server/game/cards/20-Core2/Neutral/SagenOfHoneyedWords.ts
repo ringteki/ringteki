@@ -16,7 +16,7 @@ export default class SagenOfHoneyedWords extends DrawCard {
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
-                effect: AbilityDsl.effects.modifyMilitarySkill({ amount: context.target.printedGlory })
+                effect: AbilityDsl.effects.modifyMilitarySkill({ amount: (context.target as DrawCard).glory })
             }))
         });
     }
