@@ -21,7 +21,7 @@ export default class TennyosBlessing extends DrawCard {
                     deck: Decks.DynastyDeck,
                     selectedCardsHandler: (context, event, cards) => {
                         if (cards.length > 0) {
-                            this.game.addMessage(
+                            context.game.addMessage(
                                 '{0} selects {1} and puts {2} into {3}',
                                 event.player,
                                 cards,
@@ -33,7 +33,7 @@ export default class TennyosBlessing extends DrawCard {
                                 card.facedown = false;
                             });
                         } else {
-                            this.game.addMessage('{0} selects no characters', event.player);
+                            context.game.addMessage('{0} selects no characters', event.player);
                         }
                     }
                 })
