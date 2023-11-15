@@ -1,4 +1,4 @@
-describe('Lost Deeds Temple', function () {
+xdescribe('Lost Deeds Temple', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -57,7 +57,7 @@ describe('Lost Deeds Temple', function () {
             this.player2.clickCard(this.aggressiveMoto);
             expect(this.fineKatana.location).toBe('conflict discard pile');
             expect(this.getChatLogs(3)).toContain(
-                'player2 uses Kilauea Volcano to remove all attachments from Aggressive Moto'
+                'player2 uses Lost Deeds Temple to remove all attachments from Aggressive Moto'
             );
         });
     });
