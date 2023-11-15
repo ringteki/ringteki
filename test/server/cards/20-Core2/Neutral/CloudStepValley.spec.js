@@ -41,15 +41,15 @@ describe('Cloud Step Valley', function () {
             expect(this.player2).not.toBeAbleToSelect(this.doomedShugenja);
 
             this.player2.clickCard(this.aggressiveMoto);
-            expect(this.player2).toHavePrompt('Choose a character to move to the conflict');
-            expect(this.player2).not.toBeAbleToSelect(this.aggressiveMoto);
-            expect(this.player2).toBeAbleToSelect(this.wordlyShiotome);
-            expect(this.player2).toBeAbleToSelect(this.tetsuko);
-            expect(this.player2).not.toBeAbleToSelect(this.yokuni);
-            expect(this.player2).not.toBeAbleToSelect(this.initiate);
-            expect(this.player2).not.toBeAbleToSelect(this.doomedShugenja);
+            expect(this.player1).toHavePrompt('Choose a character to move to the conflict');
+            expect(this.player1).not.toBeAbleToSelect(this.aggressiveMoto);
+            expect(this.player1).toBeAbleToSelect(this.wordlyShiotome);
+            expect(this.player1).toBeAbleToSelect(this.tetsuko);
+            expect(this.player1).not.toBeAbleToSelect(this.yokuni);
+            expect(this.player1).not.toBeAbleToSelect(this.initiate);
+            expect(this.player1).not.toBeAbleToSelect(this.doomedShugenja);
 
-            this.player2.clickCard(this.tetsuko);
+            this.player1.clickCard(this.tetsuko);
             expect(this.getChatLogs(3)).toContain(
                 'player2 uses Cloud Step Valley to move Aggressive Moto home, and move Utaku Tetsuko to the conflict'
             );

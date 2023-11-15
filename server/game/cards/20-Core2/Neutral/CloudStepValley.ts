@@ -1,4 +1,4 @@
-import { CardTypes } from '../../../Constants';
+import { CardTypes, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 
@@ -21,6 +21,10 @@ export default class CloudStepValley extends ProvinceCard {
                     dependsOn: STARTED_IN_CONFLICT,
                     activePromptTitle: 'Choose a character to move to the conflict',
                     cardType: CardTypes.Character,
+                    player: (context) =>
+                        context.targets[STARTED_IN_CONFLICT].controller === context.player
+                            ? Players.Self
+                            : Players.Opponent,
                     cardCondition: (card, { targets }) =>
                         card.controller === targets[STARTED_IN_CONFLICT].controller && !card.isParticipating()
                 }
