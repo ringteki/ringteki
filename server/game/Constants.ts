@@ -351,6 +351,8 @@ export enum EventNames {
     OnConflictDeclaredBeforeProvinceReveal = 'onConflictDeclaredBeforeProvinceReveal',
     OnTheCrashingWave = 'onTheCrashingWave',
     Unnamed = 'unnamedEvent',
+    OnAddDuelParticipant = 'onAddDuelParticipant',
+    OnReplaceDuelParticipant = 'onReplaceDuelParticipant',
     OnAbilityResolverInitiated = 'onAbilityResolverInitiated'
 }
 

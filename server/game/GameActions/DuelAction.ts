@@ -9,6 +9,8 @@ import { GameAction } from './GameAction';
 export interface DuelProperties extends CardActionProperties {
     type: DuelTypes;
     challenger?: DrawCard;
+    challengerCondition?: (card, context) => boolean;
+    requiresConflict?: boolean;
     gameAction: GameAction | ((duel: Duel, context: AbilityContext) => GameAction);
     message?: string;
     messageArgs?: (duel: Duel, context: AbilityContext) => any | any[];
@@ -16,7 +18,6 @@ export interface DuelProperties extends CardActionProperties {
     statistic?: (card: DrawCard) => number;
     challengerEffect?;
     targetEffect?;
-    swapChallengerAndTarget?: boolean
     refuseGameAction?: GameAction;
     refusalMessage?: string;
     refusalMessageArgs?: (context: AbilityContext) => any | any[];
@@ -30,7 +31,6 @@ export class DuelAction extends CardGameAction {
     defaultProperties: DuelProperties = {
         type: undefined,
         gameAction: null,
-        swapChallengerAndTarget: false,
     };
 
     getProperties(context: AbilityContext, additionalProperties = {}): DuelProperties {
@@ -69,6 +69,10 @@ export class DuelAction extends CardGameAction {
         if (card === properties.challenger) {
             return false; //cannot duel yourself
         }
+        if(!card.checkRestrictions('duel', context)) {
+            return false;
+        }
+
         return (
             properties.challenger &&
             !properties.challenger.hasDash(properties.type) &&
@@ -143,26 +147,6 @@ export class DuelAction extends CardGameAction {
         if (!Array.isArray(cards)) {
             cards = [cards];
         }
-        const swapChallengerAndTarget = properties.swapChallengerAndTarget;
-
-        if (swapChallengerAndTarget) {
-            event.cards = cards;
-            event.context = context;
-            event.duelType = properties.type;
-            event.challenger = properties.target;
-            event.duelTarget = properties.challenger;
-    
-            const duel = new Duel(
-                context.game,
-                cards[0],
-                [properties.challenger],
-                properties.type,
-                properties.statistic,
-                context.player
-            );
-            event.duel = duel;
-            return;
-        }
 
         event.cards = cards;
         event.context = context;
@@ -175,6 +159,7 @@ export class DuelAction extends CardGameAction {
             properties.challenger,
             cards,
             properties.type,
+            properties,
             properties.statistic,
             context.player
         );
@@ -241,6 +226,7 @@ export class DuelAction extends CardGameAction {
             properties.challenger,
             [],
             properties.type,
+            properties,
             properties.statistic,
             context.player
         );

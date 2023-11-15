@@ -25,6 +25,7 @@ import { DishonorAction, DishonorProperties } from './DishonorAction';
 import { DishonorProvinceAction, DishonorProvinceProperties } from './DishonorProvinceAction';
 import { DrawAction, DrawProperties } from './DrawAction';
 import { DuelAction, DuelProperties } from './DuelAction';
+import { DuelAddParticipantAction, DuelAddParticipantProperties } from './DuelAddParticipantAction';
 import { FateBidAction, FateBidProperties } from './FateBidAction';
 import { FillProvinceAction, FillProvinceProperties } from './FillProvinceAction';
 import { FlipDynastyAction, FlipDynastyProperties } from './FlipDynastyAction';
@@ -144,6 +145,9 @@ export function dishonorProvince(propertyFactory: PropsFactory<DishonorProvinceP
 }
 export function duel(propertyFactory: PropsFactory<DuelProperties>): GameAction {
     return new DuelAction(propertyFactory);
+}
+export function duelAddParticipant(propertyFactory: PropsFactory<DuelAddParticipantProperties>): GameAction {
+    return new DuelAddParticipantAction(propertyFactory);
 }
 export function flipDynasty(propertyFactory: PropsFactory<FlipDynastyProperties> = {}): GameAction {
     return new FlipDynastyAction(propertyFactory);

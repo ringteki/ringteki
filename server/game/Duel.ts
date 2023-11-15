@@ -5,6 +5,7 @@ import { EventRegistrar } from './EventRegistrar';
 import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
+import AbilityContext from './AbilityContext';
 
 /**
  * Used to track whether a player has played a specific type of duel effect yet
@@ -43,8 +44,9 @@ export class Duel extends GameObject {
         public challenger: DrawCard,
         public targets: DrawCard[],
         public duelType: DuelTypes,
+        public properties,
         private statistic?: (card: DrawCard) => number,
-        public challengingPlayer = challenger.controller
+        public challengingPlayer = challenger.controller,
     ) {
         super(game, 'Duel');
         this.gameModeOpts = parseGameMode(this.game.gameMode);
@@ -64,6 +66,32 @@ export class Duel extends GameObject {
 
     get participants(): undefined | DrawCard[] {
         return [...[this.challenger], ...this.targets];
+    }
+
+    addTargetToDuel(card: DrawCard) {
+        this.targets.push(card);
+    }
+
+    replaceTargetInDuel(oldTarget: DrawCard, newTarget: DrawCard) {
+        this.targets = this.targets.filter(a => a !== oldTarget);
+        this.targets.push(newTarget);
+    }
+
+    canAddToDuel(card: DrawCard, context: AbilityContext) {
+        if (this.participants.includes(card)) {
+            return false;
+        }
+        if (card.controller === this.challengingPlayer) {
+            return false;
+        }
+
+        const requiresConflict = this.properties.requiresConflict;
+        const targetCondition = this.properties.targetCondition;
+        // default target condition
+        if (!targetCondition) {
+            return !requiresConflict || card.isParticipating();
+        }
+        return targetCondition(card, context);
     }
 
     isInvolved(card: DrawCard): boolean {
