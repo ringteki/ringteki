@@ -38,7 +38,7 @@ export default class ForDeathAndGlory extends DrawCard {
                                         when: { onConflictFinished: () => true },
                                         message: '{1} is discarded from play due to the delayed effect of {0}',
                                         messageArgs: [context.source, context.targets[CHARACTER]],
-                                        gameAction: AbilityDsl.actions.discardFromPlay({
+                                        gameAction: AbilityDsl.actions.sacrifice({
                                             target: context.targets[CHARACTER]
                                         })
                                     })
@@ -56,7 +56,7 @@ export default class ForDeathAndGlory extends DrawCard {
                 return [
                     'grant 4 military skill to ',
                     context.targets[CHARACTER],
-                    ', discarding them at the end of the conflict'
+                    ', sacrificing them at the end of the conflict'
                 ];
             }
         });
