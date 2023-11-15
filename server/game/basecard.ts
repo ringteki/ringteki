@@ -1045,7 +1045,7 @@ class BaseCard extends EffectSource {
      * effect is applied (for cases where the effect only applies to specific
      * characters).
      */
-    whileAttached(properties) {
+    whileAttached(properties: Pick<PersistentEffectProps<this>, 'condition' | 'match' | 'effect'>) {
         this.persistentEffect({
             condition: properties.condition || (() => true),
             match: (card, context) => card === this.parent && (!properties.match || properties.match(card, context)),
