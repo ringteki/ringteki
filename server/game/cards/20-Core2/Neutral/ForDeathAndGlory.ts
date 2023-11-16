@@ -58,7 +58,8 @@ export default class ForDeathAndGlory extends DrawCard {
                     context.targets[CHARACTER],
                     ', sacrificing them at the end of the conflict'
                 ];
-            }
+            },
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 }
