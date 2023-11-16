@@ -56,7 +56,8 @@ export default class KakitaTechnique extends DrawCard {
                         ' and take ', actions, ' additional action', (actions > 1 ? 's' : '')
                     ];
                 return [context.target.isDefending() ? '2' : '1', 'military', 'political', '', '', '', ''];
-            }
+            },
+            max: AbilityDsl.limit.perConflict(1)
         });
     }
 
