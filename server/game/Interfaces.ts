@@ -151,7 +151,7 @@ interface AbilityProps<Context> {
     then?: ((context?: AbilityContext) => object) | object;
 }
 
-export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> {
+export interface ActionProps<Source = any> extends AbilityProps<AbilityContext<Source>> {
     condition?: (context?: AbilityContext<Source>) => boolean;
     phase?: string;
     anyPlayer?: boolean;
@@ -204,7 +204,7 @@ export type TriggeredAbilityProps = TriggeredAbilityWhenProps | TriggeredAbility
 export interface PersistentEffectProps<Source = any> {
     location?: Locations | Locations[];
     condition?: (context: AbilityContext<Source>) => boolean;
-    match?: (card: BaseCard, context?: AbilityContext) => boolean;
+    match?: (card: BaseCard, context?: AbilityContext<Source>) => boolean;
     targetController?: Players;
     targetLocation?: Locations;
     effect: Function | Function[];
