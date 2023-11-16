@@ -53,7 +53,7 @@ export class SetupPhase extends Phase {
         ) {
             firstPlayer.firstPlayer = false;
             firstPlayer.opponent.firstPlayer = true;
-            this.game.addMessage('{0} takes the first player token. The speed of Lady Shinjo!');
+            this.game.addMessage('{0} takes the first player token. The speed of Lady Shinjo!', [firstPlayer.opponent]);
             return;
         }
 
