@@ -1,4 +1,4 @@
-import { CardTypes, Players, Durations, DuelTypes } from '../../../Constants';
+import { CardTypes, Players, Durations, DuelTypes, AbilityTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -17,26 +17,17 @@ export default class LetHimGoBy extends DrawCard {
     }
 
     public setupCardAbilities() {
-        this.duelFocus({
-            title: 'Help a character with a duel',
-            duelCondition: (duel) => duel.duelType === DuelTypes.Military || duel.duelType === DuelTypes.Political,
-            target: {
-                cardType: CardTypes.Attachment,
-                cardCondition: (card, context) =>
-                    card.parent &&
-                    context.event.duel.isInvolved(card.parent) &&
-                    this.getAttachmentSkill(card, context) !== 0,
-                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    target: context.target.parent,
-                    effect: AbilityDsl.effects.modifyDuelistSkill(
-                        this.getAttachmentSkill(context.target, context),
-                        context.event.duel
-                    ),
-                    duration: Durations.UntilEndOfDuel
-                }))
+        this.reaction({
+            title: 'Make opponent discard a card',
+            when: {
+                onInitiateAbilityEffects: (event, context) => (event.context.ability.abilityType === AbilityTypes.DuelReaction) &&
+                    event.context.player === context.player.opponent
             },
-            effect: 'add the skill bonus of {0} ({1}) to their duel total',
-            effectArgs: (context) => [this.getAttachmentSkill(context.target, context)]
+            gameAction: AbilityDsl.actions.discardAtRandom(context => ({
+                target: context.player.opponent,
+                amount: 1
+            })),
+            max: AbilityDsl.limit.perDuel(1)
         });
 
         this.reaction({

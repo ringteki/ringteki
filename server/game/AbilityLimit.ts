@@ -152,6 +152,11 @@ export function perGame(max: number) {
     return new RepeatableAbilityLimit(max, new Set());
 }
 
+export function perDuel(max: number) {
+    return new RepeatableAbilityLimit(max, new Set([EventNames.OnDuelFinished]));
+}
+
+
 export function unlimitedPerConflict() {
     return new RepeatableAbilityLimit(Infinity, new Set([EventNames.OnConflictFinished]));
 }
