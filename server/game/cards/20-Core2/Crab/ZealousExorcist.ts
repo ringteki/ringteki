@@ -6,7 +6,7 @@ import DrawCard from '../../../drawcard';
 export default class ZealousExorcist extends DrawCard {
     static id = 'zealous-exorcist';
 
-    private charactersPlayedThisConflict = new Set<DrawCard>();
+    private charactersPlayedThisConflict = new WeakSet<DrawCard>();
     private eventRegistrar?: EventRegistrar;
 
     public setupCardAbilities() {
@@ -25,7 +25,7 @@ export default class ZealousExorcist extends DrawCard {
     }
 
     public onConflictStarted() {
-        this.charactersPlayedThisConflict.clear();
+        this.charactersPlayedThisConflict = new WeakSet();
     }
 
     public onCharacterEntersPlay(event: any) {
