@@ -108,7 +108,7 @@ describe('Swordguy', function () {
                 expect(this.player2).toBeAbleToSelect(this.ryo);
                 this.player2.clickCard(this.ryo);
 
-                expect(this.getChatLogs(10)).toContain('player2 uses Seppun Ryo to focus their duelist');
+                expect(this.getChatLogs(10)).toContain('player2 uses Seppun Ryo to add 1 to their duel total');
 
                 expect(this.getChatLogs(10)).toContain('Seppun Ryo: 5 vs 3: Kakita Yoshi');
                 expect(this.getChatLogs(10)).toContain('Duel Effect: bow Kakita Yoshi');

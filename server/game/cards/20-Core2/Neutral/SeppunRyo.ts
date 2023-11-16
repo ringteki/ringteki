@@ -8,21 +8,13 @@ export default class SeppunRyo extends DrawCard {
     public setupCardAbilities() {
         this.duelFocus({
             title: 'Help a character with a duel',
-            duelCondition: (duel, context) => context.player.imperialFavor !== '',
-            gameAction: AbilityDsl.actions.selectCard((context) => ({
-                activePromptTitle: 'Choose a duel participant',
-                hidePromptIfSingleCard: true,
-                cardType: CardTypes.Character,
-                controller: Players.Self,
-                cardCondition: (card) => context.event.duel.isInvolved(card),
-                message: '{0} gives {1} 1 bonus skill for this duel',
-                messageArgs: (cards) => [context.player, cards],
-                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                    effect: AbilityDsl.effects.modifyDuelistSkill(1, context.event.duel),
-                    duration: Durations.UntilEndOfDuel
-                }))
+            duelCondition: (duel, context) => context.player.imperialFavor !== '' && duel.participants.includes(context.source),
+            gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
+                target: context.event.duel,
+                effect: AbilityDsl.effects.modifyDuelSkill({ amount: 1, player: context.player }),
+                duration: Durations.UntilEndOfDuel
             })),
-            effect: 'focus their duelist'
+            effect: 'add 1 to their duel total'
         });
 
         this.action({

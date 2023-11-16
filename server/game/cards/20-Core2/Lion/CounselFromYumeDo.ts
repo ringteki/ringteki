@@ -24,7 +24,10 @@ export default class CounselFromYumeDo extends DrawCard {
             then: {
                 gameAction: AbilityDsl.actions.onAffinity({
                     trait: 'water',
-                    gameAction: AbilityDsl.actions.draw()
+                    gameAction: AbilityDsl.actions.draw(context => ({
+                        target: context.player,
+                        amount: 1
+                    }))
                 })
             }
         });
