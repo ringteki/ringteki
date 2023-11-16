@@ -61,14 +61,10 @@ class ActionWindow extends UiPrompt {
     postResolutionUpdate(resolver) { // eslint-disable-line no-unused-vars
         this.currentPlayerConsecutiveActions += 1;
         this.prevPlayerPassed = false;
-        let allowableConsecutiveActions = this.currentPlayer.sumEffects(EffectNames.AdditionalAction);
-        if (this.currentPlayer.actionPhasePriority) {
-            if (allowableConsecutiveActions > 0) {
-                allowableConsecutiveActions--;
-            }
-        }
+        let allowableConsecutiveActions = this.getCurrentPlayerConsecutiveActions();
 
         if(this.currentPlayerConsecutiveActions > allowableConsecutiveActions) {
+            this.markBonusActionsTaken();
             this.nextPlayer();
         }
     }
@@ -142,24 +138,127 @@ class ActionWindow extends UiPrompt {
         }
     }
 
-    pass() {
-        this.game.addMessage('{0} passes', this.currentPlayer);
-
-        if(this.prevPlayerPassed || !this.currentPlayer.opponent) {
-            this.complete();
+    getCurrentPlayerConsecutiveActions() {
+        let allowableConsecutiveActions = this.currentPlayer.sumEffects(EffectNames.AdditionalAction); 
+        if (this.bonusActions) {
+            const bonusActions = this.bonusActions[this.currentPlayer.uuid];
+            if (!bonusActions.actionsTaken && bonusActions.takingActions && bonusActions.actionCount > 0) {
+                allowableConsecutiveActions = allowableConsecutiveActions + (bonusActions?.actionCount - 1);
+            }
         }
-
-        this.currentPlayerConsecutiveActions += 1;
-        let allowableConsecutiveActions = this.currentPlayer.sumEffects(EffectNames.AdditionalAction);
         if (this.currentPlayer.actionPhasePriority) {
             if (allowableConsecutiveActions > 0) {
                 allowableConsecutiveActions--;
             }
         }
+        return allowableConsecutiveActions;
+    }
+
+    markBonusActionsTaken() {
+        if (this.bonusActions) {
+            this.bonusActions[this.currentPlayer.uuid].actionsTaken = true;
+            this.bonusActions[this.currentPlayer.uuid].takingActions = false;
+        }
+    }
+
+    pass() {
+        this.game.addMessage('{0} passes', this.currentPlayer);
+
+        if(this.prevPlayerPassed || !this.currentPlayer.opponent) {
+            this.attemptComplete();
+            return;
+        }
+
+        this.currentPlayerConsecutiveActions += 1;
+        let allowableConsecutiveActions = this.getCurrentPlayerConsecutiveActions();
+
         if(this.currentPlayerConsecutiveActions > allowableConsecutiveActions) {
+            this.markBonusActionsTaken();
             this.prevPlayerPassed = true;
             this.nextPlayer();
         }
+    }
+
+    attemptComplete() {
+        if (!this.currentPlayer.opponent) {
+            this.complete();
+        }
+
+        if (!this.checkBonusActions()) {
+            this.complete();
+        }
+    }
+
+    checkBonusActions() {
+        if (!this.bonusActions) {
+            if (!this.setupBonusActions()) {
+                return false;
+            }
+        }
+
+        const player1 = this.game.getFirstPlayer();
+        const player2 = player1.opponent;
+
+        const p1 = this.bonusActions[player1.uuid];
+        const p2 = this.bonusActions[player2.uuid];
+
+        if (p1.actionCount > 0) {
+            if (!p1.actionsTaken) {
+                this.game.addMessage('{0} has a bonus action during resolution!', player1);
+                this.prevPlayerPassed = false;
+                // Set the current player to player1
+                if (this.currentPlayer !== player1) {
+                    this.currentPlayer = player1;
+                }
+                p1.takingActions = true;
+                return true;
+            }
+        }
+        if (p2.actionCount > 0) {
+            if (!p2.actionsTaken) {
+                this.game.addMessage('{0} has a bonus action during resolution!', player2);
+                this.prevPlayerPassed = false;
+                // Set the current player to player1
+                if (this.currentPlayer !== player2) {
+                    this.currentPlayer = player2;
+                }
+                p2.takingActions = true;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    setupBonusActions() {
+        const player1 = this.game.getFirstPlayer();
+        const player2 = player1.opponent;
+        let p1ActionsPostWindow = player1.sumEffects(EffectNames.AdditionalActionAfterWindowCompleted);
+        let p2ActionsPostWindow = player2.sumEffects(EffectNames.AdditionalActionAfterWindowCompleted);
+
+        this.bonusActions = {
+            [player1.uuid]: {
+                actionCount: p1ActionsPostWindow,
+                actionsTaken: false,
+                takingActions: false
+            },
+            [player2.uuid]: {
+                actionCount: p2ActionsPostWindow,
+                actionsTaken: false,
+                takingActions: false
+            },
+        }
+
+        return p1ActionsPostWindow + p2ActionsPostWindow > 0;
+    }
+
+    teardownBonusActions() {
+        this.bonusActions = undefined;
+    }
+
+    complete() {
+        this.teardownBonusActions();
+        super.complete();
     }
 
     nextPlayer() {
@@ -167,8 +266,9 @@ class ActionWindow extends UiPrompt {
 
         this.currentPlayer.actionPhasePriority = false;
 
-        if(this.currentPlayer.anyEffect(EffectNames.ResolveConflictEarly)) {
-            this.complete();
+        if(this.currentPlayer.anyEffect(EffectNames.ResolveConflictEarly) || this.bonusActions) {
+            this.attemptComplete();
+            return;
         }
 
         if(otherPlayer) {

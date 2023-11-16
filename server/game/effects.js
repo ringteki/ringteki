@@ -255,6 +255,7 @@ const Effects = {
     customFatePhaseFateRemoval: (refillFunc) => EffectBuilder.player.static(EffectNames.CustomFatePhaseFateRemoval, refillFunc), //refillFunc: (Player, numFate) => { }
     changeConflictSkillFunctionPlayer: (func) => EffectBuilder.player.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks
     limitLegalAttackers: (matchFunc) => EffectBuilder.player.static(EffectNames.LimitLegalAttackers, matchFunc), //matchFunc: (card) => bool
+    additionalActionAfterWindowCompleted: (amount = 1) => EffectBuilder.player.static(EffectNames.AdditionalActionAfterWindowCompleted, amount),
     // Conflict effects
     charactersCannot: (properties) => EffectBuilder.conflict.static(EffectNames.AbilityRestrictions, new Restriction(Object.assign({ restricts: 'characters', type: properties.cannot || properties }, properties))),
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),

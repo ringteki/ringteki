@@ -134,6 +134,7 @@ export enum EffectNames {
     CannotDeclareRing = 'cannotDeclare',
     ConsiderRingAsClaimed = 'considerAsClaimed',
     AdditionalAction = 'additionalAction',
+    AdditionalActionAfterWindowCompleted = 'additionalActionAfterWindowCompleted',
     AdditionalCardPlayed = 'additionalCardPlayed',
     AdditionalCharactersInConflict = 'additionalCharactersInConflict',
     AdditionalConflict = 'additionalConflict',
