@@ -5,7 +5,7 @@ export class StrongholdCard extends BaseCard {
     menu = [{ command: 'bow', text: 'Bow/Ready' }];
     bowed = false;
     isStronghold = true;
-    stealFirstPlayerDuringSetup = false;
+    stealFirstPlayerDuringSetupWithMsg?: string;
 
     getFate(): number {
         return this.cardData.fate;

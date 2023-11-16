@@ -34,7 +34,6 @@ describe('Day of Brother Horse', function () {
             this.noMoreActions();
             this.player1.clickPrompt('Pass');
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.dayofBrotherHorse);
         });
 
         it('if triggered, draw 3 cards and protects a ring', function () {

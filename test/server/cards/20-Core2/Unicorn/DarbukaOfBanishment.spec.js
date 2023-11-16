@@ -6,7 +6,7 @@ describe('Darbuka of Banishment', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['miya-mystic', 'adept-of-the-waves'],
-                        hand: ['rejuvenating-vapors', 'portable-bastion']
+                        hand: ['rejuvenating-vapors', 'grasp-of-earth-2']
                     },
                     player2: {
                         inPlay: ['moto-youth'],
@@ -16,7 +16,7 @@ describe('Darbuka of Banishment', function () {
                 });
 
                 this.suitengu = this.player1.findCardByName('rejuvenating-vapors');
-                this.bastion = this.player1.findCardByName('portable-bastion');
+                this.graspOfEarth = this.player1.findCardByName('grasp-of-earth-2');
                 this.mystic = this.player1.findCardByName('miya-mystic');
                 this.mystic.bow();
 
@@ -31,7 +31,6 @@ describe('Darbuka of Banishment', function () {
             });
 
             it('removes affinity from spell events', function () {
-                console.log(this.darbuka.location);
                 this.player1.clickCard(this.suitengu);
                 this.player1.clickCard(this.mystic);
                 expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Miya Mystic');
@@ -41,7 +40,7 @@ describe('Darbuka of Banishment', function () {
             it('removes affinity from spell attachments', function () {
                 const initFate = this.player1.fate;
 
-                this.player1.clickCard(this.bastion);
+                this.player1.clickCard(this.graspOfEarth);
                 this.player1.clickCard(this.mystic);
                 expect(this.player1.fate).toBe(initFate - 1);
             });

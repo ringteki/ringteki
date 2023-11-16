@@ -41,19 +41,21 @@ export class SetupPhase extends Phase {
         }
 
         if (
-            firstPlayer.stronghold?.stealFirstPlayerDuringSetup &&
-            !firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetup
+            firstPlayer.stronghold?.stealFirstPlayerDuringSetupWithMsg &&
+            !firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetupWithMsg
         ) {
             return;
         }
 
         if (
-            !firstPlayer.stronghold?.stealFirstPlayerDuringSetup &&
-            firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetup
+            !firstPlayer.stronghold?.stealFirstPlayerDuringSetupWithMsg &&
+            firstPlayer.opponent.stronghold?.stealFirstPlayerDuringSetupWithMsg
         ) {
             firstPlayer.firstPlayer = false;
             firstPlayer.opponent.firstPlayer = true;
-            this.game.addMessage('{0} takes the first player token. The speed of Lady Shinjo!', [firstPlayer.opponent]);
+            this.game.addMessage(firstPlayer.opponent.stronghold.stealFirstPlayerDuringSetupWithMsg, [
+                firstPlayer.opponent
+            ]);
             return;
         }
 

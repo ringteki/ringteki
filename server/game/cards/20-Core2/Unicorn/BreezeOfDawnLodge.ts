@@ -6,7 +6,7 @@ import { StrongholdCard } from '../../../StrongholdCard';
 export default class BreezeOfDawnLodge extends StrongholdCard {
     static id = 'breeze-of-dawn-lodge';
 
-    stealFirstPlayerDuringSetup = true;
+    stealFirstPlayerDuringSetupWithMsg = '{0} takes the first player token. The speed of Lady Shinjo!';
 
     setupCardAbilities() {
         this.action({

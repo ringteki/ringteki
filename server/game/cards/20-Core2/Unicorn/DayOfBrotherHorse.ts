@@ -1,5 +1,5 @@
 import AbilityDsl from '../../../abilitydsl';
-import { CardTypes, Durations, TargetModes } from '../../../Constants';
+import { Durations, TargetModes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
 
