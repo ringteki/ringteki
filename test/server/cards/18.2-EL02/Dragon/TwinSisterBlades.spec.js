@@ -4,112 +4,106 @@ describe('Twin Sister Blades', function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['mirumoto-raitsugu'],
+                    inPlay: ['hida-yakamo', 'matsu-berserker', 'kakita-yoshi'],
                     hand: ['twin-sister-blades','fine-katana','ornate-fan']
                 },
                 player2: {
-                    inPlay: ['doji-whisperer']
+                    inPlay: ['doji-whisperer', 'kakita-toshimoko']
                 }
             });
-            this.mirumotoRaitsugu = this.player1.findCardByName('mirumoto-raitsugu');
+            this.yakamo = this.player1.findCardByName('hida-yakamo');
+            this.berserker = this.player1.findCardByName('matsu-berserker');
+            this.yoshi = this.player1.findCardByName('kakita-yoshi');
+
             this.mirumotoDaisho = this.player1.findCardByName('twin-sister-blades');
             this.fineKatana = this.player1.findCardByName('fine-katana');
             this.ornateFan = this.player1.findCardByName('ornate-fan');
             this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
+            this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
         });
 
-        it('during a duel the attached character is participating, the opponent should not be able to bid 4 or 5', function() {
+        it('should draw a card on a duelist if not outnumbered', function() {
             this.player1.clickCard(this.mirumotoDaisho);
-            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.yakamo);
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.mirumotoRaitsugu],
+                attackers: [this.yakamo],
                 defenders: [this.dojiWhisperer]
             });
+            let hand = this.player1.hand.length;
+
             this.player2.pass();
-            this.player1.clickCard(this.mirumotoRaitsugu);
-            this.player1.clickCard(this.dojiWhisperer);
-            expect(this.player1).toHavePrompt('Choose your bid for the duel\nMirumoto Raitsugu: 5 vs 0: Doji Whisperer');
-            expect(this.player1).toHavePromptButton('1');
-            expect(this.player1).toHavePromptButton('2');
-            expect(this.player1).toHavePromptButton('3');
-            expect(this.player1).toHavePromptButton('4');
-            expect(this.player1).toHavePromptButton('5');
-            expect(this.player2).toHavePrompt('Choose your bid for the duel\nMirumoto Raitsugu: 5 vs 0: Doji Whisperer');
-            expect(this.player2).toHavePromptButton('1');
-            expect(this.player2).toHavePromptButton('2');
-            expect(this.player2).toHavePromptButton('3');
-            expect(this.player2).not.toHavePromptButton('4');
-            expect(this.player2).not.toHavePromptButton('5');
+            this.player1.clickCard(this.yakamo);
+
+            expect(this.player1.hand.length).toBe(hand + 1);
+            expect(this.getChatLogs(5)).toContain("player1 uses Hida Yakamo's gained ability from Twin Sister Blades to draw a card");
         });
 
-        it('should let you reduce honor transfer', function() {
+        it('should draw a card on a bushi if not outnumbered', function() {
             this.player1.clickCard(this.mirumotoDaisho);
-            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.berserker);
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.mirumotoRaitsugu],
+                attackers: [this.berserker],
                 defenders: [this.dojiWhisperer]
             });
-            let honor = this.player1.honor;
-            let honor2 = this.player2.honor;
+            let hand = this.player1.hand.length;
 
             this.player2.pass();
-            this.player1.clickCard(this.mirumotoRaitsugu);
-            this.player1.clickCard(this.dojiWhisperer);
-            this.player1.clickPrompt('3');
-            this.player2.clickPrompt('1');
-            expect(this.player1.honor).toBe(honor - 1);
-            expect(this.player2.honor).toBe(honor2 + 1);
+            this.player1.clickCard(this.berserker);
 
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.getChatLogs(10)).toContain('player1 gives player2 1 honor');
+            expect(this.player1.hand.length).toBe(hand + 1);
+            expect(this.getChatLogs(5)).toContain("player1 uses Matsu Berserker's gained ability from Twin Sister Blades to draw a card");
         });
 
-        it('should let you reduce honor transfer to 0', function() {
+        it('should not draw on a non-bushi', function() {
             this.player1.clickCard(this.mirumotoDaisho);
-            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.yoshi);
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.mirumotoRaitsugu],
+                attackers: [this.yoshi],
                 defenders: [this.dojiWhisperer]
             });
-            let honor = this.player1.honor;
-            let honor2 = this.player2.honor;
+            let hand = this.player1.hand.length;
 
             this.player2.pass();
-            this.player1.clickCard(this.mirumotoRaitsugu);
-            this.player1.clickCard(this.dojiWhisperer);
-            this.player1.clickPrompt('2');
-            this.player2.clickPrompt('1');
-            expect(this.player1.honor).toBe(honor);
-            expect(this.player2.honor).toBe(honor2);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-
-            expect(this.getChatLogs(10)).toContain('player1 gives player2 0 honor');
+            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.yoshi);
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should not reduce gains', function() {
+        it('should draw 2 cards on a duelist if outnumbered', function() {
             this.player1.clickCard(this.mirumotoDaisho);
-            this.player1.clickCard(this.mirumotoRaitsugu);
+            this.player1.clickCard(this.yakamo);
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.mirumotoRaitsugu],
-                defenders: [this.dojiWhisperer]
+                attackers: [this.yakamo],
+                defenders: [this.dojiWhisperer, this.toshimoko]
             });
-            let honor = this.player1.honor;
-            let honor2 = this.player2.honor;
+            let hand = this.player1.hand.length;
 
             this.player2.pass();
-            this.player1.clickCard(this.mirumotoRaitsugu);
-            this.player1.clickCard(this.dojiWhisperer);
-            this.player1.clickPrompt('1');
-            this.player2.clickPrompt('3');
-            expect(this.player1.honor).toBe(honor + 2);
-            expect(this.player2.honor).toBe(honor2 - 2);
+            this.player1.clickCard(this.yakamo);
 
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.getChatLogs(10)).toContain('player2 gives player1 2 honor');
+            expect(this.player1.hand.length).toBe(hand + 2);
+            expect(this.getChatLogs(5)).toContain("player1 uses Hida Yakamo's gained ability from Twin Sister Blades to draw 2 cards");
+        });
+
+        it('should draw a card on a bushi non-duelist if outnumbered', function() {
+            this.player1.clickCard(this.mirumotoDaisho);
+            this.player1.clickCard(this.berserker);
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.berserker],
+                defenders: [this.dojiWhisperer, this.toshimoko]
+            });
+            let hand = this.player1.hand.length;
+
+            this.player2.pass();
+            this.player1.clickCard(this.berserker);
+
+            expect(this.player1.hand.length).toBe(hand + 1);
+            expect(this.getChatLogs(5)).toContain("player1 uses Matsu Berserker's gained ability from Twin Sister Blades to draw a card");
         });
     });
 });

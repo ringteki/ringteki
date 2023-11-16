@@ -1,23 +1,28 @@
 const DrawCard = require('../../../drawcard.js');
-const { Players } = require('../../../Constants');
+const { Players, AbilityTypes } = require('../../../Constants');
 const AbilityDsl = require('../../../abilitydsl.js');
 
 class TwinSisterBlades extends DrawCard {
     setupCardAbilities() {
-        this.persistentEffect({
-            condition: context => context.game.currentDuel && this.game.currentDuel.isInvolved(context.source.parent),
-            targetController: Players.Opponent,
-            effect: [
-                AbilityDsl.effects.cannotBidInDuels('4'),
-                AbilityDsl.effects.cannotBidInDuels('5')
-            ]
+        this.whileAttached({
+            effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
+                title: 'Draw cards',
+                condition: context => context.source.isParticipating() && context.source.hasTrait('bushi'),
+                effect: 'draw {1} card{2}',
+                effectArgs: context => this.getNumberOfCards(context) === 2 ? ['2', 's'] : ['a', ''],
+                gameAction: AbilityDsl.actions.draw(context => ({
+                    target: context.player,
+                    amount: this.getNumberOfCards(context)
+                }))
+            })
         });
+    }
 
-        this.persistentEffect({
-            condition: context => context.game.currentDuel && this.game.currentDuel.isInvolved(context.source.parent),
-            targetController: Players.Self,
-            effect: AbilityDsl.effects.modifyHonorTransferGiven(-1)
-        });
+    getNumberOfCards(context) {
+        if (context.source.hasTrait('duelist') && context.game.currentConflict.hasMoreParticipants(context.player.opponent)) {
+            return 2;
+        }
+        return 1;
     }
 }
 
