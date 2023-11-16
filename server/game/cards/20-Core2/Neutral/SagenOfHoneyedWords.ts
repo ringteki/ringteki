@@ -2,6 +2,10 @@ import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
+function skillBonus(companion: DrawCard): number {
+    return companion.getGlory();
+}
+
 export default class SagenOfHoneyedWords extends DrawCard {
     static id = 'sagen-of-honeyed-words';
 
@@ -12,12 +16,17 @@ export default class SagenOfHoneyedWords extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card) => card.isParticipating()
+                cardCondition: (card, context) => card.isParticipating() && card !== context.source
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source,
-                effect: AbilityDsl.effects.modifyMilitarySkill({ amount: (context.target as DrawCard).glory })
-            }))
+                effect: AbilityDsl.effects.modifyBothSkills(skillBonus(context.target))
+            })),
+            effect: 'get +{1}{2} and +{3}{4}',
+            effectArgs: (context) => {
+                const bonus = skillBonus(context.target);
+                return [bonus, 'military', bonus, 'political'];
+            }
         });
     }
 }

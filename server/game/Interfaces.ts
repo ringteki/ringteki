@@ -151,11 +151,11 @@ interface AbilityProps<Context> {
     then?: ((context?: AbilityContext) => object) | object;
 }
 
-export interface ActionProps<Source = any> extends AbilityProps<AbilityContext<Source>> {
+export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> {
     condition?: (context?: AbilityContext<Source>) => boolean;
     phase?: string;
     anyPlayer?: boolean;
-    conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext) => boolean;
+    conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext<Source>) => boolean;
     canTriggerOutsideConflict?: boolean;
 }
 
@@ -204,7 +204,7 @@ export type TriggeredAbilityProps = TriggeredAbilityWhenProps | TriggeredAbility
 export interface PersistentEffectProps<Source = any> {
     location?: Locations | Locations[];
     condition?: (context: AbilityContext<Source>) => boolean;
-    match?: (card: BaseCard, context?: AbilityContext<Source>) => boolean;
+    match?: (card: BaseCard, context?: AbilityContext) => boolean;
     targetController?: Players;
     targetLocation?: Locations;
     effect: Function | Function[];
