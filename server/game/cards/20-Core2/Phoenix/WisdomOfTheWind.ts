@@ -11,7 +11,7 @@ export default class WisdomOfTheWind extends DrawCard {
             effect: 'honor or dishonor {0}',
             condition: (context) =>
                 context.game.isDuringConflict() &&
-                context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('shugenja')),
+                context.player.cardsInPlay.some((card: DrawCard) => card.hasTrait('shugenja')),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card: DrawCard) => card.isParticipating(),

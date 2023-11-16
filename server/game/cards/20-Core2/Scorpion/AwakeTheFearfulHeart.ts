@@ -10,7 +10,9 @@ export default class AwakeTheFearfulHeart extends DrawCard {
         this.action({
             title: 'Move home each character without fate',
             condition: (context) =>
-                context.player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')),
+                context.player.cardsInPlay.some(
+                    (card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')
+                ),
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.sendHome((context) => ({
                     target:

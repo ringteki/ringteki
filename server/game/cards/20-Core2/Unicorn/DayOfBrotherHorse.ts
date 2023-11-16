@@ -1,5 +1,5 @@
 import AbilityDsl from '../../../abilitydsl';
-import { Durations, TargetModes } from '../../../Constants';
+import { CardTypes, Durations, TargetModes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
 
@@ -31,7 +31,7 @@ export default class DayOfBrotherHorse extends DrawCard {
             when: {
                 onConflictPass: (event, context) =>
                     context.player === event.conflict.attackingPlayer &&
-                    context.player.anyCardsInPlay((card: DrawCard) => !card.bowed)
+                    (context.player.cardsInPlay as DrawCard[]).some((card: DrawCard) => !card.bowed)
             },
             target: {
                 mode: TargetModes.Ring,

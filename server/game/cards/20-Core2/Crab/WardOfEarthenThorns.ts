@@ -14,7 +14,7 @@ export default class WardOfEarthenThorns extends DrawCard {
 
         this.persistentEffect({
             condition: (context) =>
-                context.player.anyCardsInPlay((card: DrawCard) => card.hasTrait('shugenja') && card.hasTrait('earth')),
+                context.player.cardsInPlay.some((card: DrawCard) => card.hasEveryTrait('shugenja', 'earth')),
             match: (card, context) => context.source.parent === card,
             effect: AbilityDsl.effects.modifyProvinceStrength(1)
         });

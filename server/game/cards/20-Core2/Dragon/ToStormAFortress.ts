@@ -8,11 +8,11 @@ export default class ToStormAFortress extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: "Increase a character's military skill",
-            condition: () => this.game.isDuringConflict(ConflictTypes.Military),
+            condition: (context) => context.game.isDuringConflict(ConflictTypes.Military),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card) => card.isParticipating() && (card.hasTrait('bushi') || card.hasTrait('monk')),
+                cardCondition: (card) => card.isParticipating() && card.hasSomeTrait('bushi', 'monk'),
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     effect: AbilityDsl.effects.modifyMilitarySkill(2)
                 }))

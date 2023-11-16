@@ -11,17 +11,17 @@ export default class TempleOfTheFivefoldPath extends StrongholdCard {
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 mode: TargetModes.Ring,
-                activePromptTitle: 'Choose a ring to receive fate',
+                activePromptTitle: 'Choose a ring',
                 ringCondition: (ring) => ring.isUnclaimed(),
                 gameAction: AbilityDsl.actions.conditional({
                     condition: (context) => context.ring.getFate() === 0,
                     trueGameAction: AbilityDsl.actions.placeFateOnRing(),
                     falseGameAction: AbilityDsl.actions.selectRing((context) => ({
-                        activePromptTitle: 'Choose a donor ring',
+                        activePromptTitle: 'Choose a ring to receive fate',
                         ringCondition: (ring, context) => ring !== context.ring && ring.isUnclaimed(),
-                        subActionProperties: (donorRing) => ({ target: context.ring, origin: donorRing }),
+                        subActionProperties: (receivingRing) => ({ target: receivingRing, origin: context.ring }),
                         gameAction: AbilityDsl.actions.placeFateOnRing(),
-                        message: '{0} moves 1 fate from the {1} to the {2}',
+                        message: '{0} moves 1 fate from {1} to {2}',
                         messageArgs: (ring, player) => [player, ring, context.ring]
                     }))
                 })

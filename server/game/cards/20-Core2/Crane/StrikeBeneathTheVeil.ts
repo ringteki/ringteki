@@ -9,7 +9,7 @@ export default class StrikeBeneathTheVeil extends DrawCard {
         this.action({
             title: 'Give a military penalty to a participating character',
             condition: (context) =>
-                context.player.anyCardsInPlay(
+                context.player.cardsInPlay.some(
                     (card: DrawCard) => card.isParticipating('military') && card.hasTrait('bushi')
                 ),
             target: {

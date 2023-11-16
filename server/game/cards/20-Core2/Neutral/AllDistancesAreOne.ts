@@ -32,7 +32,9 @@ export default class AllDistancesAreOne extends DrawCard {
                 (context.game.currentConflict as Conflict | undefined)
                     ?.getConflictProvinces()
                     .every((province) => province.location !== Locations.StrongholdProvince) &&
-                context.player.anyCardsInPlay((card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')),
+                context.player.cardsInPlay.some(
+                    (card: DrawCard) => card.isParticipating() && card.hasTrait('shugenja')
+                ),
             cost: captureOriginalProvince(),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 cardType: CardTypes.Province,
@@ -46,6 +48,8 @@ export default class AllDistancesAreOne extends DrawCard {
                 gameAction: AbilityDsl.actions.onAffinity({
                     trait: 'water',
                     promptTitleForConfirmingAffinity: 'Flip the original province facedown?',
+                    effect: 'flip {0} facedown',
+                    effectArgs: (context) => [context[CAPTURED_ORIGINAL_PROVINCE]],
                     gameAction: AbilityDsl.actions.turnFacedown({
                         target: context[CAPTURED_ORIGINAL_PROVINCE] as ProvinceCard
                     })
