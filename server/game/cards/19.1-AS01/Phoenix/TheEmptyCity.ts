@@ -14,6 +14,8 @@ export default class TheEmptyCity extends ProvinceCard {
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnRoundEnded, EventNames.OnCardLeavesPlay]);
 
+        const sharedLimit = AbilityDsl.limit.perRound(1);
+
         this.action({
             title: 'Claim a ring',
             canTriggerOutsideConflict: true,
@@ -37,7 +39,8 @@ export default class TheEmptyCity extends ProvinceCard {
                     }))
                 ])
             },
-            effect: 'claim {0} as a political ring'
+            effect: 'claim {0} as a political ring',
+            limit: sharedLimit
         });
 
         this.action({
@@ -61,7 +64,8 @@ export default class TheEmptyCity extends ProvinceCard {
             then: (context) => {
                 this.invokedSpirit = context.target;
                 return { gameAction: AbilityDsl.actions.noAction() };
-            }
+            },
+            limit: sharedLimit
         });
     }
 
