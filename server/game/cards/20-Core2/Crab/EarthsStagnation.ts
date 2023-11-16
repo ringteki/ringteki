@@ -3,6 +3,10 @@ import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
+function penaltyAmount(context: TriggeredAbilityContext): number {
+    return context.player.hasAffinity('earth', context) ? -2 : -1;
+}
+
 export default class EarthsStagnation extends DrawCard {
     static id = 'earth-s-stagnation';
 
@@ -17,15 +21,14 @@ export default class EarthsStagnation extends DrawCard {
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source.parent,
-                effect: AbilityDsl.effects.modifyMilitarySkill(this.#penaltyAmount(context))
+                effect: AbilityDsl.effects.modifyBothSkills(penaltyAmount(context))
             })),
-            effect: 'give {1}{2} to {3}',
-            effectArgs: (context) => [this.#penaltyAmount(context), 'military', context.source.parent],
+            effect: 'give {1}{2} and {3}{4} to {5}',
+            effectArgs: (context) => {
+                const penalty = penaltyAmount(context);
+                return [penalty, 'military', penalty, 'political', context.source.parent];
+            },
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
-    }
-
-    #penaltyAmount(context: TriggeredAbilityContext): number {
-        return context.player.hasAffinity('earth', context) ? -2 : -1;
     }
 }
