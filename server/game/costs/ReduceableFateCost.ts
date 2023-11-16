@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import AbilityContext from '../AbilityContext';
 import { EventNames, Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
 import Event from '../Events/Event';
@@ -41,10 +41,12 @@ export class ReduceableFateCost implements Cost {
         return context.player.fate >= minCost && context.player.checkRestrictions('spendFate', context);
     }
 
+    protected getAlternateFatePools(context: AbilityContext): Set<BaseCard | Ring> {
+        return new Set(context.player.getAlternateFatePools(context.playType, context.source, context));
+    }
+
     public resolve(context: AbilityContext, result: Result): void {
-        const alternatePools = new Set<BaseCard | Ring>(
-            context.player.getAlternateFatePools(context.playType, context.source, context)
-        );
+        const alternatePools = this.getAlternateFatePools(context);
 
         const ringPool = new Set<Ring>();
         const cardPool = new Set<BaseCard>();
@@ -145,7 +147,7 @@ export class ReduceableFateCost implements Cost {
             return reducedCost;
         }
         let totalAlternateFate = 0;
-        for (const alternatePool of context.player.getAlternateFatePools(context.playType, context.source, context)) {
+        for (const alternatePool of this.getAlternateFatePools(context)) {
             const amount: number = context.costs.alternateFate.get(alternatePool);
             if (amount) {
                 context.game.addMessage(
@@ -245,12 +247,18 @@ export class ReduceableFateCost implements Cost {
         });
     }
 
+    /**
+     * USED FOR EXTENDING THIS CLASS
+     */
+    protected afterPayHook(event: any): void {}
+
     public payEvent(context: AbilityContext): Event {
         const amount = this.getReducedCost(context);
         context.costs.fate = amount;
         return new Event(EventNames.OnSpendFate, { amount, context }, (event) => {
             event.context.player.markUsedReducers(context.playType, event.context.source);
             event.context.player.fate -= this.getFinalFatecost(context, amount);
+            this.afterPayHook(event);
         });
     }
 

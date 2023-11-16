@@ -1,44 +1,60 @@
-import type AbilityContext from '../../../AbilityContext';
+import AbilityContext from '../../../AbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, EventNames, Locations, Players, PlayTypes } from '../../../Constants';
-import type { Cost } from '../../../Costs';
+import { ReduceableFateCost } from '../../../costs/ReduceableFateCost';
 import DrawCard from '../../../drawcard';
 import { EventRegistrar } from '../../../EventRegistrar';
-import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import Player from '../../../player';
 
-type HifumiCost = Cost & { refreshHifumiCount: () => void };
+class HifumiCost extends ReduceableFateCost {
+    isPlayCost = false;
+    isPrintedFateCost = false;
 
-function hifumiCost(): HifumiCost {
-    let timesTriggered = 0;
-    return {
-        refreshHifumiCount: () => {
-            timesTriggered = 0;
-        },
-        canPay: (context: AbilityContext): boolean => {
+    #timesTriggered = new WeakMap<Player, number>();
+
+    refreshHifumiCount(): void {
+        this.#timesTriggered = new WeakMap();
+    }
+
+    currentCost(player: Player): number {
+        return this.#timesTriggered.get(player) ?? 0;
+    }
+
+    canPay(context: AbilityContext<any>): boolean {
+        const cost = this.currentCost(context.player);
+        if (cost === 0) {
             return true;
-
-            // This part works, but it should not be deployed before the payment itself is working
-            //
-            // if (timesTriggered === 0) {
-            //     return true;
-            // }
-
-            // const fateAvailableForRemoval = (context.player.cardsInPlay as DrawCard[]).reduce(
-            //     (total, card) =>
-            //         card.type === CardTypes.Character && card.location === Locations.PlayArea && card.getFate() > 0
-            //             ? total + 1
-            //             : total,
-            //     0
-            // );
-            // return fateAvailableForRemoval >= timesTriggered;
-        },
-        resolve: () => {
-            timesTriggered += 1;
-        },
-        pay: (context: TriggeredAbilityContext): void => {
-            // Kinda like Maho
         }
-    };
+
+        let totalFateAvailable = 0;
+        for (const card of this.#cardsThatCanPayForHifumi(context)) {
+            totalFateAvailable += card.fate;
+            if (totalFateAvailable >= cost) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected getReducedCost(context: AbilityContext): number {
+        return this.currentCost(context.player);
+    }
+
+    protected getAlternateFatePools(context: AbilityContext): Set<DrawCard> {
+        return this.#cardsThatCanPayForHifumi(context);
+    }
+
+    protected afterPayHook(event: any): void {
+        const player = event.context.player;
+        this.#timesTriggered.set(player, this.currentCost(player) + 1);
+    }
+
+    #cardsThatCanPayForHifumi(context: AbilityContext<any>): Set<DrawCard> {
+        return new Set(
+            context.player.cardsInPlay.filter((c: DrawCard) => c.type === CardTypes.Character && c.getFate() > 0)
+        );
+    }
 }
 
 export default class IsawaHifumi extends DrawCard {
@@ -47,7 +63,7 @@ export default class IsawaHifumi extends DrawCard {
     hifumiCost: HifumiCost;
 
     setupCardAbilities() {
-        this.hifumiCost = hifumiCost();
+        this.hifumiCost = new HifumiCost(false);
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnRoundEnded, EventNames.OnCardLeavesPlay]);
 
@@ -71,7 +87,8 @@ export default class IsawaHifumi extends DrawCard {
                     }
                 })
             })),
-            effect: 'play an event from their discard pile',
+            effect: 'play an event from their discard pile (the next time it is used this round will cost {1} fate from {2} characters)',
+            effectArgs: (context) => [this.hifumiCost.currentCost(context.player), context.player],
             limit: AbilityDsl.limit.unlimited()
         });
     }
