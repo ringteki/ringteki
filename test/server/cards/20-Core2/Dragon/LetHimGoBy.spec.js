@@ -6,7 +6,13 @@ describe('Let Him Go By', function () {
                 player1: {
                     fate: 20,
                     inPlay: ['promising-kohai', 'daidoji-akikore', 'kakita-yoshi', 'bayushi-yojiro', 'matsu-berserker'],
-                    hand: ['destiny-revealed', 'dutiful-assistant', 'way-of-the-crane']
+                    hand: [
+                        'destiny-revealed',
+                        'dutiful-assistant',
+                        'way-of-the-crane',
+                        'one-with-the-sea',
+                        'steward-of-law'
+                    ]
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'shosuro-sadako'],
@@ -24,6 +30,8 @@ describe('Let Him Go By', function () {
             this.berserker = this.player1.findCardByName('matsu-berserker');
             this.yojiro = this.player1.findCardByName('bayushi-yojiro');
             this.assistant = this.player1.findCardByName('dutiful-assistant');
+            this.oneWithTheSea = this.player1.findCardByName('one-with-the-sea');
+            this.stewardOfLaw = this.player1.findCardByName('steward-of-law');
 
             this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
             this.tsukune = this.player2.findCardByName('shiba-tsukune');
@@ -71,7 +79,9 @@ describe('Let Him Go By', function () {
 
                 expect(this.player1.hand.length).toBe(hand - 1);
 
-                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to make player1 discard 1 card at random');
+                expect(this.getChatLogs(10)).toContain(
+                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
+                );
             });
 
             it('duel focus', function () {
@@ -104,7 +114,9 @@ describe('Let Him Go By', function () {
 
                 expect(this.player1.hand.length).toBe(hand - 1);
 
-                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to make player1 discard 1 card at random');
+                expect(this.getChatLogs(10)).toContain(
+                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
+                );
             });
 
             it('duel strike', function () {
@@ -141,7 +153,9 @@ describe('Let Him Go By', function () {
 
                 expect(this.player1.hand.length).toBe(hand - 2);
 
-                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to make player1 discard 1 card at random');
+                expect(this.getChatLogs(10)).toContain(
+                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
+                );
             });
 
             it('max 1 per duel', function () {
@@ -166,7 +180,9 @@ describe('Let Him Go By', function () {
                 expect(this.player2).toBeAbleToSelect(this.goBy2);
                 this.player2.clickCard(this.goBy);
                 expect(this.player1.hand.length).toBe(hand - 1);
-                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to make player1 discard 1 card at random');
+                expect(this.getChatLogs(10)).toContain(
+                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
+                );
 
                 expect(this.player2).toHavePrompt('Honor Bid');
                 this.player1.clickPrompt('1');
@@ -175,6 +191,41 @@ describe('Let Him Go By', function () {
                 this.player1.clickCard(this.akikore);
 
                 expect(this.player2).not.toHavePrompt('Triggered Abilities');
+            });
+        });
+
+        describe('anti-movement reaction', function () {
+            it('bows a character that moves into a conflict', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.akikore],
+                    defenders: []
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.oneWithTheSea);
+                this.player1.clickCard(this.yoshi);
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                this.player2.clickCard(this.goBy);
+                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to bow Kakita Yoshi');
+            });
+
+            it('bows a character that is played into a conflict', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.akikore],
+                    defenders: []
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.stewardOfLaw);
+                this.player1.clickPrompt('0');
+                this.player1.clickPrompt('Conflict');
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                this.player2.clickCard(this.goBy);
+                expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to bow Steward of Law');
             });
         });
     });
