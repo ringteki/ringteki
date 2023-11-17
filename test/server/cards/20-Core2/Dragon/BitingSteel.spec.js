@@ -2,7 +2,7 @@ const { GameModes } = require('../../../../../build/server/GameModes');
 
 describe('Bitting Steel', function () {
     integration(function () {
-        describe('Duel Focus', function () {
+        describe('Duel Effect', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
@@ -21,14 +21,21 @@ describe('Bitting Steel', function () {
                 this.raitsugu = this.player2.findCardByName('mirumoto-raitsugu');
                 this.bitingSteel = this.player2.findCardByName('biting-steel');
                 this.katana = this.player2.findCardByName('fine-katana');
-
-                this.player1.pass();
-                this.player2.playAttachment(this.bitingSteel, this.raitsugu);
-                this.player1.pass();
-                this.player2.playAttachment(this.katana, this.raitsugu);
             });
 
+            it('shouldn\'t attach if you don\'t have a weapon', function () {
+                this.player1.pass();
+                expect(this.player2).toHavePrompt('Action Window');
+                this.player2.clickCard(this.bitingSteel);
+                expect(this.player2).toHavePrompt('Action Window');
+            })
+
             it('contributes to duel', function () {
+                this.player1.pass();
+                this.player2.playAttachment(this.katana, this.raitsugu);
+                this.player1.pass();
+                this.player2.playAttachment(this.bitingSteel, this.raitsugu);
+
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.makoto],
@@ -37,8 +44,6 @@ describe('Bitting Steel', function () {
 
                 this.player2.clickCard(this.raitsugu);
                 this.player2.clickCard(this.makoto);
-                this.player1.clickPrompt('1');
-                this.player2.clickPrompt('1');
                 expect(this.player2).toHavePrompt('Any reactions?');
 
                 this.player2.clickCard(this.bitingSteel);
@@ -50,6 +55,12 @@ describe('Bitting Steel', function () {
                 expect(this.getChatLogs(5)).toContain(
                     'player2 uses Biting Steel to add the skill bonus of Fine Katana (2) to their duel total'
                 );
+
+                expect(this.player1).toHavePrompt('Honor Bid');
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+
                 expect(this.getChatLogs(5)).toContain('Mirumoto Raitsugu: 6 vs 5: Akodo Makoto');
             });
         });
@@ -63,7 +74,7 @@ describe('Bitting Steel', function () {
                     },
                     player2: {
                         inPlay: ['doomed-shugenja', 'enlightened-warrior'],
-                        hand: ['biting-steel']
+                        hand: ['biting-steel', 'daikyu']
                     }
                 });
 
@@ -73,7 +84,10 @@ describe('Bitting Steel', function () {
                 this.doomed = this.player2.findCardByName('doomed-shugenja');
                 this.warrior = this.player2.findCardByName('enlightened-warrior');
                 this.bitingSteel = this.player2.findCardByName('biting-steel');
+                this.daikyu = this.player2.findCardByName('daikyu');
 
+                this.player1.pass();
+                this.player2.playAttachment(this.daikyu, this.warrior);
                 this.player1.pass();
                 this.player2.playAttachment(this.bitingSteel, this.warrior);
             });

@@ -7,7 +7,7 @@ export default class BitingSteel extends DrawCard {
     static id = 'biting-steel';
 
     public setupCardAbilities() {
-        this.duelFocus({
+        this.duelChallenge({
             title: 'Add a Weapon to your duel stats',
             duelCondition: (duel, context) =>
                 (duel.duelType === DuelTypes.Military || duel.duelType === DuelTypes.Political) &&
@@ -15,8 +15,7 @@ export default class BitingSteel extends DrawCard {
             target: {
                 cardType: CardTypes.Attachment,
                 cardCondition: (card: DrawCard, context) =>
-                    card.parent &&
-                    context.event.duel.isInvolved(card.parent) &&
+                    card.parent && card.parent === context.source.parent &&
                     this.#getAttachmentSkill(card, context) !== 0,
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     target: context.target.parent,
@@ -53,6 +52,18 @@ export default class BitingSteel extends DrawCard {
                 })
             })
         });
+    }
+
+    public canAttach(card) {
+        if(card.getType() !== CardTypes.Character) {
+            return false;
+        }
+
+        if (!card.attachments.some((card) => card.hasTrait('weapon'))) {
+            return false;
+        }
+
+        return super.canAttach(card);
     }
 
     #getAttachmentSkill(card: DrawCard, context: TriggeredAbilityContext) {

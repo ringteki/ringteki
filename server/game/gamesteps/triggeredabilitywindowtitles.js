@@ -24,7 +24,8 @@ const AbilityTypeToWord = {
     interrupt: 'interrupt',
     reaction: 'reaction',
     forcedreaction: 'forced reaction',
-    forcedinterrupt: 'forced interrupt'
+    forcedinterrupt: 'forced interrupt',
+    duelreaction: 'reaction'
 };
 
 function FormatTitles(titles) {
