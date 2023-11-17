@@ -1,6 +1,11 @@
-import { CardTypes, Decks, Durations, Locations, Players } from '../../../Constants';
+import { CardTypes, Durations, Locations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import type AbilityContext from '../../../AbilityContext';
+
+function cardsToDiscard(context: AbilityContext) {
+    return context.player.dynastyDeck.first(4);
+}
 
 export default class SecondWind extends DrawCard {
     static id = 'second-wind';
@@ -9,27 +14,25 @@ export default class SecondWind extends DrawCard {
         this.action({
             title: 'put a character from your discard pile into play',
             cannotTargetFirst: true,
-            cost: [AbilityDsl.costs.discardTopCardsFromDeck({ amount: 4, deck: Decks.DynastyDeck })],
             gameAction: AbilityDsl.actions.sequential([
-                AbilityDsl.actions.handler({
-                    handler: () => true
-                }),
+                AbilityDsl.actions.discardCard((context) => ({
+                    target: cardsToDiscard(context)
+                })),
                 AbilityDsl.actions.selectCard((context) => ({
                     location: Locations.DynastyDiscardPile,
                     cardType: CardTypes.Character,
-                    cardCondition: (card) => !card.isUnique,
+                    cardCondition: (card) => !card.isUnique(),
                     cntroller: Players.Self,
                     targets: true,
                     gameAction: AbilityDsl.actions.multiple([
-                        AbilityDsl.actions.putIntoPlay(),
-                        AbilityDsl.actions.cardLastingEffect((context) => ({
-                            duration: Durations.UntilEndOfConflict,
+                        AbilityDsl.actions.putIntoConflict(),
+                        AbilityDsl.actions.cardLastingEffect(() => ({
+                            duration: Durations.UntilEndOfPhase,
+                            location: [Locations.PlayArea],
                             effect: AbilityDsl.effects.delayedEffect({
                                 when: {
-                                    onPhaseEnded: () => true
+                                    onConflictFinished: () => true
                                 },
-                                message: "{0} returns to the bottom of the deck due to {1}'s effect",
-                                messageArgs: (effectContext, effectTargets) => [effectTargets, context.source],
                                 gameAction: AbilityDsl.actions.returnToDeck({ bottom: true })
                             })
                         }))
@@ -39,7 +42,8 @@ export default class SecondWind extends DrawCard {
                     messageArgs: (card) => [context.player, card, context.source]
                 }))
             ]),
-            effect: 'put a dynasty character into play'
+            effect: 'find a character to put into play. {1} discards {2}',
+            effectArgs: (context) => [context.player, cardsToDiscard(context)]
         });
     }
 }
