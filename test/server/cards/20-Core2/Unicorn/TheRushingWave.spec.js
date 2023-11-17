@@ -17,6 +17,8 @@ describe('The Rushing Wave', function () {
             this.theRushingWave = this.player1.findCardByName('the-rushing-wave');
 
             this.pilgrimage = this.player2.findCardByName('pilgrimage');
+            this.manicuredGarden = this.player2.findCardByName('manicured-garden');
+            this.manicuredGarden.facedown = false;
         });
 
         it('should set the province strength to 0', function () {
@@ -28,7 +30,7 @@ describe('The Rushing Wave', function () {
                 "player1 plays The Rushing Wave to set Pilgrimage's strength to 0 until the end of the phase"
             );
             expect(this.getChatLogs(5)).toContain(
-                'player1 channels their water affinity to also set the strength of Manicured Garden and Fertile Fields to 0'
+                'player1 channels their water affinity to also set the strength of Manicured Garden and province 3 to 0'
             );
         });
     });

@@ -3,10 +3,12 @@ import { CardTypes, Durations, Locations } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type { ProvinceCard } from '../../../ProvinceCard';
 
-function adjacentProvinces(centralProvince: ProvinceCard): Array<ProvinceCard> {
-    return centralProvince.controller.getProvinces((province: ProvinceCard) =>
-        centralProvince.controller.areLocationsAdjacent(centralProvince.location, province.location)
-    );
+function adjacentProvinces(centralProvince: ProvinceCard): Array<string | ProvinceCard> {
+    return centralProvince.controller
+        .getProvinces((province: ProvinceCard) =>
+            centralProvince.controller.areLocationsAdjacent(centralProvince.location, province.location)
+        )
+        .map((province: ProvinceCard) => (province.facedown ? province.location : province));
 }
 
 export default class TheRushingWave extends DrawCard {
