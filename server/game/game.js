@@ -1298,7 +1298,9 @@ class Game extends EventEmitter {
             name: player.name,
             faction: player.faction.name || player.faction.value,
             honor: player.getTotalHonor(),
-            lostProvinces: player.getProvinceCards().reduce((count, card) => (card.isBroken ? count + 1 : count), 0),
+            lostProvinces: player
+                .getProvinceCards()
+                .reduce((count, card) => (card && card.isBroken ? count + 1 : count), 0),
             deck: this.formatDeckForSaving(player.deck)
         }));
 
