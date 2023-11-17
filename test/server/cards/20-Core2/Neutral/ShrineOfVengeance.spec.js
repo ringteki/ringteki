@@ -5,17 +5,19 @@ describe('Shrine of Vengeance', function () {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['moto-horde'],
-                    provinces: ['pilgrimage']
+                    provinces: ['pilgrimage', 'manicured-garden']
                 },
                 player2: {
-                    provinces: ['shrine-of-vengeance', 'toshi-ranbo']
+                    provinces: ['shrine-of-vengeance', 'fertile-fields']
                 }
             });
             this.horde = this.player1.findCardByName('moto-horde');
             this.pilgrimage = this.player1.findCardByName('pilgrimage');
+            this.manicured = this.player1.findCardByName('manicured-garden');
+            this.manicured.facedown = false;
 
             this.shrineToVengeance = this.player2.findCardByName('shrine-of-vengeance');
-            this.toshiRanbo = this.player2.findCardByName('toshi-ranbo');
+            this.fertileFields = this.player2.findCardByName('fertile-fields');
 
             this.noMoreActions();
             this.initiateConflict({
@@ -32,8 +34,9 @@ describe('Shrine of Vengeance', function () {
 
             this.player2.clickCard(this.shrineToVengeance);
             expect(this.player2).toHavePrompt('Choose a province');
+            expect(this.player2).not.toBeAbleToSelect(this.manicured);
             expect(this.player2).toBeAbleToSelect(this.pilgrimage);
-            expect(this.player2).toBeAbleToSelect(this.toshiRanbo);
+            expect(this.player2).toBeAbleToSelect(this.fertileFields);
 
             this.player2.clickCard(this.pilgrimage);
 
