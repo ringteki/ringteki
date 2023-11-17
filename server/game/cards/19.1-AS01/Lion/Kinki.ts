@@ -37,7 +37,7 @@ export default class Kinki extends DrawCard {
                     }
                 }
             },
-            limit: AbilityDsl.limit.perRound(1)
+            max: AbilityDsl.limit.perRound(1)
         });
     }
 }
