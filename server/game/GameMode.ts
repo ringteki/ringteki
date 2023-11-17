@@ -160,7 +160,7 @@ const Emerald: GameMode = {
     duelRules: 'printedSkill',
     dynastyPhaseCanPlayAttachments: false,
     dynastyPhaseCanPlayConflictEvents: (action) =>
-        action.phase === Phases.Dynasty || action.abilityType !== AbilityTypes.Action,
+        action.abilityType !== AbilityTypes.Action || action.phase === Phases.Dynasty || action.phase === 'any',
     dynastyPhaseCanPlayConflictCharacters: false,
     dynastyPhasePassingFate: false
 };

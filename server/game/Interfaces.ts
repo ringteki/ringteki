@@ -7,7 +7,7 @@ import DrawCard = require('./drawcard');
 import { ProvinceCard } from './ProvinceCard';
 import CardAbility = require('./CardAbility');
 import { DuelProperties } from './GameActions/DuelAction';
-import { Players, TargetModes, CardTypes, Locations, EventNames, Durations } from './Constants';
+import { Players, TargetModes, CardTypes, Locations, EventNames, Phases } from './Constants';
 import type { StatusToken } from './StatusToken';
 import Player = require('./player');
 
@@ -153,7 +153,8 @@ interface AbilityProps<Context> {
 
 export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> {
     condition?: (context?: AbilityContext<Source>) => boolean;
-    phase?: string;
+    phase?: Phases | 'any';
+    emeraldWorksInDynsty?: boolean;
     anyPlayer?: boolean;
     conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext<Source>) => boolean;
     canTriggerOutsideConflict?: boolean;

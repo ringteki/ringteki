@@ -31,6 +31,7 @@ export default class StarlitSkies extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Look at top 3 cards',
+            phase: 'any',
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Choose which deck to look at:',
