@@ -1,4 +1,4 @@
-xdescribe("Eagle's Rest Peak", function () {
+describe("Eagle's Rest Peak", function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
@@ -39,8 +39,8 @@ xdescribe("Eagle's Rest Peak", function () {
             expect(this.player2).not.toBeAbleToSelect(this.aggressiveMoto);
 
             this.player2.clickCard(this.yokuni);
-            expect(this.getChatLogs(3)).toContain(
-                "player2 uses Eagle's Rest Peak with Togashi Yokuni. It reveals I Can Swim and Way of the Scorpion"
+            expect(this.getChatLogs(10)).toContain(
+                "player2 uses Eagle's Rest Peak to use the insight of Togashi Yokuni, revealing and setting aside 5 cards from player1's hand"
             );
         });
     });

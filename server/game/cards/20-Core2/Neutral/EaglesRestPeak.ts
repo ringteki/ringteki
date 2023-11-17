@@ -4,7 +4,7 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
 export default class EaglesRestPeak extends ProvinceCard {
-    static id = 'eagle-s-peak';
+    static id = 'eagle-s-rest-peak';
 
     public setupCardAbilities() {
         this.action({
@@ -15,6 +15,8 @@ export default class EaglesRestPeak extends ProvinceCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card: DrawCard) => card.isDefending() && card.getCost() > 0
             },
+            effect: 'use the insight of {0}, revealing and setting aside {1} cards from {2}\'s hand',
+            effectArgs: context => [context.target.getCost(), context.player.opponent],
             gameAction: AbilityDsl.actions.sequentialContext((context) => {
                 const opponent = context.player.opponent;
                 const setAsideCards: DrawCard[] = opponent?.hand
