@@ -4,7 +4,7 @@ describe('The Sun Will Rise Again', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-whisperer', 'solemn-scholar'],
+                    inPlay: ['doji-whisperer', 'solemn-scholar', 'adept-of-the-waves'],
                     hand: ['the-sun-will-rise-again']
                 },
                 player2: {
@@ -14,6 +14,7 @@ describe('The Sun Will Rise Again', function () {
 
             this.whisperer = this.player1.findCardByName('doji-whisperer');
             this.scholar = this.player1.findCardByName('solemn-scholar');
+            this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
             this.kuwanan = this.player2.findCardByName('doji-kuwanan');
             this.sun = this.player1.findCardByName('the-sun-will-rise-again');
         });
@@ -75,10 +76,10 @@ describe('The Sun Will Rise Again', function () {
             expect(this.player1.player.getRemainingConflictOpportunitiesForType('political')).toBe(1);
         });
 
-        it('should not trigger if lost by <5', function () {
+        it('should not trigger if lost by <4', function () {
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.scholar],
+                attackers: [this.scholar, this.adeptOfTheWaves],
                 defenders: [this.kuwanan],
                 type: 'military'
             });
