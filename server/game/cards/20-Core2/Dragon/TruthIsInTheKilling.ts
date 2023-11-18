@@ -19,11 +19,11 @@ export default class TruthIsInTheKilling extends DrawCard {
                             target: loser,
                             amount: loser.getFate(),
                             recipient: loser.controller
-                        })),
+                        }));
                         gameActions.push(AbilityDsl.actions.discardFromPlay({
-                            target: duel.loser
-                        }))
-                    })
+                            target: loser
+                        }));
+                    });
                     return { gameActions };
                 }),
                 message: 'discard {0}, returning all fate on them to {1}\'s fate pool',

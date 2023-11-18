@@ -6,7 +6,8 @@ describe('Truth is in the Killing', function () {
                 player1: {
                     fate: 20,
                     inPlay: ['doji-challenger', 'kakita-yoshi', 'daidoji-uji'],
-                    hand: ['truth-is-in-the-killing']
+                    hand: ['truth-is-in-the-killing'],
+                    conflictDiscard: ['two-hands']
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'doji-diplomat'],
@@ -22,6 +23,8 @@ describe('Truth is in the Killing', function () {
             this.tsukune = this.player2.findCardByName('shiba-tsukune');
             this.diplomat = this.player2.findCardByName('doji-diplomat');
             this.pd = this.player2.findCardByName('policy-debate');
+
+            this.hands = this.player1.findCardByName('two-hands');
         });
 
         it('should discard the loser and return fate to its controller', function () {
@@ -96,6 +99,38 @@ describe('Truth is in the Killing', function () {
             expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.truth);
             expect(this.player1).toHavePrompt('Conflict Action Window');
+        });
+
+        it('multiple targets', function () {
+            let fate1 = this.player1.fate;
+            let fate2 = this.player2.fate;
+
+            this.player1.moveCard(this.hands, 'hand');
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger, this.yoshi],
+                defenders: [this.diplomat, this.toshimoko]
+            });
+
+            this.toshimoko.fate = 4;
+            this.diplomat.fate = 3;
+            this.player2.pass();
+
+            this.player1.clickCard(this.truth);
+            this.player1.clickCard(this.challenger);
+            this.player1.clickCard(this.toshimoko);
+            this.player1.clickCard(this.hands);
+            this.player1.clickCard(this.diplomat);
+
+            this.player1.clickPrompt('5');
+            this.player2.clickPrompt('1');
+
+            expect(this.player1.fate).toBe(fate1 - 1);
+            expect(this.player2.fate).toBe(fate2 + 7);
+            expect(this.toshimoko.location).toBe('dynasty discard pile');
+            expect(this.diplomat.location).toBe('dynasty discard pile');
+            expect(this.getChatLogs(10)).toContain('Duel Effect: discard Kakita Toshimoko and Doji Diplomat, returning all fate on them to player2\'s fate pool');
         });
     });
 });
