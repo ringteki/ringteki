@@ -12,15 +12,19 @@ export default class EarthsExamination extends DrawCard {
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.taint()
+                gameAction: AbilityDsl.actions.multiple([
+                    AbilityDsl.actions.taint(),
+                    AbilityDsl.actions.onAffinity((context) => ({
+                        trait: 'earth',
+                        promptTitleForConfirmingAffinity: context.target.isTainted ? undefined : 'Bow that character?',
+                        gameAction: AbilityDsl.actions.bow(),
+                        effect: 'bow {0}',
+                        effectArgs: (context) => [context.target]
+                    }))
+                ])
             },
-            then: (context) => ({
-                gameAction: AbilityDsl.actions.onAffinity({
-                    trait: 'earth',
-                    promptTitleForConfirmingAffinity: 'Bow that character?',
-                    gameAction: AbilityDsl.actions.bow({ target: context.target })
-                })
-            })
+            effect: "reveal {1}'s corruption",
+            effectArgs: (context) => [context.target]
         });
     }
 }
