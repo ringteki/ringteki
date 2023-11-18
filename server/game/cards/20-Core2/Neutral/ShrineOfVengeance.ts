@@ -14,6 +14,7 @@ export default class ShrineOfVengeance extends ProvinceCard {
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,
+                cardCondition: (card: ProvinceCard) => card.facedown,
                 gameAction: AbilityDsl.actions.sequential([
                     AbilityDsl.actions.dishonorProvince(),
                     AbilityDsl.actions.reveal({ chatMessage: true })

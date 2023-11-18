@@ -180,8 +180,8 @@ export enum EffectNames {
     ConsideredLessHonorable = 'consideredLessHonorable',
     CustomFatePhaseFateRemoval = 'customFatePhaseFateRemoval',
     WinDuel = 'winDuel',
-    WinDuelTies = "winDuelTies",
-    IgnoreDuelSkill = "ignoreDuelSkill",
+    WinDuelTies = 'winDuelTies',
+    IgnoreDuelSkill = 'ignoreDuelSkill',
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
     LimitLegalAttackers = 'limitLegalAttackers',
     ModifyHonorTransferGiven = 'modifyHonorTransferGiven',
@@ -191,7 +191,7 @@ export enum EffectNames {
     // New Duel effects
     ModifyDuelSkill = 'modifyDuelSkill',
     ApplyStatusTokensToDuel = 'applyStatusTokensToDuel',
-    DuelIgnorePrintedSkill = 'duelIgnorePrintedSkill',
+    DuelIgnorePrintedSkill = 'duelIgnorePrintedSkill'
 }
 
 export enum Durations {
