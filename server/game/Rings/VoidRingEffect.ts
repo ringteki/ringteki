@@ -8,7 +8,10 @@ export class VoidRingEffect extends BaseAbility {
     public cannotTargetFirst = true;
     public defaultPriority = 2; // Default resolution priority when players have ordering switched off
 
-    constructor(optional: boolean) {
+    constructor(
+        optional: boolean,
+        private onResolution = (resolved: boolean) => {}
+    ) {
         super({
             target: {
                 activePromptTitle: 'Choose character to remove fate from',
@@ -30,9 +33,11 @@ export class VoidRingEffect extends BaseAbility {
                 'void',
                 context.target
             );
+            this.onResolution(true);
             context.game.applyGameAction(context, { removeFate: context.target });
         } else {
             context.game.addMessage('{0} chooses not to resolve the {1} ring', context.player, 'void');
+            this.onResolution(false);
         }
     }
 }

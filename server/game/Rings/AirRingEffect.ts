@@ -31,7 +31,11 @@ export class AirRingEffect extends BaseAbility {
     public cannotTargetFirst = true;
     public defaultPriority = 5; // Default resolution priority when players have ordering switched off
 
-    public constructor(optional: boolean, gameMode: GameModes) {
+    public constructor(
+        optional: boolean,
+        gameMode: GameModes,
+        private onResolution = (resolved: boolean) => {}
+    ) {
         super({
             target: {
                 mode: TargetModes.Select,
@@ -56,6 +60,7 @@ export class AirRingEffect extends BaseAbility {
                 'air',
                 amountToTransfer
             );
+            this.onResolution(true);
             return context.game.actions.gainHonor({ amount: 2 }).resolve(context.player, context);
         }
         if (context.select === TAKE_1) {
@@ -65,6 +70,7 @@ export class AirRingEffect extends BaseAbility {
                 'air',
                 context.player.opponent
             );
+            this.onResolution(true);
             return context.game.actions.takeHonor().resolve(context.player.opponent, context);
         }
         if (!context.game.currentConflict || context.game.currentConflict.element === 'air') {
@@ -73,6 +79,7 @@ export class AirRingEffect extends BaseAbility {
                 context.player,
                 context.game.currentConflict ? 'air' : context.game.currentConflict.element
             );
+            this.onResolution(false);
         }
     }
 }

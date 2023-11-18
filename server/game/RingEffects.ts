@@ -4,7 +4,7 @@ import { EarthRingEffect } from './Rings/EarthRingEffect';
 import { FireRingEffect } from './Rings/FireRingEffect';
 import { VoidRingEffect } from './Rings/VoidRingEffect';
 import { WaterRingEffect } from './Rings/WaterRingEffect';
-import AbilityContext = require('./AbilityContext');
+import AbilityContext from './AbilityContext';
 import BaseAbility = require('./baseability');
 import Player = require('./player');
 
@@ -22,29 +22,59 @@ interface RingAbility extends BaseAbility {
     executeHandler(context: AbilityContext): void;
 }
 
-const ringForElement: Record<Element, RingProps> = {
-    air: { name: 'Air Ring', factory: (optional, gameMode) => new AirRingEffect(optional, gameMode) },
-    earth: { name: 'Earth Ring', factory: (optional, gameMode) => new EarthRingEffect(optional, gameMode) },
-    fire: { name: 'Fire Ring', factory: (optional) => new FireRingEffect(optional) },
-    void: { name: 'Void Ring', factory: (optional) => new VoidRingEffect(optional) },
-    water: { name: 'Water Ring', factory: (optional, gameMode) => new WaterRingEffect(optional, gameMode) }
-};
+type ResolutionCb = (resolved: boolean) => void;
+
+function ringForElement(element: string) {
+    switch (element) {
+        case 'air':
+            return (optional: boolean, gameMode: GameModes, onResolution: ResolutionCb) =>
+                new AirRingEffect(optional, gameMode, onResolution);
+        case 'earth':
+            return (optional: boolean, gameMode: GameModes, onResolution: ResolutionCb) =>
+                new EarthRingEffect(optional, gameMode, onResolution);
+        case 'fire':
+            return (optional: boolean, gameMode: GameModes, onResolution: ResolutionCb) =>
+                new FireRingEffect(optional, onResolution);
+        case 'void':
+            return (optional: boolean, gameMode: GameModes, onResolution: ResolutionCb) =>
+                new VoidRingEffect(optional, onResolution);
+        case 'water':
+            return (optional: boolean, gameMode: GameModes, onResolution: ResolutionCb) =>
+                new WaterRingEffect(optional, gameMode, onResolution);
+        default:
+            throw new Error(`Unknown ring effect of ${element}`);
+    }
+}
 
 export class RingEffects {
-    static contextFor(player: Player, element: string, optional = true) {
-        const ring = ringForElement[element];
-        if (!ring) {
-            throw new Error(`Unknown ring effect of ${element}`);
-        }
-
-        const context = player.game.getFrameworkContext(player);
+    static contextFor(
+        player: Player,
+        element: string,
+        optional = true,
+        onResolution: ResolutionCb = () => {}
+    ): Omit<AbilityContext, 'ability'> & { ability: RingAbility } {
+        const ring = ringForElement(element);
+        const context: any = player.game.getFrameworkContext(player);
         context.source = player.game.rings[element];
         const gameModeWithDefault = context.game.gameMode || GameModes.Stronghold;
-        context.ability = ring.factory(optional, gameModeWithDefault);
+        context.ability = ring(optional, gameModeWithDefault, onResolution);
         return context;
     }
 
-    static getRingName(element: string): undefined | string {
-        return ringForElement[element] ? ringForElement[element].name : undefined;
+    static getRingName(element: string) {
+        switch (element) {
+            case 'air':
+                return 'Air Ring';
+            case 'earth':
+                return 'Earth Ring';
+            case 'fire':
+                return 'Fire Ring';
+            case 'void':
+                return 'Void Ring';
+            case 'water':
+                return 'Water Ring';
+            default:
+                return undefined;
+        }
     }
 }

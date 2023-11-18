@@ -25,7 +25,11 @@ export class WaterRingEffect extends BaseAbility {
     public cannotTargetFirst = true;
     public defaultPriority = 3; // Default resolution priority when players have ordering switched off
 
-    constructor(optional: boolean, gameMode: GameModes) {
+    constructor(
+        optional: boolean,
+        gameMode: GameModes,
+        private onResolution = (resolved: boolean) => {}
+    ) {
         super({
             target: {
                 activePromptTitle: 'Choose character to bow or unbow',
@@ -40,13 +44,16 @@ export class WaterRingEffect extends BaseAbility {
     public executeHandler(context: AbilityContext) {
         if (!context.target) {
             context.game.addMessage('{0} chooses not to resolve the {1} ring', context.player, 'water');
+            this.onResolution(false);
             return;
         }
         if (context.target.bowed) {
             context.game.addMessage('{0} resolves the {1} ring, readying {2}', context.player, 'water', context.target);
+            this.onResolution(true);
             context.game.applyGameAction(context, { ready: context.target });
         } else {
             context.game.addMessage('{0} resolves the {1} ring, bowing {2}', context.player, 'water', context.target);
+            this.onResolution(true);
             context.game.applyGameAction(context, { bow: context.target });
         }
     }

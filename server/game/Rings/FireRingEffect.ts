@@ -8,7 +8,10 @@ export class FireRingEffect extends BaseAbility {
     public cannotTargetFirst = true;
     public defaultPriority = 4; // Default resolution priority when players have ordering switched off
 
-    constructor(private optional: boolean) {
+    constructor(
+        private optional: boolean,
+        private onResolution = (resolved: boolean) => {}
+    ) {
         super({
             target: {
                 activePromptTitle: 'Choose character to honor or dishonor',
@@ -23,6 +26,7 @@ export class FireRingEffect extends BaseAbility {
     public executeHandler(context: AbilityContext) {
         if (!context.target) {
             context.game.addMessage('{0} chooses not to resolve the {1} ring', context.player, 'fire');
+            this.onResolution(false);
             return;
         }
 
@@ -38,6 +42,7 @@ export class FireRingEffect extends BaseAbility {
                     'fire',
                     context.target
                 );
+                this.onResolution(true);
                 context.game.applyGameAction(context, { honor: context.target });
             });
         }
@@ -51,6 +56,7 @@ export class FireRingEffect extends BaseAbility {
                     'fire',
                     context.target
                 );
+                this.onResolution(true);
                 context.game.applyGameAction(context, { dishonor: context.target });
             });
         }
@@ -60,9 +66,10 @@ export class FireRingEffect extends BaseAbility {
 
         if (this.optional) {
             choices.push("Don't resolve the fire ring");
-            handlers.push(() =>
-                context.game.addMessage('{0} chooses not to resolve the {1} ring', context.player, 'fire')
-            );
+            handlers.push(() => {
+                context.game.addMessage('{0} chooses not to resolve the {1} ring', context.player, 'fire');
+                this.onResolution(false);
+            });
         }
 
         context.game.promptWithHandlerMenu(context.player, {
