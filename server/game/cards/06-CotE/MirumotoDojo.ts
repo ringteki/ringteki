@@ -12,19 +12,20 @@ export default class MirumotoDojo extends DrawCard {
             title: 'Initiate a military duel',
             initiateDuel: {
                 type: DuelTypes.Military,
-                message: '{0} 1 fate from {1}{2}{3}{4}',
+                message: '{0}{1}{2}{3}{4}',
                 messageArgs: (duel) =>
-                    this.#wonByDuelist(duel)
-                        ? ['discard', duel.loser, '', this.#loserOwner(duel), '']
-                        : ['move', duel.loser, ' to ', this.#loserOwner(duel), "'s pool"],
+                    duel.loser ? (this.#wonByDuelist(duel)
+                        ? ['discard  1 fate from ', duel.loser, '', this.#loserOwner(duel), '']
+                        : ['move  1 fate from ', duel.loser, ' to ', this.#loserOwner(duel), "'s pool"])
+                        : ['no effect', '', '', '', ''],
                 gameAction: (duel) =>
                     AbilityDsl.actions.joint(
-                        duel.loser.map((loserChar) =>
+                        duel.loser ? duel.loser.map((loserChar) =>
                             AbilityDsl.actions.removeFate({
                                 target: loserChar,
                                 recipient: this.#wonByDuelist(duel) ? undefined : loserChar.owner
                             })
-                        )
+                        ) : []
                     )
             }
         });

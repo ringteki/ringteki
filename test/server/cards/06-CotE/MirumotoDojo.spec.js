@@ -105,6 +105,25 @@ describe('Mirumoto Dojo', function() {
                 expect(this.dojiChallenger.fate).toBe(dojiChallengerFate - 1);
                 expect(this.player1.player.fate).toBe(player1Fate);
             });
+
+            it('tie', function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.dojiChallenger],
+                    defenders: [this.mirumotoRaitsugu],
+                    type: 'military'
+                });
+                this.player2.pass();
+                this.player1.clickCard(this.mirumotoDojo);
+                this.player1.clickCard(this.dojiChallenger);
+                this.player1.clickCard(this.mirumotoRaitsugu);
+
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                expect(this.player2).toHavePrompt('Conflict Action Window');
+                expect(this.getChatLogs(10)).toContain('The duel ends in a draw');
+                expect(this.getChatLogs(10)).toContain('Duel Effect: no effect');
+            });
         });
     });
 });
