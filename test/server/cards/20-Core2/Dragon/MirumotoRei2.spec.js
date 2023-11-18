@@ -12,7 +12,8 @@ describe('Mirumoto Rei 2', function () {
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'doji-diplomat'],
                     hand: ['embrace-the-void', 'policy-debate']
-                }
+                },
+                gameMode: 'emerald'
             });
 
             this.uji = this.player1.findCardByName('daidoji-uji');
@@ -134,13 +135,13 @@ describe('Mirumoto Rei 2', function () {
             expect(this.player1).toBeAbleToSelect(this.rei);
             this.player1.clickCard(this.rei);
 
+            expect(this.getChatLogs(10)).toContain('player1 uses Mirumoto Rei to initiate a military duel : Mirumoto Rei vs. Shiba Tsukune');
             expect(this.getChatLogs(10)).toContain('player1 uses Mirumoto Rei to add 2 to their duel total');
 
             this.player1.clickPrompt('5');
             this.player2.clickPrompt('1');
 
             expect(this.tsukune.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(10)).toContain('player1 uses Mirumoto Rei to initiate a military duel : Mirumoto Rei vs. Shiba Tsukune');
             expect(this.getChatLogs(10)).toContain('Mirumoto Rei: 10 vs 5: Shiba Tsukune');
             expect(this.getChatLogs(10)).toContain('Duel Effect: injure Shiba Tsukune');
         });

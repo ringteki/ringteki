@@ -15,10 +15,10 @@ export default class MirumotoRei2 extends DrawCard {
             duelCondition: (duel, context) => duel.participants.includes(context.source) && this.getWeaponCount(context) > 0,
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
                 target: context.event.duel,
-                effect: AbilityDsl.effects.modifyDuelSkill(context => ({
+                effect: AbilityDsl.effects.modifyDuelSkill({
                     amount: this.getWeaponCount(context),
                     player: context.player
-                })),
+                }),
                 duration: Durations.UntilEndOfDuel
             })),
             effect: 'add {1} to their duel total',
