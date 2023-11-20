@@ -1,4 +1,4 @@
-const escapeRegex = require('../util.js').escapeRegex;
+const { escapeRegex } = require('../util.js');
 const { logger } = require('../logger');
 
 class UserService {
@@ -7,11 +7,12 @@ class UserService {
     }
 
     getUserByUsername(username) {
-        return this.users.find({ username: {'$regex': new RegExp('^' + escapeRegex(username.toLowerCase()) + '$', 'i') }})
-            .then(users => {
+        return this.users
+            .find({ username: { $regex: new RegExp('^' + escapeRegex(username.toLowerCase()) + '$', 'i') } })
+            .then((users) => {
                 return users[0];
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error('Error fetching users', err);
 
                 throw new Error('Error occured fetching users');
@@ -19,11 +20,12 @@ class UserService {
     }
 
     getUserByEmail(email) {
-        return this.users.find({ email: {'$regex': new RegExp('^' + escapeRegex(email.toLowerCase()) + '$', 'i') }})
-            .then(users => {
+        return this.users
+            .find({ email: { $regex: new RegExp('^' + escapeRegex(email.toLowerCase()) + '$', 'i') } })
+            .then((users) => {
                 return users[0];
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error('Error fetching users', err);
 
                 throw new Error('Error occured fetching users');
@@ -31,11 +33,12 @@ class UserService {
     }
 
     getUserById(id) {
-        return this.users.find({ _id: id })
-            .then(users => {
+        return this.users
+            .find({ _id: id })
+            .then((users) => {
                 return users[0];
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error('Error fetching users', err);
 
                 throw new Error('Error occured fetching users');
@@ -43,11 +46,12 @@ class UserService {
     }
 
     addUser(user) {
-        return this.users.insert(user)
+        return this.users
+            .insert(user)
             .then(() => {
                 return user;
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error('Error adding user', err, user);
 
                 throw new Error('Error occured adding user');
@@ -62,11 +66,11 @@ class UserService {
             permissions: user.permissions
         };
 
-        if(user.password && user.password !== '') {
+        if (user.password && user.password !== '') {
             toSet.password = user.password;
         }
 
-        return this.users.update({ username: user.username }, { '$set': toSet }).catch(err => {
+        return this.users.update({ username: user.username }, { $set: toSet }).catch((err) => {
             logger.error(err);
 
             throw new Error('Error setting user details');
@@ -74,18 +78,26 @@ class UserService {
     }
 
     updateBlockList(user) {
-        return this.users.update({ username: user.username }, { '$set': {
-            blockList: user.blockList
-        } }).catch(err => {
-            logger.error(err);
+        return this.users
+            .update(
+                { username: user.username },
+                {
+                    $set: {
+                        blockList: user.blockList
+                    }
+                }
+            )
+            .catch((err) => {
+                logger.error(err);
 
-            throw new Error('Error setting user details');
-        });
+                throw new Error('Error setting user details');
+            });
     }
 
     setResetToken(user, token, tokenExpiration) {
-        return this.users.update({ username: user.username }, { '$set': { resetToken: token, tokenExpires: tokenExpiration } })
-            .catch(err => {
+        return this.users
+            .update({ username: user.username }, { $set: { resetToken: token, tokenExpires: tokenExpiration } })
+            .catch((err) => {
                 logger.error(err);
 
                 throw new Error('Error setting reset token');
@@ -93,17 +105,17 @@ class UserService {
     }
 
     setPassword(user, password) {
-        return this.users.update({ username: user.username }, { '$set': { password: password } })
-            .catch(err => {
-                logger.error(err);
+        return this.users.update({ username: user.username }, { $set: { password: password } }).catch((err) => {
+            logger.error(err);
 
-                throw new Error('Error setting password');
-            });
+            throw new Error('Error setting password');
+        });
     }
 
     clearResetToken(user) {
-        return this.users.update({ username: user.username }, { '$set': { resetToken: undefined, tokenExpires: undefined } })
-            .catch(err => {
+        return this.users
+            .update({ username: user.username }, { $set: { resetToken: undefined, tokenExpires: undefined } })
+            .catch((err) => {
                 logger.error(err);
 
                 throw new Error('Error clearing reset token');
