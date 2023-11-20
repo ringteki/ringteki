@@ -1,9 +1,7 @@
-const { TargetModes } = require('../Constants');
+import { TargetModes } from '../Constants';
 
-class SelectChoice {
-    constructor(choice) {
-        this.choice = choice;
-    }
+export class SelectChoice {
+    constructor(public choice: string) {}
 
     getShortSummary() {
         return {
@@ -14,5 +12,3 @@ class SelectChoice {
         };
     }
 }
-
-module.exports = SelectChoice;
