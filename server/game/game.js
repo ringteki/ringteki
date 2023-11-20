@@ -2,7 +2,7 @@ const _ = require('underscore');
 const EventEmitter = require('events');
 
 const ChatCommands = require('./chatcommands.js');
-const GameChat = require('./gamechat.js');
+const { GameChat } = require('./GameChat');
 const EffectEngine = require('./effectengine.js');
 const Player = require('./player.js');
 const Spectator = require('./spectator.js');
@@ -113,6 +113,7 @@ class Game extends EventEmitter {
      * @param {Array} args to match the references in @string
      */
     addMessage() {
+        // @ts-ignore
         this.gameChat.addMessage(...arguments);
     }
 
@@ -123,6 +124,7 @@ class Game extends EventEmitter {
      * @param {Array} args to match the references in @string
      */
     addAlert() {
+        // @ts-ignore
         this.gameChat.addAlert(...arguments);
     }
 
