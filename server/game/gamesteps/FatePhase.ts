@@ -49,9 +49,16 @@ export class FatePhase extends Phase {
     }
 
     promptPlayerToDiscard(player: Player, cardsToDiscard: Set<DrawCard>) {
+        for (const card of cardsToDiscard) {
+            if (!characterShouldBeDiscarded(card)) {
+                cardsToDiscard.delete(card);
+            }
+        }
+
         if (cardsToDiscard.size === 0) {
             return;
         }
+
         this.game.promptForSelect(player, {
             source: 'Fate Phase',
             activePromptTitle: 'Choose character to discard\n(or click Done to discard all characters with no fate)',
@@ -64,13 +71,8 @@ export class FatePhase extends Phase {
                 this.game.applyGameAction(null, { discardFromPlay: selectedCard });
 
                 cardsToDiscard.delete(selectedCard);
-                for (const card of cardsToDiscard) {
-                    if (!characterShouldBeDiscarded(card)) {
-                        cardsToDiscard.delete(card);
-                    }
-                }
 
-                this.promptPlayerToDiscard(player, cardsToDiscard);
+                this.game.queueSimpleStep(() => this.promptPlayerToDiscard(player, cardsToDiscard));
                 return true;
             },
             onCancel: () => {
