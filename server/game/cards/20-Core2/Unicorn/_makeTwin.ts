@@ -50,7 +50,7 @@ export function makeTwin(id: string, opt: { siblingName: string; title: string; 
 
                         AbilityDsl.actions
                             .cardLastingEffect({
-                                effect: AbilityDsl.effects.cardCannot('triggerAbilities'),
+                                effect: AbilityDsl.effects.blank(),
                                 duration: Durations.UntilEndOfRound,
                                 target: newCharacter
                             })
