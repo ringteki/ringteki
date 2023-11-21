@@ -17,7 +17,10 @@ I Dynasty Phase
  */
 
 export class DynastyPhase extends Phase {
-    constructor(game: Game, private gainFate = true) {
+    constructor(
+        game: Game,
+        private gainFate = true
+    ) {
         super(game, Phases.Dynasty);
         this.initialise([
             new SimpleStep(game, () => this.#beginDynasty()),

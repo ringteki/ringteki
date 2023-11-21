@@ -26,7 +26,7 @@ export default class CeremonialRobes extends DrawCard {
         this.action({
             title: 'Place a card from your deck faceup on a province',
             effect: 'look at the top 3 cards of their dynasty deck',
-            phase: 'any',
+            evenDuringDynasty: true,
             target: {
                 location: Locations.Provinces,
                 cardType: CardTypes.Province,

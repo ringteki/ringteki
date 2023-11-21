@@ -33,6 +33,7 @@ export interface GameMode {
     dynastyPhaseCanPlayConflictCharacters: boolean;
     dynastyPhaseForcedFatePerRound?: number;
     dynastyPhasePassingFate: boolean;
+    dynastyPhaseActionsFromCardsInPlay: boolean;
     fatePerRoundForced?: number;
     fatePhaseForceDiscardFromBrokenProvinces: boolean;
     fatePhasePutFateOnRings: boolean;
@@ -61,9 +62,10 @@ const Stronghold: GameMode = {
     deckoutHonorLoss: 5,
     disguiseKeepsCharactersInSameLocation: false,
     duelRules: 'currentSkill',
+    dynastyPhaseActionsFromCardsInPlay: true,
     dynastyPhaseCanPlayAttachments: false,
-    dynastyPhaseCanPlayConflictEvents: () => true,
     dynastyPhaseCanPlayConflictCharacters: false,
+    dynastyPhaseCanPlayConflictEvents: () => true,
     dynastyPhaseForcedFatePerRound: undefined,
     dynastyPhasePassingFate: true,
     fatePerRoundForced: undefined,
@@ -160,9 +162,12 @@ const Emerald: GameMode = {
     duelRules: 'printedSkill',
     dynastyPhaseCanPlayAttachments: false,
     dynastyPhaseCanPlayConflictEvents: (action) =>
-        action.abilityType !== AbilityTypes.Action || action.phase === Phases.Dynasty || action.phase === 'any',
+        action.abilityType !== AbilityTypes.Action ||
+        action.phase === Phases.Dynasty ||
+        (action.card as BaseCard).isDynasty,
     dynastyPhaseCanPlayConflictCharacters: false,
-    dynastyPhasePassingFate: false
+    dynastyPhasePassingFate: false,
+    dynastyPhaseActionsFromCardsInPlay: false
 };
 const Obsidian: GameMode = {
     ...Stronghold,

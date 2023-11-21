@@ -145,6 +145,7 @@ interface AbilityProps<Context> {
     printedAbility?: boolean;
     cannotTargetFirst?: boolean;
     effect?: string;
+    evenDuringDynasty?: boolean;
     effectArgs?: EffectArg | ((context: Context) => EffectArg);
     gameAction?: GameAction | GameAction[];
     handler?: (context?: AbilityContext) => void;

@@ -1,6 +1,6 @@
 import type AbilityContext from './AbilityContext';
 import CardAbility from './CardAbility';
-import { AbilityTypes, CardTypes, EffectNames, Phases, PlayTypes } from './Constants';
+import { AbilityTypes, CardTypes, EffectNames, Locations, Phases, PlayTypes } from './Constants';
 import { parseGameMode } from './GameMode';
 import type { ActionProps } from './Interfaces';
 import type BaseCard from './basecard.js';
@@ -42,6 +42,7 @@ export class CardAction extends CardAbility {
     conflictProvinceCondition: (province: ProvinceCard, context: AbilityContext) => boolean;
     doesNotTarget: boolean;
     phase: string;
+    evenDuringDynasty: boolean;
 
     condition?: (context?: AbilityContext) => boolean;
 
@@ -49,11 +50,30 @@ export class CardAction extends CardAbility {
         super(game, card, properties);
 
         this.phase = properties.phase ?? 'any';
+        this.evenDuringDynasty = properties.evenDuringDynasty ?? false;
         this.anyPlayer = properties.anyPlayer ?? false;
         this.condition = properties.condition;
         this.doesNotTarget = (properties as any).doesNotTarget;
         this.conflictProvinceCondition = properties.conflictProvinceCondition ?? ((province) => province === this.card);
         this.canTriggerOutsideConflict = !!properties.canTriggerOutsideConflict;
+    }
+
+    #passDynastyPhaseRequirements(context: AbilityContext) {
+        const gameMode = parseGameMode(this.game.gameMode);
+        if (this.evenDuringDynasty) {
+            return true;
+        }
+        switch (this.card.type) {
+            case CardTypes.Holding:
+                return gameMode.dynastyPhaseActionsFromCardsInPlay;
+
+            case CardTypes.Event:
+                return gameMode.dynastyPhaseCanPlayConflictEvents(this);
+
+            case CardTypes.Character:
+            case CardTypes.Attachment:
+                return gameMode.dynastyPhaseActionsFromCardsInPlay;
+        }
     }
 
     meetsRequirements(context: AbilityContext = this.createContext(), ignoredRequirements = []) {
@@ -69,12 +89,11 @@ export class CardAction extends CardAbility {
             return 'phase';
         }
 
+        const gameMode = parseGameMode(this.game.gameMode);
         if (
             !ignoredRequirements.includes('phase') &&
             this.game.currentPhase === Phases.Dynasty &&
-            !parseGameMode(this.game.gameMode).dynastyPhaseCanPlayConflictEvents(this) &&
-            this.card.type === CardTypes.Event &&
-            context.playType === PlayTypes.PlayFromHand
+            !this.#passDynastyPhaseRequirements(context)
         ) {
             return 'phase';
         }
