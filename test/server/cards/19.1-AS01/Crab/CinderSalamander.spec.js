@@ -31,7 +31,7 @@ describe('Cinder Salamander', function () {
 
                 expect(this.cinderSalamander.location).toBe('dynasty deck');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Cinder Salamander to shuffle Cinder Salamander into player1\'s dynasty deck'
+                    "player1 uses Cinder Salamander to shuffle Cinder Salamander into player1's dynasty deck"
                 );
 
                 this.player2.clickCard(this.chagatai);
@@ -55,7 +55,7 @@ describe('Cinder Salamander', function () {
                 this.player1.clickCard(this.cinderSalamander);
                 expect(this.cinderSalamander.location).toBe('dynasty deck');
                 expect(this.getChatLogs(5)).toContain(
-                    'player1 uses Cinder Salamander to shuffle Cinder Salamander into player1\'s dynasty deck'
+                    "player1 uses Cinder Salamander to shuffle Cinder Salamander into player1's dynasty deck"
                 );
             });
         });
@@ -94,7 +94,9 @@ describe('Cinder Salamander', function () {
                 this.player1.player.moveCard(this.salamander3, 'dynasty deck');
 
                 this.player1.clickCard(this.salamander1);
-                expect(this.getChatLogs(5)).toContain('player1 uses Cinder Salamander to search their deck and provinces for other copies of Cinder Salamander and put them into play');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Cinder Salamander to search their deck and provinces for other copies of Cinder Salamander and put them into play'
+                );
                 expect(this.player1).toHavePrompt('Select characters to put into play from your deck');
                 expect(this.player1).toHavePromptButton('Cinder Salamander (2)');
 
@@ -119,8 +121,10 @@ describe('Cinder Salamander', function () {
 
                 this.player1.clickCard(this.salamander1);
                 this.player1.clickPrompt('Take nothing');
-                expect(this.getChatLogs(5)).toContain('player1 uses Cinder Salamander to search their deck and provinces for other copies of Cinder Salamander and put them into play');
-                expect(this.getChatLogs(5)).toContain('player1 finds no salamanders in their deck');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Cinder Salamander to search their deck and provinces for other copies of Cinder Salamander and put them into play'
+                );
+                expect(this.getChatLogs(5)).toContain('player1 takes nothing');
 
                 expect(this.player1).toHavePrompt('Select characters to put into play from your provinces');
                 expect(this.player1).toBeAbleToSelect(this.salamander2);

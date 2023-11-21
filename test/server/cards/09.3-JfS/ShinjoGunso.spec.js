@@ -1,11 +1,21 @@
-describe('Shinjo Gunso', function() {
-    integration(function() {
-        describe('Shinjo Gunso\'s ability', function() {
-            beforeEach(function() {
+describe('Shinjo Gunso', function () {
+    integration(function () {
+        describe("Shinjo Gunso's ability", function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'dynasty',
                     player1: {
-                        dynastyDiscard: ['shinjo-gunso', 'imperial-storehouse', 'favorable-ground', 'hida-kisada', 'borderlands-defender', 'hida-guardian', 'favorable-dealbroker', 'shinjo-yasamura', 'shinjo-yasamura'],
+                        dynastyDiscard: [
+                            'shinjo-gunso',
+                            'imperial-storehouse',
+                            'favorable-ground',
+                            'hida-kisada',
+                            'borderlands-defender',
+                            'hida-guardian',
+                            'favorable-dealbroker',
+                            'shinjo-yasamura',
+                            'shinjo-yasamura'
+                        ],
                         dynastyDeckSize: 4
                     }
                 });
@@ -26,14 +36,14 @@ describe('Shinjo Gunso', function() {
                 this.player1.moveCard(this.hidaGuardian, 'dynasty deck');
             });
 
-            it('should react on entering play', function() {
+            it('should react on entering play', function () {
                 this.player1.clickCard(this.gunso);
                 this.player1.clickPrompt('0');
                 expect(this.player1).toHavePrompt('Triggered Abilities');
                 expect(this.player1).toBeAbleToSelect(this.gunso);
             });
 
-            it('should allow you to put a character into play from the top 5 cards', function() {
+            it('should allow you to put a character into play from the top 5 cards', function () {
                 this.player1.clickCard(this.gunso);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.gunso);
@@ -50,11 +60,15 @@ describe('Shinjo Gunso', function() {
                 expect(this.favorableGround.location).toBe('dynasty discard pile');
                 expect(this.borderlands.location).toBe('dynasty discard pile');
                 expect(this.kisada.location).toBe('dynasty discard pile');
-                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
-                expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play'
+                );
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender'
+                );
             });
 
-            it('should allow you to put a character into play from the top 5 cards', function() {
+            it('should allow you to put a character into play from the top 5 cards', function () {
                 this.player1.clickCard(this.gunso);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.gunso);
@@ -71,11 +85,15 @@ describe('Shinjo Gunso', function() {
                 expect(this.favorableGround.location).toBe('dynasty discard pile');
                 expect(this.borderlands.location).toBe('dynasty discard pile');
                 expect(this.kisada.location).toBe('dynasty discard pile');
-                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
-                expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play'
+                );
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 puts Hida Guardian into play and discards Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender'
+                );
             });
 
-            it('should work with less than 5 cards', function() {
+            it('should work with less than 5 cards', function () {
                 this.player1.moveCard(this.storehouse, 'dynasty discard pile');
                 this.player1.moveCard(this.favorableGround, 'dynasty discard pile');
                 this.player1.moveCard(this.kisada, 'dynasty discard pile');
@@ -89,11 +107,15 @@ describe('Shinjo Gunso', function() {
                 this.player1.clickPrompt('Hida Guardian');
 
                 expect(this.hidaGuardian.location).toBe('play area');
-                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
-                expect(this.getChatLogs(5)).toContain('player1 puts Hida Guardian into play and discards Borderlands Defender');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play'
+                );
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 puts Hida Guardian into play and discards Borderlands Defender'
+                );
             });
 
-            it('should work with 0 cards', function() {
+            it('should work with 0 cards', function () {
                 this.player1.moveCard(this.storehouse, 'dynasty discard pile');
                 this.player1.moveCard(this.favorableGround, 'dynasty discard pile');
                 this.player1.moveCard(this.kisada, 'dynasty discard pile');
@@ -105,7 +127,7 @@ describe('Shinjo Gunso', function() {
                 expect(this.player1).not.toHavePrompt('Triggered Abilities');
             });
 
-            it('should work if no cards can be put into play', function() {
+            it('should work if no cards can be put into play', function () {
                 this.player1.moveCard(this.hidaGuardian, 'dynasty discard pile');
                 this.player1.moveCard(this.dealbroker, 'dynasty deck');
 
@@ -121,10 +143,10 @@ describe('Shinjo Gunso', function() {
                 expect(this.borderlands.location).toBe('dynasty discard pile');
                 expect(this.kisada.location).toBe('dynasty discard pile');
 
-                expect(this.getChatLogs(5)).toContain('player1 puts nothing into play and discards Favorable Dealbroker, Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+                expect(this.getChatLogs(5)).toContain('player1 takes nothing');
             });
 
-            it('should work if you take nothing', function() {
+            it('should work if you take nothing', function () {
                 this.player1.clickCard(this.gunso);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.gunso);
@@ -141,11 +163,13 @@ describe('Shinjo Gunso', function() {
                 expect(this.favorableGround.location).toBe('dynasty discard pile');
                 expect(this.borderlands.location).toBe('dynasty discard pile');
                 expect(this.kisada.location).toBe('dynasty discard pile');
-                expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play');
-                expect(this.getChatLogs(5)).toContain('player1 puts nothing into play and discards Hida Guardian, Hida Kisada, Favorable Ground, Imperial Storehouse and Borderlands Defender');
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 uses Shinjo Gunsō to search the top 5 cards of their dynasty deck for a character that costs 2 or less and put it into play'
+                );
+                expect(this.getChatLogs(5)).toContain('player1 takes nothing');
             });
 
-            it('bug report - duplicate uniques', function() {
+            it('bug report - duplicate uniques', function () {
                 this.player1.moveCard(this.yas1, 'play area');
                 this.player1.moveCard(this.yas2, 'dynasty deck');
 
@@ -155,7 +179,7 @@ describe('Shinjo Gunso', function() {
                 expect(this.player1).toHaveDisabledPromptButton('Shinjo Yasamura');
             });
 
-            it('should not shuffle', function() {
+            it('should not shuffle', function () {
                 this.player1.clickCard(this.gunso);
                 this.player1.clickPrompt('0');
                 this.player1.clickCard(this.gunso);
@@ -165,9 +189,9 @@ describe('Shinjo Gunso', function() {
             });
         });
 
-        describe('Playing from Province via card', function() {
-            integration(function() {
-                beforeEach(function() {
+        describe('Playing from Province via card', function () {
+            integration(function () {
+                beforeEach(function () {
                     this.setupTest({
                         phase: 'conflict',
                         player1: {
@@ -175,8 +199,7 @@ describe('Shinjo Gunso', function() {
                             hand: ['prepared-ambush', 'way-of-the-crane'],
                             dynastyDiscard: ['hidden-moon-dojo']
                         },
-                        player2: {
-                        }
+                        player2: {}
                     });
 
                     this.gunso = this.player1.placeCardInProvince('shinjo-gunso', 'province 1');
@@ -186,7 +209,7 @@ describe('Shinjo Gunso', function() {
                     this.crane = this.player1.findCardByName('way-of-the-crane');
                 });
 
-                it('should not react when played as if from hand', function() {
+                it('should not react when played as if from hand', function () {
                     this.player1.clickCard(this.crane);
                     this.player1.clickCard(this.uji);
                     this.player2.pass();

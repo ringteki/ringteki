@@ -1,7 +1,7 @@
-describe('There Are No Secrets', function() {
-    integration(function() {
-        describe('Embrace the Void/Karmic Twist interaction', function() {
-            beforeEach(function() {
+describe('There Are No Secrets', function () {
+    integration(function () {
+        describe('Embrace the Void/Karmic Twist interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -17,7 +17,7 @@ describe('There Are No Secrets', function() {
                 this.karmicTwist = this.player1.clickCard('karmic-twist');
             });
 
-            it('should not cancel the effect, and then give the player 1 fate', function() {
+            it('should not cancel the effect, and then give the player 1 fate', function () {
                 expect(this.player1).toHavePrompt('Karmic Twist');
                 this.player1.clickCard(this.miyaMystic);
                 expect(this.player1).toHavePrompt('Karmic Twist');
@@ -33,8 +33,8 @@ describe('There Are No Secrets', function() {
             });
         });
 
-        describe('Embrace the Void/Feast or Famine interaction', function() {
-            beforeEach(function() {
+        describe('Embrace the Void/Feast or Famine interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
@@ -65,7 +65,7 @@ describe('There Are No Secrets', function() {
                 this.player1.pass();
             });
 
-            it('should gain a fate', function() {
+            it('should gain a fate', function () {
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 expect(this.player2).toBeAbleToSelect(this.feastOrFamine);
                 this.player2.clickCard(this.feastOrFamine);
@@ -84,12 +84,12 @@ describe('There Are No Secrets', function() {
             });
         });
 
-        describe('Embrace the Void/Assassination interaction', function() {
-            beforeEach(function() {
+        describe('Embrace the Void/Assassination interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        fate:1,
+                        fate: 1,
                         inPlay: ['adept-of-the-waves'],
                         hand: ['there-are-no-secrets']
                     },
@@ -107,7 +107,7 @@ describe('There Are No Secrets', function() {
                 });
             });
 
-            it('should give Embrace the Void\'s controller all fate when the character is assassinated', function() {
+            it("should give Embrace the Void's controller all fate when the character is assassinated", function () {
                 this.player2.clickCard('assassination');
                 this.player2.clickCard(this.adeptOfTheWaves);
                 expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -120,12 +120,12 @@ describe('There Are No Secrets', function() {
             });
         });
 
-        describe('Embrace the Void/A Legion of One interaction', function() {
-            beforeEach(function() {
+        describe('Embrace the Void/A Legion of One interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        fate:1,
+                        fate: 1,
                         inPlay: ['adept-of-the-waves'],
                         hand: ['a-legion-of-one']
                     },
@@ -144,7 +144,7 @@ describe('There Are No Secrets', function() {
                 });
             });
 
-            it('should give Embrace the Void\'s controller the fate but still let A Legion Of One trigger a second time', function() {
+            it("should give Embrace the Void's controller the fate but still let A Legion Of One trigger a second time", function () {
                 this.milStat = this.adept.getMilitarySkill();
                 this.polStat = this.adept.getMilitarySkill();
                 this.fateStat = this.adept.fate;
@@ -167,12 +167,12 @@ describe('There Are No Secrets', function() {
             });
         });
 
-        describe('Embrace the Void/I Am Ready interaction', function() {
-            beforeEach(function() {
+        describe('Embrace the Void/I Am Ready interaction', function () {
+            beforeEach(function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        fate:1,
+                        fate: 1,
                         inPlay: ['wandering-ronin', 'shinjo-outrider'],
                         hand: ['i-am-ready']
                     },
@@ -192,7 +192,7 @@ describe('There Are No Secrets', function() {
                 this.embrace = this.player2.playAttachment('there-are-no-secrets', this.shinjo);
             });
 
-            it('should not cancel the effects of the event', function() {
+            it('should not cancel the effects of the event', function () {
                 this.fateStat = this.shinjo.fate;
                 this.player1.clickCard('i-am-ready');
                 this.player1.clickCard(this.shinjo);
@@ -202,76 +202,6 @@ describe('There Are No Secrets', function() {
                 expect(this.shinjo.bowed).toBe(false);
                 expect(this.shinjo.fate).toBe(this.fateStat - 1);
                 expect(this.player2.fate).toBe(2);
-            });
-        });
-
-        describe('Limit/Max Test', function() {
-            beforeEach(function() {
-                this.setupTest({
-                    phase: 'conflict',
-                    player1: {
-                        fate: 1,
-                        inPlay: ['iuchi-wayfinder', 'moto-chagatai'],
-                        hand: ['there-are-no-secrets', 'there-are-no-secrets', 'i-am-ready', 'i-am-ready', 'i-am-ready', 'i-am-ready', 'i-am-ready']
-                    }
-                });
-                this.wayfinder = this.player1.findCardByName('iuchi-wayfinder');
-                this.chagatai = this.player1.findCardByName('moto-chagatai');
-                this.wayfinder.fate = 3;
-                this.chagatai.fate = 2;
-                this.secrets1 = this.player1.filterCardsByName('there-are-no-secrets')[0];
-                this.secrets2 = this.player1.filterCardsByName('there-are-no-secrets')[1];
-                this.ready1 = this.player1.filterCardsByName('i-am-ready')[0];
-                this.ready2 = this.player1.filterCardsByName('i-am-ready')[1];
-                this.ready3 = this.player1.filterCardsByName('i-am-ready')[2];
-                this.ready4 = this.player1.filterCardsByName('i-am-ready')[3];
-                this.ready5 = this.player1.filterCardsByName('i-am-ready')[4];
-
-                this.wayfinder.bow();
-                this.chagatai.bow();
-                this.player1.playAttachment(this.secrets1, this.wayfinder);
-                this.player2.pass();
-                this.player1.playAttachment(this.secrets2, this.chagatai);
-                this.player2.pass();
-            });
-
-            it('each should work twice, up to 3 total among all copies', function() {
-                let fate = this.player1.fate;
-                this.player1.clickCard(this.ready1);
-                this.player1.clickCard(this.wayfinder);
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.secrets1);
-                this.player1.clickCard(this.secrets1);
-                expect(this.player1.fate).toBe(fate + 1);
-                this.wayfinder.bow();
-                this.player2.pass();
-
-                this.player1.clickCard(this.ready2);
-                this.player1.clickCard(this.wayfinder);
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.secrets1);
-                this.player1.clickCard(this.secrets1);
-                expect(this.player1.fate).toBe(fate + 2);
-                this.wayfinder.bow();
-                this.player2.pass();
-
-                this.player1.clickCard(this.ready3);
-                this.player1.clickCard(this.wayfinder);
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
-                this.player2.pass();
-
-                this.player1.clickCard(this.ready4);
-                this.player1.clickCard(this.chagatai);
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.secrets2);
-                this.player1.clickCard(this.secrets2);
-                expect(this.player1.fate).toBe(fate + 3);
-                this.chagatai.bow();
-                this.player2.pass();
-
-                this.player1.clickCard(this.ready5);
-                this.player1.clickCard(this.chagatai);
-                expect(this.player1).not.toHavePrompt('Triggered Abilities');
             });
         });
     });

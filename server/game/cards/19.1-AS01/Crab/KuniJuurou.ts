@@ -1,6 +1,6 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Phases, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class KuniJuurou extends DrawCard {
     static id = 'kuni-juurou';

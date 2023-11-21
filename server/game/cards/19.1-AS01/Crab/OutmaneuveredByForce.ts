@@ -1,8 +1,7 @@
-import AbilityContext = require('../../../AbilityContext');
+import type AbilityContext from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Phases, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class OutmaneuveredByForce extends DrawCard {
     static id = 'outmaneuvered-by-force';
@@ -28,8 +27,8 @@ export default class OutmaneuveredByForce extends DrawCard {
 
     private controlsBerserkerOrBigCharacter(context: AbilityContext): boolean {
         return context.player.cardsInPlay.any(
-            (card: BaseCard) =>
-                card.getType() === CardTypes.Character && (card.hasTrait('berserker') || card.printedMilitarySkill >= 6)
+            (card: DrawCard) =>
+                card.getType() === CardTypes.Character && (card.hasTrait('berserker') || card.printedMilitarySkill >= 5)
         );
     }
 }
