@@ -15,7 +15,8 @@ export default class UtakuSumire extends DrawCard {
                 AbilityDsl.actions.playerLastingEffect({
                     targetController: Players.Self,
                     effect: AbilityDsl.effects.playerCannot({
-                        cannot: PlayTypes.PlayFromHand
+                        cannot: PlayTypes.PlayFromHand,
+                        restricts: 'actionEvents'
                     })
                 }),
                 AbilityDsl.actions.playerLastingEffect({
@@ -35,7 +36,9 @@ export default class UtakuSumire extends DrawCard {
                         })
                     })
                 })
-            ])
+            ]),
+            effect: 'charge into battle under the devout silence of the Utaku - during this conflict, {1} refuses to play Action events. If they win the conflict, their warrior will have their confidence renewed!',
+            effectArgs: (context) => [context.player]
         });
     }
 }

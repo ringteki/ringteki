@@ -95,6 +95,8 @@ const checkRestrictions = {
         context.source.glory < effect.context.source.parent.glory,
     provinces: (context) => context.source.type === CardTypes.Province,
     reactions: (context) => context.ability.abilityType === AbilityTypes.Reaction,
+    actionEvents: (context) =>
+        context.ability.card.type === CardTypes.Event && context.ability.abilityType === AbilityTypes.Action,
     source: (context, effect) => context.source === effect.context.source,
     keywordAbilities: (context) => context.ability.isKeywordAbility(),
     nonKeywordAbilities: (context) => !context.ability.isKeywordAbility(),
