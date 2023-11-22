@@ -28,11 +28,11 @@ export default class WisdomOfTheWind extends DrawCard {
                     }
                 })
             },
-            then: {
+            then: (context) => ({
                 gameAction: AbilityDsl.actions.onAffinity({
                     trait: 'air',
                     promptTitleForConfirmingAffinity: 'Make other status tokens be ignored?',
-                    gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
+                    gameAction: AbilityDsl.actions.cardLastingEffect({
                         target: context.game.currentConflict
                             .getAttackers()
                             .concat(context.game.currentConflict.getDefenders())
@@ -43,10 +43,10 @@ export default class WisdomOfTheWind extends DrawCard {
                             AbilityDsl.effects.taintedStatusDoesNotCostHonor()
                         ],
                         duration: Durations.UntilEndOfConflict
-                    })),
+                    }),
                     effect: 'make all other status be ignored during this conflict'
                 })
-            }
+            })
         });
     }
 }
