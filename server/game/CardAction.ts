@@ -1,6 +1,6 @@
 import type AbilityContext from './AbilityContext';
 import CardAbility from './CardAbility';
-import { AbilityTypes, CardTypes, EffectNames, Locations, Phases, PlayTypes } from './Constants';
+import { AbilityTypes, CardTypes, EffectNames, Phases } from './Constants';
 import { parseGameMode } from './GameMode';
 import type { ActionProps } from './Interfaces';
 import type BaseCard from './basecard.js';
@@ -58,11 +58,12 @@ export class CardAction extends CardAbility {
         this.canTriggerOutsideConflict = !!properties.canTriggerOutsideConflict;
     }
 
-    #passDynastyPhaseRequirements(context: AbilityContext) {
-        const gameMode = parseGameMode(this.game.gameMode);
-        if (this.evenDuringDynasty) {
+    #passDynastyPhaseRequirements() {
+        if (this.phase === Phases.Dynasty || this.evenDuringDynasty) {
             return true;
         }
+
+        const gameMode = parseGameMode(this.game.gameMode);
         switch (this.card.type) {
             case CardTypes.Holding:
                 return gameMode.dynastyPhaseActionsFromCardsInPlay;
@@ -73,6 +74,9 @@ export class CardAction extends CardAbility {
             case CardTypes.Character:
             case CardTypes.Attachment:
                 return gameMode.dynastyPhaseActionsFromCardsInPlay;
+
+            default:
+                return false;
         }
     }
 
@@ -89,11 +93,10 @@ export class CardAction extends CardAbility {
             return 'phase';
         }
 
-        const gameMode = parseGameMode(this.game.gameMode);
         if (
             !ignoredRequirements.includes('phase') &&
             this.game.currentPhase === Phases.Dynasty &&
-            !this.#passDynastyPhaseRequirements(context)
+            !this.#passDynastyPhaseRequirements()
         ) {
             return 'phase';
         }
