@@ -40,31 +40,33 @@ import type { CardEffect } from './Effects/types';
 
 type PrintedKeyword =
     | 'ancestral'
-    | 'restricted'
-    | 'limited'
-    | 'sincerity'
-    | 'courtesy'
-    | 'pride'
-    | 'covert'
     | 'corrupted'
-    | 'rally'
+    | 'courtesy'
+    | 'covert'
     | 'eminent'
     | 'ephemeral'
-    | 'peaceful';
+    | 'limited'
+    | 'no duels'
+    | 'peaceful'
+    | 'pride'
+    | 'rally'
+    | 'restricted'
+    | 'sincerity';
 
 const ValidKeywords = new Set<PrintedKeyword>([
     'ancestral',
-    'restricted',
-    'limited',
-    'sincerity',
-    'courtesy',
-    'pride',
-    'covert',
     'corrupted',
-    'rally',
+    'courtesy',
+    'covert',
     'eminent',
     'ephemeral',
-    'peaceful'
+    'limited',
+    'no duels',
+    'peaceful',
+    'pride',
+    'rally',
+    'restricted',
+    'sincerity'
 ]);
 
 class BaseCard extends EffectSource {
@@ -495,17 +497,24 @@ class BaseCard extends EffectSource {
         return addKeywordEffects.length > loseKeywordEffects.length;
     }
 
-    hasPrintedKeyword(keyword: string) {
-        return this.printedKeywords.includes(keyword.toLowerCase() as PrintedKeyword);
+    hasPrintedKeyword(keyword: PrintedKeyword) {
+        return this.printedKeywords.includes(keyword);
     }
 
     hasTrait(trait: string): boolean {
         return this.hasSomeTrait(trait);
     }
 
-    hasEveryTrait(...traits: string[]): boolean {
+    hasEveryTrait(traits: Set<string>): boolean;
+    hasEveryTrait(...traits: string[]): boolean;
+    hasEveryTrait(traitSetOrFirstTrait: Set<string> | string, ...otherTraits: string[]): boolean {
+        const traitsToCheck =
+            traitSetOrFirstTrait instanceof Set
+                ? traitSetOrFirstTrait
+                : new Set([traitSetOrFirstTrait, ...otherTraits]);
+
         const cardTraits = this.getTraitSet();
-        for (const trait of traits) {
+        for (const trait of traitsToCheck) {
             if (!cardTraits.has(trait.toLowerCase())) {
                 return false;
             }
@@ -513,9 +522,16 @@ class BaseCard extends EffectSource {
         return true;
     }
 
-    hasSomeTrait(...traits: string[]): boolean {
+    hasSomeTrait(traits: Set<string>): boolean;
+    hasSomeTrait(...traits: string[]): boolean;
+    hasSomeTrait(traitSetOrFirstTrait: Set<string> | string, ...otherTraits: string[]): boolean {
+        const traitsToCheck =
+            traitSetOrFirstTrait instanceof Set
+                ? traitSetOrFirstTrait
+                : new Set([traitSetOrFirstTrait, ...otherTraits]);
+
         const cardTraits = this.getTraitSet();
-        for (const trait of traits) {
+        for (const trait of traitsToCheck) {
             if (cardTraits.has(trait.toLowerCase())) {
                 return true;
             }
@@ -523,8 +539,8 @@ class BaseCard extends EffectSource {
         return false;
     }
 
-    getTraits(): string[] {
-        return Array.from(this.getTraitSet());
+    getTraits(): Set<string> {
+        return this.getTraitSet();
     }
 
     getTraitSet(): Set<string> {

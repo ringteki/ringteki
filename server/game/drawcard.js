@@ -93,7 +93,7 @@ class DrawCard extends BaseCard {
     }
 
     isLimited() {
-        return this.hasKeyword('Limited') || this.hasPrintedKeyword('Limited');
+        return this.hasKeyword('limited') || this.hasPrintedKeyword('limited');
     }
 
     isRestricted() {
@@ -196,7 +196,7 @@ class DrawCard extends BaseCard {
         clone.parent = this.parent;
         clone.fate = this.fate;
         clone.inConflict = this.inConflict;
-        clone.traits = this.getTraits();
+        clone.traits = Array.from(this.getTraits());
         clone.uuid = this.uuid;
         return clone;
     }
@@ -432,7 +432,7 @@ class DrawCard extends BaseCard {
             const value = modifierEffect.getValue(this);
             modifiers.push(StatModifier.fromEffect(value, modifierEffect));
         });
-        modifiers = modifiers.filter(modifier => modifier.type === 'token')
+        modifiers = modifiers.filter((modifier) => modifier.type === 'token');
 
         // adjust honor status effects
         this.adjustHonorStatusModifiers(modifiers);

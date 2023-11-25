@@ -18,7 +18,14 @@ export default class TheEastWind extends StrongholdCard {
                 const playedCardTraits = (context.event.card as BaseCard).getTraitSet();
                 return {
                     amount: 5,
-                    cardCondition: (card) => card.getTraits().some((trait) => playedCardTraits.has(trait)),
+                    cardCondition: (card) => {
+                        for (const searchedCardTrait of card.getTraits()) {
+                            if (playedCardTraits.has(searchedCardTrait)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    },
                     gameAction: AbilityDsl.actions.moveCard({ destination: Locations.Hand }),
                     takesNothingGameAction: AbilityDsl.actions.gainFate()
                 };

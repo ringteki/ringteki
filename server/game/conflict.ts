@@ -169,7 +169,7 @@ export class Conflict extends GameObject {
         return this.elements.includes(element);
     }
 
-    get elements() {
+    get elements(): Array<'air' | 'earth' | 'fire' | 'void' | 'water'> {
         return this.ring ? this.ring.getElements() : [];
     }
 
