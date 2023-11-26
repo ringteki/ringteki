@@ -41,7 +41,8 @@ describe('A Matsu Proves Their Worth', function () {
         });
 
         it('many gains when the bushi wins', function () {
-            this.player1.clickRing('air');
+            const initialHonor = this.player1.honor;
+            this.player1.clickRing('water');
             this.player1.clickCard(this.shameful);
             this.player1.clickCard(this.berserker);
             this.player1.clickPrompt('Initiate Conflict');
@@ -51,6 +52,11 @@ describe('A Matsu Proves Their Worth', function () {
 
             this.player2.clickPrompt('Done');
             this.noMoreActions();
+
+            expect(this.berserker.fate).toBe(1);
+            expect(this.berserker.isHonored).toBe(true);
+            expect(this.player1.honor).toBe(initialHonor + 1);
+            expect(this.player1.hand.length).toBe(1);
 
             expect(this.getChatLogs(5)).toContain(
                 'Matsu Berserker is honored and receives 1 fate, and player1 gains 1 fate and draw 1 card due to Matsu Berserker succeeding at A Matsu Proves Their Worth!'

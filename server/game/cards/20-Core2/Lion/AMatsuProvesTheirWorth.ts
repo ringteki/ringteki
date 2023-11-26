@@ -29,7 +29,7 @@ export default class AMatsuProvesTheirWorth extends DrawCard {
                                 afterConflict: (event) =>
                                     event.conflict.winner !== target.controller && target.isParticipating()
                             },
-                            gameAction: AbilityDsl.actions.discardFromPlay({ target }),
+                            gameAction: AbilityDsl.actions.discardFromPlay(),
                             message: '{0} is discarded from play due to failing at {1}!',
                             messageArgs: (context) => [target, context.source]
                         }),
@@ -38,11 +38,11 @@ export default class AMatsuProvesTheirWorth extends DrawCard {
                                 afterConflict: (event) =>
                                     event.conflict.winner === target.controller && target.isParticipating()
                             },
-                            gameAction: AbilityDsl.actions.sequential([
-                                AbilityDsl.actions.honor({ target }),
-                                AbilityDsl.actions.placeFate({ target }),
-                                AbilityDsl.actions.gainHonor({ target: context.source.controller }),
-                                AbilityDsl.actions.draw({ target: context.source.controller })
+                            gameAction: AbilityDsl.actions.multiple([
+                                AbilityDsl.actions.honor(),
+                                AbilityDsl.actions.placeFate({ amount: 1 }),
+                                AbilityDsl.actions.gainHonor({ target: context.source.controller, amount: 1 }),
+                                AbilityDsl.actions.draw({ target: context.source.controller, amount: 1 })
                             ]),
                             message:
                                 '{0} is honored and receives 1 fate, and {1} gains 1 fate and draw 1 card due to {0} succeeding at {2}!',
