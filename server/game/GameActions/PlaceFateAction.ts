@@ -1,14 +1,13 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import Ring = require('../ring');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
-import { type } from 'os';
+import AbilityContext from '../AbilityContext';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Player from '../player';
+import Ring from '../ring';
+import { CardGameAction, type CardActionProperties } from './CardGameAction';
 
 export interface PlaceFateProperties extends CardActionProperties {
-    amount?: number,
-    origin?: DrawCard | Player | Ring
+    amount?: number;
+    origin?: DrawCard | Player | Ring;
 }
 
 export class PlaceFateAction extends CardGameAction {
@@ -21,41 +20,36 @@ export class PlaceFateAction extends CardGameAction {
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let { amount, target } = this.getProperties(context) as PlaceFateProperties;
+        const { amount, target } = this.getProperties(context) as PlaceFateProperties;
         return ['place {1} fate on {0}', [target, amount]];
     }
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
-        let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
-        if(amount === 0 || card.location !== Locations.PlayArea) {
+        const { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
+        if (amount === 0 || card.location !== Locations.PlayArea) {
             return false;
         }
 
-        if(origin && this.isRing(origin) && !context.player.checkRestrictions('takeFateFromRings', context)){
+        if (origin instanceof Ring && !context.player.checkRestrictions('takeFateFromRings', context)) {
             return false;
         }
 
-        return super.canAffect(card, context) && this.checkOrigin(origin, context) && card !== origin;
+        return super.canAffect(card, context) && this.checkOrigin(context, origin) && card !== origin;
     }
 
-    isRing(x: any): x is Ring {
-        return "element" in x;
-    }
-
-    checkOrigin(origin: Player | Ring | DrawCard, context: AbilityContext): boolean {
-        if(origin) {
-            if(origin.fate === 0) {
-                return false;
-            } else if(['player', 'ring'].includes(origin.type)) {
-                return true;
-            }
-            return origin.allowGameAction('removeFate', context);
+    checkOrigin(context: AbilityContext, origin?: Player | Ring | DrawCard): boolean {
+        if (!origin) {
+            return true;
         }
-        return true;
+
+        return (
+            origin.fate > 0 &&
+            (origin.type === 'player' || origin.type === 'ring' || origin.allowGameAction('removeFate', context))
+        );
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
+        const { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
         event.fate = amount;
         event.origin = origin;
         event.context = context;
@@ -67,9 +61,14 @@ export class PlaceFateAction extends CardGameAction {
     }
 
     isEventFullyResolved(event, card: DrawCard, context: AbilityContext, additionalProperties): boolean {
-        let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
-        return !event.cancelled && event.name === this.eventName &&
-            event.fate === amount && event.origin === origin && event.recipient === card;
+        const { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateProperties;
+        return (
+            !event.cancelled &&
+            event.name === this.eventName &&
+            event.fate === amount &&
+            event.origin === origin &&
+            event.recipient === card
+        );
     }
 
     eventHandler(event): void {
