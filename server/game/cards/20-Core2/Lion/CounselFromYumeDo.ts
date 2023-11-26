@@ -21,10 +21,13 @@ export default class CounselFromYumeDo extends DrawCard {
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.returnToDeck({ location: Locations.ConflictDiscardPile, shuffle: true })
             },
-            then: () => ({
+            then: (context) => ({
                 gameAction: AbilityDsl.actions.onAffinity({
                     trait: 'water',
-                    gameAction: AbilityDsl.actions.draw()
+                    effect: 'draw a card',
+                    gameAction: AbilityDsl.actions.draw({
+                        target: context.player
+                    })
                 })
             })
         });
