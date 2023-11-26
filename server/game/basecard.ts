@@ -487,13 +487,16 @@ class BaseCard extends EffectSource {
         return false;
     }
 
-    hasKeyword(keyword) {
-        let addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(
-            (effectValue) => effectValue === keyword.toLowerCase()
+    hasKeyword(keyword: string): boolean {
+        const targetKeyword = keyword.toLowerCase();
+
+        const addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(
+            (effectValue: string) => effectValue === targetKeyword
         );
-        let loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(
-            (effectValue) => effectValue === keyword.toLowerCase()
+        const loseKeywordEffects = this.getEffects(EffectNames.LoseKeyword).filter(
+            (effectValue: string) => effectValue === targetKeyword
         );
+
         return addKeywordEffects.length > loseKeywordEffects.length;
     }
 

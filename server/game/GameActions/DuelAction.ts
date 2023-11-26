@@ -1,23 +1,24 @@
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { CardTypes, Locations, DuelTypes, EventNames, Durations } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import { Duel } from '../Duel.js';
-import { DuelFlow } from '../gamesteps/DuelFlow.js';
-import { GameAction } from './GameAction';
+import type AbilityContext from '../AbilityContext';
+import { CardTypes, Durations, EventNames, Locations, type DuelTypes } from '../Constants';
+import type DrawCard from '../drawcard';
+import { Duel } from '../Duel';
+import { DuelFlow } from '../gamesteps/DuelFlow';
+import type TriggeredAbilityContext from '../TriggeredAbilityContext';
+import { CardGameAction, type CardActionProperties } from './CardGameAction';
+import { type GameAction } from './GameAction';
 
 export interface DuelProperties extends CardActionProperties {
     type: DuelTypes;
     challenger?: DrawCard;
-    challengerCondition?: (card, context) => boolean;
+    challengerCondition?: (card: DrawCard, context: TriggeredAbilityContext) => boolean;
     requiresConflict?: boolean;
     gameAction: GameAction | ((duel: Duel, context: AbilityContext) => GameAction);
     message?: string;
     messageArgs?: (duel: Duel, context: AbilityContext) => any | any[];
     costHandler?: (context: AbilityContext, prompt: any) => void;
     statistic?: (card: DrawCard) => number;
-    challengerEffect?;
-    targetEffect?;
+    challengerEffect?: any;
+    targetEffect?: any;
     refuseGameAction?: GameAction;
     refusalMessage?: string;
     refusalMessageArgs?: (context: AbilityContext) => any | any[];
@@ -30,7 +31,7 @@ export class DuelAction extends CardGameAction {
 
     defaultProperties: DuelProperties = {
         type: undefined,
-        gameAction: null,
+        gameAction: null
     };
 
     getProperties(context: AbilityContext, additionalProperties = {}): DuelProperties {
@@ -66,10 +67,13 @@ export class DuelAction extends CardGameAction {
         if (!super.canAffect(card, context)) {
             return false;
         }
+        if (card.hasNoDuels() || properties.challenger.hasNoDuels()) {
+            return false;
+        }
         if (card === properties.challenger) {
             return false; //cannot duel yourself
         }
-        if(!card.checkRestrictions('duel', context)) {
+        if (!card.checkRestrictions('duel', context)) {
             return false;
         }
 
@@ -102,7 +106,10 @@ export class DuelAction extends CardGameAction {
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
-        const { target, refuseGameAction, refusalMessage, refusalMessageArgs } = this.getProperties(context, additionalProperties);
+        const { target, refuseGameAction, refusalMessage, refusalMessageArgs } = this.getProperties(
+            context,
+            additionalProperties
+        );
         const addDuelEventsHandler = () => {
             const cards = (target as DrawCard[]).filter((card) => this.canAffect(card, context));
             if (cards.length === 0) {

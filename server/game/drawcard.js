@@ -128,6 +128,10 @@ class DrawCard extends BaseCard {
         return this.hasPrintedKeyword('peaceful');
     }
 
+    hasNoDuels() {
+        return this.hasKeyword('no duels');
+    }
+
     isDire() {
         return this.getFate() === 0;
     }
