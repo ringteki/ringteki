@@ -1,8 +1,13 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Players, TargetModes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
+import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 
 const CHARACTER = 'character';
+
+function theTarget(context: TriggeredAbilityContext) {
+    return { target: context.targets[CHARACTER] };
+}
 
 export default class InsufferableScallywag extends DrawCard {
     static id = 'insufferable-scallywag';
@@ -24,12 +29,8 @@ export default class InsufferableScallywag extends DrawCard {
                     mode: TargetModes.Select,
                     player: Players.Opponent,
                     choices: {
-                        'Dishonor this character': AbilityDsl.actions.dishonor((context) => ({
-                            target: context.targets[CHARACTER]
-                        })),
-                        'Move this character home': AbilityDsl.actions.bow((context) => ({
-                            target: context.targets[CHARACTER]
-                        }))
+                        'Dishonor this character': AbilityDsl.actions.dishonor(theTarget),
+                        'Move this character home': AbilityDsl.actions.sendHome(theTarget)
                     }
                 }
             }
