@@ -16,7 +16,7 @@ export interface DuelProperties extends CardActionProperties {
     message?: string;
     messageArgs?: (duel: Duel, context: AbilityContext) => any | any[];
     costHandler?: (context: AbilityContext, prompt: any) => void;
-    statistic?: (card: DrawCard) => number;
+    statistic?: (card: DrawCard, duelRules: 'currentSkill' | 'printedSkill' | 'skirmish') => number;
     challengerEffect?: any;
     targetEffect?: any;
     refuseGameAction?: GameAction;
@@ -44,17 +44,17 @@ export class DuelAction extends CardGameAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         const properties = this.getProperties(context);
-        if (properties.target instanceof Array) {
-            const targets = properties.target as DrawCard[];
-            const indices = [...Array(targets.length + 1).keys()].map((x) => '{' + x++ + '}').slice(1);
+        if (!Array.isArray(properties.target)) {
             return [
-                'initiate a ' + properties.type.toString() + ' duel : {0} vs. ' + indices.join(' and '),
-                [properties.challenger, ...(properties.target as DrawCard[])]
+                'initiate a ' + properties.type.toString() + ' duel : {0} vs. {1}',
+                [properties.challenger, properties.target]
             ];
         }
+
+        const indices = properties.target.map((_, idx) => `{${idx + 1}}`);
         return [
-            'initiate a ' + properties.type.toString() + ' duel : {0} vs. {1}',
-            [properties.challenger, properties.target]
+            'initiate a ' + properties.type.toString() + ' duel : {0} vs. ' + indices.join(' and '),
+            [properties.challenger, ...properties.target]
         ];
     }
 

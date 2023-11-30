@@ -58,7 +58,6 @@ export class DuelFlow extends BaseStepWithPipeline {
         this.game.raiseEvent(EventNames.OnDuelStrike, { duel: this.duel });
     }
 
-
     #promptForHonorBid() {
         if (this.duel.challenger.mostRecentEffect(EffectNames.WinDuel) === this.duel) {
             return;
