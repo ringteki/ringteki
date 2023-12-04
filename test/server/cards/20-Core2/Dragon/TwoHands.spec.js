@@ -10,7 +10,7 @@ describe('Two Hands', function () {
                 },
                 player2: {
                     inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'shosuro-sadako'],
-                    hand: ['embrace-the-void', 'duel-to-the-death', 'two-hands', 'disparaging-challenge']
+                    hand: ['embrace-the-void', 'duel-to-the-death', 'two-hands', 'disparaging-challenge', 'fine-katana']
                 },
                 gameMode: 'emerald'
             });
@@ -28,6 +28,46 @@ describe('Two Hands', function () {
             this.dttd = this.player2.findCardByName('duel-to-the-death');
             this.hands = this.player2.findCardByName('two-hands');
             this.challenge = this.player2.findCardByName('disparaging-challenge');
+            this.katana = this.player2.findCardByName('fine-katana');
+        });
+
+        describe('Conflict action', function () {
+            beforeEach(function () {
+                this.player1.pass();
+                this.player2.clickCard(this.katana);
+                this.player2.clickCard(this.toshimoko);
+                this.noMoreActions();
+            });
+
+            it('sets one enemy character skills equal to the other', function () {
+                this.initiateConflict({
+                    attackers: [this.challenger, this.yoshi],
+                    defenders: [this.toshimoko]
+                });
+
+                this.player2.clickCard(this.hands);
+                expect(this.player2).toHavePrompt('Choose the character that will remain unchanged');
+                expect(this.player2).toBeAbleToSelect(this.challenger);
+                expect(this.player2).toBeAbleToSelect(this.yoshi);
+                expect(this.player2).not.toBeAbleToSelect(this.yojiro);
+                expect(this.player2).not.toBeAbleToSelect(this.toshimoko);
+
+                this.player2.clickCard(this.yoshi);
+                expect(this.player2).toHavePrompt('Choose the character to that will have their skills changed');
+                expect(this.player2).toBeAbleToSelect(this.challenger);
+                expect(this.player2).not.toBeAbleToSelect(this.yoshi);
+                expect(this.player2).not.toBeAbleToSelect(this.yojiro);
+                expect(this.player2).not.toBeAbleToSelect(this.toshimoko);
+
+                this.player2.clickCard(this.challenger);
+                expect(this.challenger.getMilitarySkill()).toBe(2);
+                expect(this.challenger.getPoliticalSkill()).toBe(6);
+                expect(this.yoshi.getMilitarySkill()).toBe(2);
+                expect(this.yoshi.getPoliticalSkill()).toBe(6);
+                expect(this.getChatLogs(5)).toContain(
+                    'player2 plays Two Hands to set Doji Challenger military and political skills equal to Kakita Yoshi'
+                );
+            });
         });
 
         describe('Duel Challenge', function () {
@@ -56,7 +96,9 @@ describe('Two Hands', function () {
 
                 this.player2.clickCard(this.yoshi);
 
-                expect(this.getChatLogs(5)).toContain('player2 plays Two Hands to extend the duel challenge to Kakita Yoshi');
+                expect(this.getChatLogs(5)).toContain(
+                    'player2 plays Two Hands to extend the duel challenge to Kakita Yoshi'
+                );
 
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('5');
@@ -111,13 +153,17 @@ describe('Two Hands', function () {
 
                 this.player2.clickCard(this.challenger);
 
-                expect(this.getChatLogs(5)).toContain('player2 plays Two Hands to extend the duel challenge to Doji Challenger');
+                expect(this.getChatLogs(5)).toContain(
+                    'player2 plays Two Hands to extend the duel challenge to Doji Challenger'
+                );
 
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('5');
 
                 expect(this.getChatLogs(5)).toContain('Kakita Toshimoko: 8 vs 5: Bayushi Yojiro and Doji Challenger');
-                expect(this.getChatLogs(5)).toContain('Duel Effect: move Bayushi Yojiro and Doji Challenger into the conflict');
+                expect(this.getChatLogs(5)).toContain(
+                    'Duel Effect: move Bayushi Yojiro and Doji Challenger into the conflict'
+                );
 
                 expect(this.challenger.isParticipating()).toBe(true);
                 expect(this.yojiro.isParticipating()).toBe(true);
