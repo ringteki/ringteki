@@ -4,19 +4,123 @@ import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 
-type CardHandler = (currentCard: DrawCard) => void;
-
 class Process {
-    cardsToRemove: Set<DrawCard> = new Set();
+    private topCards: Set<DrawCard>;
+    private cardsToSteal: Set<DrawCard> = new Set();
+    private newTopOrder: Array<DrawCard> = [];
 
-    constructor(public topCards: DrawCard[]) {}
+    public constructor(private context: AbilityContext) {
+        this.topCards = new Set(context.player.opponent.conflictDeck.first(6));
+    }
 
-    markCardForRemoval(card: DrawCard) {
-        const idx = this.topCards.indexOf(card);
-        if (idx > -1) {
-            this.topCards.splice(idx, 1);
+    public start() {
+        if (this.topCards.size > 0) {
+            this.stealPrompt();
         }
-        this.cardsToRemove.add(card);
+    }
+
+    private get topCardsArray() {
+        return Array.from(this.topCards);
+    }
+
+    private stealPrompt() {
+        const x = this.cardsToSteal.size + 1;
+        const y = Math.min(3, this.topCards.size);
+        this.context.game.promptWithHandlerMenu(this.context.player, {
+            activePromptTitle: `Select a card to take for you (${x} of ${y})`,
+            context: this.context,
+            cards: this.topCardsArray,
+            cardHandler: (card: DrawCard) => this.stealChosen(card),
+            choices: ['Done'],
+            handlers: [() => this.stealCardsAndContinue()]
+        });
+    }
+
+    private stealChosen(card: DrawCard): void {
+        this.topCards.delete(card);
+        this.cardsToSteal.add(card);
+        if (this.cardsToSteal.size < 3) {
+            this.stealPrompt();
+        } else {
+            this.stealCardsAndContinue();
+        }
+    }
+
+    private stealCardsAndContinue() {
+        if (this.cardsToSteal.size > 0) {
+            this.context.game.addMessage(
+                "{0} takes {1} from {2}'s deck",
+                this.context.player,
+                Array.from(this.cardsToSteal),
+                this.context.player.opponent
+            );
+            for (const card of this.cardsToSteal) {
+                card.owner.removeCardFromPile(card);
+                card.moveTo(Locations.RemovedFromGame);
+                this.context.player.removedFromGame.unshift(card);
+                this.context.source.lastingEffect(() => ({
+                    until: {
+                        onCardMoved: (event: any) =>
+                            event.card === card && event.originalLocation === Locations.RemovedFromGame
+                    },
+                    match: card,
+                    effect: [AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)]
+                }));
+            }
+        }
+
+        if (this.topCards.size > 0) {
+            this.reorderPrompt();
+        }
+    }
+
+    private reorderPrompt() {
+        this.context.game.promptWithHandlerMenu(this.context.player, {
+            activePromptTitle: `Select a card to put in the ${this.positionWord()} position of their deck`,
+            context: this.context,
+            cards: this.topCardsArray,
+            cardHandler: (card: DrawCard) => this.markNextOnTop(card),
+            choices: [],
+            handlers: []
+        });
+    }
+
+    private positionWord(): string {
+        switch (this.newTopOrder.length) {
+            case 0:
+                return 'top';
+            case 1:
+                return 'second';
+            case 2:
+                return 'third';
+            default:
+                return 'next';
+        }
+    }
+
+    private markNextOnTop(card: DrawCard): void {
+        this.topCards.delete(card);
+        this.newTopOrder.push(card);
+        if (this.topCards.size > 0) {
+            this.reorderPrompt();
+        } else {
+            this.reorderCardsAndContinue();
+        }
+    }
+
+    private reorderCardsAndContinue() {
+        if (this.newTopOrder.length === 0) {
+            console.log('OI');
+            return;
+        }
+        this.context.game.addMessage(
+            "{0} returns {1} cards to the top of {2}'s deck",
+            this.context.player,
+            this.newTopOrder.length,
+            this.context.player.opponent
+        );
+
+        this.context.player.opponent.conflictDeck.splice(0, this.newTopOrder.length, ...this.newTopOrder);
     }
 }
 
@@ -31,67 +135,8 @@ export default class ShachihokoBay extends ProvinceCard {
                     event.card === context.source && context.game.currentConflict && Boolean(context.player.opponent)
             },
             gameAction: AbilityDsl.actions.handler({
-                handler: (context) =>
-                    this.#startPrompt(context, new Process(context.player.opponent.conflictDeck.first(6)))
+                handler: (context) => new Process(context).start()
             })
         });
-    }
-
-    #startPrompt(context: AbilityContext, process: Process) {
-        if (process.topCards.length === 0) {
-            return;
-        }
-
-        const cardHandler: CardHandler = (currentCard) => {
-            process.markCardForRemoval(currentCard);
-            this.#stepPrompt(context, process, cardHandler);
-        };
-
-        this.#stepPrompt(context, process, cardHandler);
-    }
-
-    #stepPrompt(context: AbilityContext, process: Process, cardHandler: CardHandler) {
-        if (process.topCards.length === 0 || process.cardsToRemove.size === 3) {
-            return this.#handleProcess(context, process);
-        }
-
-        this.game.promptWithHandlerMenu(context.player, {
-            activePromptTitle: `Select a card to take (${process.cardsToRemove.size} of 3)`,
-            context: context,
-            cards: process.topCards,
-            cardHandler: cardHandler,
-            choices: ['Done'],
-            handlers: [() => this.#handleProcess(context, process)]
-        });
-    }
-
-    #handleProcess(context: AbilityContext, process: Process) {
-        if (process.cardsToRemove.size > 0) {
-            this.game.addMessage(
-                "{0} takes {1} cards from {2}'s deck",
-                context.player,
-                process.cardsToRemove.size,
-                context.player.opponent
-            );
-            for (const card of process.cardsToRemove) {
-                card.owner.removeCardFromPile(card);
-                card.moveTo(Locations.RemovedFromGame);
-                context.player.removedFromGame.unshift(card);
-                context.source.lastingEffect(() => ({
-                    until: {
-                        onCardMoved: (event) =>
-                            event.card === card && event.originalLocation === Locations.RemovedFromGame
-                    },
-                    match: card,
-                    effect: [AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)]
-                }));
-            }
-        }
-        this.game.addMessage(
-            `{0} returns the {1}cards to the top of {2} deck in the same order`,
-            context.player,
-            process.cardsToRemove.size > 0 ? 'other ' : '',
-            context.player.opponent
-        );
     }
 }
