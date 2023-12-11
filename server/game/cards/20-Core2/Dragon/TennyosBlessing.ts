@@ -13,6 +13,7 @@ export default class TennyosBlessing extends DrawCard {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
                 controller: Players.Self,
+                cardCondition: (card) => card.location !== Locations.StrongholdProvince,
                 gameAction: AbilityDsl.actions.deckSearch({
                     cardCondition: (card) => card.type === CardTypes.Character,
                     targetMode: TargetModes.UpTo,
