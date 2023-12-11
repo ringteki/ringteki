@@ -1,13 +1,13 @@
 import { v1 as uuidV1 } from 'uuid';
 
+import type AbilityContext from './AbilityContext';
 import { EffectNames, Stages } from './Constants';
-import * as GameActions from './GameActions/GameActions';
-import type Game = require('./game');
-import type Player = require('./player');
-import type AbilityContext = require('./AbilityContext');
-import type DrawCard = require('./drawcard');
-import { GameAction } from './GameActions/GameAction';
+import type DrawCard from './drawcard';
 import type { CardEffect } from './Effects/types';
+import type Game from './game';
+import type { GameAction } from './GameActions/GameAction';
+import * as GameActions from './GameActions/GameActions';
+import type Player from './player';
 
 export class GameObject {
     public uuid = uuidV1();
