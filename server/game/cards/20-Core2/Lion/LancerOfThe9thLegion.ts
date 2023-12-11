@@ -8,7 +8,7 @@ export default class LancerOfThe9thLegion extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow a character',
-            condition: (context) => context.source.isAttacking('military'),
+            condition: (context) => context.source.isParticipating('military'),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card, context) =>
