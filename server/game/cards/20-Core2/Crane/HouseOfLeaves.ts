@@ -1,4 +1,4 @@
-import { CardTypes, Durations, Players } from '../../../Constants';
+import { CardTypes, Durations, Phases, Players } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';
 
@@ -8,6 +8,7 @@ export default class HouseOfLeaves extends StrongholdCard {
     setupCardAbilities() {
         this.action({
             title: 'Bow this stronghold',
+            phase: Phases.Conflict,
             cost: AbilityDsl.costs.bowSelf(),
             target: {
                 cardType: CardTypes.Character,
