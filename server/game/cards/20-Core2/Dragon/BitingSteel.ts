@@ -1,7 +1,20 @@
-import { CardTypes, DuelTypes, Durations } from '../../../Constants';
+import { CardTypes, DuelTypes, Durations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type BaseCard from '../../../basecard';
+import type Player from '../../../player';
+
+function getAttachmentSkill(card: DrawCard, context: TriggeredAbilityContext) {
+    let amount = 0;
+    if (context.game.currentDuel.duelType === DuelTypes.Military) {
+        amount = parseInt(card.cardData.military_bonus);
+    } else if (context.game.currentDuel.duelType === DuelTypes.Political) {
+        amount = parseInt(card.cardData.political_bonus);
+    }
+
+    return isNaN(amount) ? 0 : amount;
+}
 
 export default class BitingSteel extends DrawCard {
     static id = 'biting-steel';
@@ -15,65 +28,47 @@ export default class BitingSteel extends DrawCard {
             target: {
                 cardType: CardTypes.Attachment,
                 cardCondition: (card: DrawCard, context) =>
-                    card.parent && card.parent === context.source.parent &&
-                    this.#getAttachmentSkill(card, context) !== 0,
+                    card.parent && card.parent === context.source.parent && getAttachmentSkill(card, context) !== 0,
                 gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                     target: context.target.parent,
                     effect: AbilityDsl.effects.modifyDuelistSkill(
-                        this.#getAttachmentSkill(context.target, context),
+                        getAttachmentSkill(context.target, context),
                         context.event.duel
                     ),
                     duration: Durations.UntilEndOfDuel
                 }))
             },
             effect: 'add the skill bonus of {0} ({1}) to their duel total',
-            effectArgs: (context) => [this.#getAttachmentSkill(context.target, context)]
+            effectArgs: (context) => [getAttachmentSkill(context.target, context)]
         });
 
         this.action({
-            title: 'Get a skill bonus',
-            condition: (context) => (context.source.parent as DrawCard | undefined)?.isParticipating('military'),
-            gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
-                target: context.source.parent,
-                effect: AbilityDsl.effects.modifyMilitarySkill(2)
-            })),
-            effect: 'give +2 military to {1}',
-            effectArgs: (context) => [context.source.parent],
-            then: (context) => ({
-                gameAction: AbilityDsl.actions.onAffinity({
-                    trait: 'fire',
-                    promptTitleForConfirmingAffinity: 'Send a character home?',
-                    gameAction: AbilityDsl.actions.selectCard({
-                        cardType: CardTypes.Character,
-                        cardCondition: (card: DrawCard) => card.militarySkill < context.source.parent.militarySkill,
-                        gameAction: AbilityDsl.actions.sendHome()
-                    }),
-                    effect: 'send a character home'
-                })
-            })
+            title: 'Send an enemy home',
+            condition: (context) =>
+                (context.source.parent as DrawCard | undefined)?.isParticipating('military') &&
+                (context.player as Player).hasAffinity('fire', context),
+            target: {
+                cardType: CardTypes.Character,
+                controller: Players.Opponent,
+                cardCondition: (card: DrawCard, context) => card.militarySkill < context.source.parent.militarySkill,
+                gameAction: AbilityDsl.actions.sendHome()
+            }
         });
     }
 
-    public canAttach(card) {
-        if(card.getType() !== CardTypes.Character) {
-            return false;
-        }
-
-        if (!card.attachments.some((card) => card.hasTrait('weapon'))) {
-            return false;
-        }
-
-        return super.canAttach(card);
+    public canAttach(card: BaseCard) {
+        return (
+            card.getType() === CardTypes.Character &&
+            card.attachments.some((card) => card.hasTrait('weapon')) &&
+            super.canAttach(card)
+        );
     }
 
-    #getAttachmentSkill(card: DrawCard, context: TriggeredAbilityContext) {
-        let amount = 0;
-        if (context.game.currentDuel.duelType === DuelTypes.Military) {
-            amount = parseInt(card.cardData.military_bonus);
-        } else if (context.game.currentDuel.duelType === DuelTypes.Political) {
-            amount = parseInt(card.cardData.political_bonus);
-        }
-
-        return isNaN(amount) ? 0 : amount;
+    public canPlay(context: TriggeredAbilityContext, playType: string) {
+        return (
+            context.player.cardsInPlay.any(
+                (card: DrawCard) => card.getType() === CardTypes.Character && card.hasTrait('shugenja')
+            ) && super.canPlay(context, playType)
+        );
     }
 }

@@ -10,7 +10,7 @@ describe('Bitting Steel', function () {
                         inPlay: ['akodo-makoto']
                     },
                     player2: {
-                        inPlay: ['mirumoto-raitsugu'],
+                        inPlay: ['mirumoto-raitsugu', 'miya-mystic'],
                         hand: ['biting-steel', 'fine-katana']
                     },
                     gameMode: GameModes.Emerald
@@ -23,12 +23,12 @@ describe('Bitting Steel', function () {
                 this.katana = this.player2.findCardByName('fine-katana');
             });
 
-            it('shouldn\'t attach if you don\'t have a weapon', function () {
+            it("shouldn't attach if you don't have a weapon", function () {
                 this.player1.pass();
                 expect(this.player2).toHavePrompt('Action Window');
                 this.player2.clickCard(this.bitingSteel);
                 expect(this.player2).toHavePrompt('Action Window');
-            })
+            });
 
             it('contributes to duel', function () {
                 this.player1.pass();
@@ -74,7 +74,7 @@ describe('Bitting Steel', function () {
                     },
                     player2: {
                         inPlay: ['doomed-shugenja', 'enlightened-warrior'],
-                        hand: ['biting-steel', 'daikyu']
+                        hand: ['biting-steel', 'fine-katana']
                     }
                 });
 
@@ -84,10 +84,10 @@ describe('Bitting Steel', function () {
                 this.doomed = this.player2.findCardByName('doomed-shugenja');
                 this.warrior = this.player2.findCardByName('enlightened-warrior');
                 this.bitingSteel = this.player2.findCardByName('biting-steel');
-                this.daikyu = this.player2.findCardByName('daikyu');
+                this.fineKatana = this.player2.findCardByName('fine-katana');
 
                 this.player1.pass();
-                this.player2.playAttachment(this.daikyu, this.warrior);
+                this.player2.playAttachment(this.fineKatana, this.warrior);
                 this.player1.pass();
                 this.player2.playAttachment(this.bitingSteel, this.warrior);
             });
@@ -100,21 +100,15 @@ describe('Bitting Steel', function () {
                 });
 
                 this.player2.clickCard(this.bitingSteel);
-                expect(this.warrior.militarySkill).toBe(4);
-                expect(this.getChatLogs(5)).toContain(
-                    'player2 uses Biting Steel to give +2 military to Enlightened Warrior'
-                );
-                expect(this.player2).toHavePrompt('Send a character home?');
-
-                this.player2.clickPrompt('Yes');
+                expect(this.player2).toHavePrompt('Choose a character');
                 expect(this.player2).toBeAbleToSelect(this.challenger);
                 expect(this.player2).not.toBeAbleToSelect(this.kuwanan);
                 expect(this.player2).not.toBeAbleToSelect(this.warrior);
-                expect(this.player2).toBeAbleToSelect(this.doomed);
+                expect(this.player2).not.toBeAbleToSelect(this.doomed);
 
                 this.player2.clickCard(this.challenger);
                 expect(this.challenger.isParticipating()).toBe(false);
-                expect(this.getChatLogs(5)).toContain('player2 channels their fire affinity to send a character home');
+                expect(this.getChatLogs(5)).toContain('player2 uses Biting Steel to send Doji Challenger home');
             });
         });
     });
