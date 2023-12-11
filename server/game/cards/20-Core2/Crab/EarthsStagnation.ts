@@ -31,4 +31,12 @@ export default class EarthsStagnation extends DrawCard {
             limit: AbilityDsl.limit.unlimitedPerConflict()
         });
     }
+
+    public canPlay(context: TriggeredAbilityContext, playType: string) {
+        return (
+            context.player.cardsInPlay.any(
+                (card: DrawCard) => card.getType() === CardTypes.Character && card.hasTrait('shugenja')
+            ) && super.canPlay(context, playType)
+        );
+    }
 }
