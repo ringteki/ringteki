@@ -122,7 +122,7 @@ describe('Diligent Chaperone', function () {
             );
         });
 
-        it('should cancel dishonoring via cost', function () {
+        it('should not cancel dishonoring via cost', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.brash],
@@ -134,17 +134,8 @@ describe('Diligent Chaperone', function () {
             this.player1.clickCard(this.whisperer);
             this.player1.clickCard(this.brash);
 
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.yojimbo);
-            this.player1.clickCard(this.yojimbo);
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.brash.isHonored).toBe(true);
-            expect(this.whisperer.isHonored).toBe(true);
-
-            expect(this.getChatLogs(10)).toContain(
-                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
-            );
-            expect(this.getChatLogs(10)).toContain('player1 plays Resourcefulness, dishonoring Brash Samurai to honor Doji Whisperer')
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.yojimbo);
         });
 
         it('cannot attack', function () {

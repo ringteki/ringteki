@@ -1,4 +1,4 @@
-import { Locations, CardTypes, CharacterStatus } from '../../../Constants';
+import { CardTypes, CharacterStatus, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -16,11 +16,13 @@ export default class DiligentChaperone extends DrawCard {
             when: {
                 onStatusTokenMoved: (event, context) =>
                     event.token.grantedStatus === CharacterStatus.Honored &&
+                    event.context.player === context.player.opponent &&
                     event.token.card.controller === context.player &&
                     event.token.card.type === CardTypes.Character &&
                     !context.source.bowed,
                 onCardDishonored: (event, context) =>
                     event.card.isHonored &&
+                    event.context.player === context.player.opponent &&
                     event.card.controller === context.player &&
                     event.card.type === CardTypes.Character &&
                     !context.source.bowed
