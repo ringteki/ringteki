@@ -8,7 +8,8 @@ export default class EarthsExamination extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Taint a character',
-            condition: (context) => context.game.isDuringConflict(ConflictTypes.Political),
+            condition: (context) =>
+                context.game.isDuringConflict(ConflictTypes.Political) && context.player.isTraitInPlay('shugenja'),
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.isParticipating(),
