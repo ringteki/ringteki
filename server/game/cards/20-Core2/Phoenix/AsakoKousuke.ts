@@ -1,6 +1,5 @@
-import { CardTypes, CharacterStatus, TargetModes } from '../../../Constants';
-import { EventRegistrar } from '../../../EventRegistrar';
-import type { GameAction } from '../../../GameActions/GameAction';
+import { CardTypes, TargetModes } from '../../../Constants';
+import { GameAction } from '../../../GameActions/GameAction';
 import { StatusToken } from '../../../StatusToken';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
@@ -11,12 +10,7 @@ const SELECTION = 'selection';
 export default class AsakoKousuke extends DrawCard {
     static id = 'asako-kousuke';
 
-    tokensChanged = new Set<StatusToken>();
-
     setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register(['onConflictFinished']);
-
         this.action({
             title: 'Treat the status token on a character as if it was another status token',
             condition: (context) => context.game.isDuringConflict(),
@@ -41,56 +35,47 @@ export default class AsakoKousuke extends DrawCard {
                         const choices = [] as Array<[string, GameAction]>;
                         if (!targetCard.isHonored) {
                             choices.push([
-                                'Turn it into Honorable',
-                                this.handlerToOverrideStatus(targetToken, CharacterStatus.Honored)
+                                'Turn it into Honored',
+                                AbilityDsl.actions.joint([
+                                    AbilityDsl.actions.discardStatusToken({ target: targetToken }),
+                                    AbilityDsl.actions.honor({ target: targetCard })
+                                ])
                             ]);
                         }
 
                         if (!targetCard.isDishonored) {
                             choices.push([
-                                'Turn it into Dishonorable',
-                                this.handlerToOverrideStatus(targetToken, CharacterStatus.Dishonored)
+                                'Turn it into Dishonored',
+                                AbilityDsl.actions.joint([
+                                    AbilityDsl.actions.discardStatusToken({ target: targetToken }),
+                                    AbilityDsl.actions.dishonor({ target: targetCard })
+                                ])
                             ]);
                         }
 
                         if (!targetCard.isTainted) {
                             choices.push([
                                 'Turn it into Tainted',
-                                this.handlerToOverrideStatus(targetToken, CharacterStatus.Tainted)
+                                AbilityDsl.actions.joint([
+                                    AbilityDsl.actions.discardStatusToken({ target: targetToken }),
+                                    AbilityDsl.actions.taint({ target: targetCard })
+                                ])
                             ]);
                         }
 
                         return Object.fromEntries(choices);
                     }
                 }
-            }
-        });
-    }
-
-    public onConflictFinished() {
-        for (const token of this.tokensChanged) {
-            const targetCard = token.card;
-            token.overrideStatus = undefined;
-            if (targetCard) {
-                targetCard.updateStatusTokenEffects();
-            }
-        }
-        this.tokensChanged.clear();
-    }
-
-    handlerToOverrideStatus(token: StatusToken, newStatus: CharacterStatus) {
-        return AbilityDsl.actions.handler({
-            handler: (context) => {
-                token.overrideStatus = newStatus;
-                this.tokensChanged.add(token);
-                token.card.updateStatusTokenEffects();
-                context.game.addMessage(
-                    "{0}'s wisdom and wit clarifies what it means to be {2}. For this conflict, {1} is treated as {2}",
-                    context.source,
-                    token.card,
-                    newStatus
-                );
-            }
+            },
+            effect: 'clarify what it means to be {2}. The exposition reveals that {1} is {2}',
+            effectArgs: (context) => [
+                context.tokens[ORIGINL_TOKEN][0].card,
+                context.selects.selection.choice === 'Turn it into Honored'
+                    ? 'honored'
+                    : context.selects.selection.choice === 'Turn it into Dishonored'
+                    ? 'dishonored'
+                    : 'tainted'
+            ]
         });
     }
 }
