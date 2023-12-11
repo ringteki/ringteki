@@ -1,4 +1,4 @@
-import { CardTypes, Players } from '../../../Constants';
+import { CardTypes, Players, TargetModes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import type DrawCard from '../../../drawcard';
 import { BattlefieldAttachment } from '../../BattlefieldAttachment';
@@ -10,10 +10,14 @@ export default class DaclarationOfDominion extends BattlefieldAttachment {
         super.setupCardAbilities();
 
         this.action({
-            title: 'Gives Pride to an attacker and a defender',
+            title: 'Gives Pride to chosen characters',
             condition: (context) => context.source.parent?.isConflictProvince(),
             targets: {
-                ownSide: {
+                myCard: {
+                    activePromptTitle: 'Choose a character on your side',
+                    mode: TargetModes.UpTo,
+                    numCards: 1,
+                    optional: true,
                     cardType: CardTypes.Character,
                     controller: Players.Self,
                     cardCondition: (card: DrawCard) => card.isParticipating(),
@@ -21,7 +25,11 @@ export default class DaclarationOfDominion extends BattlefieldAttachment {
                         effect: AbilityDsl.effects.addKeyword('pride')
                     })
                 },
-                otherSide: {
+                opponentsCard: {
+                    activePromptTitle: 'Choose a character on the enemy side',
+                    mode: TargetModes.UpTo,
+                    numCards: 1,
+                    optional: true,
                     cardType: CardTypes.Character,
                     controller: Players.Opponent,
                     cardCondition: (card: DrawCard) => card.isParticipating(),
@@ -29,7 +37,13 @@ export default class DaclarationOfDominion extends BattlefieldAttachment {
                         effect: AbilityDsl.effects.addKeyword('pride')
                     })
                 }
-            }
+            },
+            effect: 'give pride to {1}',
+            effectArgs: (context) => [
+                ((context.targets.myCard as undefined | Array<DrawCard>) ?? []).concat(
+                    (context.targets.opponentsCard as undefined | Array<DrawCard>) ?? []
+                )
+            ]
         });
     }
 }
