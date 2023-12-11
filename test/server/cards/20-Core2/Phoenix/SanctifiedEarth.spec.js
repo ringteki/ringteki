@@ -22,7 +22,7 @@ describe('Sanctified Earth', function () {
             this.shoju = this.player2.findCardByName('bayushi-shoju');
             this.outwit = this.player2.findCardByName('outwit');
 
-            this.player1.playAttachment(this.sanctifiedEarth, this.garantoGuardian);
+            this.player1.playAttachment(this.sanctifiedEarth, this.adept);
             this.noMoreActions();
         });
 
@@ -35,11 +35,18 @@ describe('Sanctified Earth', function () {
 
             expect(this.player1).toHavePrompt('Any reactions?');
 
+            this.player1.clickCard(this.sanctifiedEarth);
+            expect(this.player1).toHavePrompt('Choose a character');
+
+            expect(this.player1).toBeAbleToSelect(this.garantoGuardian);
+            expect(this.player1).not.toBeAbleToSelect(this.adept);
+            expect(this.player1).not.toBeAbleToSelect(this.shoju);
+
             this.player1.clickCard(this.garantoGuardian);
             expect(this.garantoGuardian.getMilitarySkill()).toBe(6);
             expect(this.garantoGuardian.getPoliticalSkill()).toBe(5);
             expect(this.getChatLogs(5)).toContain(
-                "player1 uses Garanto Guardian's gained ability from Sanctified Earth to give +2military and +2political to Garanto Guardian"
+                'player1 uses Sanctified Earth to give +2military and +2political to Garanto Guardian'
             );
         });
 
@@ -47,20 +54,27 @@ describe('Sanctified Earth', function () {
             this.player1.moveCard(this.solemn, 'dynasty discard pile');
 
             this.initiateConflict({
-                attackers: [this.adept],
-                defenders: [this.shoju]
+                attackers: [this.adept]
             });
+            this.player1.clickPrompt('Pass');
+            this.player2.clickCard(this.shoju);
+            this.player2.clickPrompt('Done');
 
             this.player2.pass();
             this.player1.clickCard(this.oneWithTheSea);
             this.player1.clickCard(this.garantoGuardian);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.sanctifiedEarth);
+            expect(this.player1).toBeAbleToSelect(this.garantoGuardian);
+            expect(this.player1).not.toBeAbleToSelect(this.adept);
+            expect(this.player1).not.toBeAbleToSelect(this.shoju);
+
             this.player1.clickCard(this.garantoGuardian);
             expect(this.garantoGuardian.getMilitarySkill()).toBe(6);
             expect(this.garantoGuardian.getPoliticalSkill()).toBe(5);
             expect(this.getChatLogs(5)).toContain(
-                "player1 uses Garanto Guardian's gained ability from Sanctified Earth to give +2military and +2political to Garanto Guardian"
+                'player1 uses Sanctified Earth to give +2military and +2political to Garanto Guardian'
             );
 
             this.player2.clickCard(this.outwit);
@@ -70,20 +84,27 @@ describe('Sanctified Earth', function () {
 
         it('with affinity, it gives skill bonus to a character on move and block send home', function () {
             this.initiateConflict({
-                attackers: [this.adept],
-                defenders: [this.shoju]
+                attackers: [this.adept]
             });
+            this.player1.clickPrompt('Pass');
+            this.player2.clickCard(this.shoju);
+            this.player2.clickPrompt('Done');
 
             this.player2.pass();
             this.player1.clickCard(this.oneWithTheSea);
             this.player1.clickCard(this.garantoGuardian);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.sanctifiedEarth);
+            expect(this.player1).toBeAbleToSelect(this.garantoGuardian);
+            expect(this.player1).not.toBeAbleToSelect(this.adept);
+            expect(this.player1).not.toBeAbleToSelect(this.shoju);
+
             this.player1.clickCard(this.garantoGuardian);
             expect(this.garantoGuardian.getMilitarySkill()).toBe(6);
             expect(this.garantoGuardian.getPoliticalSkill()).toBe(5);
             expect(this.getChatLogs(5)).toContain(
-                "player1 uses Garanto Guardian's gained ability from Sanctified Earth to give +2military and +2political to Garanto Guardian"
+                'player1 uses Sanctified Earth to give +2military and +2political to Garanto Guardian'
             );
             expect(this.getChatLogs(5)).toContain(
                 "player1 channels their earth affinity to make Garanto Guardian invulnerable to opponent's send home"
