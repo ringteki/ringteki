@@ -8,6 +8,7 @@ describe("Earth's Stagnation", function () {
                     hand: ['a-perfect-cut', 'icon-of-favor']
                 },
                 player2: {
+                    inPlay: ['resourceful-maho-tsukai'],
                     dynastyDiscard: ['apprentice-earthcaller', 'kaiu-envoy'],
                     hand: ['earth-s-stagnation', 'ornate-fan', 'forebearer-s-echoes']
                 }
@@ -16,6 +17,7 @@ describe("Earth's Stagnation", function () {
             this.tactician = this.player1.findCardByName('master-tactician');
             this.perfectCut = this.player1.findCardByName('a-perfect-cut');
             this.iconOfFavor = this.player1.findCardByName('icon-of-favor');
+
             this.stagnation = this.player2.findCardByName('earth-s-stagnation');
             this.earthcaller = this.player2.findCardByName('apprentice-earthcaller');
             this.envoy = this.player2.findCardByName('kaiu-envoy');
@@ -23,8 +25,7 @@ describe("Earth's Stagnation", function () {
             this.echoes = this.player2.findCardByName('forebearer-s-echoes');
 
             this.player1.pass();
-            this.player2.clickCard(this.stagnation);
-            this.player2.clickCard(this.tactician);
+            this.player2.playAttachment(this.stagnation, this.tactician);
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.tactician],

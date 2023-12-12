@@ -39,7 +39,7 @@ describe('Avalanche of Stone', function () {
             expect(this.yokuni.bowed).toBe(false);
 
             expect(this.getChatLogs(3)).toContain(
-                'player2 uses Mount Roraima to bow Aggressive Moto, Worldly Shiotome and Togashi Initiate'
+                'player2 uses Avalanche of Stone to bow Aggressive Moto, Worldly Shiotome and Togashi Initiate'
             );
         });
     });

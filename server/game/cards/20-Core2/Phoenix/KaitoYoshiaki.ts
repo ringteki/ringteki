@@ -10,6 +10,7 @@ export default class KaitoYoshiaki extends DrawCard {
     static id = 'kaito-yoshiaki';
 
     setupCardAbilities() {
+        this.getMilitarySkill;
         this.action({
             title: 'Punish the wicked',
             condition: (context) => context.source.isParticipating(),

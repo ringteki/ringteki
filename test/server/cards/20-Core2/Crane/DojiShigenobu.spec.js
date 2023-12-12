@@ -18,7 +18,7 @@ describe('Doji Shigenobu', function () {
             this.brash.honor();
         });
 
-        it('should bow someone at the cost of bowing something participating then ask if you want to move home', function () {
+        it('should bow an enemy at the cost of bowing your participating then ask if you want to move home', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.shigenobu],
@@ -28,8 +28,8 @@ describe('Doji Shigenobu', function () {
             this.player2.pass();
 
             this.player1.clickCard(this.shigenobu);
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-            expect(this.player1).toBeAbleToSelect(this.shigenobu);
+            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+            expect(this.player1).not.toBeAbleToSelect(this.shigenobu);
             expect(this.player1).toBeAbleToSelect(this.dairu);
             this.player1.clickCard(this.dairu);
 

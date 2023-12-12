@@ -8,7 +8,8 @@ describe('All Cards:', function () {
             'addPower',
             'addMessage',
             'addEffect',
-            'getProvinceArray'
+            'getProvinceArray',
+            'getPlayers'
         ]);
         this.gameSpy.rings = {
             air: {},
@@ -26,6 +27,7 @@ describe('All Cards:', function () {
             'province 4',
             'stronghold province'
         ]);
+        this.gameSpy.getPlayers.and.returnValue([]);
     });
 
     cards.forEach((CardClass, cardId) => {

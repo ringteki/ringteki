@@ -5,7 +5,7 @@ describe('Unyielding Terms', function () {
                 phase: 'conflict',
                 player1: {
                     fate: 20,
-                    inPlay: ['kakita-zinkae', 'brash-samurai', 'doji-challenger'],
+                    inPlay: ['daidoji-akikore', 'brash-samurai', 'doji-challenger'],
                     hand: ['unyielding-terms']
                 },
                 player2: {
@@ -14,7 +14,7 @@ describe('Unyielding Terms', function () {
                 }
             });
 
-            this.zinkae = this.player1.findCardByName('kakita-zinkae');
+            this.akikore = this.player1.findCardByName('daidoji-akikore');
             this.brash = this.player1.findCardByName('brash-samurai');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.unyieldingTerms = this.player1.findCardByName('unyielding-terms');
@@ -28,10 +28,9 @@ describe('Unyielding Terms', function () {
             this.atw = this.player2.findCardByName('against-the-waves');
         });
 
-
         it('should give opportunity to refuse', function () {
             this.player1.clickCard(this.unyieldingTerms);
-            this.player1.clickCard(this.zinkae);
+            this.player1.clickCard(this.akikore);
             this.player1.clickCard(this.atsuko);
             expect(this.player2).toHavePrompt('Do you wish to refuse the duel?');
             expect(this.player2).toHavePromptButton('Yes');
@@ -40,7 +39,7 @@ describe('Unyielding Terms', function () {
 
         it('should discard half your hand rounded down to refuse', function () {
             this.player1.clickCard(this.unyieldingTerms);
-            this.player1.clickCard(this.zinkae);
+            this.player1.clickCard(this.akikore);
             this.player1.clickCard(this.atsuko);
 
             this.player2.clickPrompt('Yes');
@@ -72,7 +71,7 @@ describe('Unyielding Terms', function () {
             this.atsuko.fate = 2;
 
             this.player1.clickCard(this.unyieldingTerms);
-            this.player1.clickCard(this.zinkae);
+            this.player1.clickCard(this.akikore);
             this.player1.clickCard(this.atsuko);
             this.player2.clickPrompt('No');
 
@@ -112,9 +111,9 @@ describe('Unyielding Terms', function () {
             this.player2.pass();
 
             this.player1.clickCard(this.unyieldingTerms);
-            expect(this.player1).toBeAbleToSelect(this.zinkae);
+            expect(this.player1).toBeAbleToSelect(this.akikore);
             expect(this.player1).toBeAbleToSelect(this.challenger);
-            this.player1.clickCard(this.zinkae);
+            this.player1.clickCard(this.akikore);
             expect(this.player1).toBeAbleToSelect(this.atsuko);
             expect(this.player1).toBeAbleToSelect(this.scholar);
         });

@@ -22,7 +22,7 @@ describe('Togashi Naname', function () {
             this.yoshi.fate = 2;
         });
 
-        it('should target a participating character and a ring and give opponent a choice', function () {
+        it('should target a participating character with fate and a ring and give opponent a choice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yoshi, this.uji],
@@ -35,7 +35,7 @@ describe('Togashi Naname', function () {
 
             this.player2.clickCard(this.naname);
             expect(this.player2).toBeAbleToSelect(this.yoshi);
-            expect(this.player2).toBeAbleToSelect(this.uji);
+            expect(this.player2).not.toBeAbleToSelect(this.uji); // no fate
             expect(this.player2).not.toBeAbleToSelect(this.challenger);
             expect(this.player2).not.toBeAbleToSelect(this.naname);
             expect(this.player2).not.toBeAbleToSelect(this.tsukune);

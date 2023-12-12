@@ -9,7 +9,7 @@ describe("Fukurokushi's Blessing", function () {
                 },
                 player2: {
                     hand: ['feeding-an-army'],
-                    provinces: ['midnight-revels', 'public-forum'],
+                    provinces: ['midnight-revels', 'cycle-of-vengeance'],
                     inPlay: ['solemn-scholar']
                 }
             });
@@ -19,9 +19,9 @@ describe("Fukurokushi's Blessing", function () {
 
             this.feeding = this.player2.findCardByName('feeding-an-army');
             this.revels = this.player2.findCardByName('midnight-revels', 'province 1');
-            this.publicForum = this.player2.findCardByName('public-forum', 'province 2');
+            this.cycleOfVengeance = this.player2.findCardByName('cycle-of-vengeance', 'province 2');
             this.revels.facedown = false;
-            this.publicForum.facedown = false;
+            this.cycleOfVengeance.facedown = false;
 
             this.player1.clickPrompt('1');
             this.player2.clickPrompt('1');
@@ -51,16 +51,23 @@ describe("Fukurokushi's Blessing", function () {
         });
 
         it('does not work outside conflicts', function () {
+            /**
+             * THIS TEST IS FLAKY. THE REASON WHY IS A MYSTERY
+             */
             this.noMoreActions();
+
             this.player2.clickCard(this.feeding);
-            this.player2.clickCard(this.publicForum);
-            this.player2.clickCard(this.publicForum);
-            expect(this.getChatLogs(10)).toContain(
-                'player2 uses Public Forum to add an honor token to Public Forum instead of breaking it'
-            );
+            this.player2.clickCard(this.cycleOfVengeance);
+            this.player2.clickCard(this.cycleOfVengeance);
+
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
             expect(this.player1).not.toBeAbleToSelect(this.blessing);
-            expect(this.publicForum.isBroken).toBe(false);
+
+            this.player2.clickCard(this.kuwanan);
+            expect(this.getChatLogs(10)).toContain(
+                'player2 uses Cycle of Vengeance to honor and place a fate on Doji Kuwanan'
+            );
+            expect(this.cycleOfVengeance.isBroken).toBe(true);
         });
     });
 });

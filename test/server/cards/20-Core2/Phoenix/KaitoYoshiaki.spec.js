@@ -52,7 +52,6 @@ describe('Kaito Yoshiaki', function () {
 
         it('set base to zero, and remove fate when tainted', function () {
             this.brash.taint();
-
             this.initiateConflict({
                 attackers: [this.kaitoYoshiaki],
                 defenders: [this.brash]
@@ -60,7 +59,8 @@ describe('Kaito Yoshiaki', function () {
             this.player2.clickCard(this.brash);
             this.player1.clickCard(this.kaitoYoshiaki);
             this.player1.clickCard(this.brash);
-            expect(this.brash.getMilitarySkill()).toBe(2);
+            expect(this.brash.getMilitarySkill()).toBe(4); // honored and tainted
+            expect(this.brash.getPoliticalSkill()).toBe(4); // honored and tainted
             expect(this.brash.fate).toBe(1);
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Kaito Yoshiaki to remove a fate from and set the base skills of Brash Samurai to 0military/0political'

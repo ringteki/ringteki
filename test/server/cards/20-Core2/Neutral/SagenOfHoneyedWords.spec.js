@@ -51,7 +51,7 @@ describe('Sagen of Honeyed Words', function () {
 
             this.player2.pass();
             this.player1.clickCard(this.asahinaDiviner);
-            this.player1.clickCard(this.sagenOfHoneyedWords);
+            this.player1.clickCard(this.bayushiManipulator);
             this.player2.pass();
 
             this.player1.clickCard(this.sagenOfHoneyedWords);

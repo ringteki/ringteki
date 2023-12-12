@@ -187,52 +187,54 @@ export class ProvinceCard extends BaseCard {
     breakProvince() {
         this.isBroken = true;
         this.removeAllTokens();
-        if (this.controller.opponent) {
-            this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
-            if (
-                this.location === Locations.StrongholdProvince ||
-                (this.game.gameMode === GameModes.Skirmish &&
-                    this.controller.getProvinces((card) => card.isBroken).length > 2)
-            ) {
-                this.game.recordWinner(this.controller.opponent, 'conquest');
-            } else {
-                const dynastyCards = this.controller.getDynastyCardsInProvince(this.location);
-                dynastyCards.forEach((dynastyCard) => {
-                    if (dynastyCard) {
-                        const promptTitle =
-                            'Do you wish to discard ' +
-                            (dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name) +
-                            '?';
-                        const choosingPlayer =
-                            this.game.isDuringConflict() && this.game.currentConflict?.attackingPlayer
-                                ? this.game.currentConflict.attackingPlayer
-                                : this.controller.opponent;
-                        this.game.promptWithHandlerMenu(choosingPlayer, {
-                            activePromptTitle: promptTitle,
-                            source: 'Break ' + this.name,
-                            choices: ['Yes', 'No'],
-                            handlers: [
-                                () => {
-                                    this.game.addMessage(
-                                        '{0} chooses to discard {1}',
-                                        choosingPlayer,
-                                        dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard
-                                    );
-                                    this.game.applyGameAction(this.game.getFrameworkContext(), {
-                                        discardCard: dynastyCard
-                                    });
-                                },
-                                () =>
-                                    this.game.addMessage(
-                                        '{0} chooses not to discard {1}',
-                                        choosingPlayer,
-                                        dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard
-                                    )
-                            ]
-                        });
-                    }
-                });
+        if (!this.controller.opponent) {
+            return;
+        }
+
+        this.game.addMessage('{0} has broken {1}!', this.controller.opponent, this);
+
+        if (
+            this.location === Locations.StrongholdProvince ||
+            (this.game.gameMode === GameModes.Skirmish &&
+                this.controller.getProvinces((card: ProvinceCard) => card.isBroken).length > 2)
+        ) {
+            this.game.recordWinner(this.controller.opponent, 'conquest');
+            return;
+        }
+
+        for (const dynastyCard of this.controller.getDynastyCardsInProvince(this.location)) {
+            if (!dynastyCard) {
+                // Why?
+                continue;
             }
+
+            const choosingPlayer =
+                this.game.isDuringConflict() && this.game.currentConflict?.attackingPlayer
+                    ? this.game.currentConflict.attackingPlayer
+                    : this.controller.opponent;
+            this.game.promptWithHandlerMenu(choosingPlayer, {
+                activePromptTitle: `Do you wish to discard ${
+                    dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name
+                }?`,
+                source: 'Break ' + this.name,
+                choices: ['Yes', 'No'],
+                handlers: [
+                    () => {
+                        this.game.addMessage(
+                            '{0} chooses to discard {1}',
+                            choosingPlayer,
+                            dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard
+                        );
+                        this.game.applyGameAction(this.game.getFrameworkContext(), { discardCard: dynastyCard });
+                    },
+                    () =>
+                        this.game.addMessage(
+                            '{0} chooses not to discard {1}',
+                            choosingPlayer,
+                            dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard
+                        )
+                ]
+            });
         }
     }
 

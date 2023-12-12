@@ -6,7 +6,7 @@ describe('Agasha Crucible', function () {
                 player1: {
                     inPlay: ['doomed-shugenja'],
                     dynastyDiscard: ['agasha-crucible'],
-                    hand: ['rejuvenating-vapors', 'portable-bastion']
+                    hand: ['rejuvenating-vapors', 'grasp-of-earth-2']
                 },
                 player2: {
                     dynastyDiscard: ['favorable-ground']
@@ -14,7 +14,7 @@ describe('Agasha Crucible', function () {
             });
 
             this.suitengu = this.player1.findCardByName('rejuvenating-vapors');
-            this.bastion = this.player1.findCardByName('portable-bastion');
+            this.graspOfEarth = this.player1.findCardByName('grasp-of-earth-2');
             this.doomed = this.player1.findCardByName('doomed-shugenja');
             this.doomed.bow();
 
@@ -39,7 +39,7 @@ describe('Agasha Crucible', function () {
         it('triggers when spell attachment is played', function () {
             const initFate = this.player1.fate;
 
-            this.player1.clickCard(this.bastion);
+            this.player1.clickCard(this.graspOfEarth);
             this.player1.clickCard(this.doomed);
             expect(this.player1).toHavePrompt('Any interrupts?');
             expect(this.player1).toBeAbleToSelect(this.agashaFoundry);
