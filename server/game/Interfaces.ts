@@ -156,6 +156,9 @@ export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> 
     condition?: (context?: AbilityContext<Source>) => boolean;
     phase?: Phases | 'any';
     emeraldWorksInDynsty?: boolean;
+    /**
+     * @deprecated
+     */
     anyPlayer?: boolean;
     conflictProvinceCondition?: (province: ProvinceCard, context: AbilityContext<Source>) => boolean;
     canTriggerOutsideConflict?: boolean;
@@ -206,7 +209,7 @@ export type TriggeredAbilityProps = TriggeredAbilityWhenProps | TriggeredAbility
 export interface PersistentEffectProps<Source = any> {
     location?: Locations | Locations[];
     condition?: (context: AbilityContext<Source>) => boolean;
-    match?: (card: BaseCard, context?: AbilityContext) => boolean;
+    match?: (card: BaseCard, context?: AbilityContext<Source>) => boolean;
     targetController?: Players;
     targetLocation?: Locations;
     effect: Function | Function[];
