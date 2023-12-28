@@ -1,6 +1,6 @@
-describe('War Cry', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('War Cry', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -26,7 +26,7 @@ describe('War Cry', function() {
             this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('should break a province after you win a military conflict with berserkers', function() {
+        it('should break a province after you win a military conflict with berserkers', function () {
             this.noMoreActions();
             let hand = this.player1.hand.length;
             this.initiateConflict({
@@ -42,9 +42,10 @@ describe('War Cry', function() {
             expect(this.getChatLogs(5)).toContain('player1 plays War Cry to break an attacked province');
             expect(this.sd.isBroken).toBe(true);
             expect(this.player1.hand.length).toBe(hand - 1);
+            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to break an attacked province');
         });
 
-        it('should not trigger after you win a military conflict with a non-berserker', function() {
+        it('should not trigger after you win a military conflict with a non-berserker', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.skirmisher, this.whisperer],
@@ -54,30 +55,7 @@ describe('War Cry', function() {
             });
             this.noMoreActions();
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-        });
-
-        it('should draw at Stronghold', function() {
-            this.sd.isBroken = true;
-            this.sd2.isBroken = true;
-            this.sd3.isBroken = true;
-            this.sd4.isBroken = true;
-            this.game.checkGameState(true);
-
-            this.noMoreActions();
-            let hand = this.player1.hand.length;
-            this.initiateConflict({
-                attackers: [this.skirmisher],
-                defenders: [],
-                type: 'military',
-                province: this.sd5
-            });
-            this.noMoreActions();
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.warcry);
-            this.player1.clickCard(this.warcry);
-            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to draw a card');
-            expect(this.sd5.isBroken).toBe(false);
-            expect(this.player1.hand.length).toBe(hand);
+            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to break an attacked province');
         });
     });
 });

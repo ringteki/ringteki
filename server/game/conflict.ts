@@ -519,4 +519,13 @@ export class Conflict extends GameObject {
             this.getConflictProvinces().some((p) => p.getStrength() - (this.attackerSkill - this.defenderSkill) <= 0)
         );
     }
+
+    public isAtStrongholdProvince(): boolean {
+        for (const province of this.getConflictProvinces()) {
+            if (province.location === Locations.StrongholdProvince) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
