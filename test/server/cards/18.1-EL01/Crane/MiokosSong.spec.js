@@ -1,54 +1,97 @@
-describe('Mioko\'s Song', function() {
-    integration(function() {
-        beforeEach(function() {
-            this.setupTest({
-                phase: 'conflict',
-                player1: {
-                    inPlay: ['doji-challenger', 'kakita-yoshi', 'doji-kuwanan', 'doji-whisperer'],
-                    hand: ['festival-for-the-fortunes', 'way-of-the-crane'],
-                    stronghold: ['mioko-s-song'],
-                    dynastyDiscard: ['favorable-ground']
-                },
-                player2: {
-                    inPlay: ['savvy-politician'],
-                    hand: ['assassination']
-                }
+const { GameModes } = require('../../../../../build/server/GameModes');
+
+describe("Mioko's Song", function () {
+    integration(function () {
+        describe('Static ability', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    player1: {
+                        stronghold: ['mioko-s-song'],
+                        inPlay: ['daidoji-ahma', 'kakita-yoshi', 'hantei-daisetsu']
+                    }
+                });
+
+                this.ahma = this.player1.findCardByName('daidoji-ahma');
+                this.yoshi = this.player1.findCardByName('kakita-yoshi');
+                this.daisetsu = this.player1.findCardByName('hantei-daisetsu');
+
+                this.ahma.dishonor();
+                this.yoshi.dishonor();
+                this.daisetsu.dishonor();
+                this.noMoreActions();
             });
 
-            this.sh = this.player1.findCardByName('mioko-s-song');
-            this.crane = this.player1.findCardByName('way-of-the-crane');
-            this.ground = this.player1.findCardByName('favorable-ground');
-            this.whisperer = this.player1.findCardByName('doji-whisperer');
-            this.yoshi = this.player1.findCardByName('kakita-yoshi');
-            this.festival = this.player1.findCardByName('festival-for-the-fortunes');
-            this.challenger = this.player1.findCardByName('doji-challenger');
-            this.kuwanan = this.player1.findCardByName('doji-kuwanan');
-            this.savvy = this.player2.findCardByName('savvy-politician');
-
-            this.player1.placeCardInProvince(this.ground, 'province 1');
-            this.assassination = this.player2.findCardByName('assassination');
+            it('gives skill bonus to dishonored crane characters', function () {
+                expect(this.ahma.getMilitarySkill()).toBe(1);
+                expect(this.ahma.getPoliticalSkill()).toBe(2);
+                expect(this.yoshi.getMilitarySkill()).toBe(0);
+                expect(this.yoshi.getPoliticalSkill()).toBe(4);
+                expect(this.daisetsu.getMilitarySkill()).toBe(0);
+                expect(this.daisetsu.getPoliticalSkill()).toBe(1);
+            });
         });
 
-        it('should dishonor someone to gain a fate and give target Courtesy', function() {
-            let fate = this.player1.fate;
-            this.player1.clickCard(this.sh);
-            this.player1.clickCard(this.whisperer);
+        describe('Reaction', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    gameMode: GameModes.Emerald,
+                    phase: 'dynasty',
+                    player1: {
+                        stronghold: ['mioko-s-song'],
+                        dynastyDiscard: ['kakita-yoshi', 'hantei-daisetsu'],
+                        inPlay: ['doji-whisperer']
+                    },
+                    player2: {
+                        dynastyDiscard: ['aranat', 'border-rider', 'moto-youth'],
+                        provinces: ['shameful-display']
+                    }
+                });
 
-            expect(this.whisperer.isDishonored).toBe(true);
-            expect(this.whisperer.hasKeyword('courtesy')).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mioko\'s Song, bowing Mioko\'s Song and dishonoring Doji Whisperer to gain a fate and give Doji Whisperer Courtesy until the end of the round');
-            expect(this.player1.fate).toBe(fate + 1);
+                this.miokosSong = this.player1.findCardByName('mioko-s-song');
+                this.whisperer = this.player1.findCardByName('doji-whisperer');
+                this.yoshi = this.player1.placeCardInProvince('kakita-yoshi', 'province 1');
+                this.daisetsu = this.player1.moveCard('hantei-daisetsu', 'province 1');
 
-            this.noMoreActions();
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+                this.aranat = this.player2.findCardByName('aranat');
+                this.borderRider = this.player2.findCardByName('border-rider');
+                this.motoYouth = this.player2.findCardByName('moto-youth');
+                this.shamefulDisplay = this.player2.findCardByName('shameful-display', 'province 1');
+                this.shamefulDisplay.facedown = true;
 
-            this.initiateConflict({
-                attackers: [this.whisperer],
-                defenders: []
+                this.player2.moveCard(this.aranat, 'province 1');
+                this.player2.moveCard(this.motoYouth, 'dynasty deck');
+                this.player2.moveCard(this.borderRider, 'dynasty deck');
             });
-            this.player2.clickCard(this.assassination);
-            this.player2.clickCard(this.whisperer);
-            expect(this.player1.fate).toBe(fate + 2);
-            expect(this.getChatLogs(5)).toContain('player1 gains a fate due to Doji Whisperer\'s Courtesy');
+
+            it('discards all cards from opponent province', function () {
+                this.player1.clickCard(this.yoshi);
+                this.player1.clickPrompt('0');
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.miokosSong);
+
+                this.player1.clickCard(this.miokosSong);
+                expect(this.player1).toHavePrompt('Choose a province');
+
+                this.player1.clickCard(this.shamefulDisplay);
+                expect(this.player1).toHavePrompt('Select character to dishonor');
+                expect(this.player1).toBeAbleToSelect(this.yoshi);
+                expect(this.player1).not.toBeAbleToSelect(this.whisperer);
+
+                this.player1.clickCard(this.yoshi);
+                expect(this.yoshi.isDishonored).toBe(true);
+
+                expect(this.player1).toHavePrompt('Which card do you want to put in the province?');
+                expect(this.player1).toHavePromptButton(this.motoYouth.name);
+                expect(this.player1).toHavePromptButton(this.borderRider.name);
+
+                this.player1.clickPrompt(this.borderRider.name);
+                expect(this.borderRider.location).toBe('province 1');
+                expect(this.player2.player.dynastyDeck.slice(-1)[0]).toBe(this.motoYouth);
+                expect(this.getChatLogs(5)).toContain(
+                    'player1 puts Border Rider into province 1, discarding Adept of the Waves and Aranat'
+                );
+            });
         });
     });
 });

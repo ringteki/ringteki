@@ -3,6 +3,7 @@ import { EffectNames, Locations } from './Constants';
 import AbilityDsl from './abilitydsl';
 import BaseCard from './basecard';
 import type Player from './player';
+import type DrawCard from './drawcard';
 
 type CardData = {
     strength: number;
@@ -202,7 +203,7 @@ export class ProvinceCard extends BaseCard {
             return;
         }
 
-        for (const dynastyCard of this.controller.getDynastyCardsInProvince(this.location)) {
+        for (const dynastyCard of this.cardsInSelf()) {
             if (!dynastyCard) {
                 // Why?
                 continue;
@@ -268,7 +269,7 @@ export class ProvinceCard extends BaseCard {
                 menu.push({ command: 'move_conflict', text: 'Move Conflict' });
             }
 
-            if (this.controller.getDynastyCardsInProvince(this.location).length <= 0) {
+            if (this.cardsInSelf().length <= 0) {
                 menu.push({ command: 'refill', text: 'Refill Province' });
             }
         }
@@ -311,5 +312,9 @@ export class ProvinceCard extends BaseCard {
             return false;
         }
         return super.isFacedown();
+    }
+
+    cardsInSelf(): DrawCard[] {
+        return this.controller.getDynastyCardsInProvince(this.location);
     }
 }

@@ -38,6 +38,8 @@ import type DrawCard = require('./drawcard');
 import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
 
+type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
+
 type PrintedKeyword =
     | 'ancestral'
     | 'corrupted'
@@ -566,11 +568,9 @@ class BaseCard extends EffectSource {
         return set;
     }
 
-    isFaction(faction: string): boolean {
-        let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        let cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
-
-        faction = faction.toLowerCase();
+    isFaction(faction: Faction): boolean {
+        const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        const cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
         if (faction === 'neutral') {
             return cardFaction === faction && !this.anyEffect(EffectNames.AddFaction);
         }
@@ -1111,7 +1111,7 @@ class BaseCard extends EffectSource {
                     break;
                 }
                 case EffectNames.AttachmentFactionRestriction: {
-                    const factions = effect.getValue<string[]>(this as any);
+                    const factions = effect.getValue<Faction[]>(this as any);
                     if (!factions.some((faction) => parent.isFaction(faction))) {
                         return false;
                     }
