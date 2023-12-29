@@ -1,17 +1,19 @@
-const DrawCard = require('../../../drawcard.js');
-const AbilityDsl = require('../../../abilitydsl.js');
-const { Locations, Players } = require('../../../Constants.js');
+import AbilityDsl from '../../../abilitydsl';
+import { Locations, Players } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
-class MasterAtArms extends DrawCard {
+export default class MasterAtArms extends DrawCard {
+    static id = 'master-at-arms';
+
     setupCardAbilities() {
         this.interrupt({
             title: 'Return a weapon attachment in your conflict discard pile to your hand',
             when: {
-                onCardLeavesPlay: (event, context) => event.card === context.source
+                onCardPlayed: (event, context) => event.card === context.source
             },
             target: {
                 activePromptTitle: 'Choose a weapon attachment from your conflict discard pile',
-                cardCondition: card => card.hasTrait('weapon'),
+                cardCondition: (card) => card.hasTrait('weapon'),
                 location: [Locations.ConflictDiscardPile],
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.moveCard({ destination: Locations.Hand })
@@ -19,9 +21,3 @@ class MasterAtArms extends DrawCard {
         });
     }
 }
-
-MasterAtArms.id = 'master-at-arms';
-
-module.exports = MasterAtArms;
-
-
