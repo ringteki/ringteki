@@ -1,6 +1,6 @@
-describe('Spearhead', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Spearhead', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -26,13 +26,13 @@ describe('Spearhead', function() {
             this.player2.playAttachment(this.blade, this.challenger);
         });
 
-        it('should not work outside of conflicts', function() {
+        it('should not work outside of conflicts', function () {
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.cho);
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('should bow an attachment to let you choose a character', function() {
+        it('should bow an attachment to let you choose a character', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -42,18 +42,13 @@ describe('Spearhead', function() {
 
             this.player2.pass();
             this.player1.clickCard(this.cho);
-            expect(this.player1).toHavePrompt('Select card to bow');
-            expect(this.player1).toBeAbleToSelect(this.pilot);
-            expect(this.player1).not.toBeAbleToSelect(this.ann);
-            this.player1.clickCard(this.pilot);
-
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.cho);
             expect(this.player1).toBeAbleToSelect(this.dojiWhisperer);
             expect(this.player1).toBeAbleToSelect(this.challenger);
         });
 
-        it('should let controller of character choose to discard an attachment or bow', function() {
+        it('should let controller of character choose to discard an attachment or bow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -71,7 +66,7 @@ describe('Spearhead', function() {
             expect(this.player2).toHavePromptButton('Bow this character');
         });
 
-        it('choice - discard', function() {
+        it('choice - discard', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -91,11 +86,11 @@ describe('Spearhead', function() {
             this.player2.clickCard(this.blade);
 
             expect(this.blade.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to discard an attachment on Doji Challenger');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho to discard an attachment on Doji Challenger');
             expect(this.getChatLogs(5)).toContain('player2 discards Kakita Blade');
         });
 
-        it('choice - bow', function() {
+        it('choice - bow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -110,10 +105,10 @@ describe('Spearhead', function() {
 
             this.player2.clickPrompt('Bow this character');
             expect(this.challenger.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to bow Doji Challenger');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho to bow Doji Challenger');
         });
 
-        it('should bow if chosen character has no attachments', function() {
+        it('should bow if chosen character has no attachments', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -126,10 +121,10 @@ describe('Spearhead', function() {
             this.player1.clickCard(this.pilot);
             this.player1.clickCard(this.dojiWhisperer);
             expect(this.dojiWhisperer.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to bow Doji Whisperer');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho to bow Doji Whisperer');
         });
 
-        it('choice - discard (self)', function() {
+        it('choice - discard (self)', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.cho],
@@ -152,7 +147,7 @@ describe('Spearhead', function() {
             this.player1.clickCard(this.ann);
 
             expect(this.ann.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho, bowing Ayubune Pilot to discard an attachment on Akodo Cho');
+            expect(this.getChatLogs(5)).toContain('player1 uses Akodo Cho to discard an attachment on Akodo Cho');
             expect(this.getChatLogs(5)).toContain('player1 discards A New Name');
         });
     });
