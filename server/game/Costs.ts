@@ -7,7 +7,7 @@ import * as GameActions from './GameActions/GameActions';
 import { HandlerAction } from './GameActions/HandlerAction';
 import { ReturnToDeckProperties } from './GameActions/ReturnToDeckAction';
 import { SelectCardProperties } from './GameActions/SelectCardAction';
-import TriggeredAbilityContext from './TriggeredAbilityContext';
+import { TriggeredAbilityContext } from './TriggeredAbilityContext';
 import { Derivable, derive } from './Utils/helpers';
 import BaseCard from './basecard';
 import { GameActionCost } from './costs/GameActionCost';

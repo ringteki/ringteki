@@ -1,8 +1,8 @@
+import AbilityDsl from '../../../abilitydsl';
 import { EventNames, FavorTypes, Locations, Phases, Stages } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import { EventRegistrar } from '../../../EventRegistrar';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class Funeral extends DrawCard {
     static id = 'funeral';

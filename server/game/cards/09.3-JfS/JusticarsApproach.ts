@@ -1,7 +1,7 @@
 import { AbilityTypes, DuelTypes } from '../../Constants';
 import type { Duel } from '../../Duel';
 import type { GameAction } from '../../GameActions/GameAction';
-import type TriggeredAbilityContext from '../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext';
 import AbilityDsl from '../../abilitydsl';
 import DrawCard from '../../drawcard';
 

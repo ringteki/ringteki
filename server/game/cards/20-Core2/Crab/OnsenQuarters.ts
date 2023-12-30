@@ -1,7 +1,7 @@
 import { CardTypes, Locations, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import type Ring from '../../../ring';
 
 export default class OnsenQuarters extends ProvinceCard {

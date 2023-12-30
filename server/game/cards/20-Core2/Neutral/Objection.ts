@@ -4,7 +4,7 @@ import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import type { Cost } from '../../../Costs';
 import type Player from '../../../player';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import type Game from '../../../game';
 import { EventRegistrar } from '../../../EventRegistrar';
 

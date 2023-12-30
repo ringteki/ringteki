@@ -1,6 +1,5 @@
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import DrawCard from '../../../drawcard';
 
 export default class MantisRaider extends DrawCard {
     static id = 'mantis-raider';
@@ -13,7 +12,7 @@ export default class MantisRaider extends DrawCard {
                     context.source.isAttacking() && event.conflict.defenders.length === 0
             },
             effect: 'take a fate from {1} and place it on {0}.',
-            effectArgs: (context: TriggeredAbilityContext) => context.player.opponent,
+            effectArgs: (context) => context.player.opponent,
             gameAction: AbilityDsl.actions.placeFate((context) => ({
                 origin: context.player.opponent
             }))

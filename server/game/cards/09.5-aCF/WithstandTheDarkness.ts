@@ -1,21 +1,22 @@
-import { EventNames, AbilityTypes, CardTypes, Players, Locations } from '../../Constants';
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
+import { AbilityTypes, CardTypes, EventNames, Locations, Players } from '../../Constants';
+import DrawCard from '../../drawcard';
 import { EventRegistrar } from '../../EventRegistrar';
-import TriggeredAbilityContext = require('../../TriggeredAbilityContext');
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
+import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext';
 
 export default class WithstandTheDarkness extends DrawCard {
     static id = 'withstand-the-darkness';
 
     private currentTargets = new Set<BaseCard>();
     private extraBanzaiTarget?: BaseCard;
+    private abilityRegistrar: EventRegistrar;
 
     setupCardAbilities() {
         this.abilityRegistrar = new EventRegistrar(this.game, this);
         this.abilityRegistrar.register([
             {
-                [EventNames.OnInitiateAbilityEffects + ':' + AbilityTypes.WouldInterrupt]: 'onInitiateAbility'
+                [`${EventNames.OnInitiateAbilityEffects}:${AbilityTypes.WouldInterrupt}`]: 'onInitiateAbility'
             }
         ]);
 

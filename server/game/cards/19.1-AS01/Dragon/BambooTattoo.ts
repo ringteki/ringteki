@@ -1,8 +1,8 @@
-import { Locations, Players, CardTypes } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import { CardTypes, Locations, Players } from '../../../Constants';
+import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class BambooTattoo extends DrawCard {
     static id = 'bamboo-tattoo';
@@ -34,20 +34,17 @@ export default class BambooTattoo extends DrawCard {
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.ready((context) => ({ target: context.source.parent })),
                 AbilityDsl.actions.conditional({
-                    condition: (context) => this.isSelfTrigger(context),
+                    condition: (context: TriggeredAbilityContext<this>) => this.isSelfTrigger(context),
                     trueGameAction: AbilityDsl.actions.dishonor((context) => ({ target: context.source.parent })),
                     falseGameAction: AbilityDsl.actions.noAction()
                 })
             ]),
             effect: 'ready{1} {2}',
-            effectArgs: (context: TriggeredAbilityContext) => [
-                this.isSelfTrigger(context) ? ' and dishonor' : '',
-                context.source.parent
-            ]
+            effectArgs: (context) => [this.isSelfTrigger(context) ? ' and dishonor' : '', context.source.parent]
         });
     }
 
-    private isSelfTrigger(context) {
+    private isSelfTrigger(context: TriggeredAbilityContext<this>) {
         return (
             context.source.controller &&
             context.event.context.player &&

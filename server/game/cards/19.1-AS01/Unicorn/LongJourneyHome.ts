@@ -1,7 +1,7 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Durations } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class LongJourneyHome extends DrawCard {
     static id = 'long-journey-home';
@@ -25,11 +25,11 @@ export default class LongJourneyHome extends DrawCard {
                 ])
             },
             effect: 'make {1} take the long way home. {1} is bowed and cannot ready until the end of the phase',
-            effectArgs: (context: TriggeredAbilityContext) => [context.event.card]
+            effectArgs: (context) => [context.event.card]
         });
     }
 
-    private affectedOpponentsCharacter(event: any, context: TriggeredAbilityContext) {
+    private affectedOpponentsCharacter(event: any, context: TriggeredAbilityContext<this>) {
         return event.card.type === CardTypes.Character && event.card.controller === context.source.controller.opponent;
     }
 }

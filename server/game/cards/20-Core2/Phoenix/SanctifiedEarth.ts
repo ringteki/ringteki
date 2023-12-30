@@ -3,7 +3,7 @@ import type { Conflict } from '../../../conflict';
 import { CardTypes, Players } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 const controlledBy = (player: Player) => (character: DrawCard) => character.controller === player;
 

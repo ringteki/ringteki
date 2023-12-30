@@ -1,6 +1,6 @@
-import type TriggeredAbilityContext = require('../../TriggeredAbilityContext');
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
+import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext';
 
 export default class AgashaSumiko2 extends DrawCard {
     static id = 'agasha-sumiko-2';

@@ -1,7 +1,7 @@
 import { CardTypes, DuelTypes, Durations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import type BaseCard from '../../../basecard';
 import type Player from '../../../player';
 

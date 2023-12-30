@@ -1,5 +1,5 @@
 import { CardTypes } from '../../../Constants';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 

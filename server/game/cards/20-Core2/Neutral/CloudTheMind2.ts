@@ -1,7 +1,7 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
-import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class CloudTheMind2 extends DrawCard {
     static id = 'cloud-the-mind-2';

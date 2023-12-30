@@ -3,7 +3,7 @@ import { CardTypes, Durations, EventNames, Locations, type DuelTypes } from '../
 import type DrawCard from '../drawcard';
 import { Duel } from '../Duel';
 import { DuelFlow } from '../gamesteps/DuelFlow';
-import type TriggeredAbilityContext from '../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
 import { CardGameAction, type CardActionProperties } from './CardGameAction';
 import { type GameAction } from './GameAction';
 

@@ -1,5 +1,5 @@
 import AbilityContext = require('./AbilityContext');
-import TriggeredAbilityContext = require('./TriggeredAbilityContext');
+import { TriggeredAbilityContext } from './TriggeredAbilityContext';
 import { GameAction } from './GameActions/GameAction';
 import Ring = require('./ring');
 import BaseCard = require('./basecard');

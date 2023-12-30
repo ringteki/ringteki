@@ -1,7 +1,6 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Locations, Players, TargetModes } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class Kuro extends DrawCard {
     static id = 'kuro';
@@ -47,7 +46,7 @@ export default class Kuro extends DrawCard {
                 ])
             },
             effect: "seek the lost treasure '{1}'. {2}",
-            effectArgs: (context: TriggeredAbilityContext) => [
+            effectArgs: (context) => [
                 context.target,
                 context.source.isParticipating()
                     ? 'Kuro returns home with their treasure'

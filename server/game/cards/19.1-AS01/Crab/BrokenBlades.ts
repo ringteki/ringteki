@@ -1,8 +1,6 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, ConflictTypes, Players } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class BrokenBlades extends DrawCard {
     static id = 'broken-blades';
@@ -11,7 +9,7 @@ export default class BrokenBlades extends DrawCard {
         this.reaction({
             title: 'Return all fate from a character then discard them',
             effect: 'ensure {0} is gone!{1}{2}{3}',
-            effectArgs: (context: TriggeredAbilityContext) =>
+            effectArgs: (context) =>
                 context.target.fate < 1
                     ? []
                     : [' (', context.target.owner, ' recovers ' + context.target.fate + ' fate)'],
@@ -24,7 +22,7 @@ export default class BrokenBlades extends DrawCard {
 
             cost: AbilityDsl.costs.sacrifice({
                 cardType: CardTypes.Character,
-                cardCondition: (card: BaseCard) => card.isParticipating() && card.hasTrait('berserker')
+                cardCondition: (card) => card.isParticipating() && card.hasTrait('berserker')
             }),
             target: {
                 cardType: CardTypes.Character,

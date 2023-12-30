@@ -1,14 +1,14 @@
-import TriggeredAbilityContext = require('../TriggeredAbilityContext');
-import TriggeredAbility = require('../triggeredability');
-import AbilityResolver = require('../gamesteps/abilityresolver');
-import CardAbility = require('../CardAbility');
-import Event = require('../Events/Event');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import InitiateCardAbilityEvent = require('../Events/InitiateCardAbilityEvent');
+import type CardAbility from '../CardAbility';
 import { EventNames } from '../Constants';
-import { SimpleStep } from '../gamesteps/SimpleStep.js';
-import { CardActionProperties, CardGameAction } from './CardGameAction';
+import type DrawCard from '../drawcard';
+import type Event from '../Events/Event';
+import InitiateCardAbilityEvent from '../Events/InitiateCardAbilityEvent';
+import AbilityResolver from '../gamesteps/abilityresolver';
+import { SimpleStep } from '../gamesteps/SimpleStep';
+import type Player from '../player';
+import type TriggeredAbility from '../triggeredability';
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 class ResolveAbilityActionResolver extends AbilityResolver {
     ignoreCosts: boolean;
@@ -36,38 +36,47 @@ class ResolveAbilityActionResolver extends AbilityResolver {
 
     openInitiateAbilityEventWindow() {
         const params = { card: this.context.source, ability: this.context.ability, context: this.context };
-        const events = [this.game.getEvent(EventNames.OnCardAbilityInitiated, params, () => this.queueInitiateAbilitySteps())];
-        if(this.context.ability.isTriggeredAbility() && !this.context.subResolution) {
-            events.push(this.game.getEvent(EventNames.OnCardAbilityTriggered, {
-                player: this.context.player,
-                card: this.context.source,
-                context: this.context
-            }));
+        const events = [
+            this.game.getEvent(EventNames.OnCardAbilityInitiated, params, () => this.queueInitiateAbilitySteps())
+        ];
+        if (this.context.ability.isTriggeredAbility() && !this.context.subResolution) {
+            events.push(
+                this.game.getEvent(EventNames.OnCardAbilityTriggered, {
+                    player: this.context.player,
+                    card: this.context.source,
+                    context: this.context
+                })
+            );
         }
         this.game.openEventWindow(events);
     }
 
     initiateAbilityEffects() {
-        if(this.cancelled) {
-            for(const event of this.events) {
+        if (this.cancelled) {
+            for (const event of this.events) {
                 event.cancel();
             }
             return;
-        } else if(this.context.ability.max && !this.context.subResolution) {
+        } else if (this.context.ability.max && !this.context.subResolution) {
             this.context.player.incrementAbilityMax(this.context.ability.maxIdentifier);
         }
         this.context.ability.displayMessage(this.context, 'resolves');
-        this.game.openEventWindow(new InitiateCardAbilityEvent({ card: this.context.source, context: this.context }, () => this.initiateAbility = true));
+        this.game.openEventWindow(
+            new InitiateCardAbilityEvent(
+                { card: this.context.source, context: this.context },
+                () => (this.initiateAbility = true)
+            )
+        );
     }
 
     resolveCosts() {
-        if(!this.ignoreCosts) {
+        if (!this.ignoreCosts) {
             super.resolveCosts();
         }
     }
 
     payCosts() {
-        if(!this.ignoreCosts) {
+        if (!this.ignoreCosts) {
             super.payCosts();
         }
     }
@@ -90,13 +99,15 @@ export class ResolveAbilityAction extends CardGameAction {
         subResolution: false,
         choosingPlayerOverride: null
     };
-    constructor(properties: ((context: TriggeredAbilityContext) => ResolveAbilityProperties) | ResolveAbilityProperties) {
+    constructor(
+        properties: ((context: TriggeredAbilityContext) => ResolveAbilityProperties) | ResolveAbilityProperties
+    ) {
         super(properties);
     }
 
     getEffectMessage(context: TriggeredAbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as ResolveAbilityProperties;
-        return ['resolve {0}\'s {1} ability', [properties.target, properties.ability.title]];
+        return ["resolve {0}'s {1} ability", [properties.target, properties.ability.title]];
     }
 
     canAffect(card: DrawCard, context: TriggeredAbilityContext, additionalProperties = {}): boolean {
@@ -104,11 +115,20 @@ export class ResolveAbilityAction extends CardGameAction {
         let ability = properties.ability as TriggeredAbility;
         let player = properties.player || context.player;
         let newContextEvent = properties.event;
-        if(!super.canAffect(card, context) || !ability || !properties.subResolution && player.isAbilityAtMax(ability.maxIdentifier)) {
+        if (
+            !super.canAffect(card, context) ||
+            !ability ||
+            (!properties.subResolution && player.isAbilityAtMax(ability.maxIdentifier))
+        ) {
             return false;
         }
         let newContext = ability.createContext(player, newContextEvent);
-        let ignoredRequirements = properties.ignoredRequirements.concat('player', 'location', 'limit', 'triggeringRestrictions');
+        let ignoredRequirements = properties.ignoredRequirements.concat(
+            'player',
+            'location',
+            'limit',
+            'triggeringRestrictions'
+        );
         return !ability.meetsRequirements(newContext, ignoredRequirements);
     }
 
@@ -118,10 +138,16 @@ export class ResolveAbilityAction extends CardGameAction {
         let newContextEvent = properties.event;
         let newContext = (properties.ability as TriggeredAbility).createContext(player, newContextEvent);
         newContext.subResolution = !!properties.subResolution;
-        if(properties.choosingPlayerOverride) {
+        if (properties.choosingPlayerOverride) {
             newContext.choosingPlayerOverride = properties.choosingPlayerOverride;
         }
-        event.context.game.queueStep(new ResolveAbilityActionResolver(event.context.game, newContext, properties.ignoredRequirements.includes('cost')));
+        event.context.game.queueStep(
+            new ResolveAbilityActionResolver(
+                event.context.game,
+                newContext,
+                properties.ignoredRequirements.includes('cost')
+            )
+        );
     }
 
     hasTargetsChosenByInitiatingPlayer(context) {

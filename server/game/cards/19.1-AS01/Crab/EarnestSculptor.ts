@@ -1,9 +1,8 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes, Locations } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import { PlayAttachmentAction } from '../../../PlayAttachmentAction';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
 
 export default class EarnestSculptor extends DrawCard {
     static id = 'earnest-sculptor';
@@ -45,7 +44,7 @@ export default class EarnestSculptor extends DrawCard {
                     event.context.ability.getReducedCost(event.context) > 0
             },
             effect: 'reduce the cost of {1} by 1',
-            effectArgs: (context: TriggeredAbilityContext) => [context.event.context.source],
+            effectArgs: (context) => [context.event.context.source],
             gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
                 targetController: context.player,
                 effect: AbilityDsl.effects.reduceNextPlayedCardCost(

@@ -1,6 +1,6 @@
 import { AbilityTypes, Locations } from '../Constants';
 import { parseGameMode } from '../GameMode';
-import type TriggeredAbilityContext from '../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
 import type DrawCard from '../drawcard';
 import type Game from '../game';
 import TriggeredAbility from '../triggeredability';

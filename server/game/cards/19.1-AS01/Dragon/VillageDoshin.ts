@@ -1,7 +1,6 @@
-import { CardTypes, Locations, Players } from '../../../Constants';
-import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
-import BaseCard from '../../../basecard';
+import { CardTypes, Locations, Players } from '../../../Constants';
+import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
 const DOSHIN_TAX = 2;
@@ -56,7 +55,7 @@ export default class VillageDoshin extends DrawCard {
                 }))
             }),
             effect: 'protect {1}',
-            effectArgs: (context: TriggeredAbilityContext) => context.event.cardTargets
+            effectArgs: (context) => context.event.cardTargets
         });
     }
 }

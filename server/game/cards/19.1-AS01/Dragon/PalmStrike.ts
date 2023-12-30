@@ -1,8 +1,7 @@
+import AbilityDsl from '../../../abilitydsl';
+import BaseCard from '../../../basecard';
 import { CardTypes, Durations, Players } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 const TARGET_MONK = 'myMonk';
 const TARGET_TO_BOW = 'characterToBow';
@@ -45,7 +44,7 @@ export default class PalmStrike extends DrawCard {
                 }
             },
             effect: 'bow {1}',
-            effectArgs: (context: TriggeredAbilityContext) => [context.targets[TARGET_TO_BOW]],
+            effectArgs: (context) => [context.targets[TARGET_TO_BOW]],
             then: (context) => {
                 if (context.targets[TARGET_MONK].hasTrait('tattooed')) {
                     context.game.addMessage(

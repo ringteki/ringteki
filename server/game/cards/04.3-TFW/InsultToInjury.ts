@@ -1,6 +1,6 @@
-import TriggeredAbilityContext from '../../TriggeredAbilityContext';
 import AbilityDsl from '../../abilitydsl';
 import DrawCard from '../../drawcard';
+import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext';
 
 export default class InsultToInjury extends DrawCard {
     static id = 'insult-to-injury';
@@ -10,12 +10,12 @@ export default class InsultToInjury extends DrawCard {
             title: 'Dishonor the loser of a duel',
             when: {
                 afterDuel: (event, context) =>
-                    event.winner?.some(
-                        (card: DrawCard) => card.controller === context.player && card.hasTrait('duelist')
+                    (event.winner as Array<DrawCard> | undefined)?.some(
+                        (card) => card.controller === context.player && card.hasTrait('duelist')
                     ) ?? false
             },
             gameAction: AbilityDsl.actions.conditional({
-                condition: (context: TriggeredAbilityContext) => context.event.loser?.length > 1,
+                condition: (context: TriggeredAbilityContext<this>) => context.event.loser?.length > 1,
                 trueGameAction: AbilityDsl.actions.cardMenu((context) => ({
                     activePromptTitle: 'Choose a character to dishonor',
                     cards: context.event.loser,

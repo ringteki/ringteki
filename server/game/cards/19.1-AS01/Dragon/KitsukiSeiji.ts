@@ -1,7 +1,7 @@
+import AbilityDsl from '../../../abilitydsl';
 import { Elements } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 const ELEMENT_KEY = 'kitsuki-seiji-water';
 

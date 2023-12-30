@@ -4,9 +4,10 @@ import { EventNames, Phases, PlayTypes, TargetModes } from './Constants';
 import { payTargetDependentFateCost } from './Costs';
 import { attachToRing } from './GameActions/GameActions';
 import { parseGameMode } from './GameMode';
-import type TriggeredAbilityContext from './TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from './TriggeredAbilityContext';
 import type BaseCard from './basecard';
 import type Ring from './ring';
+import type DrawCard from './drawcard';
 
 export class PlayAttachmentToRingAction extends BaseAction {
     title = 'Play this attachment';
@@ -14,7 +15,7 @@ export class PlayAttachmentToRingAction extends BaseAction {
     constructor(card: BaseCard) {
         super(card, [payTargetDependentFateCost('target')], {
             gameAction: attachToRing((context) => ({ attachment: context.source })),
-            ringCondition: (ring: Ring, context: TriggeredAbilityContext) => context.source.canPlayOn(ring),
+            ringCondition: (ring: Ring, context: TriggeredAbilityContext<DrawCard>) => context.source.canPlayOn(ring),
             mode: TargetModes.Ring
         });
     }

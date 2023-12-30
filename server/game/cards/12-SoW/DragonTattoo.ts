@@ -1,9 +1,9 @@
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
 import { AbilityTypes, CardTypes, EventNames, Locations, PlayTypes } from '../../Constants';
+import DrawCard from '../../drawcard';
 import { EventRegistrar } from '../../EventRegistrar';
-import TriggeredAbilityContext = require('../../TriggeredAbilityContext');
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
+import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext';
 
 export default class DragonTattoo extends DrawCard {
     static id = 'dragon-tattoo';

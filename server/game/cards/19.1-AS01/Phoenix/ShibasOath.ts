@@ -1,8 +1,8 @@
-import { Locations, AbilityTypes, CardTypes } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import { AbilityTypes, CardTypes, Locations } from '../../../Constants';
+import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityProps } from '../../../Interfaces';
 
 export default class ShibasOath extends DrawCard {
     static id = 'shiba-s-oath';
@@ -23,16 +23,16 @@ export default class ShibasOath extends DrawCard {
                 target: context.source.parent
             })),
             effect: 'honor {1}',
-            effectArgs: (context: TriggeredAbilityContext) => context.source.parent
+            effectArgs: (context) => context.source.parent
         });
 
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.WouldInterrupt, {
                 title: 'Cancel an ability',
                 when: {
-                    onInitiateAbilityEffects: (event: any, context: TriggeredAbilityContext) =>
-                        event.cardTargets.some(
-                            (card: BaseCard) =>
+                    onInitiateAbilityEffects: (event, context) =>
+                        (event.cardTargets as Array<BaseCard>).some(
+                            (card) =>
                                 // In play
                                 card.location === Locations.PlayArea &&
                                 // Character
@@ -52,8 +52,8 @@ export default class ShibasOath extends DrawCard {
                     })
                 ]),
                 effect: 'cancel the effects of {1} and return {2} to their hand',
-                effectArgs: (context: TriggeredAbilityContext) => [context.event.card, this]
-            })
+                effectArgs: (context) => [context.event.card, this]
+            } as TriggeredAbilityProps)
         });
     }
 }

@@ -1,11 +1,11 @@
-import TriggeredAbilityContext = require('../TriggeredAbilityContext');
-import TriggeredAbility = require('../triggeredability');
-import AbilityResolver = require('../gamesteps/abilityresolver');
-import CardAbility = require('../CardAbility');
-import Event = require('../Events/Event');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
+import type CardAbility from '../CardAbility';
+import type DrawCard from '../drawcard';
+import type Event from '../Events/Event';
+import AbilityResolver from '../gamesteps/abilityresolver';
+import type Player from '../player';
+import type TriggeredAbility from '../triggeredability';
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
+import { CardGameAction, type CardActionProperties } from './CardGameAction';
 
 export interface TriggerAbilityProperties extends CardActionProperties {
     ability: CardAbility;
@@ -22,13 +22,15 @@ export class TriggerAbilityAction extends CardGameAction {
         ignoredRequirements: [],
         subResolution: false
     };
-    constructor(properties: ((context: TriggeredAbilityContext) => TriggerAbilityProperties) | TriggerAbilityProperties) {
+    constructor(
+        properties: ((context: TriggeredAbilityContext) => TriggerAbilityProperties) | TriggerAbilityProperties
+    ) {
         super(properties);
     }
 
     getEffectMessage(context: TriggeredAbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TriggerAbilityProperties;
-        return ['resolve {0}\'s {1} ability', [properties.target, properties.ability.title]];
+        return ["resolve {0}'s {1} ability", [properties.target, properties.ability.title]];
     }
 
     canAffect(card: DrawCard, context: TriggeredAbilityContext, additionalProperties = {}): boolean {
@@ -36,7 +38,11 @@ export class TriggerAbilityAction extends CardGameAction {
         let ability = properties.ability as TriggeredAbility;
         let player = properties.player || context.player;
         let newContextEvent = properties.event;
-        if(!super.canAffect(card, context) || !ability || !properties.subResolution && player.isAbilityAtMax(ability.maxIdentifier)) {
+        if (
+            !super.canAffect(card, context) ||
+            !ability ||
+            (!properties.subResolution && player.isAbilityAtMax(ability.maxIdentifier))
+        ) {
             return false;
         }
         let newContext = ability.createContext(player, newContextEvent);
@@ -55,6 +61,10 @@ export class TriggerAbilityAction extends CardGameAction {
 
     hasTargetsChosenByInitiatingPlayer(context) {
         let properties = this.getProperties(context) as TriggerAbilityProperties;
-        return properties.ability && properties.ability.hasTargetsChosenByInitiatingPlayer && properties.ability.hasTargetsChosenByInitiatingPlayer(context);
+        return (
+            properties.ability &&
+            properties.ability.hasTargetsChosenByInitiatingPlayer &&
+            properties.ability.hasTargetsChosenByInitiatingPlayer(context)
+        );
     }
 }

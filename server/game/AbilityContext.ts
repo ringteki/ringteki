@@ -8,7 +8,7 @@ import { Stages, Locations, PlayTypes } from './Constants.js';
 import { GameAction } from './GameActions/GameAction.js';
 import BaseCard = require('./basecard.js');
 
-interface AbilityContextProperties {
+export interface AbilityContextProperties {
     game: Game;
     source?: any;
     player?: Player;

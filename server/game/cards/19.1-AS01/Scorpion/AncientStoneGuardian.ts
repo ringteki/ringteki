@@ -1,9 +1,9 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes, Players } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import { SequentialContextProperties } from '../../../GameActions/SequentialContextAction';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class AncientStoneGuardian extends DrawCard {
     static id = 'ancient-stone-guardian';
@@ -50,7 +50,7 @@ export default class AncientStoneGuardian extends DrawCard {
             },
 
             effect: 'present an opportunity to sneak around {0} and find some secrets!{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}',
-            effectArgs: (context: TriggeredAbilityContext) =>
+            effectArgs: (context) =>
                 this.effectsForCard(context.targets.firstCharacter).concat(
                     this.effectsForCard(context.targets.secondCharacter)
                 )

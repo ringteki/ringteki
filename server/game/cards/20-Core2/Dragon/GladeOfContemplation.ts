@@ -1,6 +1,6 @@
 import { TargetModes } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 
 function cardDifference(context: TriggeredAbilityContext): number {

@@ -1,6 +1,6 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import TriggeredAbilityContext = require('../TriggeredAbilityContext');
 import { CardTypes, EventNames } from '../Constants';
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface CancelActionProperties extends GameActionProperties {
     replacementGameAction?: GameAction;

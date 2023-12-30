@@ -1,7 +1,6 @@
+import AbilityDsl from '../../../abilitydsl';
 import { Elements } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 const ELEMENT_TO_RETURN = 'firebrand-fire-cost';
 const ELEMENT_TO_RESOLVE = 'firebrand-fire-ability';
@@ -20,7 +19,7 @@ export default class Firebrand extends DrawCard {
                 target: context.game.rings[this.getCurrentElementSymbol(ELEMENT_TO_RESOLVE)]
             })),
             effect: 'resolve the {1} effect',
-            effectArgs: (context: TriggeredAbilityContext) => [context.game.rings.fire]
+            effectArgs: (context) => [context.game.rings.fire]
         });
     }
 

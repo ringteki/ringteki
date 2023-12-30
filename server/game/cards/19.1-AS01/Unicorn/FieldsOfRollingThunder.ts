@@ -1,7 +1,7 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Durations } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class FieldsOfRollingThunder extends DrawCard {
     static id = 'fields-of-rolling-thunder';
@@ -20,7 +20,7 @@ export default class FieldsOfRollingThunder extends DrawCard {
             title: 'Honor a character',
             condition: () => this.game.isDuringConflict(),
             effect: 'honor {0}. They will be dishonored at the end of the conflict if {1} loses the conflict.',
-            effectArgs: (context: TriggeredAbilityContext) => [context.source.controller],
+            effectArgs: (context) => [context.source.controller],
             target: {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => card.isParticipating() && card.isFaction('unicorn'),

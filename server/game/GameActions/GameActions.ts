@@ -1,4 +1,4 @@
-import type TriggeredAbilityContext = require('../TriggeredAbilityContext');
+import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
 import { AddTokenAction, AddTokenProperties } from './AddTokenAction';
 import { AffinityAction, AffinityActionProperties } from './AffinityAction';
 import { AttachAction, AttachActionProperties } from './AttachAction';
@@ -462,7 +462,6 @@ export function immediatelyResolveConflict(): GameAction {
 export function duelLastingEffect(propertyFactory: PropsFactory<LastingEffectProperties>): GameAction {
     return new LastingEffectAction(propertyFactory);
 } // duration = 'untilEndOfConflict', effect, targetController, condition, until
-
 
 //////////////
 // META

@@ -1,8 +1,8 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { Locations } from '../../../Constants';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class DaidojiAhma extends DrawCard {
     static id = 'daidoji-ahma';
@@ -13,7 +13,7 @@ export default class DaidojiAhma extends DrawCard {
             when: {
                 onInitiateAbilityEffects: (event, context) =>
                     event.context.ability.isTriggeredAbility() &&
-                    event.cardTargets.some((card: BaseCard) => this.targetIsDishonoredCrane(card, context)),
+                    (event.cardTargets as Array<BaseCard>).some((card) => this.targetIsDishonoredCrane(card, context)),
                 onMoveFate: (event, context) =>
                     this.isRingEffect(event) && event.fate > 0 && this.targetIsDishonoredCrane(event.origin, context),
                 onCardHonored: (event, context) =>
@@ -27,7 +27,7 @@ export default class DaidojiAhma extends DrawCard {
             },
             gameAction: AbilityDsl.actions.cancel(),
             effect: 'cancel the effects of {1}{2}',
-            effectArgs: (context: TriggeredAbilityContext) => [
+            effectArgs: (context) => [
                 context.event.context.source.type === 'ring' ? 'the ' : '',
                 context.event.context.source
             ]
@@ -38,7 +38,7 @@ export default class DaidojiAhma extends DrawCard {
         return event.context.source.type === 'ring';
     }
 
-    private targetIsDishonoredCrane(card: BaseCard, context: TriggeredAbilityContext): boolean {
+    private targetIsDishonoredCrane(card: BaseCard, context: TriggeredAbilityContext<this>): boolean {
         return (
             card.isDishonored &&
             card.controller === context.player &&

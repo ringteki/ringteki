@@ -1,8 +1,7 @@
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Players, CharacterStatus } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import type { StatusToken } from '../../../StatusToken';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
 
 export default class ForcedRetirement extends DrawCard {
     static id = 'forced-retirement';
@@ -11,7 +10,7 @@ export default class ForcedRetirement extends DrawCard {
         this.action({
             title: 'Remove negative status tokens from a character, and discard it from play',
             effect: "expiate {0}'s misdeeds by retiring them to the nearest monatery{1} Let them contemplate their sins.",
-            effectArgs: (context: TriggeredAbilityContext) => [
+            effectArgs: (context) => [
                 context.target.fate > 0 ? ', recovering their ' + context.target.fate + ' fate.' : '.'
             ],
             target: {

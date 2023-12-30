@@ -1,7 +1,7 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Players, TargetModes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
-import type TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 const CHARACTER = 'character';
 

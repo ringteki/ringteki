@@ -1,7 +1,7 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
-import TriggeredAbilityContext from '../../../TriggeredAbilityContext';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class ThereAreNoSecrets extends DrawCard {
     static id = 'there-are-no-secrets';

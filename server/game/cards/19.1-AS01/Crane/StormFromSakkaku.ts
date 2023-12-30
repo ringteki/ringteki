@@ -1,9 +1,9 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { EventNames, AbilityTypes, Locations, CardTypes, Players } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import { EventRegistrar } from '../../../EventRegistrar';
-import TriggeredAbilityContext = require('../../../TriggeredAbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 
 export default class StormFromSakkaku extends DrawCard {
     static id = 'storm-from-sakkaku';
@@ -13,9 +13,7 @@ export default class StormFromSakkaku extends DrawCard {
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([
-            {
-                [EventNames.OnResolveRingElement + ':' + AbilityTypes.WouldInterrupt]: 'cancelRingEffect'
-            }
+            { [`${EventNames.OnResolveRingElement}:${AbilityTypes.WouldInterrupt}`]: 'cancelRingEffect' }
         ]);
 
         this.action({
@@ -36,7 +34,7 @@ export default class StormFromSakkaku extends DrawCard {
                     target: this.otherHoldingsInSameProvince(context)
                 })),
                 message: 'The {1} {3}',
-                messageArgs: (context: TriggeredAbilityContext) => [
+                messageArgs: (context: TriggeredAbilityContext<this>) => [
                     this.otherHoldingsInSameProvince(context).length > 0
                         ? 'is angry and discards the holdings that they find in the province'
                         : 'calms down'
@@ -45,7 +43,7 @@ export default class StormFromSakkaku extends DrawCard {
         });
     }
 
-    private otherHoldingsInSameProvince(context: TriggeredAbilityContext): BaseCard[] {
+    private otherHoldingsInSameProvince(context: TriggeredAbilityContext<this>): BaseCard[] {
         return (context.game.allCards as BaseCard[]).filter(
             (card) =>
                 card.location === context.source.location &&
