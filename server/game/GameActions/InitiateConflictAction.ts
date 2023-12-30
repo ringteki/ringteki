@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import { EventNames, ConflictTypes, EffectNames } from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import { ConflictTypes, EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface InitiateConflictProperties extends PlayerActionProperties {
     canPass?: boolean;
@@ -30,6 +30,6 @@ export class InitiateConflictAction extends PlayerAction {
 
     eventHandler(event, additionalProperties): void {
         let properties = this.getProperties(event.context, additionalProperties) as InitiateConflictProperties;
-        event.context.game.initiateConflict(event.player, properties.canPass, properties.forcedDeclaredType)
+        event.context.game.initiateConflict(event.player, properties.canPass, properties.forcedDeclaredType);
     }
 }

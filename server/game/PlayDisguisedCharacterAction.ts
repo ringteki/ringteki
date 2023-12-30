@@ -3,7 +3,7 @@ import { CardTypes, EffectNames, EventNames, Phases, Players } from './Constants
 import { ReduceableFateCost } from './costs/ReduceableFateCost';
 import BaseAction = require('./BaseAction');
 import BaseCard = require('./basecard');
-import AbilityContext = require('./AbilityContext');
+import { AbilityContext } from './AbilityContext';
 import Player = require('./player');
 import { Cost } from './Costs';
 

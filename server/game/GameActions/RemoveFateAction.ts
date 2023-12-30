@@ -1,14 +1,14 @@
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import Ring = require('../ring');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Player from '../player';
+import type Ring from '../ring';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface RemoveFateProperties extends CardActionProperties {
-    amount?: number,
-    recipient?: DrawCard | Player | Ring
+    amount?: number;
+    recipient?: DrawCard | Player | Ring;
 }
 
 export class RemoveFateAction extends CardGameAction {
@@ -32,15 +32,15 @@ export class RemoveFateAction extends CardGameAction {
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as RemoveFateProperties;
-        if(properties.amount === 0 || card.location !== Locations.PlayArea || card.getFate() === 0) {
+        if (properties.amount === 0 || card.location !== Locations.PlayArea || card.getFate() === 0) {
             return false;
         }
         return super.canAffect(card, context) && this.checkRecipient(properties.recipient, context);
     }
 
     checkRecipient(origin: Player | Ring | DrawCard, context: AbilityContext): boolean {
-        if(origin) {
-            if(['player', 'ring'].includes(origin.type)) {
+        if (origin) {
+            if (['player', 'ring'].includes(origin.type)) {
                 return true;
             }
             return origin.allowGameAction('placeFate', context);
@@ -62,10 +62,15 @@ export class RemoveFateAction extends CardGameAction {
 
     isEventFullyResolved(event, card: DrawCard, context: AbilityContext, additionalProperties): boolean {
         let { amount, recipient } = this.getProperties(context, additionalProperties) as RemoveFateProperties;
-        return !event.cancelled && event.name === this.eventName && 
-            event.fate === amount && event.origin === card && event.recipient === recipient;
+        return (
+            !event.cancelled &&
+            event.name === this.eventName &&
+            event.fate === amount &&
+            event.origin === card &&
+            event.recipient === recipient
+        );
     }
-    
+
     eventHandler(event): void {
         this.moveFateEventHandler(event);
     }

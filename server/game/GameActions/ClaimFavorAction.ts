@@ -1,20 +1,20 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames, FavorTypes } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface ClaimFavorProperties extends PlayerActionProperties {
     target: Player | null;
     side?: FavorTypes;
 }
 
-export class ClaimFavorAction extends PlayerAction {
+export class ClaimFavorAction extends PlayerAction<ClaimFavorProperties> {
     name = 'claimFavor';
     eventName = EventNames.OnClaimFavor;
     effect = "claim the Emperor's favor";
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
-        const properties = this.getProperties(context, additionalProperties) as ClaimFavorProperties;
+        const properties = this.getProperties(context, additionalProperties);
         if (Array.isArray(properties.target)) {
             return !!properties.target[0];
         }
@@ -25,14 +25,9 @@ export class ClaimFavorAction extends PlayerAction {
         return !!player && super.canAffect(player, context);
     }
 
-    getProperties(context: AbilityContext, additionalProperties = {}): ClaimFavorProperties {
-        let properties = super.getProperties(context, additionalProperties) as ClaimFavorProperties;
-        return properties;
-    }
-
     eventHandler(event, additionalProperties = {}): void {
-        let { side } = this.getProperties(event.context, additionalProperties) as ClaimFavorProperties;
-        if(event.player) {
+        let { side } = this.getProperties(event.context, additionalProperties);
+        if (event.player) {
             event.player.claimImperialFavor(side);
         }
     }

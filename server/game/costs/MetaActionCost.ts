@@ -1,13 +1,16 @@
+import type { AbilityContext } from '../AbilityContext';
 import { Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
 import type { GameAction } from '../GameActions/GameAction';
-import { SelectCardProperties } from '../GameActions/SelectCardAction';
+import type { SelectCardProperties } from '../GameActions/SelectCardAction';
 import { randomItem } from '../Utils/helpers';
 import { GameActionCost } from './GameActionCost';
-import AbilityContext = require('../AbilityContext');
 
 export class MetaActionCost extends GameActionCost implements Cost {
-    constructor(action: GameAction, public activePromptTitle: string) {
+    constructor(
+        action: GameAction,
+        public activePromptTitle: string
+    ) {
         super(action);
     }
 

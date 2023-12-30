@@ -1,6 +1,6 @@
 import { GameModes } from '../../GameModes';
 import { CardTypes, Locations } from '../Constants';
-import AbilityContext = require('../AbilityContext');
+import { AbilityContext } from '../AbilityContext';
 import BaseAbility = require('../baseability');
 import DrawCard = require('../drawcard');
 

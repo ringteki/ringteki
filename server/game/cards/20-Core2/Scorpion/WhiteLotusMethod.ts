@@ -2,7 +2,7 @@ import { CardTypes, CharacterStatus, Players, TargetModes } from '../../../Const
 import type { StatusToken } from '../../../StatusToken';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 
 const TOKEN = 'token';
 const RECIPIENT = 'recipient';

@@ -1,8 +1,7 @@
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames } from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface RemoveFromGameProperties extends CardActionProperties {
     location?: Locations | Locations[];

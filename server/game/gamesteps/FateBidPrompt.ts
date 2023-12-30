@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import type Game from '../game';
 import { JointGameAction } from '../GameActions/JointGameAction';
 import { LoseFateAction } from '../GameActions/LoseFateAction';

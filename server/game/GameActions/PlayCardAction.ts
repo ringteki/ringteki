@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import type BaseAction from '../BaseAction';
 import { Locations, PlayTypes, Stages } from '../Constants';
 import type DrawCard from '../drawcard';

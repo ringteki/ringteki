@@ -1,10 +1,9 @@
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames, Players } from '../Constants';
-import { SimpleStep } from '../gamesteps/SimpleStep.js';
-import { GameAction } from './GameAction';
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import HonorBidPrompt = require('../gamesteps/honorbidprompt');
+import HonorBidPrompt from '../gamesteps/honorbidprompt';
+import { SimpleStep } from '../gamesteps/SimpleStep';
+import type { GameAction } from './GameAction';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface HonorBidProperties extends PlayerActionProperties {
     giveHonor?: boolean;
@@ -18,11 +17,11 @@ export interface HonorBidProperties extends PlayerActionProperties {
 export class HonorBidAction extends PlayerAction {
     name = 'honorBid';
     eventName = EventNames.OnHonorBid;
-    defaultProperties: HonorBidProperties = { 
+    defaultProperties: HonorBidProperties = {
         giveHonor: false,
         prohibitedBids: [],
         players: Players.Any,
-        postBidAction: undefined,
+        postBidAction: undefined
     };
 
     constructor(propertyFactory: HonorBidProperties | ((context: AbilityContext) => HonorBidProperties)) {
@@ -56,7 +55,10 @@ export class HonorBidAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { giveHonor, prohibitedBids, players, postBidAction, message, messageArgs } = this.getProperties(context, additionalProperties) as HonorBidProperties;        
+        let { giveHonor, prohibitedBids, players, postBidAction, message, messageArgs } = this.getProperties(
+            context,
+            additionalProperties
+        ) as HonorBidProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.giveHonor = giveHonor;
         event.prohibitedBids = prohibitedBids;

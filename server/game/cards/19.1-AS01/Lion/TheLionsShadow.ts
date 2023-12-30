@@ -1,7 +1,6 @@
-import AbilityContext = require('../../../AbilityContext');
+import AbilityDsl from '../../../abilitydsl';
 import { Phases } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class TheLionsShadow extends DrawCard {
     static id = 'the-lion-s-shadow';
@@ -18,12 +17,12 @@ export default class TheLionsShadow extends DrawCard {
         });
 
         this.whileAttached({
-            condition: (context: AbilityContext) => context.source.parent.isDishonored,
+            condition: (context) => context.source.parent.isDishonored,
             effect: AbilityDsl.effects.honorStatusDoesNotModifySkill()
         });
 
         this.whileAttached({
-            condition: (context: AbilityContext) =>
+            condition: (context) =>
                 context.source.parent.isAttacking() &&
                 context.game.currentConflict.getNumberOfParticipantsFor('attacker') === 1,
             effect: AbilityDsl.effects.addKeyword('covert')

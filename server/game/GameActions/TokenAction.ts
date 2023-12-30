@@ -1,10 +1,10 @@
+import type { AbilityContext } from '../AbilityContext';
+import { GameAction, type GameActionProperties } from './GameAction';
 import type { StatusToken } from '../StatusToken';
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
 
 export interface TokenActionProperties extends GameActionProperties {}
 
-export class TokenAction extends GameAction {
+export class TokenAction<P extends TokenActionProperties = TokenActionProperties> extends GameAction<P> {
     targetType = ['token'];
 
     defaultTargets(context: AbilityContext): StatusToken[] {

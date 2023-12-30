@@ -1,4 +1,4 @@
-import AbilityContext = require('../AbilityContext');
+import { AbilityContext } from '../AbilityContext';
 import { CardTypes } from '../Constants';
 import BaseAbility = require('../baseability');
 import DrawCard = require('../drawcard');

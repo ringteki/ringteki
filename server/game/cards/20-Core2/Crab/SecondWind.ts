@@ -1,7 +1,7 @@
 import { CardTypes, Durations, Locations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 
 function cardsToDiscard(context: AbilityContext) {
     return context.player.dynastyDeck.first(4);

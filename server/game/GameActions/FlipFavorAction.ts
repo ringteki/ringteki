@@ -1,14 +1,13 @@
-import { PlayerAction, PlayerActionProperties} from './PlayerAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import { GameAction, GameActionProperties } from './GameAction';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface FlipFavorProperties extends PlayerActionProperties {
     target: Player | null;
 }
 
-export class FlipFavorAction extends PlayerAction {
+export class FlipFavorAction extends PlayerAction<FlipFavorProperties> {
     name = 'claimFavor';
     eventName = EventNames.OnFlipFavor;
     effect = 'flip the Imperial favor';
@@ -25,15 +24,8 @@ export class FlipFavorAction extends PlayerAction {
         return !!player && this.playerHasFlippableFavor(player) && super.canAffect(player, context);
     }
 
-    getProperties(context: AbilityContext, additionalProperties = {}): FlipFavorProperties {
-        let properties = super.getProperties(context, additionalProperties) as FlipFavorProperties;
-        return properties;
-    }
-
     eventHandler(event): void {
-        if(event.player.imperialFavor === 'military')
-            event.player.imperialFavor = 'political';
-        else if(event.player.imperialFavor === 'political')
-            event.player.imperialFavor = 'military';
+        if (event.player.imperialFavor === 'military') event.player.imperialFavor = 'political';
+        else if (event.player.imperialFavor === 'political') event.player.imperialFavor = 'military';
     }
 }

@@ -1,30 +1,27 @@
-import { PlayerAction, PlayerActionProperties} from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface DrawProperties extends PlayerActionProperties {
     amount?: number;
 }
 
-export class DrawAction extends PlayerAction {
+export class DrawAction extends PlayerAction<DrawProperties> {
     name = 'draw';
     eventName = EventNames.OnCardsDrawn;
 
     defaultProperties: DrawProperties = {
         amount: 1
     };
-    constructor(properties: DrawProperties | ((context: AbilityContext) => DrawProperties)) {
-        super(properties);
-    }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as DrawProperties;
+        let properties = this.getProperties(context);
         return ['draw ' + properties.amount + (properties.amount > 1 ? ' cards' : ' card'), []];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties) as DrawProperties;
+        let properties = this.getProperties(context, additionalProperties);
         return properties.amount !== 0 && super.canAffect(player, context);
     }
 
@@ -33,7 +30,7 @@ export class DrawAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount } = this.getProperties(context, additionalProperties) as DrawProperties;
+        let { amount } = this.getProperties(context, additionalProperties);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = amount;
     }

@@ -1,4 +1,4 @@
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 import { CardTypes } from '../../../Constants';
 import type { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';

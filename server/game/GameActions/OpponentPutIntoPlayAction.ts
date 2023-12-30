@@ -1,23 +1,25 @@
-import AbilityContext = require('../AbilityContext');
+import { AbilityContext } from '../AbilityContext';
+import { Players } from '../Constants';
 import { PutIntoPlayAction, PutIntoPlayProperties } from './PutIntoPlayAction';
-import { Players }  from '../Constants';
 
-export interface OpponentPutIntoPlayProperties extends PutIntoPlayProperties {
-}
+export interface OpponentPutIntoPlayProperties extends PutIntoPlayProperties {}
 
 export class OpponentPutIntoPlayAction extends PutIntoPlayAction {
-    defaultProperties: PutIntoPlayProperties = { 
+    defaultProperties: PutIntoPlayProperties = {
         fate: 0,
         status: 'ordinary',
         controller: Players.Opponent,
         side: null
     };
 
-    getDefaultSide(context) {
+    getDefaultSide(context: AbilityContext) {
         return context.player.opponent;
     }
 
-    constructor(properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties, intoConflict = true) {
+    constructor(
+        properties: ((context: AbilityContext) => PutIntoPlayProperties) | PutIntoPlayProperties,
+        intoConflict = true
+    ) {
         super(properties, intoConflict);
     }
 

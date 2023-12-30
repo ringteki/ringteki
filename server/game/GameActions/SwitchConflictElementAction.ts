@@ -1,7 +1,7 @@
-import { RingAction, RingActionProperties } from './RingAction';
+import { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface SwitchConflictElementProperties extends RingActionProperties {}
 
@@ -12,8 +12,11 @@ export class SwitchConflictElementAction extends RingAction {
     eventName = EventNames.OnSwitchConflictElement;
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}): boolean {
-        return !ring.isRemovedFromGame() && context.game.isDuringConflict() && 
-            super.canAffect(ring, context, additionalProperties);
+        return (
+            !ring.isRemovedFromGame() &&
+            context.game.isDuringConflict() &&
+            super.canAffect(ring, context, additionalProperties)
+        );
     }
 
     eventHandler(event): void {

@@ -1,6 +1,6 @@
+import type { AbilityContext } from '../AbilityContext';
 import type { GameObject } from '../GameObject';
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface IfAbleActionProperties extends GameActionProperties {
     ifAbleAction: GameAction;
@@ -19,17 +19,25 @@ export class IfAbleAction extends GameAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let { ifAbleAction, otherwiseAction } = this.getProperties(context);
-        return ifAbleAction.hasLegalTarget(context) ? ifAbleAction.getEffectMessage(context) : otherwiseAction.getEffectMessage(context);
+        return ifAbleAction.hasLegalTarget(context)
+            ? ifAbleAction.getEffectMessage(context)
+            : otherwiseAction.getEffectMessage(context);
     }
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}) {
         let { ifAbleAction, otherwiseAction } = this.getProperties(context, additionalProperties);
-        return ifAbleAction.hasLegalTarget(context, additionalProperties) || otherwiseAction.hasLegalTarget(context, additionalProperties);
+        return (
+            ifAbleAction.hasLegalTarget(context, additionalProperties) ||
+            otherwiseAction.hasLegalTarget(context, additionalProperties)
+        );
     }
 
     canAffect(target: GameObject, context: AbilityContext, additionalProperties = {}) {
         let { ifAbleAction, otherwiseAction } = this.getProperties(context, additionalProperties);
-        return ifAbleAction.canAffect(target, context, additionalProperties) || otherwiseAction.canAffect(target, context, additionalProperties);
+        return (
+            ifAbleAction.canAffect(target, context, additionalProperties) ||
+            otherwiseAction.canAffect(target, context, additionalProperties)
+        );
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}) {
@@ -40,7 +48,9 @@ export class IfAbleAction extends GameAction {
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}) {
         let { ifAbleAction, otherwiseAction } = this.getProperties(context, additionalProperties);
-        return ifAbleAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties) || 
-            otherwiseAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties);        
+        return (
+            ifAbleAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties) ||
+            otherwiseAction.hasTargetsChosenByInitiatingPlayer(context, additionalProperties)
+        );
     }
 }

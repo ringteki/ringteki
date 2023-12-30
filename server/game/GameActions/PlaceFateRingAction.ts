@@ -1,13 +1,13 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import Ring = require('../ring');
-import { RingAction, RingActionProperties} from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Player from '../player';
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface PlaceFateRingProperties extends RingActionProperties {
-    amount?: number,
-    origin?: DrawCard | Player | Ring
+    amount?: number;
+    origin?: DrawCard | Player | Ring;
 }
 
 export class PlaceFateRingAction extends RingAction {
@@ -25,7 +25,7 @@ export class PlaceFateRingAction extends RingAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties: PlaceFateRingProperties = this.getProperties(context);
-        if(properties.origin) {
+        if (properties.origin) {
             return ['move {1} fate from {2} to {0}', [properties.target, properties.amount, properties.origin]];
         }
         return ['place {1} fate on {0}', [properties.target, properties.amount]];
@@ -33,7 +33,10 @@ export class PlaceFateRingAction extends RingAction {
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}): boolean {
         let properties: PlaceFateRingProperties = this.getProperties(context, additionalProperties);
-        if(properties.origin && (!properties.origin.checkRestrictions('spendFate', context) || properties.origin.fate === 0)) {
+        if (
+            properties.origin &&
+            (!properties.origin.checkRestrictions('spendFate', context) || properties.origin.fate === 0)
+        ) {
             return false;
         }
         return properties.amount > 0 && super.canAffect(ring, context);
@@ -53,8 +56,13 @@ export class PlaceFateRingAction extends RingAction {
 
     isEventFullyResolved(event, ring: Ring, context: AbilityContext, additionalProperties): boolean {
         let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateRingProperties;
-        return !event.cancelled && event.name === this.eventName && 
-            event.fate === amount && event.origin === origin && event.recipient === ring;
+        return (
+            !event.cancelled &&
+            event.name === this.eventName &&
+            event.fate === amount &&
+            event.origin === origin &&
+            event.recipient === ring
+        );
     }
 
     eventHandler(event): void {

@@ -1,4 +1,4 @@
-import AbilityContext from './AbilityContext';
+import { AbilityContext } from './AbilityContext';
 import { CharacterStatus, Decks, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
 import Event from './Events/Event';
 import { CardGameAction } from './GameActions/CardGameAction';

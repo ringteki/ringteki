@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
-import { ConflictTypes, CardTypes, TargetModes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import { CardTypes, ConflictTypes, TargetModes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
 export default class CornerThePrey extends DrawCard {
     static id = 'corner-the-prey';
@@ -14,7 +14,7 @@ export default class CornerThePrey extends DrawCard {
             cost: AbilityDsl.costs.sacrifice({
                 cardType: [CardTypes.Character, CardTypes.Attachment],
                 mode: TargetModes.Unlimited,
-                cardCondition: (card: BaseCard) =>
+                cardCondition: (card) =>
                     card.hasTrait('follower') &&
                     (card.isParticipating() || (card.parent && card.parent.isParticipating()))
             }),

@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Players } from '../../../Constants';
-import { GameAction } from '../../../GameActions/GameAction';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import type { GameAction } from '../../../GameActions/GameAction';
 
 export default class MangroveSafehouse extends DrawCard {
     static id = 'mangrove-safehouse';
@@ -11,7 +11,7 @@ export default class MangroveSafehouse extends DrawCard {
         this.action({
             title: 'Move an attacker out of the conflict',
             effect: 'move {0} home{1}',
-            effectArgs: (context: AbilityContext) => [
+            effectArgs: (context) => [
                 this.targetIsMantis(context) && this.opponentHasFateToBeStolen(context) ? ' and steal 1 fate' : ''
             ],
             condition: (context) => context.game.isDuringConflict(),

@@ -1,5 +1,5 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
+import type { AbilityContext } from '../AbilityContext';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface ConditionalActionProperties extends GameActionProperties {
     condition: ((context: AbilityContext, properties: ConditionalActionProperties) => boolean) | boolean;
@@ -7,11 +7,9 @@ export interface ConditionalActionProperties extends GameActionProperties {
     falseGameAction: GameAction;
 }
 
-export class ConditionalAction extends GameAction {
-    defaultProperties: ConditionalActionProperties;
-
+export class ConditionalAction extends GameAction<ConditionalActionProperties> {
     getProperties(context: AbilityContext, additionalProperties = {}): ConditionalActionProperties {
-        let properties = super.getProperties(context, additionalProperties) as ConditionalActionProperties;
+        let properties = super.getProperties(context, additionalProperties);
         properties.trueGameAction.setDefaultTarget(() => properties.target);
         properties.falseGameAction.setDefaultTarget(() => properties.target);
         return properties;
@@ -20,7 +18,7 @@ export class ConditionalAction extends GameAction {
     getGameAction(context: AbilityContext, additionalProperties = {}): GameAction {
         let properties = this.getProperties(context, additionalProperties);
         let condition = properties.condition;
-        if(typeof(condition) === 'function') {
+        if (typeof condition === 'function') {
             condition = condition(context, properties);
         }
         return condition ? properties.trueGameAction : properties.falseGameAction;
@@ -43,6 +41,9 @@ export class ConditionalAction extends GameAction {
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {
-        return this.getGameAction(context, additionalProperties).hasTargetsChosenByInitiatingPlayer(context, additionalProperties);
+        return this.getGameAction(context, additionalProperties).hasTargetsChosenByInitiatingPlayer(
+            context,
+            additionalProperties
+        );
     }
 }

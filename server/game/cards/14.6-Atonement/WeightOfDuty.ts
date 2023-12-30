@@ -1,4 +1,4 @@
-import AbilityContext from '../../AbilityContext';
+import { AbilityContext } from '../../AbilityContext';
 import { CardTypes, Players, TargetModes, Elements } from '../../Constants';
 import { ProvinceCard } from '../../ProvinceCard';
 import AbilityDsl from '../../abilitydsl';

@@ -1,7 +1,7 @@
-import AbilityContext = require('../../../AbilityContext');
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import DrawCard from '../../../drawcard';
 
 export default class ArrowsFromTheWoods extends DrawCard {
     static id = 'arrows-from-the-woods';
@@ -17,14 +17,14 @@ export default class ArrowsFromTheWoods extends DrawCard {
                 effect: AbilityDsl.effects.modifyMilitarySkill(this.penaltyValue(context))
             })),
             effect: "give {1}'s participating characters {2}{3}",
-            effectArgs: (context: AbilityContext) => [context.player.opponent, this.penaltyValue(context), 'military'],
+            effectArgs: (context) => [context.player.opponent, this.penaltyValue(context), 'military'],
             max: AbilityDsl.limit.perConflict(1)
         });
     }
 
     private penaltyValue(context: AbilityContext): number {
         const hasScoutOrShinobiParticipating = context.player.anyCardsInPlay(
-            (card: BaseCard) => card.isParticipating() && (card.hasTrait('scout') || card.hasTrait('shinobi'))
+            (card: BaseCard) => card.isParticipating() && card.hasSomeTrait('scout', 'shinobi')
         );
         return hasScoutOrShinobiParticipating ? -2 : -1;
     }

@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import BaseAction from './BaseAction';
 import { CardTypes, EventNames, Locations, Phases } from './Constants';
 import { payTargetDependentFateCost } from './Costs';

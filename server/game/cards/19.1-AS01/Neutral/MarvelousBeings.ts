@@ -1,7 +1,7 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, ConflictTypes, Durations } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class MarvelousBeings extends DrawCard {
     static id = 'marvelous-beings';

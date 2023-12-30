@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes, Locations, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 type HandlerStep = {
     activePromptTitle: string;
@@ -15,7 +15,7 @@ export default class CeremonialRobes extends DrawCard {
 
     public setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.modifyGlory((character, context) =>
+            effect: AbilityDsl.effects.modifyGlory((_character, context) =>
                 (context.player.cardsInPlay as BaseCard[]).reduce(
                     (sum, card) => (card.type === CardTypes.Character && card.hasTrait('spirit') ? sum + 1 : sum),
                     0

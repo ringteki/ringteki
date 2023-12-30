@@ -1,14 +1,14 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
+import type { AbilityContext } from '../AbilityContext';
+import type Ring from '../ring';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface RingActionProperties extends GameActionProperties {}
 
-export class RingAction extends GameAction {
+export class RingAction<P extends RingActionProperties = RingActionProperties> extends GameAction<P> {
     targetType = ['ring'];
 
     defaultTargets(context: AbilityContext): Ring[] {
-        return context.game.currentConflict ? [context.game.currentConflict.ring] : []
+        return context.game.currentConflict ? [context.game.currentConflict.ring] : [];
     }
 
     checkEventCondition(event: any, additionalProperties = {}): boolean {

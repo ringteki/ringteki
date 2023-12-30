@@ -1,14 +1,16 @@
+import type { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
 import { AbilityTypes, CardTypes, Durations, Players } from '../../Constants';
+import type DrawCard from '../../drawcard';
+import type { PersistentEffectProps } from '../../Interfaces';
 import { BaseOni } from './_BaseOni';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
-import AbilityContext = require('../../AbilityContext');
 
 export default class UndeadHorror extends BaseOni {
     static id = 'undead-horror';
 
     public setupCardAbilities() {
+        this.persistentEffect;
         super.setupCardAbilities();
         this.reaction({
             title: 'Attach a character to this card',
@@ -41,7 +43,7 @@ export default class UndeadHorror extends BaseOni {
                                 AbilityDsl.effects.blank(true),
                                 AbilityDsl.effects.changeType(CardTypes.Attachment),
                                 AbilityDsl.effects.gainAbility(AbilityTypes.Persistent, {
-                                    match: (card: BaseCard, context: AbilityContext) => card === context.source.parent,
+                                    match: (card, context) => card === context.source.parent,
                                     targetController: Players.Opponent,
                                     effect: [
                                         AbilityDsl.effects.modifyMilitarySkill(
@@ -53,7 +55,7 @@ export default class UndeadHorror extends BaseOni {
                                                 context.source.printedPoliticalSkill || 0
                                         )
                                     ]
-                                })
+                                } as PersistentEffectProps)
                             ]
                         }),
                         AbilityDsl.actions.attach({

@@ -1,12 +1,11 @@
-import { PlayerAction, PlayerActionProperties} from './PlayerAction';
+import { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import Player from '../player';
+import { PlayerAction, PlayerActionProperties } from './PlayerAction';
 
-export interface DiscardFavorProperties extends PlayerActionProperties {
-}
+export interface DiscardFavorProperties extends PlayerActionProperties {}
 
-export class DiscardFavorAction extends PlayerAction {
+export class DiscardFavorAction extends PlayerAction<DiscardFavorProperties> {
     name = 'discardFavor';
     eventName = EventNames.OnDiscardFavor;
     cost = 'discarding the Imperial Favor';

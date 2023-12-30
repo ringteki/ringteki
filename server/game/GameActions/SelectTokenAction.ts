@@ -1,10 +1,10 @@
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
 import { Players } from '../Constants';
+import type Player from '../player';
 import type { StatusToken } from '../StatusToken';
-import { GameAction } from './GameAction';
-import { TokenAction, TokenActionProperties } from './TokenAction';
-import BaseCard = require('../basecard');
+import type { GameAction } from './GameAction';
+import { TokenAction, type TokenActionProperties } from './TokenAction';
 
 export interface SelectTokenProperties extends TokenActionProperties {
     activePromptTitle?: string;

@@ -1,10 +1,9 @@
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
-import { RingAction, RingActionProperties} from './RingAction';
-import { EventNames} from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import { EventNames } from '../Constants';
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
-export interface ReturnRingToPlayProperties extends RingActionProperties {
-}
+export interface ReturnRingToPlayProperties extends RingActionProperties {}
 
 export class ReturnRingToPlayAction extends RingAction {
     name = 'returnRingToPlay';
@@ -15,7 +14,7 @@ export class ReturnRingToPlayAction extends RingAction {
     }
 
     canAffect(ring: Ring, context: AbilityContext): boolean {
-        if(!ring.removedFromGame) {
+        if (!ring.removedFromGame) {
             return false;
         }
 
@@ -26,7 +25,6 @@ export class ReturnRingToPlayAction extends RingAction {
         let ring = event.ring;
         let context = event.context;
 
-        context.game.raiseEvent(EventNames.OnReturnRingtoPlay, { ring:ring }, () => ring.returnRingToPlay());
+        context.game.raiseEvent(EventNames.OnReturnRingtoPlay, { ring: ring }, () => ring.returnRingToPlay());
     }
 }
-

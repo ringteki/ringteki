@@ -1,9 +1,9 @@
-import AbilityContext = require('../../AbilityContext');
+import type { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
 import { CardTypes, EventNames, Players } from '../../Constants';
+import DrawCard from '../../drawcard';
 import { EventRegistrar } from '../../EventRegistrar';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
 
 export default class HonoredVeterans extends DrawCard {
     static id = 'honored-veterans';

@@ -1,17 +1,17 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
+import type Player from '../player';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface PlayerActionProperties extends GameActionProperties {}
 
-export class PlayerAction extends GameAction {
+export class PlayerAction<P extends PlayerActionProperties = PlayerActionProperties> extends GameAction<P> {
     targetType = ['player'];
 
     defaultTargets(context: AbilityContext): Player[] {
         return context.player ? [context.player.opponent] : [];
     }
 
-    checkEventCondition(event, additionalProperties):boolean {
+    checkEventCondition(event, additionalProperties): boolean {
         return this.canAffect(event.player, event.context, additionalProperties);
     }
 

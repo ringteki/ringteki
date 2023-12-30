@@ -1,7 +1,6 @@
-import AbilityContext = require('../../../AbilityContext');
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Durations, TargetModes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class ShinjoArcher extends DrawCard {
     static id = 'shinjo-archer';
@@ -21,7 +20,7 @@ export default class ShinjoArcher extends DrawCard {
                 })
             },
             effect: 'give {0} -2{2}/-2{3}',
-            effectArgs: (context: AbilityContext) => [context.source, 'military', 'political']
+            effectArgs: (context) => [context.source, 'military', 'political']
         });
     }
 }

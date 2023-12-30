@@ -1,10 +1,9 @@
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import Ring = require('../ring');
-import { RingAction, RingActionProperties } from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { Players } from '../Constants';
-import { GameAction } from './GameAction';
-
+import type Player from '../player';
+import type Ring from '../ring';
+import type { GameAction } from './GameAction';
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface SelectRingProperties extends RingActionProperties {
     activePromptTitle?: string;
@@ -21,7 +20,7 @@ export interface SelectRingProperties extends RingActionProperties {
 export class SelectRingAction extends RingAction {
     defaultProperties: SelectRingProperties = {
         ringCondition: () => true,
-        subActionProperties: ring => ({ target: ring }),
+        subActionProperties: (ring) => ({ target: ring }),
         gameAction: null
     };
 
@@ -36,28 +35,38 @@ export class SelectRingAction extends RingAction {
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = super.getProperties(context, additionalProperties) as SelectRingProperties;
-        if(properties.player === Players.Opponent && !context.player.opponent) {
+        if (properties.player === Players.Opponent && !context.player.opponent) {
             return false;
         }
-        return super.canAffect(ring, context) && properties.ringCondition(ring, context) &&
-            properties.gameAction.hasLegalTarget(context, Object.assign({}, additionalProperties, properties.subActionProperties(ring)));
+        return (
+            super.canAffect(ring, context) &&
+            properties.ringCondition(ring, context) &&
+            properties.gameAction.hasLegalTarget(
+                context,
+                Object.assign({}, additionalProperties, properties.subActionProperties(ring))
+            )
+        );
     }
 
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
-        return Object.values(context.game.rings).some((ring: Ring) => this.canAffect(ring, context, additionalProperties));
+        return Object.values(context.game.rings).some((ring: Ring) =>
+            this.canAffect(ring, context, additionalProperties)
+        );
     }
 
     addEventsToArray(events, context: AbilityContext, additionalProperties = {}): void {
         let properties = super.getProperties(context, additionalProperties) as SelectRingProperties;
-        if(properties.player === Players.Opponent && !context.player.opponent) {
+        if (properties.player === Players.Opponent && !context.player.opponent) {
             return;
-        } else if(!Object.values(context.game.rings).some((ring: Ring): boolean => properties.ringCondition(ring, context))) {
+        } else if (
+            !Object.values(context.game.rings).some((ring: Ring): boolean => properties.ringCondition(ring, context))
+        ) {
             return;
         } else if (!this.hasLegalTarget(context, additionalProperties)) {
             return;
         }
         let player = properties.player === Players.Opponent ? context.player.opponent : context.player;
-        if(properties.targets && context.choosingPlayerOverride) {
+        if (properties.targets && context.choosingPlayerOverride) {
             player = context.choosingPlayerOverride;
         }
         let defaultProperties = {
@@ -65,16 +74,28 @@ export class SelectRingAction extends RingAction {
             buttons: properties.cancelHandler ? [{ text: 'Cancel', arg: 'cancel' }] : [],
             onCancel: properties.cancelHandler,
             onSelect: (player, ring) => {
-                if(properties.message) {
+                if (properties.message) {
                     context.game.addMessage(properties.message, ...properties.messageArgs(ring, player));
                 }
-                properties.gameAction.addEventsToArray(events, context, Object.assign({}, additionalProperties, properties.subActionProperties(ring)));
+                properties.gameAction.addEventsToArray(
+                    events,
+                    context,
+                    Object.assign({}, additionalProperties, properties.subActionProperties(ring))
+                );
                 return true;
             }
         };
-        context.game.promptForRingSelect(player, Object.assign(defaultProperties, properties, {
-            ringCondition: (ring, context) => properties.ringCondition(ring, context) && properties.gameAction.hasLegalTarget(context, Object.assign({}, additionalProperties, properties.subActionProperties(ring)))
-        }));
+        context.game.promptForRingSelect(
+            player,
+            Object.assign(defaultProperties, properties, {
+                ringCondition: (ring, context) =>
+                    properties.ringCondition(ring, context) &&
+                    properties.gameAction.hasLegalTarget(
+                        context,
+                        Object.assign({}, additionalProperties, properties.subActionProperties(ring))
+                    )
+            })
+        );
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {

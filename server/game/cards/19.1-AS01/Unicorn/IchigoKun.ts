@@ -1,7 +1,7 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Elements, Players, TargetModes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 const VULNERABLE_ELEMENT = 'ichigo-kun-fire';
 
@@ -50,7 +50,7 @@ export default class IchigoKun extends DrawCard {
         return symbols;
     }
 
-    private actionSequence(context: AbilityContext, modifiers: { military: number; glory: number }) {
+    private actionSequence(context: AbilityContext<this>, modifiers: { military: number; glory: number }) {
         return AbilityDsl.actions.sequential([
             AbilityDsl.actions.moveToConflict({ target: context.source }),
             AbilityDsl.actions.multiple([

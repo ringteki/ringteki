@@ -1,17 +1,17 @@
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
 import type { StatusToken } from '../StatusToken';
-import { TokenAction, TokenActionProperties } from './TokenAction';
-import AbilityContext = require('../AbilityContext');
+import { TokenAction, type TokenActionProperties } from './TokenAction';
 
 export interface DiscardStatusProperties extends TokenActionProperties {}
 
-export class DiscardStatusAction extends TokenAction {
+export class DiscardStatusAction extends TokenAction<DiscardStatusProperties> {
     name = 'discardStatus';
     eventName = EventNames.OnStatusTokenDiscarded;
     cost = 'discarding a status token';
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as DiscardStatusProperties;
+        let properties = this.getProperties(context);
         if (properties.target) {
             let targets = properties.target;
             if (!Array.isArray(targets)) {

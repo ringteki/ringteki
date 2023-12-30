@@ -1,10 +1,9 @@
-import { RingAction, RingActionProperties} from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
-export interface ReturnRingProperties extends RingActionProperties {
-}
+export interface ReturnRingProperties extends RingActionProperties {}
 
 export class ReturnRingAction extends RingAction {
     name = 'returnRing';

@@ -4,7 +4,7 @@ import { EarthRingEffect } from './Rings/EarthRingEffect';
 import { FireRingEffect } from './Rings/FireRingEffect';
 import { VoidRingEffect } from './Rings/VoidRingEffect';
 import { WaterRingEffect } from './Rings/WaterRingEffect';
-import AbilityContext from './AbilityContext';
+import { AbilityContext } from './AbilityContext';
 import BaseAbility = require('./baseability');
 import Player = require('./player');
 

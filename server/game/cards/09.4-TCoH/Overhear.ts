@@ -1,8 +1,8 @@
-import type AbilityContext = require('../../AbilityContext');
-import CardAbility = require('../../CardAbility');
+import type { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
+import CardAbility from '../../CardAbility';
 import { Locations, TargetModes } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
+import DrawCard from '../../drawcard';
 
 export default class Overhear extends DrawCard {
     static id = 'overhear';

@@ -1,6 +1,6 @@
 import { v1 as uuidV1 } from 'uuid';
 
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import { EffectNames, Stages } from './Constants';
 import type DrawCard from './drawcard';
 import type { CardEffect } from './Effects/types';

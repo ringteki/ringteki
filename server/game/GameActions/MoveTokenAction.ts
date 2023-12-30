@@ -1,8 +1,8 @@
+import type { AbilityContext } from '../AbilityContext';
 import { CharacterStatus, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
 import type { StatusToken } from '../StatusToken';
-import { TokenAction, TokenActionProperties } from './TokenAction';
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
+import { TokenAction, type TokenActionProperties } from './TokenAction';
 
 export interface MoveTokenProperties extends TokenActionProperties {
     recipient: DrawCard;

@@ -1,14 +1,27 @@
-import AbilityContext = require('../../../AbilityContext');
-import { ConflictTypes, CardTypes, Players, TargetModes, EventNames } from '../../../Constants';
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import CardAbility from '../../../CardAbility';
+import { CardTypes, ConflictTypes, EventNames, Players, TargetModes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
 const TARGET_CHARACTER = 'character';
+
+function selfDishonorSelect(message: string) {
+    return AbilityDsl.actions.selectCard((context: AbilityContext) => ({
+        cardType: CardTypes.Character,
+        controller: Players.Self,
+        cardCondition: (card: BaseCard) => card.isParticipating(),
+        gameAction: AbilityDsl.actions.dishonor(),
+        message: message,
+        messageArgs: (card: BaseCard) => [context.player, card, context.source]
+    }));
+}
 
 export default class NaturesWrath extends DrawCard {
     static id = 'nature-s-wrath';
 
-    public setupCardAbilities(ability: any) {
+    public setupCardAbilities() {
         this.action({
             title: 'Dishonor or move home a character',
             condition: (context) =>
@@ -25,10 +38,10 @@ export default class NaturesWrath extends DrawCard {
                     dependsOn: TARGET_CHARACTER,
                     player: Players.Opponent,
                     choices: {
-                        'Dishonor this character': ability.actions.dishonor((context: AbilityContext) => ({
+                        'Dishonor this character': AbilityDsl.actions.dishonor((context: AbilityContext) => ({
                             target: context.targets[TARGET_CHARACTER]
                         })),
-                        'Move this character home': ability.actions.sendHome((context: AbilityContext) => ({
+                        'Move this character home': AbilityDsl.actions.sendHome((context: AbilityContext) => ({
                             target: context.targets[TARGET_CHARACTER]
                         }))
                     }
@@ -40,11 +53,9 @@ export default class NaturesWrath extends DrawCard {
                         target: {
                             mode: TargetModes.Select,
                             choices: {
-                                'Dishonor a participating character to resolve this ability again':
-                                    this.selfDishonorSelect(
-                                        ability,
-                                        '{0} chooses to dishonor {1} to resolve {2} again'
-                                    ),
+                                'Dishonor a participating character to resolve this ability again': selfDishonorSelect(
+                                    '{0} chooses to dishonor {1} to resolve {2} again'
+                                ),
                                 Done: () => true
                             }
                         },
@@ -53,8 +64,8 @@ export default class NaturesWrath extends DrawCard {
                                 event.origin === context.target &&
                                 !event.cancelled &&
                                 event.name === EventNames.OnCardDishonored,
-                            gameAction: ability.actions.resolveAbility({
-                                ability: context.ability,
+                            gameAction: AbilityDsl.actions.resolveAbility({
+                                ability: context.ability instanceof CardAbility ? context.ability : null,
                                 subResolution: true,
                                 choosingPlayerOverride: context.choosingPlayerOverride
                             })
@@ -65,8 +76,7 @@ export default class NaturesWrath extends DrawCard {
                     target: {
                         mode: TargetModes.Select,
                         choices: {
-                            'Dishonor a participating character for no effect': this.selfDishonorSelect(
-                                ability,
+                            'Dishonor a participating character for no effect': selfDishonorSelect(
                                 '{0} chooses to dishonor {1} for no effect'
                             ),
                             Done: () => true
@@ -75,18 +85,7 @@ export default class NaturesWrath extends DrawCard {
                 };
             },
             cannotTargetFirst: true,
-            max: ability.limit.perConflict(1)
+            max: AbilityDsl.limit.perConflict(1)
         });
-    }
-
-    private selfDishonorSelect(ability: any, message: string) {
-        return ability.actions.selectCard((context: AbilityContext) => ({
-            cardType: CardTypes.Character,
-            controller: Players.Self,
-            cardCondition: (card: BaseCard) => card.isParticipating(),
-            gameAction: ability.actions.dishonor(),
-            message: message,
-            messageArgs: (card: BaseCard) => [context.player, card, context.source]
-        }));
     }
 }

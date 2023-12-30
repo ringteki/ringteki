@@ -1,11 +1,11 @@
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
-import { RingAction, RingActionProperties} from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface TakeFateRingProperties extends RingActionProperties {
-    amount?: number,
-    removeOnly?: boolean
+    amount?: number;
+    removeOnly?: boolean;
 }
 
 export class TakeFateRingAction extends RingAction {
@@ -18,13 +18,20 @@ export class TakeFateRingAction extends RingAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TakeFateRingProperties;
-        return ['{2} {1} fate from {0}', [properties.target, properties.amount, properties.removeOnly ? 'remove' : 'take']];
+        return [
+            '{2} {1} fate from {0}',
+            [properties.target, properties.amount, properties.removeOnly ? 'remove' : 'take']
+        ];
     }
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as TakeFateRingProperties;
-        return context.player.checkRestrictions('takeFateFromRings', context) &&
-               ring.fate > 0 && properties.amount > 0 && super.canAffect(ring, context);
+        return (
+            context.player.checkRestrictions('takeFateFromRings', context) &&
+            ring.fate > 0 &&
+            properties.amount > 0 &&
+            super.canAffect(ring, context)
+        );
     }
 
     addPropertiesToEvent(event, ring: Ring, context: AbilityContext, additionalProperties): void {
@@ -41,10 +48,15 @@ export class TakeFateRingAction extends RingAction {
 
     isEventFullyResolved(event, ring: Ring, context: AbilityContext, additionalProperties): boolean {
         let { amount } = this.getProperties(context, additionalProperties) as TakeFateRingProperties;
-        return !event.cancelled && event.name === this.eventName && 
-            event.fate === amount && event.origin === ring && event.recipient === context.player;
+        return (
+            !event.cancelled &&
+            event.name === this.eventName &&
+            event.fate === amount &&
+            event.origin === ring &&
+            event.recipient === context.player
+        );
     }
-    
+
     eventHandler(event): void {
         this.moveFateEventHandler(event);
     }

@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import { EventNames, Locations, Players, TargetModes } from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import { EventNames, Locations } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface RandomDiscardProperties extends PlayerActionProperties {
     amount?: number;
@@ -18,7 +18,10 @@ export class RandomDiscardAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties: RandomDiscardProperties = this.getProperties(context);
-        return ['make {0} discard {1} {2} at random', [properties.target, properties.amount, properties.amount > 1 ? 'cards' : 'card']];
+        return [
+            'make {0} discard {1} {2} at random',
+            [properties.target, properties.amount, properties.amount > 1 ? 'cards' : 'card']
+        ];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
@@ -36,7 +39,7 @@ export class RandomDiscardAction extends PlayerAction {
     eventHandler(event): void {
         let player = event.player;
         let amount = Math.min(event.amount, player.hand.size());
-        if(amount === 0) {
+        if (amount === 0) {
             return;
         }
         let cardsToDiscard = player.hand.shuffle().slice(0, amount);
@@ -44,7 +47,7 @@ export class RandomDiscardAction extends PlayerAction {
         event.discardedCards = cardsToDiscard;
         player.game.addMessage('{0} discards {1} at random', player, cardsToDiscard);
 
-        for(const card of cardsToDiscard) {
+        for (const card of cardsToDiscard) {
             player.moveCard(card, card.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
         }
     }

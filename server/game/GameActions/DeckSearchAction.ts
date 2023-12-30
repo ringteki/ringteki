@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import { Decks, EventNames, Locations, TargetModes } from '../Constants';
 import { shuffleArray } from '../Utils/helpers';
 import type DrawCard from '../drawcard';

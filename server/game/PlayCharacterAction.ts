@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import BaseAction from './BaseAction';
 import { EffectNames, EventNames, Locations, Phases, PlayTypes, Players } from './Constants';
 import { chooseFate, payReduceableFateCost } from './Costs.js';

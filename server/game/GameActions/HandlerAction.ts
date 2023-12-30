@@ -1,6 +1,6 @@
-import { GameAction, GameActionProperties } from './GameAction';
-import DrawCard = require('../drawcard');
-import AbilityContext = require('../AbilityContext');
+import type { AbilityContext } from '../AbilityContext';
+import DrawCard from '../drawcard';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface HandlerProperties extends GameActionProperties {
     handler: (context: AbilityContext) => void;
@@ -12,7 +12,7 @@ export class HandlerAction extends GameAction {
         handler: () => true,
         hasTargetsChosenByInitiatingPlayer: false
     };
-    
+
     hasLegalTarget(): boolean {
         return true;
     }
@@ -31,7 +31,10 @@ export class HandlerAction extends GameAction {
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}) {
-        const { hasTargetsChosenByInitiatingPlayer } = this.getProperties(context, additionalProperties) as HandlerProperties;
+        const { hasTargetsChosenByInitiatingPlayer } = this.getProperties(
+            context,
+            additionalProperties
+        ) as HandlerProperties;
         return hasTargetsChosenByInitiatingPlayer;
-    } 
+    }
 }

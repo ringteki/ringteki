@@ -1,11 +1,11 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface LoseHonorProperties extends PlayerActionProperties {
     amount?: number;
-    dueToUnopposed?: boolean
+    dueToUnopposed?: boolean;
 }
 
 export class LoseHonorAction extends PlayerAction {
@@ -33,16 +33,15 @@ export class LoseHonorAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount, dueToUnopposed } = this.getProperties(context, additionalProperties) as LoseHonorProperties;        
+        let { amount, dueToUnopposed } = this.getProperties(context, additionalProperties) as LoseHonorProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = -amount;
         event.dueToUnopposed = dueToUnopposed;
     }
 
     eventHandler(event): void {
-        if(event.player) {
+        if (event.player) {
             event.player.modifyHonor(event.amount);
         }
     }
 }
-

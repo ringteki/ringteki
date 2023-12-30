@@ -1,4 +1,4 @@
-import AbilityContext from '../AbilityContext';
+import { AbilityContext } from '../AbilityContext';
 import { EventNames, Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
 import Event from '../Events/Event';

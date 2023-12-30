@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import BaseAction from './BaseAction';
 import { EventNames, Phases, PlayTypes, TargetModes } from './Constants';
 import { payTargetDependentFateCost } from './Costs';

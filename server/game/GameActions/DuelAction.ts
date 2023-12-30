@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import { CardTypes, Durations, EventNames, Locations, type DuelTypes } from '../Constants';
 import type DrawCard from '../drawcard';
 import { Duel } from '../Duel';

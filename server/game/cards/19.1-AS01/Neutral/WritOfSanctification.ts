@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
-import { CardTypes, AbilityTypes, Players, TargetModes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
+import { AbilityTypes, CardTypes, Players, TargetModes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
+import type { ActionProps } from '../../../Interfaces';
 
 export default class WritOfSanctification extends DrawCard {
     static id = 'writ-of-sanctification';
@@ -24,16 +24,15 @@ export default class WritOfSanctification extends DrawCard {
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Action, {
                 title: 'Bow corrupt character',
-                condition: (context: AbilityContext) => context.source.isParticipating(),
+                condition: (context) => context.source.isParticipating(),
                 target: {
                     cardType: CardTypes.Character,
                     controller: Players.Any,
                     mode: TargetModes.Single,
-                    cardCondition: (card: BaseCard) =>
-                        card.isParticipating() && (card.hasTrait('shadowlands') || card.isTainted),
+                    cardCondition: (card) => card.isParticipating() && (card.hasTrait('shadowlands') || card.isTainted),
                     gameAction: AbilityDsl.actions.bow()
                 }
-            })
+            } as ActionProps)
         });
     }
 }

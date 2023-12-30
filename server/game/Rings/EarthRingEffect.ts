@@ -1,6 +1,6 @@
 import { GameModes } from '../../GameModes';
 import { TargetModes } from '../Constants';
-import AbilityContext = require('../AbilityContext');
+import { AbilityContext } from '../AbilityContext';
 import BaseAbility = require('../baseability');
 
 const DRAW = 'Draw a card';

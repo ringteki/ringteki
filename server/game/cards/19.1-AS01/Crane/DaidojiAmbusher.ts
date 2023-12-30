@@ -1,7 +1,7 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 const enum Timing {
     BEFORE_PENALTY,
@@ -34,7 +34,7 @@ export default class DaidojiAmbusher extends DrawCard {
                 ])
             },
             effect: 'give {0} -2{1}{2}',
-            effectArgs: (context: AbilityContext) => [
+            effectArgs: (context) => [
                 'military',
                 this.triggerKickerEffect(context, Timing.BEFORE_PENALTY)
                     ? ` and ${this.shouldDiscardTarget(context) ? 'discard them' : 'remove a fate from them'}`

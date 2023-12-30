@@ -1,4 +1,4 @@
-import AbilityContext = require('./AbilityContext');
+import { AbilityContext } from './AbilityContext';
 import { PlayTypes } from './Constants';
 import { PlayDisguisedCharacterAction, PlayDisguisedCharacterIntoLocation } from './PlayDisguisedCharacterAction';
 import DrawCard = require('./drawcard');

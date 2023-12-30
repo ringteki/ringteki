@@ -1,9 +1,9 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes, ConflictTypes, TargetModes } from '../../../Constants';
-import { GameAction } from '../../../GameActions/GameAction';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
+import type { GameAction } from '../../../GameActions/GameAction';
 
 export default class ToGovernTheLand extends DrawCard {
     static id = 'to-govern-the-land';

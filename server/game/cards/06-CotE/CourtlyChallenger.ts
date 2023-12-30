@@ -1,4 +1,4 @@
-import type AbilityContext from '../../AbilityContext';
+import type { AbilityContext } from '../../AbilityContext';
 import { DuelTypes } from '../../Constants';
 import type { Duel } from '../../Duel';
 import AbilityDsl from '../../abilitydsl';

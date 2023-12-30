@@ -1,12 +1,11 @@
-import { CardGameAction, CardActionProperties} from './CardGameAction';
-import { Locations, EventNames, CardTypes } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
+import type { AbilityContext } from '../AbilityContext';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface DiscardCardProperties extends CardActionProperties {
-}
+export interface DiscardCardProperties extends CardActionProperties {}
 
-export class DiscardCardAction extends CardGameAction {
+export class DiscardCardAction extends CardGameAction<DiscardCardProperties> {
     name = 'discardCard';
     eventName = EventNames.OnCardsDiscarded;
     cost = 'discarding {0}';
@@ -14,15 +13,17 @@ export class DiscardCardAction extends CardGameAction {
     targetType = [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding];
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
-        return (card.location !== Locations.Hand || card.controller.checkRestrictions('discard', context)) && 
-            super.canAffect(card, context, additionalProperties);
+        return (
+            (card.location !== Locations.Hand || card.controller.checkRestrictions('discard', context)) &&
+            super.canAffect(card, context, additionalProperties)
+        );
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties = {}): void {
         let { target } = this.getProperties(context, additionalProperties);
-        let cards = (target as DrawCard[]).filter(card => this.canAffect(card, context));
-        if(cards.length === 0) {
-            return
+        let cards = (target as DrawCard[]).filter((card) => this.canAffect(card, context));
+        if (cards.length === 0) {
+            return;
         }
         let event = this.createEvent(null, context, additionalProperties);
         this.updateEvent(event, cards, context, additionalProperties);
@@ -30,21 +31,24 @@ export class DiscardCardAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, cards, context: AbilityContext, additionalProperties): void {
-        if(!cards) {
+        if (!cards) {
             cards = this.getProperties(context, additionalProperties).target;
         }
-        if(!Array.isArray(cards)) {
+        if (!Array.isArray(cards)) {
             cards = [cards];
         }
-        event.originalCardStateInfo = cards.map(a => ({ location: a.location, owner: a.owner}) );
+        event.originalCardStateInfo = cards.map((a) => ({ location: a.location, owner: a.owner }));
         event.cards = cards;
         event.context = context;
     }
 
     eventHandler(event, additionalProperties = {}): void {
-        for(const card of event.cards) {
+        for (const card of event.cards) {
             this.checkForRefillProvince(card, event, additionalProperties);
-            card.controller.moveCard(card, card.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
+            card.controller.moveCard(
+                card,
+                card.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile
+            );
         }
     }
 

@@ -3,7 +3,7 @@ import AbilityDsl from '../../../abilitydsl';
 import type { Conflict } from '../../../conflict';
 import DrawCard from '../../../drawcard';
 import type Ring from '../../../ring';
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 import type { ProvinceCard } from '../../../ProvinceCard';
 
 export default class ShinjoIsamu extends DrawCard {

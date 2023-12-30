@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface LoseFateProperties extends PlayerActionProperties {
     amount?: number;
@@ -32,7 +32,7 @@ export class LoseFateAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount } = this.getProperties(context, additionalProperties) as LoseFateProperties;        
+        let { amount } = this.getProperties(context, additionalProperties) as LoseFateProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = -amount;
     }

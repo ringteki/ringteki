@@ -1,12 +1,12 @@
-import BaseAbility = require('./baseability.js');
-import EffectSource = require('./EffectSource.js');
-import Game = require('./game');
-import Player = require('./player');
-import Ring = require('./ring');
-import type { StatusToken } from './StatusToken.js';
-import { Stages, Locations, PlayTypes } from './Constants.js';
-import { GameAction } from './GameActions/GameAction.js';
-import BaseCard = require('./basecard.js');
+import BaseAbility from './baseability';
+import type BaseCard from './basecard';
+import { Locations, PlayTypes, Stages } from './Constants';
+import EffectSource from './EffectSource';
+import type Game from './game';
+import type { GameAction } from './GameActions/GameAction';
+import type Player from './player';
+import type Ring from './ring';
+import type { StatusToken } from './StatusToken';
 
 export interface AbilityContextProperties {
     game: Game;
@@ -24,7 +24,7 @@ export interface AbilityContextProperties {
     targetAbility?: any;
 }
 
-class AbilityContext<S = any> {
+export class AbilityContext<S = any> {
     game: Game;
     source: S;
     player: Player;
@@ -68,7 +68,7 @@ class AbilityContext<S = any> {
         this.playType = this.player && this.player.findPlayType(this.source); //location && location.playingType;
     }
 
-    copy(newProps: object): AbilityContext {
+    copy(newProps: Partial<AbilityContextProperties>): AbilityContext<this> {
         let copy = this.createCopy(newProps);
         copy.target = this.target;
         copy.token = this.token;
@@ -84,7 +84,7 @@ class AbilityContext<S = any> {
         return copy;
     }
 
-    createCopy(newProps) {
+    createCopy(newProps: Partial<AbilityContextProperties>): AbilityContext<this> {
         return new AbilityContext(Object.assign(this.getProps(), newProps));
     }
 
@@ -124,5 +124,3 @@ class AbilityContext<S = any> {
         };
     }
 }
-
-export = AbilityContext;

@@ -1,4 +1,4 @@
-import type AbilityContext from '../../AbilityContext';
+import type { AbilityContext } from '../../AbilityContext';
 import { Locations, Players, CardTypes } from '../../Constants';
 import { PlayCharacterAsIfFromHand } from '../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHand } from '../../PlayDisguisedCharacterAsIfFromHand';

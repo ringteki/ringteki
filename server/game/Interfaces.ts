@@ -1,15 +1,15 @@
-import AbilityContext = require('./AbilityContext');
-import { TriggeredAbilityContext } from './TriggeredAbilityContext';
-import { GameAction } from './GameActions/GameAction';
-import Ring = require('./ring');
-import BaseCard = require('./basecard');
-import DrawCard = require('./drawcard');
-import { ProvinceCard } from './ProvinceCard';
-import CardAbility = require('./CardAbility');
-import { DuelProperties } from './GameActions/DuelAction';
-import { Players, TargetModes, CardTypes, Locations, EventNames, Phases } from './Constants';
+import type { AbilityContext } from './AbilityContext';
+import type { TriggeredAbilityContext } from './TriggeredAbilityContext';
+import type { GameAction } from './GameActions/GameAction';
+import type Ring = require('./ring');
+import type BaseCard = require('./basecard');
+import type DrawCard = require('./drawcard');
+import type { ProvinceCard } from './ProvinceCard';
+import type CardAbility = require('./CardAbility');
+import type { DuelProperties } from './GameActions/DuelAction';
+import type { Players, TargetModes, CardTypes, Locations, EventNames, Phases } from './Constants';
 import type { StatusToken } from './StatusToken';
-import Player = require('./player');
+import type Player = require('./player');
 
 interface BaseTarget {
     activePromptTitle?: string;
@@ -152,7 +152,7 @@ interface AbilityProps<Context> {
     then?: ((context?: AbilityContext) => object) | object;
 }
 
-export interface ActionProps<Source = any> extends AbilityProps<AbilityContext> {
+export interface ActionProps<Source = any> extends AbilityProps<AbilityContext<Source>> {
     condition?: (context?: AbilityContext<Source>) => boolean;
     phase?: Phases | 'any';
     emeraldWorksInDynsty?: boolean;

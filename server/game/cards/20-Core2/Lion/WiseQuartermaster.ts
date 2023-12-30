@@ -1,7 +1,7 @@
 import { CardTypes, Locations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import AbilityContext from '../../../AbilityContext';
+import { AbilityContext } from '../../../AbilityContext';
 
 function attachedToType(context: AbilityContext): CardTypes {
     return (context.target.parent as DrawCard).type;

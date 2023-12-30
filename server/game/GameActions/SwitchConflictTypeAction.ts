@@ -1,10 +1,9 @@
-import { RingAction, RingActionProperties } from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { ConflictTypes, EventNames } from '../Constants';
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface SwitchConflictTypeProperties extends RingActionProperties {
-    targetConflictType?: ConflictTypes
+    targetConflictType?: ConflictTypes;
 }
 
 export class SwitchConflictTypeAction extends RingAction {
@@ -13,13 +12,15 @@ export class SwitchConflictTypeAction extends RingAction {
 
     getCostMessage(context: AbilityContext): [string, any[]] {
         let currentConflictType = context.game.currentConflict && context.game.currentConflict.conflictType;
-        let newConflictType = currentConflictType === ConflictTypes.Military ? ConflictTypes.Political : ConflictTypes.Military;
+        let newConflictType =
+            currentConflictType === ConflictTypes.Military ? ConflictTypes.Political : ConflictTypes.Military;
         return ['switching the conflict type from {0} to {1}', [currentConflictType, newConflictType]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let currentConflictType = context.game.currentConflict && context.game.currentConflict.conflictType;
-        let newConflictType = currentConflictType === ConflictTypes.Military ? ConflictTypes.Political : ConflictTypes.Military;
+        let newConflictType =
+            currentConflictType === ConflictTypes.Military ? ConflictTypes.Political : ConflictTypes.Military;
         return ['switch the conflict type from {0} to {1}', [currentConflictType, newConflictType]];
     }
 
@@ -29,7 +30,7 @@ export class SwitchConflictTypeAction extends RingAction {
     }
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}) {
-        if(!context.game.currentConflict) {
+        if (!context.game.currentConflict) {
             return false;
         }
         let { targetConflictType } = this.getProperties(context);

@@ -1,4 +1,4 @@
-import AbilityContext, { AbilityContextProperties } from './AbilityContext';
+import { AbilityContext, type AbilityContextProperties } from './AbilityContext';
 
 interface TriggeredAbilityContextProperties extends AbilityContextProperties {
     event: any;

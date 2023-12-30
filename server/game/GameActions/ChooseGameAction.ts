@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import { Players } from '../Constants';
 import { GameAction, type GameActionProperties } from './GameAction';
 

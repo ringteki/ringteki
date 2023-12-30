@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import { EffectNames, EventNames } from '../Constants';
 import type { Duel } from '../Duel';
 import type Game from '../game';

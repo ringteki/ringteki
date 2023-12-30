@@ -1,4 +1,4 @@
-import AbilityContext from '../../../AbilityContext';
+import { AbilityContext } from '../../../AbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, EventNames, Locations, Players, PlayTypes } from '../../../Constants';
 import { ReduceableFateCost } from '../../../costs/ReduceableFateCost';

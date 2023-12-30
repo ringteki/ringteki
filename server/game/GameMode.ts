@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import type { CardAction } from './CardAction';
 import { AbilityTypes, Locations, Phases } from './Constants';
 import type BaseCard from './basecard';

@@ -1,13 +1,11 @@
-import AbilityContext = require("../AbilityContext");
-import BaseCard = require('../basecard');
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames } from '../Constants';
+export interface DiscardFromPlayProperties extends CardActionProperties {}
 
-export interface DiscardFromPlayProperties extends CardActionProperties {
-}
-
-export class DiscardFromPlayAction extends CardGameAction {
+export class DiscardFromPlayAction extends CardGameAction<DiscardFromPlayProperties> {
     name = 'discardFromPlay';
     eventName = EventNames.OnCardLeavesPlay;
     cost = 'sacrificing {0}';
@@ -15,25 +13,25 @@ export class DiscardFromPlayAction extends CardGameAction {
 
     constructor(propertyFactory, isSacrifice = false) {
         super(propertyFactory);
-        if(isSacrifice) {
+        if (isSacrifice) {
             this.name = 'sacrifice';
         }
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context);
-        return[this.name === 'sacrifice' ? 'sacrifice {0}' : 'discard {0}', [properties.target]];
+        return [this.name === 'sacrifice' ? 'sacrifice {0}' : 'discard {0}', [properties.target]];
     }
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(card.type === CardTypes.Holding) {
-            if(this.name === 'sacrifice' && card.facedown) {
+        if (card.type === CardTypes.Holding) {
+            if (this.name === 'sacrifice' && card.facedown) {
                 return false;
             }
-            if(!card.location.includes('province')) {
+            if (!card.location.includes('province')) {
                 return false;
             }
-        } else if(card.location !== Locations.PlayArea) {
+        } else if (card.location !== Locations.PlayArea) {
             return false;
         }
         return super.canAffect(card, context);

@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface TransferFateProperties extends PlayerActionProperties {
     amount?: number;
@@ -15,7 +15,7 @@ export class TransferFateAction extends PlayerAction {
     constructor(propertyFactory: TransferFateProperties | ((context: AbilityContext) => TransferFateProperties)) {
         super(propertyFactory);
     }
-    
+
     getCostMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as TransferFateProperties;
         return ['giving {1} fate to {2}', [properties.amount, context.player.opponent]];
@@ -28,11 +28,16 @@ export class TransferFateAction extends PlayerAction {
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties) as TransferFateProperties;
-        return player.opponent && properties.amount > 0 && player.fate >= properties.amount && super.canAffect(player, context);
+        return (
+            player.opponent &&
+            properties.amount > 0 &&
+            player.fate >= properties.amount &&
+            super.canAffect(player, context)
+        );
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount } = this.getProperties(context, additionalProperties) as TransferFateProperties;        
+        let { amount } = this.getProperties(context, additionalProperties) as TransferFateProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.fate = amount;
         event.origin = player;

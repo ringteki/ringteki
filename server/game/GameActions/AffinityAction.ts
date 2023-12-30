@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import type { GameObject } from '../GameObject';
 import { Derivable, derive } from '../Utils/helpers';
 import { GameAction, type GameActionProperties } from './GameAction';
@@ -12,11 +12,9 @@ export interface AffinityActionProperties extends GameActionProperties {
     promptTitleForConfirmingAffinity?: string;
 }
 
-export class AffinityAction extends GameAction {
-    defaultProperties: AffinityActionProperties;
-
+export class AffinityAction extends GameAction<AffinityActionProperties> {
     getProperties(context: AbilityContext, additionalProperties = {}): AffinityActionProperties {
-        let properties = super.getProperties(context, additionalProperties) as AffinityActionProperties;
+        let properties = super.getProperties(context, additionalProperties);
         properties.gameAction.setDefaultTarget(() => properties.target);
         properties.noAffinityGameAction?.setDefaultTarget(() => properties.target);
         return properties;

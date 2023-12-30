@@ -1,12 +1,11 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface DetachActionProperties extends CardActionProperties {
-}
+export interface DetachActionProperties extends CardActionProperties {}
 
-export class DetachAction extends CardGameAction {
+export class DetachAction extends CardGameAction<DetachActionProperties> {
     name = 'detach';
     eventName = EventNames.OnCardDetached;
     targetType = [CardTypes.Attachment];
@@ -17,7 +16,12 @@ export class DetachAction extends CardGameAction {
     }
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
-        return card && card.location === Locations.PlayArea && card.parent && super.canAffect(card, context, additionalProperties);
+        return (
+            card &&
+            card.location === Locations.PlayArea &&
+            card.parent &&
+            super.canAffect(card, context, additionalProperties)
+        );
     }
 
     eventHandler(event): void {

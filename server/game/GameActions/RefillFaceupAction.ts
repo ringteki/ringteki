@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
-import { Locations } from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import type { Locations } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface RefillFaceupProperties extends PlayerActionProperties {
     location: Locations | Locations[];
@@ -26,13 +26,13 @@ export class RefillFaceupAction extends PlayerAction {
             location = [location];
         }
 
-        location.forEach(loc => {
+        location.forEach((loc) => {
             event.context.game.queueSimpleStep(() => {
-                if(event.player.replaceDynastyCard(loc)) {
+                if (event.player.replaceDynastyCard(loc)) {
                     event.context.game.queueSimpleStep(() => {
                         let cards = event.player.getDynastyCardsInProvince(loc);
-                        cards.forEach(card => {
-                            if(card) {
+                        cards.forEach((card) => {
+                            if (card) {
                                 card.facedown = false;
                             }
                         });

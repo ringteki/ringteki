@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
+import { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import BaseCard from '../../../basecard';
 import { CardTypes, Phases, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class ParanoidHososhi extends DrawCard {
     static id = 'paranoid-hososhi';

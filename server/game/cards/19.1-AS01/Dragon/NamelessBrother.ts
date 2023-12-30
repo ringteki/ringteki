@@ -1,8 +1,8 @@
-import AbilityContext = require('../../../AbilityContext');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
+import DrawCard from '../../../drawcard';
 
 export default class NamelessBrother extends DrawCard {
     static id = 'nameless-brother';
@@ -10,7 +10,7 @@ export default class NamelessBrother extends DrawCard {
     public setupCardAbilities() {
         this.persistentEffect({
             match: (card, context) => card.controller === context.player && card.type === CardTypes.Character,
-            effect: AbilityDsl.effects.modifyBothSkills((character: BaseCard, context: AbilityContext) =>
+            effect: AbilityDsl.effects.modifyBothSkills((character: BaseCard, context: AbilityContext<this>) =>
                 (context.player.cardsInPlay as BaseCard[]).reduce(
                     (skillBonus, otherCard) =>
                         otherCard.type === CardTypes.Character &&

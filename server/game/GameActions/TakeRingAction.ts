@@ -1,10 +1,10 @@
-import AbilityContext = require('../AbilityContext');
-import Ring = require('../ring');
-import { RingAction, RingActionProperties} from './RingAction';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Ring from '../ring';
+import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface TakeRingProperties extends RingActionProperties {
-    takeFate?: boolean,
+    takeFate?: boolean;
 }
 
 export class TakeRingAction extends RingAction {
@@ -26,11 +26,10 @@ export class TakeRingAction extends RingAction {
         let context = event.context;
         ring.claimRing(context.player);
         ring.contested = false;
-        if(takeFate && context.player.checkRestrictions('takeFateFromRings', context)) {
+        if (takeFate && context.player.checkRestrictions('takeFateFromRings', context)) {
             context.game.addMessage('{0} takes {1} fate from {2}', context.player, ring.fate, ring);
             context.player.modifyFate(ring.fate);
             ring.removeFate();
         }
-
     }
 }

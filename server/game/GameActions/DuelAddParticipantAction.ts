@@ -1,25 +1,24 @@
-import { CardGameAction, type CardActionProperties } from './CardGameAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { CardTypes, EventNames, Locations } from '../Constants';
-import { Duel } from '../Duel';
-import DrawCard = require('../drawcard');
+import type DrawCard from '../drawcard';
+import type { Duel } from '../Duel';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface DuelAddParticipantProperties extends CardActionProperties {
     duel: Duel;
 }
 
-export class DuelAddParticipantAction extends CardGameAction {
+export class DuelAddParticipantAction extends CardGameAction<DuelAddParticipantProperties> {
     name = 'onAddDuelParticipant';
     eventName = EventNames.OnAddDuelParticipant;
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as DuelAddParticipantProperties;
+        let properties = this.getProperties(context);
         return ['extend the duel challenge to {0}', [properties.target]];
     }
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties) as DuelAddParticipantProperties;
+        let properties = this.getProperties(context, additionalProperties);
 
         if (card.type !== CardTypes.Character) {
             return false;
@@ -36,7 +35,7 @@ export class DuelAddParticipantAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { duel } = this.getProperties(context, additionalProperties) as DuelAddParticipantProperties;
+        let { duel } = this.getProperties(context, additionalProperties);
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.duel = duel;
     }

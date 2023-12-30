@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface SetDialProperties extends PlayerActionProperties {
     value: number;
@@ -18,7 +18,7 @@ export class SetDialAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as SetDialProperties;
-        return ['set {0}\'s dial to {1}', [properties.target, properties.value]]
+        return ["set {0}'s dial to {1}", [properties.target, properties.value]];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {

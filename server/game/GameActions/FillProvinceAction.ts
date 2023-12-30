@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { Locations } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface FillProvinceProperties extends PlayerActionProperties {
     location: Locations;
@@ -9,18 +9,10 @@ export interface FillProvinceProperties extends PlayerActionProperties {
     faceup?: boolean;
 }
 
-export class FillProvinceAction extends PlayerAction {
-    defaultProperties: FillProvinceProperties = {
-        location: Locations.ProvinceOne,
-        fillTo: 1,
-        faceup: false
-    }
-
+export class FillProvinceAction extends PlayerAction<FillProvinceProperties> {
+    defaultProperties: FillProvinceProperties = { location: Locations.ProvinceOne, fillTo: 1, faceup: false };
     name = 'fill';
     effect = 'fills {0} with more cards';
-    constructor(propertyFactory: FillProvinceProperties | ((context: AbilityContext) => FillProvinceProperties)) {
-        super(propertyFactory);
-    }
 
     defaultTargets(context: AbilityContext): Player[] {
         return [context.player];
@@ -28,7 +20,7 @@ export class FillProvinceAction extends PlayerAction {
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
         let properties = this.getProperties(context) as FillProvinceProperties;
-        return ['fills {0} to {1} cards!', [properties.location, properties.fillTo]]
+        return ['fills {0} to {1} cards!', [properties.location, properties.fillTo]];
     }
 
     eventHandler(event, additionalProperties): void {
@@ -39,8 +31,8 @@ export class FillProvinceAction extends PlayerAction {
         if (properties.faceup) {
             event.context.game.queueSimpleStep(() => {
                 let cards = event.player.getDynastyCardsInProvince(properties.location);
-                cards.forEach(card => {
-                    if(card) {
+                cards.forEach((card) => {
+                    if (card) {
                         card.facedown = false;
                     }
                 });

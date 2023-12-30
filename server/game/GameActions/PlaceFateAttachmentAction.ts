@@ -1,14 +1,13 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import Player = require('../player');
-import Ring = require('../ring');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
-import { type } from 'os';
+import type { AbilityContext } from '../AbilityContext';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Player from '../player';
+import type Ring from '../ring';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface PlaceFateAttachmentProperties extends CardActionProperties {
-    amount?: number,
-    origin?: DrawCard | Player | Ring
+    amount?: number;
+    origin?: DrawCard | Player | Ring;
 }
 
 export class PlaceFateAttachmentAction extends CardGameAction {
@@ -16,7 +15,9 @@ export class PlaceFateAttachmentAction extends CardGameAction {
     eventName = EventNames.OnMoveFate;
     targetType = [CardTypes.Attachment];
     defaultProperties: PlaceFateAttachmentProperties = { amount: 1 };
-    constructor(properties: ((context: AbilityContext) => PlaceFateAttachmentProperties) | PlaceFateAttachmentProperties) {
+    constructor(
+        properties: ((context: AbilityContext) => PlaceFateAttachmentProperties) | PlaceFateAttachmentProperties
+    ) {
         super(properties);
     }
 
@@ -27,11 +28,11 @@ export class PlaceFateAttachmentAction extends CardGameAction {
 
     canAffect(card: DrawCard, context: AbilityContext, additionalProperties = {}): boolean {
         let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateAttachmentProperties;
-        if(amount === 0 || card.location !== Locations.PlayArea) {
+        if (amount === 0 || card.location !== Locations.PlayArea) {
             return false;
         }
 
-        if(origin && this.isRing(origin) && !context.player.checkRestrictions('takeFateFromRings', context)){
+        if (origin && this.isRing(origin) && !context.player.checkRestrictions('takeFateFromRings', context)) {
             return false;
         }
 
@@ -39,14 +40,14 @@ export class PlaceFateAttachmentAction extends CardGameAction {
     }
 
     isRing(x: any): x is Ring {
-        return "element" in x;
+        return 'element' in x;
     }
 
     checkOrigin(origin: Player | Ring | DrawCard, context: AbilityContext): boolean {
-        if(origin) {
-            if(origin.fate === 0) {
+        if (origin) {
+            if (origin.fate === 0) {
                 return false;
-            } else if(['player', 'ring'].includes(origin.type)) {
+            } else if (['player', 'ring'].includes(origin.type)) {
                 return true;
             }
             return origin.allowGameAction('removeFate', context);
@@ -68,8 +69,13 @@ export class PlaceFateAttachmentAction extends CardGameAction {
 
     isEventFullyResolved(event, card: DrawCard, context: AbilityContext, additionalProperties): boolean {
         let { amount, origin } = this.getProperties(context, additionalProperties) as PlaceFateAttachmentProperties;
-        return !event.cancelled && event.name === this.eventName &&
-            event.fate === amount && event.origin === origin && event.recipient === card;
+        return (
+            !event.cancelled &&
+            event.name === this.eventName &&
+            event.fate === amount &&
+            event.origin === origin &&
+            event.recipient === card
+        );
     }
 
     eventHandler(event): void {

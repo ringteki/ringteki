@@ -1,7 +1,7 @@
-import { PlayerAction, PlayerActionProperties } from './PlayerAction';
-import AbilityContext = require('../AbilityContext');
-import Player = require('../player');
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames, Locations } from '../Constants';
+import type Player from '../player';
+import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface MatchingDiscardProperties extends PlayerActionProperties {
     amount?: number;
@@ -11,7 +11,7 @@ export interface MatchingDiscardProperties extends PlayerActionProperties {
 }
 
 export class MatchingDiscardAction extends PlayerAction {
-    defaultProperties: MatchingDiscardProperties = { 
+    defaultProperties: MatchingDiscardProperties = {
         amount: -1,
         reveal: false,
         cards: null,
@@ -34,7 +34,10 @@ export class MatchingDiscardAction extends PlayerAction {
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let properties: MatchingDiscardProperties = this.getProperties(context, additionalProperties) as MatchingDiscardProperties;
+        let properties: MatchingDiscardProperties = this.getProperties(
+            context,
+            additionalProperties
+        ) as MatchingDiscardProperties;
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = properties.amount;
         event.reveal = properties.reveal;
@@ -50,26 +53,26 @@ export class MatchingDiscardAction extends PlayerAction {
             amount = player.hand.size(); //ensure we discard all matching copies
         }
 
-        if(amount === 0) {
+        if (amount === 0) {
             return;
         }
         let cards = event.cards;
-        let cardsToDiscard = cards.filter(a => event.match(context, a));
+        let cardsToDiscard = cards.filter((a) => event.match(context, a));
         if (amount < cardsToDiscard.length) {
             cardsToDiscard = cardsToDiscard.slice(0, amount);
         }
         event.cards = cardsToDiscard;
         event.discardedCards = cardsToDiscard;
-        if(event.reveal) {
+        if (event.reveal) {
             player.game.addMessage('{0} reveals {1}', player, cards);
         }
-        if(cardsToDiscard.length > 0) {
+        if (cardsToDiscard.length > 0) {
             player.game.addMessage('{0} discards {1}', player, cardsToDiscard);
         } else {
             player.game.addMessage('{0} does not discard anything', player);
         }
 
-        for(const card of cardsToDiscard) {
+        for (const card of cardsToDiscard) {
             player.moveCard(card, card.isDynasty ? Locations.DynastyDiscardPile : Locations.ConflictDiscardPile);
         }
     }

@@ -1,18 +1,16 @@
-import _ = require('underscore');
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
+import { CardTypes, EffectNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import type Ring from '../ring';
 import { GameAction, GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
-import BaseCard = require('../basecard');
-import Ring = require('../ring');
-import EffectSource = require('../EffectSource');
-import { CardTypes, EffectNames, Locations } from '../Constants.js';
 import { LoseFateAction } from './LoseFateAction';
-import type DrawCard = require('../drawcard');
 
 export interface CardActionProperties extends GameActionProperties {
     target?: BaseCard | BaseCard[];
 }
 
-export class CardGameAction extends GameAction {
+export class CardGameAction<P extends CardActionProperties = CardActionProperties> extends GameAction<P> {
     targetType = [
         CardTypes.Character,
         CardTypes.Attachment,
@@ -49,7 +47,7 @@ export class CardGameAction extends GameAction {
 
                 if (context.targets.challenger && context.targets.duelTarget) {
                     //duels act weird, we need to handle targeting differently for them to work
-                    let duelTargets = _.flatten(_.values(context.targets));
+                    let duelTargets = Object.values<BaseCard | Array<BaseCard>>(context.targets).flat();
                     targetForCost = targetForCost.concat(duelTargets);
                 }
 

@@ -1,10 +1,10 @@
-import { LastingEffectCardAction, LastingEffectCardProperties } from './LastingEffectCardAction';
-import { GameActionProperties } from './GameAction';
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import Effects = require('../effects');
-import { Durations, Locations, Players } from '../Constants';
-import { WhenType } from '../Interfaces';
+import type { AbilityContext } from '../AbilityContext';
+import { Durations, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import Effects from '../effects';
+import type { WhenType } from '../Interfaces';
+import type { GameActionProperties } from './GameAction';
+import { LastingEffectCardAction, type LastingEffectCardProperties } from './LastingEffectCardAction';
 
 export interface TakeControlProperties extends GameActionProperties {
     duration?: Durations;
@@ -20,7 +20,7 @@ export class TakeControlAction extends LastingEffectCardAction {
         duration: Durations.Custom,
         targetLocation: Locations.PlayArea,
         effect: null
-    }
+    };
 
     constructor(properties: ((context: AbilityContext) => TakeControlProperties) | TakeControlProperties) {
         super(properties as LastingEffectCardProperties);
@@ -28,7 +28,7 @@ export class TakeControlAction extends LastingEffectCardAction {
 
     getProperties(context: AbilityContext, additionalProperties = {}) {
         const properties = super.getProperties(context, additionalProperties);
-        if(properties.effect.length === 0 || !properties.effect[0]) {
+        if (properties.effect.length === 0 || !properties.effect[0]) {
             properties.effect = [Effects.takeControl(context.player)];
         }
         return properties;

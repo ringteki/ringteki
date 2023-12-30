@@ -5,7 +5,7 @@ import { EventRegistrar } from './EventRegistrar';
 import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
-import AbilityContext from './AbilityContext';
+import { AbilityContext } from './AbilityContext';
 
 /**
  * Used to track whether a player has played a specific type of duel effect yet

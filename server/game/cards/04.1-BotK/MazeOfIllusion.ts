@@ -1,7 +1,7 @@
-import type AbilityContext = require('../../AbilityContext');
+import type { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
 import { CardTypes, Players } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
+import DrawCard from '../../drawcard';
 
 type Choice = 'Even' | 'Odd';
 

@@ -1,4 +1,4 @@
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 import { TargetModes } from '../../../Constants';
 import { StrongholdCard } from '../../../StrongholdCard';
 import AbilityDsl from '../../../abilitydsl';

@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import CardAbility from './CardAbility';
 import { AbilityTypes, CardTypes, EffectNames, Phases } from './Constants';
 import { parseGameMode } from './GameMode';

@@ -1,10 +1,9 @@
-import AbilityContext = require('../AbilityContext');
-import DrawCard = require('../drawcard');
-import { CardGameAction, CardActionProperties } from './CardGameAction';
-import { Locations, CardTypes, EventNames }  from '../Constants';
+import type { AbilityContext } from '../AbilityContext';
+import { CardTypes, EventNames, Locations } from '../Constants';
+import type DrawCard from '../drawcard';
+import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
-export interface ReturnToHandProperties extends CardActionProperties {
-}
+export interface ReturnToHandProperties extends CardActionProperties {}
 
 export class ReturnToHandAction extends CardGameAction {
     name = 'returnToHand';

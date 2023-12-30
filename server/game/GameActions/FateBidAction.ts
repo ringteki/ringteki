@@ -1,4 +1,4 @@
-import type AbilityContext from '../AbilityContext';
+import type { AbilityContext } from '../AbilityContext';
 import { EventNames } from '../Constants';
 import { SimpleStep } from '../gamesteps/SimpleStep.js';
 import type { GameAction } from './GameAction';

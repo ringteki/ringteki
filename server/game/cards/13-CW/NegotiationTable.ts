@@ -1,8 +1,7 @@
-import type AbilityContext = require('../../AbilityContext');
+import type { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
 import { CardTypes, Players } from '../../Constants';
-import GameActions = require('../../GameActions/GameActions');
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
+import DrawCard from '../../drawcard';
 
 export default class NegotiationTable extends DrawCard {
     static id = 'negotiation-table';
@@ -68,15 +67,18 @@ export default class NegotiationTable extends DrawCard {
     getDrawChoice(context: AbilityContext) {
         this.game.addMessage('{0} chooses to have each player draw a card', context.player.opponent);
 
-        GameActions.draw((context) => ({
-            target: context.player.opponent,
-            amount: 1
-        })).resolve(context.player.opponent, context);
-
-        GameActions.draw((context) => ({
-            target: context.player,
-            amount: 1
-        })).resolve(context.player, context);
+        AbilityDsl.actions
+            .draw((context) => ({
+                target: context.player.opponent,
+                amount: 1
+            }))
+            .resolve(context.player.opponent, context);
+        AbilityDsl.actions
+            .draw((context) => ({
+                target: context.player,
+                amount: 1
+            }))
+            .resolve(context.player, context);
     }
 
     getReadyChoice(context: AbilityContext) {
@@ -86,40 +88,48 @@ export default class NegotiationTable extends DrawCard {
             context.player.opponent.cardsInPlay.filter((a) => a.type === CardTypes.Character && a.bowed).length;
 
         if (bowedCharacters > 0) {
-            GameActions.selectCard((context) => ({
-                player: Players.Opponent,
-                cardType: CardTypes.Character,
-                targets: true,
-                message: '{0} chooses to ready {1}',
-                messageArgs: (card) => [context.player.opponent, card],
-                gameAction: AbilityDsl.actions.ready()
-            })).resolve(context.player.opponent, context);
+            AbilityDsl.actions
+                .selectCard((context) => ({
+                    player: Players.Opponent,
+                    cardType: CardTypes.Character,
+                    targets: true,
+                    message: '{0} chooses to ready {1}',
+                    messageArgs: (card) => [context.player.opponent, card],
+                    gameAction: AbilityDsl.actions.ready()
+                }))
+                .resolve(context.player.opponent, context);
         }
 
         //This is ugly, but it's needed to not deadlock the game
         if (bowedCharacters > 1) {
-            GameActions.selectCard((context) => ({
-                player: Players.Self,
-                cardType: CardTypes.Character,
-                targets: true,
-                message: '{0} chooses to ready {1}',
-                messageArgs: (card) => [context.player, card],
-                gameAction: AbilityDsl.actions.ready()
-            })).resolve(context.player, context);
+            AbilityDsl.actions
+                .selectCard((context) => ({
+                    player: Players.Self,
+                    cardType: CardTypes.Character,
+                    targets: true,
+                    message: '{0} chooses to ready {1}',
+                    messageArgs: (card) => [context.player, card],
+                    gameAction: AbilityDsl.actions.ready()
+                }))
+                .resolve(context.player, context);
         }
     }
 
     getFateChoice(context: AbilityContext) {
         this.game.addMessage('{0} chooses to have each player gain a fate', context.player.opponent);
 
-        GameActions.gainFate((context) => ({
-            target: context.player.opponent,
-            amount: 1
-        })).resolve(context.player.opponent, context);
-        GameActions.gainFate((context) => ({
-            target: context.player,
-            amount: 1
-        })).resolve(context.player, context);
+        AbilityDsl.actions
+            .gainFate((context) => ({
+                target: context.player.opponent,
+                amount: 1
+            }))
+            .resolve(context.player.opponent, context);
+        AbilityDsl.actions
+            .gainFate((context) => ({
+                target: context.player,
+                amount: 1
+            }))
+            .resolve(context.player, context);
     }
 
     getDoneChoice(context: AbilityContext) {

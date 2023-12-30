@@ -1,4 +1,4 @@
-import type AbilityContext from './AbilityContext';
+import type { AbilityContext } from './AbilityContext';
 import BaseCard from './basecard';
 import { EffectNames } from './Constants';
 import type Player from './player';

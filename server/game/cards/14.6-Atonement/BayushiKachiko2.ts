@@ -1,10 +1,10 @@
-import AbilityContext = require('../../AbilityContext');
-import { CardTypes, EventNames, Locations, PlayTypes, Players } from '../../Constants';
+import { AbilityContext } from '../../AbilityContext';
+import AbilityDsl from '../../abilitydsl';
+import type BaseCard from '../../basecard';
+import { CardTypes, EventNames, Locations, Players, PlayTypes } from '../../Constants';
+import DrawCard from '../../drawcard';
 import { EventRegistrar } from '../../EventRegistrar';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
-import Player = require('../../player');
+import type Player from '../../player';
 
 const MAXIMUM_CARDS_ALLOWED = 3;
 

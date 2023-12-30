@@ -1,10 +1,10 @@
-import AbilityContext = require('../AbilityContext');
-import Event = require('../Events/Event.js');
+import type { AbilityContext } from '../AbilityContext';
+import type BaseCard from '../basecard';
 import { CardTypes, EventNames, Stages } from '../Constants';
+import Event from '../Events/Event';
+import type Player from '../player';
+import type Ring from '../ring';
 import type { StatusToken } from '../StatusToken';
-import BaseCard = require('../basecard');
-import Ring = require('../ring');
-import Player = require('../player');
 
 type PlayerOrRingOrCardOrToken = Player | Ring | BaseCard | StatusToken;
 
@@ -12,34 +12,33 @@ export interface GameActionProperties {
     target?: PlayerOrRingOrCardOrToken | PlayerOrRingOrCardOrToken[];
     cannotBeCancelled?: boolean;
     optional?: boolean;
-    parentAction?: GameAction;
+    parentAction?: GameAction<GameActionProperties>;
 }
 
-export class GameAction {
-    propertyFactory: (context?: AbilityContext) => GameActionProperties;
-    properties: GameActionProperties;
+export class GameAction<P extends GameActionProperties = GameActionProperties> {
+    propertyFactory: (context?: AbilityContext) => P;
+    properties: P;
     targetType: string[] = [];
     eventName = EventNames.Unnamed;
     name = '';
     cost = '';
     effect = '';
-    defaultProperties: GameActionProperties = { cannotBeCancelled: false, optional: false };
+    defaultProperties: P = { cannotBeCancelled: false, optional: false } as P;
     getDefaultTargets: (context: AbilityContext) => any = (context) => this.defaultTargets(context);
 
-    constructor(propertyFactory: GameActionProperties | ((context?: AbilityContext) => GameActionProperties) = {}) {
+    constructor<C extends AbilityContext>(propertyFactory: P | ((context?: C) => P)) {
         if (typeof propertyFactory === 'function') {
-            this.propertyFactory = <(context?: AbilityContext) => GameActionProperties>propertyFactory;
+            this.propertyFactory = propertyFactory;
         } else {
             this.properties = propertyFactory;
         }
     }
 
     defaultTargets(context: AbilityContext): any[] {
-        // eslint-disable-line no-unused-vars
         return [];
     }
 
-    getProperties(context: AbilityContext, additionalProperties = {}): GameActionProperties {
+    getProperties(context: AbilityContext, additionalProperties = {}): P {
         let properties = Object.assign(
             { target: this.getDefaultTargets(context) },
             this.defaultProperties,
@@ -119,7 +118,10 @@ export class GameAction {
         return event;
     }
 
-    resolve(target: undefined | PlayerOrRingOrCardOrToken | PlayerOrRingOrCardOrToken[], context: AbilityContext): void {
+    resolve(
+        target: undefined | PlayerOrRingOrCardOrToken | PlayerOrRingOrCardOrToken[],
+        context: AbilityContext
+    ): void {
         if (target) {
             this.setDefaultTarget(() => target);
         }
@@ -135,21 +137,16 @@ export class GameAction {
     }
 
     addPropertiesToEvent(event: any, target: any, context: AbilityContext, additionalProperties = {}): void {
-        // eslint-disable-line no-unused-vars
         event.context = context;
     }
 
-    eventHandler(event: any, additionalProperties = {}): void {
-        // eslint-disable-line no-unused-vars
-    }
+    eventHandler(event: any, additionalProperties = {}): void {}
 
     checkEventCondition(event: Event, additionalProperties = {}): boolean {
-        // eslint-disable-line no-unused-vars
         return true;
     }
 
     isEventFullyResolved(event: Event, target: any, context: AbilityContext, additionalProperties = {}): boolean {
-        // eslint-disable-line no-unused-vars
         return !event.cancelled && event.name === this.eventName;
     }
 
@@ -191,7 +188,6 @@ export class GameAction {
     }
 
     hasTargetsChosenByInitiatingPlayer(context: AbilityContext, additionalProperties = {}): boolean {
-        // eslint-disable-line no-unused-vars
         return false;
     }
 }

@@ -2,7 +2,7 @@ import { CardTypes, Locations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import { AshigaruRecruit } from '../../AshigaruRecruit';
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 
 function putAshigaruTokenIntoPlay(context: AbilityContext) {
     const card = context.player.dynastyDeck.first();

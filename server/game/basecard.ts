@@ -8,7 +8,7 @@ import Game = require('./game');
 import DynastyCardAction = require('./dynastycardaction');
 
 import { GameModes } from '../GameModes';
-import AbilityContext from './AbilityContext';
+import { AbilityContext } from './AbilityContext';
 import { CardAction } from './CardAction.js';
 import {
     AbilityTypes,

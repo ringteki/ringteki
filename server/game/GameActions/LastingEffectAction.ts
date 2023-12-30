@@ -1,4 +1,4 @@
-import type AbilityContext from "../AbilityContext";
+import type { AbilityContext } from "../AbilityContext";
 import type BaseAbility from "../baseability";
 import { Durations, EventNames, Players } from "../Constants";
 import type { WhenType } from "../Interfaces";

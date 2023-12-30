@@ -1,4 +1,4 @@
-import type AbilityContext from '../../../AbilityContext';
+import type { AbilityContext } from '../../../AbilityContext';
 import { CardTypes, Locations, Phases, PlayTypes } from '../../../Constants';
 import type { Cost } from '../../../Costs';
 import AbilityDsl from '../../../abilitydsl';
