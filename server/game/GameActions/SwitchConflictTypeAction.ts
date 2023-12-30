@@ -1,12 +1,13 @@
 import type { AbilityContext } from '../AbilityContext';
 import { ConflictTypes, EventNames } from '../Constants';
+import type Ring from '../ring';
 import { RingAction, type RingActionProperties } from './RingAction';
 
 export interface SwitchConflictTypeProperties extends RingActionProperties {
     targetConflictType?: ConflictTypes;
 }
 
-export class SwitchConflictTypeAction extends RingAction {
+export class SwitchConflictTypeAction extends RingAction<SwitchConflictTypeProperties> {
     name = 'switchConflictType';
     eventName = EventNames.OnSwitchConflictType;
 
@@ -22,11 +23,6 @@ export class SwitchConflictTypeAction extends RingAction {
         let newConflictType =
             currentConflictType === ConflictTypes.Military ? ConflictTypes.Political : ConflictTypes.Military;
         return ['switch the conflict type from {0} to {1}', [currentConflictType, newConflictType]];
-    }
-
-    getProperties(context: AbilityContext, additionalProperties = {}): SwitchConflictTypeProperties {
-        let properties = super.getProperties(context, additionalProperties) as SwitchConflictTypeProperties;
-        return properties;
     }
 
     canAffect(ring: Ring, context: AbilityContext, additionalProperties = {}) {

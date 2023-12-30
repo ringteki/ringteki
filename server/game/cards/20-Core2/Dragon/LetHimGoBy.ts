@@ -31,7 +31,7 @@ export default class LetHimGoBy extends DrawCard {
                     event.card.isParticipating()
             },
             gameAction: AbilityDsl.actions.bow((context) => ({
-                target: context.event.card
+                target: (context as any).event.card
             }))
         });
     }

@@ -6,11 +6,11 @@ class MediumOfTheLivingSoul extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Grant an ability to resolve ring effects',
-            condition: context => context.game.isDuringConflict(),
+            condition: (context) => context.game.isDuringConflict(),
             target: {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
-                cardCondition: card => card.isParticipating(),
+                cardCondition: (card) => card.isParticipating(),
                 gameAction: AbilityDsl.actions.cardLastingEffect(() => ({
                     effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
                         title: 'Resolve the Ring Effect',
@@ -18,9 +18,11 @@ class MediumOfTheLivingSoul extends DrawCard {
                             onResolveRingElement: (event, context) => {
                                 let val = event.player === context.player && context.source.isParticipating();
                                 return val;
-                            }},
+                            }
+                        },
                         cost: AbilityDsl.costs.removeFateFromSelf(),
-                        gameAction: AbilityDsl.actions.resolveRingEffect(context => ({ target: context.event.ring }))
+                        // @ts-ignore
+                        gameAction: AbilityDsl.actions.resolveRingEffect((context) => ({ target: context.event.ring }))
                     })
                 }))
             },
@@ -32,4 +34,3 @@ class MediumOfTheLivingSoul extends DrawCard {
 MediumOfTheLivingSoul.id = 'medium-of-the-living-soul';
 
 module.exports = MediumOfTheLivingSoul;
-

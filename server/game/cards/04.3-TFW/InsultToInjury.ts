@@ -18,11 +18,13 @@ export default class InsultToInjury extends DrawCard {
                 condition: (context: TriggeredAbilityContext<this>) => context.event.loser?.length > 1,
                 trueGameAction: AbilityDsl.actions.cardMenu((context) => ({
                     activePromptTitle: 'Choose a character to dishonor',
+                    // @ts-ignore
                     cards: context.event.loser,
                     gameAction: AbilityDsl.actions.dishonor(),
                     message: '{0} chooses to dishonor {1}',
                     messageArgs: (card, player) => [player, card]
                 })),
+                // @ts-ignore
                 falseGameAction: AbilityDsl.actions.dishonor((context) => ({ target: context.event.loser[0] }))
             }),
             effect: '{1}',

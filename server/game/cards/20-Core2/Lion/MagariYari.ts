@@ -18,7 +18,7 @@ export default class MagariYari extends DrawCard {
                         event.card.isParticipating() &&
                         event.card.getMilitarySkill() < context.source.getMilitarySkill()
                 },
-                gameAction: AbilityDsl.actions.bow((context) => ({ target: context.event.card }))
+                gameAction: AbilityDsl.actions.bow((context) => ({ target: (context as any).event.card }))
             } as TriggeredAbilityProps)
         });
     }

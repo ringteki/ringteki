@@ -1,6 +1,6 @@
 const { UiPrompt } = require('./UiPrompt.js');
 const GameActions = require('../GameActions/GameActions');
-const AbilityContext = require('../AbilityContext');
+const { AbilityContext } = require('../AbilityContext');
 const { Players } = require('../Constants');
 
 class AttachmentPrompt extends UiPrompt {

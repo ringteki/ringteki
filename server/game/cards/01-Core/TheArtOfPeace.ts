@@ -12,8 +12,8 @@ export default class TheArtOfPeace extends ProvinceCard {
             },
             effect: 'dishonor all attackers and honor all defenders in this conflict',
             gameAction: [
-                AbilityDsl.actions.dishonor((context) => ({ target: context.event.conflict.getAttackers() })),
-                AbilityDsl.actions.honor((context) => ({ target: context.event.conflict.getDefenders() }))
+                AbilityDsl.actions.dishonor((context) => ({ target: (context as any).event.conflict.getAttackers() })),
+                AbilityDsl.actions.honor((context) => ({ target: (context as any).event.conflict.getDefenders() }))
             ]
         });
     }

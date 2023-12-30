@@ -12,9 +12,14 @@ class YoungRumormonger extends DrawCard {
             },
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card, context) => card !== context.event.card && card.controller === context.event.card.controller,
-                gameAction: AbilityDsl.actions.cancel(context => ({
-                    replacementGameAction: context.event.name === EventNames.OnCardHonored ? AbilityDsl.actions.honor() : AbilityDsl.actions.dishonor()
+                cardCondition: (card, context) =>
+                    card !== context.event.card && card.controller === context.event.card.controller,
+                gameAction: AbilityDsl.actions.cancel((context) => ({
+                    replacementGameAction:
+                        // @ts-ignore
+                        context.event.name === EventNames.OnCardHonored
+                            ? AbilityDsl.actions.honor()
+                            : AbilityDsl.actions.dishonor()
                 }))
             }
         });

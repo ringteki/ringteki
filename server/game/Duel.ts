@@ -6,6 +6,7 @@ import type DrawCard from './drawcard';
 import type Game from './game';
 import type Player from './player';
 import { AbilityContext } from './AbilityContext';
+import type BaseCard from './basecard';
 
 /**
  * Used to track whether a player has played a specific type of duel effect yet
@@ -94,8 +95,11 @@ export class Duel extends GameObject {
             : !this.properties.requiresConflict || card.isParticipating();
     }
 
-    isInvolved(card: DrawCard): boolean {
-        return card.location === Locations.PlayArea && (card === this.challenger || this.targets.includes(card));
+    isInvolved(card: BaseCard): boolean {
+        return (
+            card.location === Locations.PlayArea &&
+            (card === this.challenger || this.targets.includes(card as DrawCard))
+        );
     }
 
     isInvolvedInAnyDuel(card: DrawCard): boolean {

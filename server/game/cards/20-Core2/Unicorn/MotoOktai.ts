@@ -22,7 +22,7 @@ export default class MotoOktai extends DrawCard {
             effectArgs: (context) => [skillBonus(context.event.card), 'military'],
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 duration: Durations.UntilEndOfPhase,
-                effect: AbilityDsl.effects.modifyMilitarySkill(skillBonus(context.event.card))
+                effect: AbilityDsl.effects.modifyMilitarySkill(skillBonus((context as any).event.card))
             }))
         });
 

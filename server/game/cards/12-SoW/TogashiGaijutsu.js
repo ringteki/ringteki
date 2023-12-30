@@ -7,14 +7,14 @@ class TogashiGaijutsu extends DrawCard {
         this.reaction({
             title: 'Ready a character',
             when: {
-                onCardPlayed: (event, context) => (
+                onCardPlayed: (event, context) =>
                     event.card.parent &&
                     event.card.type === CardTypes.Attachment &&
                     event.card.hasTrait('tattoo') &&
                     event.card.controller === context.player
-                )
             },
-            gameAction: AbilityDsl.actions.ready(context => ({ target: context.event.card.parent }))
+            // @ts-ignore
+            gameAction: AbilityDsl.actions.ready((context) => ({ target: context.event.card.parent }))
         });
     }
 }

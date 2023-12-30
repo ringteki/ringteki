@@ -443,7 +443,7 @@ export function handler(propertyFactory: PropsFactory<HandlerProperties>): GameA
     return new HandlerAction(propertyFactory);
 }
 export function noAction(): GameAction {
-    return new HandlerAction();
+    return new HandlerAction({});
 }
 
 //////////////
@@ -453,7 +453,7 @@ export function conflictLastingEffect(propertyFactory: PropsFactory<LastingEffec
     return new LastingEffectAction(propertyFactory);
 } // duration = 'untilEndOfConflict', effect, targetController, condition, until
 export function immediatelyResolveConflict(): GameAction {
-    return new HandlerAction();
+    return new HandlerAction({});
 }
 
 //////////////

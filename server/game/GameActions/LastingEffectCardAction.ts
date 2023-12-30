@@ -10,10 +10,14 @@ export interface LastingEffectCardProperties extends LastingEffectGeneralPropert
     canChangeZoneNTimes?: number;
 }
 
-export class LastingEffectCardAction extends CardGameAction {
+export class LastingEffectCardAction<
+    P extends LastingEffectCardProperties = LastingEffectCardProperties
+    // @ts-ignore
+> extends CardGameAction<P> {
     name = 'applyLastingEffect';
     eventName = EventNames.OnEffectApplied;
     effect = 'apply a lasting effect to {0}';
+    // @ts-ignore
     defaultProperties: LastingEffectCardProperties = {
         duration: Durations.UntilEndOfConflict,
         canChangeZoneOnce: false,
@@ -21,10 +25,8 @@ export class LastingEffectCardAction extends CardGameAction {
         effect: [],
         ability: null
     };
-    constructor(properties: LastingEffectCardProperties | ((context: AbilityContext) => LastingEffectCardProperties)) {
-        super(properties);
-    }
 
+    // @ts-ignore
     getProperties(context: AbilityContext, additionalProperties = {}): LastingEffectCardProperties {
         let properties = super.getProperties(context, additionalProperties) as LastingEffectCardProperties;
         if (!Array.isArray(properties.effect)) {

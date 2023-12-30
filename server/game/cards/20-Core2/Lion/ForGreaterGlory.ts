@@ -12,7 +12,9 @@ export default class ForGreaterGlory extends DrawCard {
                     this.game.isDuringConflict('military') && event.conflict.attackingPlayer === context.player
             },
             gameAction: AbilityDsl.actions.placeFate((context) => ({
-                target: context.event.conflict.getCharacters(context.player).filter((card) => card.hasTrait('bushi'))
+                target: (context as any).event.conflict
+                    .getCharacters(context.player)
+                    .filter((card) => card.hasTrait('bushi'))
             })),
             max: AbilityDsl.limit.perConflict(1)
         });

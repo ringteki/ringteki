@@ -23,6 +23,7 @@ class IsawaTsuke extends DrawCard {
                 }
             },
             gameAction: AbilityDsl.actions.conditional((context) => ({
+                // @ts-ignore
                 condition: context.event.name === EventNames.OnCardDishonored,
                 trueGameAction: AbilityDsl.actions.dishonor({
                     target: this.getTsukeTargets(context)

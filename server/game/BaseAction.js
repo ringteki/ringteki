@@ -1,4 +1,4 @@
-const AbilityContext = require('./AbilityContext');
+const { AbilityContext } = require('./AbilityContext');
 const BaseAbility = require('./baseability.js');
 const { Stages } = require('./Constants.js');
 

@@ -1,4 +1,4 @@
-import { CardTypes, DuelTypes, Durations, FavorTypes, Players } from '../../../Constants';
+import { DuelTypes, Durations, FavorTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -8,9 +8,10 @@ export default class SeppunRyo extends DrawCard {
     public setupCardAbilities() {
         this.duelFocus({
             title: 'Help a character with a duel',
-            duelCondition: (duel, context) => context.player.imperialFavor !== '' && duel.participants.includes(context.source),
+            duelCondition: (duel, context) =>
+                context.player.imperialFavor !== '' && duel.participants.includes(context.source),
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
-                target: context.event.duel,
+                target: (context as any).event.duel,
                 effect: AbilityDsl.effects.modifyDuelSkill({ amount: 1, player: context.player }),
                 duration: Durations.UntilEndOfDuel
             })),

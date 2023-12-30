@@ -15,26 +15,21 @@ export interface TriggerAbilityProperties extends CardActionProperties {
     event?: Event;
 }
 
-export class TriggerAbilityAction extends CardGameAction {
+export class TriggerAbilityAction extends CardGameAction<TriggerAbilityProperties> {
     name = 'triggerAbility';
     defaultProperties: TriggerAbilityProperties = {
         ability: null,
         ignoredRequirements: [],
         subResolution: false
     };
-    constructor(
-        properties: ((context: TriggeredAbilityContext) => TriggerAbilityProperties) | TriggerAbilityProperties
-    ) {
-        super(properties);
-    }
 
     getEffectMessage(context: TriggeredAbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as TriggerAbilityProperties;
+        let properties = this.getProperties(context);
         return ["resolve {0}'s {1} ability", [properties.target, properties.ability.title]];
     }
 
     canAffect(card: DrawCard, context: TriggeredAbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties) as TriggerAbilityProperties;
+        let properties = this.getProperties(context, additionalProperties);
         let ability = properties.ability as TriggeredAbility;
         let player = properties.player || context.player;
         let newContextEvent = properties.event;
@@ -51,7 +46,7 @@ export class TriggerAbilityAction extends CardGameAction {
     }
 
     eventHandler(event, additionalProperties): void {
-        let properties = this.getProperties(event.context, additionalProperties) as TriggerAbilityProperties;
+        let properties = this.getProperties(event.context, additionalProperties);
         let player = properties.player || event.context.player;
         let newContextEvent = properties.event;
         let newContext = (properties.ability as TriggeredAbility).createContext(player, newContextEvent);
@@ -60,7 +55,7 @@ export class TriggerAbilityAction extends CardGameAction {
     }
 
     hasTargetsChosenByInitiatingPlayer(context) {
-        let properties = this.getProperties(context) as TriggerAbilityProperties;
+        let properties = this.getProperties(context);
         return (
             properties.ability &&
             properties.ability.hasTargetsChosenByInitiatingPlayer &&

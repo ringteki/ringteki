@@ -51,7 +51,7 @@ export default class VillageDoshin extends DrawCard {
                             message: `{0} refuses to discard ${DOSHIN_TAX} cards. The effects of {2} are canceled.`
                         }
                     },
-                    messageArgs: [context.event.card]
+                    messageArgs: [(context as any).event.card]
                 }))
             }),
             effect: 'protect {1}',

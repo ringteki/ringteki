@@ -1,6 +1,7 @@
 import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import { Duel } from '../../../Duel';
 
 export default class Coward extends DrawCard {
     static id = 'coward-';
@@ -13,11 +14,12 @@ export default class Coward extends DrawCard {
                 cardType: CardTypes.Character,
                 controller: Players.Any,
                 hidePromptIfSingleCard: true,
-                cardCondition: (card) => {
-                    const isInvolved = context.event.duel.isInvolved(card);
-                    const isChallenger = context.event.duel.challenger === card;
-                    const higherSkill = context.event.duel.targets.some(target =>
-                        context.event.duel.getSkillStatistic(card) > context.event.duel.getSkillStatistic(target)
+                cardCondition: (card: DrawCard) => {
+                    const duel: Duel = (context as any).event.duel;
+                    const isInvolved = duel.isInvolved(card);
+                    const isChallenger = duel.challenger === card;
+                    const higherSkill = duel.targets.some(
+                        (target) => duel.getSkillStatistic(card) > duel.getSkillStatistic(target)
                     );
 
                     return isInvolved && isChallenger && higherSkill;
@@ -32,8 +34,7 @@ export default class Coward extends DrawCard {
         this.reaction({
             title: 'Dishonor a character',
             when: {
-                onConflictPass: (event, context) =>
-                    event.conflict.attackingPlayer === context.player.opponent
+                onConflictPass: (event, context) => event.conflict.attackingPlayer === context.player.opponent
             },
             target: {
                 cardType: CardTypes.Character,

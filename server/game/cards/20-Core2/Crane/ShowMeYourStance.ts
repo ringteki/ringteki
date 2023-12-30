@@ -1,4 +1,4 @@
-import { CardTypes, Players, Durations } from '../../../Constants';
+import { CardTypes, Durations } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -9,7 +9,7 @@ export default class ShowMeYourStance extends DrawCard {
         this.duelChallenge({
             title: 'Apply status tokens to the duel',
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
-                target: context.event.duel,
+                target: (context as any).event.duel,
                 effect: AbilityDsl.effects.applyStatusTokensToDuel(),
                 duration: Durations.UntilEndOfDuel
             })),

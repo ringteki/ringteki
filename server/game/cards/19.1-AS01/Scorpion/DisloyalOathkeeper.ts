@@ -1,7 +1,7 @@
-import { Locations, Players, PlayTypes, CardTypes } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
-import Player = require('../../../player');
+import AbilityDsl from '../../../abilitydsl';
+import { CardTypes, Locations, Players, PlayTypes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
+import type Player from '../../../player';
 
 export default class DisloyalOathkeeper extends DrawCard {
     static id = 'disloyal-oathkeeper';
@@ -30,7 +30,7 @@ export default class DisloyalOathkeeper extends DrawCard {
                     context.source.controller.getSourceList(this.uuid).size() === 0
             },
             gameAction: AbilityDsl.actions.placeCardUnderneath((context) => ({
-                target: context.event.card,
+                target: (context as any).event.card,
                 hideWhenFaceup: true,
                 destination: this
             }))

@@ -1,9 +1,9 @@
-import type { AbilityContext } from "../AbilityContext";
-import type BaseAbility from "../baseability";
-import { Durations, EventNames, Players } from "../Constants";
-import type { WhenType } from "../Interfaces";
-import type Player from "../player";
-import { GameAction, type GameActionProperties } from "./GameAction";
+import type { AbilityContext } from '../AbilityContext';
+import type BaseAbility from '../baseability';
+import { Durations, EventNames, Players } from '../Constants';
+import type { WhenType } from '../Interfaces';
+import type Player from '../player';
+import { GameAction, type GameActionProperties } from './GameAction';
 
 export interface LastingEffectGeneralProperties extends GameActionProperties {
     duration?: Durations;
@@ -17,31 +17,38 @@ export interface LastingEffectProperties extends LastingEffectGeneralProperties 
     targetController?: Players | Player;
 }
 
-export class LastingEffectAction extends GameAction {
+export class LastingEffectAction<P extends LastingEffectProperties = LastingEffectProperties> extends GameAction<P> {
     name = 'applyLastingEffect';
     eventName = EventNames.OnEffectApplied;
     effect = 'apply a lasting effect';
+    // @ts-ignore
     defaultProperties: LastingEffectProperties = {
         duration: Durations.UntilEndOfConflict,
         effect: [],
         ability: null
-    };
+    } as LastingEffectProperties;
 
-    getProperties(context: AbilityContext, additionalProperties = {}): LastingEffectProperties & { effect?: Array<any> } {
-        let properties = super.getProperties(context, additionalProperties) as LastingEffectProperties & { effect: Array<any> }
-        if(!Array.isArray(properties.effect)) {
+    // @ts-ignore
+    getProperties(
+        context: AbilityContext,
+        additionalProperties = {}
+    ): LastingEffectProperties & { effect?: Array<any> } {
+        let properties = super.getProperties(context, additionalProperties) as LastingEffectProperties & {
+            effect: Array<any>;
+        };
+        if (!Array.isArray(properties.effect)) {
             properties.effect = [properties.effect];
         }
         return properties;
     }
-    
+
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
         let properties = this.getProperties(context, additionalProperties);
         return properties.effect.length > 0;
     }
 
     addEventsToArray(events: any[], context: AbilityContext, additionalProperties: any): void {
-        if(this.hasLegalTarget(context, additionalProperties)) {
+        if (this.hasLegalTarget(context, additionalProperties)) {
             events.push(this.getEvent(null, context, additionalProperties));
         }
     }

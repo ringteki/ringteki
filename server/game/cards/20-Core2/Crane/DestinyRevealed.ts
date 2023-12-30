@@ -1,6 +1,7 @@
-import { CardTypes, EventNames, Players } from '../../../Constants';
+import { CardTypes, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import { Duel } from '../../../Duel';
 
 export default class DestinyRevealed extends DrawCard {
     static id = 'destiny-revealed';
@@ -11,16 +12,15 @@ export default class DestinyRevealed extends DrawCard {
             duelCondition: (duel, context) => duel.winnerController === context.player,
             gameAction: AbilityDsl.actions.sequentialContext((context) => {
                 let firstTarget = undefined;
-                const twoFate =
-                    context.event.duel.loser?.some((card) => card.isUnique()) &&
-                    context.event.duel.finalDifference >= 4;
+                const duel: Duel = (context as any).event.duel;
+                const twoFate = duel.loser?.some((card) => card.isUnique()) && duel.finalDifference >= 4;
 
                 let placeFateOnDuelist = AbilityDsl.actions.selectCard((context) => ({
                     activePromptTitle: 'Choose a duel participant',
                     hidePromptIfSingleCard: true,
                     cardType: CardTypes.Character,
                     controller: Players.Self,
-                    cardCondition: (card) => context.event.duel.isInvolved(card),
+                    cardCondition: (card) => duel.isInvolved(card),
                     message: '{0} places a fate on {1}',
                     messageArgs: (cards) => [context.player, cards],
                     subActionProperties: (card) => {

@@ -16,7 +16,7 @@ export default class TwoHands extends DrawCard {
             target: {
                 controller: Players.Opponent,
                 gameAction: AbilityDsl.actions.duelAddParticipant((context) => ({
-                    duel: context.event.duel
+                    duel: (context as any).event.duel
                 }))
             }
         });

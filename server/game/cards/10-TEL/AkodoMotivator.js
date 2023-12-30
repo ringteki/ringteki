@@ -7,14 +7,19 @@ class AkodoMotivator extends DrawCard {
             title: 'Opponent discards an equal number of cards at random',
             when: {
                 onCardsDiscardedFromHand: (event, context) => {
-                    const discardedFromOwnHand = (event.player === context.player);
-                    const discardedByOpponentsEffect = (event.player.opponent === event.context.player);
-                    const discardedByRingEffect = (event.context.source.type === 'ring');
+                    const discardedFromOwnHand = event.player === context.player;
+                    const discardedByOpponentsEffect = event.player.opponent === event.context.player;
+                    const discardedByRingEffect = event.context.source.type === 'ring';
                     const discardedByCardEffect = event.context.ability.isCardAbility();
-                    return discardedFromOwnHand && discardedByOpponentsEffect && (discardedByRingEffect || discardedByCardEffect);
+                    return (
+                        discardedFromOwnHand &&
+                        discardedByOpponentsEffect &&
+                        (discardedByRingEffect || discardedByCardEffect)
+                    );
                 }
             },
-            gameAction: AbilityDsl.actions.discardAtRandom(context => ({
+            gameAction: AbilityDsl.actions.discardAtRandom((context) => ({
+                // @ts-ignore
                 amount: context.event.amount
             }))
         });

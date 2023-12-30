@@ -12,9 +12,10 @@ export default class MirumotoRei2 extends DrawCard {
     setupCardAbilities() {
         this.duelChallenge({
             title: 'Help a character with a duel',
-            duelCondition: (duel, context) => duel.participants.includes(context.source) && this.getWeaponCount(context) > 0,
+            duelCondition: (duel, context) =>
+                duel.participants.includes(context.source) && this.getWeaponCount(context) > 0,
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
-                target: context.event.duel,
+                target: (context as any).event.duel,
                 effect: AbilityDsl.effects.modifyDuelSkill({
                     amount: this.getWeaponCount(context),
                     player: context.player
@@ -22,7 +23,7 @@ export default class MirumotoRei2 extends DrawCard {
                 duration: Durations.UntilEndOfDuel
             })),
             effect: 'add {1} to their duel total',
-            effectArgs: context => [this.getWeaponCount(context)]
+            effectArgs: (context) => [this.getWeaponCount(context)]
         });
 
         this.action({
@@ -31,23 +32,29 @@ export default class MirumotoRei2 extends DrawCard {
             initiateDuel: {
                 type: DuelTypes.Military,
                 message: 'injure {0}',
-                messageArgs: (duel) => [duel.loser],    
-                gameAction: (duel) => duel.loser && AbilityDsl.actions.multipleContext(() => {
-                    const gameActions = [];
-                    duel.loser.forEach((loser) => {
-                        if (loser.getFate() > 0) {
-                            gameActions.push(AbilityDsl.actions.removeFate({
-                                target: loser,
-                                amount: 1,
-                            }));
-                        } else {
-                            gameActions.push(AbilityDsl.actions.discardFromPlay({
-                                target: loser
-                            }))
-                        }
-                    });
-                    return { gameActions };
-                }),
+                messageArgs: (duel) => [duel.loser],
+                gameAction: (duel) =>
+                    duel.loser &&
+                    AbilityDsl.actions.multipleContext(() => {
+                        const gameActions = [];
+                        duel.loser.forEach((loser) => {
+                            if (loser.getFate() > 0) {
+                                gameActions.push(
+                                    AbilityDsl.actions.removeFate({
+                                        target: loser,
+                                        amount: 1
+                                    })
+                                );
+                            } else {
+                                gameActions.push(
+                                    AbilityDsl.actions.discardFromPlay({
+                                        target: loser
+                                    })
+                                );
+                            }
+                        });
+                        return { gameActions };
+                    })
             }
         });
     }

@@ -1,3 +1,4 @@
+import { AbilityContext } from '../../../AbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import { EventNames, AbilityTypes, Locations, CardTypes, Players } from '../../../Constants';
@@ -43,7 +44,7 @@ export default class StormFromSakkaku extends DrawCard {
         });
     }
 
-    private otherHoldingsInSameProvince(context: TriggeredAbilityContext<this>): BaseCard[] {
+    private otherHoldingsInSameProvince(context: AbilityContext<this>): BaseCard[] {
         return (context.game.allCards as BaseCard[]).filter(
             (card) =>
                 card.location === context.source.location &&

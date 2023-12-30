@@ -6,11 +6,16 @@ class KansenHaunt extends DrawCard {
         this.reaction({
             title: 'Resolve ring effect',
             when: {
-                onClaimRing: (event, context) => context.player.opponent && context.player.isLessHonorable() && context.player.isDefendingPlayer() && event.player === context.player
+                onClaimRing: (event, context) =>
+                    context.player.opponent &&
+                    context.player.isLessHonorable() &&
+                    context.player.isDefendingPlayer() &&
+                    event.player === context.player
             },
             cost: AbilityDsl.costs.payHonor(2),
-            gameAction: AbilityDsl.actions.resolveRingEffect(context => ({
+            gameAction: AbilityDsl.actions.resolveRingEffect((context) => ({
                 player: context.player,
+                // @ts-ignore
                 target: context.event.ring
             }))
         });

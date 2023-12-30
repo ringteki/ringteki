@@ -2,6 +2,7 @@ import type { AbilityContext } from '../AbilityContext';
 import { EventNames, Players } from '../Constants';
 import HonorBidPrompt from '../gamesteps/honorbidprompt';
 import { SimpleStep } from '../gamesteps/SimpleStep';
+import type Player from '../player';
 import type { GameAction } from './GameAction';
 import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 

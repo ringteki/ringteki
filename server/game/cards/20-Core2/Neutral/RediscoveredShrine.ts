@@ -18,7 +18,10 @@ export default class RediscoveredShrine extends DrawCard {
             effect: 'reduce the cost of their next event by 1',
             gameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
                 targetController: context.player,
-                effect: AbilityDsl.effects.reduceNextPlayedCardCost(1, (card: DrawCard) => card === context.event.card)
+                effect: AbilityDsl.effects.reduceNextPlayedCardCost(
+                    1,
+                    (card: DrawCard) => card === (context as any).event.card
+                )
             }))
         });
     }

@@ -26,7 +26,7 @@ export class GameAction<P extends GameActionProperties = GameActionProperties> {
     defaultProperties: P = { cannotBeCancelled: false, optional: false } as P;
     getDefaultTargets: (context: AbilityContext) => any = (context) => this.defaultTargets(context);
 
-    constructor<C extends AbilityContext>(propertyFactory: P | ((context?: C) => P)) {
+    constructor(propertyFactory: P | ((context?: AbilityContext) => P)) {
         if (typeof propertyFactory === 'function') {
             this.propertyFactory = propertyFactory;
         } else {

@@ -49,7 +49,8 @@ export default class EarnestSculptor extends DrawCard {
                 targetController: context.player,
                 effect: AbilityDsl.effects.reduceNextPlayedCardCost(
                     1,
-                    (card: BaseCard) => card === context.event.card || card === context.event.context.source
+                    (card: BaseCard) =>
+                        card === (context as any).event.card || card === (context as any).event.context.source
                 )
             }))
         });

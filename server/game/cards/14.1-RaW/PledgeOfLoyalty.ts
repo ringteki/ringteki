@@ -15,7 +15,7 @@ export default class PledgeOfLoyalty extends ProvinceCard {
             effectArgs: (context) => context.event.card,
             gameAction: AbilityDsl.actions.cancel((context) => ({
                 replacementGameAction: AbilityDsl.actions.discardStatusToken({
-                    target: context.event.card.getStatusToken(CharacterStatus.Honored)
+                    target: (context as any).event.card.getStatusToken(CharacterStatus.Honored)
                 })
             }))
         });

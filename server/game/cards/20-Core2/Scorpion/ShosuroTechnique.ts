@@ -10,7 +10,7 @@ export default class ShosuroTechnique extends DrawCard {
             title: 'Apply status tokens to the duel',
             duelCondition: (duel, context) => duel.challengingPlayer && duel.challengingPlayer.opponent === context.player,
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
-                target: context.event.duel,
+                target: (context as any).event.duel,
                 effect: AbilityDsl.effects.duelIgnorePrintedSkill(),
                 duration: Durations.UntilEndOfDuel
             })),

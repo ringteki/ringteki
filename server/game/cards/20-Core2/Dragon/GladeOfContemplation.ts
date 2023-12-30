@@ -1,9 +1,9 @@
 import { TargetModes } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
-import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
+import type { AbilityContext } from '../../../AbilityContext';
 
-function cardDifference(context: TriggeredAbilityContext): number {
+function cardDifference(context: AbilityContext): number {
     return Math.max(0, Math.min(5, context.player.opponent.hand.size() - context.player.hand.size()));
 }
 

@@ -11,14 +11,17 @@ class HidaAmoro extends DrawCard {
             },
             limit: AbilityDsl.limit.perPhase(Infinity),
             effect: 'force {1} to sacrifice a character',
-            effectArgs: context => context.event.conflict.attackingPlayer,
-            gameAction: AbilityDsl.actions.selectCard(context => ({
+            effectArgs: (context) => context.event.conflict.attackingPlayer,
+            gameAction: AbilityDsl.actions.selectCard((context) => ({
+                // @ts-ignore
                 player: context.event.conflict.attackingPlayer === context.player ? Players.Self : Players.Opponent,
                 activePromptTitle: 'Choose a character to sacrifice',
                 cardType: CardTypes.Character,
-                cardCondition: card => card.controller === context.event.conflict.attackingPlayer,
+                // @ts-ignore
+                cardCondition: (card) => card.controller === context.event.conflict.attackingPlayer,
                 message: '{0} sacrifices {1} to {2}',
-                messageArgs: card => [context.event.conflict.attackingPlayer, card, context.source],
+                // @ts-ignore
+                messageArgs: (card) => [context.event.conflict.attackingPlayer, card, context.source],
                 gameAction: AbilityDsl.actions.sacrifice()
             }))
         });

@@ -33,7 +33,7 @@ export default class DrawingTheVoid extends DrawCard {
             gameAction: AbilityDsl.actions.cancel({
                 effect: 'choose between two piles of cards to draw',
                 replacementGameAction: AbilityDsl.actions.chooseAction((context) => {
-                    const pileSize: number = context.event.amount;
+                    const pileSize: number = (context as any).event.amount;
                     const topCards: Array<DrawCard> = context.player.conflictDeck.first(pileSize);
                     const bottomCards: Array<DrawCard> = context.player.conflictDeck.last(pileSize);
                     return {

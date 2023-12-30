@@ -14,7 +14,7 @@ export default class ReadyForBattle extends DrawCard {
                         (context.player.opponent && event.context.player === context.player.opponent))
             },
             cannotBeMirrored: true,
-            gameAction: AbilityDsl.actions.ready((context) => ({ target: context.event.card }))
+            gameAction: AbilityDsl.actions.ready((context) => ({ target: (context as any).event.card }))
         });
     }
 }

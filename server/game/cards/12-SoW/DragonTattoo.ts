@@ -39,6 +39,7 @@ export default class DragonTattoo extends DrawCard {
                     this.cardPlayed = true;
                     return {
                         source: this,
+                        // @ts-ignore
                         target: context.event.card,
                         resetOnCancel: true,
                         playType: PlayTypes.Other,
@@ -50,6 +51,7 @@ export default class DragonTattoo extends DrawCard {
                 otherwiseAction: AbilityDsl.actions.moveCard(() => {
                     this.cardPlayed = false;
                     return {
+                        // @ts-ignore
                         target: context.event.card,
                         destination: Locations.RemovedFromGame
                     };

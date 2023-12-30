@@ -4,8 +4,9 @@ import DrawCard from '../../../drawcard';
 import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import type BaseCard from '../../../basecard';
 import type Player from '../../../player';
+import type { AbilityContext } from '../../../AbilityContext';
 
-function getAttachmentSkill(card: DrawCard, context: TriggeredAbilityContext) {
+function getAttachmentSkill(card: DrawCard, context: AbilityContext) {
     let amount = 0;
     if (context.game.currentDuel.duelType === DuelTypes.Military) {
         amount = parseInt(card.cardData.military_bonus);
@@ -33,7 +34,7 @@ export default class BitingSteel extends DrawCard {
                     target: context.target.parent,
                     effect: AbilityDsl.effects.modifyDuelistSkill(
                         getAttachmentSkill(context.target, context),
-                        context.event.duel
+                        (context as any).event.duel
                     ),
                     duration: Durations.UntilEndOfDuel
                 }))

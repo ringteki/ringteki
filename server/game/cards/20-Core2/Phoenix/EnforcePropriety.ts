@@ -36,7 +36,7 @@ export default class EnforcePropriety extends DrawCard {
                         message: '{0} refuses to appease the fortunes - the effects of {3} are canceled'
                     }
                 },
-                messageArgs: [context.player, context.event.card]
+                messageArgs: [context.player, (context as any).event.card]
             })),
             effect: 'enforce the proper protocol'
         });

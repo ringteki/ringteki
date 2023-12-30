@@ -1,8 +1,8 @@
 import { CardTypes, Locations, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
-import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import type Ring from '../../../ring';
+import type { AbilityContext } from '../../../AbilityContext';
 
 export default class OnsenQuarters extends ProvinceCard {
     static id = 'onsen-quarters';
@@ -31,7 +31,7 @@ export default class OnsenQuarters extends ProvinceCard {
         });
     }
 
-    #ringForRole(context: TriggeredAbilityContext): Ring | undefined {
+    #ringForRole(context: AbilityContext): Ring | undefined {
         for (const trait of context.player.role.traits) {
             if (trait in context.game.rings) {
                 return context.game.rings[trait];

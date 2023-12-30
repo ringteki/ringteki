@@ -8,9 +8,10 @@ export default class DaidojiAkikore extends DrawCard {
     setupCardAbilities() {
         this.duelFocus({
             title: 'Add +1 to your duel total',
-            duelCondition: (duel, context) => context.game.isDuringConflict('political') && duel.participants.includes(context.source),
+            duelCondition: (duel, context) =>
+                context.game.isDuringConflict('political') && duel.participants.includes(context.source),
             gameAction: AbilityDsl.actions.duelLastingEffect((context) => ({
-                target: context.event.duel,
+                target: (context as any).event.duel,
                 effect: AbilityDsl.effects.modifyDuelSkill({ amount: 1, player: context.player }),
                 duration: Durations.UntilEndOfDuel
             })),
@@ -19,7 +20,7 @@ export default class DaidojiAkikore extends DrawCard {
 
         this.action({
             title: 'Military duel to add skill',
-            initiateDuel: context => ({
+            initiateDuel: (context) => ({
                 type: DuelTypes.Military,
                 opponentChoosesDuelTarget: true,
                 challengerCondition: (card, context) => context.game.isDuringConflict(),
@@ -28,14 +29,15 @@ export default class DaidojiAkikore extends DrawCard {
                     duel.winningPlayer === context.player
                         ? ['add 3 to ', context.player, "'s side for this conflict"]
                         : ['no effect', '', ''],
-                gameAction: (duel) => AbilityDsl.actions.conditional({
-                    condition: duel.winningPlayer === context.player,
-                    trueGameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
-                        targetController: duel.winningPlayer,
-                        effect: AbilityDsl.effects.changePlayerSkillModifier(3)
-                    })),
-                    falseGameAction: AbilityDsl.actions.noAction()
-                })
+                gameAction: (duel) =>
+                    AbilityDsl.actions.conditional({
+                        condition: duel.winningPlayer === context.player,
+                        trueGameAction: AbilityDsl.actions.playerLastingEffect((context) => ({
+                            targetController: duel.winningPlayer,
+                            effect: AbilityDsl.effects.changePlayerSkillModifier(3)
+                        })),
+                        falseGameAction: AbilityDsl.actions.noAction()
+                    })
             })
         });
     }

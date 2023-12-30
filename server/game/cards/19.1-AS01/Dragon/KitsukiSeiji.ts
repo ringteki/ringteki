@@ -1,3 +1,4 @@
+import { AbilityContext } from '../../../AbilityContext';
 import AbilityDsl from '../../../abilitydsl';
 import { Elements } from '../../../Constants';
 import DrawCard from '../../../drawcard';
@@ -28,7 +29,7 @@ export default class KitsukiSeiji extends DrawCard {
             effect: 'put the fate that would go on the {1} ring on {0} instead',
             effectArgs: () => [this.getCurrentElementSymbol(ELEMENT_KEY)],
             gameAction: AbilityDsl.actions.cancel((context) => {
-                switch (context.event.name) {
+                switch ((context as any).event.name) {
                     case 'onPlaceFateOnUnclaimedRings':
                         return { replacementGameAction: this.replacementForPlaceFateOnUnclaimedRings(context) };
                     case 'onMoveFate':
@@ -56,17 +57,17 @@ export default class KitsukiSeiji extends DrawCard {
         );
     }
 
-    private replacementForMoveFate(context: TriggeredAbilityContext) {
+    private replacementForMoveFate(context: AbilityContext) {
         return AbilityDsl.actions.placeFate({
-            origin: context.event.origin,
+            origin: (context as any).event.origin,
             target: context.source,
-            amount: context.event.fate
+            amount: (context as any).event.fate
         });
     }
 
-    private replacementForPlaceFateOnUnclaimedRings(context: TriggeredAbilityContext) {
+    private replacementForPlaceFateOnUnclaimedRings(context: AbilityContext) {
         return AbilityDsl.actions.joint(
-            context.event.recipients.map((recipient) => {
+            (context as any).event.recipients.map((recipient) => {
                 const isSeijisRing = recipient.ring.hasElement(this.getCurrentElementSymbol(ELEMENT_KEY));
                 if (isSeijisRing) {
                     return AbilityDsl.actions.placeFate({

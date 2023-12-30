@@ -1,6 +1,6 @@
 const _ = require('underscore');
 
-const AbilityContext = require('../AbilityContext.js');
+const { AbilityContext } = require('../AbilityContext.js');
 const CardSelector = require('../CardSelector.js');
 const EffectSource = require('../EffectSource.js');
 const { UiPrompt } = require('./UiPrompt.js');

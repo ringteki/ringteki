@@ -7,13 +7,19 @@ class AdornedTemple extends DrawCard {
             title: 'Draw cards',
             when: {
                 onMoveFate: (event, context) => {
-                    return event.fate > 0 && event.recipient && event.recipient.controller === context.player && event.context.ability.isCardAbility();
+                    return (
+                        event.fate > 0 &&
+                        event.recipient &&
+                        event.recipient.controller === context.player &&
+                        event.context.ability.isCardAbility()
+                    );
                 }
             },
             effect: 'draw {1} card{2}',
-            effectArgs: context => context.event.recipient.isOrdinary() ? ['2', 's'] : ['a', ''],
-            gameAction: AbilityDsl.actions.draw(context => ({
+            effectArgs: (context) => (context.event.recipient.isOrdinary() ? ['2', 's'] : ['a', '']),
+            gameAction: AbilityDsl.actions.draw((context) => ({
                 target: context.player,
+                // @ts-ignore
                 amount: context.event.recipient.isOrdinary() ? 2 : 1
             }))
         });

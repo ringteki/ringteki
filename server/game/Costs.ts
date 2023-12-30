@@ -146,7 +146,7 @@ export function shuffleIntoDeck(properties: SelectCostProperties): Cost {
 /**
  * Cost that requires discarding a specific card.
  */
-export function discardCardSpecific(cardFunc: (context: TriggeredAbilityContext) => DrawCard): Cost {
+export function discardCardSpecific(cardFunc: (context: AbilityContext) => DrawCard): Cost {
     return new GameActionCost(GameActions.discardCard((context) => ({ target: cardFunc(context) })));
 }
 
@@ -306,7 +306,7 @@ export function selectedReveal(properties: SelectCostProperties): Cost {
 /**
  * Cost that will reveal specific cards
  */
-export function reveal(cardFunc: (context: TriggeredAbilityContext) => BaseCard[]): Cost {
+export function reveal(cardFunc: (context: AbilityContext) => BaseCard[]): Cost {
     return new GameActionCost(GameActions.reveal((context) => ({ target: cardFunc(context) })));
 }
 
@@ -489,7 +489,7 @@ export function variableFateCost(properties: {
             });
         },
         payEvent(context: TriggeredAbilityContext) {
-            const payZeroFate = new HandlerAction();
+            const payZeroFate = new HandlerAction({});
             if ((context as any).ignoreFateCost) {
                 return payZeroFate.getEvent(context.player, context);
             }
@@ -810,7 +810,7 @@ export function optional(cost: Cost): Cost {
         payEvent: (context: TriggeredAbilityContext) => {
             const actionName = getActionName(context);
             if (!context.costs[actionName]) {
-                const doNothing = new HandlerAction();
+                const doNothing = new HandlerAction({});
                 return doNothing.getEvent(context.player, context);
             }
 
@@ -1018,7 +1018,7 @@ export function optionalHonorTransferFromOpponentCost(canPayFunc = (context: Tri
                 return events;
             }
 
-            const doNothing = new HandlerAction();
+            const doNothing = new HandlerAction({});
             return doNothing.getEvent(context.player, context);
         }
     };

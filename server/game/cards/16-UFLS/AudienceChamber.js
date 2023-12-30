@@ -7,9 +7,13 @@ class AudienceChamber extends DrawCard {
         this.reaction({
             title: 'Place fate on character',
             when: {
-                onCardPlayed: (event, context) => event.player === context.player && event.card.type === CardTypes.Character && event.card.getCost() >= 4
+                onCardPlayed: (event, context) =>
+                    event.player === context.player &&
+                    event.card.type === CardTypes.Character &&
+                    event.card.getCost() >= 4
             },
-            gameAction: AbilityDsl.actions.placeFate(context => ({
+            gameAction: AbilityDsl.actions.placeFate((context) => ({
+                // @ts-ignore
                 target: context.event.card
             }))
         });

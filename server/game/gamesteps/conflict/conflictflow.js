@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const AbilityContext = require('../../AbilityContext');
+const { AbilityContext } = require('../../AbilityContext');
 const { BaseStepWithPipeline } = require('../BaseStepWithPipeline.js');
 const Costs = require('../../Costs.js');
 const CovertAbility = require('../../KeywordAbilities/CovertAbility');
