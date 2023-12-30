@@ -25,25 +25,8 @@ export default class FeignedWeakness extends DrawCard {
     }
 
     #hasEqualOrLessSkill(conflict: Conflict, player: Player): boolean {
-        let mySide = 0;
-        let enemySide = 0;
-        const conflictType = conflict.conflictType;
-        for (const attackingChar of conflict.attackers) {
-            if (conflict.defendingPlayer === player) {
-                enemySide += attackingChar.getSkill(conflictType);
-            } else {
-                mySide += attackingChar.getSkill(conflictType);
-            }
-        }
-
-        for (const defendingChar of conflict.defenders) {
-            if (conflict.defendingPlayer === player) {
-                mySide += defendingChar.getSkill(conflictType);
-            } else {
-                enemySide += defendingChar.getSkill(conflictType);
-            }
-        }
-
-        return mySide <= enemySide;
+        return conflict.defendingPlayer === player
+            ? conflict.attackerSkill >= conflict.defenderSkill
+            : conflict.defenderSkill >= conflict.attackerSkill;
     }
 }
