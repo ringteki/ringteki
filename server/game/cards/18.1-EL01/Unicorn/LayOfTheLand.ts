@@ -14,43 +14,12 @@ export default class LayOfTheLand extends DrawCard {
                 cardType: CardTypes.Province,
                 controller: Players.Any,
                 location: Locations.Provinces,
-                cardCondition: (card) => !card.isBroken,
-                gameAction: AbilityDsl.actions.multipleContext((context) => {
-                    const promptActions = this.getStatusTokenPrompts(context.target as ProvinceCard);
-                    return {
-                        gameActions: [
-                            AbilityDsl.actions.reveal((context) => ({ target: context.target })),
-                            ...promptActions
-                        ]
-                    };
-                })
+                cardCondition: (card: ProvinceCard) => !card.isBroken && card.location !== Locations.StrongholdProvince,
+                gameAction: [AbilityDsl.actions.reveal(), AbilityDsl.actions.turnFacedown()]
             },
-            effect: 'reveal and disard any number of status tokens from {1}',
-            effectArgs: (context) => [context.target.facedown ? context.target.location : context.target]
+            effect: '{1} {2}',
+            effectArgs: (context) =>
+                context.target.facedown ? ['reveal', context.target] : ['flip facedown', context.target]
         });
-    }
-
-    getStatusTokenPrompts(target: ProvinceCard) {
-        return target.statusTokens.map((token) =>
-            AbilityDsl.actions.menuPrompt((context) => ({
-                activePromptTitle: `Do you wish to discard ${token.name}?`,
-                choices: ['Yes', 'No'],
-                optional: true,
-                choiceHandler: (choice, displayMessage) => {
-                    if (displayMessage && choice === 'Yes') {
-                        this.game.addMessage(
-                            '{0} chooses to discard {1} from {2}',
-                            context.player,
-                            token,
-                            context.target
-                        );
-                    }
-
-                    return { target: choice === 'Yes' ? token : [] };
-                },
-                player: Players.Self,
-                gameAction: AbilityDsl.actions.discardStatusToken()
-            }))
-        );
     }
 }
