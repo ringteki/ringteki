@@ -1,6 +1,6 @@
-describe('Moto Raiju', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Moto Raiju', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -25,9 +25,8 @@ describe('Moto Raiju', function() {
             this.p41 = this.player1.findCardByName('shameful-display', 'province 4');
         });
 
-        it('should get a bonus equal to the number of faceup provinces your opponent controls to a max of 3', function() {
+        it('should get a bonus equal to the number of faceup provinces your opponent controls', function () {
             const baseMil = this.raiju.getMilitarySkill();
-            const basePol = this.raiju.getPoliticalSkill();
 
             this.p1.facedown = false;
             this.p2.facedown = false;
@@ -46,19 +45,17 @@ describe('Moto Raiju', function() {
             });
 
             this.player2.clickCard(this.raiju2);
-            expect(this.player2).toHavePromptButton('Political Bonus');
-            expect(this.player2).toHavePromptButton('Military Bonus');
-            this.player2.clickPrompt('Political Bonus');
-            expect(this.raiju2.getMilitarySkill()).toBe(baseMil);
-            expect(this.raiju2.getPoliticalSkill()).toBe(basePol + 2);
+            expect(this.raiju2.getMilitarySkill()).toBe(baseMil + 2);
 
             this.player1.clickCard(this.raiju);
-            this.player1.clickPrompt('Military Bonus');
-            expect(this.raiju.getMilitarySkill()).toBe(baseMil + 3);
-            expect(this.raiju.getPoliticalSkill()).toBe(basePol);
+            expect(this.raiju.getMilitarySkill()).toBe(baseMil + 5);
 
-            expect(this.getChatLogs(10)).toContain('player2 uses Moto Raiju to give itself +2political until the end of the conflict');
-            expect(this.getChatLogs(10)).toContain('player1 uses Moto Raiju to give itself +3military until the end of the conflict');
+            expect(this.getChatLogs(10)).toContain(
+                'player2 uses Moto Raiju to give itself +2military until the end of the conflict'
+            );
+            expect(this.getChatLogs(10)).toContain(
+                'player1 uses Moto Raiju to give itself +5military until the end of the conflict'
+            );
         });
     });
 });
