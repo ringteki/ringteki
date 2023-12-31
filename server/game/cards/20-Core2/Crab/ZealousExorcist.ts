@@ -29,8 +29,6 @@ export default class ZealousExorcist extends DrawCard {
     }
 
     public onCharacterEntersPlay(event: any) {
-        if (event.originalLocation === Locations.Hand) {
-            this.charactersPlayedThisConflict.add(event.card);
-        }
+        this.charactersPlayedThisConflict.add(event.card);
     }
 }
