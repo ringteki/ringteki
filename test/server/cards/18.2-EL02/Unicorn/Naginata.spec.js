@@ -1,6 +1,6 @@
-describe('Daikyu Reprint', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Daikyu Reprint', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -29,12 +29,12 @@ describe('Daikyu Reprint', function() {
             this.player2.playAttachment(this.mount, this.whisperer);
         });
 
-        it('should give +2 mil when first player and +1 when 2nd', function() {
+        it('should give +2 mil when first player and +1 when 2nd', function () {
             expect(this.hotaru.getMilitarySkill()).toBe(3 + 2);
             expect(this.toturi.getMilitarySkill()).toBe(6 + 1);
         });
 
-        it('should react when a character moves in', function() {
+        it('should react when a character moves in', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.hotaru, this.initiate],
@@ -45,8 +45,8 @@ describe('Daikyu Reprint', function() {
             this.player2.clickCard(this.mount);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.naginata1);
-            this.player1.clickCard(this.naginata1);
+            expect(this.player1).toBeAbleToSelect(this.hotaru);
+            this.player1.clickCard(this.hotaru);
             expect(this.player1).not.toBeAbleToSelect(this.hotaru);
             expect(this.player1).not.toBeAbleToSelect(this.toturi);
             expect(this.player1).toBeAbleToSelect(this.initiate);
@@ -54,8 +54,8 @@ describe('Daikyu Reprint', function() {
             this.player1.clickCard(this.whisperer);
             expect(this.whisperer.bowed).toBe(true);
             expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.naginata2);
-            this.player2.clickCard(this.naginata2);
+            expect(this.player2).toBeAbleToSelect(this.toturi);
+            this.player2.clickCard(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.initiate);
@@ -64,7 +64,7 @@ describe('Daikyu Reprint', function() {
             expect(this.hotaru.bowed).toBe(true);
         });
 
-        it('should react when a character moves out', function() {
+        it('should react when a character moves out', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.hotaru, this.initiate],
@@ -77,8 +77,8 @@ describe('Daikyu Reprint', function() {
 
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
             expect(this.player2).toHavePrompt('Triggered Abilities');
-            expect(this.player2).toBeAbleToSelect(this.naginata2);
-            this.player2.clickCard(this.naginata2);
+            expect(this.player2).toBeAbleToSelect(this.toturi);
+            this.player2.clickCard(this.toturi);
             expect(this.player2).not.toBeAbleToSelect(this.hotaru);
             expect(this.player2).not.toBeAbleToSelect(this.toturi);
             expect(this.player2).toBeAbleToSelect(this.initiate);
@@ -87,7 +87,7 @@ describe('Daikyu Reprint', function() {
             expect(this.initiate.bowed).toBe(true);
         });
 
-        it('should not react in pol', function() {
+        it('should not react in pol', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.hotaru, this.initiate],
