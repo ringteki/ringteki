@@ -8,6 +8,9 @@ const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
 const GainAbility = require('./Effects/GainAbility');
 const EffectBuilder = require('./Effects/EffectBuilder');
+const { switchAttachmentSkillModifiers } = require('./Effects/Library/switchAttachmentSkillModifiers');
+const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmentMilitarySkillModifier');
+const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
 const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
 
 /* Types of effect
@@ -105,11 +108,14 @@ const Effects = {
     modifyDuelistSkill: (value, duel) => EffectBuilder.card.flexible(EffectNames.ModifyDuelistSkill, { value, duel }),
     modifyGlory: (value) => EffectBuilder.card.flexible(EffectNames.ModifyGlory, value),
     modifyMilitarySkill: (value) => EffectBuilder.card.flexible(EffectNames.ModifyMilitarySkill, value),
-    attachmentMilitarySkillModifier: (value) => EffectBuilder.card.flexible(EffectNames.AttachmentMilitarySkillModifier, value),
-    modifyMilitarySkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyMilitarySkillMultiplier, value),
+    switchAttachmentSkillModifiers,
+    attachmentMilitarySkillModifier,
+    modifyMilitarySkillMultiplier: (value) =>
+        EffectBuilder.card.flexible(EffectNames.ModifyMilitarySkillMultiplier, value),
     modifyPoliticalSkill: (value) => EffectBuilder.card.flexible(EffectNames.ModifyPoliticalSkill, value),
-    attachmentPoliticalSkillModifier: (value) => EffectBuilder.card.flexible(EffectNames.AttachmentPoliticalSkillModifier, value),
-    modifyPoliticalSkillMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyPoliticalSkillMultiplier, value),
+    attachmentPoliticalSkillModifier,
+    modifyPoliticalSkillMultiplier: (value) =>
+        EffectBuilder.card.flexible(EffectNames.ModifyPoliticalSkillMultiplier, value),
     modifyProvinceStrength: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrength, value),
     modifyProvinceStrengthMultiplier: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrengthMultiplier, value),
     modifyProvinceStrengthBonus: (value) => EffectBuilder.card.flexible(EffectNames.ModifyProvinceStrengthBonus, value),

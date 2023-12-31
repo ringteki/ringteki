@@ -1,6 +1,6 @@
-describe('Traveling Tinker', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Traveling Tinker', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -23,6 +23,7 @@ describe('Traveling Tinker', function() {
             this.ann = this.player1.findCardByName('a-new-name');
             this.blade = this.player2.findCardByName('kakita-blade');
             this.talisman = this.player1.findCardByName('talisman-of-the-sun');
+
             this.player1.playAttachment(this.katana, this.tinkerer);
             this.player2.playAttachment(this.fan, this.tinkerer);
             this.player1.playAttachment(this.ann, this.swindler);
@@ -30,34 +31,30 @@ describe('Traveling Tinker', function() {
             this.player1.playAttachment(this.talisman, this.yoshi);
         });
 
-        it('should not trigger outside of a conflict', function() {
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Action Window');
-            this.player1.clickCard(this.tinkerer);
-            expect(this.player1).toHavePrompt('Action Window');
-        });
-
-        it('should bow an attachment to gain a fate', function() {
+        it('flips an attachment modifiers', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.swindler],
-                defenders: [this.vice]
+                defenders: [this.vice, this.tinkerer]
             });
             this.player2.pass();
+            expect(this.tinkerer.getMilitarySkill()).toBe(3);
+            expect(this.tinkerer.getPoliticalSkill()).toBe(5);
+
             this.player1.clickCard(this.tinkerer);
-
-            expect(this.player1).toHavePrompt('Select card to bow');
-            expect(this.player1).not.toBeAbleToSelect(this.katana);
-            expect(this.player1).not.toBeAbleToSelect(this.fan);
+            expect(this.player1).toHavePrompt('Choose an attachment');
+            expect(this.player1).toBeAbleToSelect(this.katana);
+            expect(this.player1).toBeAbleToSelect(this.fan);
             expect(this.player1).toBeAbleToSelect(this.ann);
-            expect(this.player1).not.toBeAbleToSelect(this.blade);
-            expect(this.player1).not.toBeAbleToSelect(this.talisman);
+            expect(this.player1).toBeAbleToSelect(this.blade);
+            expect(this.player1).toBeAbleToSelect(this.talisman);
 
-            let fate = this.player1.fate;
-            this.player1.clickCard(this.ann);
-            expect(this.player1.fate).toBe(fate + 1);
-            expect(this.ann.bowed).toBe(true);
-            expect(this.getChatLogs(5)).toContain('player1 uses Traveling Tinkerer, bowing A New Name to gain 1 fate');
+            this.player1.clickCard(this.katana);
+            expect(this.tinkerer.getMilitarySkill()).toBe(1);
+            expect(this.tinkerer.getPoliticalSkill()).toBe(7);
+            expect(this.getChatLogs(5)).toContain(
+                'player1 uses Traveling Tinkerer to switch the skill modifiers of Fine Katana'
+            );
         });
     });
 });

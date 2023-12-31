@@ -96,6 +96,7 @@ export enum EffectNames {
     ModifyDuelistSkill = 'modifyDuelistSkill',
     ModifyGlory = 'modifyGlory',
     ModifyMilitarySkill = 'modifyMilitarySkill',
+    SwitchAttachmentSkillModifiers = 'switchAttachmentSkillModifiers',
     AttachmentMilitarySkillModifier = 'attachmentMilitarySkillModifier',
     ModifyMilitarySkillMultiplier = 'modifyMilitarySkillMultiplier',
     ModifyPoliticalSkill = 'modifyPoliticalSkill',

@@ -919,21 +919,31 @@ class BaseCard extends EffectSource {
         }
     }
 
+    isAttachmentBonusModifierSwitchActive() {
+        const switches = this.getEffects(EffectNames.SwitchAttachmentSkillModifiers).filter(Boolean);
+        // each pair of switches cancels each other. Need an odd number of switches to be active
+        return switches.length % 2 === 1;
+    }
+
     applyAttachmentBonus() {
-        let militaryBonus = parseInt(this.cardData.military_bonus);
-        if (militaryBonus) {
+        const militaryBonus = parseInt(this.cardData.military_bonus);
+        const politicalBonus = parseInt(this.cardData.political_bonus);
+        if (!isNaN(militaryBonus)) {
             this.persistentEffect({
                 match: (card) => card === this.parent,
                 targetController: Players.Any,
-                effect: AbilityDsl.effects.attachmentMilitarySkillModifier(militaryBonus)
+                effect: AbilityDsl.effects.attachmentMilitarySkillModifier(() =>
+                    this.isAttachmentBonusModifierSwitchActive() ? politicalBonus : militaryBonus
+                )
             });
         }
-        let politicalBonus = parseInt(this.cardData.political_bonus);
-        if (politicalBonus) {
+        if (!isNaN(politicalBonus)) {
             this.persistentEffect({
                 match: (card) => card === this.parent,
                 targetController: Players.Any,
-                effect: AbilityDsl.effects.attachmentPoliticalSkillModifier(politicalBonus)
+                effect: AbilityDsl.effects.attachmentPoliticalSkillModifier(() =>
+                    this.isAttachmentBonusModifierSwitchActive() ? militaryBonus : politicalBonus
+                )
             });
         }
     }
