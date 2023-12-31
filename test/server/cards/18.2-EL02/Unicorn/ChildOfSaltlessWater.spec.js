@@ -1,6 +1,6 @@
-describe('Child of Saltless Water', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Child of Saltless Water', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -31,7 +31,7 @@ describe('Child of Saltless Water', function() {
             this.sd5 = this.player2.findCardByName('shameful-display', 'stronghold province');
         });
 
-        it('should put itself into the conflict and set a mil skill to the province strength', function() {
+        it('should put itself into the conflict and set a mil skill to the province strength', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.chagatai, this.rider],
@@ -39,20 +39,26 @@ describe('Child of Saltless Water', function() {
                 province: this.garden
             });
 
-            let fate = this.player2.fate;
             this.player2.clickCard(this.child);
+            this.player2.clickPrompt('0');
+            this.player2.clickPrompt('Conflict');
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.child);
+
+            this.player2.clickCard(this.child);
+
+            expect(this.player2).toHavePrompt('Choose a province');
             expect(this.player2).toBeAbleToSelect(this.garden);
             expect(this.player2).not.toBeAbleToSelect(this.pilgrimage);
             this.player2.clickCard(this.garden);
             expect(this.child.location).toBe('play area');
             expect(this.child.isParticipating()).toBe(true);
             expect(this.child.getMilitarySkill()).toBe(4);
-            expect(this.player2.fate).toBe(fate - 1);
 
-            expect(this.getChatLogs(5)).toContain('player2 uses Child of Saltless Water, spending 1 fate to put Child of Saltless Water into play and set it to 4military');
+            expect(this.getChatLogs(5)).toContain("player2 uses Child of Saltless Water to set it's military to 4");
         });
 
-        it('should die when not in a conflict', function() {
+        it('should die when not in a conflict', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.chagatai, this.rider],
@@ -60,6 +66,9 @@ describe('Child of Saltless Water', function() {
                 province: this.garden
             });
 
+            this.player2.clickCard(this.child);
+            this.player2.clickPrompt('0');
+            this.player2.clickPrompt('Conflict');
             this.player2.clickCard(this.child);
             this.player2.clickCard(this.garden);
 
@@ -67,10 +76,10 @@ describe('Child of Saltless Water', function() {
             this.player1.clickCard(this.child);
 
             expect(this.child.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain('Child of Saltless Water is discarded from play as it is not participating in a conflict');
+            expect(this.getChatLogs(5)).toContain('Child of Saltless Water is discarded from play as it is at home');
         });
 
-        it('should die when conflict ends', function() {
+        it('should die when conflict ends', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.rider],
@@ -79,10 +88,13 @@ describe('Child of Saltless Water', function() {
             });
 
             this.player2.clickCard(this.child);
+            this.player2.clickPrompt('0');
+            this.player2.clickPrompt('Conflict');
+            this.player2.clickCard(this.child);
             this.player2.clickCard(this.garden);
             this.noMoreActions();
 
-            expect(this.getChatLogs(5)).toContain('Child of Saltless Water is discarded from play as it is not participating in a conflict');
+            expect(this.getChatLogs(5)).toContain('Child of Saltless Water is discarded from play as it is at home');
         });
     });
 });
