@@ -1,16 +1,39 @@
-describe('Bayushi\'s Saboteurs', function() {
-    integration(function() {
-        beforeEach(function() {
+describe("Bayushi's Saboteurs", function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['bayushi-s-saboteurs', 'daidoji-nerishma', 'kakita-yoshi', 'kakita-toshimoko', 'matsu-berserker', 'ikoma-prodigy', 'doji-challenger', 'prodigy-of-the-waves', 'hida-kisada', 'aranat', 'kakita-ryoku'],
+                    inPlay: [
+                        'bayushi-s-saboteurs',
+                        'daidoji-nerishma',
+                        'kakita-yoshi',
+                        'kakita-toshimoko',
+                        'matsu-berserker',
+                        'ikoma-prodigy',
+                        'doji-challenger',
+                        'prodigy-of-the-waves',
+                        'hida-kisada',
+                        'aranat',
+                        'kakita-ryoku'
+                    ],
                     dynastyDeck: [],
                     hand: ['way-of-the-crane', 'those-who-serve'],
                     dynastyDiscard: ['a-season-of-war', 'a-season-of-war']
                 },
                 player2: {
-                    inPlay: ['doji-whisperer', 'acolyte-of-koyane', 'adept-of-the-waves', 'agasha-hiyori', 'agasha-shunsen', 'agasha-sumiko', 'agasha-swordsmith', 'agasha-taiko', 'akodo-kaede', 'akodo-makoto'],
+                    inPlay: [
+                        'doji-whisperer',
+                        'acolyte-of-koyane',
+                        'adept-of-the-waves',
+                        'agasha-hiyori',
+                        'agasha-shunsen',
+                        'agasha-sumiko',
+                        'agasha-swordsmith',
+                        'agasha-taiko',
+                        'akodo-kaede',
+                        'akodo-makoto'
+                    ],
                     hand: ['those-who-serve'],
                     conflictDiscard: ['appeal-to-sympathy']
                 }
@@ -58,6 +81,7 @@ describe('Bayushi\'s Saboteurs', function() {
             this.kaede = this.player2.findCardByName('akodo-kaede');
             this.makoto = this.player2.findCardByName('akodo-makoto');
             this.whisperer = this.player2.findCardByName('doji-whisperer');
+            this.shameful = this.player2.findCardByName('shameful-display', 'province 1');
 
             this.player2.placeCardInProvince(this.sumiko, 'province 1');
             this.player2.placeCardInProvince(this.swordsmith, 'province 2');
@@ -76,21 +100,21 @@ describe('Bayushi\'s Saboteurs', function() {
             this.appeal = this.player2.findCardByName('appeal-to-sympathy');
         });
 
-        it('should have the defending player pick to discard or flip facedown', function() {
+        it('should have the defending player pick to discard or flip facedown', function () {
             this.noMoreActions();
-            this.initiateConflict({
-                type: 'political',
-                attackers: [this.spy],
-                defenders: []
-            });
-
-            this.player2.pass();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
             this.player1.clickCard(this.spy);
-            expect(this.player2).toHavePromptButton('Discard Dynasty Cards');
-            expect(this.player2).toHavePromptButton('Flip Dynasty Cards Facedown');
+            this.player1.clickPrompt('Initiate Conflict');
+            expect(this.player1).toHavePrompt('Any reactions?');
+
+            this.player1.clickCard(this.spy);
+            expect(this.player2).toHavePrompt('Select one');
+            expect(this.player2).toHavePromptButton('Discard all cards from your provinces');
+            expect(this.player2).toHavePromptButton('Flip all cards in your provinces facedown');
         });
 
-        it('discard - controller', function() {
+        it('discard - controller', function () {
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
@@ -101,7 +125,7 @@ describe('Bayushi\'s Saboteurs', function() {
             });
 
             this.player1.clickCard(this.spy);
-            this.player1.clickPrompt('Discard Dynasty Cards');
+            this.player1.clickPrompt('Discard all cards from your provinces');
 
             expect(this.season.location).toBe('dynasty discard pile');
             expect(this.challenger.location).toBe('dynasty discard pile');
@@ -115,11 +139,12 @@ describe('Bayushi\'s Saboteurs', function() {
             expect(this.kaede.location).not.toBe('dynasty discard pile');
             expect(this.makoto.location).not.toBe('dynasty discard pile');
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Bayushi\'s Saboteurs to discard or flip facedown all of player1\'s dynasty cards');
-            expect(this.getChatLogs(10)).toContain('player1 chooses to discard their dynasty cards');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Bayushi's Saboteurs to discard all of player1's dynasty cards"
+            );
         });
 
-        it('should refill each province faceup', function() {
+        it('should refill each province faceup', function () {
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
@@ -129,7 +154,7 @@ describe('Bayushi\'s Saboteurs', function() {
                 defenders: [this.spy]
             });
             this.player1.clickCard(this.spy);
-            this.player1.clickPrompt('Discard Dynasty Cards');
+            this.player1.clickPrompt('Discard all cards from your provinces');
 
             expect(this.berserker.location).toBe('province 1');
             expect(this.toshimoko.location).toBe('province 2');
@@ -142,17 +167,15 @@ describe('Bayushi\'s Saboteurs', function() {
             expect(this.yoshi.facedown).toBe(false);
         });
 
-        it('discard - player 2', function() {
+        it('discard - player 2', function () {
             this.noMoreActions();
-            this.initiateConflict({
-                type: 'political',
-                attackers: [this.spy],
-                defenders: []
-            });
-
-            this.player2.pass();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
             this.player1.clickCard(this.spy);
-            this.player2.clickPrompt('Discard Dynasty Cards');
+            this.player1.clickPrompt('Initiate Conflict');
+            this.player1.clickCard(this.spy);
+
+            this.player2.clickPrompt('Discard all cards from your provinces');
 
             expect(this.season.location).not.toBe('dynasty discard pile');
             expect(this.challenger.location).not.toBe('dynasty discard pile');
@@ -166,11 +189,12 @@ describe('Bayushi\'s Saboteurs', function() {
             expect(this.kaede.location).toBe('dynasty discard pile');
             expect(this.makoto.location).toBe('dynasty discard pile');
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Bayushi\'s Saboteurs to discard or flip facedown all of player2\'s dynasty cards');
-            expect(this.getChatLogs(10)).toContain('player2 chooses to discard their dynasty cards');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Bayushi's Saboteurs to discard all of player2's dynasty cards"
+            );
         });
 
-        it('flip facedown - player 1', function() {
+        it('flip facedown - player 1', function () {
             this.noMoreActions();
             this.player1.passConflict();
             this.noMoreActions();
@@ -180,7 +204,7 @@ describe('Bayushi\'s Saboteurs', function() {
                 defenders: [this.spy]
             });
             this.player1.clickCard(this.spy);
-            this.player1.clickPrompt('Flip Dynasty Cards Facedown');
+            this.player1.clickPrompt('Flip all cards in your provinces facedown');
 
             expect(this.season.facedown).toBe(true);
             expect(this.challenger.facedown).toBe(true);
@@ -194,21 +218,20 @@ describe('Bayushi\'s Saboteurs', function() {
             expect(this.kaede.facedown).toBe(false);
             expect(this.makoto.facedown).toBe(false);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Bayushi\'s Saboteurs to discard or flip facedown all of player1\'s dynasty cards');
-            expect(this.getChatLogs(10)).toContain('player1 chooses to flip their dynasty cards facedown');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Bayushi's Saboteurs to flip facedown all of player1's dynasty cards"
+            );
         });
 
-        it('discard - player 2', function() {
+        it('discard - player 2', function () {
             this.noMoreActions();
-            this.initiateConflict({
-                type: 'political',
-                attackers: [this.spy],
-                defenders: []
-            });
-
-            this.player2.pass();
+            this.player1.clickRing('air');
+            this.player1.clickCard(this.shameful);
             this.player1.clickCard(this.spy);
-            this.player2.clickPrompt('Flip Dynasty Cards Facedown');
+            this.player1.clickPrompt('Initiate Conflict');
+            this.player1.clickCard(this.spy);
+
+            this.player2.clickPrompt('Flip all cards in your provinces facedown');
 
             expect(this.season.facedown).toBe(false);
             expect(this.challenger.facedown).toBe(false);
@@ -222,8 +245,9 @@ describe('Bayushi\'s Saboteurs', function() {
             expect(this.kaede.facedown).toBe(true);
             expect(this.makoto.facedown).toBe(true);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses Bayushi\'s Saboteurs to discard or flip facedown all of player2\'s dynasty cards');
-            expect(this.getChatLogs(10)).toContain('player2 chooses to flip their dynasty cards facedown');
+            expect(this.getChatLogs(10)).toContain(
+                "player1 uses Bayushi's Saboteurs to flip facedown all of player2's dynasty cards"
+            );
         });
     });
 });
