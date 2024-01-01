@@ -49,6 +49,7 @@ export default class MiokosSong extends StrongholdCard {
                                     context.player.opponent.moveCard(fromProvince, 'dynasty discard pile');
                                 }
                                 context.player.opponent.moveCard(selectedCard, province.location);
+                                selectedCard.facedown = false;
                                 for (const goToBottom of topCards.filter((c) => c !== selectedCard)) {
                                     context.player.opponent.moveCard(goToBottom, 'dynasty deck bottom');
                                 }
