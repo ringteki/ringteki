@@ -48,7 +48,7 @@ export class ProvinceCard extends BaseCard {
         return this.getStrength();
     }
 
-    getStrength() {
+    getStrength(): number {
         if (this.anyEffect(EffectNames.SetProvinceStrength)) {
             return this.mostRecentEffect(EffectNames.SetProvinceStrength);
         }
@@ -73,7 +73,7 @@ export class ProvinceCard extends BaseCard {
         return isNaN(parsed) ? 0 : parsed;
     }
 
-    getBaseStrength() {
+    getBaseStrength(): number {
         if (this.anyEffect(EffectNames.SetBaseProvinceStrength)) {
             return this.mostRecentEffect(EffectNames.SetBaseProvinceStrength);
         }
@@ -83,7 +83,7 @@ export class ProvinceCard extends BaseCard {
         );
     }
 
-    getDynastyOrStrongholdCardModifier() {
+    getDynastyOrStrongholdCardModifier(): number {
         const province = this.controller.getSourceList(this.location);
         const canBeIncreased = !this.anyEffect(EffectNames.ProvinceCannotHaveSkillIncreased);
 
@@ -146,7 +146,7 @@ export class ProvinceCard extends BaseCard {
         super.leavesPlay();
     }
 
-    isConflictProvince() {
+    isConflictProvince(): boolean {
         return this.game.currentConflict && this.game.currentConflict.getConflictProvinces().includes(this);
     }
 
@@ -176,7 +176,7 @@ export class ProvinceCard extends BaseCard {
         return this.sumEffects(EffectNames.FateCostToRingToDeclareConflictAgainst);
     }
 
-    isBlank() {
+    isBlank(): boolean {
         const ignoreTokens =
             this.game.currentConflict &&
             this.game.currentConflict.anyEffect(EffectNames.ConflictIgnoreStatusTokens) &&
@@ -185,7 +185,7 @@ export class ProvinceCard extends BaseCard {
         return this.isBroken || dishonored || super.isBlank();
     }
 
-    breakProvince() {
+    breakProvince(): void {
         this.isBroken = true;
         this.removeAllTokens();
         if (!this.controller.opponent) {
@@ -239,20 +239,20 @@ export class ProvinceCard extends BaseCard {
         }
     }
 
-    restoreProvince() {
+    restoreProvince(): void {
         this.isBroken = false;
         this.facedown = false;
     }
 
-    cannotBeStrongholdProvince() {
+    cannotBeStrongholdProvince(): boolean {
         return this.hasEminent();
     }
 
-    startsGameFaceup() {
+    startsGameFaceup(): boolean {
         return this.hasEminent();
     }
 
-    hideWhenFacedown() {
+    hideWhenFacedown(): boolean {
         return false;
     }
 
@@ -277,7 +277,7 @@ export class ProvinceCard extends BaseCard {
         return menu;
     }
 
-    getSummary(activePlayer, hideWhenFaceup) {
+    getSummary(activePlayer: Player, hideWhenFaceup: boolean) {
         const baseSummary = super.getSummary(activePlayer, hideWhenFaceup);
         return {
             ...baseSummary,
@@ -287,7 +287,7 @@ export class ProvinceCard extends BaseCard {
         };
     }
 
-    allowAttachment(attachment) {
+    allowAttachment(attachment: DrawCard): boolean {
         if (this.allowedAttachmentTraits.some((trait) => attachment.hasTrait(trait))) {
             return true;
         }
@@ -295,23 +295,20 @@ export class ProvinceCard extends BaseCard {
         return true;
     }
 
-    hasEminent() {
+    hasEminent(): boolean {
         //Facedown provinces are out of play and their effects don't evaluate, so we check for the printed keyword
         return this.hasKeyword('eminent') || (!this.isBlank() && this.hasPrintedKeyword('eminent'));
     }
 
-    isFaceup() {
+    isFaceup(): boolean {
         if (this.game.gameMode === GameModes.Skirmish) {
             return false;
         }
         return super.isFaceup();
     }
 
-    isFacedown() {
-        if (this.game.gameMode === GameModes.Skirmish) {
-            return false;
-        }
-        return super.isFacedown();
+    isFacedown(): boolean {
+        return this.game.gameMode !== GameModes.Skirmish && super.isFacedown();
     }
 
     cardsInSelf(): DrawCard[] {
