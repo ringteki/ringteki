@@ -1,78 +1,60 @@
-describe('Henshin Seeker', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Henshin Seeker', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['henshin-seeker', 'ancient-master'],
+                    inPlay: ['henshin-seeker', 'ancient-master', 'solemn-scholar', 'miya-mystic'],
                     hand: ['commune-with-the-spirits']
                 },
                 player2: {
                     inPlay: ['tattooed-wanderer'],
-                    hand: ['mark-of-shame', 'mark-of-shame', 'mark-of-shame']
+                    hand: ['commune-with-the-spirits']
                 }
             });
             this.seeker = this.player1.findCardByName('henshin-seeker');
             this.ancientMaster = this.player1.findCardByName('ancient-master');
-            this.wanderer = this.player2.findCardByName('tattooed-wanderer');
-            this.commune = this.player1.findCardByName('commune-with-the-spirits');
+            this.solemnScholar = this.player1.findCardByName('solemn-scholar');
+            this.miyaMystic = this.player1.findCardByName('miya-mystic');
 
-            this.shame1 = this.player2.filterCardsByName('mark-of-shame')[0];
-            this.shame2 = this.player2.filterCardsByName('mark-of-shame')[1];
-            this.shame3 = this.player2.filterCardsByName('mark-of-shame')[2];
+            this.ancientMaster.bow();
+            this.solemnScholar.bow();
+            this.miyaMystic.bow();
+            this.communeOwn = this.player1.findCardByName('commune-with-the-spirits');
+
+            this.wanderer = this.player2.findCardByName('tattooed-wanderer');
+            this.communeOpp = this.player2.findCardByName('commune-with-the-spirits');
         });
 
-        it('should let you honor someone and then prevent receiving dishonored status tokens if you claim the fire ring', function() {
-            this.player1.clickCard(this.commune);
+        it('triggers when you claim the Fire ring', function () {
+            this.player1.clickCard(this.communeOwn);
             this.player1.clickRing('fire');
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.seeker);
+        });
+
+        it('triggers when the opponent claims the Fire ring', function () {
+            this.player1.pass();
+            this.player2.clickCard(this.communeOpp);
+            this.player2.clickRing('fire');
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.seeker);
-            this.player1.clickCard(this.seeker);
-            expect(this.player1).toBeAbleToSelect(this.seeker);
-            expect(this.player1).toBeAbleToSelect(this.ancientMaster);
-            expect(this.player1).not.toBeAbleToSelect(this.wanderer);
-
-            this.player1.clickCard(this.seeker);
-            expect(this.seeker.isHonored).toBe(true);
-
-            expect(this.getChatLogs(5)).toContain('player1 uses Henshin Seeker to honor Henshin Seeker and prevent Henshin Seeker from receiving dishonored status tokens this phase');
-
-            this.seeker.honor();
-            this.ancientMaster.honor();
-            this.wanderer.honor();
-
-            this.game.checkGameState(true);
-
-            this.player2.clickCard(this.shame1);
-            this.player2.clickCard(this.seeker);
-            this.player2.clickCard(this.shame1);
-
-            this.player1.pass();
-            this.player2.clickCard(this.shame2);
-            this.player2.clickCard(this.ancientMaster);
-            this.player2.clickCard(this.shame2);
-
-            this.player1.pass();
-            this.player2.clickCard(this.shame3);
-            this.player2.clickCard(this.wanderer);
-            this.player2.clickCard(this.shame3);
-
-            expect(this.seeker.isHonored).toBe(false);
-            expect(this.seeker.isDishonored).toBe(false);
-
-            expect(this.ancientMaster.isHonored).toBe(false);
-            expect(this.ancientMaster.isDishonored).toBe(true);
-
-            expect(this.wanderer.isHonored).toBe(false);
-            expect(this.wanderer.isDishonored).toBe(true);
         });
 
-        it('should not react if you claim a different ring', function() {
-            this.player1.clickCard(this.commune);
-            this.player1.clickRing('earth');
+        it('readies a scholar or monk', function () {
+            this.player1.clickCard(this.communeOwn);
+            this.player1.clickRing('fire');
+            this.player1.clickCard(this.seeker);
+            expect(this.player1).toHavePrompt('Choose a character');
+            expect(this.player1).not.toBeAbleToSelect(this.seeker);
+            expect(this.player1).toBeAbleToSelect(this.ancientMaster);
+            expect(this.player1).toBeAbleToSelect(this.solemnScholar);
+            expect(this.player1).not.toBeAbleToSelect(this.miyaMystic);
 
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            this.player1.clickCard(this.ancientMaster);
+            expect(this.ancientMaster.bowed).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player1 uses Henshin Seeker to ready Ancient Master');
         });
     });
 });
