@@ -213,6 +213,7 @@ export interface PersistentEffectProps<Source = any> {
     targetController?: Players;
     targetLocation?: Locations;
     effect: Function | Function[];
+    createCopies?: boolean;
 }
 
 export type traitLimit = {

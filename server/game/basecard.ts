@@ -37,7 +37,7 @@ import Player from './player';
 import type DrawCard = require('./drawcard');
 import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
-import type { GainAllAbilitiesValue } from './Effects/Library/gainAllAbilities';
+import type { GainAllAbilities } from './Effects/Library/gainAllAbilities';
 
 type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
 
@@ -148,7 +148,7 @@ class BaseCard extends EffectSource {
 
         for (const effect of this.getRawEffects()) {
             if (effect.type === EffectNames.GainAllAbilities) {
-                actions = actions.concat((effect.value as GainAllAbilitiesValue).getActions(this));
+                actions = actions.concat((effect.value as GainAllAbilities).getActions(this));
             }
         }
         if (!ignoreDynamicGains) {
@@ -194,7 +194,7 @@ class BaseCard extends EffectSource {
         );
         for (const effect of this.getRawEffects()) {
             if (effect.type === EffectNames.GainAllAbilities) {
-                reactions = reactions.concat((effect.value as GainAllAbilitiesValue).getReactions(this));
+                reactions = reactions.concat((effect.value as GainAllAbilities).getReactions(this));
             }
         }
         if (!ignoreDynamicGains) {
@@ -234,7 +234,7 @@ class BaseCard extends EffectSource {
         for (const effect of this.getRawEffects()) {
             if (effect.type === EffectNames.GainAllAbilities) {
                 gainedPersistentEffects = gainedPersistentEffects.concat(
-                    (effect.value as GainAllAbilitiesValue).getPersistentEffects()
+                    (effect.value as GainAllAbilities).getPersistentEffects()
                 );
             }
         }

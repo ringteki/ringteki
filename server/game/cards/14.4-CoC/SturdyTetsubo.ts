@@ -1,8 +1,10 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl');
-const { AbilityTypes } = require('../../Constants.js');
+import AbilityDsl from '../../abilitydsl';
+import { AbilityTypes } from '../../Constants';
+import DrawCard from '../../drawcard';
 
-class SturdyTetsubo extends DrawCard {
+export default class SturdyTetsubo extends DrawCard {
+    static id = 'sturdy-tetsubo';
+
     setupCardAbilities() {
         this.whileAttached({
             effect: AbilityDsl.effects.gainAbility(AbilityTypes.Reaction, {
@@ -11,16 +13,12 @@ class SturdyTetsubo extends DrawCard {
                 printedAbility: false,
                 when: {
                     afterConflict: (event, context) =>
+                        context.player.opponent &&
                         context.source.isParticipating() &&
-                        event.conflict.winner === context.source.controller &&
-                        context.player.opponent
+                        event.conflict.winner === context.source.controller
                 },
                 gameAction: AbilityDsl.actions.chosenDiscard()
             })
         });
     }
 }
-
-SturdyTetsubo.id = 'sturdy-tetsubo';
-
-module.exports = SturdyTetsubo;

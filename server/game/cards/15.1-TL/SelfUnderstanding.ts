@@ -1,8 +1,11 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl.js');
-const { AbilityTypes } = require('../../Constants.js');
+import AbilityDsl from '../../abilitydsl';
+import { AbilityTypes } from '../../Constants';
+import DrawCard from '../../drawcard';
+import { TriggeredAbilityProps } from '../../Interfaces';
 
-class SelfUnderstanding extends DrawCard {
+export default class SelfUnderstanding extends DrawCard {
+    static id = 'self-understanding';
+
     setupCardAbilities() {
         this.persistentEffect({
             effect: AbilityDsl.effects.cardCannot({
@@ -25,11 +28,7 @@ class SelfUnderstanding extends DrawCard {
                     target: context.player.getClaimedRings()
                 })),
                 effect: 'resolve all their claimed ring effects'
-            })
+            } as TriggeredAbilityProps)
         });
     }
 }
-
-SelfUnderstanding.id = 'self-understanding';
-
-module.exports = SelfUnderstanding;

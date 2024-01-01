@@ -1,16 +1,15 @@
 const _ = require('underscore');
 
 const AbilityLimit = require('./AbilityLimit');
-const CopyCharacter = require('./Effects/CopyCharacter');
-const GainAllAbiliites = require('./Effects/GainAllAbilities.js');
 const GainAllAbiliitesDynamic = require('./Effects/GainAllAbilitiesDynamic.js');
 const Restriction = require('./Effects/restriction.js');
 const SuppressEffect = require('./Effects/SuppressEffect');
-const GainAbility = require('./Effects/GainAbility');
 const EffectBuilder = require('./Effects/EffectBuilder');
 const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmentMilitarySkillModifier');
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
+const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
+const { gainAbility } = require('./Effects/Library/gainAbility');
 const { reduceCost } = require('./Effects/Library/reduceCost');
 const { switchAttachmentSkillModifiers } = require('./Effects/Library/switchAttachmentSkillModifiers');
 const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
@@ -85,7 +84,7 @@ const Effects = {
     canContributeWhileBowed: (properties) => EffectBuilder.card.static(EffectNames.CanContributeWhileBowed, properties),
     canContributeGloryWhileBowed: (properties) =>
         EffectBuilder.card.static(EffectNames.CanContributeGloryWhileBowed, properties),
-    copyCharacter: (character) => EffectBuilder.card.static(EffectNames.CopyCharacter, new CopyCharacter(character)),
+    copyCard,
     customDetachedCard: (properties) => EffectBuilder.card.detached(EffectNames.CustomEffect, properties),
     customRefillProvince: (refillFunc) => EffectBuilder.card.static(EffectNames.CustomProvinceRefillEffect, refillFunc), //refillFunc: (Player, ProvinceCard) => { }
     delayedEffect: (properties) => EffectBuilder.card.static(EffectNames.DelayedEffect, properties),
@@ -99,8 +98,7 @@ const Effects = {
     fateCostToRingToDeclareConflictAgainst: (amount = 1) =>
         EffectBuilder.card.flexible(EffectNames.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties) => EffectBuilder.card.flexible(EffectNames.FateCostToTarget, properties),
-    gainAbility: (abilityType, properties) =>
-        EffectBuilder.card.static(EffectNames.GainAbility, new GainAbility(abilityType, properties)),
+    gainAbility,
     gainAllAbilities,
     gainAllAbilitiesDynamic: (match) =>
         EffectBuilder.card.static(EffectNames.GainAllAbilitiesDynamic, new GainAllAbiliitesDynamic(match)),

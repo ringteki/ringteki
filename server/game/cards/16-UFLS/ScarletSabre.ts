@@ -1,8 +1,10 @@
-const DrawCard = require('../../drawcard.js');
-const AbilityDsl = require('../../abilitydsl');
-const { AbilityTypes } = require('../../Constants.js');
+import AbilityDsl from '../../abilitydsl';
+import { AbilityTypes } from '../../Constants';
+import DrawCard from '../../drawcard';
 
-class ScarletSabre extends DrawCard {
+export default class ScarletSabre extends DrawCard {
+    static id = 'scarlet-sabre';
+
     setupCardAbilities() {
         this.whileAttached({
             match: (card) => card.controller.firstPlayer,
@@ -11,16 +13,12 @@ class ScarletSabre extends DrawCard {
                 printedAbility: false,
                 when: {
                     afterConflict: (event, context) =>
+                        context.player.opponent &&
                         context.source.isParticipating() &&
-                        event.conflict.winner === context.source.controller &&
-                        context.player.opponent
+                        event.conflict.winner === context.source.controller
                 },
                 gameAction: AbilityDsl.actions.loseFate((context) => ({ target: context.player.opponent }))
             })
         });
     }
 }
-
-ScarletSabre.id = 'scarlet-sabre';
-
-module.exports = ScarletSabre;

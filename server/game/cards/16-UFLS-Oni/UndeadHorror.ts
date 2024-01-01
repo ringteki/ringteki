@@ -10,7 +10,6 @@ export default class UndeadHorror extends BaseOni {
     static id = 'undead-horror';
 
     public setupCardAbilities() {
-        this.persistentEffect;
         super.setupCardAbilities();
         this.reaction({
             title: 'Attach a character to this card',
