@@ -1,26 +1,25 @@
 import type { AbilityContext } from '../AbilityContext';
 import { ConflictTypes, EventNames } from '../Constants';
 import type Player from '../player';
+import { ProvinceCard } from '../ProvinceCard';
 import { PlayerAction, type PlayerActionProperties } from './PlayerAction';
 
 export interface InitiateConflictProperties extends PlayerActionProperties {
     canPass?: boolean;
     forcedDeclaredType?: ConflictTypes;
+    forceProvinceTarget?: ProvinceCard;
 }
 
-export class InitiateConflictAction extends PlayerAction {
+export class InitiateConflictAction extends PlayerAction<InitiateConflictProperties> {
     name = 'initiateConflict';
     eventName = EventNames.OnConflictInitiated;
     effect = 'declare a new conflict';
     defaultProperties: InitiateConflictProperties = {
         canPass: true
     };
-    constructor(properties: InitiateConflictProperties | ((context: AbilityContext) => InitiateConflictProperties)) {
-        super(properties);
-    }
 
     canAffect(player: Player, context: AbilityContext): boolean {
-        let { forcedDeclaredType } = this.getProperties(context) as InitiateConflictProperties;
+        const { forcedDeclaredType } = this.getProperties(context);
         return super.canAffect(player, context) && player.hasLegalConflictDeclaration({ forcedDeclaredType });
     }
 
@@ -28,8 +27,13 @@ export class InitiateConflictAction extends PlayerAction {
         return [context.player];
     }
 
-    eventHandler(event, additionalProperties): void {
-        let properties = this.getProperties(event.context, additionalProperties) as InitiateConflictProperties;
-        event.context.game.initiateConflict(event.player, properties.canPass, properties.forcedDeclaredType);
+    eventHandler(event: any, additionalProperties: any): void {
+        const properties = this.getProperties(event.context, additionalProperties);
+        event.context.game.initiateConflict(
+            event.player,
+            properties.canPass,
+            properties.forcedDeclaredType,
+            properties.forceProvinceTarget
+        );
     }
 }

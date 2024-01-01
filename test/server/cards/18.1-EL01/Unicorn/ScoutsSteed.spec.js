@@ -1,81 +1,47 @@
-describe('Scouts Steed', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Scouts Steed', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['kakita-toshimoko'],
-                    dynastyDiscard: ['doji-whisperer'],
+                    inPlay: ['moto-conqueror', 'shinjo-archer'],
                     hand: ['scout-s-steed']
                 },
                 player2: {
-                    inPlay: ['wandering-ronin'],
-                    hand: ['talisman-of-the-sun']
+                    provinces: ['manicured-garden', 'fertile-fields']
                 }
             });
 
-            this.toshimoko = this.player1.findCardByName('kakita-toshimoko');
-            this.steed = this.player1.findCardByName('scout-s-steed');
-            this.whisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 1');
+            this.scoutsSteed = this.player1.findCardByName('scout-s-steed');
+            this.motoConqueror = this.player1.findCardByName('moto-conqueror');
+            this.shinjoArcher = this.player1.findCardByName('shinjo-archer');
 
-            this.wanderingRonin = this.player2.findCardByName('wandering-ronin');
-            this.talismanOfTheSun = this.player2.findCardByName('talisman-of-the-sun');
+            this.motoConqueror.bow();
+            this.shinjoArcher.bow();
 
-            this.player1.playAttachment(this.steed, this.toshimoko);
-
-            this.shamefulDisplay1 = this.player2.provinces['province 1'].provinceCard;
-            this.shamefulDisplay2 = this.player2.provinces['province 2'].provinceCard;
+            this.manicuredFaceup = this.player2.findCardByName('manicured-garden');
+            this.fertileFacedown = this.player2.findCardByName('fertile-fields');
+            this.manicuredFaceup.facedown = false;
+            this.fertileFacedown.facedown = true;
         });
 
-        it('should not give cavalry and trigger after attacking', function() {
-            this.noMoreActions();
-            expect(this.toshimoko.hasTrait('cavalry')).toBe(false);
-            this.initiateConflict({
-                attackers: [this.toshimoko]
-            });
+        it('readies the character and declare an attack with them', function () {
+            this.player1.clickCard(this.scoutsSteed);
+            this.player1.clickCard(this.shinjoArcher);
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.steed);
-        });
 
-        it('should let you play a character into the conflict', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.toshimoko]
-            });
-            this.player1.clickCard(this.steed);
-            expect(this.player1).toHavePrompt('Choose a character');
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-            this.player1.clickCard(this.whisperer);
-            expect(this.player1).toHavePromptButton('0');
-            expect(this.player1).toHavePromptButton('1');
-            expect(this.player1).toHavePromptButton('2');
+            this.player1.clickCard(this.scoutsSteed);
+            expect(this.player1).toHavePrompt('Choose a province');
+            expect(this.player1).not.toBeAbleToSelect(this.manicuredFaceup);
+            expect(this.player1).toBeAbleToSelect(this.fertileFacedown);
 
-            this.player1.clickPrompt('2');
-            expect(this.whisperer.location).toBe('play area');
-            expect(this.whisperer.isParticipating()).toBe(true);
-            expect(this.whisperer.fate).toBe(2);
-            expect(this.getChatLogs(10)).toContain('player1 uses Scout\'s Steed to play Doji Whisperer into the conflict');
-            expect(this.getChatLogs(10)).toContain('player1 plays Doji Whisperer into the conflict with 2 additional fate');
-        });
-
-        it('if you cancel should not let you play the character', function() {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.toshimoko]
-            });
-            this.player1.clickCard(this.steed);
-            expect(this.player1).toHavePrompt('Choose a character');
-            expect(this.player1).toBeAbleToSelect(this.whisperer);
-            this.player1.clickCard(this.whisperer);
-            this.player1.clickPrompt('Cancel');
-            expect(this.whisperer.location).toBe('province 1');
-            expect(this.getChatLogs(10)).toContain('player1 uses Scout\'s Steed to play Doji Whisperer into the conflict');
-            this.player2.clickPrompt('Done');
-
-            this.player2.pass();
-            expect(this.player1).toHavePrompt('Conflict Action Window');
-            this.player1.clickCard(this.whisperer);
-            expect(this.player1).toHavePrompt('Conflict Action Window');
+            this.player1.clickCard(this.fertileFacedown);
+            expect(this.getChatLogs(3)).toContain(
+                "player1 uses Scout's Steed to ready Shinjo Archer and send them on a journey! Fertile Fields cannot be broken during this conflict - it's just exploration for now"
+            );
+            expect(this.player1).toHavePrompt('Military Air Conflict');
+            expect(this.player1).not.toHavePromptButton('Pass Conflict');
+            expect(this.game.currentConflict.attackers).toContain(this.shinjoArcher);
         });
     });
 });

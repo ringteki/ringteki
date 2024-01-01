@@ -1,45 +1,48 @@
-import { CardTypes, Locations, Players, PlayTypes } from '../../../Constants';
-import { PlayCharacterAsIfFromHandIntoConflict } from '../../../PlayCharacterAsIfFromHand';
-import { PlayDisguisedCharacterAsIfFromHandIntoConflict } from '../../../PlayDisguisedCharacterAsIfFromHand';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import AbilityDsl from '../../../abilitydsl';
+import { CardTypes, Durations, Locations } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 
 export default class ScoutsSteed extends DrawCard {
     static id = 'scout-s-steed';
 
     public setupCardAbilities() {
-        this.attachmentConditions({
-            myControl: true
-        });
+        this.attachmentConditions({ myControl: true });
 
         this.reaction({
-            title: 'Pick a character to be able to play',
+            title: 'Call your steed and go out to explore!',
             when: {
-                onConflictDeclared: (event, context) =>
-                    context.source.parent && event.attackers.includes(context.source.parent),
-                onDefendersDeclared: (event, context) =>
-                    context.source.parent && event.defenders.includes(context.source.parent),
-                onMoveToConflict: (event, context) => context.source.parent && event.card === context.source.parent
+                onCardPlayed: (event, context) => event.card === context.source
             },
             target: {
-                cardType: CardTypes.Character,
+                cardType: CardTypes.Province,
                 location: Locations.Provinces,
-                controller: Players.Self,
-                gameAction: AbilityDsl.actions.playCard((context) => ({
-                    target: context.target,
-                    source: this,
-                    resetOnCancel: false,
-                    playType: PlayTypes.PlayFromHand,
-                    playAction: context.target
-                        ? [
-                              new PlayCharacterAsIfFromHandIntoConflict(context.target),
-                              new PlayDisguisedCharacterAsIfFromHandIntoConflict(context.target)
-                          ]
-                        : undefined,
-                    ignoredRequirements: ['phase']
-                }))
+                cardCondition: (card) => card.isFacedown() && card.canBeAttacked()
             },
-            effect: 'play {0} into the conflict'
+            gameAction: AbilityDsl.actions.sequentialContext(
+                ({ player, target: province, source: { parent: character } }) => ({
+                    gameActions: [
+                        AbilityDsl.actions.ready({ target: character }),
+                        AbilityDsl.actions.cardLastingEffect({
+                            target: character,
+                            effect: AbilityDsl.effects.mustBeDeclaredAsAttacker(),
+                            duration: Durations.UntilEndOfConflict
+                        }),
+                        AbilityDsl.actions.cardLastingEffect(() => ({
+                            target: province,
+                            targetLocation: Locations.Provinces,
+                            effect: AbilityDsl.effects.cardCannot('break'),
+                            duration: Durations.UntilEndOfConflict
+                        })),
+                        AbilityDsl.actions.initiateConflict({
+                            target: player,
+                            forceProvinceTarget: province,
+                            canPass: false
+                        })
+                    ]
+                })
+            ),
+            effect: "ready {1} and send them on a journey! {0} cannot be broken during this conflict - it's just exploration for now",
+            effectArgs: (context) => [context.source.parent]
         });
     }
 }

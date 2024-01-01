@@ -1049,8 +1049,15 @@ class Game extends EventEmitter {
         return new AbilityContext({ game: this, player: player });
     }
 
-    initiateConflict(player, canPass, forcedDeclaredType) {
-        const conflict = new Conflict(this, player, player.opponent, null, null, forcedDeclaredType);
+    initiateConflict(player, canPass, forcedDeclaredType, forceProvinceTarget) {
+        const conflict = new Conflict(
+            this,
+            player,
+            player.opponent,
+            null,
+            forceProvinceTarget ?? null,
+            forcedDeclaredType
+        );
         this.queueStep(new ConflictFlow(this, conflict, canPass));
     }
 
