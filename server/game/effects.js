@@ -7,9 +7,11 @@ const SuppressEffect = require('./Effects/SuppressEffect');
 const EffectBuilder = require('./Effects/EffectBuilder');
 const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmentMilitarySkillModifier');
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
+const { cardCannot } = require('./Effects/Library/cardCannot');
 const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
 const { gainAbility } = require('./Effects/Library/gainAbility');
+const { mustBeDeclaredAsAttacker } = require('./Effects/Library/mustBeDeclaredAsAttacker');
 const { reduceCost } = require('./Effects/Library/reduceCost');
 const { switchAttachmentSkillModifiers } = require('./Effects/Library/switchAttachmentSkillModifiers');
 const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
@@ -68,11 +70,7 @@ const Effects = {
         EffectBuilder.card.static(EffectNames.CannotParticipateAsAttacker, type),
     cannotParticipateAsDefender: (type = 'both') =>
         EffectBuilder.card.static(EffectNames.CannotParticipateAsDefender, type),
-    cardCannot: (properties) =>
-        EffectBuilder.card.static(
-            EffectNames.AbilityRestrictions,
-            new Restriction(Object.assign({ type: properties.cannot || properties }, properties))
-        ),
+    cardCannot,
     changeContributionFunction: (func) => EffectBuilder.card.static(EffectNames.ChangeContributionFunction, func),
     changeType: (type) => EffectBuilder.card.static(EffectNames.ChangeType, type),
     characterProvidesAdditionalConflict: (type) =>
@@ -154,7 +152,7 @@ const Effects = {
             EffectNames.MustBeChosen,
             new Restriction(Object.assign({ type: 'target' }, properties))
         ),
-    mustBeDeclaredAsAttacker: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttacker, type),
+    mustBeDeclaredAsAttacker,
     mustBeDeclaredAsAttackerIfType: (type = 'both') =>
         EffectBuilder.card.static(EffectNames.MustBeDeclaredAsAttackerIfType, type),
     mustBeDeclaredAsDefender: (type = 'both') => EffectBuilder.card.static(EffectNames.MustBeDeclaredAsDefender, type),
