@@ -1,4 +1,4 @@
-import { EffectNames, Phases } from '../Constants';
+import { EffectNames, EventNames, Phases } from '../Constants';
 import type DrawCard from '../drawcard';
 import type Game from '../game';
 import { Phase } from './Phase';
@@ -44,6 +44,7 @@ export class DynastyPhase extends Phase {
     }
 
     #flipDynastyCards() {
+        const allRevealedCards = new Set<DrawCard>();
         for (const player of this.game.getPlayersInFirstPlayerOrder()) {
             const revealedCards = new Set<DrawCard>();
             for (const province of this.game.getProvinceArray()) {
@@ -51,6 +52,7 @@ export class DynastyPhase extends Phase {
                     if (card.isFacedown()) {
                         this.game.applyGameAction(null, { flipDynasty: card });
                         revealedCards.add(card);
+                        allRevealedCards.add(card);
                     }
                 }
             }
@@ -60,6 +62,8 @@ export class DynastyPhase extends Phase {
                 );
             }
         }
+
+        this.game.raiseEvent(EventNames.OnRevealFacedownDynastyCards, { allRevealedCards });
     }
 
     #collectFate() {

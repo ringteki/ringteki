@@ -323,6 +323,7 @@ export enum EventNames {
     OnDuelResolution = 'onDuelResolution',
     OnDuelFinished = 'onDuelFinished',
     OnDynastyCardTurnedFaceup = 'onDynastyCardTurnedFaceup',
+    OnRevealFacedownDynastyCards = 'onRevealFacedownDynastyCards',
     OnTransferHonor = 'onTransferHonor',
     OnPassDuringDynasty = 'onPassDuringDynasty',
     OnModifyHonor = 'onModifyHonor',

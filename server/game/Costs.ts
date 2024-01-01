@@ -221,8 +221,8 @@ export function removeFromGame(properties: SelectCostProperties): Cost {
 /**
  * Cost that requires removing a card selected by the player from the game.
  */
-export function removeSelfFromGame(): Cost {
-    return new GameActionCost(GameActions.removeFromGame());
+export function removeSelfFromGame(properties?: { location: Array<Locations> }): Cost {
+    return new GameActionCost(GameActions.removeFromGame(properties));
 }
 
 /**
