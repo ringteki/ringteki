@@ -1,50 +1,58 @@
-import { AbilityTypes, EventNames, Locations, Players } from '../../../Constants';
-import { EventRegistrar } from '../../../EventRegistrar';
-import AbilityDsl = require('../../../abilitydsl');
-import DrawCard = require('../../../drawcard');
+import type { AbilityContext } from '../../../AbilityContext';
+import AbilityDsl from '../../../abilitydsl';
+import { CardTypes, Locations, Players } from '../../../Constants';
+import type { Cost } from '../../../Costs';
+import DrawCard from '../../../drawcard';
+
+function captureParentCost(): Cost {
+    return {
+        canPay() {
+            return true;
+        },
+        resolve(context: AbilityContext) {
+            context.costs.captureParentCost = context.source.parent;
+        },
+        pay() {}
+    };
+}
+
+function receiver(context: AbilityContext): DrawCard {
+    return context.costs.captureParentCost ?? context.source.parent;
+}
 
 export default class SpiritOfValor extends DrawCard {
     static id = 'spirit-of-valor';
 
-    private eventRegistrar?: EventRegistrar;
-
     public setupCardAbilities() {
-        this.eventRegistrar = new EventRegistrar(this.game, this);
-        this.eventRegistrar.register([
-            { [EventNames.OnCardLeavesPlay + ':' + AbilityTypes.WouldInterrupt]: 'onCardLeavesPlay' }
-        ]);
-
-        this.reaction({
-            title: 'Put a character into play',
-            when: {
-                onCardAttached: (event, context) =>
-                    event.card === context.source && event.originalLocation !== Locations.PlayArea
-            },
-            target: {
-                activePromptTitle: 'Choose a character from your dynasty discard pile',
-                location: [Locations.DynastyDiscardPile],
-                cardCondition: (card) => card.hasTrait('bushi') && card.costLessThan(3) && !card.isUnique(),
-                controller: Players.Self,
-                gameAction: AbilityDsl.actions.sequential([
-                    AbilityDsl.actions.putIntoPlay(),
-                    AbilityDsl.actions.ifAble((context) => ({
-                        ifAbleAction: AbilityDsl.actions.attach({
-                            target: context.target,
-                            attachment: context.source
-                        }),
-                        otherwiseAction: AbilityDsl.actions.discardFromPlay({ target: context.source })
-                    }))
-                ])
-            }
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            effect: AbilityDsl.effects.reduceCost({
+                amount: (_, player) =>
+                    player.cardsInPlay.some(
+                        (card) => card.getType() === CardTypes.Character && card.hasTrait('shugenja')
+                    )
+                        ? 1
+                        : 0,
+                match: (card, source) => card === source
+            })
         });
-    }
 
-    public onCardLeavesPlay(event: any) {
-        if (this.parent && event.card === this.parent) {
-            if (event.card.location !== Locations.RemovedFromGame) {
-                this.game.addMessage('{0} is removed from the game due to the effects of {1}', event.card, this);
-                event.card.owner.moveCard(event.card, Locations.RemovedFromGame);
-            }
-        }
+        this.action({
+            title: 'Gain abilities from a character in your discard pile',
+            cost: [captureParentCost(), AbilityDsl.costs.sacrificeSelf()],
+            target: {
+                activePromptTitle: 'Choose a character from a discard pile',
+                location: [Locations.DynastyDiscardPile, Locations.ConflictDiscardPile],
+                controller: Players.Self,
+                cardCondition: (card) => card.isFaction('lion'),
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
+                    target: receiver(context),
+                    effect: AbilityDsl.effects.gainAllAbilities(context.target)
+                }))
+            },
+            effect: "copy {0}'s abilities onto {1}",
+            effectArgs: (context) => [receiver(context)]
+        });
     }
 }

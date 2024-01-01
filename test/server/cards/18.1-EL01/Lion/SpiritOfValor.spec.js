@@ -1,88 +1,70 @@
-describe('Spirit of Valor', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Spirit of Valor', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doomed-shugenja'],
+                    inPlay: ['akodo-kaede', 'wandering-ronin'],
                     hand: ['spirit-of-valor'],
-                    dynastyDiscard: ['brash-samurai', 'doji-whisperer', 'ikoma-tsanuri']
-                },
-                player2: {
-                    inPlay: [],
-                    hand: ['assassination', 'let-go']
+                    dynastyDiscard: ['bushido-adherent', 'doji-whisperer']
                 }
             });
 
-            this.doomed = this.player1.findCardByName('doomed-shugenja');
-            this.valor = this.player1.findCardByName('spirit-of-valor');
-
-            this.brash = this.player1.findCardByName('brash-samurai');
-            this.whisperer = this.player1.findCardByName('doji-whisperer');
-            this.tsanuri = this.player1.findCardByName('ikoma-tsanuri');
-
-            this.assassination = this.player2.findCardByName('assassination');
-            this.letGo = this.player2.findCardByName('let-go');
+            this.wanderingRonin = this.player1.findCardByName('wandering-ronin');
+            this.kaede = this.player1.findCardByName('akodo-kaede');
+            this.spiritOfValor = this.player1.findCardByName('spirit-of-valor');
+            this.bushidoAdherent = this.player1.findCardByName('bushido-adherent');
+            this.dojiWhisperer = this.player1.findCardByName('doji-whisperer');
         });
 
-        it('should react to entering play', function() {
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.doomed);
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.valor);
-        });
+        describe('cost discounts', function () {
+            it('no discounts without shugenja', function () {
+                const initialFate = this.player1.fate;
+                this.player1.moveCard(this.kaede, 'dynasty discard pile');
 
-        it('should let you put a bushi into play and move this attachment to it', function() {
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.doomed);
-            this.player1.clickCard(this.valor);
-            expect(this.player1).toBeAbleToSelect(this.brash);
-            expect(this.player1).not.toBeAbleToSelect(this.whisperer);
-            expect(this.player1).not.toBeAbleToSelect(this.tsanuri);
-            expect(this.valor.parent).toBe(this.doomed);
-            this.player1.clickCard(this.brash);
-            expect(this.getChatLogs(5)).toContain('player1 uses Spirit of Valor to put Brash Samurai into play');
-            expect(this.brash.location).toBe('play area');
-            expect(this.valor.parent).toBe(this.brash);
-        });
-
-        it('should remove attached character from game if it leaves play', function() {
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.doomed);
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.brash);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.brash],
-                defenders: []
+                this.player1.clickCard(this.spiritOfValor);
+                this.player1.clickCard(this.wanderingRonin);
+                expect(this.player1.fate).toBe(initialFate - 1);
             });
-            this.player2.clickCard(this.assassination);
-            this.player2.clickCard(this.brash);
-            expect(this.brash.location).toBe('removed from game');
-            expect(this.getChatLogs(5)).toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');
+
+            it('costs 1 less while controling shugenja', function () {
+                const initialFate = this.player1.fate;
+
+                this.player1.clickCard(this.spiritOfValor);
+                this.player1.clickCard(this.wanderingRonin);
+                expect(this.player1.fate).toBe(initialFate);
+            });
         });
 
-        it('should not remove attached character from game if attachment leaves play first', function() {
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.doomed);
-            this.player1.clickCard(this.valor);
-            this.player1.clickCard(this.brash);
-
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.brash],
-                defenders: []
+        describe('action ability', function () {
+            beforeEach(function () {
+                this.player1.playAttachment(this.spiritOfValor, this.kaede);
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.kaede],
+                    defenders: []
+                });
             });
-            this.player2.clickCard(this.letGo);
-            this.player2.clickCard(this.valor);
 
-            this.player1.pass();
+            it('copies all abilities from a discarded Lion', function () {
+                this.player2.pass();
+                this.player1.clickCard(this.spiritOfValor);
+                expect(this.player1).toHavePrompt('Choose a character from a discard pile');
+                expect(this.player1).toBeAbleToSelect(this.bushidoAdherent);
+                expect(this.player1).not.toBeAbleToSelect(this.dojiWhisperer);
 
-            this.player2.clickCard(this.assassination);
-            this.player2.clickCard(this.brash);
-            expect(this.brash.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).not.toContain('Brash Samurai is removed from the game due to the effects of Spirit of Valor');
+                this.player1.clickCard(this.bushidoAdherent);
+                expect(this.getChatLogs(3)).toContain(
+                    "player1 uses Spirit of Valor, sacrificing Spirit of Valor to copy Bushidō Adherent's abilities onto Akodo Kaede"
+                );
+
+                this.player2.pass();
+                this.player1.clickCard(this.kaede);
+                this.player1.clickCard(this.kaede);
+                expect(this.getChatLogs(3)).toContain(
+                    "player1 uses Akodo Kaede's gained ability from Bushidō Adherent to honor Akodo Kaede and have player2 draw 1 card"
+                );
+            });
         });
     });
 });

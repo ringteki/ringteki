@@ -1,7 +1,7 @@
+import AbilityDsl from '../../abilitydsl';
 import { CardTypes, Locations, Players, TargetModes } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import DrawCard = require('../../drawcard');
-import type Player = require('../../player');
+import DrawCard from '../../drawcard';
+import type Player from '../../player';
 
 export default class StokeInsurrection extends DrawCard {
     static id = 'stoke-insurrection';
@@ -13,10 +13,8 @@ export default class StokeInsurrection extends DrawCard {
             condition: (context) =>
                 context.player.opponent && this.getFaceDownProvinceCards(context.player.opponent) >= 4,
             effect: AbilityDsl.effects.reduceCost({
-                amount: () => {
-                    return 2;
-                },
-                match: (card: DrawCard, source: DrawCard) => card === source
+                amount: 2,
+                match: (card, source) => card === source
             })
         });
 

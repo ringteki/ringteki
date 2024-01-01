@@ -1,7 +1,6 @@
 import { CardTypes, Locations, Players } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import type Player from '../../../player';
 
 export default class Hayate extends DrawCard {
     static id = 'hayate';
@@ -11,12 +10,12 @@ export default class Hayate extends DrawCard {
             location: Locations.Any,
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
-                amount: (_: DrawCard, player: Player) =>
+                amount: (_, player) =>
                     (player.cardsInPlay as DrawCard[]).reduce(
                         (cavCount, card) => (card.hasTrait('cavalry') ? cavCount + 1 : cavCount),
                         0
                     ),
-                match: (card: DrawCard, source: DrawCard) => card === source
+                match: (card, source) => card === source
             })
         });
 

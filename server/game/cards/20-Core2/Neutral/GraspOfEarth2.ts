@@ -1,7 +1,6 @@
 import { AbilityTypes, CardTypes, Locations, Players } from '../../../Constants';
 import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
 import DrawCard from '../../../drawcard';
 
 export default class GraspOfEarth2 extends DrawCard {
@@ -15,8 +14,8 @@ export default class GraspOfEarth2 extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: (target: BaseCard, context) => target.controller.hasAffinity('earth', context),
-                match: (card: BaseCard, source: any) => card === source
+                targetCondition: (target) => target.controller.hasAffinity('earth'),
+                match: (card, source) => card === source
             })
         });
 

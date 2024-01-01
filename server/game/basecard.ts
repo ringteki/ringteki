@@ -37,6 +37,7 @@ import Player from './player';
 import type DrawCard = require('./drawcard');
 import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
+import type { GainAllAbilitiesValue } from './Effects/Library/gainAllAbilities';
 
 type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
 
@@ -144,9 +145,11 @@ class BaseCard extends EffectSource {
         const effectActions = this.getEffects(EffectNames.GainAbility).filter(
             (ability) => ability.abilityType === AbilityTypes.Action
         );
-        if (this.anyEffect(EffectNames.GainAllAbilities)) {
-            const effects = this.getRawEffects().filter((effect) => effect.type === EffectNames.GainAllAbilities);
-            effects.forEach((effect) => (actions = actions.concat(effect.value.getActions(this))));
+
+        for (const effect of this.getRawEffects()) {
+            if (effect.type === EffectNames.GainAllAbilities) {
+                actions = actions.concat((effect.value as GainAllAbilitiesValue).getActions(this));
+            }
         }
         if (!ignoreDynamicGains) {
             if (this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
@@ -189,9 +192,10 @@ class BaseCard extends EffectSource {
         const effectReactions = this.getEffects(EffectNames.GainAbility).filter((ability) =>
             TriggeredAbilityTypes.includes(ability.abilityType)
         );
-        if (this.anyEffect(EffectNames.GainAllAbilities)) {
-            const effects = this.getRawEffects().filter((effect) => effect.type === EffectNames.GainAllAbilities);
-            effects.forEach((effect) => (reactions = reactions.concat(effect.value.getReactions(this))));
+        for (const effect of this.getRawEffects()) {
+            if (effect.type === EffectNames.GainAllAbilities) {
+                reactions = reactions.concat((effect.value as GainAllAbilitiesValue).getReactions(this));
+            }
         }
         if (!ignoreDynamicGains) {
             if (this.anyEffect(EffectNames.GainAllAbilitiesDynamic)) {
@@ -227,12 +231,12 @@ class BaseCard extends EffectSource {
         if (mostRecentEffect) {
             return gainedPersistentEffects.concat(mostRecentEffect.value.getPersistentEffects());
         }
-        if (this.anyEffect(EffectNames.GainAllAbilities)) {
-            const effects = this.getRawEffects().filter((effect) => effect.type === EffectNames.GainAllAbilities);
-            effects.forEach(
-                (effect) =>
-                    (gainedPersistentEffects = gainedPersistentEffects.concat(effect.value.getPersistentEffects()))
-            );
+        for (const effect of this.getRawEffects()) {
+            if (effect.type === EffectNames.GainAllAbilities) {
+                gainedPersistentEffects = gainedPersistentEffects.concat(
+                    (effect.value as GainAllAbilitiesValue).getPersistentEffects()
+                );
+            }
         }
         if (!ignoreDynamicGains) {
             // This is needed even though there are no dynamic persistent effects

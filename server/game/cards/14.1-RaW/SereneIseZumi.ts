@@ -34,8 +34,8 @@ export default class SereneIseZumi extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 2,
-                targetCondition: (target: DrawCard) => target.type === CardTypes.Character,
-                match: (card: DrawCard, source: DrawCard) => card === source
+                targetCondition: (target) => target.type === CardTypes.Character,
+                match: (card, source) => card === source
             })
         });
     }

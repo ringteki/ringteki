@@ -8,8 +8,8 @@ export default class IuchiTadamatsu extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             effect: AbilityDsl.effects.reduceCost({
-                match: (card: DrawCard) => card.hasTrait('meishodo'),
-                targetCondition: (target: DrawCard, source: DrawCard) => target === source
+                match: (card) => card.hasTrait('meishodo'),
+                targetCondition: (target, source) => target === source
             })
         });
 

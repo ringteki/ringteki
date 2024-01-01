@@ -1,8 +1,8 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes } from '../../../Constants';
+import DrawCard from '../../../drawcard';
 import { EventRegistrar } from '../../../EventRegistrar';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
 
 export default class CraneIndustry extends DrawCard {
     static id = 'crane-industry';
@@ -24,7 +24,7 @@ export default class CraneIndustry extends DrawCard {
                 targetController: context.player,
                 effect: AbilityDsl.effects.reduceCost({
                     amount: 1,
-                    match: (card: BaseCard) => !this.hasEventBeenPlayedByThisPlayer(card)
+                    match: (card) => !this.hasEventBeenPlayedByThisPlayer(card)
                 })
             }))
         });
