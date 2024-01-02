@@ -3,12 +3,16 @@ import { CardTypes, Durations, Locations } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type { ProvinceCard } from '../../../ProvinceCard';
 
+function provinceLog(province: ProvinceCard) {
+    return province.facedown ? province.location : province;
+}
+
 function adjacentProvinces(centralProvince: ProvinceCard): Array<string | ProvinceCard> {
     return centralProvince.controller
         .getProvinces((province: ProvinceCard) =>
             centralProvince.controller.areLocationsAdjacent(centralProvince.location, province.location)
         )
-        .map((province: ProvinceCard) => (province.facedown ? province.location : province));
+        .map(provinceLog);
 }
 
 export default class TheRushingWave extends DrawCard {
@@ -46,7 +50,7 @@ export default class TheRushingWave extends DrawCard {
                 })
             },
             effect: "set {1}'s strength to 0 until the end of the phase",
-            effectArgs: (context) => [context.target]
+            effectArgs: (context) => [provinceLog(context.target)]
         });
     }
 }
