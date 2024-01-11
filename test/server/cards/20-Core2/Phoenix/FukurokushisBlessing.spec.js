@@ -27,6 +27,23 @@ describe("Fukurokushi's Blessing", function () {
             this.player2.clickPrompt('1');
         });
 
+        it('does not work outside conflicts', function () {
+            this.noMoreActions();
+
+            this.player2.clickCard(this.feeding);
+            this.player2.clickCard(this.cycleOfVengeance);
+            this.player2.clickCard(this.cycleOfVengeance);
+
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.blessing);
+
+            this.player2.clickCard(this.kuwanan);
+            expect(this.getChatLogs(10)).toContain(
+                'player2 uses Cycle of Vengeance to honor and place a fate on Doji Kuwanan'
+            );
+            expect(this.cycleOfVengeance.isBroken).toBe(true);
+        });
+
         it('cancels provinces on attack', function () {
             this.noMoreActions();
             this.player2.clickPrompt('Pass');
@@ -48,26 +65,6 @@ describe("Fukurokushi's Blessing", function () {
                 "player1 plays Fukurokushi's Blessing to cancel the effects of Midnight Revels's ability"
             );
             expect(this.kuwanan.bowed).toBe(false);
-        });
-
-        it('does not work outside conflicts', function () {
-            /**
-             * THIS TEST IS FLAKY. THE REASON WHY IS A MYSTERY
-             */
-            this.noMoreActions();
-
-            this.player2.clickCard(this.feeding);
-            this.player2.clickCard(this.cycleOfVengeance);
-            this.player2.clickCard(this.cycleOfVengeance);
-
-            expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.player1).not.toBeAbleToSelect(this.blessing);
-
-            this.player2.clickCard(this.kuwanan);
-            expect(this.getChatLogs(10)).toContain(
-                'player2 uses Cycle of Vengeance to honor and place a fate on Doji Kuwanan'
-            );
-            expect(this.cycleOfVengeance.isBroken).toBe(true);
         });
     });
 });

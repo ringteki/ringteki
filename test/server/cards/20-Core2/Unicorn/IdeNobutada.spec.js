@@ -12,7 +12,7 @@ describe('Ide Nobutada', function () {
 
             this.fineKatana = this.player1.findCardByName('fine-katana');
             this.ideNobutada = this.player1.findCardByName('ide-nobutada');
-            this.shinjoTakame = this.player1.findCardByName('shinjo-takame', 'dynasty deck');
+            this.shinjoTakame = this.player1.findCardByName('shinjo-takame');
 
             this.ideNobutada.honor();
             this.ideNobutada.modifyFate(1);

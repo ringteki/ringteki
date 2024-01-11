@@ -1,6 +1,5 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import type Player from '../../../player';
 import { ProvinceCard } from '../../../ProvinceCard';
 
 export default class FukurokushisBlessing extends DrawCard {

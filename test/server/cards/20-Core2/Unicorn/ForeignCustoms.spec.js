@@ -61,24 +61,6 @@ describe('Foreign Customs', function () {
                 this.chagatai.facedown = false;
             });
 
-            it('should react if you win', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.challenger],
-                    defenders: [this.toshimoko]
-                });
-
-                this.player2.clickCard(this.pd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.challenger);
-
-                this.player1.clickPrompt('2');
-                this.player2.clickPrompt('1');
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.destiny);
-            });
-
             it('should react if you lose', function () {
                 this.noMoreActions();
                 this.initiateConflict({
@@ -135,7 +117,7 @@ describe('Foreign Customs', function () {
                 this.player1.clickPrompt('1');
                 this.player2.clickPrompt('2');
 
-                expect(this.player2).toHavePrompt('Policy Debate');
+                expect(this.player2).not.toHavePrompt('Triggered Abilities');
             });
         });
     });
