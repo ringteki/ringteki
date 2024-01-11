@@ -30,13 +30,13 @@ const listFormatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunct
 
 export class Duel extends GameObject {
     #bidFinished = false;
+    #modifiers = new WeakMap<Player, DuelAbilities>();
     loser?: DrawCard[];
     losingPlayer?: Player;
     previousDuel?: Duel;
     winner?: DrawCard[];
     winningPlayer?: Player;
     gameModeOpts: GameMode;
-    modifiers: Map<Player, DuelAbilities>;
     finalDifference?: number;
     private eventRegistrar?: EventRegistrar;
 
@@ -70,6 +70,18 @@ export class Duel extends GameObject {
 
     get participants(): undefined | DrawCard[] {
         return [...[this.challenger], ...this.targets];
+    }
+
+    public playerCanTriggerChallenge(player: Player): boolean {
+        return !this.#modifiers.get(player)?.challenge ?? false;
+    }
+
+    public playerCanTriggerFocus(player: Player): boolean {
+        return !this.#modifiers.get(player)?.focus ?? false;
+    }
+
+    public playerCanTriggerStrike(player: Player): boolean {
+        return !this.#modifiers.get(player)?.strike ?? false;
     }
 
     addTargetToDuel(card: DrawCard) {
@@ -344,14 +356,13 @@ export class Duel extends GameObject {
     }
 
     #initializeDuelModifiers(challengingPlayer: Player) {
-        this.modifiers = new Map();
-        this.modifiers.set(challengingPlayer, {
+        this.#modifiers.set(challengingPlayer, {
             challenge: false,
             focus: false,
             strike: false
         });
         if (challengingPlayer.opponent) {
-            this.modifiers.set(challengingPlayer.opponent, {
+            this.#modifiers.set(challengingPlayer.opponent, {
                 challenge: false,
                 focus: false,
                 strike: false
@@ -372,7 +383,7 @@ export class Duel extends GameObject {
             return;
         }
 
-        const playersModifiers = this.modifiers.get(player);
+        const playersModifiers = this.#modifiers.get(player);
         if (!playersModifiers) {
             return;
         }

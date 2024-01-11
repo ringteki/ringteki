@@ -38,6 +38,7 @@ import type DrawCard = require('./drawcard');
 import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
 import type { GainAllAbilities } from './Effects/Library/gainAllAbilities';
+import type { Duel } from './Duel';
 
 type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
 
@@ -319,15 +320,10 @@ class BaseCard extends EffectSource {
         const newProperties: TriggeredAbilityProps = {
             ...properties,
             when: {
-                onDuelChallenge: (event, context) => {
-                    if (!event.duel) {
-                        return false;
-                    }
-                    const player = context.player;
-                    const usedChallenge = event.duel.modifiers.get(player.id)?.challenge;
-                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
-                    return !usedChallenge && conditionMet;
-                }
+                onDuelChallenge: ({ duel }: { duel?: Duel }, context) =>
+                    duel &&
+                    duel.playerCanTriggerChallenge(context.player) &&
+                    (!properties.duelCondition || properties.duelCondition(duel, context))
             }
         };
         this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
@@ -339,15 +335,10 @@ class BaseCard extends EffectSource {
         const newProperties: TriggeredAbilityWhenProps = {
             ...properties,
             when: {
-                onDuelFocus: (event, context) => {
-                    if (!event.duel) {
-                        return false;
-                    }
-                    const player = context.player;
-                    const usedChallenge = event.duel.modifiers.get(player.id)?.focus;
-                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
-                    return !usedChallenge && conditionMet;
-                }
+                onDuelFocus: ({ duel }: { duel?: Duel }, context) =>
+                    duel &&
+                    duel.playerCanTriggerFocus(context.player) &&
+                    (!properties.duelCondition || properties.duelCondition(duel, context))
             }
         };
         this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
@@ -357,15 +348,10 @@ class BaseCard extends EffectSource {
         const newProperties: TriggeredAbilityProps = {
             ...properties,
             when: {
-                onDuelStrike: (event, context) => {
-                    if (!event.duel) {
-                        return false;
-                    }
-                    const player = context.player;
-                    const usedChallenge = event.duel.modifiers.get(player.id)?.strike;
-                    const conditionMet = !properties.duelCondition || properties.duelCondition(event.duel, context);
-                    return !usedChallenge && conditionMet;
-                }
+                onDuelStrike: ({ duel }: { duel?: Duel }, context) =>
+                    duel &&
+                    duel.playerCanTriggerStrike(context.player) &&
+                    (!properties.duelCondition || properties.duelCondition(duel, context))
             }
         };
         this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
