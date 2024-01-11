@@ -13,6 +13,7 @@ const { GameModes } = require('../GameModes');
 const { EventRegistrar } = require('./EventRegistrar');
 
 class DrawCard extends BaseCard {
+    // fromOutOfPlaySource ?: Array < DrawCard >;
     menu = [
         { command: 'bow', text: 'Bow/Ready' },
         { command: 'honor', text: 'Honor' },
@@ -73,6 +74,7 @@ class DrawCard extends BaseCard {
             if (this.location !== Locations.RemovedFromGame) {
                 this.owner.moveCard(this, Locations.RemovedFromGame);
             }
+            this.fromOutOfPlaySource = undefined;
         }
     }
 

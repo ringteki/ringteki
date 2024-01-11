@@ -1,16 +1,16 @@
 import type { Locations, PlayTypes } from './Constants';
-import type BaseCard = require('./basecard');
-import type Player = require('./player');
+import type DrawCard from './drawcard';
+import type Player from './player';
 
 export class PlayableLocation {
     public constructor(
         public playingType: PlayTypes,
         private player: Player,
         private location: Locations,
-        private cards = new Set<BaseCard>()
+        public cards = new Set<DrawCard>()
     ) {}
 
-    public contains(card: BaseCard) {
+    public contains(card: DrawCard) {
         if (this.cards.size > 0 && !this.cards.has(card)) {
             return false;
         }

@@ -7,6 +7,7 @@ const SuppressEffect = require('./Effects/SuppressEffect');
 const EffectBuilder = require('./Effects/EffectBuilder');
 const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmentMilitarySkillModifier');
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
+const { canPlayFromOwn } = require('./Effects/Library/canPlayFromOwn');
 const { cardCannot } = require('./Effects/Library/cardCannot');
 const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
@@ -198,36 +199,7 @@ const Effects = {
     additionalPlayCost: (func) => EffectBuilder.player.static(EffectNames.AdditionalPlayCost, func),
     alternateFatePool: (match) => EffectBuilder.player.static(EffectNames.AlternateFatePool, match),
     cannotDeclareConflictsOfType: (type) => EffectBuilder.player.static(EffectNames.CannotDeclareConflictsOfType, type),
-    canPlayFromOwn: (location, cards, sourceOfEffect, playType = PlayTypes.PlayFromHand) =>
-        EffectBuilder.player.detached(EffectNames.CanPlayFromOwn, {
-            apply: (player) => {
-                for (const card of cards.filter(
-                    (card) => card.type === CardTypes.Event && card.location === location
-                )) {
-                    for (const reaction of card.reactions) {
-                        reaction.registerEvents();
-                    }
-                }
-                for (const card of cards) {
-                    if (!card.fromOutOfPlaySource) {
-                        card.fromOutOfPlaySource = [];
-                    }
-                    card.fromOutOfPlaySource.push(sourceOfEffect);
-                }
-                return player.addPlayableLocation(playType, player, location, cards);
-            },
-            unapply: (player, context, location) => {
-                player.removePlayableLocation(location);
-                for (const card of location.cards) {
-                    if (Array.isArray(card.fromOutOfPlaySource)) {
-                        card.fromOutOfPlaySource.filter((a) => a !== context.source);
-                        if (card.fromOutOfPlaySource.length === 0) {
-                            delete card.fromOutOfPlaySource;
-                        }
-                    }
-                }
-            }
-        }),
+    canPlayFromOwn,
     canPlayFromOpponents: (location, cards, sourceOfEffect, playType = PlayTypes.PlayFromHand) =>
         EffectBuilder.player.detached(EffectNames.CanPlayFromOpponents, {
             apply: (player) => {

@@ -64,7 +64,7 @@ class Process {
                             event.card === card && event.originalLocation === Locations.RemovedFromGame
                     },
                     match: card,
-                    effect: [AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this)]
+                    effect: [AbilityDsl.effects.canPlayFromOwn(Locations.RemovedFromGame, [card], this.context.source)]
                 }));
             }
         }
