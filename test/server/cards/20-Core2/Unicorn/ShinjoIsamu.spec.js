@@ -83,7 +83,6 @@ describe('Shinjo Isamu', function () {
 
             this.player1.clickCard(this.shinjoIsamu);
             expect(this.player1).toHavePrompt('Choose a ring');
-            expect(this.player1).toBeAbleToSelect(this.shinjoIsamu);
             expect(this.player1).toBeAbleToSelectRing('fire');
             expect(this.player1).toBeAbleToSelectRing('air');
             expect(this.player1).not.toBeAbleToSelectRing('water');

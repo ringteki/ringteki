@@ -5,6 +5,11 @@ import DrawCard from '../../../drawcard';
 import type Ring from '../../../ring';
 import type { AbilityContext } from '../../../AbilityContext';
 import type { ProvinceCard } from '../../../ProvinceCard';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
+
+function isamuWentHome(event: any, context: TriggeredAbilityContext<ShinjoIsamu>) {
+    return event.card === context.source;
+}
 
 export default class ShinjoIsamu extends DrawCard {
     static id = 'shinjo-isamu';
@@ -13,8 +18,8 @@ export default class ShinjoIsamu extends DrawCard {
         this.reaction({
             title: 'Resolve a ring effect',
             when: {
-                onSendHome: (event, context) => event.card === context.source,
-                onReturnHome: (event, context) => event.card === context.source
+                onSendHome: isamuWentHome,
+                onReturnHome: isamuWentHome
             },
             target: {
                 mode: TargetModes.Ring,
