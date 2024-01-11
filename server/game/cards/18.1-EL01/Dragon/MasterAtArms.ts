@@ -6,7 +6,7 @@ export default class MasterAtArms extends DrawCard {
     static id = 'master-at-arms';
 
     setupCardAbilities() {
-        this.interrupt({
+        this.reaction({
             title: 'Return a weapon attachment in your conflict discard pile to your hand',
             when: {
                 onCardPlayed: (event, context) => event.card === context.source
