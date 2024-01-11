@@ -16,8 +16,8 @@ export interface GameActionProperties {
 }
 
 export class GameAction<P extends GameActionProperties = GameActionProperties> {
-    propertyFactory: (context?: AbilityContext) => P;
-    properties: P;
+    propertyFactory?: (context?: AbilityContext) => P;
+    properties?: P;
     targetType: string[] = [];
     eventName = EventNames.Unnamed;
     name = '';
@@ -39,16 +39,16 @@ export class GameAction<P extends GameActionProperties = GameActionProperties> {
     }
 
     getProperties(context: AbilityContext, additionalProperties = {}): P {
-        let properties = Object.assign(
+        const properties = Object.assign(
             { target: this.getDefaultTargets(context) },
             this.defaultProperties,
             additionalProperties,
-            this.properties || this.propertyFactory(context)
+            this.properties ?? this.propertyFactory?.(context) ?? {}
         );
         if (!Array.isArray(properties.target)) {
             properties.target = [properties.target];
         }
-        properties.target = properties.target.filter((target) => !!target);
+        properties.target = properties.target.filter(Boolean);
         return properties;
     }
 
@@ -74,31 +74,38 @@ export class GameAction<P extends GameActionProperties = GameActionProperties> {
         );
     }
 
+    #targets(context: AbilityContext, additionalProperties = {}) {
+        return this.getProperties(context, additionalProperties).target as PlayerOrRingOrCardOrToken[];
+    }
+
     hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties);
-        return (properties.target as PlayerOrRingOrCardOrToken[]).some((target) =>
-            this.canAffect(target, context, additionalProperties)
-        );
+        for (const candidateTarget of this.#targets(context, additionalProperties)) {
+            if (this.canAffect(candidateTarget, context, additionalProperties)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     allTargetsLegal(context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties);
-        return (properties.target as PlayerOrRingOrCardOrToken[]).every((target) =>
-            this.canAffect(target, context, additionalProperties)
-        );
+        for (const candidateTarget of this.#targets(context, additionalProperties)) {
+            if (!this.canAffect(candidateTarget, context, additionalProperties)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     addEventsToArray(events: Event[], context: AbilityContext, additionalProperties = {}): void {
-        let properties = this.getProperties(context, additionalProperties);
-        for (const target of (properties.target as PlayerOrRingOrCardOrToken[]).filter((target) =>
-            this.canAffect(target, context, additionalProperties)
-        )) {
-            events.push(this.getEvent(target, context, additionalProperties));
+        for (const target of this.#targets(context, additionalProperties)) {
+            if (this.canAffect(target, context, additionalProperties)) {
+                events.push(this.getEvent(target, context, additionalProperties));
+            }
         }
     }
 
     getEvent(target: any, context: AbilityContext, additionalProperties = {}): Event {
-        let event = this.createEvent(target, context, additionalProperties);
+        const event = this.createEvent(target, context, additionalProperties);
         this.updateEvent(event, target, context, additionalProperties);
         return event;
     }
@@ -131,7 +138,7 @@ export class GameAction<P extends GameActionProperties = GameActionProperties> {
     }
 
     getEventArray(context: AbilityContext, additionalProperties = {}): Event[] {
-        let events = [];
+        const events = [];
         this.addEventsToArray(events, context, additionalProperties);
         return events;
     }
@@ -151,8 +158,7 @@ export class GameAction<P extends GameActionProperties = GameActionProperties> {
     }
 
     isOptional(context: AbilityContext, additionalProperties = {}): boolean {
-        const { optional } = this.getProperties(context, additionalProperties);
-        return optional;
+        return this.getProperties(context, additionalProperties).optional ?? false;
     }
 
     moveFateEventCondition(event): boolean {
