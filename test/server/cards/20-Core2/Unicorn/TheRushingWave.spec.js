@@ -27,7 +27,7 @@ describe('The Rushing Wave', function () {
             this.player1.clickCard(this.pilgrimage);
             expect(this.pilgrimage.getStrength()).toBe(0);
             expect(this.getChatLogs(5)).toContain(
-                "player1 plays The Rushing Wave to set Pilgrimage's strength to 0 until the end of the phase"
+                "player1 plays The Rushing Wave to set province 2's strength to 0 until the end of the phase"
             );
             expect(this.getChatLogs(5)).toContain(
                 'player1 channels their water affinity to also set the strength of Manicured Garden and province 3 to 0'
