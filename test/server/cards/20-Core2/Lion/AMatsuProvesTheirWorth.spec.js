@@ -59,7 +59,7 @@ describe('A Matsu Proves Their Worth', function () {
             expect(this.player1.hand.length).toBe(1);
 
             expect(this.getChatLogs(5)).toContain(
-                'Matsu Berserker is honored and receives 1 fate, and player1 gains 1 fate and draw 1 card due to Matsu Berserker succeeding at A Matsu Proves Their Worth!'
+                'Matsu Berserker is honored and receives 1 fate, and player1 gains 1 honor and draw 1 card due to Matsu Berserker succeeding at A Matsu Proves Their Worth!'
             );
         });
 
