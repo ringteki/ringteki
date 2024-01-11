@@ -55,7 +55,7 @@ describe('War Cry', function () {
             });
             this.noMoreActions();
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
-            expect(this.getChatLogs(5)).toContain('player1 plays War Cry to break an attacked province');
+            expect(this.getChatLogs(5)).not.toContain('player1 plays War Cry to break an attacked province');
         });
     });
 });
