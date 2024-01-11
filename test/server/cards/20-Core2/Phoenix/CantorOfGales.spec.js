@@ -46,13 +46,13 @@ describe('Cantor of Gales', function () {
             expect(this.game.currentConflict.attackerSkill).toBe(6);
         });
 
-        it('contributes base skill twice in the conflict when controller has honorale char in conflict', function () {
+        it('does not work while participating', function () {
             this.initiateConflict({
                 attackers: [this.cantor, this.adeptHonorable],
                 defenders: [],
                 type: 'military'
             });
-            expect(this.game.currentConflict.attackerSkill).toBe(10);
+            expect(this.game.currentConflict.attackerSkill).toBe(8);
         });
     });
 });
