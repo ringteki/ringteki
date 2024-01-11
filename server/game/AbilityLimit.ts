@@ -3,6 +3,18 @@ import { EventNames } from './Constants';
 import Player from './player';
 import type CardAbility from './CardAbility';
 
+export interface AbilityLimit {
+    ability?: CardAbility;
+    currentUser: null | string;
+    clone(): AbilityLimit;
+    isRepeatable(): boolean;
+    isAtMax(player: Player): boolean;
+    increment(player: Player): void;
+    reset(): void;
+    registerEvents(eventEmitter: EventEmitter): void;
+    unregisterEvents(eventEmitter: EventEmitter): void;
+}
+
 class UnlimitedAbilityLimit {
     public ability?: CardAbility;
     public currentUser: null | string = null;
@@ -155,7 +167,6 @@ export function perGame(max: number) {
 export function perDuel(max: number) {
     return new RepeatableAbilityLimit(max, new Set([EventNames.OnDuelFinished]));
 }
-
 
 export function unlimitedPerConflict() {
     return new RepeatableAbilityLimit(Infinity, new Set([EventNames.OnConflictFinished]));
