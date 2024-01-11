@@ -8,10 +8,11 @@ export default class CompositeYumi extends DrawCard {
         this.reaction({
             title: 'Give attached character +1/+0',
             when: {
-                onMoveToConflict: (event, context) => Boolean(context.source.parent),
-                onSendHome: (event, context) => Boolean(context.source.parent),
-                onCharacterEntersPlay: (event, context) =>
-                    Boolean(context.source.parent) && context.game.isDuringConflict()
+                onMoveToConflict: (event, context) => context.source.parent,
+                onSendHome: (event, context) => context.source.parent,
+                onCharacterEntersPlay: (event, context) => context.source.parent && context.game.isDuringConflict(),
+                onCreateTokenCharacter: (event, context) =>
+                    context.source.parent && event.tokenCharacter?.isParticipating()
             },
             gameAction: AbilityDsl.actions.cardLastingEffect((context) => ({
                 target: context.source.parent,

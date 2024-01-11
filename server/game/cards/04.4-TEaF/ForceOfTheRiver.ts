@@ -14,8 +14,8 @@ export default class ForceOfTheRiver extends DrawCard {
             effect: 'summon {1}!',
             effectArgs: {
                 id: 'spirit-of-the-river',
-                label: 'Sprits of the River',
-                name: 'Sprits of the River',
+                label: 'Spirits of the River',
+                name: 'Spirits of the River',
                 facedown: false,
                 type: CardTypes.Character
             },

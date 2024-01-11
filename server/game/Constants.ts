@@ -265,6 +265,7 @@ export enum PlayTypes {
 export enum EventNames {
     OnMoveFate = 'onMoveFate',
     OnBeginRound = 'onBeginRound',
+    OnCreateTokenCharacter = 'onCreateTokenCharacter',
     OnCharacterEntersPlay = 'onCharacterEntersPlay',
     OnInitiateAbilityEffects = 'onInitiateAbilityEffects',
     OnCardAbilityInitiated = 'onCardAbilityInitiated',

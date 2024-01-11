@@ -1,6 +1,6 @@
 import type { AbilityContext } from '../AbilityContext';
 import type BaseCard from '../basecard';
-import { CardTypes, Durations, Locations } from '../Constants';
+import { CardTypes, Durations, EventNames, Locations } from '../Constants';
 import Effects from '../effects';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
@@ -8,9 +8,10 @@ export interface CreateTokenProperties extends CardActionProperties {
     atHome?: boolean;
 }
 
-export class CreateTokenAction extends CardGameAction {
+export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
     name = 'createToken';
     effect = 'create a token';
+    eventName = EventNames.OnCreateTokenCharacter;
     targetType = [CardTypes.Character, CardTypes.Holding, CardTypes.Event];
     defaultProperties: CreateTokenProperties = { atHome: false };
 
@@ -24,7 +25,7 @@ export class CreateTokenAction extends CardGameAction {
     }
 
     eventHandler(event, additionalProperties = {}): void {
-        let { atHome } = this.getProperties(event.context, additionalProperties) as CreateTokenProperties;
+        let { atHome } = this.getProperties(event.context, additionalProperties);
         let context = event.context;
         let card = event.card;
         let token = context.game.createToken(card);
@@ -39,6 +40,7 @@ export class CreateTokenAction extends CardGameAction {
                 context.game.currentConflict.addDefender(token);
             }
         }
+
         context.game.actions
             .cardLastingEffect({
                 duration: Durations.UntilEndOfPhase,
@@ -52,5 +54,7 @@ export class CreateTokenAction extends CardGameAction {
                 })
             })
             .resolve(token, context);
+
+        context.game.raiseEvent(EventNames.OnCreateTokenCharacter, { tokenCharacter: token });
     }
 }

@@ -4,9 +4,10 @@ describe('Composite Yumi', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['wandering-ronin', 'eager-scout'],
-                    dynastyDeck: ['favorable-ground'],
-                    hand: ['composite-yumi', 'steward-of-law']
+                    inPlay: ['wandering-ronin', 'eager-scout', 'master-of-the-swift-waves'],
+                    dynastyDeck: ['favorable-ground', 'hida-kisada', 'imperial-storehouse'],
+                    hand: ['composite-yumi', 'steward-of-law', 'force-of-the-river'],
+                    provinces: ['manicured-garden']
                 },
                 player2: {
                     inPlay: ['shinjo-outrider'],
@@ -16,11 +17,21 @@ describe('Composite Yumi', function () {
             this.fg = this.player1.placeCardInProvince('favorable-ground', 'province 1');
             this.wanderingRonin = this.player1.findCardByName('wandering-ronin');
             this.scout = this.player1.findCardByName('eager-scout');
+            this.masterOfTheSwiftWaves = this.player1.findCardByName('master-of-the-swift-waves');
             this.stewardOfLaw = this.player1.findCardByName('steward-of-law');
             this.compositeYumi = this.player1.findCardByName('composite-yumi');
+            this.forceOfTheRiver = this.player1.findCardByName('force-of-the-river');
 
             this.shinjoOutrider = this.player2.findCardByName('shinjo-outrider');
             this.stoicGunso = this.player2.findCardByName('stoic-gunso');
+
+            this.garden = this.player1.findCardByName('manicured-garden');
+            this.kisada = this.player1.findCardByName('hida-kisada');
+            this.storehouse = this.player1.findCardByName('imperial-storehouse');
+            this.player1.moveCard(this.storehouse, this.garden.location);
+            this.player1.moveCard(this.kisada, this.garden.location);
+            this.kisada.facedown = true;
+            this.storehouse.facedown = true;
 
             this.player1.playAttachment(this.compositeYumi, this.wanderingRonin);
 
@@ -158,6 +169,32 @@ describe('Composite Yumi', function () {
             this.player1.clickPrompt('Conflict');
             this.player1.clickCard(this.compositeYumi);
             expect(this.wanderingRonin.getMilitarySkill()).toBe(2 + 1 + 4);
+        });
+
+        it('comboes with Force of the River', function () {
+            this.initiateConflict({
+                attackers: [this.wanderingRonin],
+                defenders: []
+            });
+            this.player2.pass();
+            this.player1.clickCard(this.forceOfTheRiver);
+            this.player1.clickCard(this.masterOfTheSwiftWaves);
+            this.player2.pass();
+
+            this.player1.clickCard(this.forceOfTheRiver);
+
+            expect(this.player1).toHavePrompt('Any reactions?');
+            expect(this.player1).toBeAbleToSelect(this.compositeYumi);
+            this.player1.clickCard(this.compositeYumi);
+            expect(this.getChatLogs(3)).toContain('player1 uses Composite Yumi to give +1military to Wandering Ronin');
+
+            expect(this.player1).toHavePrompt('Any reactions?');
+            expect(this.player1).toBeAbleToSelect(this.compositeYumi);
+            this.player1.clickCard(this.compositeYumi);
+            expect(this.getChatLogs(3)).toContain('player1 uses Composite Yumi to give +1military to Wandering Ronin');
+
+            expect(this.player1).toHavePrompt('Any reactions?');
+            expect(this.player1).toBeAbleToSelect(this.compositeYumi);
         });
     });
 });
