@@ -149,7 +149,7 @@ interface AbilityProps<Context> {
     evenDuringDynasty?: boolean;
     effectArgs?: EffectArg | ((context: Context) => EffectArg);
     gameAction?: GameAction | GameAction[];
-    handler?: (context?: AbilityContext) => void;
+    handler?: (context?: Context) => void;
     then?: ((context?: AbilityContext) => object) | object;
 }
 

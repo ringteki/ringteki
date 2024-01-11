@@ -1,6 +1,6 @@
-describe('Riddles of the Henshin', function() {
-    integration(function() {
-        beforeEach(function() {
+describe('Riddles of the Henshin', function () {
+    integration(function () {
+        beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -20,14 +20,14 @@ describe('Riddles of the Henshin', function() {
             this.riddles = this.player1.findCardByName('riddles-of-the-henshin');
         });
 
-        it('should prompt you to pick claimed rings', function() {
+        it('should prompt you to pick claimed rings', function () {
             this.player1.claimRing('air');
             this.player1.claimRing('fire');
             this.player1.claimRing('earth');
             this.player1.claimRing('void');
 
             this.player1.clickCard(this.riddles);
-            expect(this.player1).toHavePrompt('Choose a ring to resolve');
+            expect(this.player1).toHavePrompt('Choose the first ring to resolve');
             expect(this.player1).toBeAbleToSelectRing('air');
             expect(this.player1).toBeAbleToSelectRing('earth');
             expect(this.player1).toBeAbleToSelectRing('fire');
@@ -36,6 +36,7 @@ describe('Riddles of the Henshin', function() {
 
             this.player1.clickRing('fire');
 
+            expect(this.player1).toHavePrompt('Choose the second ring to resolve');
             expect(this.player1).toBeAbleToSelectRing('air');
             expect(this.player1).toBeAbleToSelectRing('earth');
             expect(this.player1).not.toBeAbleToSelectRing('fire');
@@ -58,14 +59,14 @@ describe('Riddles of the Henshin', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should resolve if you cancel mid-prompt', function() {
+        it('should resolve if you cancel mid-prompt', function () {
             this.player1.claimRing('air');
             this.player1.claimRing('fire');
             this.player1.claimRing('earth');
             this.player1.claimRing('void');
 
             this.player1.clickCard(this.riddles);
-            expect(this.player1).toHavePrompt('Choose a ring to resolve');
+            expect(this.player1).toHavePrompt('Choose the first ring to resolve');
             expect(this.player1).toBeAbleToSelectRing('air');
             expect(this.player1).toBeAbleToSelectRing('earth');
             expect(this.player1).toBeAbleToSelectRing('fire');
@@ -93,7 +94,7 @@ describe('Riddles of the Henshin', function() {
             expect(this.player2).toHavePrompt('Action Window');
         });
 
-        it('should allow ring replacement effects', function() {
+        it('should allow ring replacement effects', function () {
             this.player1.claimRing('water');
             this.player1.clickCard(this.riddles);
             this.player1.clickRing('water');
@@ -103,7 +104,7 @@ describe('Riddles of the Henshin', function() {
             expect(this.player1).toHavePrompt('Asako Azunami');
         });
 
-        it('should not be playable if you have no claimed rings', function() {
+        it('should not be playable if you have no claimed rings', function () {
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.riddles);
             expect(this.player1).toHavePrompt('Action Window');
