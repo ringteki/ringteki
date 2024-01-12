@@ -1,9 +1,8 @@
-const { EffectValue } = require('./EffectValue');
+import { EffectValue } from './EffectValue';
 
-class SuppressEffect extends EffectValue {
-    constructor(predicate) {
+export class SuppressEffect extends EffectValue<any[]> {
+    constructor(private predicate: (effect: unknown) => boolean) {
         super([]);
-        this.predicate = predicate;
     }
 
     recalculate() {
@@ -19,5 +18,3 @@ class SuppressEffect extends EffectValue {
         return oldValue.length !== newValue.length || oldValue.some((element) => !newValue.includes(element));
     }
 }
-
-module.exports = SuppressEffect;
