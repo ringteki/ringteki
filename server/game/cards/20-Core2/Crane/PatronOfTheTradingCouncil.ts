@@ -9,7 +9,7 @@ export default class PatronOfTheTradingCouncil extends DrawCard {
         this.persistentEffect({
             condition: (context) =>
                 context.game.isDuringConflict() &&
-                context.game.currentConflict.getNumberOfParticipants((card) => card.hasTrait('mantis')) > 0,
+                context.game.currentConflict.getNumberOfParticipants((card) => card.hasTrait('mantis-clan')) > 0,
             effect: AbilityDsl.effects.modifyBothSkills(1)
         });
 
