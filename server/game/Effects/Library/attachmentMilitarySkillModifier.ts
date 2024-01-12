@@ -1,7 +1,7 @@
 import type { AbilityContext } from '../../AbilityContext';
 import type BaseCard from '../../basecard';
 import { EffectNames } from '../../Constants';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 
 export type AttachmentMilitarySkillModifierValue = number | ((card: BaseCard, context: AbilityContext) => number);
 

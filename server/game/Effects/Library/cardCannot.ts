@@ -1,7 +1,7 @@
 import type BaseCard from '../../basecard';
 import { EffectNames } from '../../Constants';
 import type Player from '../../player';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 import Restriction from '../restriction';
 
 type Props =

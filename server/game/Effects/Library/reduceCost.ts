@@ -2,7 +2,7 @@ import type { AbilityContext } from '../../AbilityContext';
 import { EffectNames } from '../../Constants';
 import type { CostReducer, CostReducerProps } from '../../CostReducer';
 import type Player from '../../player';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 
 export function reduceCost(properties: CostReducerProps) {
     return EffectBuilder.player.detached(EffectNames.CostReducer, {

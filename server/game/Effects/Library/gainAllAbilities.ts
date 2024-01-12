@@ -1,6 +1,6 @@
 import type BaseCard from '../../basecard';
 import { AbilityTypes, EffectNames, Locations } from '../../Constants';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 import { EffectValue } from '../EffectValue';
 import GainAbility from '../GainAbility';
 

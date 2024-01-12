@@ -6,7 +6,7 @@ import type {
     TriggeredAbilityWhenProps
 } from '../../Interfaces';
 import type CardEffect from '../CardEffect';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 import GainAbility from '../GainAbility';
 
 type Res = (game: any, source: any, props: any) => CardEffect;

@@ -4,7 +4,7 @@ import { CardTypes, EffectNames, Locations, PlayTypes } from '../../Constants';
 import type DrawCard from '../../drawcard';
 import type { PlayableLocation } from '../../PlayableLocation';
 import type Player from '../../player';
-import EffectBuilder from '../EffectBuilder';
+import { EffectBuilder } from '../EffectBuilder';
 
 export function canPlayFromOwn(
     location: Locations,
