@@ -1,4 +1,4 @@
-const EffectValue = require('./EffectValue');
+const { EffectValue } = require('./EffectValue');
 
 const { AbilityTypes, CardTypes, Locations, Phases, Stages } = require('../Constants');
 const { MoveCardAction } = require('../GameActions/MoveCardAction');

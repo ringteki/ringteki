@@ -1,10 +1,10 @@
 import type BaseCard from '../../basecard';
 import { AbilityTypes, EffectNames, Locations } from '../../Constants';
 import EffectBuilder from '../EffectBuilder';
-import EffectValue from '../EffectValue';
+import { EffectValue } from '../EffectValue';
 import GainAbility from '../GainAbility';
 
-export class GainAllAbilities extends EffectValue {
+export class GainAllAbilities extends EffectValue<BaseCard> {
     actions: Array<GainAbility>;
     reactions: Array<GainAbility>;
     persistentEffects: Array<any>;
