@@ -25,13 +25,6 @@ const {
     PlayTypes
 } = require('./Constants');
 const { GameModes } = require('../GameModes');
-const provinceLocations = [
-    Locations.StrongholdProvince,
-    Locations.ProvinceOne,
-    Locations.ProvinceTwo,
-    Locations.ProvinceThree,
-    Locations.ProvinceFour
-];
 
 class Player extends GameObject {
     constructor(id, user, owner, game, clockdetails) {
@@ -272,10 +265,19 @@ class Player extends GameObject {
         });
     }
 
-    areLocationsAdjacent(location1, location2) {
-        let index1 = provinceLocations.indexOf(location1);
-        let index2 = provinceLocations.indexOf(location2);
-        return index1 > -1 && index2 > -2 && Math.abs(index1 - index2) === 1;
+    areLocationsAdjacent(locationA, locationB) {
+        switch (locationA) {
+            case Locations.ProvinceOne:
+                return locationB === Locations.ProvinceTwo;
+            case Locations.ProvinceTwo:
+                return locationB === Locations.ProvinceOne || locationB === Locations.ProvinceThree;
+            case Locations.ProvinceThree:
+                return locationB === Locations.ProvinceTwo || locationB === Locations.ProvinceFour;
+            case Locations.ProvinceFour:
+                return locationB === Locations.ProvinceThree;
+            default:
+                return false;
+        }
     }
 
     /**
