@@ -47,27 +47,12 @@ describe('Counsel from Yume-do', function () {
             expect(this.player1.hand.length).toBe(0);
         });
 
-        it('without affinity, shuffles cards back into deck and draw a card', function () {
+        it('with affinity, also draw a card', function () {
             this.player1.clickCard(this.counselFromYumeDo);
-            expect(this.player1).toHavePrompt('Choose up to 3 conflict cards');
-            expect(this.player1).toBeAbleToSelect(this.aPerfectCut);
-            expect(this.player1).toBeAbleToSelect(this.courtGames);
-            expect(this.player1).toBeAbleToSelect(this.fineKatana);
-            expect(this.player1).not.toBeAbleToSelect(this.warmWelcomeP2);
-
             this.player1.clickCard(this.aPerfectCut);
             this.player1.clickCard(this.courtGames);
             this.player1.clickCard(this.fineKatana);
             this.player1.clickPrompt('Done');
-
-            expect(this.aPerfectCut.location).toBe('conflict deck');
-            expect(this.courtGames.location).toBe('conflict deck');
-            expect(this.fineKatana.location).toBe('conflict deck');
-            expect(this.getChatLogs(5)).toContain(
-                "player1 plays Counsel from Yume-do to shuffle A Perfect Cut, Court Games and Fine Katana into its owner's deck"
-            );
-            expect(this.getChatLogs(5)).toContain('player1 is shuffling their conflict deck');
-
             expect(this.player1.hand.length).toBe(1);
             expect(this.getChatLogs(5)).toContain('player1 channels their water affinity to draw a card');
         });
