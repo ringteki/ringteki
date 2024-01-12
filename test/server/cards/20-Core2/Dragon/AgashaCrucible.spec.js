@@ -6,17 +6,16 @@ describe('Agasha Crucible', function () {
                 player1: {
                     inPlay: ['doomed-shugenja'],
                     dynastyDiscard: ['agasha-crucible'],
-                    hand: ['rejuvenating-vapors', 'grasp-of-earth-2']
+                    hand: ['the-rushing-wave', 'grasp-of-earth-2']
                 },
                 player2: {
                     dynastyDiscard: ['favorable-ground']
                 }
             });
 
-            this.suitengu = this.player1.findCardByName('rejuvenating-vapors');
+            this.rushingWave = this.player1.findCardByName('the-rushing-wave');
             this.graspOfEarth = this.player1.findCardByName('grasp-of-earth-2');
             this.doomed = this.player1.findCardByName('doomed-shugenja');
-            this.doomed.bow();
 
             this.agashaFoundry = this.player1.placeCardInProvince('agasha-crucible', 'province 1');
 
@@ -25,15 +24,20 @@ describe('Agasha Crucible', function () {
         });
 
         it('triggers when spell event is played', function () {
-            this.player1.clickCard(this.suitengu);
-            this.player1.clickCard(this.doomed);
-            expect(this.player1).toHavePrompt('Any interrupts to Rejuvenating Vapors being played?');
+            this.player1.clickCard(this.rushingWave);
+            expect(this.player1).toHavePrompt('Choose a province');
+            this.player1.clickCard(this.shamefulDisplay);
+            expect(this.player1).toHavePrompt('Any interrupts to The Rushing Wave being played?');
             expect(this.player1).toBeAbleToSelect(this.agashaFoundry);
 
             this.player1.clickCard(this.agashaFoundry);
             expect(this.getChatLogs(5)).toContain('player1 uses Agasha Crucible to satisfy all elemental affinities');
-            expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Doomed Shugenja');
-            expect(this.player1).toHavePrompt('Discard all cards from a province?');
+            expect(this.getChatLogs(5)).toContain(
+                "player1 plays The Rushing Wave to set province 1's strength to 0 until the end of the phase"
+            );
+            expect(this.getChatLogs(5)).toContain(
+                'player1 channels their water affinity to also set the strength of province 2 to 0'
+            );
         });
 
         it('triggers when spell attachment is played', function () {
