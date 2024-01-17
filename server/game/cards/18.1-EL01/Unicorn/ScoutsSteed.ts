@@ -1,6 +1,7 @@
 import AbilityDsl from '../../../abilitydsl';
 import { CardTypes, Durations, Locations } from '../../../Constants';
 import DrawCard from '../../../drawcard';
+import { ProvinceCard } from '../../../ProvinceCard';
 
 export default class ScoutsSteed extends DrawCard {
     static id = 'scout-s-steed';
@@ -41,8 +42,11 @@ export default class ScoutsSteed extends DrawCard {
                     ]
                 })
             ),
-            effect: "ready {1} and send them on a journey! {0} cannot be broken during this conflict - it's just exploration for now",
-            effectArgs: (context) => [context.source.parent]
+            effect: "ready {1} and send them on a journey! {2} cannot be broken during this conflict - it's just exploration for now",
+            effectArgs: (context) => [
+                context.source.parent,
+                context.target.isFacedown() ? context.target.location : context.target
+            ]
         });
     }
 }

@@ -37,7 +37,7 @@ describe('Scouts Steed', function () {
 
             this.player1.clickCard(this.fertileFacedown);
             expect(this.getChatLogs(3)).toContain(
-                "player1 uses Scout's Steed to ready Shinjo Archer and send them on a journey! Fertile Fields cannot be broken during this conflict - it's just exploration for now"
+                "player1 uses Scout's Steed to ready Shinjo Archer and send them on a journey! province 2 cannot be broken during this conflict - it's just exploration for now'"
             );
             expect(this.player1).toHavePrompt('Military Air Conflict');
             expect(this.player1).not.toHavePromptButton('Pass Conflict');
