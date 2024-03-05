@@ -21,7 +21,7 @@ export default class JakIthith extends DrawCard {
             title: 'Take control of an attachment',
             when: {
                 afterConflict: (event, context) =>
-                    event.conflict.winner === context.source.controller && context.source.isDefending()
+                    event.conflict.winner === context.source.controller && context.source.isParticipating()
             },
             targets: {
                 [ATTACHMENT]: {
@@ -33,7 +33,7 @@ export default class JakIthith extends DrawCard {
                     dependsOn: ATTACHMENT,
                     cardType: CardTypes.Character,
                     controller: Players.Self,
-                    cardCondition: (card) => card.isDefending(),
+                    cardCondition: (card) => card.isParticipating(),
                     gameAction: AbilityDsl.actions.ifAble((context) => ({
                         ifAbleAction: AbilityDsl.actions.attach({
                             attachment: context.targets[ATTACHMENT],

@@ -1,6 +1,6 @@
-describe("Jak'Ithith", function () {
-    integration(function () {
-        beforeEach(function () {
+describe("Jak'Ithith", function() {
+    integration(function() {
+        beforeEach(function() {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
@@ -21,6 +21,8 @@ describe("Jak'Ithith", function () {
             this.katana = this.player1.findCardByName('fine-katana');
             this.affliction = this.player2.findCardByName('lurking-affliction');
 
+            this.shamefulDisplayP1 = this.player1.findCardByName('shameful-display', 'province 1');
+
             this.player1.clickCard(this.tattoo);
             this.player1.clickCard(this.initiate);
             this.player2.pass();
@@ -28,59 +30,20 @@ describe("Jak'Ithith", function () {
             this.player1.clickCard(this.initiate);
         });
 
-        it('steals attachments when it can attach them', function () {
+        it('cannot be tainted', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.initiate],
                 defenders: [this.borderlands, this.jakithit],
                 type: 'military'
             });
-            this.noMoreActions();
 
-            expect(this.player2).toHavePrompt('Any reactions?');
-
-            this.player2.clickCard(this.jakithit);
-            expect(this.player2).toHavePrompt('Choose an attachment');
-            expect(this.player2).toBeAbleToSelect(this.tattoo);
-            expect(this.player2).toBeAbleToSelect(this.katana);
-
-            this.player2.clickCard(this.katana);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toBeAbleToSelect(this.jakithit);
+            this.player2.clickCard(this.affliction);
             expect(this.player2).toBeAbleToSelect(this.borderlands);
-
-            this.player2.clickCard(this.borderlands);
-            expect(this.borderlands.attachments).toContain(this.katana);
-            expect(this.getChatLogs(5)).toContain("player2 uses Jak'ithith to take control of and attach Togashi Initiate's Fine Katana to Borderlands Defender");
+            expect(this.player2).not.toBeAbleToSelect(this.jakithit);
         });
 
-        it('discards attachments when it can not attach them', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate],
-                defenders: [this.borderlands, this.jakithit],
-                type: 'military'
-            });
-            this.noMoreActions();
-
-            expect(this.player2).toHavePrompt('Any reactions?');
-
-            this.player2.clickCard(this.jakithit);
-            expect(this.player2).toHavePrompt('Choose an attachment');
-            expect(this.player2).toBeAbleToSelect(this.tattoo);
-            expect(this.player2).toBeAbleToSelect(this.katana);
-
-            this.player2.clickCard(this.tattoo);
-            expect(this.player2).toHavePrompt('Choose a character');
-            expect(this.player2).toBeAbleToSelect(this.jakithit);
-            expect(this.player2).toBeAbleToSelect(this.borderlands);
-
-            this.player2.clickCard(this.borderlands);
-            expect(this.tattoo.location).toBe('conflict discard pile');
-            expect(this.getChatLogs(5)).toContain("player2 uses Jak'ithith to discard Centipede Tattoo");
-        });
-
-        it('does not work from home', function () {
+        it('does not work from home', function() {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.initiate],
@@ -93,17 +56,112 @@ describe("Jak'Ithith", function () {
             expect(this.player1).toHavePrompt('Action Window');
         });
 
-        it('cannot be tainted', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.initiate],
-                defenders: [this.borderlands, this.jakithit],
-                type: 'military'
+        describe('when defending', function() {
+            beforeEach(function() {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.initiate],
+                    defenders: [this.borderlands, this.jakithit],
+                    type: 'military'
+                });
+                this.noMoreActions();
             });
 
-            this.player2.clickCard(this.affliction);
-            expect(this.player2).toBeAbleToSelect(this.borderlands);
-            expect(this.player2).not.toBeAbleToSelect(this.jakithit);
+            it('steals attachments when it can attach them', function() {
+                expect(this.player2).toHavePrompt('Any reactions?');
+
+                this.player2.clickCard(this.jakithit);
+                expect(this.player2).toHavePrompt('Choose an attachment');
+                expect(this.player2).toBeAbleToSelect(this.tattoo);
+                expect(this.player2).toBeAbleToSelect(this.katana);
+
+                this.player2.clickCard(this.katana);
+                expect(this.player2).toHavePrompt('Choose a character');
+                expect(this.player2).toBeAbleToSelect(this.jakithit);
+                expect(this.player2).toBeAbleToSelect(this.borderlands);
+
+                this.player2.clickCard(this.borderlands);
+                expect(this.borderlands.attachments).toContain(this.katana);
+                expect(this.getChatLogs(5)).toContain(
+                    "player2 uses Jak'ithith to take control of and attach Togashi Initiate's Fine Katana to Borderlands Defender"
+                );
+            });
+
+            it('discards attachments when it can not attach them', function() {
+                expect(this.player2).toHavePrompt('Any reactions?');
+
+                this.player2.clickCard(this.jakithit);
+                expect(this.player2).toHavePrompt('Choose an attachment');
+                expect(this.player2).toBeAbleToSelect(this.tattoo);
+                expect(this.player2).toBeAbleToSelect(this.katana);
+
+                this.player2.clickCard(this.tattoo);
+                expect(this.player2).toHavePrompt('Choose a character');
+                expect(this.player2).toBeAbleToSelect(this.jakithit);
+                expect(this.player2).toBeAbleToSelect(this.borderlands);
+
+                this.player2.clickCard(this.borderlands);
+                expect(this.tattoo.location).toBe('conflict discard pile');
+                expect(this.getChatLogs(5)).toContain("player2 uses Jak'ithith to discard Centipede Tattoo");
+            });
+        });
+
+        describe('when attacking', function() {
+            beforeEach(function() {
+                this.noMoreActions();
+                this.player1.clickPrompt('Pass Conflict');
+                this.player1.clickPrompt('Yes');
+                this.noMoreActions();
+
+                this.player2.clickRing('air');
+                this.player2.clickCard(this.shamefulDisplayP1);
+                this.player2.clickCard(this.borderlands);
+                this.player2.clickCard(this.jakithit);
+                this.player2.clickPrompt('Initiate Conflict');
+                this.player2.clickPrompt('No Target');
+                this.player1.clickCard(this.initiate);
+                this.player1.clickPrompt('Done');
+
+                this.noMoreActions();
+            });
+
+            it('steals attachments when it can attach them', function() {
+                expect(this.player2).toHavePrompt('Any reactions?');
+
+                this.player2.clickCard(this.jakithit);
+                expect(this.player2).toHavePrompt('Choose an attachment');
+                expect(this.player2).toBeAbleToSelect(this.tattoo);
+                expect(this.player2).toBeAbleToSelect(this.katana);
+
+                this.player2.clickCard(this.katana);
+                expect(this.player2).toHavePrompt('Choose a character');
+                expect(this.player2).toBeAbleToSelect(this.jakithit);
+                expect(this.player2).toBeAbleToSelect(this.borderlands);
+
+                this.player2.clickCard(this.borderlands);
+                expect(this.borderlands.attachments).toContain(this.katana);
+                expect(this.getChatLogs(5)).toContain(
+                    "player2 uses Jak'ithith to take control of and attach Togashi Initiate's Fine Katana to Borderlands Defender"
+                );
+            });
+
+            it('discards attachments when it can not attach them', function() {
+                expect(this.player2).toHavePrompt('Any reactions?');
+
+                this.player2.clickCard(this.jakithit);
+                expect(this.player2).toHavePrompt('Choose an attachment');
+                expect(this.player2).toBeAbleToSelect(this.tattoo);
+                expect(this.player2).toBeAbleToSelect(this.katana);
+
+                this.player2.clickCard(this.tattoo);
+                expect(this.player2).toHavePrompt('Choose a character');
+                expect(this.player2).toBeAbleToSelect(this.jakithit);
+                expect(this.player2).toBeAbleToSelect(this.borderlands);
+
+                this.player2.clickCard(this.borderlands);
+                expect(this.tattoo.location).toBe('conflict discard pile');
+                expect(this.getChatLogs(5)).toContain("player2 uses Jak'ithith to discard Centipede Tattoo");
+            });
         });
     });
 });
