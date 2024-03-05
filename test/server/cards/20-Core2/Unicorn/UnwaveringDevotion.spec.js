@@ -29,11 +29,11 @@ describe('Unwavering Devotion', function () {
                 expect(this.moto.glory).toBe(initialGlory + 1);
             });
 
-            it('does not give attached character +1 glory when they are dishonored', function () {
+            it('gives attached character +1 glory when they are dishonored', function () {
                 const initialGlory = this.moto.glory;
                 this.moto.dishonor();
                 this.player1.playAttachment(this.unwaveringDevotion, this.moto);
-                expect(this.moto.glory).toBe(initialGlory + 0);
+                expect(this.moto.glory).toBe(initialGlory + 1);
             });
         });
 
