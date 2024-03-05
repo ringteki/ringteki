@@ -36,7 +36,7 @@ describe('Day of Brother Horse', function () {
             expect(this.player1).not.toHavePrompt('Triggered Abilities');
         });
 
-        it('if triggered, draw 3 cards and protects a ring', function () {
+        it('if triggered, protects a ring, draw 3 cards and discard 1 card', function () {
             const initialHandSize = this.player1.hand.length;
             this.noMoreActions();
             this.player1.clickPrompt('Pass Conflict');
@@ -45,9 +45,13 @@ describe('Day of Brother Horse', function () {
             expect(this.player1).toHavePrompt('Choose a ring');
 
             this.player1.clickRing('fire');
-            expect(this.player1.hand.length).toBe(initialHandSize - 1 + 3);
+            expect(this.player1).toHavePrompt('Choose a card to discard');
+            expect(this.player1).not.toBeAbleToSelect(this.dayofBrotherHorse);
+            this.player1.clickCard(this.player1.hand[0]);
+
+            expect(this.player1.hand.length).toBe(initialHandSize + 1);
             expect(this.getChatLogs(5)).toContain(
-                "player1 plays Day of Brother Horse to prevent player2 from declaring Fire Ring conflicts, and draw 3 cards - it's a sunny day filled with celebration. The Moto share tales of the desert!"
+                "player1 plays Day of Brother Horse to prevent player2 from declaring Fire Ring conflicts, draw 3 cards, and discard 1 card - it's a sunny day filled with celebration. The Moto share tales of the desert!"
             );
 
             this.noMoreActions();
