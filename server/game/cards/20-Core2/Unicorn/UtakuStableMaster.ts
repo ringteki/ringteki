@@ -20,11 +20,6 @@ export default class UtakuStableMaster extends DrawCard {
     static id = 'utaku-stable-master';
 
     setupCardAbilities() {
-        this.persistentEffect({
-            match: (card, context) => card.controller === context.player && card.isHonored,
-            effect: AbilityDsl.effects.modifyGlory(1)
-        });
-
         this.action({
             title: 'Bow participating character with lower glory than participating cavalry.',
             condition: (context) => context.game.isDuringConflict(),
@@ -32,7 +27,7 @@ export default class UtakuStableMaster extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card: DrawCard, context) =>
                     card.isParticipating() &&
-                    card.glory < participatingCavGlory(context.game.currentConflict, context.player),
+                    card.glory <= participatingCavGlory(context.game.currentConflict, context.player),
                 gameAction: AbilityDsl.actions.bow()
             }
         });
