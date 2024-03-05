@@ -12,16 +12,6 @@ const possibleChoices = {
         condition: (context: AbilityContext) => (context.player?.conflictDeck.size() ?? 0) > 0,
         cards: (context: AbilityContext): Array<DrawCard> => context.player.conflictDeck.first(3),
         player: (context: AbilityContext) => context.player
-    },
-    "Opponent's Dynasty Deck": {
-        condition: (context: AbilityContext) => (context.player?.opponent?.dynastyDeck.size() ?? 0) > 0,
-        cards: (context: AbilityContext): Array<DrawCard> => context.player.opponent.dynastyDeck.first(3),
-        player: (context: AbilityContext) => context.player.opponent
-    },
-    "Opponent's Conflict Deck": {
-        condition: (context: AbilityContext) => (context.player?.opponent?.conflictDeck.size() ?? 0) > 0,
-        cards: (context: AbilityContext): Array<DrawCard> => context.player.opponent.conflictDeck.first(3),
-        player: (context: AbilityContext) => context.player.opponent
     }
 } as const;
 
@@ -51,7 +41,7 @@ export default class StarlitSkies extends DrawCard {
                 ];
                 let choices = [];
                 const handlers = [];
-                const cardHandler = (card) => {
+                const cardHandler = (card: DrawCard) => {
                     context.game.addMessage(messages.pop(), context.player, card);
                     choice.player(context).moveCard(card, destinations.pop());
                     if (messages.length > 0) {
