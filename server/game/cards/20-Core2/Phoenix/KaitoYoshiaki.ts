@@ -1,6 +1,7 @@
 import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
+import type { Conflict } from '../../../conflict';
 
 function isEvil(character: DrawCard): boolean {
     return character.isTainted || character.hasTrait('shadowlands');
@@ -16,7 +17,12 @@ export default class KaitoYoshiaki extends DrawCard {
             condition: (context) => context.source.isParticipating(),
             target: {
                 cardType: CardTypes.Character,
-                cardCondition: (card) => !card.isUnique() && card.isParticipating(),
+                cardCondition: (card: DrawCard, context) =>
+                    card !== context.source &&
+                    card.isParticipating() &&
+                    (context.game.currentConflict as Conflict)
+                        .getCharacters(context.player)
+                        .some((myCard) => myCard.printedCost >= card.printedCost),
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.cardLastingEffect({
                         effect: [
