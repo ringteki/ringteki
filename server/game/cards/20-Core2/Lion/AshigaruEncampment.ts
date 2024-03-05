@@ -1,4 +1,4 @@
-import { CardTypes, Locations } from '../../../Constants';
+import { CardTypes, Locations, Phases } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 import { AshigaruRecruit } from '../../AshigaruRecruit';
@@ -19,6 +19,18 @@ export default class AshigaruEncampment extends DrawCard {
     static id = 'ashigaru-encampment';
 
     setupCardAbilities() {
+        this.reaction({
+            title: 'Fill this province with a card',
+            when: {
+                onPhaseStarted: (event) => event.phase === Phases.Dynasty
+            },
+            gameAction: AbilityDsl.actions.fillProvince((context) => ({
+                location: context.source.location,
+                fillTo: context.source.controller.getDynastyCardsInProvince(context.source.location).length + 1
+            })),
+            effect: 'fill its province with 1 card'
+        });
+
         this.action({
             title: 'Recruit a fresh Ashigaru',
             effect: 'recruit {1}!',
