@@ -8,12 +8,10 @@ export default class HoneypotVillage extends ProvinceCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Attacker moves a character to the conflict',
+            title: 'Move a character in',
             target: {
                 cardType: CardTypes.Character,
-                controller: (context) => (context.player.isAttackingPlayer() ? Players.Self : Players.Opponent),
-                player: (context) => (context.player.isAttackingPlayer() ? Players.Self : Players.Opponent),
-                activePromptTitle: 'Choose a character to move to the conflict',
+                controller: Players.Opponent,
                 cardCondition: (card: DrawCard) => !card.bowed,
                 gameAction: AbilityDsl.actions.moveToConflict()
             }
