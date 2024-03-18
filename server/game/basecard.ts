@@ -1,5 +1,4 @@
 const AbilityDsl = require('./abilitydsl.js');
-const CustomPlayAction = require('./customplayaction.js');
 const Effects = require('./effects');
 const EffectSource = require('./EffectSource.js');
 import CardAbility = require('./CardAbility');
@@ -355,14 +354,6 @@ class BaseCard extends EffectSource {
             }
         };
         this.triggeredAbility(AbilityTypes.DuelReaction, newProperties);
-    }
-
-    /**
-     * Defines a special play action that can occur when the card is outside the
-     * play area (e.g. Lady-in-Waiting's dupe marshal ability)
-     */
-    playAction(properties): void {
-        this.abilities.playActions.push(new CustomPlayAction(properties));
     }
 
     /**
