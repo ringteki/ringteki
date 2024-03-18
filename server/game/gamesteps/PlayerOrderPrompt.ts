@@ -1,5 +1,5 @@
-const _ = require('underscore');
-const { UiPrompt } = require('./UiPrompt.js');
+import type Player from '../player';
+import { UiPrompt } from './UiPrompt';
 
 /**
  * Represents a UI Prompt that prompts each player individually in first-player
@@ -7,49 +7,49 @@ const { UiPrompt } = require('./UiPrompt.js');
  * current player has been completed. Overriding skipCondition will exclude
  * any matching players from the prompt.
  */
-class PlayerOrderPrompt extends UiPrompt {
-    get currentPlayer() {
+export class PlayerOrderPrompt extends UiPrompt {
+    players: Player[];
+
+    public get currentPlayer() {
         this.lazyFetchPlayers();
         return this.players[0];
     }
 
-    lazyFetchPlayers() {
-        if(!this.players) {
+    private lazyFetchPlayers(): void {
+        if (!this.players) {
             this.players = this.game.getPlayersInFirstPlayerOrder();
         }
     }
 
-    skipPlayers() {
+    private skipPlayers(): void {
         this.lazyFetchPlayers();
-        this.players = _.reject(this.players, p => this.skipCondition(p));
+        this.players = this.players.filter((p) => !this.skipCondition(p));
     }
 
-    skipCondition(player) { // eslint-disable-line no-unused-vars
+    private skipCondition(player: Player): boolean {
         return false;
     }
 
-    completePlayer() {
+    protected completePlayer(): void {
         this.lazyFetchPlayers();
         this.players.shift();
     }
 
-    setPlayers(players) {
+    private setPlayers(players: Player[]): void {
         this.players = players;
     }
 
-    isComplete() {
+    public isComplete(): boolean {
         this.lazyFetchPlayers();
         return this.players.length === 0;
     }
 
-    activeCondition(player) {
+    public activeCondition(player: Player): boolean {
         return player === this.currentPlayer;
     }
 
-    continue() {
+    public continue(): boolean {
         this.skipPlayers();
         return super.continue();
     }
 }
-
-module.exports = PlayerOrderPrompt;

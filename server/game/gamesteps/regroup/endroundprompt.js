@@ -1,4 +1,4 @@
-const PlayerOrderPrompt = require('../playerorderprompt.js');
+const { PlayerOrderPrompt } = require('../PlayerOrderPrompt.js');
 
 class EndRoundPrompt extends PlayerOrderPrompt {
     activePrompt() {
