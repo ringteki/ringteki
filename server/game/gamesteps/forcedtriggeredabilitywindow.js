@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const { BaseStep } = require('./BaseStep');
-const TriggeredAbilityWindowTitles = require('./triggeredabilitywindowtitles.js');
+const { TriggeredAbilityWindowTitle } = require('./TriggeredAbilityWindowTitle');
 const { Locations } = require('../Constants');
 
 class ForcedTriggeredAbilityWindow extends BaseStep {
@@ -72,7 +72,7 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
         return {
             source: 'Triggered Abilities',
             controls: this.getPromptControls(),
-            activePromptTitle: TriggeredAbilityWindowTitles.getTitle(this.abilityType, this.events),
+            activePromptTitle: TriggeredAbilityWindowTitle.getTitle(this.abilityType, this.events),
             waitingPromptTitle: 'Waiting for opponent'
         };
     }
@@ -157,7 +157,7 @@ class ForcedTriggeredAbilityWindow extends BaseStep {
             return;
         }
         // Several events affect this card and the chosen ability can respond to more than one of them - prompt player to pick one
-        let menuChoices = choices.map(context => TriggeredAbilityWindowTitles.getAction(context.event));
+        let menuChoices = choices.map(context => TriggeredAbilityWindowTitle.getAction(context.event));
         let handlers = choices.map(context => (() => this.resolveAbility(context)));
         if(addBackButton) {
             menuChoices.push('Back');

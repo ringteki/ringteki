@@ -1,7 +1,7 @@
 const _ = require('underscore');
 
 const ForcedTriggeredAbilityWindow = require('./forcedtriggeredabilitywindow.js');
-const TriggeredAbilityWindowTitles = require('./triggeredabilitywindowtitles.js');
+const { TriggeredAbilityWindowTitle } = require('./TriggeredAbilityWindowTitle');
 
 const { CardTypes, EventNames, AbilityTypes } = require('../Constants');
 
@@ -30,7 +30,7 @@ class TriggeredAbilityWindow extends ForcedTriggeredAbilityWindow {
             source: 'Triggered Abilities',
             waitingPromptTitle: 'Waiting for opponent',
             activePrompt: {
-                promptTitle: TriggeredAbilityWindowTitles.getTitle(this.abilityType, this.events),
+                promptTitle: TriggeredAbilityWindowTitle.getTitle(this.abilityType, this.events),
                 controls: this.getPromptControls(),
                 buttons: [
                     { timer: true, method: 'pass' },
