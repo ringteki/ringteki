@@ -795,15 +795,7 @@ class BaseCard extends EffectSource {
     }
 
     isParticipatingFor(player: Player): boolean {
-        if (this.isAttacking() && player.isAttackingPlayer()) {
-            return true;
-        }
-
-        if (this.isDefending() && player.isDefendingPlayer()) {
-            return true;
-        }
-
-        return false;
+        return (this.isAttacking() && player.isAttackingPlayer()) || (this.isDefending() && player.isDefendingPlayer());
     }
 
     isUnique(): boolean {

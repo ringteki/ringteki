@@ -43,18 +43,21 @@ describe('Dai-Tsuchi', function () {
                     },
                     player2: {
                         inPlay: ['adept-of-the-waves', 'miya-mystic'],
-                        hand: ['ornate-fan', 'cloud-the-mind']
+                        hand: ['ornate-fan', 'cloud-the-mind', 'sato']
                     }
                 });
 
                 this.purifier = this.player1.findCardByName('kuni-purifier');
+                this.sato = this.player2.findCardByName('sato');
 
                 this.player1.pass();
                 this.player2.playAttachment('ornate-fan', 'adept-of-the-waves');
                 this.player1.playAttachment('dai-tsuchi', 'kuni-purifier');
                 this.player2.playAttachment('cloud-the-mind', 'miya-mystic');
+                this.player1.pass();
+                this.player2.playAttachment(this.sato, this.purifier);
                 this.ornatefan = this.player2.findCardByName('ornate-fan');
-                this.finekatana = this.player1.findCardByName('dai-tsuchi');
+                this.daiTsuchi = this.player1.findCardByName('dai-tsuchi');
                 this.cloud = this.player2.findCardByName('cloud-the-mind');
                 this.adept = this.player2.findCardByName('adept-of-the-waves');
                 this.adept.fate = 1;
@@ -64,7 +67,7 @@ describe('Dai-Tsuchi', function () {
             it('should return attachment to hand', function () {
                 this.initiateConflict({
                     attackers: [this.purifier],
-                    defenders: ['adept-of-the-waves'],
+                    defenders: [this.adept],
                     type: 'military'
                 });
                 this.player2.pass();
@@ -77,14 +80,15 @@ describe('Dai-Tsuchi', function () {
             it('should only allow choosing participating character attachments', function () {
                 this.initiateConflict({
                     attackers: [this.purifier],
-                    defenders: ['adept-of-the-waves'],
+                    defenders: [this.adept],
                     type: 'military'
                 });
                 this.player2.pass();
                 this.player1.clickCard(this.purifier);
                 expect(this.player1).toBeAbleToSelect(this.ornatefan);
-                expect(this.player1).toBeAbleToSelect(this.finekatana);
+                expect(this.player1).not.toBeAbleToSelect(this.daiTsuchi);
                 expect(this.player1).not.toBeAbleToSelect(this.cloud);
+                expect(this.player1).not.toBeAbleToSelect(this.sato);
             });
 
             it('should not allow copies of attachment be played again until end of conflict', function () {
