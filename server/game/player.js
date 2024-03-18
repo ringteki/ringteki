@@ -8,7 +8,7 @@ const { CostReducer } = require('./CostReducer');
 const GameActions = require('./GameActions/GameActions');
 const { RingEffects } = require('./RingEffects.js');
 const { PlayableLocation } = require('./PlayableLocation');
-const PlayerPromptState = require('./playerpromptstate.js');
+const { PlayerPromptState } = require('./PlayerPromptState.js');
 const { RoleCard } = require('./RoleCard');
 const { StrongholdCard } = require('./StrongholdCard.js');
 
