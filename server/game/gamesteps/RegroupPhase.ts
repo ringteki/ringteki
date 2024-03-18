@@ -5,7 +5,7 @@ import type Player from '../player';
 import { Phase } from './Phase';
 import { SimpleStep } from './SimpleStep';
 import ActionWindow from './actionwindow';
-import EndRoundPrompt from './regroup/endroundprompt';
+import { EndRoundPrompt } from './regroup/EndRoundPrompt'
 
 /**
  * V Regroup Phase
