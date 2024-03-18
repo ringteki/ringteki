@@ -1,5 +1,5 @@
 const Game = require('../../../build/server/game/game.js');
-const Spectator = require('../../../build/server/game/spectator.js');
+const { Spectator } = require('../../../build/server/game/Spectator.js');
 
 describe('Game', function() {
     beforeEach(function() {
