@@ -2,7 +2,7 @@ import type { AbilityContext } from '../AbilityContext';
 import type BaseAction from '../BaseAction';
 import { Locations, PlayTypes, Stages } from '../Constants';
 import type DrawCard from '../drawcard';
-import type Event from '../Events/Event';
+import type { Event } from '../Events/Event';
 import AbilityResolver from '../gamesteps/abilityresolver';
 import type { TriggeredAbilityContext } from '../TriggeredAbilityContext';
 import { CardGameAction, type CardActionProperties } from './CardGameAction';

@@ -1,7 +1,7 @@
 import type CardAbility from '../CardAbility';
 import { EventNames } from '../Constants';
 import type DrawCard from '../drawcard';
-import type Event from '../Events/Event';
+import type { Event } from '../Events/Event';
 import InitiateCardAbilityEvent from '../Events/InitiateCardAbilityEvent';
 import AbilityResolver from '../gamesteps/abilityresolver';
 import { SimpleStep } from '../gamesteps/SimpleStep';

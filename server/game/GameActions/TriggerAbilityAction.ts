@@ -1,6 +1,6 @@
 import type CardAbility from '../CardAbility';
 import type DrawCard from '../drawcard';
-import type Event from '../Events/Event';
+import type { Event } from '../Events/Event';
 import AbilityResolver from '../gamesteps/abilityresolver';
 import type Player from '../player';
 import type TriggeredAbility from '../triggeredability';

@@ -1,7 +1,7 @@
 import { AbilityContext } from '../AbilityContext';
 import { EventNames, Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
-import Event from '../Events/Event';
+import { Event } from '../Events/Event';
 import { removeFate } from '../GameActions/GameActions';
 import BaseCard from '../basecard';
 import Ring from '../ring';

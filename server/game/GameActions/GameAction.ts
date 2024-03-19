@@ -1,7 +1,7 @@
 import type { AbilityContext } from '../AbilityContext';
 import type BaseCard from '../basecard';
 import { CardTypes, EventNames, Stages } from '../Constants';
-import Event from '../Events/Event';
+import { Event } from '../Events/Event';
 import type Player from '../player';
 import type Ring from '../ring';
 import type { StatusToken } from '../StatusToken';

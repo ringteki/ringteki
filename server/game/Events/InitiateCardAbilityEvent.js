@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const Event = require('./Event.js');
+const { Event } = require('./Event.js');
 const { EventNames } = require('../Constants');
 
 class InitiateCardAbilityEvent extends Event {

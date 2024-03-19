@@ -1,6 +1,6 @@
 import type { AbilityContext } from '../AbilityContext';
 import { EffectNames, EventNames } from '../Constants';
-import Event from '../Events/Event';
+import { Event } from '../Events/Event';
 import type Player from '../player';
 import Ring from '../ring';
 import { RingEffects } from '../RingEffects';

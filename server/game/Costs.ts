@@ -1,6 +1,6 @@
 import { AbilityContext } from './AbilityContext';
 import { CharacterStatus, Decks, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
-import Event from './Events/Event';
+import { Event } from './Events/Event';
 import { CardGameAction } from './GameActions/CardGameAction';
 import { GameAction } from './GameActions/GameAction';
 import * as GameActions from './GameActions/GameActions';
