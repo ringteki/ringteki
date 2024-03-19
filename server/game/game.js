@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 
 const ChatCommands = require('./chatcommands.js');
 const { GameChat } = require('./GameChat');
-const EffectEngine = require('./effectengine.js');
+const { EffectEngine } = require('./EffectEngine.js');
 const Player = require('./player.js');
 const { Spectator } = require('./Spectator.js');
 const { AnonymousSpectator } = require('./AnonymousSpectator');
