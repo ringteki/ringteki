@@ -5,13 +5,21 @@ describe('The East Wind', function () {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['cautious-scout'],
-                    hand: ['compass', 'fine-katana', 'adopted-kin', 'adorned-barcha', 'inscribed-tanto'],
+                    hand: [
+                        'compass',
+                        'fine-katana',
+                        'adopted-kin',
+                        'adorned-barcha',
+                        'inscribed-tanto',
+                        'child-of-saltless-water'
+                    ],
                     stronghold: ['the-east-wind']
                 },
                 player2: {}
             });
 
             this.eastWind = this.player1.findCardByName('the-east-wind');
+            this.childOfSaltlessWater = this.player1.findCardByName('child-of-saltless-water');
             this.compass = this.player1.findCardByName('compass');
             this.fineKatana = this.player1.findCardByName('fine-katana');
             this.adoptedKin = this.player1.findCardByName('adopted-kin');
@@ -78,6 +86,23 @@ describe('The East Wind', function () {
 
             this.player1.clickPrompt('Take nothing');
             expect(this.player1.fate).toBe(initialFate + 1);
+        });
+
+        it('works when deck is too small', function () {
+            const initialFate = this.player1.fate;
+            this.player1.reduceDeckToNumber('conflict deck', 1);
+
+            this.player1.clickCard(this.childOfSaltlessWater);
+            this.player1.clickPrompt('0');
+            expect(this.player1).toHavePrompt(
+                'Any reactions to Child of Saltless Water leaving play, Child of Saltless Water being played or Child of Saltless Water entering play?'
+            );
+
+            this.player1.clickCard(this.eastWind);
+            expect(this.player1).toHavePrompt('Select a card to reveal');
+
+            this.player1.clickPrompt('Take nothing');
+            expect(this.player1.fate).toBe(initialFate);
         });
     });
 });
