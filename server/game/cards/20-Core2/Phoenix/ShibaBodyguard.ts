@@ -15,11 +15,11 @@ export default class ShibaBodyguard extends DrawCard {
                 cardType: CardTypes.Character,
                 cardCondition: (card) => !card.hasTrait('bushi'),
                 gameAction: AbilityDsl.actions.placeFate((context) => ({
-                    origin: context.target.controller
+                    origin: context.player
                 }))
             },
             effect: "place a fate from {1}'s fate pool on {0}",
-            effectArgs: (context) => [context.target.controller]
+            effectArgs: (context) => [context.player]
         });
     }
 }

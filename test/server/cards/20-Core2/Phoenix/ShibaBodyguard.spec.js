@@ -6,6 +6,9 @@ describe('Shiba Bodyguard', function () {
                 player1: {
                     inPlay: ['shiba-bodyguard', 'hida-guardian', 'adept-of-the-waves', 'solemn-scholar'],
                     fate: 6
+                },
+                player2:{
+                    inPlay: ['doji-whisperer'],
                 }
             });
             this.shibaBodyguard = this.player1.findCardByName('shiba-bodyguard');
@@ -14,9 +17,11 @@ describe('Shiba Bodyguard', function () {
             this.hidaGuardian.fate = 1;
             this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves');
             this.adeptOfTheWaves.fate = 1;
+
+            this.dojiWhisperer = this.player2.findCardByName('doji-whisperer');
         });
 
-        it('fate phase: chooses a non-bushi', function () {
+        it('chooses a non-bushi', function () {
             this.flow.finishConflictPhase();
             expect(this.player1).toHavePrompt('Fate Phase');
 
@@ -37,7 +42,7 @@ describe('Shiba Bodyguard', function () {
             );
         });
 
-        it('fate phase: add fate to a non-bushi', function () {
+        it('add fate to a non-bushi', function () {
             this.flow.finishConflictPhase();
             expect(this.player1).toHavePrompt('Fate Phase');
 
@@ -53,7 +58,23 @@ describe('Shiba Bodyguard', function () {
             expect(this.player1).toHavePrompt('Fate Phase');
         });
 
-        it('fate phase: saves a fateless non-bushi', function () {
+        it('add fate to a non-bushi controlled by the opponent', function () {
+            this.flow.finishConflictPhase();
+            expect(this.player1).toHavePrompt('Fate Phase');
+
+            this.player1.clickCard(this.shibaBodyguard);
+            this.player1.clickCard(this.shibaBodyguard);
+            this.player1.clickCard(this.dojiWhisperer);
+            expect(this.player1.fate).toBe(5);
+            expect(this.dojiWhisperer.fate).toBe(1);
+            expect(this.getChatLogs(5)).toContain(
+                "player1 uses Shiba Bodyguard to place a fate from player1's fate pool on Doji Whisperer"
+            );
+            expect(this.dojiWhisperer.location).toBe('play area');
+            expect(this.player1).toHavePrompt('Fate Phase');
+        });
+
+        it('saves a fateless non-bushi', function () {
             this.flow.finishConflictPhase();
             expect(this.player1).toHavePrompt('Fate Phase');
 
@@ -64,10 +85,11 @@ describe('Shiba Bodyguard', function () {
             expect(this.getChatLogs(5)).toContain(
                 "player1 uses Shiba Bodyguard to place a fate from player1's fate pool on Solemn Scholar"
             );
+
+            this.player2.clickPrompt('Done');
             expect(this.player1.fate).toBe(5);
             expect(this.solemnScholar.fate).toBe(0);
             expect(this.solemnScholar.location).toBe('play area');
-
             expect(this.player1).toHavePrompt('Discard Dynasty Cards');
         });
     });
