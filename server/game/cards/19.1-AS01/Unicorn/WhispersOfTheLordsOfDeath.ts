@@ -1,8 +1,8 @@
+import AbilityDsl from '../../../abilitydsl';
+import type BaseCard from '../../../basecard';
 import { CardTypes, FavorTypes, Locations, Players } from '../../../Constants';
-import AbilityDsl = require('../../../abilitydsl');
-import BaseCard = require('../../../basecard');
-import DrawCard = require('../../../drawcard');
-import Player = require('../../../player');
+import DrawCard from '../../../drawcard';
+import type Player from '../../../player';
 
 export default class WhispersOfTheLordsOfDeath extends DrawCard {
     static id = 'whispers-of-the-lords-of-death';
@@ -18,7 +18,9 @@ export default class WhispersOfTheLordsOfDeath extends DrawCard {
             location: [Locations.Hand],
             when: {
                 onCardLeavesPlay: (event, context) =>
-                    event.card.type === CardTypes.Character && context.game.isDuringConflict()
+                    event.card.type === CardTypes.Character &&
+                    event.cardStateWhenLeftPlay.location === Locations.PlayArea &&
+                    context.game.isDuringConflict()
             },
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.putIntoPlay((context) => ({ target: context.source })),

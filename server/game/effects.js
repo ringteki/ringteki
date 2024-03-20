@@ -9,6 +9,7 @@ const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmen
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
 const { canPlayFromOwn } = require('./Effects/Library/canPlayFromOwn');
 const { cardCannot } = require('./Effects/Library/cardCannot');
+const { changePlayerGloryModifier } = require('./Effects/Library/changePlayerGloryModifier');
 const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
 const { gainAbility } = require('./Effects/Library/gainAbility');
@@ -238,7 +239,7 @@ const Effects = {
     modifyHonorTransferReceived: (amount) =>
         EffectBuilder.player.static(EffectNames.ModifyHonorTransferReceived, amount),
     cannotResolveRings: () => EffectBuilder.player.static(EffectNames.CannotResolveRings),
-    changePlayerGloryModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerGloryModifier, value),
+    changePlayerGloryModifier,
     changePlayerSkillModifier: (value) => EffectBuilder.player.flexible(EffectNames.ChangePlayerSkillModifier, value),
     customDetachedPlayer: (properties) => EffectBuilder.player.detached(EffectNames.CustomEffect, properties),
     gainActionPhasePriority: () =>

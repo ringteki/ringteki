@@ -43,8 +43,9 @@ describe('Whispers of the Lords of Death', function () {
                         hand: ['whispers-of-the-lords-of-death', 'fine-katana']
                     },
                     player2: {
-                        inPlay: ['solemn-scholar'],
-                        hand: ['assassination']
+                        inPlay: ['solemn-scholar', 'isawa-tadaka-2'],
+                        hand: ['assassination'],
+                        dynastyDiscard: ['adept-of-the-waves']
                     }
                 });
 
@@ -55,6 +56,8 @@ describe('Whispers of the Lords of Death', function () {
 
                 this.solemnScholar = this.player2.findCardByName('solemn-scholar');
                 this.assassination = this.player2.findCardByName('assassination');
+                this.isawaTadaka = this.player2.findCardByName('isawa-tadaka-2');
+                this.adeptOfTheWaves = this.player2.findCardByName('adept-of-the-waves');
 
                 this.player1.clickCard(this.katana);
                 this.player1.clickCard(this.wayfinder);
@@ -67,6 +70,23 @@ describe('Whispers of the Lords of Death', function () {
 
                 this.player1.clickCard(this.whispers);
                 expect(this.whispers.location).toBe('hand');
+            });
+
+            it('does not trigger when a character is removed from the game coming from the discard pile', function () {
+                this.noMoreActions();
+
+                this.initiateConflict({
+                    ring: 'earth',
+                    type: 'military',
+                    attackers: [this.wayfinder],
+                    defenders: []
+                });
+
+                this.player2.clickCard(this.isawaTadaka);
+                this.player2.clickCard(this.adeptOfTheWaves);
+                this.player2.clickPrompt('Done');
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+                expect(this.player1).not.toBeAbleToSelect(this.whispers);
             });
 
             it('trigger on own character leaving play due to own action', function () {
@@ -89,7 +109,7 @@ describe('Whispers of the Lords of Death', function () {
                 expect(this.getChatLogs(5)).toContain(
                     'player1 uses Whispers of the Lords of Death to put Whispers of the Lords of Death into play and claim the Imperial Favor'
                 );
-                expect(this.getChatLogs(5)).toContain('player1 claims the Emperor\'s military favor!');
+                expect(this.getChatLogs(5)).toContain("player1 claims the Emperor's military favor!");
             });
 
             it('trigger on own character leaving play due to opponent action', function () {
@@ -111,7 +131,7 @@ describe('Whispers of the Lords of Death', function () {
                 expect(this.getChatLogs(5)).toContain(
                     'player1 uses Whispers of the Lords of Death to put Whispers of the Lords of Death into play and claim the Imperial Favor'
                 );
-                expect(this.getChatLogs(5)).toContain('player1 claims the Emperor\'s military favor!');
+                expect(this.getChatLogs(5)).toContain("player1 claims the Emperor's military favor!");
             });
         });
     });
