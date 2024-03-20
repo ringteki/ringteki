@@ -15,7 +15,6 @@ export default class TennyosBlessing extends DrawCard {
                 controller: Players.Self,
                 cardCondition: (card) => card.location !== Locations.StrongholdProvince,
                 gameAction: AbilityDsl.actions.deckSearch({
-                    cardCondition: (card) => card.type === CardTypes.Character,
                     targetMode: TargetModes.UpTo,
                     numCards: 2,
                     amount: 4,
@@ -35,7 +34,7 @@ export default class TennyosBlessing extends DrawCard {
                                 card.facedown = false;
                             });
                         } else {
-                            context.game.addMessage('{0} selects no characters', event.player);
+                            context.game.addMessage('{0} selects no cards', event.player);
                         }
                     }
                 })
