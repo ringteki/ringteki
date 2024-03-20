@@ -51,7 +51,7 @@ describe('Lay of the Land', function () {
 
             this.player1.clickCard(this.brushfires);
             expect(this.brushfires.facedown).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal Brushfires');
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal province 1');
         });
 
         it('turns facedown a revealed province', function () {
@@ -65,7 +65,7 @@ describe('Lay of the Land', function () {
             this.player1.clickCard(this.land);
             this.player1.clickCard(this.brushfires);
             expect(this.brushfires.facedown).toBe(false);
-            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal Brushfires');
+            expect(this.getChatLogs(5)).toContain('player1 plays Lay of the Land to reveal province 1');
         });
 
         it('should not work in a conflict', function () {

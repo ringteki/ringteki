@@ -18,8 +18,8 @@ export default class LayOfTheLand extends DrawCard {
                 gameAction: [AbilityDsl.actions.reveal(), AbilityDsl.actions.turnFacedown()]
             },
             effect: '{1} {2}',
-            effectArgs: (context) =>
-                context.target.facedown ? ['reveal', context.target] : ['flip facedown', context.target]
+            effectArgs: ({ target }: { target: ProvinceCard }) =>
+                target.isFaceup() ? ['flip facedown', target] : ['reveal', target.location]
         });
     }
 }
