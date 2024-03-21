@@ -66,7 +66,7 @@ export class ReturnToDeckAction extends CardGameAction {
         this.updateLeavesPlayEvent(event, card, context, additionalProperties);
         event.destination = card.isDynasty ? Locations.DynastyDeck : Locations.ConflictDeck;
         event.options = { bottom };
-        if (shuffle && (target.length === 0 || card === target[target.length - 1])) {
+        if (shuffle && ((target as any).length === 0 || card === target[(target as any).length - 1])) {
             event.shuffle = true;
         }
     }

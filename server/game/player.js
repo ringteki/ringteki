@@ -1860,6 +1860,10 @@ class Player extends GameObject {
 
         return _.extend(state, promptState);
     }
+
+    get name() {
+        return ''
+    }
 }
 
 module.exports = Player;

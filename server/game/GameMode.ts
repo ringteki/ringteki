@@ -3,6 +3,7 @@ import type { CardAction } from './CardAction';
 import { AbilityTypes, Locations, Phases } from './Constants';
 import type BaseCard from './basecard';
 import type { ProvinceCard } from './ProvinceCard';
+import DrawCard from './drawcard';
 
 type RingChoices = Record<string, (context: AbilityContext) => boolean>;
 
@@ -96,6 +97,7 @@ const Stronghold: GameMode = {
         [EARTH_CHOICE.SKIP]: () => optional
     }),
     ringWaterTargetCondition: (card: BaseCard, context: AbilityContext) =>
+        card instanceof DrawCard &&
         card.location === Locations.PlayArea &&
         (card.bowed || (card.getFate() === 0 && card.allowGameAction('bow', context))),
     winConReachedConquestVictory: (provinceBeingBroken: ProvinceCard) =>
@@ -136,6 +138,7 @@ const Skirmish: GameMode = {
         [EARTH_CHOICE.SKIP]: () => optional
     }),
     ringWaterTargetCondition: (card: BaseCard, context: AbilityContext) =>
+        card instanceof DrawCard &&
         card.location === Locations.PlayArea &&
         card.getFate() <= 1 &&
         !card.isParticipating() &&

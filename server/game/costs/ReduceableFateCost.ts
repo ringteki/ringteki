@@ -3,13 +3,13 @@ import { EventNames, Locations, Players } from '../Constants';
 import type { Cost, Result } from '../Costs';
 import { Event } from '../Events/Event';
 import { removeFate } from '../GameActions/GameActions';
-import BaseCard from '../basecard';
 import Ring from '../ring';
+import DrawCard from '../drawcard';
 
 const CANCELLED = 'CANCELLED';
 const STOP = 'STOP';
 
-type PoolOption = BaseCard | Ring | typeof CANCELLED | typeof STOP;
+type PoolOption = DrawCard | Ring | typeof CANCELLED | typeof STOP;
 type Props = {
     reducedCost: number;
     remainingPoolTotal: number;
@@ -41,7 +41,7 @@ export class ReduceableFateCost implements Cost {
         return context.player.fate >= minCost && context.player.checkRestrictions('spendFate', context);
     }
 
-    protected getAlternateFatePools(context: AbilityContext): Set<BaseCard | Ring> {
+    protected getAlternateFatePools(context: AbilityContext): Set<DrawCard | Ring> {
         return new Set(context.player.getAlternateFatePools(context.playType, context.source, context));
     }
 
@@ -49,13 +49,13 @@ export class ReduceableFateCost implements Cost {
         const alternatePools = this.getAlternateFatePools(context);
 
         const ringPool = new Set<Ring>();
-        const cardPool = new Set<BaseCard>();
+        const cardPool = new Set<DrawCard>();
         let alternatePoolTotal = 0;
         for (const pool of alternatePools) {
-            if (pool.printedType === 'ring') {
-                ringPool.add(pool as Ring);
-            } else {
-                cardPool.add(pool as BaseCard);
+            if (pool instanceof Ring) {
+                ringPool.add(pool);
+            } else if (pool instanceof DrawCard) {
+                cardPool.add(pool);
             }
             alternatePoolTotal += pool.getFate();
         }
@@ -167,7 +167,7 @@ export class ReduceableFateCost implements Cost {
     private promptForAlternateFateCardSelect(
         context: AbilityContext,
         minFate: number,
-        cards: Set<BaseCard | Ring>,
+        cards: Set<DrawCard | Ring>,
         handler: (alternatePool: PoolOption) => void
     ) {
         const currentCard = context.source;
@@ -227,7 +227,9 @@ export class ReduceableFateCost implements Cost {
 
         context.player.setSelectableCards([properties.pool]);
         context.game.promptWithHandlerMenu(context.player, {
-            activePromptTitle: `Choose amount of fate to spend from ${properties.pool.name}`,
+            activePromptTitle: `Choose amount of fate to spend from ${
+                properties.pool instanceof Ring ? properties.pool.id : properties.pool.name
+            }`,
             choices: choices,
             choiceHandler: (choice: string) => {
                 context.player.clearSelectableCards();

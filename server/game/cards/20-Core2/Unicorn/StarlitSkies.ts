@@ -15,6 +15,7 @@ const possibleChoices = {
     }
 } as const;
 
+
 export default class StarlitSkies extends DrawCard {
     static id = 'starlit-skies';
 
@@ -25,9 +26,9 @@ export default class StarlitSkies extends DrawCard {
             target: {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Choose which deck to look at:',
-                choices: Object.fromEntries(
+                choices: (Object.fromEntries(
                     Object.entries(possibleChoices).map(([name, { condition }]) => [name, condition])
-                )
+                ) as any)
             },
             effect: "look at the top 3 cards of {1}'s {2}",
             effectArgs: (context) => [context.player, context.select.toLowerCase()],

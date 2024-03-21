@@ -1,13 +1,28 @@
-const _ = require('underscore');
-const { SelectChoice } = require('./SelectChoice.js');
-const { Stages, Players } = require('../Constants.js');
+import { AbilityContext } from '../AbilityContext';
+import BaseAbility from '../baseability';
+import { Players, Stages, TargetModes } from '../Constants';
+import type { GameAction } from '../GameActions/GameAction';
+import { AbilityTargetBase } from './AbilityTargetBase';
+import { SelectChoice } from './SelectChoice';
 
-class AbilityTargetSelect {
-    constructor(name, properties, ability) {
-        this.name = name;
-        this.properties = properties;
-        this.dependentTarget = null;
-        this.dependentCost = null;
+export type AbilityTargetSelectProps = {
+    source?: any;
+    condition?: (context: AbilityContext) => boolean;
+    dependsOn?: string;
+    mode: TargetModes.Select;
+    choices: Record<string, GameAction | boolean> | ((context: AbilityContext) => Record<string, GameAction | boolean>);
+    targets?: boolean;
+    player?: Players | ((context: AbilityContext) => Players);
+    activePromptTitle?: string;
+};
+
+export class AbilityTargetSelect extends AbilityTargetBase{
+    constructor(
+        public name: string,
+        private properties: AbilityTargetSelectProps,
+        ability: BaseAbility
+    ) {
+        super();
         if (this.properties.dependsOn) {
             let dependsOnTarget = ability.targets.find((target) => target.name === this.properties.dependsOn);
             dependsOnTarget.dependentTarget = this;
@@ -42,7 +57,7 @@ class AbilityTargetSelect {
         if (this.dependentTarget && !this.dependentTarget.hasLegalTarget(contextCopy)) {
             return false;
         }
-        let choice = this.getChoices(context)[key];
+        let choice: any = this.getChoices(context)[key];
         if (typeof choice === 'function') {
             return choice(contextCopy);
         }
@@ -79,13 +94,11 @@ class AbilityTargetSelect {
         }
         let promptTitle = this.properties.activePromptTitle || 'Select one';
         let choices = Object.keys(this.getChoices(context)).filter((key) => this.isChoiceLegal(key, context));
-        let handlers = _.map(choices, (choice) => {
-            return () => {
-                context.selects[this.name] = new SelectChoice(choice);
-                if (this.name === 'target') {
-                    context.select = choice;
-                }
-            };
+        let handlers = choices.map((choice) => () => {
+            context.selects[this.name] = new SelectChoice(choice);
+            if (this.name === 'target') {
+                context.select = choice;
+            }
         });
         if (player !== context.player.opponent && context.stage === Stages.PreTarget) {
             if (!targetResults.noCostsFirstButton) {
@@ -141,8 +154,6 @@ class AbilityTargetSelect {
             return true;
         }
         let actions = Object.values(this.getChoices(context)).filter((value) => typeof value !== 'function');
-        return actions.some((action) => action.hasTargetsChosenByInitiatingPlayer(context));
+        return actions.some((action) => (action as any).hasTargetsChosenByInitiatingPlayer(context));
     }
 }
-
-module.exports = AbilityTargetSelect;

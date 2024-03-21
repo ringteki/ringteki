@@ -1,6 +1,6 @@
 import { Durations, EffectNames, EventNames } from './Constants';
 import type Effect from './Effects/Effect';
-import type EffectSource from './EffectSource';
+import type { EffectSource } from './EffectSource';
 import { EventRegistrar } from './EventRegistrar';
 import type Game from './game';
 

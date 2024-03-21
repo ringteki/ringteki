@@ -1,7 +1,7 @@
 import BaseAbility from './baseability';
 import type BaseCard from './basecard';
 import { Locations, PlayTypes, Stages } from './Constants';
-import EffectSource from './EffectSource';
+import { EffectSource } from './EffectSource';
 import type Game from './game';
 import type { GameAction } from './GameActions/GameAction';
 import type Player from './player';

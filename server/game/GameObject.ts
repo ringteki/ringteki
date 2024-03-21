@@ -2,7 +2,6 @@ import { v1 as uuidV1 } from 'uuid';
 
 import type { AbilityContext } from './AbilityContext';
 import { EffectNames, Stages } from './Constants';
-import type DrawCard from './drawcard';
 import type { CardEffect } from './Effects/types';
 import type Game from './game';
 import type { GameAction } from './GameActions/GameAction';
@@ -11,21 +10,12 @@ import type Player from './player';
 
 export class GameObject {
     public uuid = uuidV1();
-    protected id: string;
-    protected printedType = '';
-    private facedown = false;
-    private effects = [] as CardEffect[];
+    protected effects = [] as CardEffect[];
 
     public constructor(
         public game: Game,
-        public name: string
-    ) {
-        this.id = name;
-    }
-
-    public get type() {
-        return this.getType();
-    }
+        public id: string
+    ) {}
 
     public addEffect(effect: CardEffect) {
         this.effects.push(effect);
@@ -64,41 +54,6 @@ export class GameObject {
         );
     }
 
-    public isUnique() {
-        return false;
-    }
-
-    public getType() {
-        if (this.anyEffect(EffectNames.ChangeType)) {
-            return this.mostRecentEffect(EffectNames.ChangeType);
-        }
-        return this.printedType;
-    }
-
-    public getPrintedFaction() {
-        return null;
-    }
-
-    public hasKeyword() {
-        return false;
-    }
-
-    public hasTrait() {
-        return false;
-    }
-
-    public getTraits() {
-        return [];
-    }
-
-    public isFaction() {
-        return false;
-    }
-
-    public hasToken() {
-        return false;
-    }
-
     public isTemptationsMaho() {
         return false;
     }
@@ -106,10 +61,10 @@ export class GameObject {
     public getShortSummary() {
         return {
             id: this.id,
-            label: this.name,
-            name: this.name,
-            facedown: this.isFacedown(),
-            type: this.getType(),
+            label: this.id,
+            name: this.id,
+            facedown: false,
+            type: '',
             uuid: this.uuid
         };
     }
@@ -153,20 +108,21 @@ export class GameObject {
         return true;
     }
 
-    public getShortSummaryForControls(activePlayer: Player) {
+    public getShortSummaryForControls(activePlayer: Player):
+        | {
+              facedown: boolean;
+              isDynasty: boolean;
+              isConflict: boolean;
+          }
+        | {
+              id: string;
+              label: string;
+              name: string;
+              facedown: boolean;
+              type: string;
+              uuid: string;
+          } {
         return this.getShortSummary();
-    }
-
-    public isParticipating(card: DrawCard): boolean {
-        return this.game.currentConflict && this.game.currentConflict.isParticipating(this);
-    }
-
-    public isFacedown() {
-        return this.facedown;
-    }
-
-    public isFaceup() {
-        return !this.facedown;
     }
 
     public mostRecentEffect(type: EffectNames) {
@@ -174,7 +130,7 @@ export class GameObject {
         return effects[effects.length - 1];
     }
 
-    protected getRawEffects() {
+    public getRawEffects() {
         const suppressEffects = this.effects.filter((effect) => effect.type === EffectNames.SuppressEffects);
         const suppressedEffects = suppressEffects.reduce((array, effect) => array.concat(effect.getValue(this)), []);
         return this.effects.filter((effect) => !suppressedEffects.includes(effect));

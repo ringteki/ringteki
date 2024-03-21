@@ -1,7 +1,7 @@
 import { AbilityContext } from '../AbilityContext';
 import { CardTypes, EventNames, Locations } from '../Constants';
 import type DrawCard from '../drawcard';
-import type Player from '../player';
+import Player from '../player';
 import Ring from '../ring';
 import { CardGameAction, type CardActionProperties } from './CardGameAction';
 
@@ -44,7 +44,7 @@ export class PlaceFateAction extends CardGameAction {
 
         return (
             origin.fate > 0 &&
-            (origin.type === 'player' || origin.type === 'ring' || origin.allowGameAction('removeFate', context))
+            (origin instanceof Player || origin instanceof Ring || origin.allowGameAction('removeFate', context))
         );
     }
 

@@ -50,6 +50,8 @@ class ObjectionCost implements Cost {
 export default class Objection extends DrawCard {
     static id = 'objection-';
 
+    eventRegistrar: EventRegistrar;
+
     setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register([EventNames.OnPhaseStarted]);

@@ -2,7 +2,7 @@ import AbilityDsl from '../../../abilitydsl';
 import type BaseCard from '../../../basecard';
 import { CardTypes, Players } from '../../../Constants';
 import DrawCard from '../../../drawcard';
-import type Ring from '../../../ring';
+import Ring from '../../../ring';
 
 export default class GreaterUnderstanding extends DrawCard {
     static id = 'greater-understanding-2';
@@ -37,8 +37,8 @@ export default class GreaterUnderstanding extends DrawCard {
         });
     }
 
-    canAttach(ring: BaseCard | Ring) {
-        return ring?.type === 'ring';
+    canAttach(object: BaseCard | Ring) {
+        return object instanceof Ring;
     }
 
     canPlayOn(source: any) {

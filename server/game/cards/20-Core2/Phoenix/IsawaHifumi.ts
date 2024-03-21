@@ -61,6 +61,7 @@ export default class IsawaHifumi extends DrawCard {
     static id = 'isawa-hifumi';
 
     hifumiCost: HifumiCost;
+    eventRegistrar: EventRegistrar;
 
     setupCardAbilities() {
         this.hifumiCost = new HifumiCost(false);

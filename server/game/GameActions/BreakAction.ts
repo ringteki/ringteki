@@ -1,12 +1,12 @@
 import type { AbilityContext } from '../AbilityContext';
 import { CardTypes, EventNames } from '../Constants';
-import type { ProvinceCard } from '../ProvinceCard';
+import { ProvinceCard } from '../ProvinceCard';
 import type BaseCard from '../basecard';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface BreakProperties extends CardActionProperties {}
 
-export class BreakAction extends CardGameAction {
+export class BreakAction extends CardGameAction<BreakProperties> {
     name = 'break';
     eventName = EventNames.OnBreakProvince;
     targetType = [CardTypes.Province];
@@ -14,10 +14,7 @@ export class BreakAction extends CardGameAction {
     effect = 'break {0}';
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if (!card.isProvince || card.isBroken) {
-            return false;
-        }
-        return super.canAffect(card, context);
+        return card instanceof ProvinceCard && card.isBroken && super.canAffect(card, context);
     }
 
     addPropertiesToEvent(event, card: ProvinceCard, context: AbilityContext, additionalProperties): void {

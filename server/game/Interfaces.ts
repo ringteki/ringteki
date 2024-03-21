@@ -10,6 +10,12 @@ import type { DuelProperties } from './GameActions/DuelAction';
 import type { Players, TargetModes, CardTypes, Locations, EventNames, Phases } from './Constants';
 import type { StatusToken } from './StatusToken';
 import type Player = require('./player');
+import type { AbilityTargetRingProps } from './AbilityTargets/AbilityTargetRing';
+import type { AbilityTargetTokenProps } from './AbilityTargets/AbilityTargetToken';
+import type { AbilityTargetElementSymbolProps } from './AbilityTargets/AbilityTargetElementSymbol';
+import type { AbilityTargetSelectProps } from './AbilityTargets/AbilityTargetSelect';
+import type { AbilityTargetCardProps } from './AbilityTargets/AbilityTargetCard';
+import type { AbilityTargetAbilityProps } from './AbilityTargets/AbilityTargetAbility';
 
 export type Faction =
     | 'neutral'
@@ -153,11 +159,18 @@ type EffectArg =
     | number
     | string
     | Player
-    | DrawCard
-    | ProvinceCard
+    | BaseCard
     | Ring
     | { id: string; label: string; name: string; facedown: boolean; type: CardTypes }
     | EffectArg[];
+
+type ActionTarget2 =
+    | (Omit<AbilityTargetCardProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
+    | (Omit<AbilityTargetAbilityProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
+    | (Omit<AbilityTargetElementSymbolProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
+    | (Omit<AbilityTargetRingProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
+    | (Omit<AbilityTargetTokenProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
+    | AbilityTargetSelectProps
 
 interface AbilityProps<Context> {
     title: string;
@@ -165,8 +178,8 @@ interface AbilityProps<Context> {
     cost?: any;
     limit?: any;
     max?: any;
-    target?: ActionTarget;
-    targets?: ActionTargets;
+    target?: ActionTarget2;
+    targets?: { [propName: string]: ActionTarget2 }
     initiateDuel?: InitiateDuel | ((context: AbilityContext) => InitiateDuel);
     cannotBeMirrored?: boolean;
     printedAbility?: boolean;
@@ -216,8 +229,8 @@ export interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbility
     when: WhenType;
     collectiveTrigger?: boolean;
     anyPlayer?: boolean;
-    target?: TriggeredAbilityTarget & TriggeredAbilityTarget;
-    targets?: TriggeredAbilityTargets;
+    target?: any//TriggeredAbilityTarget & TriggeredAbilityTarget;
+    targets?: any//TriggeredAbilityTargets;
     handler?: (context: TriggeredAbilityContext) => void;
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 }
@@ -225,8 +238,8 @@ export interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbility
 export interface TriggeredAbilityAggregateWhenProps extends AbilityProps<TriggeredAbilityContext> {
     aggregateWhen: (events: any[], context: TriggeredAbilityContext) => boolean;
     collectiveTrigger?: boolean;
-    target?: TriggeredAbilityTarget & TriggeredAbilityTarget;
-    targets?: TriggeredAbilityTargets;
+    target?: any//TriggeredAbilityTarget & TriggeredAbilityTarget;
+    targets?: any//TriggeredAbilityTargets;
     handler?: (context: TriggeredAbilityContext) => void;
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 }

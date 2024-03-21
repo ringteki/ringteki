@@ -1,30 +1,45 @@
-const CardSelector = require('../CardSelector.js');
-const { CardTypes, Stages, Players, Locations } = require('../Constants.js');
+import type { AbilityContext } from '../AbilityContext';
+import type BaseAbility from '../baseability';
+import CardSelector from '../CardSelector';
+import { CardTypes, Locations, Players, Stages, TargetModes } from '../Constants';
+import type { GameAction } from '../GameActions/GameAction';
+import { AbilityTargetBase } from './AbilityTargetBase';
 
-class AbilityTargetElementSymbol {
-    constructor(name, properties, ability) {
-        this.name = name;
-        this.properties = properties;
+export type AbilityTargetElementSymbolProps = {
+    player?: Players | ((context: AbilityContext) => Players);
+    dependsOn?: string;
+    mode: TargetModes.ElementSymbol;
+    activePromptTitle: string;
+    location: Locations | Array<Locations>;
+    gameAction: GameAction[];
+};
+
+export class AbilityTargetElementSymbol extends AbilityTargetBase{
+    selector: any;
+    constructor(
+        public name: string,
+        private properties: AbilityTargetElementSymbolProps,
+        ability: BaseAbility
+    ) {
+        super()
         this.properties.location = this.properties.location || Locations.PlayArea;
         this.selector = this.getSelector(properties);
-        for(let gameAction of this.properties.gameAction) {
-            gameAction.setDefaultTarget(context => context.elements[name]);
+        for (let gameAction of this.properties.gameAction) {
+            gameAction.setDefaultTarget((context) => context.elements[name]);
         }
-        this.dependentTarget = null;
-        this.dependentCost = null;
-        if(this.properties.dependsOn) {
-            let dependsOnTarget = ability.targets.find(target => target.name === this.properties.dependsOn);
+        if (this.properties.dependsOn) {
+            let dependsOnTarget = ability.targets.find((target) => target.name === this.properties.dependsOn);
             dependsOnTarget.dependentTarget = this;
         }
     }
 
     getSelector(properties) {
-        let cardCondition = card => {
-            if(!card.isInPlay()) {
+        let cardCondition = (card) => {
+            if (!card.isInPlay()) {
                 return false;
             }
             let elements = card.getCurrentElementSymbols();
-            if(elements.length === 0) {
+            if (elements.length === 0) {
                 return false;
             }
             return true; // cheating, this is only used for Twin Soul Temple and the action is always valid if it has an element
@@ -41,8 +56,18 @@ class AbilityTargetElementSymbol {
             // return (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
             //         (properties.gameAction.length === 0 || properties.gameAction.some(gameAction => gameAction.hasLegalTarget(contextCopy)));
         };
-        let cardType = properties.cardType || [CardTypes.Attachment, CardTypes.Character, CardTypes.Event, CardTypes.Holding, CardTypes.Province, CardTypes.Role, CardTypes.Stronghold];
-        return CardSelector.for(Object.assign({}, properties, { cardType: cardType, cardCondition: cardCondition, targets: false }));
+        let cardType = properties.cardType || [
+            CardTypes.Attachment,
+            CardTypes.Character,
+            CardTypes.Event,
+            CardTypes.Holding,
+            CardTypes.Province,
+            CardTypes.Role,
+            CardTypes.Stronghold
+        ];
+        return CardSelector.for(
+            Object.assign({}, properties, { cardType: cardType, cardCondition: cardCondition, targets: false })
+        );
     }
 
     canResolve(context) {
@@ -58,23 +83,23 @@ class AbilityTargetElementSymbol {
     }
 
     getGameAction(context) {
-        return this.properties.gameAction.filter(gameAction => gameAction.hasLegalTarget(context));
+        return this.properties.gameAction.filter((gameAction) => gameAction.hasLegalTarget(context));
     }
 
     resolve(context, targetResults) {
-        if(targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
+        if (targetResults.cancelled || targetResults.payCostsFirst || targetResults.delayTargeting) {
             return;
         }
         let player = context.choosingPlayerOverride || this.getChoosingPlayer(context);
-        if(player === context.player.opponent && context.stage === Stages.PreTarget) {
+        if (player === context.player.opponent && context.stage === Stages.PreTarget) {
             targetResults.delayTargeting = this;
             return;
         }
         let buttons = [];
         let waitingPromptTitle = '';
-        if(context.stage === Stages.PreTarget) {
+        if (context.stage === Stages.PreTarget) {
             buttons.push({ text: 'Cancel', arg: 'cancel' });
-            if(context.ability.abilityType === 'action') {
+            if (context.ability.abilityType === 'action') {
                 waitingPromptTitle = 'Waiting for opponent to take an action or pass';
             } else {
                 waitingPromptTitle = 'Waiting for opponent';
@@ -88,12 +113,12 @@ class AbilityTargetElementSymbol {
             onSelect: (player, card) => {
                 let validElements = card.getCurrentElementSymbols();
                 context.elementCard = card;
-                if(validElements.length > 1) {
-                    const choices = validElements.map(element => `${element.prettyName} (${element.element})`);
-                    const handlers = validElements.map(element => {
+                if (validElements.length > 1) {
+                    const choices = validElements.map((element) => `${element.prettyName} (${element.element})`);
+                    const handlers = validElements.map((element) => {
                         return () => {
                             context.elements[this.name] = element;
-                            if(this.name === 'target') {
+                            if (this.name === 'target') {
                                 context.element = element;
                             }
                         };
@@ -106,7 +131,7 @@ class AbilityTargetElementSymbol {
                     });
                 } else {
                     context.elements[this.name] = validElements[0];
-                    if(this.name === 'target') {
+                    if (this.name === 'target') {
                         context.element = validElements[0];
                     }
                 }
@@ -117,7 +142,7 @@ class AbilityTargetElementSymbol {
                 return true;
             },
             onMenuCommand: (player, arg) => {
-                if(arg === 'costsFirst') {
+                if (arg === 'costsFirst') {
                     targetResults.costsFirst = true;
                     return true;
                 }
@@ -128,7 +153,10 @@ class AbilityTargetElementSymbol {
     }
 
     checkTarget(context) {
-        if(!context.elementCard || context.choosingPlayerOverride && this.getChoosingPlayer(context) === context.player) {
+        if (
+            !context.elementCard ||
+            (context.choosingPlayerOverride && this.getChoosingPlayer(context) === context.player)
+        ) {
             return false;
         }
         return this.selector.canTarget(context.elementCard, context);
@@ -136,18 +164,16 @@ class AbilityTargetElementSymbol {
 
     getChoosingPlayer(context) {
         let playerProp = this.properties.player;
-        if(typeof playerProp === 'function') {
+        if (typeof playerProp === 'function') {
             playerProp = playerProp(context);
         }
         return playerProp === Players.Opponent ? context.player.opponent : context.player;
     }
 
     hasTargetsChosenByInitiatingPlayer(context) {
-        if(this.properties.gameAction.some(action => action.hasTargetsChosenByInitiatingPlayer(context))) {
+        if (this.properties.gameAction.some((action) => action.hasTargetsChosenByInitiatingPlayer(context))) {
             return true;
         }
         return this.getChoosingPlayer(context) === context.player;
     }
 }
-
-module.exports = AbilityTargetElementSymbol;

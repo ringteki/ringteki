@@ -1,6 +1,5 @@
 const AbilityDsl = require('./abilitydsl.js');
 const Effects = require('./effects');
-const EffectSource = require('./EffectSource.js');
 import CardAbility = require('./CardAbility');
 import TriggeredAbility = require('./triggeredability');
 import Game = require('./game');
@@ -40,7 +39,7 @@ import Ring = require('./ring');
 import type { CardEffect } from './Effects/types';
 import type { GainAllAbilities } from './Effects/Library/gainAllAbilities';
 import type { Duel } from './Duel';
-
+import { EffectSource } from './EffectSource';
 
 const ValidKeywords = new Set<PrintedKeyword>([
     'ancestral',
@@ -89,6 +88,8 @@ class BaseCard extends EffectSource {
     allowedAttachmentTraits = [] as string[];
     printedKeywords: Array<PrintedKeyword> = [];
     disguisedKeywordTraits = [] as string[];
+    parent?: BaseCard;
+    printedType: string
 
     constructor(
         public owner: Player,
@@ -106,6 +107,13 @@ class BaseCard extends EffectSource {
         this.setupCardAbilities(AbilityDsl);
         this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
         this.applyAttachmentBonus();
+    }
+
+    public getType() {
+        if (this.anyEffect(EffectNames.ChangeType)) {
+            return this.mostRecentEffect(EffectNames.ChangeType);
+        }
+        return this.printedType;
     }
 
     get name(): string {
@@ -456,7 +464,7 @@ class BaseCard extends EffectSource {
         return false;
     }
 
-    hasKeyword(keyword: string): boolean {
+    public hasKeyword(keyword: string): boolean {
         const targetKeyword = keyword.toLowerCase();
 
         const addKeywordEffects = this.getEffects(EffectNames.AddKeyword).filter(
@@ -473,7 +481,7 @@ class BaseCard extends EffectSource {
         return this.printedKeywords.includes(keyword);
     }
 
-    hasTrait(trait: string): boolean {
+    public hasTrait(trait: string): boolean {
         return this.hasSomeTrait(trait);
     }
 
@@ -511,7 +519,7 @@ class BaseCard extends EffectSource {
         return false;
     }
 
-    getTraits(): Set<string> {
+    public getTraits(): Set<string> {
         return this.getTraitSet();
     }
 
@@ -535,7 +543,7 @@ class BaseCard extends EffectSource {
         return set;
     }
 
-    isFaction(faction: Faction): boolean {
+    public isFaction(faction: Faction): boolean {
         const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
         const cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
         if (faction === 'neutral') {
@@ -756,7 +764,7 @@ class BaseCard extends EffectSource {
         );
     }
 
-    isParticipating(conflictType?: 'military' | 'political'): boolean {
+    public isParticipating(conflictType?: 'military' | 'political'): boolean {
         return (
             this.game.currentConflict?.isParticipating(this) &&
             (!conflictType || this.game.isDuringConflict(conflictType))
@@ -775,7 +783,7 @@ class BaseCard extends EffectSource {
         return (this.isAttacking() && player.isAttackingPlayer()) || (this.isDefending() && player.isDefendingPlayer());
     }
 
-    isUnique(): boolean {
+    public isUnique(): boolean {
         return this.cardData.is_unique;
     }
 
@@ -783,7 +791,7 @@ class BaseCard extends EffectSource {
         return this.anyEffect(EffectNames.Blank) || this.anyEffect(EffectNames.CopyCharacter);
     }
 
-    getPrintedFaction(): string {
+    public getPrintedFaction(): string {
         return this.cardData.clan || this.cardData.faction;
     }
 
@@ -797,6 +805,14 @@ class BaseCard extends EffectSource {
         );
     }
 
+    public isFacedown() {
+        return this.facedown;
+    }
+
+    public isFaceup() {
+        return !this.facedown;
+    }
+
     getTokenCount(type: string): number {
         return this.tokens[type] ?? 0;
     }
@@ -805,7 +821,7 @@ class BaseCard extends EffectSource {
         this.tokens[type] = this.getTokenCount(type) + number;
     }
 
-    hasToken(type: string): boolean {
+    public hasToken(type: string): boolean {
         return this.getTokenCount(type) > 0;
     }
 
@@ -1288,6 +1304,19 @@ class BaseCard extends EffectSource {
             return symbol.element;
         }
         return 'none';
+    }
+
+    public anotherUniqueInPlay(player: Player): boolean {
+        return (
+            this.isUnique() &&
+            this.game.allCards.any(
+                (card) =>
+                    card.isInPlay() &&
+                    card.printedName === this.printedName &&
+                    card !== this &&
+                    (card.owner === player || card.controller === player || card.owner === this.owner)
+            )
+        );
     }
 
     public getShortSummaryForControls(activePlayer: Player) {

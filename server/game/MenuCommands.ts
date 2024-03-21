@@ -1,10 +1,9 @@
-import { Locations } from './Constants';
-import { Conflict } from './conflict';
-import type BaseCard = require('./basecard');
-import type Game = require('./game');
-import ConflictFlow = require('./gamesteps/conflict/conflictflow');
-import type Player = require('./player');
-import type Ring = require('./ring');
+import { Conflict } from "./conflict";
+import { Locations } from "./Constants";
+import type Game from "./game";
+import ConflictFlow from "./gamesteps/conflict/conflictflow";
+import type Player from "./player";
+import type Ring from "./ring";
 
 type MenuItem = {
     command: string;
@@ -13,7 +12,7 @@ type MenuItem = {
     method: string;
 };
 
-export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, card: BaseCard) {
+export function cardMenuClick(menuItem: MenuItem, game: Game, player: Player, card: any) {
     switch (menuItem.command) {
         case 'bow':
             if (card.bowed) {

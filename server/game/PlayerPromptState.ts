@@ -85,7 +85,7 @@ export class PlayerPromptState {
         let result = {
             // The `card.selected` property here is a hack for plot selection,
             // which we do differently from normal card selection.
-            selected: card.selected || index !== -1,
+            selected: (card as any).selected || index !== -1,
             selectable: selectable,
             unselectable: this.selectCard && !selectable
         };

@@ -1,6 +1,7 @@
 import type { AbilityContext } from '../AbilityContext';
 import type BaseCard from '../basecard';
 import { CardTypes, EffectNames, EventNames, Locations } from '../Constants';
+import DrawCard from '../drawcard';
 import type Player from '../player';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
@@ -8,7 +9,7 @@ export interface MoveToConflictProperties extends CardActionProperties {
     side?: Player;
 }
 
-export class MoveToConflictAction extends CardGameAction {
+export class MoveToConflictAction extends CardGameAction<MoveToConflictProperties> {
     name = 'moveToConflict';
     eventName = EventNames.OnMoveToConflict;
     cost = 'moving {0} into the conflict';
@@ -17,7 +18,10 @@ export class MoveToConflictAction extends CardGameAction {
     defaultProperties: MoveToConflictProperties = { side: null };
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        let properties = this.getProperties(context) as MoveToConflictProperties;
+        if (!(card instanceof DrawCard)) {
+            return false;
+        }
+        let properties = this.getProperties(context);
         if (!super.canAffect(card, context)) {
             return false;
         }
@@ -42,7 +46,7 @@ export class MoveToConflictAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, card: BaseCard, context: AbilityContext, additionalProperties): void {
-        let properties = this.getProperties(context) as MoveToConflictProperties;
+        let properties = this.getProperties(context);
         super.addPropertiesToEvent(event, card, context, additionalProperties);
         event.side = properties.side || card.controller;
     }

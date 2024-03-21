@@ -1,22 +1,24 @@
 import { CardTypes, CharacterStatus, EffectNames } from './Constants';
-import EffectSource from './EffectSource';
 import AbilityDsl from './abilitydsl';
 import type BaseCard from './basecard';
 import type Game from './game';
 import type Player from './player';
+import { EffectSource } from './EffectSource';
+import type DrawCard from './drawcard';
 
 export class StatusToken extends EffectSource {
     persistentEffects: any[] = [];
     printedType = 'token';
+    type = 'token';
     overrideStatus?: CharacterStatus;
 
     constructor(
         public game: Game,
         public card: BaseCard,
         private initialStatus: CharacterStatus,
-        title: string
+        public name: string
     ) {
-        super(game, title);
+        super(game, name);
         this.applyEffects();
     }
 
@@ -81,7 +83,7 @@ export class StatusToken extends EffectSource {
         }
         const effect = {
             match: this.card,
-            effect: AbilityDsl.effects.modifyBothSkills((card: BaseCard) => -card.getGlory()),
+            effect: AbilityDsl.effects.modifyBothSkills((card: DrawCard) => -card.getGlory()),
             ref: []
         };
         this.persistentEffects.push(effect);

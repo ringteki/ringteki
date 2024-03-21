@@ -223,18 +223,17 @@ export enum Players {
 
 export enum TargetModes {
     Ring = 'ring',
-    Select = 'select',
-    Ability = 'ability',
     Token = 'token',
     ElementSymbol = 'elementSymbol',
-    AutoSingle = 'autoSingle',
+    Ability = 'ability',
+    Select = 'select',
     Exactly = 'exactly',
     ExactlyVariable = 'exactlyVariable',
     MaxStat = 'maxStat',
-    Single = 'single',
+    UpToVariable = 'upToVariable',
     Unlimited = 'unlimited',
     UpTo = 'upTo',
-    UpToVariable = 'upToVariable'
+    Single = 'single',
 }
 
 export enum Phases {

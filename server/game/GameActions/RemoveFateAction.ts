@@ -1,9 +1,9 @@
 import type { AbilityContext } from '../AbilityContext';
 import type BaseCard from '../basecard';
 import { CardTypes, EventNames, Locations } from '../Constants';
-import type DrawCard from '../drawcard';
-import type Player from '../player';
-import type Ring from '../ring';
+import DrawCard from '../drawcard';
+import Player from '../player';
+import Ring from '../ring';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface RemoveFateProperties extends CardActionProperties {
@@ -11,27 +11,27 @@ export interface RemoveFateProperties extends CardActionProperties {
     recipient?: DrawCard | Player | Ring;
 }
 
-export class RemoveFateAction extends CardGameAction {
+export class RemoveFateAction extends CardGameAction<RemoveFateProperties> {
     name = 'removeFate';
     eventName = EventNames.OnMoveFate;
     targetType = [CardTypes.Character];
     defaultProperties: RemoveFateProperties = { amount: 1 };
-    constructor(properties: ((context: AbilityContext) => RemoveFateProperties) | RemoveFateProperties) {
-        super(properties);
-    }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as RemoveFateProperties;
+        let properties = this.getProperties(context) 
         return ['removing {1} fate from {0}', [properties.amount]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties = this.getProperties(context) as RemoveFateProperties;
+        let properties = this.getProperties(context) 
         return ['remove {1} fate from {0}', [properties.target, properties.amount]];
     }
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {
-        let properties = this.getProperties(context, additionalProperties) as RemoveFateProperties;
+        if (!(card instanceof DrawCard)) {
+            return false;
+        }
+        let properties = this.getProperties(context, additionalProperties) 
         if (properties.amount === 0 || card.location !== Locations.PlayArea || card.getFate() === 0) {
             return false;
         }
@@ -40,7 +40,8 @@ export class RemoveFateAction extends CardGameAction {
 
     checkRecipient(origin: Player | Ring | DrawCard, context: AbilityContext): boolean {
         if (origin) {
-            if (['player', 'ring'].includes(origin.type)) {
+            if (origin instanceof Player || origin instanceof Ring) {
+
                 return true;
             }
             return origin.allowGameAction('placeFate', context);
@@ -49,7 +50,7 @@ export class RemoveFateAction extends CardGameAction {
     }
 
     addPropertiesToEvent(event, card: DrawCard, context: AbilityContext, additionalProperties): void {
-        let { amount, recipient } = this.getProperties(context, additionalProperties) as RemoveFateProperties;
+        let { amount, recipient } = this.getProperties(context, additionalProperties) 
         event.fate = amount;
         event.recipient = recipient;
         event.origin = card;
@@ -61,7 +62,7 @@ export class RemoveFateAction extends CardGameAction {
     }
 
     isEventFullyResolved(event, card: DrawCard, context: AbilityContext, additionalProperties): boolean {
-        let { amount, recipient } = this.getProperties(context, additionalProperties) as RemoveFateProperties;
+        let { amount, recipient } = this.getProperties(context, additionalProperties) 
         return (
             !event.cancelled &&
             event.name === this.eventName &&

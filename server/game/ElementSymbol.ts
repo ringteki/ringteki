@@ -1,7 +1,7 @@
-import { Elements } from "./Constants";
-import EffectSource from "./EffectSource";
-import BaseCard from "./basecard";
-import Game from "./game";
+import type BaseCard from "./basecard";
+import type { Elements } from "./Constants";
+import { EffectSource } from "./EffectSource";
+import type Game from "./game";
 
 type Info = {
     element: Elements
@@ -23,4 +23,3 @@ export class ElementSymbol extends EffectSource {
         this.prettyName = info.prettyName;
     }
 }
-

@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const EffectSource = require('./EffectSource');
+const { EffectSource } = require('./EffectSource');
 const { EffectNames } = require('./Constants');
 
 class Ring extends EffectSource {

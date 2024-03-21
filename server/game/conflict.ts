@@ -426,7 +426,7 @@ export class Conflict extends GameObject {
         return stateChanged;
     }
 
-    calculateSkillFor(cards: BaseCard[]) {
+    calculateSkillFor(cards: DrawCard[]) {
         let skillFunction =
             this.mostRecentEffect(EffectNames.ChangeConflictSkillFunction) ||
             ((card) => card.getContributionToConflict(this.conflictType));

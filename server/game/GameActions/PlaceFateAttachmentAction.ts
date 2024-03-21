@@ -1,8 +1,8 @@
 import type { AbilityContext } from '../AbilityContext';
 import { CardTypes, EventNames, Locations } from '../Constants';
 import type DrawCard from '../drawcard';
-import type Player from '../player';
-import type Ring from '../ring';
+import Player from '../player';
+import Ring from '../ring';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 
 export interface PlaceFateAttachmentProperties extends CardActionProperties {
@@ -47,7 +47,7 @@ export class PlaceFateAttachmentAction extends CardGameAction {
         if (origin) {
             if (origin.fate === 0) {
                 return false;
-            } else if (['player', 'ring'].includes(origin.type)) {
+            } else if (origin instanceof Player || origin instanceof Ring) {
                 return true;
             }
             return origin.allowGameAction('removeFate', context);

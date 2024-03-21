@@ -1,7 +1,6 @@
+import AbilityDsl from '../../abilitydsl';
 import { Locations, Players, TargetModes } from '../../Constants';
-import AbilityDsl = require('../../abilitydsl');
-import type BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
+import DrawCard from '../../drawcard';
 
 export default class InquisiorialInitiate extends DrawCard {
     static id = 'inquisitorial-initiate';
@@ -19,7 +18,7 @@ export default class InquisiorialInitiate extends DrawCard {
                 activePromptTitle: 'Choose cards to reveal',
                 player: Players.Opponent,
                 numCardsFunc: (context) =>
-                    context.player.opponent.cardsInPlay.filter((card: BaseCard) => card.getFate() === 0).length,
+                    context.player.opponent.cardsInPlay.filter((card: DrawCard) => card.getFate() === 0).length,
                 mode: TargetModes.ExactlyVariable,
                 location: Locations.Hand
             },

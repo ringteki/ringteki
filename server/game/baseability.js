@@ -1,9 +1,9 @@
-const AbilityTargetAbility = require('./AbilityTargets/AbilityTargetAbility.js');
-const AbilityTargetCard = require('./AbilityTargets/AbilityTargetCard.js');
-const AbilityTargetRing = require('./AbilityTargets/AbilityTargetRing.js');
-const AbilityTargetSelect = require('./AbilityTargets/AbilityTargetSelect.js');
-const AbilityTargetToken = require('./AbilityTargets/AbilityTargetToken.js');
-const AbilityTargetElementSymbol = require('./AbilityTargets/AbilityTargetElementSymbol.js');
+const { AbilityTargetAbility } = require('./AbilityTargets/AbilityTargetAbility.js');
+const { AbilityTargetCard } = require('./AbilityTargets/AbilityTargetCard.js');
+const { AbilityTargetRing } = require('./AbilityTargets/AbilityTargetRing.js');
+const { AbilityTargetSelect } = require('./AbilityTargets/AbilityTargetSelect.js');
+const { AbilityTargetToken } = require('./AbilityTargets/AbilityTargetToken.js');
+const { AbilityTargetElementSymbol } = require('./AbilityTargets/AbilityTargetElementSymbol.js');
 const { Stages, TargetModes } = require('./Constants.js');
 
 /**

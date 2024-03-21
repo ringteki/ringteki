@@ -3,6 +3,8 @@ import DrawCard from '../drawcard';
 import Player from '../player';
 
 export default class Soldier<D extends DrawCard> extends DrawCard {
+    facedownCard: D;
+
     static createDummy(owner: Player) {
         const dummyCard = new DrawCard(owner, {});
         return new Soldier(dummyCard);

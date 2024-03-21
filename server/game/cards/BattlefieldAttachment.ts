@@ -1,6 +1,7 @@
-import { CardTypes } from '../Constants';
-import BaseCard = require('../basecard');
-import DrawCard = require('../drawcard');
+import type BaseCard from "../basecard";
+import { CardTypes } from "../Constants";
+import DrawCard from "../drawcard";
+import { ProvinceCard } from "../ProvinceCard";
 
 export class BattlefieldAttachment extends DrawCard {
     public setupCardAbilities() {
@@ -19,11 +20,11 @@ export class BattlefieldAttachment extends DrawCard {
     }
 
     public canAttach(parent: BaseCard) {
-        if (this.unbrokenOnly() && parent.type === CardTypes.Province && parent.isBroken) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardTypes.Province && this.getType() === CardTypes.Attachment;
+        return (
+            parent instanceof ProvinceCard &&
+            this.getType() === CardTypes.Attachment &&
+            (!this.unbrokenOnly() || !parent.isBroken)
+        );
     }
 
     protected unbrokenOnly(): boolean {
