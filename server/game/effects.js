@@ -1,18 +1,20 @@
-const _ = require('underscore');
-
 const AbilityLimit = require('./AbilityLimit');
-const GainAllAbiliitesDynamic = require('./Effects/GainAllAbilitiesDynamic.js');
+const GainAllAbilitiesDynamic = require('./Effects/GainAllAbilitiesDynamic.js');
 const Restriction = require('./Effects/restriction.js');
 const { SuppressEffect } = require('./Effects/SuppressEffect');
 const { EffectBuilder } = require('./Effects/EffectBuilder');
+const { addElementAsAttacker } = require('./Effects/Library/addElementAsAttacker');
+const { addFaction } = require('./Effects/Library/addFaction');
+const { addKeyword } = require('./Effects/Library/addKeyword');
+const { addTrait } = require('./Effects/Library/addTrait');
 const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmentMilitarySkillModifier');
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
 const { canPlayFromOwn } = require('./Effects/Library/canPlayFromOwn');
 const { cardCannot } = require('./Effects/Library/cardCannot');
 const { changePlayerGloryModifier } = require('./Effects/Library/changePlayerGloryModifier');
 const { copyCard } = require('./Effects/Library/copyCard');
-const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
 const { gainAbility } = require('./Effects/Library/gainAbility');
+const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
 const { mustBeDeclaredAsAttacker } = require('./Effects/Library/mustBeDeclaredAsAttacker');
 const { reduceCost } = require('./Effects/Library/reduceCost');
 const { switchAttachmentSkillModifiers } = require('./Effects/Library/switchAttachmentSkillModifiers');
@@ -26,10 +28,10 @@ const { EffectNames, PlayTypes, CardTypes, Players } = require('./Constants');
 
 const Effects = {
     // Card effects
-    addElementAsAttacker: (element) => EffectBuilder.card.flexible(EffectNames.AddElementAsAttacker, element),
-    addFaction: (faction) => EffectBuilder.card.static(EffectNames.AddFaction, faction),
-    addKeyword: (keyword) => EffectBuilder.card.static(EffectNames.AddKeyword, keyword),
-    addTrait: (trait) => EffectBuilder.card.static(EffectNames.AddTrait, trait),
+    addElementAsAttacker,
+    addFaction,
+    addKeyword,
+    addTrait,
     additionalTriggerCostForCard: (func) => EffectBuilder.card.static(EffectNames.AdditionalTriggerCost, func),
     attachmentCardCondition: (func) => EffectBuilder.card.static(EffectNames.AttachmentCardCondition, func),
     attachmentFactionRestriction: (factions) =>
@@ -101,7 +103,7 @@ const Effects = {
     gainAbility,
     gainAllAbilities,
     gainAllAbilitiesDynamic: (match) =>
-        EffectBuilder.card.static(EffectNames.GainAllAbilitiesDynamic, new GainAllAbiliitesDynamic(match)),
+        EffectBuilder.card.static(EffectNames.GainAllAbilitiesDynamic, new GainAllAbilitiesDynamic(match)),
     gainExtraFateWhenPlayed: (amount = 1) => EffectBuilder.card.flexible(EffectNames.GainExtraFateWhenPlayed, amount),
     gainPlayAction: (playActionClass) =>
         EffectBuilder.card.detached(EffectNames.GainPlayAction, {
@@ -247,7 +249,7 @@ const Effects = {
             apply: (player) => (player.actionPhasePriority = true),
             unapply: (player) => (player.actionPhasePriority = false)
         }),
-    increaseCost: (properties) => Effects.reduceCost(_.extend(properties, { amount: -properties.amount })),
+    increaseCost: (properties) => Effects.reduceCost(Object.assign(properties, { amount: -properties.amount })),
     modifyCardsDrawnInDrawPhase: (amount) =>
         EffectBuilder.player.flexible(EffectNames.ModifyCardsDrawnInDrawPhase, amount),
     playerCannot: (properties) =>

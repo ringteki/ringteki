@@ -23,7 +23,9 @@ import { ElementSymbol } from './ElementSymbol';
 import {
     ActionProps,
     AttachmentConditionProps,
+    Faction,
     PersistentEffectProps,
+    PrintedKeyword,
     TriggeredAbilityProps,
     TriggeredAbilityWhenProps
 } from './Interfaces';
@@ -39,22 +41,6 @@ import type { CardEffect } from './Effects/types';
 import type { GainAllAbilities } from './Effects/Library/gainAllAbilities';
 import type { Duel } from './Duel';
 
-type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
-
-type PrintedKeyword =
-    | 'ancestral'
-    | 'corrupted'
-    | 'courtesy'
-    | 'covert'
-    | 'eminent'
-    | 'ephemeral'
-    | 'limited'
-    | 'no duels'
-    | 'peaceful'
-    | 'pride'
-    | 'rally'
-    | 'restricted'
-    | 'sincerity';
 
 const ValidKeywords = new Set<PrintedKeyword>([
     'ancestral',

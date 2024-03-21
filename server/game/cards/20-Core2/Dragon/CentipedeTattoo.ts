@@ -7,7 +7,7 @@ export default class CentipedeTattoo extends DrawCard {
     setupCardAbilities() {
         this.attachmentConditions({ trait: 'monk' });
 
-        this.whileAttached({ effect: AbilityDsl.effects.addKeyword('tattooed') });
+        this.whileAttached({ effect: AbilityDsl.effects.addTrait('tattooed') });
 
         this.whileAttached({
             condition: () =>

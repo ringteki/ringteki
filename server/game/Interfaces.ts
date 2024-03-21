@@ -11,6 +11,32 @@ import type { Players, TargetModes, CardTypes, Locations, EventNames, Phases } f
 import type { StatusToken } from './StatusToken';
 import type Player = require('./player');
 
+export type Faction =
+    | 'neutral'
+    | 'crab'
+    | 'crane'
+    | 'dragon'
+    | 'lion'
+    | 'phoenix'
+    | 'scorpion'
+    | 'unicorn'
+    | 'shadowlands';
+
+export type PrintedKeyword =
+    | 'ancestral'
+    | 'corrupted'
+    | 'courtesy'
+    | 'covert'
+    | 'eminent'
+    | 'ephemeral'
+    | 'limited'
+    | 'no duels'
+    | 'peaceful'
+    | 'pride'
+    | 'rally'
+    | 'restricted'
+    | 'sincerity';
+
 interface BaseTarget {
     activePromptTitle?: string;
     location?: Locations | Locations[];
