@@ -1862,7 +1862,7 @@ class Player extends GameObject {
     }
 
     get name() {
-        return ''
+        return this.id
     }
 }
 
