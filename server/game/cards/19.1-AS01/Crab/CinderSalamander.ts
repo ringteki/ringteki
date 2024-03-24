@@ -48,7 +48,7 @@ export default class CinderSalamander extends DrawCard {
                     cardCondition: (card) => this.isSalamanderCard(card),
                     gameAction: AbilityDsl.actions.putIntoPlay(),
                     message: '{0} finds {1} in their provinces',
-                    messageArgs: (cards, player) => [player, this.salamanderCountToText(cards.length)]
+                    messageArgs: (cards, player) => [player, this.salamanderCountToText((cards as any).length)]
                 })
             ]),
             effect: 'search their deck and provinces for other copies of {0} and put them into play',

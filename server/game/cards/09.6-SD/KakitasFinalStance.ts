@@ -8,6 +8,7 @@ export default class KakitasFinalStance extends DrawCard {
     static id = 'kakita-s-final-stance';
 
     private duelParticipantsInThisConflict = new Set<DrawCard>();
+    private eventRegistrar: EventRegistrar;
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);

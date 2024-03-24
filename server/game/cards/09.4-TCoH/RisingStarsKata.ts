@@ -1,13 +1,14 @@
 import { CardTypes, Durations } from '../../Constants';
+import type { Duel } from '../../Duel';
 import { EventRegistrar } from '../../EventRegistrar';
-import AbilityDsl = require('../../abilitydsl');
-import BaseCard = require('../../basecard');
-import DrawCard = require('../../drawcard');
+import AbilityDsl from '../../abilitydsl';
+import DrawCard from '../../drawcard';
 
 export default class RisingStarsKata extends DrawCard {
     static id = 'rising-stars-kata';
 
-    private duelWinnersThisConflict = new Set<BaseCard>();
+    private duelWinnersThisConflict = new Set<DrawCard>();
+    private eventRegistrar: EventRegistrar;
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
@@ -36,10 +37,9 @@ export default class RisingStarsKata extends DrawCard {
         this.duelWinnersThisConflict.clear();
     }
 
-    public afterDuel(event: any) {
-        if (event.duel.winner) {
-            const winners: BaseCard[] = Array.isArray(event.duel.winner) ? event.duel.winner : [event.duel.winner];
-            winners.forEach((duelWinner) => this.duelWinnersThisConflict.add(duelWinner));
+    public afterDuel({ duel }: { duel: Duel }) {
+        for (const duelWinner of duel.winner ?? []) {
+            this.duelWinnersThisConflict.add(duelWinner);
         }
     }
 }

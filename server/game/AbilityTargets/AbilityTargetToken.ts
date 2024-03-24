@@ -2,29 +2,31 @@ import type { AbilityContext } from '../AbilityContext';
 import type BaseAbility from '../baseability';
 import CardSelector from '../CardSelector';
 import { CardTypes, Locations, Players, Stages, TargetModes } from '../Constants';
-import type { GameAction } from '../GameActions/GameAction';
 import type { StatusToken } from '../StatusToken';
 import { AbilityTargetBase } from './AbilityTargetBase';
+import { CardCondition, GameActionEnforced, GameActionUnenforce } from './types';
 
-export type AbilityTargetTokenProps = {
+type AbilityTargetTokenPropsBase = {
     mode: TargetModes.Token;
-    cardType?: CardTypes | Array<CardTypes>;
     player?: Players | ((context: AbilityContext) => Players);
     activePromptTitle?: string;
     optional?: boolean;
     dependsOn?: string;
-    gameAction?: GameAction[];
     location?: Locations;
     singleToken?: boolean;
     tokenCondition?: (token: StatusToken, context: AbilityContext) => boolean;
-};
+} & CardCondition
+
+export type AbilityTargetTokenProps = AbilityTargetTokenPropsBase & GameActionUnenforce;
+
+export type AbilityTargetTokenPropsEnf = AbilityTargetTokenPropsBase & GameActionEnforced;
 
 export class AbilityTargetToken extends AbilityTargetBase {
     selector: any;
 
     constructor(
         public name: string,
-        private properties: AbilityTargetTokenProps,
+        protected properties: AbilityTargetTokenPropsEnf,
         ability: BaseAbility
     ) {
         super();

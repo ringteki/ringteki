@@ -3,18 +3,18 @@ import type BaseAbility from '../baseability';
 import CardSelector from '../CardSelector';
 import { EffectNames, Locations, Players, Stages, TargetModes } from '../Constants';
 import type DrawCard from '../drawcard';
-import type { GameAction } from '../GameActions/GameAction';
 import { AbilityTargetBase } from './AbilityTargetBase';
-import type { CardCondition } from './types';
+import type { CardCondition, GameActionEnforced, GameActionUnenforce } from './types';
 
-export type AbilityTargetCardProps = {
-    gameAction: GameAction[];
-    dependsOn?: string;
-    controller?: Players;
-    location?: Locations | Array<Locations>;
-    player?: Players | ((context: AbilityContext) => Players);
+type AbilityTargetCardPropsBase = {
     activePromptTitle?: string;
+    controller?: Players | ((context: AbilityContext) => Players);
+    dependsOn?: string;
+    hideIfNoLegalTargets?: boolean;
+    location?: Locations | Array<Locations>;
     optional?: boolean;
+    player?: Players | ((context: AbilityContext) => Players);
+    targets?: boolean;
 } & CardCondition &
     (
         | {
@@ -32,12 +32,16 @@ export type AbilityTargetCardProps = {
         | {}
     );
 
+export type AbilityTargetCardProps = AbilityTargetCardPropsBase & GameActionUnenforce;
+
+export type AbilityTargetCardPropsEnf = AbilityTargetCardPropsBase & GameActionEnforced;
+
 export class AbilityTargetCard extends AbilityTargetBase {
     selector: any;
 
     constructor(
         public name: string,
-        protected properties: AbilityTargetCardProps,
+        protected properties: AbilityTargetCardPropsEnf,
         ability: BaseAbility
     ) {
         super();

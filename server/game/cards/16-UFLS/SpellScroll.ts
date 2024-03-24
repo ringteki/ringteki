@@ -18,11 +18,11 @@ export default class SpellScroll extends DrawCard {
 
         this.action({
             title: 'Put a card into your hand',
-            condition: (context) => context.source.parent,
+            condition: (context) => Boolean(context.source.parent),
             target: {
                 location: Locations.ConflictDiscardPile,
                 controller: Players.Self,
-                cardCondition: (card: DrawCard, context) =>
+                cardCondition: (card, context) =>
                     card.type !== CardTypes.Character &&
                     (context.source.parent as DrawCard).hasSomeTrait(card.getTraitSet()),
                 gameAction: AbilityDsl.actions.multiple([

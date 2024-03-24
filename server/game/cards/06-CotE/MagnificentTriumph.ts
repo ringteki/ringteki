@@ -9,6 +9,7 @@ export default class MagnificentTriumph extends DrawCard {
     static id = 'magnificent-triumph';
 
     #duelWinnersThisConflict = new Set<BaseCard>();
+    private eventRegistrar: EventRegistrar;
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);

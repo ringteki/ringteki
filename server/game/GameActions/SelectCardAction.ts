@@ -3,33 +3,70 @@ import type BaseCard from '../basecard';
 import CardSelector from '../CardSelector';
 import type BaseCardSelector from '../CardSelectors/BaseCardSelector';
 import { CardTypes, EffectNames, Locations, Players, TargetModes } from '../Constants';
+import type DrawCard from '../drawcard';
 import type Player from '../player';
+import type { ProvinceCard } from '../ProvinceCard';
+import type { RoleCard } from '../RoleCard';
+import type { StrongholdCard } from '../StrongholdCard';
 import { type CardActionProperties, CardGameAction } from './CardGameAction';
 import type { GameAction } from './GameAction';
 
-export interface SelectCardProperties extends CardActionProperties {
-    activePromptTitle?: string;
-    player?: Players;
-    cardType?: CardTypes | CardTypes[];
-    controller?: Players;
-    location?: Locations | Locations[];
-    cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
-    targets?: boolean;
-    message?: string;
-    manuallyRaiseEvent?: boolean;
-    messageArgs?: (card: BaseCard, player: Player, properties: SelectCardProperties) => any[];
-    gameAction: GameAction;
-    selector?: BaseCardSelector;
-    mode?: TargetModes;
-    numCards?: number;
-    hidePromptIfSingleCard?: boolean;
-    subActionProperties?: (card: BaseCard) => any;
-    cancelHandler?: () => void;
-    effect?: string;
-    effectArgs?: (context) => string[];
-}
+type CardCondition =
+    | {
+          cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: BaseCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: BaseCard) => any;
+      }
+    | {
+          cardType: CardTypes.Stronghold;
+          cardCondition?: (card: StrongholdCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: StrongholdCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: StrongholdCard) => any;
+      }
+    | {
+          cardType: CardTypes.Role;
+          cardCondition?: (card: RoleCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: RoleCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: RoleCard) => any;
+      }
+    | {
+          cardType: CardTypes.Province;
+          cardCondition?: (card: ProvinceCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: ProvinceCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: ProvinceCard) => any;
+      }
+    | {
+          cardType:
+              | CardTypes.Character
+              | CardTypes.Holding
+              | CardTypes.Event
+              | CardTypes.Attachment
+              | Array<CardTypes.Character | CardTypes.Holding | CardTypes.Event | CardTypes.Attachment>;
+          cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: DrawCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: DrawCard) => any;
+      };
 
-export class SelectCardAction extends CardGameAction {
+export type SelectCardProperties = CardActionProperties &
+    CardCondition & {
+        activePromptTitle?: string;
+        player?: Players;
+        controller?: Players;
+        location?: Locations | Locations[];
+        targets?: boolean;
+        message?: string;
+        manuallyRaiseEvent?: boolean;
+        gameAction: GameAction;
+        selector?: BaseCardSelector;
+        mode?: TargetModes;
+        numCards?: number;
+        hidePromptIfSingleCard?: boolean;
+        cancelHandler?: () => void;
+        effect?: string;
+        effectArgs?: (context: AbilityContext) => Array<string|Player>
+    };
+
+export class SelectCardAction extends CardGameAction<SelectCardProperties> {
     defaultProperties: SelectCardProperties = {
         cardCondition: () => true,
         gameAction: null,
@@ -39,20 +76,19 @@ export class SelectCardAction extends CardGameAction {
         manuallyRaiseEvent: false
     };
 
-    constructor(properties: SelectCardProperties | ((context: AbilityContext) => SelectCardProperties)) {
-        super(properties);
-    }
-
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let { target, effect, effectArgs } = this.getProperties(context) as SelectCardProperties;
+        let { target, effect, effectArgs } = this.getProperties(context);
         if (effect) {
             return [effect, effectArgs(context) || []];
         }
         return ['choose a target for {0}', [target]];
     }
 
-    getProperties(context: AbilityContext, additionalProperties = {}): SelectCardProperties {
-        let properties = super.getProperties(context, additionalProperties) as SelectCardProperties;
+    getProperties(
+        context: AbilityContext,
+        additionalProperties = {}
+    ): SelectCardProperties & { selector: BaseCardSelector } {
+        let properties = super.getProperties(context, additionalProperties);
         properties.gameAction.setDefaultTarget(() => properties.target);
         if (!properties.selector) {
             let cardCondition = (card, context) =>
@@ -62,7 +98,7 @@ export class SelectCardAction extends CardGameAction {
                 ) && properties.cardCondition(card, context);
             properties.selector = CardSelector.for(Object.assign({}, properties, { cardCondition }));
         }
-        return properties;
+        return properties as SelectCardProperties & { selector: BaseCardSelector };
     }
 
     canAffect(card: BaseCard, context: AbilityContext, additionalProperties = {}): boolean {

@@ -19,7 +19,7 @@ export type AbilityTargetSelectProps = {
 export class AbilityTargetSelect extends AbilityTargetBase{
     constructor(
         public name: string,
-        private properties: AbilityTargetSelectProps,
+        protected properties: AbilityTargetSelectProps,
         ability: BaseAbility
     ) {
         super();

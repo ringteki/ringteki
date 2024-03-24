@@ -25,6 +25,7 @@ class PrepareForWar extends DrawCard {
                                     message: '{0} chooses to discard {1} from {2}',
                                     messageArgs: (cards) => [
                                         context.player,
+                                        // @ts-ignore
                                         cards.length === 0 ? 'no attachments' : cards,
                                         context.target
                                     ]

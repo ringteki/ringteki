@@ -14,7 +14,7 @@ export default class JealousAncestor extends DrawCard {
 
         this.whileAttached({ effect: AbilityDsl.effects.addTrait('shadowlands') });
         this.persistentEffect({
-            condition: (context) => context.source.parent,
+            condition: (context) => Boolean(context.source.parent),
             effect: AbilityDsl.effects.immunity({ restricts: 'events' })
         });
 

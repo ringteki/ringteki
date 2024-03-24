@@ -7,6 +7,7 @@ class BattlefieldOrders extends DrawCard {
         this.persistentEffect({
             location: Locations.Any,
             targetController: Players.Any,
+            // @ts-ignore
             match: player => player.opponent && player.honor >= player.opponent.honor + 5,
             effect: AbilityDsl.effects.reduceCost({ match: (card, source) => card === source })
         });

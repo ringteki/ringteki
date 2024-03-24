@@ -1,5 +1,4 @@
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
 import { CardTypes, FavorTypes, Locations, Players } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type Player from '../../../player';
@@ -34,13 +33,9 @@ export default class WhispersOfTheLordsOfDeath extends DrawCard {
     }
 
     private highestMilitaryForPlayer(player: Player) {
-        return (player.cardsInPlay as BaseCard[]).reduce((maxMil, card) => {
-            if (card.type !== CardTypes.Character) {
-                return maxMil;
-            }
-
-            const cardMil = card.getMilitarySkill();
-            return cardMil > maxMil ? cardMil : maxMil;
-        }, 0);
+        return (player.cardsInPlay as DrawCard[]).reduce(
+            (maxMil, card) => (card.type !== CardTypes.Character ? maxMil : Math.max(card.getMilitarySkill(), maxMil)),
+            0
+        );
     }
 }

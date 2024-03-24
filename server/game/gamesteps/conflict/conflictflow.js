@@ -231,6 +231,7 @@ class ConflictFlow extends BaseStepWithPipeline {
                     message: '{0} discards {1}',
                     messageArgs: (cards, player) => [player, cards]
                 };
+                // @ts-ignore
                 Costs.discardCard(props).addEventsToArray(
                     costEvents,
                     this.game.getFrameworkContext(this.conflict.attackingPlayer),

@@ -7,6 +7,7 @@ import Game = require('./game');
 import Player = require('./player');
 import type Ring = require('./ring');
 import DrawCard = require('./drawcard');
+import type { ChangeConflictSkillFunctionValue } from './Effects/Library/changeConflictSkillFunctionPlayer';
 
 type Predicate = (card: DrawCard) => boolean;
 
@@ -427,15 +428,17 @@ export class Conflict extends GameObject {
     }
 
     calculateSkillFor(cards: DrawCard[]) {
-        let skillFunction =
-            this.mostRecentEffect(EffectNames.ChangeConflictSkillFunction) ||
+        let skillFunction: ChangeConflictSkillFunctionValue =
+            this.mostRecentEffect(EffectNames.ChangeConflictSkillFunction) ??
             ((card) => card.getContributionToConflict(this.conflictType));
         let cannotContributeFunctions = this.getEffects(EffectNames.CannotContribute);
 
         return cards.reduce((sum, card) => {
             let canContributeWhileBowed = card.anyEffect(EffectNames.CanContributeWhileBowed);
             let cannotContribute = card.bowed && !canContributeWhileBowed;
-            let playerSkillFunction = card.controller.mostRecentEffect(EffectNames.ChangeConflictSkillFunction);
+            let playerSkillFunction: undefined | ChangeConflictSkillFunctionValue = card.controller.mostRecentEffect(
+                EffectNames.ChangeConflictSkillFunction
+            );
             if (playerSkillFunction) {
                 skillFunction = playerSkillFunction;
             }

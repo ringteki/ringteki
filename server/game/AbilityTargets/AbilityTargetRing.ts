@@ -4,23 +4,27 @@ import { Players, Stages, TargetModes } from '../Constants';
 import type { GameAction } from '../GameActions/GameAction';
 import type Ring from '../ring';
 import { AbilityTargetBase } from './AbilityTargetBase';
+import { GameActionEnforced, GameActionUnenforce } from './types';
 
-export type AbilityTargetRingProps = {
+type AbilityTargetRingPropsBase = {
     mode: TargetModes.Ring;
     ringCondition: (ring: Ring, context: AbilityContext) => boolean;
     activePromptTitle?: string;
     optional?: boolean;
     dependsOn?: string;
-    gameAction?: GameAction[];
     player?: Players | ((context: AbilityContext) => Players);
 };
+
+export type AbilityTargetRingProps = AbilityTargetRingPropsBase & GameActionUnenforce;
+
+export type AbilityTargetRingPropsEnf = AbilityTargetRingPropsBase & GameActionEnforced;
 
 export class AbilityTargetRing extends AbilityTargetBase {
     ringCondition: (ring: Ring, context: AbilityContext) => boolean;
 
     constructor(
         public name: string,
-        private properties: AbilityTargetRingProps,
+        protected properties: AbilityTargetRingPropsEnf,
         ability: BaseAbility
     ) {
         super();

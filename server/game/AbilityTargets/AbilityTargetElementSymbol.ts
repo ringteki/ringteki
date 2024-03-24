@@ -2,26 +2,27 @@ import type { AbilityContext } from '../AbilityContext';
 import type BaseAbility from '../baseability';
 import CardSelector from '../CardSelector';
 import { CardTypes, Locations, Players, Stages, TargetModes } from '../Constants';
-import type { GameAction } from '../GameActions/GameAction';
 import { AbilityTargetBase } from './AbilityTargetBase';
+import { GameActionEnforced, GameActionUnenforce } from './types';
 
-export type AbilityTargetElementSymbolProps = {
+type AbilityTargetElementSymbolPropsBase = {
     player?: Players | ((context: AbilityContext) => Players);
     dependsOn?: string;
     mode: TargetModes.ElementSymbol;
     activePromptTitle: string;
     location: Locations | Array<Locations>;
-    gameAction: GameAction[];
 };
+export type AbilityTargetElementSymbolProps = AbilityTargetElementSymbolPropsBase & GameActionUnenforce;
+export type AbilityTargetElementSymbolPropsEnf = AbilityTargetElementSymbolPropsBase & GameActionEnforced;
 
-export class AbilityTargetElementSymbol extends AbilityTargetBase{
+export class AbilityTargetElementSymbol extends AbilityTargetBase {
     selector: any;
     constructor(
         public name: string,
-        private properties: AbilityTargetElementSymbolProps,
+        protected properties: AbilityTargetElementSymbolPropsEnf,
         ability: BaseAbility
     ) {
-        super()
+        super();
         this.properties.location = this.properties.location || Locations.PlayArea;
         this.selector = this.getSelector(properties);
         for (let gameAction of this.properties.gameAction) {

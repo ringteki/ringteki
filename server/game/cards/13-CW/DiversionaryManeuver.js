@@ -31,6 +31,7 @@ class DiversionaryManeuver extends DrawCard {
                         mode: TargetModes.Unlimited,
                         cardCondition: card => !card.bowed,
                         message: '{0} moves {1} to the conflict',
+                        // @ts-ignore
                         messageArgs: (card, player) => [player, card.length > 0 ? card : 'no one'],
                         gameAction: AbilityDsl.actions.moveToConflict()
                     })
@@ -44,6 +45,7 @@ class DiversionaryManeuver extends DrawCard {
                     mode: TargetModes.Unlimited,
                     cardCondition: card => !card.bowed,
                     message: '{0} moves {1} to the conflict',
+                    // @ts-ignore
                     messageArgs: (card, player) => [player, card.length > 0 ? card : 'no one'],
                     gameAction: AbilityDsl.actions.moveToConflict()
                 })
@@ -57,4 +59,3 @@ class DiversionaryManeuver extends DrawCard {
 DiversionaryManeuver.id = 'diversionary-maneuver';
 
 module.exports = DiversionaryManeuver;
-

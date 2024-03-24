@@ -13,6 +13,7 @@ export default class MasterTactician extends DrawCard {
 
     private cardsPlayedThisRound = 0;
     private mostRecentEvent?: any;
+    private eventRegistrar: EventRegistrar;
 
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);

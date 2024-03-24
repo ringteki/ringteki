@@ -10,7 +10,9 @@ class MagnificentLighthouse extends DrawCard {
                 mode: TargetModes.Select,
                 activePromptTitle: 'Choose which deck to look at:',
                 choices: {
+                    // @ts-ignore
                     'Dynasty Deck': context => context.player.opponent && context.player.opponent.dynastyDeck.size() > 0,
+                    // @ts-ignore
                     'Conflict Deck': context => context.player.opponent && context.player.opponent.conflictDeck.size() > 0
                 }
             },

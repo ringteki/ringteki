@@ -2,20 +2,24 @@ import { AbilityContext } from '../AbilityContext';
 import type BaseAbility from '../baseability';
 import type CardAbility from '../CardAbility';
 import CardSelector from '../CardSelector';
-import { Players, Stages, TargetModes } from '../Constants';
+import { Locations, Players, Stages, TargetModes } from '../Constants';
 import type { GameAction } from '../GameActions/GameAction';
 import { AbilityTargetBase } from './AbilityTargetBase';
-import type { CardCondition } from './types';
+import type { CardCondition, GameActionEnforced, GameActionUnenforce } from './types';
 
-export type AbilityTargetAbilityProps = {
+type AbilityTargetAbilityPropsBase = {
     mode: TargetModes.Ability;
+    dependsOn?: string;
+    abilityCondition?: (ability: CardAbility) => boolean;
     activePromptTitle?: string;
     controller?: Players;
-    abilityCondition?: (ability: CardAbility) => boolean;
-    gameAction?: GameAction[];
+    location?: Locations | Locations[];
     player?: Players | ((context: AbilityContext) => Players);
-    dependsOn?: string;
 } & CardCondition;
+
+export type AbilityTargetAbilityProps = AbilityTargetAbilityPropsBase & GameActionUnenforce;
+
+export type AbilityTargetAbilityPropsEnf = AbilityTargetAbilityPropsBase & GameActionEnforced;
 
 export class AbilityTargetAbility extends AbilityTargetBase {
     abilityCondition: (ability: CardAbility) => boolean;
@@ -23,10 +27,10 @@ export class AbilityTargetAbility extends AbilityTargetBase {
 
     constructor(
         public name: string,
-        private properties: AbilityTargetAbilityProps,
+        protected properties: AbilityTargetAbilityPropsEnf,
         ability: BaseAbility
     ) {
-        super()
+        super();
         this.abilityCondition = properties.abilityCondition ?? (() => true);
         this.selector = this.getSelector(properties);
 
@@ -54,18 +58,18 @@ export class AbilityTargetAbility extends AbilityTargetBase {
                 return (
                     (!properties.cardCondition || properties.cardCondition(card, contextCopy)) &&
                     (!this.dependentTarget || this.dependentTarget.hasLegalTarget(contextCopy)) &&
-                    properties.gameAction.some((gameAction) => gameAction.hasLegalTarget(contextCopy))
+                    (properties.gameAction as any).some((gameAction) => gameAction.hasLegalTarget(contextCopy))
                 );
             });
         };
         return CardSelector.for(Object.assign({}, properties, { cardCondition: cardCondition, targets: false }));
     }
 
-    canResolve(context) :boolean{
+    canResolve(context): boolean {
         return !!this.properties.dependsOn || this.hasLegalTarget(context);
     }
 
-    hasLegalTarget(context) :boolean{
+    hasLegalTarget(context): boolean {
         return this.selector.optional || this.selector.hasEnoughTargets(context, this.getChoosingPlayer(context));
     }
 
@@ -73,7 +77,7 @@ export class AbilityTargetAbility extends AbilityTargetBase {
         return this.selector.getAllLegalTargets(context, this.getChoosingPlayer(context));
     }
 
-    getGameAction(context) :GameAction[]{
+    getGameAction(context): GameAction[] {
         return this.properties.gameAction.filter((gameAction) => gameAction.hasLegalTarget(context));
     }
 

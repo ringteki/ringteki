@@ -13,6 +13,7 @@ class FuSuiDisciple extends DrawCard {
                     mode: TargetModes.Select,
                     activePromptTitle: 'Choose a player',
                     targets: true,
+                    // @ts-ignore
                     choices: {
                         [this.owner.name]: context => context.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(this.owner),
                         [this.owner.opponent && this.owner.opponent.name || 'NA']: context => context.game.rings[this.getCurrentElementSymbol(elementKey)].isConsideredClaimed(this.owner.opponent)

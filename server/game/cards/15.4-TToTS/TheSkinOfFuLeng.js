@@ -18,7 +18,7 @@ class TheSkinOfFuLeng extends DrawCard {
         });
 
         this.persistentEffect({
-            match: card => card.getFate() === 0,
+            match: card => card instanceof DrawCard && card.getFate() === 0,
             targetController: Players.Opponent,
             effect: AbilityDsl.effects.canBeTriggeredByOpponent()
         });

@@ -16,6 +16,7 @@ class CommanderOfTheLegions extends DrawCard {
                 context.game.currentPhase === Phases.Fate && context.player.opponent
                 && context.player.honor >= context.player.opponent.honor + 5,
             match: (card, context) =>
+                card instanceof DrawCard &&
                 card.type === CardTypes.Character
                 && card.isFaction('lion')
                 && card.printedCost <= 3

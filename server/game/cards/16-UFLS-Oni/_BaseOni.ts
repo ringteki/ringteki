@@ -5,6 +5,8 @@ import DrawCard = require('../../drawcard');
 export class BaseOni extends DrawCard {
     private eventRegistrar?: EventRegistrar;
 
+    protected messageShown?: boolean 
+
     public setupCardAbilities() {
         this.eventRegistrar = new EventRegistrar(this.game, this);
         this.eventRegistrar.register(['onCardLeavesPlay']);

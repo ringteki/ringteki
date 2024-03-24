@@ -8,7 +8,20 @@ type Player = {
     };
 };
 
-type MsgArg = string | { name: string } | { getShortSummary: () => string };
+export interface CanBeChatArg {
+    getShortSummary: () =>
+        | string
+        | {
+              id: string;
+              label: string;
+              name: string;
+              facedown: boolean;
+              type: string;
+              uuid: string;
+          };
+}
+
+export type GameChatArg = string | { name: string } | CanBeChatArg;
 
 type MessageText = string | Array<string | number>;
 
@@ -28,17 +41,17 @@ export class GameChat {
         this.addMessage('{0} {1}', playerArg, message);
     }
 
-    addMessage(message: string, ...args: Array<MsgArg>): void {
+    addMessage(message: string, ...args: Array<GameChatArg>): void {
         const formattedMessage = this.formatMessage(message, args);
         this.messages.push({ date: new Date(), message: formattedMessage });
     }
 
-    addAlert(type: string, message: string, ...args: Array<MsgArg>): void {
+    addAlert(type: string, message: string, ...args: Array<GameChatArg>): void {
         const formattedMessage = this.formatMessage(message, args);
         this.messages.push({ date: new Date(), message: { alert: { type: type, message: formattedMessage } } });
     }
 
-    formatMessage(format: string, args: Array<MsgArg>): string | Array<string> {
+    formatMessage(format: string, args: Array<GameChatArg>): string | Array<string> {
         if (!format) {
             return '';
         }
@@ -74,7 +87,7 @@ export class GameChat {
         }, []);
     }
 
-    formatArray(array: Array<MsgArg>): string | Array<string> {
+    formatArray(array: Array<GameChatArg>): string | Array<string> {
         if (array.length === 0) {
             return [];
         }

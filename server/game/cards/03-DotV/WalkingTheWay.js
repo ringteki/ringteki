@@ -1,12 +1,13 @@
 const DrawCard = require('../../drawcard.js');
 const { Locations, Players, CardTypes } = require('../../Constants');
+const Player = require('../../player.js');
 
 class WalkingTheWay extends DrawCard {
     setupCardAbilities(ability) {
         this.persistentEffect({
             location: Locations.Any,
             targetController: Players.Any,
-            match: player => player.cardsInPlay.any(card => card.hasTrait('shugenja')),
+            match: player => player instanceof Player && player.cardsInPlay.any(card => card.hasTrait('shugenja')),
             effect: ability.effects.reduceCost({ match: (card, source) => card === source })
         });
 

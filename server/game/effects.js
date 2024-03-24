@@ -11,6 +11,7 @@ const { attachmentMilitarySkillModifier } = require('./Effects/Library/attachmen
 const { attachmentPoliticalSkillModifier } = require('./Effects/Library/attachmentPoliticalSkillModifier');
 const { canPlayFromOwn } = require('./Effects/Library/canPlayFromOwn');
 const { cardCannot } = require('./Effects/Library/cardCannot');
+const { changeConflictSkillFunctionPlayer, changeConflictSkillFunction } = require('./Effects/Library/changeConflictSkillFunctionPlayer');
 const { changePlayerGloryModifier } = require('./Effects/Library/changePlayerGloryModifier');
 const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAbility } = require('./Effects/Library/gainAbility');
@@ -292,8 +293,7 @@ const Effects = {
     consideredLessHonorable: () => EffectBuilder.player.static(EffectNames.ConsideredLessHonorable),
     customFatePhaseFateRemoval: (refillFunc) =>
         EffectBuilder.player.static(EffectNames.CustomFatePhaseFateRemoval, refillFunc), //refillFunc: (Player, numFate) => { }
-    changeConflictSkillFunctionPlayer: (func) =>
-        EffectBuilder.player.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks
+    changeConflictSkillFunctionPlayer,
     limitLegalAttackers: (matchFunc) => EffectBuilder.player.static(EffectNames.LimitLegalAttackers, matchFunc), //matchFunc: (card) => bool
     additionalActionAfterWindowCompleted: (amount = 1) =>
         EffectBuilder.player.static(EffectNames.AdditionalActionAfterWindowCompleted, amount),
@@ -306,7 +306,7 @@ const Effects = {
             )
         ),
     cannotContribute: (func) => EffectBuilder.conflict.dynamic(EffectNames.CannotContribute, func),
-    changeConflictSkillFunction: (func) => EffectBuilder.conflict.static(EffectNames.ChangeConflictSkillFunction, func), // TODO: Add this to lasting effect checks
+    changeConflictSkillFunction,
     modifyConflictElementsToResolve: (value) =>
         EffectBuilder.conflict.static(EffectNames.ModifyConflictElementsToResolve, value), // TODO: Add this to lasting effect checks
     restrictNumberOfDefenders: (value) => EffectBuilder.conflict.static(EffectNames.RestrictNumberOfDefenders, value), // TODO: Add this to lasting effect checks

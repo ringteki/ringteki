@@ -1,12 +1,16 @@
 import { AbilityContext } from './AbilityContext';
-import { CharacterStatus, Decks, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
+import type BaseCardSelector from './CardSelectors/BaseCardSelector';
+import { CardTypes, CharacterStatus, Decks, EventNames, Locations, PlayTypes, Players, TargetModes } from './Constants';
 import { Event } from './Events/Event';
-import { CardGameAction } from './GameActions/CardGameAction';
+import { CardActionProperties, CardGameAction } from './GameActions/CardGameAction';
 import { GameAction } from './GameActions/GameAction';
 import * as GameActions from './GameActions/GameActions';
 import { HandlerAction } from './GameActions/HandlerAction';
 import { ReturnToDeckProperties } from './GameActions/ReturnToDeckAction';
 import { SelectCardProperties } from './GameActions/SelectCardAction';
+import type { ProvinceCard } from './ProvinceCard';
+import type { RoleCard } from './RoleCard';
+import type { StrongholdCard } from './StrongholdCard';
 import { TriggeredAbilityContext } from './TriggeredAbilityContext';
 import { Derivable, derive } from './Utils/helpers';
 import BaseCard from './basecard';
@@ -18,7 +22,60 @@ import DrawCard from './drawcard';
 import Player from './player';
 import Ring from './ring';
 
-type SelectCostProperties = Omit<SelectCardProperties, 'gameAction'>;
+type CardCondition =
+    | {
+          cardType?: undefined;
+          cardCondition?: (card: BaseCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: BaseCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: BaseCard) => any;
+      }
+    | {
+          cardType: CardTypes.Stronghold;
+          cardCondition?: (card: StrongholdCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: StrongholdCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: StrongholdCard) => any;
+      }
+    | {
+          cardType: CardTypes.Role;
+          cardCondition?: (card: RoleCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: RoleCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: RoleCard) => any;
+      }
+    | {
+          cardType: CardTypes.Province;
+          cardCondition?: (card: ProvinceCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: ProvinceCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: ProvinceCard) => any;
+      }
+    | {
+          cardType:
+              | CardTypes.Character
+              | CardTypes.Holding
+              | CardTypes.Event
+              | CardTypes.Attachment
+              | Array<CardTypes.Character | CardTypes.Holding | CardTypes.Event | CardTypes.Attachment>;
+          cardCondition?: (card: DrawCard, context: AbilityContext) => boolean;
+          messageArgs?: (card: DrawCard, player: Player, properties: SelectCardProperties) => any[];
+          subActionProperties?: (card: DrawCard) => any;
+      };
+
+type SelectCostProperties = CardActionProperties &
+    CardCondition & {
+        activePromptTitle?: string;
+        player?: Players;
+        controller?: Players;
+        location?: Locations | Locations[];
+        targets?: boolean;
+        message?: string;
+        manuallyRaiseEvent?: boolean;
+        selector?: BaseCardSelector;
+        mode?: TargetModes;
+        numCards?: number;
+        hidePromptIfSingleCard?: boolean;
+        cancelHandler?: () => void;
+        effect?: string;
+        effectArgs?: (context: AbilityContext) => string[];
+    };
 
 function getSelectCost(
     action: CardGameAction,
@@ -300,7 +357,7 @@ export function putSelfIntoPlay(): Cost {
  * Cost that will prompt for a card
  */
 export function selectedReveal(properties: SelectCostProperties): Cost {
-    return getSelectCost(GameActions.reveal(), properties, `Select a ${properties.cardType || 'card'} to reveal`);
+    return getSelectCost(GameActions.reveal(), properties, `Select a ${properties.cardType ?? 'card'} to reveal`);
 }
 
 /**

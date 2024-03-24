@@ -1,5 +1,6 @@
 import AbilityDsl from '../../abilitydsl';
-import { CardTypes, Locations, Phases, Players } from '../../Constants';
+import { Locations, Phases, Players } from '../../Constants';
+import { ProvinceCard } from '../../ProvinceCard';
 import { BattlefieldAttachment } from '../BattlefieldAttachment';
 
 export default class FieldOfRuin extends BattlefieldAttachment {
@@ -13,7 +14,7 @@ export default class FieldOfRuin extends BattlefieldAttachment {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: (target) => target.type === CardTypes.Province && target.isBroken,
+                targetCondition: (target) => target instanceof ProvinceCard && target.isBroken,
                 match: (card, source) => card === source
             })
         });

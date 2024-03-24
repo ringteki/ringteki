@@ -33,7 +33,7 @@ export default class DevelopingMasterpiece extends DrawCard {
         this.action({
             title: 'Gain honor',
             phase: Phases.Fate,
-            condition: (context) => context.source.parent,
+            condition: (context) => Boolean(context.source.parent),
             cost: [captureParentCost(), AbilityDsl.costs.removeSelfFromGame()],
             gameAction: AbilityDsl.actions.gainHonor((context) => ({
                 amount: this.getHonorGain(context),

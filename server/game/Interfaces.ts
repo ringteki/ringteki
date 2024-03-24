@@ -165,12 +165,12 @@ type EffectArg =
     | EffectArg[];
 
 type ActionTarget2 =
-    | (Omit<AbilityTargetCardProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
-    | (Omit<AbilityTargetAbilityProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
-    | (Omit<AbilityTargetElementSymbolProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
-    | (Omit<AbilityTargetRingProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
-    | (Omit<AbilityTargetTokenProps, 'gameAction'> & { gameAction?: GameAction | GameAction[] })
-    | AbilityTargetSelectProps
+    | AbilityTargetCardProps
+    | AbilityTargetAbilityProps
+    | AbilityTargetElementSymbolProps
+    | AbilityTargetRingProps
+    | AbilityTargetTokenProps
+    | AbilityTargetSelectProps;
 
 interface AbilityProps<Context> {
     title: string;
@@ -179,7 +179,7 @@ interface AbilityProps<Context> {
     limit?: any;
     max?: any;
     target?: ActionTarget2;
-    targets?: { [propName: string]: ActionTarget2 }
+    targets?: { [propName: string]: ActionTarget2 };
     initiateDuel?: InitiateDuel | ((context: AbilityContext) => InitiateDuel);
     cannotBeMirrored?: boolean;
     printedAbility?: boolean;
@@ -229,8 +229,8 @@ export interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbility
     when: WhenType;
     collectiveTrigger?: boolean;
     anyPlayer?: boolean;
-    target?: any//TriggeredAbilityTarget & TriggeredAbilityTarget;
-    targets?: any//TriggeredAbilityTargets;
+    target?: any; //TriggeredAbilityTarget & TriggeredAbilityTarget;
+    targets?: any; //TriggeredAbilityTargets;
     handler?: (context: TriggeredAbilityContext) => void;
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 }
@@ -238,8 +238,8 @@ export interface TriggeredAbilityWhenProps extends AbilityProps<TriggeredAbility
 export interface TriggeredAbilityAggregateWhenProps extends AbilityProps<TriggeredAbilityContext> {
     aggregateWhen: (events: any[], context: TriggeredAbilityContext) => boolean;
     collectiveTrigger?: boolean;
-    target?: any//TriggeredAbilityTarget & TriggeredAbilityTarget;
-    targets?: any//TriggeredAbilityTargets;
+    target?: any; //TriggeredAbilityTarget & TriggeredAbilityTarget;
+    targets?: any; //TriggeredAbilityTargets;
     handler?: (context: TriggeredAbilityContext) => void;
     then?: ((context?: TriggeredAbilityContext) => object) | object;
 }
@@ -251,7 +251,7 @@ export interface PersistentEffectProps<Source = any> {
     condition?: (context: AbilityContext<Source>) => boolean;
     match?: (card: BaseCard, context?: AbilityContext<Source>) => boolean;
     targetController?: Players;
-    targetLocation?: Locations;
+    targetLocation?: Locations | string;
     effect: Function | Function[];
     createCopies?: boolean;
 }

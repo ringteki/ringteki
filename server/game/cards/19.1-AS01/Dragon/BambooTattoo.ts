@@ -1,5 +1,4 @@
 import AbilityDsl from '../../../abilitydsl';
-import type BaseCard from '../../../basecard';
 import { CardTypes, Locations, Players } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext';
@@ -17,7 +16,8 @@ export default class BambooTattoo extends DrawCard {
             targetController: Players.Any,
             effect: AbilityDsl.effects.reduceCost({
                 amount: 1,
-                targetCondition: (target) => target.type === CardTypes.Character && target.printedCost <= 3,
+                targetCondition: (target) =>
+                    target instanceof DrawCard && target.type === CardTypes.Character && target.printedCost <= 3,
                 match: (card, source) => card === source
             })
         });

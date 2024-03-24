@@ -1,13 +1,14 @@
 const { CardTypes } = require('../../Constants');
 const AbilityDsl = require('../../abilitydsl');
 const DrawCard = require('../../drawcard.js');
+const Ring = require('../../ring');
 
 class GreaterUnderstanding extends DrawCard {
     setupCardAbilities() {
         this.reaction({
             when: {
                 onMoveFate: (event) => event.recipient === this.parent,
-                onPlaceFateOnUnclaimedRings: () => this.parent.isUnclaimed()
+                onPlaceFateOnUnclaimedRings: () => this.parent instanceof Ring && this.parent.isUnclaimed()
             },
             title: 'Resolve the attached ring\'s effect',
             gameAction: AbilityDsl.actions.resolveRingEffect(context => ({ target: context.source.parent }))
@@ -27,4 +28,3 @@ class GreaterUnderstanding extends DrawCard {
 GreaterUnderstanding.id = 'greater-understanding';
 
 module.exports = GreaterUnderstanding;
-

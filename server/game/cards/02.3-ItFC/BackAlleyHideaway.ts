@@ -1,3 +1,4 @@
+import { AbilityLimit } from '../../AbilityLimit';
 import { Locations, Phases, PlayTypes, EventNames, CardTypes } from '../../Constants';
 import { putIntoPlay, sacrifice } from '../../GameActions/GameActions';
 import ThenAbility from '../../ThenAbility';
@@ -105,6 +106,8 @@ class BackAlleyPlayCharacterAction extends DynastyCardAction {
 
 export default class BackAlleyHideaway extends DrawCard {
     static id = 'back-alley-hideaway';
+
+    backAlleyActionLimit: AbilityLimit
 
     setupCardAbilities() {
         this.backAlleyActionLimit = AbilityDsl.limit.perRound(1);

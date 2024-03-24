@@ -7,8 +7,9 @@ import type Game from './game';
 import type { GameAction } from './GameActions/GameAction';
 import * as GameActions from './GameActions/GameActions';
 import type Player from './player';
+import type { CanBeChatArg } from './GameChat';
 
-export class GameObject {
+export class GameObject  implements CanBeChatArg {
     public uuid = uuidV1();
     protected effects = [] as CardEffect[];
 
