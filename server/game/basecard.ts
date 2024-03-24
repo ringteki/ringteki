@@ -64,7 +64,6 @@ class BaseCard extends EffectSource {
     id: string;
     printedName: string;
     inConflict = false;
-    type: CardTypes;
     facedown: boolean;
 
     tokens: object = {};
@@ -89,7 +88,7 @@ class BaseCard extends EffectSource {
     printedKeywords: Array<PrintedKeyword> = [];
     disguisedKeywordTraits = [] as string[];
     parent?: BaseCard;
-    printedType: string
+    printedType: string;
 
     constructor(
         public owner: Player,
@@ -109,13 +108,6 @@ class BaseCard extends EffectSource {
         this.applyAttachmentBonus();
     }
 
-    public getType() {
-        if (this.anyEffect(EffectNames.ChangeType)) {
-            return this.mostRecentEffect(EffectNames.ChangeType);
-        }
-        return this.printedType;
-    }
-
     get name(): string {
         let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
         return copyEffect ? copyEffect.printedName : this.printedName;
@@ -123,6 +115,17 @@ class BaseCard extends EffectSource {
 
     set name(name: string) {
         this.printedName = name;
+    }
+
+    get type(): CardTypes {
+        return this.getType();
+    }
+
+    public getType() {
+        if (this.anyEffect(EffectNames.ChangeType)) {
+            return this.mostRecentEffect(EffectNames.ChangeType);
+        }
+        return this.printedType;
     }
 
     #mostRecentEffect(predicate: (effect: CardEffect) => boolean): CardEffect | undefined {
