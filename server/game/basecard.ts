@@ -62,7 +62,6 @@ class BaseCard extends EffectSource {
     controller: Player;
     game: Game;
 
-    id: string;
     printedName: string;
     inConflict = false;
     facedown: boolean;
@@ -98,7 +97,7 @@ class BaseCard extends EffectSource {
         super(owner.game);
         this.controller = owner;
 
-        this.id = cardData.id;
+        this.name = cardData.id;
         this.printedName = cardData.name;
         this.printedType = cardData.type;
         this.traits = cardData.traits || [];
@@ -109,6 +108,7 @@ class BaseCard extends EffectSource {
         this.applyAttachmentBonus();
     }
 
+    //@ts-ignore
     get name(): string {
         let copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
         return copyEffect ? copyEffect.printedName : this.printedName;

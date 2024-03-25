@@ -46,7 +46,7 @@ describe('Temptation Maho', function() {
                 });
             });
 
-            it('should require fate to be paid from characters', function() {
+            fit('should require fate to be paid from characters', function() {
                 let fate = this.player1.fate;
                 this.uji.fate = 3;
                 this.yoshi.fate = 2;

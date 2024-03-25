@@ -9,14 +9,17 @@ import * as GameActions from './GameActions/GameActions';
 import type Player from './player';
 import type { CanBeChatArg } from './GameChat';
 
-export class GameObject  implements CanBeChatArg {
+export class GameObject implements CanBeChatArg {
     public uuid = uuidV1();
     protected effects = [] as CardEffect[];
+    public id: string;
 
     public constructor(
         public game: Game,
-        public id: string
-    ) {}
+        public name: string
+    ) {
+        this.id = name;
+    }
 
     public addEffect(effect: CardEffect) {
         this.effects.push(effect);
@@ -61,9 +64,9 @@ export class GameObject  implements CanBeChatArg {
 
     public getShortSummary() {
         return {
-            id: this.id,
-            label: this.id,
-            name: this.id,
+            id: this.name,
+            label: this.name,
+            name: this.name,
             facedown: false,
             type: '',
             uuid: this.uuid
