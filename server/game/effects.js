@@ -13,6 +13,7 @@ const { canPlayFromOwn } = require('./Effects/Library/canPlayFromOwn');
 const { cardCannot } = require('./Effects/Library/cardCannot');
 const { changeConflictSkillFunctionPlayer, changeConflictSkillFunction } = require('./Effects/Library/changeConflictSkillFunctionPlayer');
 const { changePlayerGloryModifier } = require('./Effects/Library/changePlayerGloryModifier');
+const { changeType } = require('./Effects/Library/changeType');
 const { copyCard } = require('./Effects/Library/copyCard');
 const { gainAbility } = require('./Effects/Library/gainAbility');
 const { gainAllAbilities } = require('./Effects/Library/gainAllAbilities');
@@ -77,7 +78,7 @@ const Effects = {
         EffectBuilder.card.static(EffectNames.CannotParticipateAsDefender, type),
     cardCannot,
     changeContributionFunction: (func) => EffectBuilder.card.static(EffectNames.ChangeContributionFunction, func),
-    changeType: (type) => EffectBuilder.card.static(EffectNames.ChangeType, type),
+    changeType,
     characterProvidesAdditionalConflict: (type) =>
         EffectBuilder.card.detached(EffectNames.AdditionalConflict, {
             apply: (card) => card.controller.addConflictOpportunity(type),

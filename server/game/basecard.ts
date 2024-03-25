@@ -40,6 +40,7 @@ import type { CardEffect } from './Effects/types';
 import type { GainAllAbilities } from './Effects/Library/gainAllAbilities';
 import type { Duel } from './Duel';
 import { EffectSource } from './EffectSource';
+import type { ChangeTypeValue } from './Effects/Library/changeType';
 
 const ValidKeywords = new Set<PrintedKeyword>([
     'ancestral',
@@ -88,7 +89,7 @@ class BaseCard extends EffectSource {
     printedKeywords: Array<PrintedKeyword> = [];
     disguisedKeywordTraits = [] as string[];
     parent?: BaseCard;
-    printedType: string;
+    printedType: CardTypes;
 
     constructor(
         public owner: Player,
@@ -121,9 +122,9 @@ class BaseCard extends EffectSource {
         return this.getType();
     }
 
-    public getType() {
+    public getType(): CardTypes {
         if (this.anyEffect(EffectNames.ChangeType)) {
-            return this.mostRecentEffect(EffectNames.ChangeType);
+            return this.mostRecentEffect(EffectNames.ChangeType) as ChangeTypeValue;
         }
         return this.printedType;
     }
