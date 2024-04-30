@@ -4,7 +4,7 @@ import DrawCard from '../../../drawcard';
 import type { Conflict } from '../../../conflict';
 import type Player from '../../../player';
 
-function hasHigherSkill(conflict: Conflict, player: Player): boolean {
+function hasEqualOrHigherSkill(conflict: Conflict, player: Player): boolean {
     let mySide = 0;
     let enemySide = 0;
     const conflictType = conflict.conflictType;
@@ -24,7 +24,7 @@ function hasHigherSkill(conflict: Conflict, player: Player): boolean {
         }
     }
 
-    return mySide > enemySide;
+    return mySide >= enemySide;
 }
 
 export default class DiplomatOfTheSteppes extends DrawCard {
@@ -36,7 +36,7 @@ export default class DiplomatOfTheSteppes extends DrawCard {
             cost: AbilityDsl.costs.payHonor(1),
             condition: (context) =>
                 (context.source as DrawCard).isParticipating('political') &&
-                hasHigherSkill(context.game.currentConflict, context.player),
+                hasEqualOrHigherSkill(context.game.currentConflict, context.player),
             effect: 'switch the conflict type to {1}',
             effectArgs: () => 'military',
             gameAction: AbilityDsl.actions.switchConflictType({ targetConflictType: ConflictTypes.Military })

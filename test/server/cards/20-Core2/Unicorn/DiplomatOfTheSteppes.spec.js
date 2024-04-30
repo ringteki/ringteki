@@ -7,7 +7,7 @@ describe('Diplomat of the Steppes', function () {
                     inPlay: ['arbiter-of-authority']
                 },
                 player2: {
-                    inPlay: ['diplomat-of-the-steppes', 'wandering-ronin'],
+                    inPlay: ['diplomat-of-the-steppes', 'wandering-ronin','golden-eagle'],
                     hand: []
                 }
             });
@@ -15,6 +15,7 @@ describe('Diplomat of the Steppes', function () {
             this.arbiterOfAuthority = this.player1.findCardByName('arbiter-of-authority');
             this.diplomatOfTheSteppes = this.player2.findCardByName('diplomat-of-the-steppes');
             this.wanderingRonin = this.player2.findCardByName('wandering-ronin');
+            this.goldenEagle = this.player2.findCardByName('golden-eagle');
             this.noMoreActions();
         });
 
@@ -39,7 +40,7 @@ describe('Diplomat of the Steppes', function () {
             this.initiateConflict({
                 type: 'political',
                 attackers: [this.arbiterOfAuthority],
-                defenders: [this.diplomatOfTheSteppes, this.wanderingRonin]
+                defenders: [this.diplomatOfTheSteppes, this.goldenEagle]
             });
             expect(this.game.currentConflict.conflictType).toBe('political');
             this.player2.clickCard(this.diplomatOfTheSteppes);
