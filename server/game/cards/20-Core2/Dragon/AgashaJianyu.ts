@@ -1,50 +1,49 @@
-import { CardTypes, Durations, TargetModes } from '../../../Constants';
+import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
-import { PlayAttachmentAction } from '../../../PlayAttachmentAction';
-import Ring from '../../../ring';
-import Player from '../../../player';
+import type { AbilityContext } from '../../../AbilityContext';
 
-type Element = 'air' | 'earth' | 'fire' | 'void' | 'water';
-
-function isSpell(card: DrawCard) {
-    return card.hasTrait('spell');
+function bonusBase(context: AbilityContext) {
+    const elementalTraits = new Set();
+    context.player.cardsInPlay.forEach((character: DrawCard) => {
+        for (const trait of character.getTraits()) {
+            switch (trait) {
+                case 'air':
+                case 'earth':
+                case 'fire':
+                case 'void':
+                case 'water':
+                    elementalTraits.add(trait);
+            }
+        }
+    });
+    return elementalTraits.size;
 }
 
 export default class AgashaJianyu extends DrawCard {
     static id = 'agasha-jianyu';
 
     public setupCardAbilities() {
-        this.reaction({
-            title: 'Take fate from a ring and block it from enemy attacks',
-            when: {
-                onCardPlayed: (event, context) => event.player === context.player && isSpell(event.card as DrawCard),
-                onAbilityResolverInitiated: (event, context) => {
-                    //might be able to remove the source.type check at some point
-                    const isAttachment =
-                        event.context.source.type === CardTypes.Attachment ||
-                        event.context.ability instanceof PlayAttachmentAction;
-                    return event.context.player === context.player && isAttachment && isSpell(event.context.source);
-                }
-            },
+        this.action({
+            title: 'Empower a character with the combined strength of the elements',
+            condition: (context) => context.game.isDuringConflict(),
             target: {
-                mode: TargetModes.Ring,
-                activePromptTitle: 'Choose an unclaimed ring',
-                ringCondition: (ring: Ring) => ring.isUnclaimed() && ring.fate > 0,
-                gameAction: AbilityDsl.actions.sequentialContext((context) => ({
-                    gameActions: [
-                        AbilityDsl.actions.takeFate({ target: context.target }),
-                        AbilityDsl.actions.ringLastingEffect({
-                            duration: Durations.UntilEndOfPhase,
-                            target: (context.ring.getElements() as Element[]).map(
-                                (element) => this.game.rings[element]
-                            ),
-                            effect: AbilityDsl.effects.cannotDeclareRing(
-                                (player: Player) => player === context.player.opponent
-                            )
-                        })
-                    ]
-                }))
+                cardType: CardTypes.Character,
+                cardCondition: (card) => card.isParticipating(),
+                gameAction: AbilityDsl.actions.cardLastingEffect((context) => {
+                    const bonus = bonusBase(context);
+                    return {
+                        effect: [
+                            AbilityDsl.effects.modifyMilitarySkill(2 * bonus),
+                            AbilityDsl.effects.modifyPoliticalSkill(1 * bonus)
+                        ]
+                    };
+                })
+            },
+            effect: 'give {0} +{1}{2}/+{3}{4}',
+            effectArgs: (context) => {
+                const bonus = bonusBase(context);
+                return [2 * bonus, 'military', 1 * bonus, 'political'];
             }
         });
     }
