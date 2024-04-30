@@ -1,8 +1,8 @@
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
-export default class Makuragaeshi extends DrawCard {
-    static id = 'makuragaeshi';
+export default class Onibi extends DrawCard {
+    static id = 'onibi';
 
     public setupCardAbilities() {
         this.reaction({
