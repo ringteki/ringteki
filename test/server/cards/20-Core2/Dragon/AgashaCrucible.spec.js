@@ -24,14 +24,19 @@ describe('Agasha Crucible', function () {
             this.favorableGround = this.player2.placeCardInProvince('favorable-ground', 'province 1');
         });
 
-        it('should trigger when a spell event is played', function () {
+        it('gives elemental Trait to a shugenja and gain an action', function () {
             this.player1.clickCard(this.agashaCrucible);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).toBeAbleToSelect(this.doomed);
-            expect(this.player1).not.toBeAbleToSelect(this.mystic);
+            expect(this.player1).toBeAbleToSelect(this.mystic);
 
             this.player1.clickCard(this.doomed);
             expect(this.player1).toHavePrompt('Choose Trait to gain');
+            expect(this.player1).toHavePromptButton('Air');
+            expect(this.player1).toHavePromptButton('Earth');
+            expect(this.player1).toHavePromptButton('Fire');
+            expect(this.player1).toHavePromptButton('Void');
+            expect(this.player1).toHavePromptButton('Water');
             this.player1.clickPrompt('Water');
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Agasha Crucible to give Doomed Shugenja another Elemental Trait, and take another action!'
