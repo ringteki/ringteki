@@ -6,7 +6,7 @@ export default class UtakuSumire extends DrawCard {
     static id = 'utaku-sumire';
 
     setupCardAbilities() {
-        this.reaction({
+        this.interrupt({
             title: "Don't play cards. Place fate on up to 2 characters on win",
             when: {
                 onConflictStarted: (_, context) => context.source.isAttacking()

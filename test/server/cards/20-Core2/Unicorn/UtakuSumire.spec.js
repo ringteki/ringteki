@@ -31,7 +31,7 @@ describe('Utaku Sumire', function () {
                 defenders: []
             });
 
-            expect(this.player1).toHavePrompt('Any reactions?');
+            expect(this.player1).toHavePrompt('Any interrupts?');
             this.player1.clickCard(this.utakuSumire);
             expect(this.getChatLogs(5)).toContain(
                 'player1 uses Utaku Sumire to charge into battle under the devout silence of the Utaku - during this conflict, player1 refuses to play Action events. If they win the conflict, their warrior will have their confidence renewed!'
