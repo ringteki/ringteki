@@ -13,7 +13,7 @@ describe('Asako Kousuke', function () {
                     ]
                 },
                 player2: {
-                    inPlay: ['bayushi-manipulator']
+                    inPlay: ['bayushi-manipulator', 'bayushi-kachiko']
                 }
             });
             this.kousukeHonored = this.player1.findCardByName('asako-kousuke');
@@ -23,6 +23,8 @@ describe('Asako Kousuke', function () {
             this.seekerOrdinary = this.player1.findCardByName('seeker-initiate');
 
             this.manipulatorDishonored = this.player2.findCardByName('bayushi-manipulator');
+            this.bayushiKachiko = this.player2.findCardByName('bayushi-kachiko');
+            this.bayushiKachiko.honor();
 
             this.kousukeHonored.honor();
             this.adeptHonored.honor();
@@ -33,16 +35,17 @@ describe('Asako Kousuke', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.adeptHonored, this.solemnDishonored, this.keeperTainted, this.seekerOrdinary],
-                defenders: [this.manipulatorDishonored]
+                defenders: [this.manipulatorDishonored, this.bayushiKachiko]
             });
             this.player2.pass();
         });
 
-        it('chooses participating characters with stats', function () {
+        it('chooses participating characters with stats and lower glory', function () {
             this.player1.clickCard(this.kousukeHonored);
             expect(this.player1).toHavePrompt('Choose a character');
             expect(this.player1).not.toBeAbleToSelect(this.kousukeHonored);
             expect(this.player1).not.toBeAbleToSelect(this.seekerOrdinary);
+            expect(this.player1).not.toBeAbleToSelect(this.bayushiKachiko);
             expect(this.player1).toBeAbleToSelect(this.adeptHonored);
             expect(this.player1).toBeAbleToSelect(this.solemnDishonored);
             expect(this.player1).toBeAbleToSelect(this.keeperTainted);
@@ -120,7 +123,6 @@ describe('Asako Kousuke', function () {
             );
 
             this.noMoreActions();
-            this.player1.clickPrompt('Yes');
             this.player1.clickPrompt('Gain 2 honor');
             expect(this.adeptHonored.isHonored).toBe(false);
             expect(this.adeptHonored.isTainted).toBe(true);

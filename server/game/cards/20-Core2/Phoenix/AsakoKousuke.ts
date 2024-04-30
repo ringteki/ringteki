@@ -19,7 +19,8 @@ export default class AsakoKousuke extends DrawCard {
                 [ORIGINL_TOKEN]: {
                     mode: TargetModes.Token,
                     cardType: CardTypes.Character,
-                    cardCondition: (card: DrawCard) => card.isParticipating()
+                    cardCondition: (card: DrawCard, context) =>
+                        card.isParticipating() && card.getGlory() <= context.source.getGlory()
                 },
                 [SELECTION]: {
                     dependsOn: ORIGINL_TOKEN,
