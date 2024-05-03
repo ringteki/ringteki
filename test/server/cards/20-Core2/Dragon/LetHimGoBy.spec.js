@@ -1,208 +1,37 @@
 describe('Let Him Go By', function () {
     integration(function () {
-        beforeEach(function () {
-            this.setupTest({
-                phase: 'conflict',
-                player1: {
-                    fate: 20,
-                    inPlay: ['promising-kohai', 'daidoji-akikore', 'kakita-yoshi', 'bayushi-yojiro', 'matsu-berserker'],
-                    hand: [
-                        'destiny-revealed',
-                        'dutiful-assistant',
-                        'way-of-the-crane',
-                        'one-with-the-sea',
-                        'steward-of-law'
-                    ]
-                },
-                player2: {
-                    inPlay: ['kakita-toshimoko', 'shiba-tsukune', 'shosuro-sadako'],
-                    hand: ['duel-to-the-death', 'let-him-go-by', 'let-him-go-by']
-                },
-                gameMode: 'emerald'
-            });
-
-            this.kohai = this.player1.findCardByName('promising-kohai');
-            this.destiny = this.player1.findCardByName('destiny-revealed');
-            this.akikore = this.player1.findCardByName('daidoji-akikore');
-
-            this.crane = this.player1.findCardByName('way-of-the-crane');
-            this.yoshi = this.player1.findCardByName('kakita-yoshi');
-            this.berserker = this.player1.findCardByName('matsu-berserker');
-            this.yojiro = this.player1.findCardByName('bayushi-yojiro');
-            this.assistant = this.player1.findCardByName('dutiful-assistant');
-            this.oneWithTheSea = this.player1.findCardByName('one-with-the-sea');
-            this.stewardOfLaw = this.player1.findCardByName('steward-of-law');
-
-            this.toshimoko = this.player2.findCardByName('kakita-toshimoko');
-            this.tsukune = this.player2.findCardByName('shiba-tsukune');
-            this.sadako = this.player2.findCardByName('shosuro-sadako');
-            this.dttd = this.player2.findCardByName('duel-to-the-death');
-            this.goBy = this.player2.filterCardsByName('let-him-go-by')[0];
-            this.goBy2 = this.player2.filterCardsByName('let-him-go-by')[1];
-        });
-
-        describe('Duel Part', function () {
-            it('shouldnt fire on non-duel abilities', function () {
-                let hand = this.player1.hand.length;
-
-                this.akikore.dishonor();
-
-                this.player1.clickCard(this.crane);
-                this.player1.clickCard(this.akikore);
-
-                expect(this.player2).toHavePrompt('Action Window');
-            });
-
-            it('duel challenge', function () {
-                let hand = this.player1.hand.length;
-
-                this.akikore.dishonor();
-
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.akikore, this.yoshi],
-                    defenders: [this.toshimoko, this.tsukune]
+        describe('Reaction side', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    gameMode: 'emerald',
+                    phase: 'conflict',
+                    player1: {
+                        fate: 20,
+                        inPlay: ['daidoji-akikore', 'kakita-yoshi'],
+                        hand: ['one-with-the-sea', 'steward-of-law']
+                    },
+                    player2: {
+                        inPlay: [],
+                        hand: ['let-him-go-by']
+                    }
                 });
 
-                this.player2.clickCard(this.dttd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.akikore);
+                this.akikore = this.player1.findCardByName('daidoji-akikore');
+                this.yoshi = this.player1.findCardByName('kakita-yoshi');
+                this.oneWithTheSea = this.player1.findCardByName('one-with-the-sea');
+                this.stewardOfLaw = this.player1.findCardByName('steward-of-law');
 
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.kohai);
-                this.player1.clickCard(this.kohai);
+                this.goBy = this.player2.findCardByName('let-him-go-by');
 
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect(this.goBy);
-
-                this.player2.clickCard(this.goBy);
-
-                expect(this.player1.hand.length).toBe(hand - 1);
-
-                expect(this.getChatLogs(10)).toContain(
-                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
-                );
-            });
-
-            it('duel focus', function () {
-                let hand = this.player1.hand.length;
-
-                this.akikore.dishonor();
-
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.akikore, this.yoshi],
-                    defenders: [this.toshimoko, this.tsukune],
-                    type: 'political'
-                });
-
-                this.player2.clickCard(this.dttd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.akikore);
-
-                this.player1.pass();
-
-                this.player1.clickPrompt('1');
-                this.player2.clickPrompt('1');
-
-                this.player1.clickCard(this.akikore);
-
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect(this.goBy);
-
-                this.player2.clickCard(this.goBy);
-
-                expect(this.player1.hand.length).toBe(hand - 1);
-
-                expect(this.getChatLogs(10)).toContain(
-                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
-                );
-            });
-
-            it('duel strike', function () {
-                let hand = this.player1.hand.length;
-
-                this.akikore.dishonor();
-
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.akikore, this.yoshi],
-                    defenders: [this.toshimoko, this.tsukune],
-                    type: 'political'
-                });
-
-                this.player2.clickCard(this.dttd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.akikore);
-
-                this.player1.pass();
-
-                this.player1.clickPrompt('3');
-                this.player2.clickPrompt('1');
-
-                this.player1.pass();
-
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-                expect(this.player1).toBeAbleToSelect(this.destiny);
-                this.player1.clickCard(this.destiny);
-
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect(this.goBy);
-
-                this.player2.clickCard(this.goBy);
-
-                expect(this.player1.hand.length).toBe(hand - 2);
-
-                expect(this.getChatLogs(10)).toContain(
-                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
-                );
-            });
-
-            it('max 1 per duel', function () {
-                let hand = this.player1.hand.length;
-
-                this.akikore.dishonor();
-
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.akikore, this.yoshi],
-                    defenders: [this.toshimoko, this.tsukune]
-                });
-
-                this.player2.clickCard(this.dttd);
-                this.player2.clickCard(this.toshimoko);
-                this.player2.clickCard(this.akikore);
-
-                this.player1.clickCard(this.kohai);
-
-                expect(this.player2).toHavePrompt('Triggered Abilities');
-                expect(this.player2).toBeAbleToSelect(this.goBy);
-                expect(this.player2).toBeAbleToSelect(this.goBy2);
-                this.player2.clickCard(this.goBy);
-                expect(this.player1.hand.length).toBe(hand - 1);
-                expect(this.getChatLogs(10)).toContain(
-                    'player2 plays Let Him Go By to make player1 discard 1 card at random'
-                );
-
-                expect(this.player2).toHavePrompt('Honor Bid');
-                this.player1.clickPrompt('1');
-                this.player2.clickPrompt('1');
-
-                this.player1.clickCard(this.akikore);
-
-                expect(this.player2).not.toHavePrompt('Triggered Abilities');
-            });
-        });
-
-        describe('anti-movement reaction', function () {
-            it('bows a character that moves into a conflict', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.akikore],
                     defenders: []
                 });
-
                 this.player2.pass();
+            });
+
+            it('bows a character that moves into a conflict', function () {
                 this.player1.clickCard(this.oneWithTheSea);
                 this.player1.clickCard(this.yoshi);
 
@@ -212,13 +41,6 @@ describe('Let Him Go By', function () {
             });
 
             it('bows a character that is played into a conflict', function () {
-                this.noMoreActions();
-                this.initiateConflict({
-                    attackers: [this.akikore],
-                    defenders: []
-                });
-
-                this.player2.pass();
                 this.player1.clickCard(this.stewardOfLaw);
                 this.player1.clickPrompt('0');
                 this.player1.clickPrompt('Conflict');
@@ -226,6 +48,68 @@ describe('Let Him Go By', function () {
                 expect(this.player2).toHavePrompt('Triggered Abilities');
                 this.player2.clickCard(this.goBy);
                 expect(this.getChatLogs(10)).toContain('player2 plays Let Him Go By to bow Steward of Law');
+            });
+        });
+
+        describe('Duel side', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    gameMode: 'emerald',
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['kakita-taneharu', 'army-of-the-rising-wave'],
+                        hand: ['let-him-go-by']
+                    },
+                    player2: {
+                        inPlay: ['one-of-the-forgotten', 'miya-mystic'],
+                        hand: ['fine-katana']
+                    }
+                });
+
+                this.taneharu = this.player1.findCardByName('kakita-taneharu');
+                this.army = this.player1.findCardByName('army-of-the-rising-wave');
+                this.goBy = this.player1.findCardByName('let-him-go-by');
+
+                this.oneOfTheForgotten = this.player2.findCardByName('one-of-the-forgotten');
+                this.miyaMystic = this.player2.findCardByName('miya-mystic');
+                this.fineKatana = this.player2.findCardByName('fine-katana');
+
+                this.player1.pass();
+                this.player2.playAttachment(this.fineKatana, this.oneOfTheForgotten);
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.taneharu],
+                    defenders: [this.miyaMystic]
+                });
+            });
+
+            it('is initiated by a participating character', function () {
+                this.player2.pass();
+                this.player1.clickCard(this.goBy);
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).toBeAbleToSelect(this.taneharu);
+                expect(this.player1).not.toBeAbleToSelect(this.army);
+            });
+
+            it('can challenge a character at home or in the conflict', function () {
+                this.player2.pass();
+                this.player1.clickCard(this.goBy);
+                this.player1.clickCard(this.taneharu);
+                expect(this.player1).toHavePrompt('Choose a character');
+                expect(this.player1).toBeAbleToSelect(this.oneOfTheForgotten);
+                expect(this.player1).toBeAbleToSelect(this.miyaMystic);
+            });
+
+            it('gives the winner a skill bonus equal to the loser', function () {
+                this.player2.pass();
+                this.player1.clickCard(this.goBy);
+                this.player1.clickCard(this.taneharu);
+                this.player1.clickCard(this.oneOfTheForgotten);
+                this.player1.clickPrompt('1');
+                this.player2.clickPrompt('1');
+                expect(this.getChatLogs(10)).toContain('Duel Effect: Kakita Taneharu gets +6military skill');
+                expect(this.taneharu.getMilitarySkill()).toBe(12);
             });
         });
     });
