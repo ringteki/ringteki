@@ -22,7 +22,18 @@ describe('Diligent Chaperone', function () {
             this.brash.honor();
         });
 
-        it('should cancel trying to dishonor an honored character', function () {
+        it('cannot attack', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.whisperer, this.brash, this.yojimbo],
+                defenders: [this.dairu]
+            });
+
+            expect(this.player2).toHavePrompt('Conflict Action Window');
+            expect(this.yojimbo.isParticipating()).toBe(false);
+        });
+
+        it('rehonors an honored character who is dishonored', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.brash],
@@ -38,13 +49,10 @@ describe('Diligent Chaperone', function () {
             expect(this.brash.isHonored).toBe(true);
             expect(this.scorp.location).toBe('conflict discard pile');
             expect(this.yojimbo.bowed).toBe(false);
-
-            expect(this.getChatLogs(5)).toContain(
-                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
-            );
+            expect(this.getChatLogs(5)).toContain('player1 honors Brash Samurai');
         });
 
-        it('should not cancel if bowed', function () {
+        it('does not work while bowed', function () {
             this.yojimbo.bow();
 
             this.noMoreActions();
@@ -60,7 +68,7 @@ describe('Diligent Chaperone', function () {
             expect(this.brash.isHonored).toBe(false);
         });
 
-        it('should not cancel trying to dishonor a normal character', function () {
+        it('does not work when an orginary character is dishonored', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.brash],
@@ -73,7 +81,7 @@ describe('Diligent Chaperone', function () {
             expect(this.player1).toHavePrompt('Conflict Action Window');
         });
 
-        it('should cancel trying to move an honored status token off a character', function () {
+        it('rehonors an honored character when their token is moved', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.whisperer, this.brash],
@@ -88,12 +96,9 @@ describe('Diligent Chaperone', function () {
             this.player1.clickCard(this.yojimbo);
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.brash.isHonored).toBe(true);
-            expect(this.dairu.isHonored).toBe(false);
+            expect(this.dairu.isHonored).toBe(true);
             expect(this.yojimbo.bowed).toBe(false);
-
-            expect(this.getChatLogs(5)).toContain(
-                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
-            );
+            expect(this.getChatLogs(5)).toContain('player1 honors Brash Samurai');
         });
 
         it('should cancel dishonoring via fire ring', function () {
@@ -117,9 +122,7 @@ describe('Diligent Chaperone', function () {
             expect(this.brash.isHonored).toBe(true);
             expect(this.yojimbo.bowed).toBe(false);
 
-            expect(this.getChatLogs(5)).toContain(
-                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
-            );
+            expect(this.getChatLogs(5)).toContain('player1 honors Brash Samurai');
         });
 
         it('should cancel dishonoring via cost', function () {
@@ -141,21 +144,10 @@ describe('Diligent Chaperone', function () {
             expect(this.brash.isHonored).toBe(true);
             expect(this.whisperer.isHonored).toBe(true);
 
+            expect(this.getChatLogs(10)).toContain('player1 honors Brash Samurai');
             expect(this.getChatLogs(10)).toContain(
-                'player1 uses Diligent Chaperone to prevent Brash Samurai from losing their status token'
+                'player1 plays Resourcefulness, dishonoring Brash Samurai to honor Doji Whisperer'
             );
-            expect(this.getChatLogs(10)).toContain('player1 plays Resourcefulness, dishonoring Brash Samurai to honor Doji Whisperer')
-        });
-
-        it('cannot attack', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                attackers: [this.whisperer, this.brash, this.yojimbo],
-                defenders: [this.dairu]
-            });
-
-            expect(this.player2).toHavePrompt('Conflict Action Window');
-            expect(this.yojimbo.isParticipating()).toBe(false);
         });
     });
 });

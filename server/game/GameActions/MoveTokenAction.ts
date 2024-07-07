@@ -50,6 +50,7 @@ export class MoveTokenAction extends TokenAction {
         const { recipient } = this.getProperties(context) as MoveTokenProperties;
         super.addPropertiesToEvent(event, token, context, additionalProperties);
         event.recipient = recipient;
+        event.donor = token.card;
     }
 
     eventHandler(event): void {
