@@ -9,10 +9,8 @@ export default class GreaterUnderstanding extends DrawCard {
 
     setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.cardCannot({
-                cannot: 'target',
-                restricts: 'opponentsCardAbilities',
-                applyingPlayer: this.controller
+            effect: AbilityDsl.effects.immunity({
+                restricts: 'opponentsCardEffects'
             })
         });
 
