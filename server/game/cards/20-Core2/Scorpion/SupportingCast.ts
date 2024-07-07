@@ -7,29 +7,43 @@ export default class SupportingCast extends DrawCard {
     static id = 'supporting-cast';
 
     setupCardAbilities() {
-        this.interrupt({
+        this.reaction({
             when: {
-                onInitiateAbilityEffects: (event, context) =>
-                    context.game.isDuringConflict() &&
-                    event.cardTargets.some((card: BaseCard) => card.controller === context.player)
+                onInitiateAbilityEffects: (event, context) => {
+                    return (
+                        context.game.isDuringConflict('military') &&
+                        event.cardTargets.some((card: BaseCard) => card.controller === context.player)
+                    );
+                }
             },
             title: 'Give +3 military to a character',
-            cost: AbilityDsl.costs.bow({
-                cardType: CardTypes.Character,
-                cardCondition: (card, context) =>
-                    (context as any).event.cardTargets.includes(
-                        (targetedByAbility: BaseCard) => targetedByAbility === card
-                    )
-            }),
             target: {
+                activePromptTitle: 'Choose a character to give +3 military skill',
                 cardType: CardTypes.Character,
                 controller: Players.Self,
-                cardCondition: (card: DrawCard) => card.isParticipating(),
-                gameAction: AbilityDsl.actions.cardLastingEffect({
-                    duration: Durations.UntilEndOfConflict,
-                    effect: AbilityDsl.effects.modifyMilitarySkill(3)
-                })
+                cardCondition: (card: DrawCard, context: any) =>
+                    card.isParticipating() &&
+                    !context.event.cardTargets.some((eventCard: BaseCard) => eventCard === card),
+                gameAction: [
+                    AbilityDsl.actions.selectCard((context) => ({
+                        activePromptTitle: 'Choose a character to bow',
+                        hidePromptIfSingleCard: true,
+                        cardCondition: (card, context: any) =>
+                            context.event.cardTargets.some((eventCard: BaseCard) => eventCard === card),
+                        subActionProperties: (card) => {
+                            context.target = card;
+                            return { target: card };
+                        },
+                        gameAction: AbilityDsl.actions.bow()
+                    })),
+                    AbilityDsl.actions.cardLastingEffect({
+                        duration: Durations.UntilEndOfConflict,
+                        effect: AbilityDsl.effects.modifyMilitarySkill(3)
+                    })
+                ]
             },
+            effect: 'give +3 military skill to {1} - {2} was just a distraction!',
+            effectArgs: (context) => [context.target, context.event.cardTargets],
             max: AbilityDsl.limit.perConflict(1)
         });
     }
