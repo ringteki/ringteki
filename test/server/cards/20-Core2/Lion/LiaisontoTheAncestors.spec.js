@@ -4,80 +4,82 @@ describe('Liaison to the Ancestors', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['liaison-to-the-ancestors', 'akodo-toturi'],
+                    inPlay: ['liaison-to-the-ancestors', 'honored-general', 'akodo-toturi'],
                     hand: ['resourcefulness'],
-                    dynastyDiscard: ['matsu-berserker', 'ikoma-prodigy']
+                    dynastyDiscard: ['ikoma-ujiaki']
                 },
                 player2: {
                     inPlay: ['bayushi-dairu'],
-                    hand: ['way-of-the-scorpion']
+                    hand: ['way-of-the-scorpion', 'unspoken-etiquette']
                 }
             });
 
             this.liaisonToTheAncestors = this.player1.findCardByName('liaison-to-the-ancestors');
             this.toturi = this.player1.findCardByName('akodo-toturi');
-            this.matsuBerserker = this.player1.findCardByName('matsu-berserker');
-            this.ikomaProdigy = this.player1.findCardByName('ikoma-prodigy');
+            this.honoredGeneral = this.player1.findCardByName('honored-general');
+            this.ujiaki = this.player1.findCardByName('ikoma-ujiaki');
             this.resourcefulness = this.player1.findCardByName('resourcefulness');
 
             this.scorp = this.player2.findCardByName('way-of-the-scorpion');
             this.dairu = this.player2.findCardByName('bayushi-dairu');
+            this.unspokenEtiquette = this.player2.findCardByName('unspoken-etiquette');
         });
 
-        it('should cancel trying to dishonor an honored character', function () {
+        it('works on multiple characters at the same time', function () {
             this.toturi.honor();
 
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.toturi],
+                type: 'political',
+                attackers: [this.toturi, this.honoredGeneral, this.liaisonToTheAncestors],
                 defenders: []
             });
 
-            this.player2.clickCard(this.scorp);
-            this.player2.clickCard(this.toturi);
+            this.player2.clickCard(this.unspokenEtiquette);
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.liaisonToTheAncestors);
 
             this.player1.clickCard(this.liaisonToTheAncestors);
-            expect(this.player1).toHavePrompt('Choose a character from your discard pile');
-            expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
-            expect(this.player1).not.toBeAbleToSelect(this.ikomaProdigy);
 
-            this.player1.clickCard(this.matsuBerserker);
-
-            expect(this.toturi.isDishonored).toBe(false);
-            expect(this.scorp.location).toBe('conflict discard pile');
-            expect(this.matsuBerserker.location).toBe('dynasty deck');
-            expect(this.getChatLogs(5)).toContain(
-                "player1 uses Liaison to the Ancestors to protect Akodo Toturi's honor, returning their ancestor Matsu Berserker back to their deck"
-            );
+            expect(this.player1).toHavePrompt('Select a card to affect');
+            this.player1.clickCard(this.honoredGeneral);
+            expect(this.honoredGeneral.isHonored).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player1 uses Liaison to the Ancestors to honor Honored General');
         });
 
-        it('should cancel trying to dishonor a character', function () {
+        it('rehonor character with lower cost', function () {
+            this.toturi.honor();
+
             this.noMoreActions();
             this.initiateConflict({
-                attackers: [this.toturi],
+                attackers: [this.toturi, this.honoredGeneral],
+                defenders: []
+            });
+
+            this.player2.clickCard(this.scorp);
+            this.player2.clickCard(this.honoredGeneral);
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.liaisonToTheAncestors);
+
+            this.player1.clickCard(this.liaisonToTheAncestors);
+            expect(this.honoredGeneral.isHonored).toBe(false);
+            expect(this.scorp.location).toBe('conflict discard pile');
+            expect(this.getChatLogs(5)).toContain('player1 uses Liaison to the Ancestors to honor Honored General');
+        });
+
+        it('does not rehonor character with higher cost', function () {
+            this.toturi.honor();
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.toturi, this.honoredGeneral],
                 defenders: []
             });
 
             this.player2.clickCard(this.scorp);
             this.player2.clickCard(this.toturi);
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.liaisonToTheAncestors);
-
-            this.player1.clickCard(this.liaisonToTheAncestors);
-            expect(this.player1).toHavePrompt('Choose a character from your discard pile');
-            expect(this.player1).toBeAbleToSelect(this.matsuBerserker);
-            expect(this.player1).not.toBeAbleToSelect(this.ikomaProdigy);
-
-            this.player1.clickCard(this.matsuBerserker);
-
-            expect(this.toturi.isDishonored).toBe(false);
-            expect(this.scorp.location).toBe('conflict discard pile');
-            expect(this.matsuBerserker.location).toBe('dynasty deck');
-            expect(this.getChatLogs(5)).toContain(
-                "player1 uses Liaison to the Ancestors to protect Akodo Toturi's honor, returning their ancestor Matsu Berserker back to their deck"
-            );
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+            expect(this.player1).not.toBeAbleToSelect(this.liaisonToTheAncestors);
         });
 
         it('should cancel dishonoring via fire ring', function () {
@@ -92,27 +94,15 @@ describe('Liaison to the Ancestors', function () {
 
             this.noMoreActions();
 
-            this.player2.clickCard(this.toturi);
-            this.player2.clickPrompt('Dishonor Akodo Toturi');
+            this.player2.clickCard(this.honoredGeneral);
+            this.player2.clickPrompt('Dishonor Honored General');
+
             expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.liaisonToTheAncestors);
 
             this.player1.clickCard(this.liaisonToTheAncestors);
-            this.player1.clickCard(this.matsuBerserker);
-            expect(this.toturi.isDishonored).toBe(false);
-            expect(this.matsuBerserker.location).toBe('dynasty deck');
-            expect(this.getChatLogs(5)).toContain(
-                "player1 uses Liaison to the Ancestors to protect Akodo Toturi's honor, returning their ancestor Matsu Berserker back to their deck"
-            );
-        });
-
-        it('should substitute dishonoring as cost', function () {
-            this.player1.clickCard(this.resourcefulness);
-            this.player1.clickCard(this.liaisonToTheAncestors);
-            this.player1.clickCard(this.toturi);
-
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.liaisonToTheAncestors);
+            expect(this.honoredGeneral.isHonored).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player1 uses Liaison to the Ancestors to honor Honored General');
         });
     });
 });
