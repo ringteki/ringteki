@@ -45,7 +45,7 @@ describe('Wise Quartermaster', function () {
             expect(this.player1).toBeAbleToSelect(this.theLionsShadow);
             expect(this.player1).toBeAbleToSelect(this.makeshiftWarCamp);
             expect(this.player1).not.toBeAbleToSelect(this.ornateFan);
-            expect(this.player1).not.toBeAbleToSelect(this.fieryMadness);
+            expect(this.player1).toBeAbleToSelect(this.fieryMadness);
             expect(this.player1).not.toBeAbleToSelect(this.treasuredGift);
         });
 
