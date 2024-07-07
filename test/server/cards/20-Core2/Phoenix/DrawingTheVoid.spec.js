@@ -4,54 +4,53 @@ describe('Drawing the Void', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['ikoma-prodigy', 'akodo-kaede'],
-                    hand: ['regal-bearing', 'drawing-the-void', 'reprieve', 'fine-katana', 'ornate-fan']
+                    inPlay: ['akodo-kaede', 'miya-mystic'],
+                    hand: ['drawing-the-void']
                 },
-                player2: {}
+                player2: {
+                    hand: ['regal-bearing', 'reprieve']
+                }
             });
 
-            this.ikomaProdigy = this.player1.findCardByName('ikoma-prodigy');
             this.akodoKaede = this.player1.findCardByName('akodo-kaede');
-            this.regalBearing = this.player1.findCardByName('regal-bearing');
             this.drawingTheVoid = this.player1.findCardByName('drawing-the-void');
-            this.katana = this.player1.findCardByName('fine-katana');
-            this.fan = this.player1.findCardByName('ornate-fan');
-            this.reprieve = this.player1.findCardByName('reprieve');
 
-            this.player1.player.showBid = 5;
-            this.player2.player.showBid = 5;
-
-            this.player1.moveCard(this.katana, 'conflict deck');
-            this.player1.moveCard(this.fan, 'conflict deck');
-            this.player1.moveCard(this.reprieve, 'conflict deck');
+            this.regalBearing = this.player2.findCardByName('regal-bearing');
+            this.reprieve = this.player2.findCardByName('reprieve');
         });
 
-        it('chooses cards to draw from 2 piles', function () {
-            this.noMoreActions();
-            this.initiateConflict({
-                type: 'political',
-                attackers: [this.ikomaProdigy],
-                defenders: []
-            });
+        it('reveals two cards and remove one from the game, with affinity the player chooses the card', function () {
+            this.player1.clickCard(this.drawingTheVoid);
+            expect(this.getChatLogs(5)).toContain(
+                'player2 reveals Regal Bearing and Reprieve from their hand - the void reveals...'
+            );
+            expect(this.player1).toHavePrompt('Choose a card to remove from the game');
+            expect(this.player1).toHavePromptButton('Regal Bearing');
+            expect(this.player1).toHavePromptButton('Reprieve');
 
-            this.player2.pass();
-            this.player1.clickCard(this.regalBearing);
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.drawingTheVoid);
+            this.player1.clickPrompt('Regal Bearing');
+            expect(this.getChatLogs(5)).toContain('player1 removes Regal Bearing from the game - the void consumes!');
+            expect(this.regalBearing.location).toBe('removed from game');
+
+            expect(this.player2).toHavePrompt('Initiate an action');
+        });
+
+        it('reveals two cards and remove one from the game, without affinity the opponent chooses the card', function () {
+            this.player1.moveCard(this.akodoKaede, 'dynasty deck');
 
             this.player1.clickCard(this.drawingTheVoid);
-            expect(this.player1).toHavePrompt('Choose a pile of cards to draw');
-            expect(this.player1).toHavePromptButton('Reprieve, Ornate Fan, Fine Katana, Supernatural Storm');
-            expect(this.player1).toHavePromptButton('Supernatural Storm (4)');
-
-            this.player1.clickPrompt('Reprieve, Ornate Fan, Fine Katana, Supernatural Storm');
-            expect(this.katana.location).toBe('hand');
-            expect(this.fan.location).toBe('hand');
-            expect(this.reprieve.location).toBe('hand');
             expect(this.getChatLogs(5)).toContain(
-                'player1 plays Drawing the Void to choose between two piles of cards to draw'
+                'player2 reveals Regal Bearing and Reprieve from their hand - the void reveals...'
             );
-            expect(this.getChatLogs(5)).toContain('player1 channels their void affinity to draw an extra card');
+            expect(this.player2).toHavePrompt('Choose a card to remove from the game');
+            expect(this.player2).toHavePromptButton('Regal Bearing');
+            expect(this.player2).toHavePromptButton('Reprieve');
+
+            this.player2.clickPrompt('Regal Bearing');
+            expect(this.getChatLogs(5)).toContain('player2 removes Regal Bearing from the game - the void consumes!');
+            expect(this.regalBearing.location).toBe('removed from game');
+
+            expect(this.player2).toHavePrompt('Initiate an action');
         });
     });
 });
