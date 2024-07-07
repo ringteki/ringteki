@@ -8,7 +8,7 @@ describe('Keeper of Inner Peace', function () {
                     inPlay: ['matsu-berserker']
                 },
                 player2: {
-                    inPlay: ['keeper-of-inner-peace']
+                    inPlay: ['keeper-of-inner-peace', 'moto-youth']
                 }
             });
 
@@ -18,6 +18,8 @@ describe('Keeper of Inner Peace', function () {
 
             this.keeperOfInnerPeace = this.player2.findCardByName('keeper-of-inner-peace');
             this.keeperOfInnerPeace.modifyFate(1);
+            this.motoYouth = this.player2.findCardByName('moto-youth');
+            this.motoYouth.modifyFate(1);
 
             this.noMoreActions();
         });
@@ -41,7 +43,7 @@ describe('Keeper of Inner Peace', function () {
 
             expect(this.keeperOfInnerPeace.fate).toBe(1);
             expect(this.getChatLogs(5)).toContain(
-                "player2 uses Keeper of Inner Peace to protect Keeper of Inner Peace's fate from the Void Ring"
+                'player2 uses Keeper of Inner Peace to place 1 fate on Keeper of Inner Peace'
             );
         });
 
@@ -50,22 +52,20 @@ describe('Keeper of Inner Peace', function () {
                 type: 'military',
                 ring: 'void',
                 attackers: [this.matsuBerserker],
-                defenders: [this.keeperOfInnerPeace]
+                defenders: [this.keeperOfInnerPeace, this.motoYouth]
             });
 
             this.player2.pass();
             this.player1.clickCard(this.afwtd);
-            this.player1.clickCard(this.keeperOfInnerPeace);
+            this.player1.clickCard(this.motoYouth);
 
             expect(this.player2).toHavePrompt('Triggered Abilities');
             this.player2.clickCard(this.keeperOfInnerPeace);
 
-            expect(this.keeperOfInnerPeace.fate).toBe(1);
-            expect(this.keeperOfInnerPeace.bowed).toBe(true);
-            expect(this.keeperOfInnerPeace.inConflict).toBe(false);
-            expect(this.getChatLogs(5)).toContain(
-                "player2 uses Keeper of Inner Peace to protect Keeper of Inner Peace's fate from A Fate Worse Than Death"
-            );
+            expect(this.motoYouth.fate).toBe(1);
+            expect(this.motoYouth.bowed).toBe(true);
+            expect(this.motoYouth.inConflict).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player2 uses Keeper of InnerPeace to place 1 fate on Moto Youth');
         });
 
         it('does not protect fate from framework effects', function () {
