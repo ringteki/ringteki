@@ -25,9 +25,8 @@ export default class AkodoAsuka extends DrawCard {
                 gameAction: AbilityDsl.actions.moveCard({
                     destination: Locations.Hand
                 }),
-                shuffle: false,
-                reveal: false,
-                placeOnBottomInRandomOrder: true
+                shuffle: true,
+                reveal: false
             }),
             effect: 'look at the top {1} cards of their conflict deck',
             effectArgs: (context) => getCharactersWithoutFate(context)
