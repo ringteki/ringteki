@@ -1,4 +1,4 @@
-import { CardTypes, Players, Decks } from '../../../Constants';
+import { CardTypes } from '../../../Constants';
 import AbilityDsl from '../../../abilitydsl';
 import DrawCard from '../../../drawcard';
 
@@ -6,7 +6,7 @@ export default class MethodicalSecretary extends DrawCard {
     static id = 'methodical-secretary';
 
     setupCardAbilities() {
-        this.wouldInterrupt({
+        this.interrupt({
             title: 'Ready for Glory Count',
             when: {
                 onGloryCount: () => true
