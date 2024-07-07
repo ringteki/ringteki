@@ -38,7 +38,7 @@ describe('Chronicler of Calamities', function () {
             expect(this.player2).toBeAbleToSelect(this.yoshi);
             expect(this.player2).toBeAbleToSelect(this.manipulator);
             expect(this.player2).not.toBeAbleToSelect(this.chronicler);
-            expect(this.player2).toBeAbleToSelect(this.sotorii);
+            expect(this.player2).not.toBeAbleToSelect(this.sotorii);
             this.player2.clickCard(this.toshimoko);
 
             expect(this.player2).toHavePrompt('Select one');
