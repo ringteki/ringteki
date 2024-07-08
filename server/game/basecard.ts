@@ -41,22 +41,7 @@ import type { Duel } from './Duel';
 
 type Faction = 'neutral' | 'crab' | 'crane' | 'dragon' | 'lion' | 'phoenix' | 'scorpion' | 'unicorn' | 'shadowlands';
 
-type PrintedKeyword =
-    | 'ancestral'
-    | 'corrupted'
-    | 'courtesy'
-    | 'covert'
-    | 'eminent'
-    | 'ephemeral'
-    | 'limited'
-    | 'no duels'
-    | 'peaceful'
-    | 'pride'
-    | 'rally'
-    | 'restricted'
-    | 'sincerity';
-
-const ValidKeywords = new Set<PrintedKeyword>([
+const printedKeywords = [
     'ancestral',
     'corrupted',
     'courtesy',
@@ -68,9 +53,12 @@ const ValidKeywords = new Set<PrintedKeyword>([
     'peaceful',
     'pride',
     'rally',
+    'thriving',
     'restricted',
     'sincerity'
-]);
+] as const;
+type PrintedKeyword = (typeof printedKeywords)[number];
+const ValidKeywords = new Set(printedKeywords);
 
 class BaseCard extends EffectSource {
     controller: Player;
@@ -878,8 +866,7 @@ class BaseCard extends EffectSource {
             } else if (keyword.startsWith('disguised ')) {
                 this.disguisedKeywordTraits.push(keyword.replace('disguised ', ''));
             } else if (keyword.startsWith('no attachments except')) {
-                var traits = keyword.replace('no attachments except ', '');
-                this.allowedAttachmentTraits = traits.split(' or ');
+                this.allowedAttachmentTraits = keyword.replace('no attachments except ', '').split(' or ');
             } else if (keyword.startsWith('no attachments,')) {
                 //catch all for statements that are to hard to parse automatically
             } else if (keyword.startsWith('no attachments')) {

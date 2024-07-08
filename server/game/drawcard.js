@@ -11,6 +11,7 @@ const StatModifier = require('./StatModifier');
 const { Locations, EffectNames, CardTypes, PlayTypes, ConflictTypes, EventNames } = require('./Constants');
 const { GameModes } = require('../GameModes');
 const { EventRegistrar } = require('./EventRegistrar');
+const { ThrivingAbility } = require('./KeywordAbilities/ThrivingAbility');
 
 class DrawCard extends BaseCard {
     // fromOutOfPlaySource ?: Array < DrawCard >;
@@ -66,6 +67,7 @@ class DrawCard extends BaseCard {
         }
         if (this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this.game, this));
+            this.abilities.reactions.push(new ThrivingAbility(this.game, this));
         }
     }
 
@@ -141,6 +143,10 @@ class DrawCard extends BaseCard {
     hasRally() {
         //Facedown cards are out of play and their keywords don't update until after the reveal reaction window is done, so we need to check for the printed keyword
         return this.hasKeyword('rally') || (!this.isBlank() && this.hasPrintedKeyword('rally'));
+    }
+
+    hasThriving() {
+        return this.hasKeyword('thriving') || (!this.isBlank() && this.hasPrintedKeyword('thriving'));
     }
 
     getCost() {

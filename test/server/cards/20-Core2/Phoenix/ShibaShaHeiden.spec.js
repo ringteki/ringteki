@@ -1,6 +1,6 @@
 describe('Shiba-sha Heiden', function () {
     integration(function () {
-        describe('Province fill reaction', function () {
+        describe('Thriving', function () {
             beforeEach(function () {
                 this.setupTest({
                     phase: 'fate',
@@ -22,14 +22,11 @@ describe('Shiba-sha Heiden', function () {
                 this.noMoreActions();
                 this.player1.clickPrompt('Done');
                 this.player2.clickPrompt('Done');
-                this.player2.clickPrompt('End Round');
-                this.player1.clickPrompt('End Round');
-                expect(this.player1).toHavePrompt('Triggered Abilities');
-
-                this.player1.clickCard(this.shibaShaHeiden);
                 expect(this.dojiWhisperer.location).toBe('province 1');
-                expect(this.getChatLogs(5)).toContain('player1 uses Shiba-sha Heiden to fill its province with 1 card');
-                expect(this.player2).toHavePrompt('Play cards from provinces');
+                expect(this.dojiWhisperer.facedown).toBe(true);
+                expect(this.getChatLogs(5)).toContain(
+                    "player1 places a card facedown in province 1 due to Shiba-sha Heiden's Thriving"
+                );
             });
         });
 
