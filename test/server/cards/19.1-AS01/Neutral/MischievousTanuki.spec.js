@@ -132,6 +132,22 @@ describe('Mischievous Tanuki', function () {
                 expect(this.getChatLogs(10)).toContain('player1 takes 2 fate from player2');
             });
 
+            it('both same parity, but player 2 has only one fate', function () {
+                this.player2.fate = 1;
+                let p1Fate = this.player1.fate;
+                let p2Fate = this.player2.fate;
+
+                this.player1.clickCard(this.tanuki);
+                this.player1.clickPrompt('3');
+                this.player2.clickPrompt('1');
+
+                expect(this.player2).toHavePrompt('Action Window');
+
+                expect(this.player1.fate).toBe(p1Fate + 1);
+                expect(this.player2.fate).toBe(p2Fate - 1);
+                expect(this.getChatLogs(10)).toContain('player1 takes 1 fate from player2');
+            });
+
             it('different parity', function () {
                 let p1Fate = this.player1.fate;
                 let p2Fate = this.player2.fate;
