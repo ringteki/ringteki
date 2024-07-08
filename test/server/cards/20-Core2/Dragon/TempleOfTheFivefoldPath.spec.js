@@ -19,26 +19,52 @@ describe('Temple of the Fivefold Path', function () {
 
         it('puts fate on a ring', function () {
             this.player1.clickCard(this.t5p);
+            expect(this.player1).toHavePrompt('Temple of the Fivefold Path');
+            expect(this.player1).toHavePromptButton('Place fate on a ring without fate');
+            expect(this.player1).toHavePromptButton('Move 1 fate from one ring to another');
+
+            this.player1.clickPrompt('Place fate on a ring without fate');
+            expect(this.player1).not.toBeAbleToSelectRing('void');
+            expect(this.player1).not.toBeAbleToSelectRing('water');
+            expect(this.player1).toBeAbleToSelectRing('fire');
+            expect(this.player1).not.toBeAbleToSelectRing('air');
+            expect(this.player1).not.toBeAbleToSelectRing('earth');
+
             this.player1.clickRing('fire');
             expect(this.game.rings.fire.fate).toBe(1);
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to examine the mysteries of the Fire Ring in search for guidance, placing 1 fate on that ring'
+                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to place 1 fate on Fire Ring'
             );
         });
 
-        it('moves fate to a ring', function () {
+        it('moves fate between rings', function () {
             this.player1.clickCard(this.t5p);
-            expect(this.player1).toHavePrompt('Choose a ring');
+            expect(this.player1).toHavePrompt('Temple of the Fivefold Path');
+            expect(this.player1).toHavePromptButton('Place fate on a ring without fate');
+            expect(this.player1).toHavePromptButton('Move 1 fate from one ring to another');
+
+            this.player1.clickPrompt('Move 1 fate from one ring to another');
+            expect(this.player1).toHavePrompt('Choose a ring to lose fate');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            expect(this.player1).toBeAbleToSelectRing('water');
+            expect(this.player1).not.toBeAbleToSelectRing('fire');
+            expect(this.player1).toBeAbleToSelectRing('air');
+            expect(this.player1).toBeAbleToSelectRing('earth');
 
             this.player1.clickRing('air');
-            expect(this.player1).toHavePrompt('Choose a ring to receive fate');
+            expect(this.player1).toHavePrompt('Choose a ring to gain fate');
+            expect(this.player1).toBeAbleToSelectRing('void');
+            expect(this.player1).toBeAbleToSelectRing('water');
+            expect(this.player1).toBeAbleToSelectRing('fire');
+            expect(this.player1).not.toBeAbleToSelectRing('air');
+            expect(this.player1).toBeAbleToSelectRing('earth');
+
             this.player1.clickRing('water');
-            expect(this.game.rings.water.fate).toBe(3);
             expect(this.game.rings.air.fate).toBe(1);
+            expect(this.game.rings.water.fate).toBe(3);
             expect(this.getChatLogs(3)).toContain(
-                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to examine the mysteries of the Air Ring in search for guidance'
+                'player1 uses Temple of the Fivefold Path, bowing Temple of the Fivefold Path to move 1 fate from Air Ring to Water Ring'
             );
-            expect(this.getChatLogs(3)).toContain('player1 moves 1 fate from Water Ring to Air Ring');
         });
     });
 });

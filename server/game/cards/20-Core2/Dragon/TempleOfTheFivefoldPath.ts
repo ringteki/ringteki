@@ -6,9 +6,18 @@ export default class TempleOfTheFivefoldPath extends StrongholdCard {
     static id = 'temple-of-the-fivefold-path';
 
     setupCardAbilities() {
+        const sharedLimit = AbilityDsl.limit.perRound(1);
+
         this.action({
-            title: 'Manipulate fate on rings',
+            title: 'Place fate on a ring without fate',
             cost: AbilityDsl.costs.bowSelf(),
+            target: {
+                mode: TargetModes.Ring,
+                ringCondition: (ring) => ring.getFate() === 0,
+                gameAction: AbilityDsl.actions.placeFateOnRing()
+            },
+            limit: sharedLimit
+            /*
             target: {
                 mode: TargetModes.Ring,
                 activePromptTitle: 'Choose a ring',
@@ -26,8 +35,30 @@ export default class TempleOfTheFivefoldPath extends StrongholdCard {
                     }))
                 })
             },
-            effect: 'examine the mysteries of the {0} in search for guidance{1}',
             effectArgs: (context) => [context.ring.getFate() === 0 ? ', placing 1 fate on that ring' : '']
+            */
+        });
+
+        this.action({
+            title: 'Move 1 fate from one ring to another',
+            cost: AbilityDsl.costs.bowSelf(),
+            targets: {
+                donor: {
+                    mode: TargetModes.Ring,
+                    activePromptTitle: 'Choose a ring to lose fate',
+                    ringCondition: (ring) => ring.getFate() > 0
+                },
+                receiver: {
+                    mode: TargetModes.Ring,
+                    activePromptTitle: 'Choose a ring to gain fate',
+                    ringCondition: (ring, context) => ring !== context.rings.donor,
+                    gameAction: AbilityDsl.actions.placeFateOnRing((context) => ({
+                        target: context.rings.receiver,
+                        origin: context.rings.donor
+                    }))
+                }
+            },
+            limit: sharedLimit
         });
     }
 }
