@@ -27,17 +27,10 @@ export default class TheEmptyCity extends ProvinceCard {
                 mode: TargetModes.Ring,
                 activePromptTitle: 'Choose an unclaimed ring',
                 ringCondition: (ring) => ring.isUnclaimed(),
-                gameAction: AbilityDsl.actions.joint([
-                    AbilityDsl.actions.claimRing({
-                        takeFate: false,
-                        type: 'political'
-                    }),
-                    AbilityDsl.actions.cardLastingEffect((context) => ({
-                        target: context.source,
-                        effect: AbilityDsl.effects.cardCannot('triggerAbilities'),
-                        duration: Durations.UntilEndOfRound
-                    }))
-                ])
+                gameAction: AbilityDsl.actions.claimRing({
+                    takeFate: false,
+                    type: 'political'
+                })
             },
             effect: 'claim {0} as a political ring',
             limit: sharedLimit

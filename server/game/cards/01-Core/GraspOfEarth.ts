@@ -1,4 +1,4 @@
-import { PlayTypes } from '../../Constants';
+import { Locations, Players, PlayTypes } from '../../Constants';
 import AbilityDsl = require('../../abilitydsl');
 import DrawCard = require('../../drawcard');
 
@@ -9,6 +9,13 @@ export default class GraspOfEarth extends DrawCard {
         this.attachmentConditions({
             myControl: true,
             trait: 'shugenja'
+        });
+
+        this.persistentEffect({
+            location: Locations.Any,
+            targetController: Players.Any,
+            condition: (context) => context.player.hasAffinity('earth'),
+            effect: AbilityDsl.effects.reduceCost({ amount: 1, match: (card, source) => card === source })
         });
 
         this.action({

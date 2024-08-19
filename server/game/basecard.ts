@@ -302,7 +302,9 @@ class BaseCard extends EffectSource {
     }
 
     duelChallenge(
-        properties: Omit<TriggeredAbilityProps, 'when'> & { duelCondition?: (duel, context) => boolean }
+        properties: Omit<TriggeredAbilityProps, 'when'> & {
+            duelCondition?: (duel: Duel, context: AbilityContext) => boolean;
+        }
     ): void {
         const newProperties: TriggeredAbilityProps = {
             ...properties,
