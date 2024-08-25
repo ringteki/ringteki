@@ -4,8 +4,8 @@ import DrawCard from '../../../drawcard';
 import { PlayCharacterAsIfFromHandAtHome } from '../../../PlayCharacterAsIfFromHand';
 import { PlayDisguisedCharacterAsIfFromHandAtHome } from '../../../PlayDisguisedCharacterAsIfFromHand';
 
-export default class AgashaTaiko extends DrawCard {
-    static id = 'agasha-taiko';
+export default class AgashaAyako extends DrawCard {
+    static id = 'agasha-ayako';
 
     setupCardAbilities() {
         this.reaction({

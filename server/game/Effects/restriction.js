@@ -123,6 +123,7 @@ const checkRestrictions = {
         return targetActions.some(isMoveToHandAction) || nestedActions.some(isMoveToHandAction);
     },
     loseHonorAsCost: (context) => context.stage === Stages.Cost,
+    unopposedHonorLoss: (context) => context.source.name === 'Framework effect',
     unlessMeishodo: (context) => {
         const spell = context.source || context;
         return !spell.hasTrait('meishodo');

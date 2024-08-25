@@ -540,12 +540,18 @@ class BaseCard extends EffectSource {
     }
 
     isFaction(faction: Faction): boolean {
-        const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
-        const cardFaction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
+        const cardFactions = this.getFactions();
         if (faction === 'neutral') {
-            return cardFaction === faction && !this.anyEffect(EffectNames.AddFaction);
+            return cardFactions.has(faction) && cardFactions.size === 1;
         }
-        return cardFaction === faction || this.getEffects(EffectNames.AddFaction).includes(faction);
+        return cardFactions.has(faction);
+    }
+
+    getFactions(): Set<Faction> {
+        const copyEffect = this.mostRecentEffect(EffectNames.CopyCharacter);
+        const cardFaction: Faction = copyEffect ? copyEffect.printedFaction : this.printedFaction;
+        const addedFactions: Faction[] = this.getEffects(EffectNames.AddFaction);
+        return new Set([...addedFactions, cardFaction]);
     }
 
     isInProvince(): boolean {

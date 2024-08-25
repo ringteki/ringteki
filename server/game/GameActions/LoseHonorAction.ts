@@ -8,32 +8,29 @@ export interface LoseHonorProperties extends PlayerActionProperties {
     dueToUnopposed?: boolean;
 }
 
-export class LoseHonorAction extends PlayerAction {
+export class LoseHonorAction extends PlayerAction<LoseHonorProperties> {
     defaultProperties: LoseHonorProperties = { amount: 1, dueToUnopposed: false };
 
     name = 'loseHonor';
     eventName = EventNames.OnModifyHonor;
-    constructor(propertyFactory: LoseHonorProperties | ((context: AbilityContext) => LoseHonorProperties)) {
-        super(propertyFactory);
-    }
 
     getCostMessage(context: AbilityContext): [string, any[]] {
-        let properties: LoseHonorProperties = this.getProperties(context);
+        let properties = this.getProperties(context);
         return ['losing {1} honor', [properties.amount]];
     }
 
     getEffectMessage(context: AbilityContext): [string, any[]] {
-        let properties: LoseHonorProperties = this.getProperties(context);
+        let properties = this.getProperties(context);
         return ['make {0} lose ' + properties.amount + ' honor', [properties.target]];
     }
 
     canAffect(player: Player, context: AbilityContext, additionalProperties = {}): boolean {
-        let properties: LoseHonorProperties = this.getProperties(context, additionalProperties);
+        let properties = this.getProperties(context, additionalProperties);
         return properties.amount === 0 ? false : super.canAffect(player, context);
     }
 
     addPropertiesToEvent(event, player: Player, context: AbilityContext, additionalProperties): void {
-        let { amount, dueToUnopposed } = this.getProperties(context, additionalProperties) as LoseHonorProperties;
+        let { amount, dueToUnopposed } = this.getProperties(context, additionalProperties);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = -amount;
         event.dueToUnopposed = dueToUnopposed;

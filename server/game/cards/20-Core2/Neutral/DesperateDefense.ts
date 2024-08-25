@@ -8,7 +8,7 @@ export default class DesperateDefense extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Add Province Strength',
-            condition: (context) => context.game.isDuringConflict(),
+            condition: (context) => context.player.cardsInPlay.some((card: DrawCard) => card.isParticipating()),
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 activePromptTitle: 'Choose an attacked province',
                 hidePromptIfSingleCard: true,
