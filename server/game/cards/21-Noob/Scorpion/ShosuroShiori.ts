@@ -2,8 +2,8 @@ import AbilityDsl from '../../../abilitydsl';
 import { PlayTypes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 
-export default class Infiltrator extends DrawCard {
-    static id = 'infiltrator';
+export default class ShosuroShiori extends DrawCard {
+    static id = 'shosuro-shiori';
 
     setupCardAbilities() {
         this.action({
