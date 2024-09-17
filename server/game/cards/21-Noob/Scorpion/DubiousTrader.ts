@@ -5,6 +5,10 @@ export default class DubiousTrader extends DrawCard {
     static id = 'dubious-trader';
 
     setupCardAbilities() {
+        this.persistentEffect({
+            effect: AbilityDsl.effects.canContributeGloryWhileBowed()
+        });
+
         this.action({
             title: 'Make a deal',
             evenDuringDynasty: true,

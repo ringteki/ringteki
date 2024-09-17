@@ -15,7 +15,8 @@ export default class AHintOfDarkness extends DrawCard {
                     event.ability.isTriggeredAbility()
             },
             cannotBeMirrored: true,
-            gameAction: AbilityDsl.actions.removeFate((context: any) => ({ target: context.event.card }))
+            gameAction: AbilityDsl.actions.removeFate((context: any) => ({ target: context.event.card })),
+            max: AbilityDsl.limit.perPhase(1)
         });
     }
 }

@@ -16,9 +16,9 @@ export default class DojiReiha extends DrawCard {
                         AbilityDsl.actions.chooseAction((context) => ({
                             player: duel.winningPlayer === context.player ? Players.Self : Players.Opponent,
                             options: {
-                                'Move loser home': {
+                                'Move all duel participants home': {
                                     action: AbilityDsl.actions.sendHome({
-                                        target: duel.loser
+                                        target: duel.loser.concat(...duel.winner)
                                     })
                                 },
                                 'Do nothing': {

@@ -9,8 +9,8 @@ export default class KaiuForeman extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: (context) =>
-                (context.game.currentConflict as undefined | Conflict)?.anyParticipants(
-                    (card) => card.controller === context.player.opponent && card.isFaction('unicorn')
+                (context.game.currentConflict as undefined | Conflict)?.anyParticipants((card) =>
+                    card.hasTrait('cavalry')
                 ),
             effect: AbilityDsl.effects.modifyBothSkills(1)
         });

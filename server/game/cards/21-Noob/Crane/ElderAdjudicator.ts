@@ -1,6 +1,6 @@
 import AbilityDsl from '../../../abilitydsl';
-import BaseCard from '../../../basecard';
-import { CardTypes, Locations } from '../../../Constants';
+import type BaseCard from '../../../basecard';
+import { CardTypes } from '../../../Constants';
 import DrawCard from '../../../drawcard';
 
 export default class ElderAdjudicator extends DrawCard {
@@ -13,8 +13,7 @@ export default class ElderAdjudicator extends DrawCard {
                     (card: BaseCard) =>
                         card instanceof DrawCard &&
                         card.type === CardTypes.Character &&
-                        card.location === Locations.PlayArea &&
-                        card.isFaceup() &&
+                        card.isParticipating() &&
                         card.printedCost > context.source.printedCost
                 ),
             effect: [AbilityDsl.effects.modifyBothSkills(-2)]

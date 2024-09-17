@@ -11,25 +11,22 @@ export default class SpuriousLineage extends DrawCard {
             condition: (context) => context.game.isDuringConflict('political'),
             targets: {
                 fromDiscard: {
-                    activePromptTitle: 'Choose up to 3 characters from a discard pile',
+                    activePromptTitle: 'Choose up to 2 characters from a discard pile',
                     mode: TargetModes.UpTo,
-                    numCards: 3,
+                    numCards: 2,
                     location: [Locations.DynastyDiscardPile, Locations.ConflictDiscardPile],
-                    controller: Players.Opponent,
-                    cardCondition: (card) => card.isUnique(),
-                    gameAction: AbilityDsl.actions.putIntoConflict()
+                    controller: Players.Opponent
                 },
                 toBow: {
                     dependsOn: 'fromDiscard',
                     activePromptTitle: 'Choose a character to bow',
                     cardType: CardTypes.Character,
-                    cardCondition: (card, context) => {
-                        if (!card.isParticipating()) {
-                            return false;
-                        }
-                        const cardFactions = Array.from(card.getFactions());
-                        return context.targets.fromDiscard.some((fromDiscard: DrawCard) =>
-                            cardFactions.some((cardFaction) => fromDiscard.isFaction(cardFaction))
+                    cardCondition: (card: DrawCard, context) => {
+                        return (
+                            card.isParticipating() &&
+                            card.costLessThan(
+                                Math.max(...context.targets.fromDiscard.map((card: DrawCard) => card.getCost()))
+                            )
                         );
                     },
                     gameAction: AbilityDsl.actions.bow()
@@ -40,8 +37,8 @@ export default class SpuriousLineage extends DrawCard {
                 const toBow = context.targets.toBow;
                 return {
                     gameActions: [
-                        AbilityDsl.actions.removeFromGame({ target: fromDiscard }),
-                        AbilityDsl.actions.bow({ target: toBow })
+                        AbilityDsl.actions.bow({ target: toBow }),
+                        AbilityDsl.actions.removeFromGame({ target: fromDiscard })
                     ]
                 };
             })
