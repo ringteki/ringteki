@@ -3,5 +3,6 @@ export enum GameModes {
     Skirmish = 'skirmish',
     JadeEdict = 'jade-edict',
     Emerald = 'emerald',
-    Obsidian = 'obsidian'
+    Obsidian = 'obsidian',
+    Sanctuary = 'sanctuary'
 }

@@ -152,6 +152,7 @@ const JadeEdict: GameMode = {
 
     rallyHasEffect: false
 };
+
 const Emerald: GameMode = {
     ...Stronghold,
     name: 'emerald',
@@ -169,6 +170,9 @@ const Emerald: GameMode = {
     dynastyPhasePassingFate: false,
     dynastyPhaseActionsFromCardsInPlay: false
 };
+
+const Sanctuary: GameMode = { ...Emerald, name: 'sanctuary' };
+
 const Obsidian: GameMode = {
     ...Stronghold,
     name: 'obsidian',
@@ -187,6 +191,8 @@ export function parseGameMode(candidateStr: string): GameMode {
             return JadeEdict;
         case 'emerald':
             return Emerald;
+        case 'sanctuary':
+            return Sanctuary;
         case 'obsidian':
             return Obsidian;
         default:
