@@ -1,4 +1,4 @@
-import { CardTypes, Locations } from '../../../Constants';
+import { CardTypes, Locations, Players } from '../../../Constants';
 import { ProvinceCard } from '../../../ProvinceCard';
 import AbilityDsl from '../../../abilitydsl';
 
@@ -14,6 +14,7 @@ export default class FarVisionPath extends ProvinceCard {
             target: {
                 cardType: CardTypes.Province,
                 location: Locations.Provinces,
+                controller: Players.Self,
                 gameAction: AbilityDsl.actions.moveConflict()
             }
         });
