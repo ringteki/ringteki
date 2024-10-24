@@ -9,15 +9,17 @@ describe('Diligent Chaperone', function () {
                 },
                 player2: {
                     inPlay: ['bayushi-dairu'],
-                    hand: ['way-of-the-scorpion']
+                    hand: ['way-of-the-scorpion', 'herald-of-jade']
                 }
             });
             this.yojimbo = this.player1.findCardByName('diligent-chaperone');
             this.brash = this.player1.findCardByName('brash-samurai');
             this.whisperer = this.player1.findCardByName('doji-whisperer');
+            this.resourcefulness = this.player1.findCardByName('resourcefulness');
+
             this.dairu = this.player2.findCardByName('bayushi-dairu');
             this.scorp = this.player2.findCardByName('way-of-the-scorpion');
-            this.resourcefulness = this.player1.findCardByName('resourcefulness');
+            this.herald = this.player2.findCardByName('herald-of-jade');
 
             this.brash.honor();
         });
@@ -48,6 +50,21 @@ describe('Diligent Chaperone', function () {
             expect(this.player1).toHavePrompt('Conflict Action Window');
             expect(this.brash.isHonored).toBe(true);
             expect(this.scorp.location).toBe('conflict discard pile');
+            expect(this.yojimbo.bowed).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player1 honors Brash Samurai');
+        });
+
+        it('rehonors an honored character after token is removed', function () {
+            this.player1.pass();
+            this.player2.clickCard(this.herald);
+            this.player2.clickPrompt('0');
+            this.player2.clickCard(this.herald);
+            this.player2.clickCard(this.brash);
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.yojimbo);
+            this.player1.clickCard(this.yojimbo);
+            expect(this.brash.isHonored).toBe(true);
             expect(this.yojimbo.bowed).toBe(false);
             expect(this.getChatLogs(5)).toContain('player1 honors Brash Samurai');
         });
