@@ -15,7 +15,7 @@ export default class CloudStepValley extends ProvinceCard {
                 [STARTED_IN_CONFLICT]: {
                     activePromptTitle: 'Choose a participating character to send home',
                     cardType: CardTypes.Character,
-                    cardCondition: (card) => card.isParticipating()
+                    cardCondition: (card, context) => AbilityDsl.actions.sendHome().canAffect(card, context)
                 },
                 [STARTED_AT_HOME]: {
                     dependsOn: STARTED_IN_CONFLICT,
@@ -25,8 +25,9 @@ export default class CloudStepValley extends ProvinceCard {
                         context.targets[STARTED_IN_CONFLICT].controller === context.player
                             ? Players.Self
                             : Players.Opponent,
-                    cardCondition: (card, { targets }) =>
-                        card.controller === targets[STARTED_IN_CONFLICT].controller && !card.isParticipating()
+                    cardCondition: (card, context) =>
+                        card.controller === context.targets[STARTED_IN_CONFLICT].controller &&
+                        AbilityDsl.actions.moveToConflict().canAffect(card, context)
                 }
             },
             gameAction: AbilityDsl.actions.joint([
