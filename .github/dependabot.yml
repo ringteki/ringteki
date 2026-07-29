@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 6
+    groups:
+      # One PR for every minor and patch bump. Majors are left ungrouped so each
+      # arrives on its own, never buried in a batch of harmless updates.
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
