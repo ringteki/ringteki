@@ -72,6 +72,13 @@ interface CardAbilities {
 
 import { type PrintedKeyword, parseKeywords as parseKeywordsFromText } from './KeywordParser.js';
 
+const PLAYABLE_OUT_OF_PLAY_LOCATIONS: Set<Location> = new Set([
+    Location.RemovedFromGame,
+    Location.ConflictDiscardPile,
+    Location.DynastyDiscardPile,
+    Location.UnderneathStronghold
+]);
+
 export interface CardSummary {
     attachments?: CardSummary[];
     childCards?: CardSummary[];
@@ -1069,6 +1076,24 @@ class BaseCard extends EffectSource {
         return limits.length > 0 ? limits : undefined;
     }
 
+    /**
+     * Names of the players who can currently play this card from where it sits. Only meaningful
+     * out of play — e.g. cards set aside by Favorable Alliance or stolen by Shachihoko Bay stay
+     * in "removed from game" but remain playable for a while, and the client marks those.
+     */
+    getPlayableBy(): string[] | undefined {
+        if(!PLAYABLE_OUT_OF_PLAY_LOCATIONS.has(this.location)) {
+            return undefined;
+        }
+
+        const names = this.game
+            .getPlayers()
+            .filter((player) => player.isCardInPlayableLocation(this))
+            .map((player) => player.name);
+
+        return names.length > 0 ? names : undefined;
+    }
+
     getSummary(activePlayer: Player, hideWhenFaceup: boolean): CardSummary {
         let isActivePlayer = activePlayer === this.controller;
         let selectionState = activePlayer.getCardSelectionState(this);
@@ -1108,7 +1133,8 @@ class BaseCard extends EffectSource {
             isHonored: this.isHonored,
             isTainted: !!this.isTainted,
             uuid: this.uuid,
-            abilityLimits: this.getAbilityLimitSummary()
+            abilityLimits: this.getAbilityLimitSummary(),
+            playableBy: this.getPlayableBy()
         };
 
         return Object.assign(state, selectionState);
