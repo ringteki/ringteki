@@ -5,7 +5,8 @@ describe('BaseCard', function () {
         this.testCard = { id: '111', label: 'test 1(some pack)', name: 'test 1' };
         this.limitedCard = { id: '1234', text: 'Limited.' };
         this.nonLimitedCard = { id: '2222', text: 'Covert.' };
-        this.game = jasmine.createSpyObj('game', ['raiseEvent', 'getCurrentAbilityContext']);
+        this.game = jasmine.createSpyObj('game', ['raiseEvent', 'getCurrentAbilityContext', 'getPlayers']);
+        this.game.getPlayers.and.returnValue([]);
         this.owner = jasmine.createSpyObj('owner', ['getCardSelectionState', 'allowGameAction', 'getShortSummary']);
         this.owner.getCardSelectionState.and.returnValue({});
         this.owner.allowGameAction.and.returnValue(true);

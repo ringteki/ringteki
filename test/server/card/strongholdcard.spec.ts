@@ -2,8 +2,9 @@ import { StrongholdCard } from '../../../server/game/StrongholdCard.js';
 import type { CardData } from '../../../server/game/types/CardData.js';
 
 function makeGame() {
-    const game = jasmine.createSpyObj('game', ['raiseEvent', 'getCurrentAbilityContext', 'getFrameworkContext']);
+    const game = jasmine.createSpyObj('game', ['raiseEvent', 'getCurrentAbilityContext', 'getFrameworkContext', 'getPlayers']);
     game.getFrameworkContext.and.returnValue(null);
+    game.getPlayers.and.returnValue([]);
     return game;
 }
 
