@@ -70,6 +70,37 @@ describe('Favorable Alliance', function () {
             expect(this.player1.fate).toBe(fate - 3);
         });
 
+        it('should mark the set aside cards as playable for the client', function () {
+            this.player1.fate = 4;
+            this.player1.clickCard(this.alliance);
+            this.player1.clickPrompt('3');
+
+            expect(this.voice.location).toBe('removed from game');
+            expect(this.voice.getSummary(this.player1.player, false).playableBy).toEqual(['player1']);
+            expect(this.katana.getSummary(this.player1.player, false).playableBy).toEqual(['player1']);
+
+            // the same summary is what the opponent's client sees
+            expect(this.voice.getSummary(this.player2.player, false).playableBy).toEqual(['player1']);
+        });
+
+        it('should not mark unrelated removed from game cards as playable', function () {
+            this.player1.moveCard(this.rival, 'removed from game');
+
+            expect(this.rival.location).toBe('removed from game');
+            expect(this.rival.getSummary(this.player1.player, false).playableBy).toBeUndefined();
+        });
+
+        it('should stop marking a card once it leaves the removed from game pile', function () {
+            this.player1.fate = 4;
+            this.player1.clickCard(this.alliance);
+            this.player1.clickPrompt('3');
+            expect(this.voice.getSummary(this.player1.player, false).playableBy).toEqual(['player1']);
+
+            this.player1.moveCard(this.voice, 'conflict discard pile');
+
+            expect(this.voice.getSummary(this.player1.player, false).playableBy).toBeUndefined();
+        });
+
         it('should work with Yoshi', function () {
             this.player1.fate = 2;
             this.player1.player.imperialFavor = 'military';
