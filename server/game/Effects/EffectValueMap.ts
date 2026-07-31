@@ -158,7 +158,6 @@ export interface EffectValueMap {
     [EffectName.SetConflictDeclarationType]: ConflictType;
     [EffectName.ProvideConflictDeclarationType]: ConflictType;
     [EffectName.ForceConflictDeclarationType]: ConflictType;
-    [EffectName.MustDeclareMaximumAttackers]: string;
     [EffectName.AdditionalConflict]: string;
 
     // --- enum-valued ---
