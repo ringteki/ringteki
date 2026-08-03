@@ -1,6 +1,6 @@
 import DrawCard from '../../DrawCard.js';
 import AbilityDsl from '../../abilitydsl.js';
-import { EventName, Location } from '../../Constants.js';
+import { CardType, EventName, Location } from '../../Constants.js';
 
 import type { EventPayload } from '../../Events/EventPayloads.js';
 class MushinNoShin extends DrawCard {
@@ -12,12 +12,13 @@ class MushinNoShin extends DrawCard {
             when: {
                 onInitiateAbilityEffects: (event: EventPayload<EventName.OnInitiateAbilityEffects>, context) =>
                     event.context.ability.isTriggeredAbility() &&
-                    (event.cardTargets?.some(
+                    (event.cardTargets ?? []).some(
                         (card) =>
-                            (card as DrawCard).attachments.length >= 2 &&
+                            card.type === CardType.Character &&
+                            card.location === Location.PlayArea &&
                             card.controller === context.player &&
-                            card.location === Location.PlayArea
-                    ) ?? false)
+                            (card as DrawCard).attachments.length >= 2
+                    )
             },
             gameAction: AbilityDsl.actions.cancel()
         });
