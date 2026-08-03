@@ -535,3 +535,56 @@ describe('Excellence Attained', function () {
         });
     });
 });
+
+describe('SoD - Two-Folded Virtue played from an opponent\'s deck', function () {
+    integration(function () {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['ancient-master'],
+                    conflictDiscard: ['two-folded-virtue', 'ready-for-battle', 'honored-blade']
+                },
+                player2: {
+                    inPlay: ['ikoma-natsuko', 'doji-challenger'],
+                    hand: ['a-swallow-s-return']
+                }
+            });
+
+            this.ancientMaster = this.player1.findCardByName('ancient-master');
+            this.virtue = this.player1.findCardByName('two-folded-virtue');
+            this.readyForBattle = this.player1.findCardByName('ready-for-battle');
+            this.honoredBlade = this.player1.findCardByName('honored-blade');
+            this.player1.player.moveCard(this.readyForBattle, 'conflict deck');
+            this.player1.player.moveCard(this.honoredBlade, 'conflict deck');
+            this.player1.player.moveCard(this.virtue, 'conflict deck');
+
+            this.natsuko = this.player2.findCardByName('ikoma-natsuko');
+            this.challenger = this.player2.findCardByName('doji-challenger');
+            this.swallow = this.player2.findCardByName('a-swallow-s-return');
+        });
+
+        it('honors the player who played it, not the card\'s owner', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.ancientMaster],
+                defenders: [this.natsuko, this.challenger]
+            });
+
+            this.player2.clickCard(this.swallow);
+            this.player2.clickPrompt('Two-Folded Virtue');
+            this.player2.clickCard(this.challenger);
+
+            this.natsuko.bow();
+            this.challenger.bow();
+            const honor1 = this.player1.honor;
+            const honor2 = this.player2.honor;
+
+            this.noMoreActions();
+
+            expect(this.player2.honor).toBe(honor2 + 1);
+            expect(this.player1.honor).toBe(honor1);
+        });
+    });
+});
