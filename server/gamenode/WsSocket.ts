@@ -17,6 +17,29 @@ const TEN_SECONDS = 10_000;
 const ONE_SECOND = 1_000;
 const MAX_RECONNECT_DELAY = 5_000;
 
+// Error payloads carry game debug data, which can contain references back to the
+// Game object. Replace cycles instead of throwing so the report still gets sent.
+function stringifyWithoutCycles(value: unknown): string {
+    const ancestors: unknown[] = [];
+
+    return JSON.stringify(value, function(this: unknown, _key: string, val: unknown) {
+        if(typeof val !== 'object' || val === null) {
+            return val;
+        }
+
+        while(ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) {
+            ancestors.pop();
+        }
+
+        if(ancestors.includes(val)) {
+            return '[Circular]';
+        }
+
+        ancestors.push(val);
+        return val;
+    });
+}
+
 export class WsSocket extends EventEmitter {
     private ws: WebSocket | null = null;
     private running = false;
@@ -98,7 +121,7 @@ export class WsSocket extends EventEmitter {
         }
 
         try {
-            this.ws.send(JSON.stringify({ command, arg }));
+            this.ws.send(stringifyWithoutCycles({ command, arg }));
         } catch(err) {
             logger.error(`Error sending message: ${err}`);
         }
