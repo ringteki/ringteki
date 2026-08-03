@@ -26,7 +26,7 @@ export default class TwoFoldVirtue extends DrawCard {
                                 afterConflict: (event: EventPayload<EventName.AfterConflict>) =>
                                     context.player === event.conflict.loser
                             },
-                            gameAction: AbilityDsl.actions.gainHonor(context => ({ target: context.player })),
+                            gameAction: AbilityDsl.actions.gainHonor(() => ({ target: context.player })),
                             message: '{0} gains 1 honor due to the delayed effect of {1}',
                             messageArgs: [context.player, context.source]
                         })

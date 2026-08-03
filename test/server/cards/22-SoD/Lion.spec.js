@@ -538,6 +538,56 @@ describe('SoD - Lion', function () {
                 expect(this.player1).toHavePrompt('Action Window');
             });
         });
+
+        describe('Deeds not Words played from an opponent\'s deck', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['ancient-master'],
+                        conflictDiscard: ['deeds-not-words', 'ready-for-battle', 'honored-blade']
+                    },
+                    player2: {
+                        inPlay: ['ikoma-natsuko', 'doji-challenger'],
+                        hand: ['a-swallow-s-return']
+                    }
+                });
+
+                this.ancientMaster = this.player1.findCardByName('ancient-master');
+                this.deeds = this.player1.findCardByName('deeds-not-words');
+                this.readyForBattle = this.player1.findCardByName('ready-for-battle');
+                this.honoredBlade = this.player1.findCardByName('honored-blade');
+                this.player1.player.moveCard(this.readyForBattle, 'conflict deck');
+                this.player1.player.moveCard(this.honoredBlade, 'conflict deck');
+                this.player1.player.moveCard(this.deeds, 'conflict deck');
+
+                this.natsuko = this.player2.findCardByName('ikoma-natsuko');
+                this.challenger = this.player2.findCardByName('doji-challenger');
+                this.swallow = this.player2.findCardByName('a-swallow-s-return');
+            });
+
+            it('gives the favor to the player who played it, not the card\'s owner', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.ancientMaster],
+                    defenders: [this.natsuko, this.challenger]
+                });
+
+                this.player2.clickCard(this.swallow);
+                this.player2.clickPrompt('Deeds, not Words');
+                this.player2.clickCard(this.natsuko);
+
+                this.noMoreActions();
+
+                expect(this.player2).toHavePromptButton('Military');
+                expect(this.player2).toHavePromptButton('Political');
+                this.player2.clickPrompt('Political');
+
+                expect(this.player2.player.imperialFavor).toBe('political');
+                expect(this.player1.player.imperialFavor).toBe('');
+            });
+        });
     });
 });
 

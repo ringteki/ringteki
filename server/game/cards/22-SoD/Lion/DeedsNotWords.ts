@@ -25,7 +25,7 @@ export default class DeedsNotWords extends DrawCard {
                                 afterConflict: (event: EventPayload<EventName.AfterConflict>) =>
                                     context.player === event.conflict.winner
                             },
-                            gameAction: AbilityDsl.actions.claimImperialFavor(context => ({ target: context.player })),
+                            gameAction: AbilityDsl.actions.claimImperialFavor(() => ({ target: context.player })),
                             message: '{0} claims the Imperial Favor to the delayed effect of {1}',
                             messageArgs: [context.player, context.source]
                         })
