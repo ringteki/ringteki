@@ -170,7 +170,7 @@ class SelectCardPrompt extends UiPrompt {
     }
 
     savePreviouslySelectedCards(): void {
-        this.previouslySelectedCards = this.choosingPlayer.selectedCards;
+        this.previouslySelectedCards = [...this.choosingPlayer.selectedCards];
         this.choosingPlayer.clearSelectedCards();
         this.choosingPlayer.setSelectedCards(this.selectedCards);
     }
