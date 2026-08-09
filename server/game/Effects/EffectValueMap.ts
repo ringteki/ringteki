@@ -62,7 +62,6 @@ export interface EffectValueMap {
     [EffectName.AttachmentLimit]: number;
     [EffectName.FateCostToAttack]: number;
     [EffectName.CardCostToAttackMilitary]: number;
-    [EffectName.HonorCostToDeclare]: number;
     [EffectName.FateCostToRingToDeclareConflictAgainst]: number;
     [EffectName.GainExtraFateWhenPlayed]: number;
     [EffectName.LegendaryFate]: number;
@@ -176,6 +175,9 @@ export interface EffectValueMap {
     [EffectName.CopyCharacter]: DrawCard; // the copied card; consumers read printed* / traits
     [EffectName.TakeControl]: Player;
     [EffectName.ChangePlayerGloryModifier]: number;
+
+    // --- composite-valued (multiple values) ---
+    [EffectName.HonorCostToDeclare]: { amount: number, dueToStatusToken?: boolean };
 
     // --- function-valued (predicate / match / cost functions; typed against consumer call sites) ---
     [EffectName.CannotDeclareRing]: (player: Player) => boolean;

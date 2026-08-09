@@ -1,3 +1,4 @@
+import DrawCard from '../DrawCard.js';
 import { AddTokenAction, AddTokenProperties } from './AddTokenAction.js';
 import { AffinityAction, AffinityActionProperties } from './AffinityAction.js';
 import { AttachAction, AttachActionProperties } from './AttachAction.js';
@@ -47,6 +48,7 @@ import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingE
 import { LookAtAction, LookAtProperties } from './LookAtAction.js';
 import { LoseFateAction, LoseFateProperties } from './LoseFateAction.js';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction.js';
+import { OptionalAction, OptionalActionProperties } from './OptionalAction.js';
 import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction.js';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction.js';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction.js';
@@ -481,8 +483,18 @@ export function conditional<Target = unknown>(propertyFactory: PropsFactory<Cond
 export function onAffinity<Target = unknown>(propertyFactory: PropsFactory<AffinityActionProperties, NoInfer<Target>>): GameAction {
     return new AffinityAction(propertyFactory as ConstructorParameters<typeof AffinityAction>[0]);
 }
+export function optional<Target = unknown>(propertyFactory: PropsFactory<OptionalActionProperties, NoInfer<Target>>): GameAction {
+    return new OptionalAction(propertyFactory as ConstructorParameters<typeof OptionalAction>[0]);
+}
 export function ifAble<Target = unknown>(propertyFactory: PropsFactory<IfAbleActionProperties, NoInfer<Target>>): GameAction {
     return new IfAbleAction(propertyFactory as ConstructorParameters<typeof IfAbleAction>[0]);
+}
+export function injure(): GameAction {
+    return conditional({
+        condition: (context) => (context.target as DrawCard).getFate() === 0,
+        trueGameAction: discardFromPlay(),
+        falseGameAction: removeFate()
+    });
 }
 export function joint(gameActions: GameAction[]): GameAction {
     return new JointGameAction(gameActions);

@@ -250,6 +250,7 @@ export interface EventPayloadMap {
         player?: Player;
         amount?: number;
         dueToUnopposed?: boolean;
+        dueToStatusToken?: boolean;
     };
     [EventName.OnTransferHonor]: BaseEventPayload & {
         player?: Player;

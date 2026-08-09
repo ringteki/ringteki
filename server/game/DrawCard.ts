@@ -680,7 +680,10 @@ class DrawCard extends BaseCard {
 
         if(this.isDishonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
-            const honorLossAction = this.game.actions.loseHonor();
+            const honorLossAction = this.game.actions.loseHonor({
+                amount: 1,
+                dueToStatusToken: true
+            });
 
             if(honorLossAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
@@ -688,7 +691,10 @@ class DrawCard extends BaseCard {
             this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
         } else if(this.isHonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
-            const honorGainAction = this.game.actions.gainHonor();
+            const honorGainAction = this.game.actions.gainHonor({
+                amount: 1,
+                dueToStatusToken: true
+            });
             if(honorGainAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} gains 1 honor due to {1}\'s personal honor', this.controller, this);
             }

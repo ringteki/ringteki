@@ -64,7 +64,7 @@ const Effects = {
     registerToPlayFromOutOfPlay: () =>
         EffectBuilder.card.detached(EffectName.CanPlayFromOutOfPlay, {
             apply: (card) => {
-                for(const reaction of (card as DrawCard).reactions) {
+                for (const reaction of (card as DrawCard).reactions) {
                     reaction.registerEvents();
                 }
             },
@@ -108,7 +108,7 @@ const Effects = {
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectName.EntersPlayForOpponent, true),
     fateCostToAttack: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.FateCostToAttack, amount),
     cardCostToAttackMilitary: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.CardCostToAttackMilitary, amount),
-    honorCostToDeclare: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.HonorCostToDeclare, amount),
+    honorCostToDeclare: (properties: { amount: Flexible<number>, dueToStatusToken?: boolean } = { amount: 1, dueToStatusToken: false }) => EffectBuilder.card.flexible(EffectName.HonorCostToDeclare, properties),
     fateCostToRingToDeclareConflictAgainst: (amount: Flexible<number> = 1) =>
         EffectBuilder.card.flexible(EffectName.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties: unknown) => EffectBuilder.card.flexible(EffectName.FateCostToTarget, properties),
@@ -219,18 +219,18 @@ const Effects = {
         EffectBuilder.player.detached(EffectName.CanPlayFromOpponents, {
             apply: (player) => {
                 const p = player as Player;
-                if(!p.opponent) {
+                if (!p.opponent) {
                     return;
                 }
-                for(const card of cards.filter(
+                for (const card of cards.filter(
                     (card) => card.type === CardType.Event && card.location === location
                 )) {
-                    for(const reaction of card.reactions) {
+                    for (const reaction of card.reactions) {
                         reaction.registerEvents();
                     }
                 }
-                for(const card of cards) {
-                    if(!card.fromOutOfPlaySource) {
+                for (const card of cards) {
+                    if (!card.fromOutOfPlaySource) {
                         card.fromOutOfPlaySource = [];
                     }
                     card.fromOutOfPlaySource.push(sourceOfEffect);
@@ -240,10 +240,10 @@ const Effects = {
             unapply: (player, context, state) => {
                 const location = state as PlayableLocation;
                 (player as Player).removePlayableLocation(location);
-                for(const card of location.cards) {
-                    if(Array.isArray(card.fromOutOfPlaySource)) {
+                for (const card of location.cards) {
+                    if (Array.isArray(card.fromOutOfPlaySource)) {
                         card.fromOutOfPlaySource.filter((a) => a !== context.source);
-                        if(card.fromOutOfPlaySource.length === 0) {
+                        if (card.fromOutOfPlaySource.length === 0) {
                             delete card.fromOutOfPlaySource;
                         }
                     }

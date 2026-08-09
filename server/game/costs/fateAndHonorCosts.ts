@@ -68,8 +68,8 @@ export function payFate(amount: number | ((context: AbilityContext) => number) =
 /**
  * Cost in which the player must pay a fixed, non-reduceable amount of honor.
  */
-export function payHonor(amount = 1): Cost {
-    return new GameActionCost(GameActions.loseHonor((context) => ({ target: context.player, amount })));
+export function payHonor(amount = 1, dueToStatusToken = false): Cost {
+    return new GameActionCost(GameActions.loseHonor((context) => ({ target: context.player, amount, dueToStatusToken })));
 }
 
 export function giveHonorToOpponent(amount = 1): Cost {
@@ -103,7 +103,7 @@ export function variableHonorCost(amountFunc: (context: TriggeredAbilityContext)
             const amount = amountFunc(context);
             const max = Math.min(amount, context.player.honor);
             const choices = Array.from(Array(max), (x, i) => String(i + 1));
-            if(result.canCancel) {
+            if (result.canCancel) {
                 choices.push('Cancel');
             }
             context.game.promptWithHandlerMenu(context.player, {
@@ -111,7 +111,7 @@ export function variableHonorCost(amountFunc: (context: TriggeredAbilityContext)
                 context: context,
                 choices: choices,
                 choiceHandler: (choice: string) => {
-                    if(choice === 'Cancel') {
+                    if (choice === 'Cancel') {
                         context.costs.variableHonorCost = 0;
                         result.cancelled = true;
                     } else {
@@ -141,7 +141,7 @@ export function variableFateCost(properties: {
     return {
         promptsPlayer: true,
         canPay(context: TriggeredAbilityContext<DrawCard>) {
-            if(context.ignoreFateCost) {
+            if (context.ignoreFateCost) {
                 return true;
             }
             const costModifiers = context.player.getTotalCostModifiers(PlayType.PlayFromHand, context.source);
@@ -159,14 +159,14 @@ export function variableFateCost(properties: {
             const maxAmount = deriveMaxAmount(context);
             const min = deriveMinAmount(context);
             let max = context.player.fate - costModifiers;
-            if(maxAmount >= 0) {
+            if (maxAmount >= 0) {
                 max = Math.min(maxAmount, context.player.fate - costModifiers);
             }
-            if(!context.game.actions.loseFate().canAffect(context.player, context)) {
+            if (!context.game.actions.loseFate().canAffect(context.player, context)) {
                 max = Math.min(max, -costModifiers);
             }
             const choices = Array.from({ length: max + 1 - min }, (_, idx) => String(idx + min));
-            if(result.canCancel) {
+            if (result.canCancel) {
                 choices.push('Cancel');
             }
             context.game.promptWithHandlerMenu(context.player, {
@@ -176,7 +176,7 @@ export function variableFateCost(properties: {
                 context: context,
                 choices: choices,
                 choiceHandler: (choice: string) => {
-                    if(choice === 'Cancel') {
+                    if (choice === 'Cancel') {
                         context.costs.variableFateCost = 0;
                         result.cancelled = true;
                     } else {
@@ -187,13 +187,13 @@ export function variableFateCost(properties: {
         },
         payEvent(context: TriggeredAbilityContext<DrawCard>) {
             const payZeroFate = new HandlerAction({});
-            if(context.ignoreFateCost) {
+            if (context.ignoreFateCost) {
                 return payZeroFate.getEvent(context.player, context);
             }
 
             const costModifiers = context.player.getTotalCostModifiers(PlayType.PlayFromHand, context.source);
             const cost = (context.costs.variableFateCost as number) + Math.min(0, costModifiers); //+ve cost modifiers are applied by the engine
-            if(cost > 0) {
+            if (cost > 0) {
                 const action = context.game.actions.loseFate({ amount: cost });
                 return action.getEvent(context.player, context);
             }
