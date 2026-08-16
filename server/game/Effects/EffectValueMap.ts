@@ -173,6 +173,7 @@ export interface EffectValueMap {
 
     // --- instance/Player-valued ---
     [EffectName.CopyCharacter]: DrawCard; // the copied card; consumers read printed* / traits
+    [EffectName.CopyProvince]: ProvinceCard; // the copied card; consumers read printed* / traits
     [EffectName.TakeControl]: Player;
     [EffectName.ChangePlayerGloryModifier]: number;
 

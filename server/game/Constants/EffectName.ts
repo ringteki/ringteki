@@ -31,6 +31,7 @@ export enum EffectName {
     ChangeContributionFunction = 'changeContributionFunction',
     ChangeType = 'changeType',
     CopyCharacter = 'copyCharacter',
+    CopyProvince = 'copyProvince',
     CustomEffect = 'customEffect',
     CustomProvinceRefillEffect = 'customProvinceRefillEffect',
     DelayedEffect = 'delayedEffect',

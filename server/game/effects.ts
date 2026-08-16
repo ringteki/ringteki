@@ -8,7 +8,7 @@ import { attachmentPoliticalSkillModifier } from './Effects/Library/attachmentPo
 import { canPlayFromOwn } from './Effects/Library/canPlayFromOwn.js';
 import { cardCannot } from './Effects/Library/cardCannot.js';
 import { changePlayerGloryModifier } from './Effects/Library/changePlayerGloryModifier.js';
-import { copyCard } from './Effects/Library/copyCard.js';
+import { copyCard, copyProvince } from './Effects/Library/copyCard.js';
 import { gainAllAbilities } from './Effects/Library/gainAllAbilities.js';
 import { gainAbility } from './Effects/Library/gainAbility.js';
 import { mustBeDeclaredAsAttacker } from './Effects/Library/mustBeDeclaredAsAttacker.js';
@@ -99,6 +99,7 @@ const Effects = {
     canContributeGloryWhileBowed: (properties?: unknown) =>
         EffectBuilder.card.static(EffectName.CanContributeGloryWhileBowed, properties),
     copyCard,
+    copyProvince,
     customDetachedCard: (properties: DetachedValue) => EffectBuilder.card.detached(EffectName.CustomEffect, properties),
     customRefillProvince: (refillFunc: unknown) => EffectBuilder.card.static(EffectName.CustomProvinceRefillEffect, refillFunc),
     delayedEffect: (properties: unknown) => EffectBuilder.card.static(EffectName.DelayedEffect, properties),

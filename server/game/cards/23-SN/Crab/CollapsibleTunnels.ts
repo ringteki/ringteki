@@ -1,15 +1,15 @@
 import { CardType, Location } from '../../../Constants.js';
-import AbilityDsl from '../../../abilitydsl.js';
 import DrawCard from '../../../DrawCard.js';
+import AbilityDsl from '../../../abilitydsl.js';
 
-export default class DesperateDefense extends DrawCard {
-    static id = 'desperate-defense';
+export default class CollapsibleTunnels extends DrawCard {
+    static id = 'collapsible-tunnels';
 
     setupCardAbilities() {
         this.action({
             title: 'Add Province Strength',
-            condition: (context) => context.player.cardsInPlay.some((card: DrawCard) => card.isParticipating()),
-            effect: 'increase the strength of an attacked province by 3',
+            condition: (context) => context.game.isDuringConflict(),
+            effect: 'increase the strength of an attacked province by 2',
             gameAction: AbilityDsl.actions.selectCard((context) => ({
                 activePromptTitle: 'Choose an attacked province',
                 hidePromptIfSingleCard: true,
@@ -20,10 +20,20 @@ export default class DesperateDefense extends DrawCard {
                 messageArgs: (cards) => [context.player, cards],
                 gameAction: AbilityDsl.actions.cardLastingEffect({
                     targetLocation: Location.Provinces,
-                    effect: AbilityDsl.effects.modifyProvinceStrength(3)
+                    effect: AbilityDsl.effects.modifyProvinceStrength(2)
                 })
             })),
-            max: AbilityDsl.limit.perConflict(1)
+        });
+
+        this.action({
+            title: 'Bow a character',
+            cost: AbilityDsl.costs.sacrificeSelf(),
+            condition: (context) => context.game.isDuringConflict(),
+            target: {
+                cardType: CardType.Character,
+                cardCondition: (card, context) => card.isAttacking() && card.getBaseMilitarySkill() <= 2,
+                gameAction: AbilityDsl.actions.bow()
+            }
         });
     }
 }

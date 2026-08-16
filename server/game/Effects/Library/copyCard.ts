@@ -6,6 +6,7 @@ import type TriggeredAbility from '../../TriggeredAbility.js';
 import { EffectBuilder } from '../EffectBuilder.js';
 import { EffectValue } from '../EffectValue.js';
 import GainAbility from '../GainAbility.js';
+import { ProvinceCard } from '../../ProvinceCard.js';
 
 class CopyCard extends EffectValue<BaseCard> {
     actions: Array<GainAbility>;
@@ -39,8 +40,8 @@ class CopyCard extends EffectValue<BaseCard> {
                 return value.getValue() as TriggeredAbility;
             })
         });
-        for(const effect of this.persistentEffects) {
-            if(
+        for (const effect of this.persistentEffects) {
+            if (
                 effect.location === Location.Any ||
                 (target.getType() === CardType.Character && effect.location === Location.PlayArea) ||
                 (target.getType() === CardType.Holding && effect.location === Location.Provinces)
@@ -51,11 +52,11 @@ class CopyCard extends EffectValue<BaseCard> {
     }
 
     unapply(target: BaseCard) {
-        for(const value of this.abilitiesForTargets.get(target)?.reactions ?? []) {
+        for (const value of this.abilitiesForTargets.get(target)?.reactions ?? []) {
             value.unregisterEvents();
         }
-        for(const effect of this.persistentEffects) {
-            if(effect.ref) {
+        for (const effect of this.persistentEffects) {
+            if (effect.ref) {
                 target.removeEffectFromEngine(effect.ref);
                 delete effect.ref;
             }
@@ -82,4 +83,8 @@ class CopyCard extends EffectValue<BaseCard> {
 
 export function copyCard(character: BaseCard) {
     return EffectBuilder.card.static(EffectName.CopyCharacter, new CopyCard(character));
+}
+
+export function copyProvince(province: ProvinceCard) {
+    return EffectBuilder.card.static(EffectName.CopyProvince, new CopyCard(province));
 }
