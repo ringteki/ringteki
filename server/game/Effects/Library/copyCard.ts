@@ -44,7 +44,8 @@ class CopyCard extends EffectValue<BaseCard> {
             if (
                 effect.location === Location.Any ||
                 (target.getType() === CardType.Character && effect.location === Location.PlayArea) ||
-                (target.getType() === CardType.Holding && effect.location === Location.Provinces)
+                (target.getType() === CardType.Holding && effect.location === Location.Provinces) ||
+                (target.getType() === CardType.Province && effect.location === Location.Provinces)
             ) {
                 effect.ref = target.addEffectToEngine({ ...effect, location: effect.location });
             }

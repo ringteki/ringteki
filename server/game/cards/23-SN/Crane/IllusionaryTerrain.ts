@@ -1,8 +1,8 @@
 import DrawCard from '../../../DrawCard.js';
 import { ProvinceCard } from '../../../ProvinceCard.js';
-import { CardType, EventName, Players, Location } from '../../../Constants.js';
-import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
-import type { EventPayload } from '../../../Events/EventPayloads.js';
+import { CardType, /*EventName,*/ Players, Location } from '../../../Constants.js';
+// import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
+// import type { EventPayload } from '../../../Events/EventPayloads.js';
 import AbilityDsl from '../../../abilitydsl.js';
 import BaseCard from '../../../BaseCard.js';
 
@@ -10,21 +10,32 @@ export default class IllusionaryTerrain extends DrawCard {
     static id = 'illusionary-terrain';
 
     setupCardAbilities() {
+        this.persistentEffect({
+            location: Location.Any,
+            targetController: Players.Any,
+            effect: AbilityDsl.effects.reduceCost({
+                amount: (card, player) => {
+                    return player.filterCardsInPlay((card) => {
+                        return card.hasTrait('shugenja');
+                    }).length;
+                },
+                match: (card, source) => card === source
+            })
+        });
+
         this.wouldInterrupt({
             title: 'Turn province into copy of a province',
             effect: 'transform the attacked province into a copy of {0}',
             when: {
-                onConflictDeclaredBeforeProvinceReveal: (event: EventPayload<EventName.OnConflictDeclaredBeforeProvinceReveal>, context: TriggeredAbilityContext) => !!event.conflict.conflictProvince && event.conflict.conflictProvince.isFacedown() &&
-                    event.conflict.defendingPlayer === context.player &&
-                    event.conflict.conflictProvince.location !== Location.StrongholdProvince
+                onConflictDeclaredBeforeProvinceReveal: () => true
             },
             target: {
                 cardType: CardType.Province,
                 location: Location.Provinces,
                 controller: context => context.player.hasAffinity('air', context) ? Players.Any : Players.Self,
-                cardCondition: (card: BaseCard) => (card as ProvinceCard).isFaceup(),
+                cardCondition: (card: BaseCard, context: any) => (card as ProvinceCard).isFaceup() && card !== context.event.conflict.conflictProvince,
                 gameAction: AbilityDsl.actions.cardLastingEffect<DrawCard>((context) => ({
-                    target: context.event.card,
+                    target: context.event.conflict.conflictProvince,
                     targetLocation: Location.Any,
                     effect: AbilityDsl.effects.copyProvince(context.target)
                 }))
