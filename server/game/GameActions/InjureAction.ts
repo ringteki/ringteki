@@ -4,7 +4,7 @@ import type { AbilityContext } from '../AbilityContext.js';
 import type { GameObject } from '../GameObject.js';
 import { GameAction, GameActionProperties } from './GameAction.js';
 import { RemoveFateAction } from './RemoveFateAction.js';
-import { CardType } from '../Constants.js';
+import { CardType, Location } from '../Constants.js';
 import { DiscardFromPlayAction } from './DiscardFromPlayAction.js';
 import DrawCard from '../DrawCard.js';
 import BaseCard from '../BaseCard.js';
@@ -42,14 +42,14 @@ export class InjureAction extends GameAction<InjureActionProperties> {
             return false;
         }
 
+        if (target.location !== Location.PlayArea) {
+            return false;
+        }
+
         if (target.getFate() === 0) {
             return this.discardGameAction.canAffect(target, context, additionalProperties);
         }
         return this.removeFateGameAction.canAffect(target, context, additionalProperties);
-    }
-
-    hasLegalTarget(context: AbilityContext, additionalProperties = {}): boolean {
-        return this.discardGameAction.hasLegalTarget(context, additionalProperties) || this.removeFateGameAction.hasLegalTarget(context, additionalProperties);
     }
 
     addEventsToArray(events: Event[], context: AbilityContext, additionalProperties = {}): void {

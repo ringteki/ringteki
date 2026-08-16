@@ -43,7 +43,32 @@ describe('Kinutanuki Yoite', function () {
 
             this.player2.clickCard(this.toturi);
             expect(this.toturi.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).toContain('player2 uses Kinutanuki Yoite to discard Akodo Toturi');
+            expect(this.getChatLogs(5)).toContain('player2 uses Kinutanuki Yoite to injure Akodo Toturi');
+        });
+
+        it('removes fate if character has a fate', function () {
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.matsuBerserker, this.tactician, this.toturi],
+                defenders: [this.kinutanukiYoite]
+            });
+
+            this.toturi.fate = 1;
+
+            this.player2.clickCard(this.unleashTheDjinn);
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            expect(this.player2).toBeAbleToSelect(this.kinutanukiYoite);
+
+            this.player2.clickCard(this.kinutanukiYoite);
+            expect(this.player2).toHavePrompt('Choose a character');
+            expect(this.player2).toBeAbleToSelect(this.matsuBerserker);
+            expect(this.player2).toBeAbleToSelect(this.tactician);
+            expect(this.player2).toBeAbleToSelect(this.toturi);
+
+            this.player2.clickCard(this.toturi);
+            expect(this.toturi.location).toBe('play area');
+            expect(this.toturi.fate).toBe(0);
+            expect(this.getChatLogs(5)).toContain('player2 uses Kinutanuki Yoite to injure Akodo Toturi');
         });
 
         it('discards characters with attachment spells', function () {
@@ -66,7 +91,7 @@ describe('Kinutanuki Yoite', function () {
 
             this.player2.clickCard(this.tactician);
             expect(this.tactician.location).toBe('dynasty discard pile');
-            expect(this.getChatLogs(5)).toContain('player2 uses Kinutanuki Yoite to discard Master Tactician');
+            expect(this.getChatLogs(5)).toContain('player2 uses Kinutanuki Yoite to injure Master Tactician');
         });
     });
 });

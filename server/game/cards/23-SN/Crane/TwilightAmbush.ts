@@ -18,9 +18,10 @@ export default class TwilightAmbush extends DrawCard {
                 cardCondition: card => card.isDishonored,
                 gameAction: AbilityDsl.actions.injure()
             },
+            cannotTargetFirst: true,
             then: (context: AbilityContext) => ({
-                message: '{0} is injured again because {2} is a Shinobi',
-                messageArgs: () => [context.player.opponent, context.player.getNumberOfOpponentsFacedownProvinces()],
+                message: '{3} is injured again because {4} is a Shinobi',
+                messageArgs: () => [context.target, (context.costs.sacrificeStateWhenChosen as DrawCard)],
                 thenCondition: () => (context.costs.sacrificeStateWhenChosen as DrawCard).hasTrait('shinobi'),
                 gameAction: AbilityDsl.actions.injure({
                     target: context.target,
