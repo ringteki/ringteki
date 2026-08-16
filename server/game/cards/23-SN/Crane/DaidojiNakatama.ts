@@ -25,7 +25,7 @@ export default class DaidojiNakatama extends DrawCard {
             target: {
                 cardType: CardType.Character,
                 controller: Players.Any,
-                cardCondition: (card, context) => card !== context.source && card.costLessThan(4),
+                cardCondition: (card, context) => card !== context.source && card.costLessThan(4) && card.bowed,
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.ready(),
                     AbilityDsl.actions.dishonor(),

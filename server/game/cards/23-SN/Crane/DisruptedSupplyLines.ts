@@ -1,6 +1,6 @@
 import AbilityDsl from '../../../abilitydsl.js';
 import BaseCard from '../../../BaseCard.js';
-import { CardType, EventName, Players } from '../../../Constants.js';
+import { CardType, EventName, Location, Players, TargetMode } from '../../../Constants.js';
 import { Result } from '../../../costs/Cost.js';
 import DrawCard from '../../../DrawCard.js';
 import { EventPayload } from '../../../Events/EventPayloads.js';
@@ -42,6 +42,7 @@ const disruptedSupplyLinesCost = function () {
             const { fateAvailable, eligibleCharacters, freeCharacters } = resourcesAvailable(context);
             context.costs.disruptedSupplyLinesCostFatePaid = false;
             context.costs.disruptedSupplyLinesCostDishonoredCharacter = undefined;
+            results.cancelled = false;
 
             let cards = freeCharacters;
             if (fateAvailable) {
@@ -68,12 +69,12 @@ const disruptedSupplyLinesCost = function () {
         payEvent: function (context: TriggeredAbilityContext) {
             const events = [];
             if (context.costs.disruptedSupplyLinesCostFatePaid) {
-                const loseFateaction = context.game.actions.loseFate({ amount: 1 });
+                const loseFateaction = context.game.actions.loseFate({ amount: 1, target: context.player });
                 events.push(loseFateaction.getEvent(context.player, context));
             }
 
             const dishonorAction = context.game.actions.dishonor({ target: context.costs.disruptedSupplyLinesCostDishonoredCharacter as BaseCard });
-            events.push(dishonorAction.getEvent(context.player, context));
+            events.push(dishonorAction.getEvent(context.costs.disruptedSupplyLinesCostDishonoredCharacter, context));
 
             return events;
         },
@@ -86,31 +87,29 @@ export default class DisruptedSupplyLines extends DrawCard {
 
     setupCardAbilities() {
         this.interrupt({
-            title: 'Ready attached character',
+            title: 'Remove attachment from game',
             cost: disruptedSupplyLinesCost(),
             when: {
                 onCardAttached: (event: EventPayload<EventName.OnCardAttached>, context) => (
-                    context.source.parent && (context.source.parent as DrawCard).getType() === CardType.Character &&
+                    !!event.parent && event.parent.getType() === CardType.Character &&
                     event.context?.player === context.player.opponent
                 )
             },
-            gameAction: AbilityDsl.actions.chooseAction(context => ({
-                options: {
-                    'Give opponent 1 fate': {
-                        action: AbilityDsl.actions.honor(),
-                        message: '{0} chooses to give 1 fate to {2}',
-                        messageArgs: [context.player]
-                    },
-                    'Remove attachment from the game': {
-                        action: AbilityDsl.actions.removeFromGame({ target: context.event.card }),
-                        message: '{0} chooses to remove {2} from the game',
-                        messageArgs: [context.event.card]
-                    }
-                },
+            target: {
                 player: Players.Opponent,
-            })),
-            effect: 'make {1} either give them 1 fate or remove {2} from the game',
-            effectArgs: context => [context.player.opponent, context.event.card]
+                mode: TargetMode.Select,
+                choices: {
+                    'Give your opponent 1 fate': AbilityDsl.actions.takeFate(),
+                    'Remove attachment from the game': AbilityDsl.actions.cancel(context => ({
+                        target: context.source,
+                        replacementGameAction: AbilityDsl.actions.removeFromGame(context => ({ target: context.event.card, location: Location.Any }))
+                    }))
+                }
+            },
+            effect: '{1}{2}{3}',
+            effectArgs: context => context.select === "Give your opponent 1 fate" ?
+                ['take 1 fate from ', context.player.opponent, ''] :
+                ['remove ', context.event.card, ' from the game']
         });
     }
 }
