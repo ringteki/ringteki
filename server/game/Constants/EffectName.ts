@@ -19,6 +19,7 @@ export enum EffectName {
     CanBeSeenWhenFacedown = 'canBeSeenWhenFacedown',
     CanBeTriggeredByOpponent = 'canBeTriggeredByOpponent',
     CanOnlyBeDeclaredAsAttackerWithElement = 'canOnlyBeDeclaredAsAttackerWithElement',
+    CanOnlyBeDeclaredAsAttackerWithCondition = 'canOnlyBeDeclaredAsAttackerWithCondition',
     CannotApplyLastingEffects = 'cannotApplyLastingEffects',
     CannotBeAttacked = 'cannotBeAttacked',
     CannotBidInDuels = 'cannotBidInDuels',

@@ -199,4 +199,13 @@ export interface EffectValueMap {
     [EffectName.AdditionalAttackedProvince]: ProvinceCard;
     [EffectName.AdditionalTriggerCost]: (context: AbilityContext) => Cost | Cost[];
     [EffectName.AdditionalPlayCost]: (context: AbilityContext) => Cost | Cost[];
+    [EffectName.CanOnlyBeDeclaredAsAttackerWithCondition]: ((props: ICanOnlyBeDeclaredAsAttackerWithCondition) => boolean);
+}
+
+export interface ICanOnlyBeDeclaredAsAttackerWithCondition {
+    context: AbilityContext,
+    conflictType: string,
+    ring: Ring,
+    province?: ProvinceCard | null,
+    incomingAttackers?: DrawCard[]
 }

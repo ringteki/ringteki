@@ -27,6 +27,7 @@ import type { EffectTarget, DetachedValue } from './Effects/EffectBuilder.js';
 import type { DynamicMatch } from './Effects/GainAllAbilitiesDynamic.js';
 import type { CostReducer, CostReducerProps } from './CostReducer.js';
 import type { RestrictionProperties } from './Effects/Restriction.js';
+import { ICanOnlyBeDeclaredAsAttackerWithCondition } from './Effects/EffectValueMap.js';
 
 /* Types of effect
     1. Static effects - do something for a period
@@ -74,6 +75,8 @@ const Effects = {
     canBeTriggeredByOpponent: () => EffectBuilder.card.static(EffectName.CanBeTriggeredByOpponent, true),
     canOnlyBeDeclaredAsAttackerWithElement: (element: Flexible<string>) =>
         EffectBuilder.card.flexible(EffectName.CanOnlyBeDeclaredAsAttackerWithElement, element),
+    canOnlyBeDeclaredAsAttackerWithCondition: (condition: (props: ICanOnlyBeDeclaredAsAttackerWithCondition) => boolean) =>
+        EffectBuilder.card.static(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition, condition),
     cannotApplyLastingEffects: (condition: unknown) =>
         EffectBuilder.card.static(EffectName.CannotApplyLastingEffects, condition),
     cannotBeAttacked: () => EffectBuilder.card.static(EffectName.CannotBeAttacked, true),

@@ -110,8 +110,8 @@ class DrawCard extends BaseCard {
         this.printedPoliticalSkill = this.getPrintedSkill('political');
         this.printedCost = parseInt(this.cardData.cost ?? '');
 
-        if(typeof this.printedCost !== 'number' || isNaN(this.printedCost)) {
-            if(this.type === CardType.Event) {
+        if (typeof this.printedCost !== 'number' || isNaN(this.printedCost)) {
+            if (this.type === CardType.Event) {
                 this.printedCost = 0;
             } else {
                 this.printedCost = null;
@@ -125,28 +125,28 @@ class DrawCard extends BaseCard {
         this.isDynasty = cardData.side === 'dynasty';
         this.allowDuplicatesOfAttachment = !!cardData.attachment_allow_duplicates;
 
-        if(cardData.type === CardType.Character) {
+        if (cardData.type === CardType.Character) {
             this.abilities.reactions.push(new CourtesyAbility(this));
             this.abilities.reactions.push(new PrideAbility(this));
             this.abilities.reactions.push(new SincerityAbility(this));
         }
-        if(cardData.type === CardType.Attachment) {
+        if (cardData.type === CardType.Attachment) {
             this.abilities.reactions.push(new CourtesyAbility(this));
             this.abilities.reactions.push(new SincerityAbility(this));
         }
-        if(cardData.type === CardType.Event && this.hasEphemeral()) {
+        if (cardData.type === CardType.Event && this.hasEphemeral()) {
             this.eventRegistrarForEphemeral = new EventRegistrar(this.game, this);
             this.eventRegistrarForEphemeral.register([{ [EventName.OnCardPlayed]: 'handleEphemeral' }]);
         }
-        if(cardData.type === CardType.Attachment && this.hasEphemeral()) {
+        if (cardData.type === CardType.Attachment && this.hasEphemeral()) {
             this.eventRegistrarForEphemeral = new EventRegistrar(this.game, this);
             this.eventRegistrarForEphemeral.register([{ [EventName.OnCardLeavesPlay]: 'handleEphemeral' }]);
         }
-        if(cardData.type === CardType.Character && this.hasEphemeral()) {
+        if (cardData.type === CardType.Character && this.hasEphemeral()) {
             this.eventRegistrarForEphemeral = new EventRegistrar(this.game, this);
             this.eventRegistrarForEphemeral.register([{ [EventName.OnCardLeavesPlay]: 'handleEphemeral' }]);
         }
-        if(this.isDynasty) {
+        if (this.isDynasty) {
             this.abilities.reactions.push(new RallyAbility(this));
             this.abilities.reactions.push(new ThrivingAbility(this));
         }
@@ -155,8 +155,8 @@ class DrawCard extends BaseCard {
     }
 
     handleEphemeral(event: GameEvent<EventName.OnCardPlayed | EventName.OnCardLeavesPlay>): void {
-        if(event.card === this) {
-            if(this.location !== Location.RemovedFromGame) {
+        if (event.card === this) {
+            if (this.location !== Location.RemovedFromGame) {
                 this.owner.moveCard(this, Location.RemovedFromGame);
             }
             this.fromOutOfPlaySource = undefined;
@@ -172,7 +172,7 @@ class DrawCard extends BaseCard {
     applyAttachmentBonus() {
         const militaryBonus = parseInt(this.cardData.military_bonus ?? '');
         const politicalBonus = parseInt(this.cardData.political_bonus ?? '');
-        if(!isNaN(militaryBonus)) {
+        if (!isNaN(militaryBonus)) {
             this.persistentEffect({
                 match: (card) => card === this.parent,
                 targetController: Players.Any,
@@ -181,7 +181,7 @@ class DrawCard extends BaseCard {
                 )
             });
         }
-        if(!isNaN(politicalBonus)) {
+        if (!isNaN(politicalBonus)) {
             this.persistentEffect({
                 match: (card) => card === this.parent,
                 targetController: Players.Any,
@@ -209,13 +209,13 @@ class DrawCard extends BaseCard {
     }
 
     getPrintedSkill(type: string): number {
-        if(type === 'military') {
+        if (type === 'military') {
             return this.cardData.military === null || this.cardData.military === undefined
                 ? NaN
                 : isNaN(parseInt(this.cardData.military))
                     ? 0
                     : parseInt(this.cardData.military);
-        } else if(type === 'political') {
+        } else if (type === 'political') {
             return this.cardData.political === null || this.cardData.political === undefined
                 ? NaN
                 : isNaN(parseInt(this.cardData.political))
@@ -397,15 +397,15 @@ class DrawCard extends BaseCard {
     }
 
     hasDash(type: string = ''): boolean {
-        if(type === 'glory' || this.printedType !== CardType.Character) {
+        if (type === 'glory' || this.printedType !== CardType.Character) {
             return false;
         }
 
         const baseSkillModifiers = this.skillCalculator.getBaseSkillModifiers();
 
-        if(type === 'military') {
+        if (type === 'military') {
             return isNaN(baseSkillModifiers.baseMilitarySkill);
-        } else if(type === 'political') {
+        } else if (type === 'political') {
             return isNaN(baseSkillModifiers.basePoliticalSkill);
         }
 
@@ -414,7 +414,7 @@ class DrawCard extends BaseCard {
 
     getContributionToConflict(type: string): number {
         const skillFunction = this.mostRecentEffect(EffectName.ChangeContributionFunction);
-        if(skillFunction) {
+        if (skillFunction) {
             return skillFunction(this);
         }
         return this.getSkill(type);
@@ -426,9 +426,9 @@ class DrawCard extends BaseCard {
      * @return The chosen skill value
      */
     getSkill(type: string): number {
-        if(type === 'military') {
+        if (type === 'military') {
             return this.getMilitarySkill();
-        } else if(type === 'political') {
+        } else if (type === 'political') {
             return this.getPoliticalSkill();
         }
         return 0;
@@ -439,7 +439,7 @@ class DrawCard extends BaseCard {
     }
 
     get militarySkillSummary(): { stat?: string; modifiers?: StatModifier[] } {
-        if(!this.showStats) {
+        if (!this.showStats) {
             return {};
         }
         const modifiers = this.skillCalculator.getMilitaryModifiers().map((modifier: StatModifier) => Object.assign({}, modifier));
@@ -451,7 +451,7 @@ class DrawCard extends BaseCard {
     }
 
     get politicalSkillSummary(): { stat?: string; modifiers?: StatModifier[] } {
-        if(!this.showStats) {
+        if (!this.showStats) {
             return {};
         }
         const modifiers = this.skillCalculator.getPoliticalModifiers().map((modifier: StatModifier) => Object.assign({}, modifier));
@@ -464,7 +464,7 @@ class DrawCard extends BaseCard {
     }
 
     get glorySummary(): { stat?: string; modifiers?: StatModifier[] } {
-        if(!this.showStats) {
+        if (!this.showStats) {
             return {};
         }
         const modifiers = this.skillCalculator.getGloryModifiers().map((modifier: StatModifier) => Object.assign({}, modifier));
@@ -483,7 +483,7 @@ class DrawCard extends BaseCard {
     getGlory(): number {
         const gloryModifiers = this.skillCalculator.getGloryModifiers();
         const glory = gloryModifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(isNaN(glory)) {
+        if (isNaN(glory)) {
             return 0;
         }
         return Math.max(0, glory);
@@ -492,7 +492,7 @@ class DrawCard extends BaseCard {
     getProvinceStrengthBonus(): number {
         const modifiers = this.skillCalculator.getProvinceStrengthBonusModifiers();
         const bonus = modifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(bonus && this.isFaceup()) {
+        if (bonus && this.isFaceup()) {
             return bonus;
         }
         return 0;
@@ -517,19 +517,19 @@ class DrawCard extends BaseCard {
     getMilitarySkill(floor: boolean = true): number {
         const modifiers = this.skillCalculator.getMilitaryModifiers();
         const skill = modifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return floor ? Math.max(0, skill) : skill;
     }
 
     getMilitarySkillExcludingModifiers(exclusions: Exclusions | EffectName, floor: boolean = true): number {
-        if(!Array.isArray(exclusions) && typeof exclusions !== 'function') {
+        if (!Array.isArray(exclusions) && typeof exclusions !== 'function') {
             exclusions = [exclusions];
         }
         const modifiers = this.skillCalculator.getMilitaryModifiers(exclusions);
         const skill = modifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return floor ? Math.max(0, skill) : skill;
@@ -542,19 +542,19 @@ class DrawCard extends BaseCard {
     getPoliticalSkill(floor: boolean = true): number {
         const modifiers = this.skillCalculator.getPoliticalModifiers();
         const skill = modifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return floor ? Math.max(0, skill) : skill;
     }
 
     getPoliticalSkillExcludingModifiers(exclusions: Exclusions | EffectName, floor: boolean = true): number {
-        if(!Array.isArray(exclusions) && typeof exclusions !== 'function') {
+        if (!Array.isArray(exclusions) && typeof exclusions !== 'function') {
             exclusions = [exclusions];
         }
         const modifiers = this.skillCalculator.getPoliticalModifiers(exclusions);
         const skill = modifiers.reduce((total: number, modifier: StatModifier) => total + modifier.amount, 0);
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return floor ? Math.max(0, skill) : skill;
@@ -566,7 +566,7 @@ class DrawCard extends BaseCard {
 
     getBaseMilitarySkill(): number {
         const skill = this.skillCalculator.getBaseSkillModifiers().baseMilitarySkill;
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return Math.max(0, skill);
@@ -578,7 +578,7 @@ class DrawCard extends BaseCard {
 
     getBasePoliticalSkill(): number {
         const skill = this.skillCalculator.getBaseSkillModifiers().basePoliticalSkill;
-        if(isNaN(skill)) {
+        if (isNaN(skill)) {
             return 0;
         }
         return Math.max(0, skill);
@@ -608,7 +608,7 @@ class DrawCard extends BaseCard {
     }
 
     getActions(location: string = this.location): BaseCardAbility[] {
-        if(location === Location.PlayArea || this.type === CardType.Event) {
+        if (location === Location.PlayArea || this.type === CardType.Event) {
             return super.getActions();
         }
         const actions: BaseCardAbility[] = this.type === CardType.Character ? [new DuplicateUniqueAction(this)] : [];
@@ -616,22 +616,22 @@ class DrawCard extends BaseCard {
     }
 
     getPlayActions(): BaseCardAbility[] {
-        if(this.type === CardType.Event) {
+        if (this.type === CardType.Event) {
             return this.getActions();
         }
         let actions = this.abilities.playActions.slice();
-        if(this.type === CardType.Character) {
-            if(this.disguisedKeywordTraits.length > 0) {
+        if (this.type === CardType.Character) {
+            if (this.disguisedKeywordTraits.length > 0) {
                 actions.push(new PlayDisguisedCharacterAction(this));
             }
-            if(this.isDynasty) {
+            if (this.isDynasty) {
                 actions.push(new DynastyCardAction(this));
             } else {
                 actions.push(new PlayCharacterAction(this));
             }
-        } else if(this.type === CardType.Attachment && this.mustAttachToRing()) {
+        } else if (this.type === CardType.Attachment && this.mustAttachToRing()) {
             actions.push(new PlayAttachmentToRingAction(this));
-        } else if(this.type === CardType.Attachment) {
+        } else if (this.type === CardType.Attachment) {
             actions.push(new PlayAttachmentAction(this));
         }
         return actions;
@@ -644,14 +644,14 @@ class DrawCard extends BaseCard {
      */
     leavesPlay(_destination?: string): void {
         // If this is an attachment and is attached to another card, we need to remove all links between them
-        if(this.parent && this.parent.attachments) {
+        if (this.parent && this.parent.attachments) {
             this.parent.removeAttachment(this);
             this.parent = null;
         }
 
         // Remove any cards underneath from the game
         const cardsUnderneath = this.controller.getSourceList(this.uuid).map((a) => a);
-        if(cardsUnderneath.length > 0) {
+        if (cardsUnderneath.length > 0) {
             cardsUnderneath.forEach((card) => {
                 this.controller.moveCard(card, Location.RemovedFromGame);
             });
@@ -665,37 +665,37 @@ class DrawCard extends BaseCard {
 
         const cacheParticipating = this.isParticipating();
 
-        if(this.isParticipating()) {
+        if (this.isParticipating()) {
             this.game.currentConflict?.removeFromConflict(this);
         }
 
         const honorStatusDoesNotAffectLeavePlayEffects = this.anyEffect(EffectName.HonorStatusDoesNotModifySkill);
         let honorStatusDoesNotAffectLeavePlayConflictEffects = false;
-        if(this.game.currentConflict) {
+        if (this.game.currentConflict) {
             honorStatusDoesNotAffectLeavePlayConflictEffects =
                 cacheParticipating && this.game.currentConflict.anyEffect(EffectName.ConflictIgnoreStatusTokens);
         }
         const ignoreHonorStatus =
             honorStatusDoesNotAffectLeavePlayEffects || honorStatusDoesNotAffectLeavePlayConflictEffects;
 
-        if(this.isDishonored && !ignoreHonorStatus) {
+        if (this.isDishonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorLossAction = this.game.actions.loseHonor({
                 amount: 1,
                 dueToStatusToken: true
             });
 
-            if(honorLossAction.canAffect(this.controller, frameworkContext)) {
+            if (honorLossAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
             }
             this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
-        } else if(this.isHonored && !ignoreHonorStatus) {
+        } else if (this.isHonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
             const honorGainAction = this.game.actions.gainHonor({
                 amount: 1,
                 dueToStatusToken: true
             });
-            if(honorGainAction.canAffect(this.controller, frameworkContext)) {
+            if (honorGainAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} gains 1 honor due to {1}\'s personal honor', this.controller, this);
             }
             this.game.openThenEventWindow(honorGainAction.getEvent(this.controller, frameworkContext));
@@ -725,12 +725,12 @@ class DrawCard extends BaseCard {
         province?: ProvinceCard | null,
         incomingAttackers?: DrawCard[]
     ): boolean {
-        if(!province) {
+        if (!province) {
             const provinces =
                 this.game.currentConflict && this.game.currentConflict.defendingPlayer
                     ? this.game.currentConflict.defendingPlayer.getProvinces()
                     : null;
-            if(provinces) {
+            if (provinces) {
                 return provinces.some(
                     (a) =>
                         a.canDeclare(conflictType, ring) &&
@@ -740,10 +740,10 @@ class DrawCard extends BaseCard {
         }
 
         let attackers = this.game.isDuringConflict() && this.game.currentConflict ? this.game.currentConflict.attackers : [];
-        if(incomingAttackers) {
+        if (incomingAttackers) {
             attackers = incomingAttackers;
         }
-        if(!attackers.includes(this)) {
+        if (!attackers.includes(this)) {
             attackers = attackers.concat(this);
         }
 
@@ -754,7 +754,7 @@ class DrawCard extends BaseCard {
             this.getEffects(EffectName.AddElementAsAttacker)
         ).flat();
 
-        if(
+        if (
             elementsAdded.some((element: string) =>
                 this.game.rings[element]
                     .getEffects(EffectName.CannotDeclareRing)
@@ -764,7 +764,7 @@ class DrawCard extends BaseCard {
             return false;
         }
 
-        if(
+        if (
             conflictType === ConflictType.Military &&
             attackers.reduce(
                 (total: number, card: DrawCard) => total + card.sumEffects(EffectName.CardCostToAttackMilitary),
@@ -775,39 +775,55 @@ class DrawCard extends BaseCard {
         }
 
         const fateCostToAttackProvince = province ? province.getFateCostToAttack() : 0;
-        if(
+        if (
             attackers.reduce(
                 (total: number, card: DrawCard) => total + card.sumEffects(EffectName.FateCostToAttack),
                 0
             ) +
-                fateCostToAttackProvince >
+            fateCostToAttackProvince >
             this.controller.fate
         ) {
             return false;
         }
-        if(this.anyEffect(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
-            for(const element of this.getEffects(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
-                if(!ring.hasElement(element) && !elementsAdded.includes(element)) {
+        if (this.anyEffect(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
+            for (const element of this.getEffects(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
+                if (!ring.hasElement(element) && !elementsAdded.includes(element)) {
                     return false;
                 }
             }
         }
 
-        if(this.controller.anyEffect(EffectName.LimitLegalAttackers)) {
+        const frameworkContext = this.game.getFrameworkContext();
+
+        if (this.anyEffect(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition)) {
+            for (const condition of this.getEffects(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition)) {
+                if (!condition({
+                    context: frameworkContext,
+                    conflictType,
+                    ring,
+                    province,
+                    incomingAttackers
+                })) {
+                    return false;
+                }
+            }
+        }
+
+        if (this.controller.anyEffect(EffectName.LimitLegalAttackers)) {
             const checks = this.controller.getEffects(EffectName.LimitLegalAttackers);
             let valid = true;
             checks.forEach((check) => {
-                if(typeof check === 'function') {
+                if (typeof check === 'function') {
                     valid = valid && check(this);
                 }
             });
-            if(!valid) {
+            if (!valid) {
                 return false;
             }
         }
 
         return (
-            this.checkRestrictions('declareAsAttacker', this.game.getFrameworkContext()) &&
+            this.checkRestrictions('declareAsAttacker', frameworkContext) &&
             this.canParticipateAsAttacker(conflictType) &&
             this.location === Location.PlayArea &&
             !this.bowed
@@ -845,7 +861,7 @@ class DrawCard extends BaseCard {
     }
 
     getModifiedController(): Player {
-        if(
+        if (
             this.location === Location.PlayArea ||
             (this.type === CardType.Holding && (this.location as string).includes('province'))
         ) {
@@ -870,8 +886,8 @@ class DrawCard extends BaseCard {
     allowAttachment(attachment: BaseCard | DrawCard): boolean {
         const frameworkLimitsAttachmentsWithRepeatedNames =
             this.game.gameMode === GameModes.Emerald || this.game.gameMode === GameModes.Obsidian || this.game.gameMode === GameModes.Sanctuary;
-        if(frameworkLimitsAttachmentsWithRepeatedNames && this.type === CardType.Character) {
-            if(
+        if (frameworkLimitsAttachmentsWithRepeatedNames && this.type === CardType.Character) {
+            if (
                 this.attachments
                     .filter((a: DrawCard) => !a.allowDuplicatesOfAttachment)
                     .some(
@@ -887,7 +903,7 @@ class DrawCard extends BaseCard {
 
     getEffectMarkers(): Array<{ source: string; kind: 'delayed' | 'modifier' }> {
         const engine = this.game && this.game.effectEngine;
-        if(!engine || !Array.isArray(engine.effects)) {
+        if (!engine || !Array.isArray(engine.effects)) {
             return [];
         }
         const SKILL_EFFECTS: Set<string> = new Set([
@@ -906,31 +922,31 @@ class DrawCard extends BaseCard {
         ]);
         const seen = new Set<string>();
         const matching: Array<{ source: string; kind: 'delayed' | 'modifier' }> = [];
-        for(const e of engine.effects) {
-            if(!e) {
+        for (const e of engine.effects) {
+            if (!e) {
                 continue;
             }
-            if(e.duration === Duration.Persistent) {
+            if (e.duration === Duration.Persistent) {
                 continue;
             }
             const targetsByList = Array.isArray(e.targets) && e.targets.indexOf(this) !== -1;
             const targetsByMatch = e.match === this;
-            if(!targetsByList && !targetsByMatch) {
+            if (!targetsByList && !targetsByMatch) {
                 continue;
             }
             const sourceObj = e.context && e.context.source;
-            if(sourceObj && sourceObj.printedType === 'token') {
+            if (sourceObj && sourceObj.printedType === 'token') {
                 continue;
             }
             const effectType: string = (e.effect && e.effect.type) || '';
             const isDelayed = effectType === EffectName.DelayedEffect;
-            if(!isDelayed && SKILL_EFFECTS.has(effectType)) {
+            if (!isDelayed && SKILL_EFFECTS.has(effectType)) {
                 continue;
             }
             const source = (sourceObj && sourceObj.name) || 'Unknown';
             const kind: 'delayed' | 'modifier' = isDelayed ? 'delayed' : 'modifier';
             const key = `${source}|${kind}`;
-            if(seen.has(key)) {
+            if (seen.has(key)) {
                 continue;
             }
             seen.add(key);

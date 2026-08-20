@@ -27,21 +27,21 @@ export class PlayerConflictManager {
         political: 1
     };
 
-    constructor(private readonly player: Player, private readonly game: Game) {}
+    constructor(private readonly player: Player, private readonly game: Game) { }
 
     hasLegalConflictDeclaration(properties: ConflictDeclarationProperties): boolean {
         const conflictType = this.getLegalConflictTypes(properties);
-        if(conflictType.length === 0) {
+        if (conflictType.length === 0) {
             return false;
         }
         let conflictRing = properties.ring || Object.values(this.game.rings);
         conflictRing = Array.isArray(conflictRing) ? conflictRing : [conflictRing];
         conflictRing = conflictRing.filter((ring: Ring) => ring.canDeclare(this.player));
-        if(conflictRing.length === 0) {
+        if (conflictRing.length === 0) {
             return false;
         }
         const cards = properties.attacker ? [properties.attacker] : this.player.cardsInPlay.slice();
-        if(!this.player.opponent) {
+        if (!this.player.opponent) {
             return conflictType.some((type: string) =>
                 conflictRing.some((ring: Ring) => cards.some((card: DrawCard) => card.canDeclareAsAttacker(type, ring)))
             );
@@ -53,7 +53,7 @@ export class PlayerConflictManager {
                 conflictProvince.some(
                     (province: ProvinceCard) =>
                         province.canDeclare(type, ring) &&
-                        cards.some((card: DrawCard) => card.canDeclareAsAttacker(type, ring, province))
+                        cards.some((card: DrawCard) => card.canDeclareAsAttacker(type, ring, province, this.game.currentConflict?.attackers))
                 )
             )
         );
@@ -65,11 +65,11 @@ export class PlayerConflictManager {
         const provideConflictDeclarationType = this.player.mostRecentEffect(EffectName.ProvideConflictDeclarationType);
         const maxConflicts = this.player.mostRecentEffect(EffectName.SetMaxConflicts);
         const skirmishModeRRGLimit = this.game.gameMode === GameModes.Skirmish ? 1 : 0;
-        if(maxConflicts) {
+        if (maxConflicts) {
             return this.getConflictsWhenMaxIsSet(maxConflicts);
         }
 
-        if(provideConflictDeclarationType) {
+        if (provideConflictDeclarationType) {
             return (
                 this.getRemainingConflictOpportunitiesForType(provideConflictDeclarationType) -
                 this.declaredConflictOpportunities[ConflictType.Passed] -
@@ -77,7 +77,7 @@ export class PlayerConflictManager {
             );
         }
 
-        if(forceConflictDeclarationType) {
+        if (forceConflictDeclarationType) {
             return (
                 this.getRemainingConflictOpportunitiesForType(forceConflictDeclarationType) -
                 this.declaredConflictOpportunities[ConflictType.Passed] -
@@ -85,7 +85,7 @@ export class PlayerConflictManager {
             );
         }
 
-        if(setConflictDeclarationType) {
+        if (setConflictDeclarationType) {
             return (
                 this.getRemainingConflictOpportunitiesForType(setConflictDeclarationType) -
                 this.declaredConflictOpportunities[ConflictType.Passed] -
@@ -112,7 +112,7 @@ export class PlayerConflictManager {
         const forcedDeclaredType =
             properties.forcedDeclaredType ||
             (this.game.currentConflict && this.game.currentConflict.forcedDeclaredType);
-        if(forcedDeclaredType) {
+        if (forcedDeclaredType) {
             return [forcedDeclaredType].filter(
                 (type) =>
                     types.includes(type) &&
@@ -121,7 +121,7 @@ export class PlayerConflictManager {
             );
         }
 
-        if(this.getConflictOpportunities() === 0) {
+        if (this.getConflictOpportunities() === 0) {
             return [];
         }
 
@@ -145,42 +145,42 @@ export class PlayerConflictManager {
         let baselineAvailableConflicts =
             this.defaultAllowedConflicts[ConflictType.Military] +
             this.defaultAllowedConflicts[ConflictType.Political];
-        if(provideConflictDeclarationType && setConflictType !== provideConflictDeclarationType) {
+        if (provideConflictDeclarationType && setConflictType !== provideConflictDeclarationType) {
             setConflictType = undefined;
         }
-        if(provideConflictDeclarationType && forceConflictType !== provideConflictDeclarationType) {
+        if (provideConflictDeclarationType && forceConflictType !== provideConflictDeclarationType) {
             forceConflictType = undefined;
         }
 
-        if(this.game.gameMode === GameModes.Skirmish) {
+        if (this.game.gameMode === GameModes.Skirmish) {
             baselineAvailableConflicts = 1;
         }
 
-        if(setConflictType && type === setConflictType) {
+        if (setConflictType && type === setConflictType) {
             let declaredConflictsOfOtherType = 0;
-            if(setConflictType === ConflictType.Military) {
+            if (setConflictType === ConflictType.Military) {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Political];
             } else {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Military];
             }
             return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
-        } else if(setConflictType && type !== setConflictType) {
+        } else if (setConflictType && type !== setConflictType) {
             return 0;
         }
-        if(forceConflictType && type === forceConflictType) {
+        if (forceConflictType && type === forceConflictType) {
             let declaredConflictsOfOtherType = 0;
-            if(forceConflictType === ConflictType.Military) {
+            if (forceConflictType === ConflictType.Military) {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Political];
             } else {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Military];
             }
             return baselineAvailableConflicts + additionalConflictEffects.length - declaredConflictsOfOtherType;
-        } else if(forceConflictType && type !== forceConflictType) {
+        } else if (forceConflictType && type !== forceConflictType) {
             return 0;
         }
-        if(provideConflictDeclarationType) {
+        if (provideConflictDeclarationType) {
             let declaredConflictsOfOtherType = 0;
-            if(type === ConflictType.Military) {
+            if (type === ConflictType.Military) {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Political];
             } else {
                 declaredConflictsOfOtherType = this.declaredConflictOpportunities[ConflictType.Military];
@@ -189,7 +189,7 @@ export class PlayerConflictManager {
                 baselineAvailableConflicts +
                 this.player.getEffects(EffectName.AdditionalConflict).length -
                 declaredConflictsOfOtherType;
-            if(type === provideConflictDeclarationType) {
+            if (type === provideConflictDeclarationType) {
                 return availableAll;
             }
             const maxType = this.defaultAllowedConflicts[type] + additionalConflictsForType;
