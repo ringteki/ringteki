@@ -21,9 +21,9 @@ export default class IkomaUjio extends DrawCard {
                             action: AbilityDsl.actions.takeHonor({
                                 target: duel.loserController
                             }),
-                            message: '{0} chooses to give 1 honor to {1}',
+                            message: '{0} chooses to give 1 honor to their opponent',
                         },
-                        'Bow this character': {
+                        'Bow duel loser': {
                             action: AbilityDsl.actions.bow(),
                             message: '{0} chooses to bow {1}'
                         }
