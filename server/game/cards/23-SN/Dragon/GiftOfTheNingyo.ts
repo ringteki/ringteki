@@ -13,7 +13,7 @@ export default class GiftOfTheNingyo extends DrawCard {
                         card.attachments.some(attachment => attachment.hasSomeTrait('creature', 'spirit'))
                     )
                 )),
-            effect: AbilityDsl.effects.modifyMilitarySkill(2)
+            effect: AbilityDsl.effects.modifyPoliticalSkill(2)
         });
     }
 

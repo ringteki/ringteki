@@ -22,9 +22,8 @@ export default class DaidojiHiroteru extends DrawCard {
             })
         });
 
-        this.action({
+        this.conflictAction({
             title: 'Give skill bonus',
-            condition: context => context.source.isParticipating(),
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 target: context.game.currentConflict?.getCharacters(context.player) ?? [],
                 effect: AbilityDsl.effects.modifyBothSkills(1)

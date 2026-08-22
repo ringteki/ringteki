@@ -42,7 +42,7 @@ export default class MirumotoRikitaro extends DrawCard {
             }))
         });
 
-        this.action({
+        this.conflictAction({
             title: 'Discard an attachment',
             target: {
                 cardCondition: (card, context) => !!(card.hasSomeTrait('item', 'weapon', 'armor') && card.parent && context.player.opponent && card.parent.isParticipatingFor(context.player.opponent)),

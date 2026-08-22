@@ -6,10 +6,10 @@ export default class EmpressFavorite extends DrawCard {
     static id = 'empress-favorite';
 
     setupCardAbilities() {
-        this.action({
+        this.conflictAction({
+            conflictType: 'political',
             title: 'Take 1 honor',
             condition: (context) => context.source.isDefending() &&
-                context.game.isDuringConflict('political') &&
                 !!context.player.opponent &&
                 !context.player.opponent.hasDeclaredConflictOfType(context, ConflictType.Military),
             gameAction: AbilityDsl.actions.takeHonor(),

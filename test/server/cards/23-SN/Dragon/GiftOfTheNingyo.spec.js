@@ -26,7 +26,7 @@ describe('Gift of the Ningyo', function () {
         });
 
         it('my attachment on opponent character', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
@@ -35,77 +35,77 @@ describe('Gift of the Ningyo', function () {
             });
             this.player2.pass();
 
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.player1.clickCard(this.mount);
             this.player1.clickCard(this.brash);
 
-            expect(this.challenger.getMilitarySkill()).toBe(7);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
 
         it('opponent attachment on opponent character', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
                 defenders: [this.brash],
             });
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.player2.clickCard(this.spirit);
             this.player2.clickCard(this.brash);
 
-            expect(this.challenger.getMilitarySkill()).toBe(7);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
 
         it('opponent attachment on my character', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
                 defenders: [this.brash],
             });
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.player2.clickCard(this.spirit);
             this.player2.clickCard(this.challenger);
 
-            expect(this.challenger.getMilitarySkill()).toBe(6);
+            expect(this.challenger.getPoliticalSkill()).toBe(4);
         });
 
         it('opponent spirit', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
                 defenders: [this.robe],
             });
-            expect(this.challenger.getMilitarySkill()).toBe(7);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
 
         it('opponent creature', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
                 defenders: [this.ningyo],
             });
-            expect(this.challenger.getMilitarySkill()).toBe(7);
+            expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
 
         it('my creature', function () {
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
 
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger, this.aranat],
                 defenders: [this.brash],
             });
-            expect(this.challenger.getMilitarySkill()).toBe(5);
+            expect(this.challenger.getPoliticalSkill()).toBe(3);
         });
     });
 });

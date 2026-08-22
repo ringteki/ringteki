@@ -75,7 +75,7 @@ describe('Day of Brother Horse', function () {
             expect(this.player1).toHavePrompt('Air Ring');
         });
 
-        it('if triggered, protects a ring, draw 3 cards and discard 1 card', function () {
+        it('if triggered, protects a ring', function () {
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',

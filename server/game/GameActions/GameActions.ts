@@ -1,4 +1,3 @@
-import DrawCard from '../DrawCard.js';
 import { AddTokenAction, AddTokenProperties } from './AddTokenAction.js';
 import { AffinityAction, AffinityActionProperties } from './AffinityAction.js';
 import { AttachAction, AttachActionProperties } from './AttachAction.js';
@@ -493,13 +492,6 @@ export function optional<Target = unknown>(propertyFactory: PropsFactory<Optiona
 }
 export function ifAble<Target = unknown>(propertyFactory: PropsFactory<IfAbleActionProperties, NoInfer<Target>>): GameAction {
     return new IfAbleAction(propertyFactory as ConstructorParameters<typeof IfAbleAction>[0]);
-}
-export function injure2(): GameAction {
-    return conditional({
-        condition: (context) => (context.target as DrawCard).getFate() === 0,
-        trueGameAction: discardFromPlay(),
-        falseGameAction: removeFate()
-    });
 }
 export function joint(gameActions: GameAction[]): GameAction {
     return new JointGameAction(gameActions);

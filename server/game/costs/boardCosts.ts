@@ -132,12 +132,12 @@ export function discardTopCardsFromDeck(properties: { amount: number; deck: Deck
     return {
         getActionName: (_context) => 'discardTopCardsFromDeck',
         getCostMessage: (_context) => ['discarding {0}'],
-        canPay: (context) => getDeck(context).length >= 4,
+        canPay: (context) => getDeck(context).length >= properties.amount,
         resolve: (context) => {
-            context.costs.discardTopCardsFromDeck = getDeck(context).slice(0, 4);
+            context.costs.discardTopCardsFromDeck = getDeck(context).slice(0, properties.amount);
         },
         pay: (context) => {
-            for(const card of context.costs.discardTopCardsFromDeck as DrawCard[]) {
+            for (const card of context.costs.discardTopCardsFromDeck as DrawCard[]) {
                 card.controller.moveCard(card, destination);
             }
         }
@@ -284,7 +284,7 @@ export function switchLocation(): Cost {
             return 'switchLocation';
         },
         getCostMessage(context: TriggeredAbilityContext<DrawCard>) {
-            if(!context.source.isParticipating()) {
+            if (!context.source.isParticipating()) {
                 return ['moving {1} home', [context.source]];
             }
             return ['moving {1} to the conflict', [context.source]];

@@ -25,7 +25,7 @@ import type { ProvinceCard } from './ProvinceCard.js';
 import type Ring from './Ring.js';
 import type { AbilityContext } from './AbilityContext.js';
 import type { GameEvent } from './Events/EventPayloads.js';
-import type { PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces.js';
+import type { ActionProps, ConflictActionProps, PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces.js';
 import type { Duel } from './Duel.js';
 import type { CardData } from './types/CardData.js';
 
@@ -1018,6 +1018,24 @@ class DrawCard extends BaseCard {
                     (!properties.duelCondition || properties.duelCondition(duel, context))
             }
         });
+    }
+
+    conflictAction<Target extends BaseCard = BaseCard>(properties: ConflictActionProps<this, Target>): void {
+        const propConditions = properties.condition;
+        const finalCondition = (context: AbilityContext<this, Target>) => {
+            if (!context.source.game.isDuringConflict()) {
+                return false;
+            }
+            if (!properties.evenFromHome && !context.source.isParticipating(properties.conflictType)) {
+                return false;
+            }
+            return propConditions?.(context) ?? true;
+        }
+        const finalProperties = {
+            ...properties,
+            condition: finalCondition
+        }
+        this.abilities.actions.push(this.createAction(finalProperties as ActionProps));
     }
 }
 

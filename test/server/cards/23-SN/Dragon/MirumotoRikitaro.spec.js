@@ -231,6 +231,19 @@ describe('Mirumoto Rikitaro', function () {
 
                 expect(this.getChatLogs(5)).not.toContain('Mirumoto Rikitaro gains +2military due to discarding a weapon!');
             });
+
+            it('should require participating', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.yoshi],
+                    defenders: [this.initiate],
+                });
+
+                this.player2.pass();
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+                this.player1.clickCard(this.rikitaro);
+                expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
         });
     });
 });
