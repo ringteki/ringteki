@@ -32,8 +32,8 @@ export default class MapmakerApprentice extends DrawCard {
                                 return eventsPlayed <= 1
                             }
                         },
-                        effect: '{0} changes the province strength of an attacked province',
-                        messageArgs: () => [context.player],
+                        message: '{0} changes the province strength of an attacked province due to the delayed effect of {1}',
+                        messageArgs: () => [context.player, context.source],
                         multipleTrigger: true,
                         gameAction: AbilityDsl.actions.selectCard((context) => ({
                             activePromptTitle: 'Choose an attacked province',
@@ -72,7 +72,8 @@ export default class MapmakerApprentice extends DrawCard {
                     duration: Duration.UntilEndOfRound
                 })),
             },
-            effect: 'map {0} - the first event they play during each conflict at that province will also modify its strength',
+            effect: 'map {1}{2}{3} - the first event they play during each conflict at that province will also modify its strength',
+            effectArgs: context => context.target?.facedown ? [context.target.controller, '\'s ', context.target.location] : ['', '', context.target]
         });
     }
 }

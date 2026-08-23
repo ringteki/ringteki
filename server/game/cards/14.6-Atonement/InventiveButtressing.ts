@@ -1,18 +1,12 @@
-import DrawCard from '../../DrawCard.js';
 import AbilityDsl from '../../abilitydsl.js';
-import { Location, CardType } from '../../Constants.js';
-import type BaseCard from '../../BaseCard.js';
-import { ProvinceCard } from '../../ProvinceCard.js';
-import type Ring from '../../Ring.js';
+import { Location } from '../../Constants.js';
+import { ProvinceAttachment } from '../ProvinceAttachment.js';
 
-class InventiveButtressing extends DrawCard {
+class InventiveButtressing extends ProvinceAttachment {
     static id = 'inventive-buttressing';
 
     setupCardAbilities() {
-        this.attachmentConditions({
-            myControl: true
-        });
-
+        super.setupCardAbilities();
         this.persistentEffect({
             condition: () => this.game.isDuringConflict('military'),
             targetLocation: Location.Provinces,
@@ -21,20 +15,8 @@ class InventiveButtressing extends DrawCard {
         });
     }
 
-    canPlayOn(source: BaseCard | Ring) {
-        return source && source.getType() === 'province' && (source as BaseCard).controller === this.controller && !(source instanceof ProvinceCard && source.isBroken) && this.getType() === CardType.Attachment;
-    }
-
-    canAttach(parent: BaseCard) {
-        if(parent.type === CardType.Province && parent instanceof ProvinceCard && parent.isBroken) {
-            return false;
-        }
-
-        if(parent.controller !== this.controller) {
-            return false;
-        }
-
-        return parent && parent.getType() === CardType.Province && this.getType() === CardType.Attachment;
+    protected myProvinceOnly(): boolean {
+        return true;
     }
 }
 

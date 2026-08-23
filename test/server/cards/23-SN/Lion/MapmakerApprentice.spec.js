@@ -32,7 +32,7 @@ describe('A Cleansing Death', function () {
         it('happy path', function () {
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
+            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map player2\'s province 1 - the first event they play during each conflict at that province will also modify its strength');
 
             this.noMoreActions();
             this.initiateConflict({
@@ -45,6 +45,7 @@ describe('A Cleansing Death', function () {
             this.player2.pass();
             this.player1.clickCard(this.assassination1);
             this.player1.clickCard(this.whisperer);
+            expect(this.getChatLogs(5)).toContain('player1 changes the province strength of an attacked province due to the delayed effect of Mapmaker Apprentice');
             expect(this.player1).toHavePrompt('Select an action:');
             expect(this.player1).toHavePromptButton('Lower attacked province\'s strength by 2');
             expect(this.player1).toHavePromptButton('Raise attacked province\'s strength by 2');
@@ -57,6 +58,8 @@ describe('A Cleansing Death', function () {
         });
 
         it('different province', function () {
+            this.sd1.facedown = false;
+            this.game.checkGameState(true);
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
             expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
@@ -77,7 +80,6 @@ describe('A Cleansing Death', function () {
         it('opponent event', function () {
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
 
             this.noMoreActions();
             this.initiateConflict({
@@ -94,7 +96,6 @@ describe('A Cleansing Death', function () {
         it('happy path - increase', function () {
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
 
             this.noMoreActions();
             this.initiateConflict({
@@ -124,7 +125,6 @@ describe('A Cleansing Death', function () {
 
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
 
             this.noMoreActions();
             this.initiateConflict({
@@ -210,7 +210,6 @@ describe('A Cleansing Death', function () {
 
             this.player1.clickCard(this.map1);
             this.player1.clickCard(this.sd1);
-            expect(this.getChatLogs(5)).toContain('player1 uses Mapmaker Apprentice to map Shameful Display - the first event they play during each conflict at that province will also modify its strength');
 
             this.noMoreActions();
             this.initiateConflict({
