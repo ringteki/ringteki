@@ -4,7 +4,7 @@
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['bayushi-gichin'],
+                    inPlay: ['bayushi-gichin', 'heir-of-the-serpent'],
                     hand: ['fiery-madness'],
                     conflictDiscard: ['stolen-breath'],
                 },
@@ -13,6 +13,7 @@
                 }
             });
 
+            this.serpent = this.player1.findCardByName('heir-of-the-serpent');
             this.gichin = this.player1.findCardByName('bayushi-gichin');
             this.madness = this.player1.findCardByName('fiery-madness');
             this.breath = this.player1.findCardByName('stolen-breath');
@@ -139,6 +140,18 @@
             expect(this.player2.honor).toBe(honor2 - 1);
 
             expect(this.getChatLogs(5)).toContain('Duel Effect: take 1 honor from player2');
+        });
+
+        it('testing disguise', function () {
+            this.player1.moveCard(this.gichin, 'province 1');
+            this.gichin.facedown = false;
+            this.game.checkGameState(true);
+
+            this.player1.clickCard(this.gichin);
+            expect(this.player1).toBeAbleToSelect(this.serpent)
+            this.player1.clickCard(this.serpent);
+
+            expect(this.getChatLogs(5)).toContain('player1 plays Bayushi Gichin using Disguised, choosing to replace Heir of the Serpent');
         });
     });
 });

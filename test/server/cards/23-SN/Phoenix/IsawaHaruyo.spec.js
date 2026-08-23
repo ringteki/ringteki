@@ -35,7 +35,7 @@ describe('Isawa Haruyo', function () {
             this.player2.clickPrompt(matchingButtons[0].text);
             expect(this.player1.player.conflictDiscardPile.length).toBe(conflictDiscardPileSize + 1);
             expect(this.player1.player.hand.length).toBe(hand - 1);
-            expect(this.getChatLogs(5)).toContain('player2 uses Isawa Haruyo to look at an amouint of random cards in player1\'s hand equal to the strength of an attacked province and discard 1');
+            expect(this.getChatLogs(5)).toContain('player2 uses Isawa Haruyo to look at an amount of random cards in player1\'s hand equal to the strength of an attacked province and discard one of them');
             expect(this.getChatLogs(5)).toContain('player2 chooses ' + matchingButtons[0].text + ' to be discarded');
             expect(this.getChatLogs(5)).toContain('Isawa Haruyo sees ' + matchingButtons[0].text + ', ' + matchingButtons[1].text + ' and ' + matchingButtons[2].text);
 
