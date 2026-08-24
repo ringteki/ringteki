@@ -8,6 +8,7 @@ import { type CardActionProperties, CardGameAction } from './CardGameAction.js';
 import type { GameEvent } from '../Events/EventPayloads.js';
 export interface CreateTokenProperties extends CardActionProperties {
     atHome?: boolean;
+    token?: new (card: DrawCard) => DrawCard;
 }
 
 export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
@@ -18,9 +19,9 @@ export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
     defaultProperties: CreateTokenProperties = { atHome: false };
 
     canAffect(card: BaseCard, context: AbilityContext): boolean {
-        if(!card.isFacedown() || !card.isInProvince() || card.location === Location.StrongholdProvince) {
+        if (!card.isFacedown() || !card.isInProvince() || card.location === Location.StrongholdProvince) {
             return false;
-        } else if(!context.game.isDuringConflict('military')) {
+        } else if (!context.game.isDuringConflict('military')) {
             return false;
         }
         return super.canAffect(card, context);
@@ -28,16 +29,16 @@ export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
 
     eventHandler(event: GameEvent<EventName.OnCreateTokenCharacter>, additionalProperties: Record<string, unknown> = {}): void {
         let context = event.context as AbilityContext;
-        let { atHome } = this.getProperties(context, additionalProperties);
+        let { atHome, token: propToken } = this.getProperties(context, additionalProperties);
         let card = event.card as DrawCard;
-        let token = context.game.createToken(card);
+        let token = context.game.createToken(card, propToken);
         card.owner.removeCardFromPile(card);
         this.checkForRefillProvince(card, event, additionalProperties);
         card.moveTo(Location.RemovedFromGame);
         card.owner.moveCard(token, Location.PlayArea);
         const conflict = context.game.currentConflict;
-        if(!atHome && conflict) {
-            if(context.player.isAttackingPlayer()) {
+        if (!atHome && conflict) {
+            if (context.player.isAttackingPlayer()) {
                 conflict.addAttacker(token);
             } else {
                 conflict.addDefender(token);
