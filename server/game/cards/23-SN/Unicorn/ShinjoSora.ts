@@ -9,21 +9,16 @@ export default class ShinjoSora extends DrawCard {
     setupCardAbilities() {
         this.conflictAction({
             title: 'Create beasts from facedown dynasty cards',
-            effect: 'unleash a swarm of bears!',
-            // effectArgs: {
-            //     id: 'shinjo-sora-beast',
-            //     label: 'Spirits of the River',
-            //     name: 'Spirits of the River',
-            //     facedown: false,
-            //     type: CardType.Character
-            // },
+            effect: 'release the hounds!',
             gameAction: AbilityDsl.actions.createToken((context) => ({
                 target: context.game
                     .getProvinceArray()
                     .flatMap((location: Location) =>
                         context.player.getDynastyCardsInProvince(location).filter((card: DrawCard) => card.isFacedown())
                     ),
-                token: ShinjoSoraBeast
+                token: ShinjoSoraBeast,
+                canEnterConflict: () => true,
+                leavingPlayMessage: "{0} grows tired and decides to have a nap"
             }))
         });
     }

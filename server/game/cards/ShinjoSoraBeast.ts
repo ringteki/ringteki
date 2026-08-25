@@ -12,7 +12,7 @@ class ShinjoSoraBeast extends DrawCard {
             glory: '0',
             id: 'shinjo-sora-beast',
             military: '1',
-            name: 'Rampaging Bear',
+            name: 'Unleashed Hound',
             political: '0',
             side: 'dynasty',
             text: '',

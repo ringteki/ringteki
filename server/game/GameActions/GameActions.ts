@@ -128,7 +128,7 @@ export function cardLastingEffect<Target = unknown>(propertyFactory: PropsFactor
 export function claimImperialFavor<Target = unknown>(propertyFactory: PropsFactory<ClaimFavorProperties, NoInfer<Target>>): GameAction {
     return new ClaimFavorAction(propertyFactory as ConstructorParameters<typeof ClaimFavorAction>[0]);
 }
-export function createToken<Target = unknown>(propertyFactory: PropsFactory<CreateTokenProperties, NoInfer<Target>> = {}): GameAction {
+export function createToken<Target = unknown>(propertyFactory: PropsFactory<CreateTokenProperties, NoInfer<Target>>): GameAction {
     return new CreateTokenAction(propertyFactory as ConstructorParameters<typeof CreateTokenAction>[0]);
 }
 export function detach<Target = unknown>(propertyFactory: PropsFactory<DetachActionProperties, NoInfer<Target>> = {}): GameAction {
