@@ -1,4 +1,4 @@
-describe('Purveyor Of Rarities', function () {
+describe('Utaku Prodigy', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

@@ -1,4 +1,4 @@
-﻿describe('Shosuro Isa', function () {
+﻿describe('Strike from the Shadows', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

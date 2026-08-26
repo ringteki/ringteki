@@ -204,6 +204,7 @@ const Effects = {
     winDuel: (duel: unknown) => EffectBuilder.card.static(EffectName.WinDuel, duel),
     winDuelTies: () => EffectBuilder.card.static(EffectName.WinDuelTies, true),
     ignoreDuelSkill: () => EffectBuilder.card.static(EffectName.IgnoreDuelSkill, true),
+    payPrintedCostToOpponent: () => EffectBuilder.card.static(EffectName.PayPrintedCostToOpponent, true),
     // Ring effects
     addElement: (element: Flexible<string | string[], Ring>) => EffectBuilder.ring.flexible(EffectName.AddElement, element),
     cannotBidInDuels: (num: number | string) => EffectBuilder.player.static(EffectName.CannotBidInDuels, num),

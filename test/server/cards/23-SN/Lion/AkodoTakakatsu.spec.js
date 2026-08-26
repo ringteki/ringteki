@@ -1,4 +1,4 @@
-describe('A Cleansing Death', function () {
+describe('Akodo Takakatsu', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

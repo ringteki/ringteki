@@ -8,7 +8,6 @@ export default class EbbAndFlow extends DrawCard {
     public setupCardAbilities() {
         this.action({
             title: 'Switch a character\'s skills',
-
             targets: {
                 mine: {
                     cardType: CardType.Character,

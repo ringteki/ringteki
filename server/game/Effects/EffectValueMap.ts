@@ -125,6 +125,7 @@ export interface EffectValueMap {
     [EffectName.SwitchBaseSkills]: boolean;
     [EffectName.WinDuelTies]: boolean;
     [EffectName.IgnoreDuelSkill]: boolean;
+    [EffectName.PayPrintedCostToOpponent]: boolean;
     [EffectName.CannotResolveRings]: boolean;
     [EffectName.ShowTopDynastyCard]: boolean;
     [EffectName.EventsCannotBeCancelled]: boolean;

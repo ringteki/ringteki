@@ -154,6 +154,7 @@ export enum EffectName {
     WinDuel = 'winDuel',
     WinDuelTies = 'winDuelTies',
     IgnoreDuelSkill = 'ignoreDuelSkill',
+    PayPrintedCostToOpponent = 'payPrintedCostToOpponent',
     ConflictIgnoreStatusTokens = 'conflictIgnoreStatusTokens',
     LimitLegalAttackers = 'limitLegalAttackers',
     ModifyHonorTransferGiven = 'modifyHonorTransferGiven',

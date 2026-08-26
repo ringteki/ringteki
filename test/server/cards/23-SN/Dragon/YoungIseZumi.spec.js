@@ -1,4 +1,4 @@
-describe('Day of Brother Horse', function () {
+describe('Young Ise Zumi', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

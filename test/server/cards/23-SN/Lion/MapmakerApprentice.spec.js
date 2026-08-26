@@ -1,4 +1,4 @@
-describe('A Cleansing Death', function () {
+describe('Mapmaker Apprentice', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({

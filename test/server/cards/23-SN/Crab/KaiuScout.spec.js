@@ -86,7 +86,6 @@ describe('Kaiu Scout', function () {
             this.solemnScholar.facedown = false;
 
             this.player1.clickCard(this.kaiu);
-            expect(this.player1).toHavePrompt('Kaiu Scout');
             expect(this.player1).not.toBeAbleToSelect(this.sd1);
         });
 

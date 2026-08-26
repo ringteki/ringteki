@@ -22,6 +22,7 @@ export interface Cost {
     isPrintedFateCost?: boolean;
     isPlayCost?: boolean;
     canIgnoreForTargeting?: boolean;
+    payFateCostToOpponent?: boolean;
 
     getActionName?(context: AbilityContext): string;
     getCostMessage?(context: AbilityContext): MsgArg[];

@@ -12,10 +12,10 @@ export class TargetDependentFateCost extends ReduceableFateCost implements Cost 
     }
 
     public canPay(context: AbilityContext<DrawCard>): boolean {
-        if(context.source.printedCost === null) {
+        if (context.source.printedCost === null) {
             return false;
         }
-        if(!context.targets[this.dependsOn]) {
+        if (!context.targets[this.dependsOn]) {
             // we don't need to check now because this will be checked again once targeting is done
             return true;
         }
@@ -25,6 +25,11 @@ export class TargetDependentFateCost extends ReduceableFateCost implements Cost 
             context.targets[this.dependsOn] as DrawCard,
             this.ignoreType
         );
+
+        if (reducedCost !== 0 && this.payFateCostToOpponent && (!context.player.opponent || !context.player.opponent.checkRestrictions('gainFate', context))) {
+            return false;
+        }
+
         return (
             context.player.fate >= reducedCost &&
             (reducedCost === 0 || context.player.checkRestrictions('spendFate', context))
@@ -33,6 +38,21 @@ export class TargetDependentFateCost extends ReduceableFateCost implements Cost 
 
     public payEvent(context: TriggeredAbilityContext<DrawCard>): Event {
         const amount = (context.costs.targetDependentFate = this.getReducedCost(context));
+
+        if (this.payFateCostToOpponent) {
+            return new Event(EventName.OnMoveFate, { amount, context }, () => {
+                context.player.markUsedReducers(
+                    context.playType,
+                    context.source,
+                    context.targets[this.dependsOn] as DrawCard
+                );
+                context.player.fate -= this.getFinalFatecost(context, amount);
+                if (context.player.opponent) {
+                    context.player.opponent.fate += this.getFinalFatecost(context, amount);
+                }
+            });
+        }
+
         return new Event(EventName.OnSpendFate, { amount, context }, () => {
             context.player.markUsedReducers(
                 context.playType,

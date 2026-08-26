@@ -23,6 +23,7 @@ class PlayCardResolver extends AbilityResolver {
         this.cancelPressed = false;
         context.ignoreFateCost = this.gameActionProperties.ignoreFateCost;
         context.onPlayCardSource = this.gameActionProperties.source;
+        context.payFateCostToOpponent = this.gameActionProperties.payFateToOpponent;
     }
 
     resolveEarlyTargets() {
@@ -109,6 +110,7 @@ export interface PlayCardProperties extends CardActionProperties {
     allowReactions?: boolean;
     ignoredRequirements?: string[];
     playAction?: BaseAction | BaseAction[];
+    payFateToOpponent?: boolean;
 }
 
 export class PlayCardAction extends CardGameAction {

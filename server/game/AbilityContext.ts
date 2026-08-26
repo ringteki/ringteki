@@ -66,6 +66,7 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
     playType: PlayType | undefined;
     cardStateWhenInitiated: BaseCard | null = null;
     ignoreFateCost?: boolean;
+    payFateCostToOpponent?: boolean;
     onPlayCardSource?: BaseCard;
 
     constructor(properties: AbilityContextProperties) {
@@ -111,15 +112,15 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
 
     getCards<U extends BaseCard = BaseCard>(name: string = 'target'): U[] {
         const slot = this.targets[name];
-        if(!slot) {
+        if (!slot) {
             return [];
         }
         return (Array.isArray(slot) ? slot : [slot]) as U[];
     }
 
     refill(): void {
-        for(let player of this.game.getPlayersInFirstPlayerOrder()) {
-            for(let refill of this.provincesToRefill.filter((refill) => refill.player === player)) {
+        for (let player of this.game.getPlayersInFirstPlayerOrder()) {
+            for (let refill of this.provincesToRefill.filter((refill) => refill.player === player)) {
                 this.game.queueSimpleStep(() => {
                     player.replaceDynastyCard(refill.location);
                     return true;
