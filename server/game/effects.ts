@@ -40,6 +40,7 @@ type Flexible<T, Target extends EffectTarget = DrawCard> = T | ((target: Target,
 const Effects = {
     // Card effects
     addElementAsAttacker: (element: Flexible<string | string[]>) => EffectBuilder.card.flexible(EffectName.AddElementAsAttacker, element),
+    addFlag: (flag: string) => EffectBuilder.card.static(EffectName.AddFlag, flag),
     addFaction: (faction: string) => EffectBuilder.card.static(EffectName.AddFaction, faction),
     loseFaction: (faction: string) => EffectBuilder.card.static(EffectName.LoseFaction, faction),
     addKeyword: (keyword: string) => EffectBuilder.card.static(EffectName.AddKeyword, keyword),

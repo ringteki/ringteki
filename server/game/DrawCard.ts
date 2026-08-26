@@ -83,6 +83,33 @@ class DrawCard extends BaseCard {
         return this.attachmentHost.checkForIllegalAttachments();
     }
 
+    override checkForIllegalTokens(): boolean {
+        const context = (this.game.getFrameworkContext as (player?: Player | null) => AbilityContext)(this.controller);
+        let result = false;
+
+        if (this.getType() === CardType.Attachment) {
+            // cannot have fate or status tokens
+            const events: any = [];
+            if (this.fate > 0) {
+                this.game.addMessage('{0} fate is removed from {1} as it can no longer legally have fate', this.fate, this);
+                this.game.actions.removeFate({ target: this, amount: this.fate }).addEventsToArray(events, context);
+                result = true;
+            }
+            if (this.statusTokens.length > 0) {
+                this.game.addMessage('Status tokens are removed from {0} as it can no longer legally have status tokens', this);
+                for (const token of this.statusTokens) {
+                    this.game.actions.discardStatusToken({ target: token }).addEventsToArray(events, context);
+                }
+                result = true;
+            }
+            if (events.length > 0) {
+                this.game.openEventWindow(events);
+                this.game.queueSimpleStep(() => context.refill());
+            }
+        }
+        return result;
+    }
+
     get childCards(): DrawCard[] {
         return this.childCardHost.childCards;
     }

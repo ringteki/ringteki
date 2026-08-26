@@ -879,6 +879,10 @@ class BaseCard extends EffectSource {
         return false;
     }
 
+    checkForIllegalTokens(): boolean {
+        return false;
+    }
+
     mustAttachToRing() {
         return false;
     }

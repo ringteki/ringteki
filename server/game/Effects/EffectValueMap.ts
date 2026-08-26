@@ -138,6 +138,7 @@ export interface EffectValueMap {
 
     // --- string (faction/keyword/trait/conflict-type names) ---
     [EffectName.AddElementAsAttacker]: Element | Element[];
+    [EffectName.AddFlag]: string;
     [EffectName.AddFaction]: string;
     [EffectName.LoseFaction]: string;
     [EffectName.AddKeyword]: string;

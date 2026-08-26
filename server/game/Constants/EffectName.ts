@@ -1,6 +1,7 @@
 export enum EffectName {
     AbilityRestrictions = 'abilityRestrictions',
     AddElementAsAttacker = 'addElementAsAttacker',
+    AddFlag = 'addFlag',
     AddFaction = 'addFaction',
     LoseFaction = 'loseFaction',
     AddKeyword = 'addKeyword',
