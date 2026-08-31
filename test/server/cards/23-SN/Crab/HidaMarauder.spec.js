@@ -40,7 +40,8 @@ describe('Hida Marauder', function () {
             expect(this.player2.player.conflictDiscardPile.length).toBe(conflictDiscardPileSize + 1);
             expect(this.player2.player.hand.length).toBe(hand - 1);
             expect(this.getChatLogs(5)).toContain('player1 chooses ' + matchingButtons[0].text + ' to be discarded');
-            expect(this.getChatLogs(5)).toContain('Hida Marauder sees ' + matchingButtons[0].text + ' and ' + matchingButtons[1].text);
+            expect(this.getChatLogs(5)).toContain('player2 reveals ' + matchingButtons[0].text + ' due to Hida Marauder');
+            expect(this.getChatLogs(5)).toContain('player2 reveals ' + matchingButtons[1].text + ' due to Hida Marauder');
         });
 
         it('should not prompt when losing', function () {

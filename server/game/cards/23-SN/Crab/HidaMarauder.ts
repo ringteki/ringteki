@@ -22,9 +22,11 @@ export default class HidaMarauder extends DrawCard {
                         : [context.source];
                 return {
                     gameActions: [
-                        AbilityDsl.actions.lookAt(() => ({
-                            target: cards.slice().sort((a, b) => a.name.localeCompare(b.name))
-                        })),
+                        AbilityDsl.actions.reveal({
+                            target: cards.slice().sort((a, b) => a.name.localeCompare(b.name)),
+                            chatMessage: true,
+                            player: context.player.opponent
+                        }),
                         AbilityDsl.actions.cardMenu((context) => ({
                             cards: cards.slice().sort((a, b) => a.name.localeCompare(b.name)),
                             targets: true,
@@ -35,7 +37,7 @@ export default class HidaMarauder extends DrawCard {
                     ]
                 };
             }),
-            effect: 'look at {1} random card{3} in {2}\'s hand',
+            effect: 'make {2} reveal {1} random card{3} from their hand',
             effectArgs: (context) => [
                 (context.game.currentConflict?.getCharacters(context.player)?.length || 0),
                 context.player.opponent as Player,
