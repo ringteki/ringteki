@@ -59,7 +59,8 @@ describe('Opportunistic Rustler', function () {
             expect(this.courtly.facedown).toBe(false);
 
             expect(this.getChatLogs(5)).toContain('player1 puts Courtly Challenger faceup into the attacked province and gives Opportunistic Rustler +2military');
-            expect(this.getChatLogs(5)).toContain('player2 puts 2 cards on the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player2 puts 2 cards on the bottom of their dynasty deck');
+            expect(this.player2.player.dynastyDeck.length).toBe(3);
         });
 
         it('cavalry', function () {
@@ -91,7 +92,8 @@ describe('Opportunistic Rustler', function () {
             expect(this.diplomat.location).toBe('removed from game');
 
             expect(this.getChatLogs(5)).toContain('player1 removes Diplomat of the Steppes from the game and gives Opportunistic Rustler +3military');
-            expect(this.getChatLogs(5)).toContain('player2 puts 2 cards on the bottom of their conflict deck');
+            expect(this.getChatLogs(5)).toContain('player2 puts 2 cards on the bottom of their dynasty deck');
+            expect(this.player2.player.dynastyDeck.length).toBe(3);
         });
     });
 });
