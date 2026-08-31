@@ -9,7 +9,7 @@ export default class CastOutTheShadow extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Dishonor or bow a character',
-            condition: context => context.player.isTraitInPlay('shugenja') && context.game.isDuringConflict(),
+            condition: context => context.game.isDuringConflict(),
             targets: {
                 character: {
                     cardType: CardType.Character,
@@ -27,5 +27,13 @@ export default class CastOutTheShadow extends DrawCard {
                 }
             }
         });
+    }
+
+    canPlay(context: AbilityContext, playType: string) {
+        if(!context.player.isCharacterTraitInPlay('shugenja')) {
+            return false;
+        }
+
+        return super.canPlay(context, playType);
     }
 }
