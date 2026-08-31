@@ -10,9 +10,12 @@ export default class LaughingThunder extends DrawCard {
 
     setupCardAbilities() {
         this.persistentEffect({
-            effect: AbilityDsl.effects.gainAllAbilitiesDynamic((card: BaseCard, _context: AbilityContext) => {
-                return (card as DrawCard).attachments.filter((a: DrawCard) => a.hasTrait('kiho') && a.printedType === CardType.Event) ?? [];
-            })
+            effect: AbilityDsl.effects.gainAllAbilitiesDynamic(
+                (card: BaseCard, _context: AbilityContext) => {
+                    return (card as DrawCard).attachments.filter((a: DrawCard) => a.hasTrait('kiho') && a.printedType === CardType.Event) ?? [];
+                },
+                true
+            )
         });
 
         this.action({
