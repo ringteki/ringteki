@@ -1,3 +1,5 @@
+import { GameModes } from '../../../../../build/server/GameModes.js';
+
 describe('Kaiu Scout', function () {
     integration(function () {
         beforeEach(function () {
@@ -106,6 +108,42 @@ describe('Kaiu Scout', function () {
 
             expect(this.solemnScholar.facedown).toBe(false);
             expect(this.getChatLogs(5)).toContain('player1 turns Solemn Scholar faceup');
+        });
+    });
+});
+
+describe('Kaiu Scout - dynasty phase', function () {
+    integration(function () {
+        beforeEach(function () {
+            this.setupTest({
+                phase: 'dynasty',
+                gameMode: GameModes.Emerald,
+                player1: {
+                    inPlay: ['kaiu-scout', 'adept-of-the-waves']
+                },
+                player2: {
+                    inPlay: ['doji-kuwanan']
+                }
+            });
+
+            this.sd1 = this.player1.findCardByName('shameful-display', 'province 1');
+            this.kaiu = this.player1.findCardByName('kaiu-scout');
+            this.adeptOfTheWaves = this.player1.findCardByName('adept-of-the-waves', 'play area');
+
+            this.player1.moveCard(this.adeptOfTheWaves, 'province 1');
+            this.adeptOfTheWaves.facedown = true;
+        });
+
+        it('can be triggered during the dynasty phase in Emerald mode', function () {
+            this.player1.clickCard(this.kaiu);
+            expect(this.player1).toBeAbleToSelect(this.sd1);
+
+            this.player1.clickCard(this.sd1);
+            expect(this.player1).toHavePrompt('Select a card to turn faceup');
+
+            this.player1.clickPrompt('Adept of the Waves');
+            expect(this.adeptOfTheWaves.facedown).toBe(false);
+            expect(this.getChatLogs(5)).toContain('player1 turns Adept of the Waves faceup');
         });
     });
 });
