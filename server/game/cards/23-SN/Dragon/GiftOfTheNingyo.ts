@@ -19,10 +19,10 @@ export default class GiftOfTheNingyo extends DrawCard {
 
 
     getCharacters(context: AbilityContext<this>): DrawCard[] {
-        if (!context.game.currentConflict || !context.source.parent) {
+        if(!context.game.currentConflict || !context.source.parent) {
             return [];
         }
-        if (context.source.parent.isAttacking()) {
+        if(context.source.parent.isAttacking()) {
             return context.game.currentConflict.defenders;
         }
         return context.game.currentConflict.attackers;

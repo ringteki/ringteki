@@ -10,7 +10,7 @@ import { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
 
 const resourcesAvailable = (context: TriggeredAbilityContext) => {
     let fateAvailable = false;
-    if (context.game.actions.loseFate().canAffect(context.player, context)) {
+    if(context.game.actions.loseFate().canAffect(context.player, context)) {
         fateAvailable = true;
     }
 
@@ -28,7 +28,7 @@ const disruptedSupplyLinesCost = function () {
         getCostMessage(context: TriggeredAbilityContext) {
             return ['dishonoring {1}{2}',
                 [context.costs.disruptedSupplyLinesCostDishonoredCharacter,
-                context.costs.disruptedSupplyLinesCostFatePaid ? ' and paying 1 fate' : ''] as MsgArg
+                    context.costs.disruptedSupplyLinesCostFatePaid ? ' and paying 1 fate' : ''] as MsgArg
             ];
         },
         getActionName(_context: TriggeredAbilityContext) {
@@ -45,7 +45,7 @@ const disruptedSupplyLinesCost = function () {
             results.cancelled = false;
 
             let cards = freeCharacters;
-            if (fateAvailable) {
+            if(fateAvailable) {
                 cards = eligibleCharacters;
             }
 
@@ -68,7 +68,7 @@ const disruptedSupplyLinesCost = function () {
         },
         payEvent: function (context: TriggeredAbilityContext) {
             const events = [];
-            if (context.costs.disruptedSupplyLinesCostFatePaid) {
+            if(context.costs.disruptedSupplyLinesCostFatePaid) {
                 const loseFateaction = context.game.actions.loseFate({ amount: 1, target: context.player });
                 events.push(loseFateaction.getEvent(context.player, context));
             }
@@ -107,7 +107,7 @@ export default class DisruptedSupplyLines extends DrawCard {
                 }
             },
             effect: '{1}{2}{3}',
-            effectArgs: context => context.select === "Give your opponent 1 fate" ?
+            effectArgs: context => context.select === 'Give your opponent 1 fate' ?
                 ['take 1 fate from ', context.player.opponent, ''] :
                 ['remove ', context.event.card, ' from the game']
         });

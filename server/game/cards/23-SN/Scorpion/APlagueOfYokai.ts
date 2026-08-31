@@ -18,14 +18,14 @@ export default class APlagueOfYokai extends DrawCard {
         this.action({
             title: 'Spread the plague',
             condition: context => {
-                if (!context.game.isDuringConflict()) {
+                if(!context.game.isDuringConflict()) {
                     return false;
                 }
-                if (!context.player.anyCardsInPlay(card => card.isParticipating() && card.hasTrait('shinobi'))) {
+                if(!context.player.anyCardsInPlay(card => card.isParticipating() && card.hasTrait('shinobi'))) {
                     return false;
                 }
                 const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
-                if (copiesInDiscard.length === 0 && copiesInDeck.length === 0) {
+                if(copiesInDiscard.length === 0 && copiesInDeck.length === 0) {
                     return false;
                 }
 
@@ -37,19 +37,19 @@ export default class APlagueOfYokai extends DrawCard {
                 cardCondition: (card, context) => {
                     const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
                     let attachment;
-                    if (copiesInDeck.length > 0) {
+                    if(copiesInDeck.length > 0) {
                         attachment = copiesInDeck[0];
-                    } else if (copiesInDiscard.length > 0) {
+                    } else if(copiesInDiscard.length > 0) {
                         attachment = copiesInDiscard[0];
                     }
-                    return card.isParticipating() && AbilityDsl.actions.attach().canAffect(card, context, { attachment })
+                    return card.isParticipating() && AbilityDsl.actions.attach().canAffect(card, context, { attachment });
                 },
                 gameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.chooseAction((context) => {
                         const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
 
                         let options = {};
-                        if (copiesInDiscard.length > 0) {
+                        if(copiesInDiscard.length > 0) {
                             const optionTitle = `Discard pile (${copiesInDiscard.length})`;
                             options = {
                                 ...options,
@@ -62,7 +62,7 @@ export default class APlagueOfYokai extends DrawCard {
                                 }
                             };
                         }
-                        if (copiesInDeck.length > 0) {
+                        if(copiesInDeck.length > 0) {
                             const optionTitle = `Deck (${copiesInDeck.length})`;
                             options = {
                                 ...options,
@@ -85,7 +85,7 @@ export default class APlagueOfYokai extends DrawCard {
                         return {
                             activePromptTitle: 'Select where to pull card from',
                             options
-                        }
+                        };
                     }),
                     AbilityDsl.actions.onAffinity(context => ({
                         trait: 'shadow',
@@ -93,12 +93,12 @@ export default class APlagueOfYokai extends DrawCard {
                         noAffinityGameAction: AbilityDsl.actions.loseHonor({
                             target: context.player
                         }),
-                        effect: 'prevent the honor loss',
+                        effect: 'prevent the honor loss'
                     }))
                 ])
             },
-            effect: 'infect {0} and lose 1 honor',
-        })
+            effect: 'infect {0} and lose 1 honor'
+        });
     }
 
     getCopies(context: AbilityContext) {
@@ -110,7 +110,7 @@ export default class APlagueOfYokai extends DrawCard {
     }
 
     getSkillModifier(context: AbilityContext) {
-        if (!context.game.currentConflict) {
+        if(!context.game.currentConflict) {
             return 0;
         }
 
@@ -118,7 +118,7 @@ export default class APlagueOfYokai extends DrawCard {
         const attachments = participatingCharacters.reduce(
             (prev, current) => [...prev, ...current.attachments],
             [] as DrawCard[]
-        )
+        );
 
         const matchingAttachments = attachments.filter(a => a.name === context.source.name && a.controller === context.source.controller);
         return matchingAttachments.length;

@@ -23,7 +23,7 @@ export default class ShosuroIsa extends DrawCard {
                 location: [Location.DynastyDiscardPile, Location.ConflictDiscardPile],
                 controller: Players.Self,
                 cardCondition: (card) => !card.isUnique(),
-                gameAction: AbilityDsl.actions.putIntoPlay(),
+                gameAction: AbilityDsl.actions.putIntoPlay()
             },
             effect: 'manifest a shadow of {0}',
             then: (context: AbilityContext) => ({
@@ -38,13 +38,13 @@ export default class ShosuroIsa extends DrawCard {
                         effect: [
                             AbilityDsl.effects.setBaseMilitarySkill(0),
                             AbilityDsl.effects.setBasePoliticalSkill(0),
-                            AbilityDsl.effects.addTrait('shadow'),
+                            AbilityDsl.effects.addTrait('shadow')
                         ]
                     }),
                     AbilityDsl.actions.handler({
                         handler: () => {
-                            if (context.target) {
-                                this.shadows.push(context.target)
+                            if(context.target) {
+                                this.shadows.push(context.target);
                             }
                         }
                     })
@@ -54,7 +54,7 @@ export default class ShosuroIsa extends DrawCard {
     }
 
     public onCardLeavesPlay(event: EventPayload<EventName.OnCardLeavesPlay>) {
-        if (
+        if(
             this.shadows.includes(event.card) &&
             event.card.location !== Location.RemovedFromGame
         ) {

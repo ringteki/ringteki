@@ -41,14 +41,14 @@ export default class LaughingThunder extends DrawCard {
                     },
                     effect: [
                         AbilityDsl.effects.cannotTriggerAbilities(),
-                        AbilityDsl.effects.changeType(CardType.Attachment),
+                        AbilityDsl.effects.changeType(CardType.Attachment)
                     ]
-                }))
+                }));
 
                 gameActions.push(AbilityDsl.actions.attach({
                     attachment: context.target,
-                    target: context.source,
-                }))
+                    target: context.source
+                }));
 
                 return { gameActions };
             }),

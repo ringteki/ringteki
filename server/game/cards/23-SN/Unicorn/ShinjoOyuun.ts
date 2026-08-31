@@ -12,10 +12,10 @@ export default class ShinjoOyuun extends DrawCard {
                 cardType: CardType.Character,
                 controller: Players.Any,
                 cardCondition: (card, context) => {
-                    if (!context.player.opponent) {
-                        return false
+                    if(!context.player.opponent) {
+                        return false;
                     }
-                    return !!card.printedCost && card.printedCost <= context.player.opponent.getNumberOfFaceupProvinces()
+                    return !!card.printedCost && card.printedCost <= context.player.opponent.getNumberOfFaceupProvinces();
                 },
                 gameAction: AbilityDsl.actions.moveToConflict()
             }

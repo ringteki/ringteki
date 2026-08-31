@@ -11,7 +11,7 @@ export default class DaidojiHiroteru extends DrawCard {
             condition: (context) => context.source.isDishonored,
             targetLocation: Location.Provinces,
             match: (card: DrawCard) => card.isDynasty && card.isFaceup() && card.hasSomeTrait('scout', 'shinobi'),
-            effect: AbilityDsl.effects.gainPlayAction(PlayCharacterAsIfFromHand),
+            effect: AbilityDsl.effects.gainPlayAction(PlayCharacterAsIfFromHand)
         });
 
         this.persistentEffect({

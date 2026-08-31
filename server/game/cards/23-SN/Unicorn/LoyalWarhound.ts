@@ -49,10 +49,10 @@ export default class LoyalWarhound extends DrawCard {
                             },
                             printedAbility: false,
                             effect: 'detatch itself',
-                            gameAction: AbilityDsl.actions.detach((context) => ({ target: context.source })),
-                        }),
+                            gameAction: AbilityDsl.actions.detach((context) => ({ target: context.source }))
+                        })
                     ]
-                }))
+                }));
 
                 gameActions.push(AbilityDsl.actions.cardLastingEffect({
                     target: context.target,
@@ -65,22 +65,22 @@ export default class LoyalWarhound extends DrawCard {
                         AbilityDsl.effects.cardCannot({
                             cannot: 'target',
                             restricts: 'opponentsProvinceEffects',
-                            source: context.source,
+                            source: context.source
                         })
                     ]
-                }))
+                }));
 
                 gameActions.push(AbilityDsl.actions.cardLastingEffect({
                     target: context.source,
                     duration: Duration.UntilEndOfRound,
-                    effect: AbilityDsl.effects.addFlag("wasAttachedThisRound"),
-                }))
+                    effect: AbilityDsl.effects.addFlag('wasAttachedThisRound')
+                }));
 
                 gameActions.push(AbilityDsl.actions.attach({
                     attachment: this,
                     target: context.target,
-                    wasACharacter: true,
-                }))
+                    wasACharacter: true
+                }));
 
                 return { gameActions };
             }),

@@ -20,7 +20,7 @@ export default class ExemplaryNegotiator extends DrawCard {
                 context.player.opponent,
                 (context.costs.discardCardsUpToVariableX as BaseCard[]).length,
                 (context.costs.discardCardsUpToVariableX as BaseCard[]).length > 1 ? 's' : ''
-            ],
+            ]
         });
     }
 }

@@ -19,17 +19,17 @@ export default class MapmakerApprentice extends DrawCard {
                     effect: AbilityDsl.effects.delayedEffect({
                         when: {
                             onCardPlayed: (event: EventPayload<EventName.OnCardPlayed>, eventContext: AbilityContext) => {
-                                if (!eventContext.game.currentConflict) {
+                                if(!eventContext.game.currentConflict) {
                                     return false;
                                 }
-                                if (!(context.target as ProvinceCard).isConflictProvince()) {
+                                if(!(context.target as ProvinceCard).isConflictProvince()) {
                                     return false;
                                 }
-                                if (event.player !== context.player || event.card.type !== CardType.Event) {
+                                if(event.player !== context.player || event.card.type !== CardType.Event) {
                                     return false;
                                 }
                                 const eventsPlayed = eventContext.game.currentConflict.getCardsPlayed(context.player, (card) => card.type === CardType.Event).length;
-                                return eventsPlayed <= 1
+                                return eventsPlayed <= 1;
                             }
                         },
                         message: '{0} changes the province strength of an attacked province due to the delayed effect of {1}',
@@ -70,7 +70,7 @@ export default class MapmakerApprentice extends DrawCard {
                         }))
                     }),
                     duration: Duration.UntilEndOfRound
-                })),
+                }))
             },
             effect: 'map {1}{2}{3} - the first event they play during each conflict at that province will also modify its strength',
             effectArgs: context => context.target?.facedown ? [context.target.controller, '\'s ', context.target.location] : ['', '', context.target]

@@ -13,7 +13,7 @@ export default class MirumotoRikitaro extends DrawCard {
             title: 'Reduce cost of next attachment',
             when: {
                 onAbilityResolverInitiated: (event, context) => {
-                    if (event.context === undefined) {
+                    if(event.context === undefined) {
                         return false;
                     }
                     const ec = event.context;
@@ -47,7 +47,7 @@ export default class MirumotoRikitaro extends DrawCard {
             target: {
                 cardCondition: (card, context) => !!(card.hasSomeTrait('item', 'weapon', 'armor') && card.parent && context.player.opponent && card.parent.isParticipatingFor(context.player.opponent)),
                 cardType: CardType.Attachment,
-                gameAction: AbilityDsl.actions.discardFromPlay(),
+                gameAction: AbilityDsl.actions.discardFromPlay()
             },
             then: (context: AbilityContext) => ({
                 message: '{3} gains +2{4} due to discarding a weapon!',

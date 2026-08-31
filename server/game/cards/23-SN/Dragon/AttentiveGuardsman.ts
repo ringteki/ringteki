@@ -11,7 +11,7 @@ export default class AttentiveGuardsman extends DrawCard {
             effect: AbilityDsl.effects.canOnlyBeDeclaredAsAttackerWithCondition((props: ICanOnlyBeDeclaredAsAttackerWithCondition) => {
                 const { incomingAttackers } = props;
                 // console.log("incomingAttackers", incomingAttackers?.map(a => a.name), incomingAttackers?.some((card: DrawCard) => (card.getType() === CardType.Character && card.isUnique())));
-                return !!incomingAttackers?.some((card: DrawCard) => (card.getType() === CardType.Character && card.isUnique()))
+                return !!incomingAttackers?.some((card: DrawCard) => (card.getType() === CardType.Character && card.isUnique()));
             })
         });
 
@@ -20,7 +20,7 @@ export default class AttentiveGuardsman extends DrawCard {
                 context.game.currentConflict?.attackingPlayer === context.player &&
                 !context.game.currentConflict?.attackers.some(card => card.getType() === CardType.Character && card.isUnique()),
             effect: [
-                AbilityDsl.effects.cardCannot('moveToConflict'),
+                AbilityDsl.effects.cardCannot('moveToConflict')
             ]
         });
 

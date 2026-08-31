@@ -19,15 +19,15 @@ export default class BayushiGichin extends DrawCard {
                         cardType: CardType.Character,
                         controller: Players.Opponent,
                         cardCondition: (card) => {
-                            if (!((context as TriggeredAbilityContext).event.duel as Duel).isInvolved(card)) {
+                            if(!((context as TriggeredAbilityContext).event.duel as Duel).isInvolved(card)) {
                                 return false;
                             }
                             const poisons = this.getPoisons(context);
-                            return poisons.some(p => AbilityDsl.actions.attach().canAffect(card, context, { attachment: p }))
+                            return poisons.some(p => AbilityDsl.actions.attach().canAffect(card, context, { attachment: p }));
                         },
                         message: '{0} poisons {1}',
                         messageArgs: (cards) => {
-                            return [context.player, cards]
+                            return [context.player, cards];
                         },
                         subActionProperties: (card) => {
                             context.targets.character = card;
@@ -43,7 +43,7 @@ export default class BayushiGichin extends DrawCard {
                         cardCondition: (card) => card.hasTrait('poison') && AbilityDsl.actions.attach().canAffect(context.targets.character, context, { attachment: card }),
                         message: '{0} attaches {1}',
                         messageArgs: (cards) => {
-                            return [context.player, cards]
+                            return [context.player, cards];
                         },
                         subActionProperties: (card) => {
                             context.targets.attachment = card;
@@ -55,7 +55,7 @@ export default class BayushiGichin extends DrawCard {
                         return {
                             target: context.targets.character,
                             attachment: context.targets.attachment
-                        }
+                        };
                     })
                 ]
             })),
@@ -67,10 +67,10 @@ export default class BayushiGichin extends DrawCard {
             initiateDuel: {
                 type: DuelType.Military,
                 gameAction: (duel, context) => {
-                    if (duel.winner?.includes(context.source as DrawCard)) {
-                        return AbilityDsl.actions.takeHonor({ target: duel.loserController })
+                    if(duel.winner?.includes(context.source as DrawCard)) {
+                        return AbilityDsl.actions.takeHonor({ target: duel.loserController });
                     }
-                    return AbilityDsl.actions.noAction()
+                    return AbilityDsl.actions.noAction();
                 }
             }
         });

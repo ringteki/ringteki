@@ -39,7 +39,7 @@ export default class IllusionaryTerrain extends DrawCard {
                     targetLocation: Location.Any,
                     effect: AbilityDsl.effects.copyProvince(context.target)
                 }))
-            },
+            }
         });
     }
 }

@@ -14,7 +14,7 @@ export default class StrikeFromTheShadows extends DrawCard {
             gameAction: AbilityDsl.actions.cardLastingEffect(context => ({
                 target: context.player.cardsInPlay.filter((card: DrawCard) => card.isParticipating() && card.hasTrait('shinobi')),
                 effect: [
-                    AbilityDsl.effects.modifyBothSkills(1),
+                    AbilityDsl.effects.modifyBothSkills(1)
                 ],
                 duration: Duration.UntilEndOfConflict
             })),

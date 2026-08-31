@@ -27,10 +27,10 @@ export default class JusticarsApproach2 extends DrawCard {
 
     #effectsOnLoser(target: DrawCard): GameAction {
         const effects: GameAction[] = [AbilityDsl.actions.dishonor({ target })];
-        if (target.isDishonored) {
+        if(target.isDishonored) {
             effects.push(AbilityDsl.actions.bow({ target }));
         }
-        if (target.isDishonored && target.bowed) {
+        if(target.isDishonored && target.bowed) {
             effects.push(AbilityDsl.actions.discardFromPlay({ target }));
         }
 

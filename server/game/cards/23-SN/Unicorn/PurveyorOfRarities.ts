@@ -25,7 +25,7 @@ export default class PurveyorOfRarities extends DrawCard {
                 falseGameAction: AbilityDsl.actions.cardLastingEffect({
                     target: context.source,
                     effect: AbilityDsl.effects.modifyBothSkills(3)
-                }),
+                })
             })),
             effect: 'give +{1}{2}/+{1}{3} to {4}{5}',
             effectArgs: context => this.#cardCondition(context) ?
@@ -35,11 +35,11 @@ export default class PurveyorOfRarities extends DrawCard {
     }
 
     #cardCondition(context: AbilityContext) {
-        if (!context.costs.discardCard) {
+        if(!context.costs.discardCard) {
             return false;
         }
         const card = (context.costs.discardCard as BaseCard[])[0];
-        return card.hasSomeTrait('gaijin', 'foreign') || this.#isOutOfClan(card)
+        return card.hasSomeTrait('gaijin', 'foreign') || this.#isOutOfClan(card);
     }
 
     #isOutOfClan(card: BaseCard): boolean {

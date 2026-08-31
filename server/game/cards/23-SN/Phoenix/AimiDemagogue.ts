@@ -19,19 +19,19 @@ export default class AimiDemagogue extends DrawCard {
                     gameActions.push(AbilityDsl.actions.cardLastingEffect({
                         effect: AbilityDsl.effects.addKeyword('pride'),
                         target: context.target
-                    }))
+                    }));
 
-                    if (context.target.controller !== context.player) {
+                    if(context.target.controller !== context.player) {
                         gameActions.push(AbilityDsl.actions.cardLastingEffect({
                             effect: AbilityDsl.effects.addKeyword('pride'),
                             target: context.source
-                        }))
+                        }));
                     }
-                    return { gameActions }
+                    return { gameActions };
                 })
             },
             effect: 'give {1}{0} pride the end of the conflict',
             effectArgs: (context: any) => [context.target.controller !== context.player ? 'itself and ' : '']
-        })
+        });
     }
 }

@@ -48,7 +48,7 @@ export default class ShaperOfStone extends DrawCard {
                         }))
                     }),
                     duration: Duration.UntilEndOfRound
-                })),
+                }))
             },
             effect: 'mark {1} - they will gain 1 honor if the province remains unbroken at the end of the phase',
             effectArgs: context => context.target?.facedown ? [context.target.location] : [context.target]

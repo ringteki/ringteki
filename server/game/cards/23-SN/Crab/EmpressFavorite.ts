@@ -12,7 +12,7 @@ export default class EmpressFavorite extends DrawCard {
             condition: (context) => context.source.isDefending() &&
                 !!context.player.opponent &&
                 !context.player.opponent.hasDeclaredConflictOfType(context, ConflictType.Military),
-            gameAction: AbilityDsl.actions.takeHonor(),
+            gameAction: AbilityDsl.actions.takeHonor()
         });
     }
 }

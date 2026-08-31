@@ -33,8 +33,8 @@ export default class OpportunisticRustler extends DrawCard {
                     [context.player, 'puts', cards, 'faceup into the attacked province and gives', context.source, cards[0].getTraitSet().size, 'military'],
                 gameAction: AbilityDsl.actions.multipleContext((context: AbilityContext) => {
                     const selected: DrawCard = context?.deckSearchSelected[0];
-                    if (!selected || !context.game.currentConflict) {
-                        return { gameActions: [AbilityDsl.actions.noAction()] }
+                    if(!selected || !context.game.currentConflict) {
+                        return { gameActions: [AbilityDsl.actions.noAction()] };
                     }
                     const numberOfTraits = selected.getTraitSet().size;
 
@@ -42,9 +42,9 @@ export default class OpportunisticRustler extends DrawCard {
                     gameActions.push(AbilityDsl.actions.cardLastingEffect(context => ({
                         target: context.source,
                         effect: AbilityDsl.effects.modifyMilitarySkill(numberOfTraits)
-                    })),)
+                    })));
 
-                    if (selected.hasTrait('cavalry')) {
+                    if(selected.hasTrait('cavalry')) {
                         gameActions.push(AbilityDsl.actions.moveCard({ target: selected, destination: Location.RemovedFromGame }));
                     } else {
                         gameActions.push(AbilityDsl.actions.moveCard({ target: selected, faceup: true, destination: context.game.currentConflict.declaredProvince?.location }));

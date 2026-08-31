@@ -9,10 +9,10 @@ export default class IuchiHatsue extends DrawCard {
     setupCardAbilities() {
         this.persistentEffect({
             condition: (context) => {
-                if (!context.game.currentConflict) {
+                if(!context.game.currentConflict) {
                     return false;
                 }
-                return context.game.currentConflict.getNumberOfParticipantsFor(context.player, card => card.type === CardType.Character && card.hasTrait('creature')) > 0
+                return context.game.currentConflict.getNumberOfParticipantsFor(context.player, card => card.type === CardType.Character && card.hasTrait('creature')) > 0;
             },
             effect: AbilityDsl.effects.modifyBothSkills(2)
         });

@@ -19,7 +19,7 @@ export default class AsahinaPurifier extends DrawCard {
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.cancel(),
                 AbilityDsl.actions.gainHonor(context => ({ target: context.player }))
-            ]),
+            ])
         });
     }
 }

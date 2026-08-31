@@ -31,16 +31,16 @@ export default class IsawaHouseGuard extends DrawCard {
                         target: duel.loser
                     }));
                     duel.loser?.forEach(card => {
-                        if (card.isTainted) {
+                        if(card.isTainted) {
                             gameActions.push(AbilityDsl.actions.injure({
                                 target: card
-                            }))
+                            }));
                         }
-                    })
+                    });
                     return { gameActions };
                 }),
                 message: '{0} is dishonored and injured if tainted',
-                messageArgs: duel => [duel.loser],
+                messageArgs: duel => [duel.loser]
             }
         });
     }

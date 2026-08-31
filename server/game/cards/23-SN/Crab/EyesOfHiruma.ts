@@ -15,7 +15,7 @@ export default class EyesOfHiruma extends DrawCard {
                 provinceCard: {
                     location: Location.Provinces,
                     cardType: CardType.Character,
-                    cardCondition: card => card.isInConflictProvince() && card.isFaceup() && card.getTraits().size > 0,
+                    cardCondition: card => card.isInConflictProvince() && card.isFaceup() && card.getTraits().size > 0
                 },
                 select: {
                     mode: TargetMode.Select,
@@ -46,7 +46,7 @@ export default class EyesOfHiruma extends DrawCard {
     }
 
     getTargets(card: BaseCard, context: AbilityContext) {
-        if (context.game.currentConflict) {
+        if(context.game.currentConflict) {
             const defenders = context.game.currentConflict.getDefenders();
             const traits = card.getTraits();
 

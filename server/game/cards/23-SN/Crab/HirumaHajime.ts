@@ -43,13 +43,13 @@ export default class HirumaHajime extends DrawCard {
                             target: context.targets.cardInProvince,
                             destination: context.targets.province.location
                         })
-                    })),
+                    }))
                 }
             },
             effect: 'move {1} to {2}',
             effectArgs: context => [
                 (context.targets.cardInProvince as DrawCard).isFacedown() ? 'a facedown card' : context.targets.cardInProvince as DrawCard,
-                (context.targets.province as ProvinceCard).isFacedown() ? (context.targets.province as ProvinceCard).location : context.targets.province as ProvinceCard,
+                (context.targets.province as ProvinceCard).isFacedown() ? (context.targets.province as ProvinceCard).location : context.targets.province as ProvinceCard
             ],
             then: (context) => ({
                 thenCondition: () => !!(context.targets.province as ProvinceCard).isConflictProvince() && (context.targets.cardInProvince as DrawCard).type !== CardType.Attachment && (context.targets.cardInProvince as DrawCard).isFaceup(),

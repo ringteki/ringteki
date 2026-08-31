@@ -26,12 +26,12 @@ export default class CloudHands extends DrawCard {
                         AbilityDsl.actions.cardLastingEffect(context => {
                             let effects = [];
                             let oppCharacter = context.targets.oppCharacter;
-                            if (oppCharacter.hasDash('military')) {
+                            if(oppCharacter.hasDash('military')) {
                                 effects.push(AbilityDsl.effects.setBaseDash('military'));
                             } else {
                                 effects.push(AbilityDsl.effects.setBaseMilitarySkill(oppCharacter.getBaseMilitarySkill()));
                             }
-                            if (oppCharacter.hasDash('political')) {
+                            if(oppCharacter.hasDash('political')) {
                                 effects.push(AbilityDsl.effects.setBaseDash('political'));
                             } else {
                                 effects.push(AbilityDsl.effects.setBasePoliticalSkill(oppCharacter.getBasePoliticalSkill()));

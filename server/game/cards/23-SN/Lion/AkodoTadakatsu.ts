@@ -16,7 +16,7 @@ export default class AkodoTadakatsu extends DrawCard {
             target: {
                 controller: Players.Opponent,
                 cardType: CardType.Character,
-                gameAction: AbilityDsl.actions.injure(),
+                gameAction: AbilityDsl.actions.injure()
             }
         });
 

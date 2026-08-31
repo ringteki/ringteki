@@ -21,7 +21,7 @@ export default class UtakuProdigy extends DrawCard {
             gameAction: AbilityDsl.actions.sequential([
                 AbilityDsl.actions.cancel(),
                 AbilityDsl.actions.gainHonor(context => ({ target: context.player, amount: 2 }))
-            ]),
+            ])
         });
     }
 }

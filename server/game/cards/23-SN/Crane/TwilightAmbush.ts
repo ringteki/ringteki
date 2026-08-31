@@ -24,7 +24,7 @@ export default class TwilightAmbush extends DrawCard {
                 messageArgs: () => [context.target, (context.costs.sacrificeStateWhenChosen as DrawCard)],
                 thenCondition: () => (context.costs.sacrificeStateWhenChosen as DrawCard).hasTrait('shinobi'),
                 gameAction: AbilityDsl.actions.injure({
-                    target: context.target,
+                    target: context.target
                 })
             })
         });

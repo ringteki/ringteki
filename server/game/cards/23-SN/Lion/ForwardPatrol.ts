@@ -12,7 +12,7 @@ export default class ForwardPatrol extends DrawCard {
                 cardCondition: card => card.isParticipating() && card.hasTrait('bushi'),
                 cardType: CardType.Character,
                 gameAction: AbilityDsl.actions.ready()
-            },
+            }
         });
     }
 }

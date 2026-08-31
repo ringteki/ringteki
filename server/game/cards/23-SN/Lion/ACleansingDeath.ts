@@ -16,21 +16,21 @@ export default class ACleansingDeath extends DrawCard {
                         ...context.player.getDynastyCardsInProvince(Location.ProvinceTwo),
                         ...context.player.getDynastyCardsInProvince(Location.ProvinceThree),
                         ...context.player.getDynastyCardsInProvince(Location.ProvinceFour),
-                        ...context.player.getDynastyCardsInProvince(Location.StrongholdProvince),
-                    ]
+                        ...context.player.getDynastyCardsInProvince(Location.StrongholdProvince)
+                    ];
 
                     const contextCopy = context.createCopy({
                         stage: Stage.Target
                     });
 
-                    const faceupCharacters = cardsInProvinces.filter(a => a.isFaceup() && a.getType() === CardType.Character)
+                    const faceupCharacters = cardsInProvinces.filter(a => a.isFaceup() && a.getType() === CardType.Character);
 
                     const hasValidCharacters = faceupCharacters.some(a => {
                         return (a.printedCost || 0) <= (card.printedCost || 0) &&
-                            AbilityDsl.actions.putIntoPlay().canAffect(a, contextCopy)
+                            AbilityDsl.actions.putIntoPlay().canAffect(a, contextCopy);
                     });
                     return hasValidCharacters;
-                },
+                }
             }),
             cannotTargetFirst: true,
             target: {

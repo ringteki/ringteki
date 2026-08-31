@@ -18,8 +18,8 @@ export default class BlackMarketeer extends DrawCard {
                     resetOnCancel: true,
                     source: this,
                     playType: PlayType.PlayFromHand,
-                    payFateToOpponent: true,
-                }),
+                    payFateToOpponent: true
+                })
             }
         });
     }

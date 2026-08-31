@@ -12,7 +12,7 @@ export default class LessonsFromEarth extends ProvinceAttachment {
             title: 'Loser sacrifices a character',
             when: {
                 afterConflict: (event, context) => {
-                    return context.source.parent && event.conflict.winner && event.conflict.loser && context.source.parent.isConflictProvince()
+                    return context.source.parent && event.conflict.winner && event.conflict.loser && context.source.parent.isConflictProvince();
                 }
             },
             limit: AbilityDsl.limit.unlimitedPerConflict(),
@@ -26,19 +26,19 @@ export default class LessonsFromEarth extends ProvinceAttachment {
 
                 gameActions.push(AbilityDsl.actions.draw({
                     target: winner
-                }))
+                }));
 
                 const hasAffinity = loser.hasAffinity('earth');
-                if (!hasAffinity) {
+                if(!hasAffinity) {
                     gameActions.push(AbilityDsl.actions.chosenDiscard({
                         target: loser
-                    }))
+                    }));
                 } else {
                     gameActions.push(AbilityDsl.actions.handler({
                         handler: () => {
                             context.game.addMessage('{0}\'s affinity to Earth prevents them from discarding a card!', loser);
                         }
-                    }))
+                    }));
                 }
                 return { gameActions };
             })

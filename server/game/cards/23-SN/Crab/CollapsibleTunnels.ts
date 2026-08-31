@@ -22,7 +22,7 @@ export default class CollapsibleTunnels extends DrawCard {
                     targetLocation: Location.Provinces,
                     effect: AbilityDsl.effects.modifyProvinceStrength(2)
                 })
-            })),
+            }))
         });
 
         this.action({
@@ -31,7 +31,7 @@ export default class CollapsibleTunnels extends DrawCard {
             condition: (context) => context.game.isDuringConflict(),
             target: {
                 cardType: CardType.Character,
-                cardCondition: (card, context) => card.isAttacking() && card.getBaseMilitarySkill() <= 2,
+                cardCondition: (card) => card.isAttacking() && card.getBaseMilitarySkill() <= 2,
                 gameAction: AbilityDsl.actions.bow()
             }
         });

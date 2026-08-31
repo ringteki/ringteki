@@ -18,7 +18,7 @@ export default class KaiuScout extends DrawCard {
             target: {
                 location: Location.Provinces,
                 cardType: CardType.Province,
-                cardCondition: card => card.controller.getDynastyCardsInProvince(card.location).filter(a => a.isFacedown()).length > 0,
+                cardCondition: card => card.controller.getDynastyCardsInProvince(card.location).filter(a => a.isFacedown()).length > 0
             },
             gameAction: AbilityDsl.actions.handler({
                 handler: (context: AbilityContext) => {
@@ -34,7 +34,7 @@ export default class KaiuScout extends DrawCard {
     };
 
     selectPrompt(context: AbilityContext) {
-        if (!this.cards || this.cards.length <= 0) {
+        if(!this.cards || this.cards.length <= 0) {
             return;
         }
 
@@ -42,7 +42,7 @@ export default class KaiuScout extends DrawCard {
             this.chosenCards.push(currentCard);
             this.cards = this.cards.filter((a: DrawCard) => a !== currentCard);
 
-            if (this.cards && this.cards.length > 0) {
+            if(this.cards && this.cards.length > 0) {
                 this.game.promptWithHandlerMenu(context.player, {
                     activePromptTitle: 'Select a card to turn faceup',
                     context: context,
@@ -67,17 +67,17 @@ export default class KaiuScout extends DrawCard {
     }
 
     resolveSelect(context: AbilityContext) {
-        if (this.chosenCards.length > 0) {
+        if(this.chosenCards.length > 0) {
             this.game.addMessage(
                 '{0} turns {1} faceup',
                 context.player,
-                this.chosenCards,
+                this.chosenCards
             );
             context.game.applyGameAction(context, { flipDynasty: this.chosenCards });
         } else {
             this.game.addMessage(
                 '{0} does not turn any cards faceup',
-                context.player,
+                context.player
             );
         }
     }

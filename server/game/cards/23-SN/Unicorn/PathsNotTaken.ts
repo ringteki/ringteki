@@ -20,14 +20,14 @@ export default class PathsNotTaken extends DrawCard {
     }
 
     getSkillThreshold(context: AbilityContext) {
-        if (!context.game.currentConflict) {
+        if(!context.game.currentConflict) {
             return 0;
         }
 
         const attackedProvinces = context.game.currentConflict.getConflictProvinces();
         const hasScout = context.game.currentConflict.getDefenders(card => card.hasTrait('scout')).length > 0;
 
-        if (hasScout) {
+        if(hasScout) {
             const strengths = attackedProvinces.map(a => a.getStrength());
             return Math.max(...strengths);
         }

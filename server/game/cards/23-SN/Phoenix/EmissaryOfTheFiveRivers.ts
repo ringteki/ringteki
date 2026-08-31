@@ -26,7 +26,7 @@ export default class EmissaryOfTheFiveRivers extends DrawCard {
                 cardType: CardType.Character,
                 cardCondition: card => card.hasTrait('spirit'),
                 gameAction: AbilityDsl.actions.ready()
-            },
-        })
+            }
+        });
     }
 }

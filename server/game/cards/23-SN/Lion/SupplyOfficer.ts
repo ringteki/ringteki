@@ -25,9 +25,9 @@ export default class SupplyOfficer extends DrawCard {
                         AbilityDsl.actions.joint([
                             AbilityDsl.actions.sendHome(context => ({ target: context.targets.characterInConflict })),
                             AbilityDsl.actions.moveToConflict()
-                        ]),
+                        ])
                     ])
-                },
+                }
             },
             then: (context: any) => ({
                 message: '{3} is readied',

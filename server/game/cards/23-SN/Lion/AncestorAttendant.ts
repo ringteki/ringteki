@@ -15,19 +15,19 @@ export default class AncestorAttendant extends DrawCard {
                     const cost = context.target.printedCost || 0;
                     const gameActions = [AbilityDsl.actions.dishonor()];
 
-                    if (cost > 0) {
+                    if(cost > 0) {
                         gameActions.push(AbilityDsl.actions.discardCard((context) => ({
                             target: context.player.dynastyDeck.slice(0, cost)
-                        })))
+                        })));
                     }
 
-                    return { gameActions }
+                    return { gameActions };
                 })
             },
             effect: 'dishonor {0}{1}{2}{3}',
             effectArgs: (context: any) => {
                 return ((context.target.printedCost ?? 0) === 0) ? ['', '', ''] :
-                    [' and discard the top ', context.target.printedCost, ' cards of their dynasty deck']
+                    [' and discard the top ', context.target.printedCost, ' cards of their dynasty deck'];
             }
         });
     }

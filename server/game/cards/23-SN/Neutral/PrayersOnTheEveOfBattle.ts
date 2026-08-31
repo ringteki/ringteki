@@ -35,7 +35,7 @@ export default class PrayersOnTheEveOfBattle extends DrawCard {
                 onConflictPass: (event, context) => context.player.opponent && event.conflict.attackingPlayer === context.player.opponent && context.player.opponent.cardsInPlay.some(card => card.type === CardType.Character && !card.bowed)
             },
             gameAction: AbilityDsl.actions.moveCard(context => ({ target: context.source, destination: Location.Hand })),
-            max: AbilityDsl.limit.perConflictOpportunity(1),
+            max: AbilityDsl.limit.perConflictOpportunity(1)
         });
     }
 }

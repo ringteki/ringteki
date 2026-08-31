@@ -18,7 +18,7 @@ export default class ShinjoSora extends DrawCard {
                     ),
                 token: ShinjoSoraBeast,
                 canEnterConflict: () => true,
-                leavingPlayMessage: "{0} grows tired and decides to have a nap"
+                leavingPlayMessage: '{0} grows tired and decides to have a nap'
             }))
         });
     }
