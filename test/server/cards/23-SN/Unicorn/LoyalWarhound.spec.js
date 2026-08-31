@@ -8,7 +8,7 @@ describe('Loyal Warhound', function () {
                 gameMode: GameModes.Emerald,
 
                 player1: {
-                    inPlay: ['loyal-warhound', 'loyal-warhound', 'doji-challenger', 'aranat', 'eager-scout'],
+                    inPlay: ['loyal-warhound', 'loyal-warhound', 'doji-challenger', 'aranat', 'eager-scout', 'laughing-thunder'],
                     hand: ['fine-katana'],
                 },
                 player2: {
