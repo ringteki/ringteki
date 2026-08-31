@@ -1,11 +1,11 @@
-describe('Eyes of Hiruma', function () {
+describe('Hiruma\'s Eyes', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
                     inPlay: ['brash-samurai'],
-                    hand: ['eyes-of-hiruma']
+                    hand: ['hiruma-s-eyes']
                 },
                 player2: {
                     inPlay: ['doji-challenger', 'border-rider', 'kakita-yoshi'],
@@ -17,7 +17,7 @@ describe('Eyes of Hiruma', function () {
             });
 
             this.brash = this.player1.findCardByName('brash-samurai');
-            this.eyes = this.player1.findCardByName('eyes-of-hiruma');
+            this.eyes = this.player1.findCardByName('hiruma-s-eyes');
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.rider = this.player2.findCardByName('border-rider');
             this.yoshi = this.player2.findCardByName('kakita-yoshi');
@@ -50,7 +50,7 @@ describe('Eyes of Hiruma', function () {
             expect(this.rider.getMilitarySkill()).toBe(riderMil - 2);
             expect(this.challenger.getMilitarySkill()).toBe(challengerMil - 2);
             expect(this.yoshi.getMilitarySkill()).toBe(yoshiMil);
-            expect(this.getChatLogs(5)).toContain('player1 plays Eyes of Hiruma to give Doji Challenger and Border Rider -2military until the end of the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 plays Hiruma\'s Eyes to give Doji Challenger and Border Rider -2military until the end of the conflict');
         });
 
         it('choose +2 military', function () {
@@ -76,7 +76,7 @@ describe('Eyes of Hiruma', function () {
             expect(this.rider.getMilitarySkill()).toBe(riderMil + 2);
             expect(this.challenger.getMilitarySkill()).toBe(challengerMil + 2);
             expect(this.yoshi.getMilitarySkill()).toBe(yoshiMil);
-            expect(this.getChatLogs(5)).toContain('player1 plays Eyes of Hiruma to give Doji Challenger and Border Rider +2military until the end of the conflict');
+            expect(this.getChatLogs(5)).toContain('player1 plays Hiruma\'s Eyes to give Doji Challenger and Border Rider +2military until the end of the conflict');
         });
 
     });
