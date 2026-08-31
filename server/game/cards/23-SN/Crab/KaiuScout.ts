@@ -15,6 +15,7 @@ export default class KaiuScout extends DrawCard {
 
         this.action<DrawCard>({
             title: 'Look at cards in a province',
+            evenDuringDynasty: true,
             target: {
                 location: Location.Provinces,
                 cardType: CardType.Province,
