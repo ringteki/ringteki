@@ -10,8 +10,9 @@ export default class PurveyorOfRarities extends DrawCard {
     setupCardAbilities() {
         this.conflictAction({
             title: 'Discard a card for bonuses',
+            max: AbilityDsl.limit.perConflict(1),
             cost: AbilityDsl.costs.discardCard({ location: Location.Hand }),
-            gameAction: AbilityDsl.actions.conditional((context: any) => ({
+            gameAction: AbilityDsl.actions.conditional((context: AbilityContext) => ({
                 condition: () => this.#cardCondition(context),
                 trueGameAction: AbilityDsl.actions.multiple([
                     AbilityDsl.actions.cardLastingEffect({

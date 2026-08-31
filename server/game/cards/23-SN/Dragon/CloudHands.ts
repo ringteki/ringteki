@@ -8,6 +8,7 @@ export default class CloudHands extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Change base skill to match another character\'s',
+            max: AbilityDsl.limit.perConflict(1),
             condition: context => context.game.isDuringConflict(),
             targets: {
                 myCharacter: {

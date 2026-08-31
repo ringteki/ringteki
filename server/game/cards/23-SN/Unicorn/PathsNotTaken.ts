@@ -9,6 +9,7 @@ export default class PathsNotTaken extends DrawCard {
     setupCardAbilities() {
         this.action({
             title: 'Send home a character',
+            max: AbilityDsl.limit.perConflict(1),
             condition: context => !!context.game.isDuringConflict() && context.player.isDefendingPlayer(),
             target: {
                 cardType: CardType.Character,
