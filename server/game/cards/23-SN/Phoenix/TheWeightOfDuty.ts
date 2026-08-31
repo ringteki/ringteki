@@ -23,7 +23,7 @@ export default class TheWeightOfDuty extends DrawCard {
         this.reaction({
             when: {
                 onCardAbilityTriggered: (event, context) => {
-                    if (event.card.controller === context.player.opponent) {
+                    if(event.player === context.player.opponent) {
                         this.currentTargets = this.getLegalCardTargets(event);
                         return this.currentTargets.size > 0;
                     }
@@ -43,13 +43,13 @@ export default class TheWeightOfDuty extends DrawCard {
                         duration: Duration.UntilEndOfPhase
                     })
                 ])
-            },
+            }
         });
     }
 
     public onInitiateAbility(event: GameEvent<EventName.OnInitiateAbilityEffects>) {
-        if (event.card.id === 'banzai') {
-            if (event.context) {
+        if(event.card.id === 'banzai') {
+            if(event.context) {
                 this.extraBanzaiTarget = event.context.targets.target as BaseCard;
             }
         }
@@ -57,40 +57,40 @@ export default class TheWeightOfDuty extends DrawCard {
 
     private getLegalCardTargets(event: any) {
         const allTargets = new Set<BaseCard>();
-        if (!event.context) {
+        if(!event.context) {
             return allTargets;
         }
 
-        for (const directTargets of Object.values<BaseCard | BaseCard[]>(event.context.targets)) {
-            if (!Array.isArray(directTargets)) {
+        for(const directTargets of Object.values<BaseCard | BaseCard[]>(event.context.targets)) {
+            if(!Array.isArray(directTargets)) {
                 allTargets.add(directTargets);
                 continue;
             }
-            for (const directTarget of directTargets) {
+            for(const directTarget of directTargets) {
                 allTargets.add(directTarget);
             }
         }
 
-        for (const selectedTargets of Object.values<BaseCard | BaseCard[]>(event.context.selects)) {
-            if (!Array.isArray(selectedTargets)) {
+        for(const selectedTargets of Object.values<BaseCard | BaseCard[]>(event.context.selects)) {
+            if(!Array.isArray(selectedTargets)) {
                 allTargets.add(selectedTargets);
                 continue;
             }
-            for (const selectedTarget of selectedTargets) {
+            for(const selectedTarget of selectedTargets) {
                 allTargets.add(selectedTarget);
             }
         }
 
-        if (event.card.id === 'banzai') {
-            if (this.extraBanzaiTarget) {
+        if(event.card.id === 'banzai') {
+            if(this.extraBanzaiTarget) {
                 allTargets.add(this.extraBanzaiTarget);
             }
             this.extraBanzaiTarget = undefined;
         }
 
         const validTargets = new Set<BaseCard>();
-        for (let card of allTargets) {
-            if (this.isValidTargetForCard(card, event)) {
+        for(let card of allTargets) {
+            if(this.isValidTargetForCard(card, event)) {
                 validTargets.add(card);
             }
         }
@@ -102,7 +102,7 @@ export default class TheWeightOfDuty extends DrawCard {
         return (
             card.type === CardType.Character &&
             card.hasTrait('shugenja') &&
-            card.controller !== event.card.controller &&
+            card.controller !== event.player &&
             card.location === Location.PlayArea
         );
     }
