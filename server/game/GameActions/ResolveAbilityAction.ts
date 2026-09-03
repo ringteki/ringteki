@@ -147,6 +147,9 @@ export class ResolveAbilityAction extends CardGameAction {
         let newContextEvent = properties.event;
         let newContext = (properties.ability as TriggeredAbility).createContext(player, newContextEvent);
         newContext.subResolution = !!properties.subResolution;
+        if(properties.subResolution) {
+            newContext.originatingContext = (event.context as AbilityContext).triggeringContext;
+        }
         if(properties.choosingPlayerOverride) {
             newContext.choosingPlayerOverride = properties.choosingPlayerOverride;
         }

@@ -1,4 +1,5 @@
 import { Event } from './Event.js';
+import type BaseCard from '../BaseCard.js';
 import { EventName } from '../Constants.js';
 
 class InitiateCardAbilityEvent extends Event {
@@ -23,6 +24,16 @@ class InitiateCardAbilityEvent extends Event {
             this.tokenTargets = [];
         }
         this.allTargets = this.cardTargets.concat(this.ringTargets, this.selectTargets, this.tokenTargets);
+        // Record chosen cards on the triggering context, so continuations (sub-resolutions)
+        // stay visible to cards reacting to the original triggering.
+        const triggeringContext = ctx?.triggeringContext;
+        if(triggeringContext) {
+            for(const card of this.cardTargets as BaseCard[]) {
+                if(!triggeringContext.chosenCardTargets.includes(card)) {
+                    triggeringContext.chosenCardTargets.push(card);
+                }
+            }
+        }
     }
 }
 

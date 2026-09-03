@@ -513,5 +513,56 @@ describe('Withstand The Darkness', function() {
                 expect(this.player1).not.toBeAbleToSelect(this.hirumaSkirmisher);
             });
         });
+
+        describe('Withstand The Darkness\'s Reaction (sub-resolutions)', function() {
+            beforeEach(function() {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['crisis-breaker', 'doji-challenger'],
+                        hand: ['withstand-the-darkness']
+                    },
+                    player2: {
+                        inPlay: ['keeper-initiate'],
+                        hand: ['nature-s-wrath']
+                    }
+                });
+                this.crisisBreaker = this.player1.findCardByName('crisis-breaker');
+                this.dojiChallenger = this.player1.findCardByName('doji-challenger');
+                this.withstandTheDarkness = this.player1.findCardByName('withstand-the-darkness');
+                this.keeperInitiate = this.player2.findCardByName('keeper-initiate');
+                this.naturesWrath = this.player2.findCardByName('nature-s-wrath');
+
+                this.crisisBreaker.fate = 0;
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.crisisBreaker, this.dojiChallenger],
+                    defenders: [this.keeperInitiate],
+                    type: 'military'
+                });
+            });
+
+            it('should react when only the sub-resolution targets a crab character you control', function() {
+                this.player2.clickCard(this.naturesWrath);
+                this.player2.clickCard(this.dojiChallenger);
+                this.player1.clickPrompt('Dishonor this character');
+                expect(this.player1).not.toHavePrompt('Triggered Abilities');
+
+                this.player2.clickPrompt('Dishonor a participating character to resolve this ability again');
+                this.player2.clickCard(this.keeperInitiate);
+
+                this.player2.clickCard(this.crisisBreaker);
+                this.player1.clickPrompt('Dishonor this character');
+
+                expect(this.player1).toHavePrompt('Triggered Abilities');
+                expect(this.player1).toBeAbleToSelect(this.withstandTheDarkness);
+                this.player1.clickCard(this.withstandTheDarkness);
+                expect(this.player1).toBeAbleToSelect(this.crisisBreaker);
+                expect(this.player1).not.toBeAbleToSelect(this.dojiChallenger);
+                this.player1.clickCard(this.crisisBreaker);
+                expect(this.crisisBreaker.fate).toBe(1);
+            });
+        });
     });
 });

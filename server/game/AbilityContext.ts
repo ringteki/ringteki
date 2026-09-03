@@ -61,6 +61,10 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
     elementCard: BaseCard | undefined;
     provincesToRefill: { player: Player; location: Location }[] = [];
     subResolution = false;
+    /** Set when this context continues an earlier one: a sub-resolution (`resolveAbility`/`triggerAbility`) or a `then` clause. */
+    originatingContext?: AbilityContext;
+    /** Every card chosen as a target across this triggering, continuations included. */
+    chosenCardTargets: BaseCard[] = [];
     choosingPlayerOverride: Player | null = null;
     gameActionsResolutionChain: GameAction[] = [];
     playType: PlayType | undefined;
@@ -86,6 +90,12 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
         this.playType = this.player && this.player.findPlayType(this.source as BaseCard); //location && location.playingType;
     }
 
+    /** The context representing the triggering this one belongs to. */
+    get triggeringContext(): AbilityContext {
+        // S is unconstrained, so `this` is not assignable to the default instantiation.
+        return this.originatingContext ?? (this as unknown as AbilityContext);
+    }
+
     copy(newProps: Partial<AbilityContextProperties>): this {
         let copy = this.createCopy(newProps);
         copy.target = this.target;
@@ -96,6 +106,8 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
         copy.ring = this.ring;
         copy.provincesToRefill = this.provincesToRefill;
         copy.subResolution = this.subResolution;
+        copy.originatingContext = this.originatingContext;
+        copy.chosenCardTargets = this.chosenCardTargets;
         copy.choosingPlayerOverride = this.choosingPlayerOverride;
         copy.gameActionsResolutionChain = this.gameActionsResolutionChain;
         copy.playType = this.playType;

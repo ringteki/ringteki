@@ -141,7 +141,10 @@ export default class EventWindow extends BaseStepWithPipeline {
     checkThenAbilities() {
         for(const thenAbility of this.thenAbilities) {
             if(thenAbility.context.events.every((event) => thenAbility.condition(event))) {
-                this.game.resolveAbility(thenAbility.ability.createContext(thenAbility.context.player));
+                const thenContext = thenAbility.ability.createContext(thenAbility.context.player);
+                // a `then` continues the same triggering, so keep the link for chosenCardTargets
+                thenContext.originatingContext = thenAbility.context.triggeringContext;
+                this.game.resolveAbility(thenContext);
             }
         }
     }
