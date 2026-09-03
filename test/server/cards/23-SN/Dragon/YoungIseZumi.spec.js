@@ -20,7 +20,6 @@ describe('Young Ise Zumi', function () {
         });
 
         it('triggers when you win a conflict', function () {
-            let fate = this.player1.fate;
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -40,6 +39,7 @@ describe('Young Ise Zumi', function () {
             expect(this.player1).toBeAbleToSelectRing('water');
             expect(this.player1).toBeAbleToSelectRing('void');
 
+            let fate = this.player1.fate;
             this.player1.clickRing('fire');
             expect(this.player1.fate).toBe(fate - 1);
             expect(this.game.rings.fire.fate).toBe(1);
@@ -48,7 +48,6 @@ describe('Young Ise Zumi', function () {
         });
 
         it('does not trigger when you lose a conflict', function () {
-            let fate = this.player1.fate;
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',
@@ -62,7 +61,6 @@ describe('Young Ise Zumi', function () {
         });
 
         it('does not trigger when another character wins the conflict', function () {
-            let fate = this.player1.fate;
             this.noMoreActions();
             this.initiateConflict({
                 type: 'military',

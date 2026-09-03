@@ -66,9 +66,9 @@ describe('Asahina Purifier', function () {
             this.brash.taint();
             this.sotorii.taint();
             this.shugenja.taint();
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
+            let honor1 = this.player1.honor;
             this.noMoreActions();
             this.initiateConflict({
                 type: 'political',
@@ -88,7 +88,6 @@ describe('Asahina Purifier', function () {
         it('should work when you assign a tainted character', function () {
             this.sotorii.taint();
             this.shugenja.taint();
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();
@@ -110,7 +109,6 @@ describe('Asahina Purifier', function () {
         });
 
         it('should not work on card costs', function () {
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();
@@ -128,7 +126,6 @@ describe('Asahina Purifier', function () {
         });
 
         it('should not work on direct honor loss', function () {
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();
@@ -147,7 +144,6 @@ describe('Asahina Purifier', function () {
         });
 
         it('should not work on ring or unopposed', function () {
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();
@@ -168,7 +164,6 @@ describe('Asahina Purifier', function () {
 
         it('should work when a dishonored character leaves play', function () {
             this.shugenja.dishonor();
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();
@@ -188,7 +183,6 @@ describe('Asahina Purifier', function () {
         });
 
         it('should not work with other assign costs', function () {
-            let honor1 = this.player1.honor;
             let honor2 = this.player2.honor;
 
             this.noMoreActions();

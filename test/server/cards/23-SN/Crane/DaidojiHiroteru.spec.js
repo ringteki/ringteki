@@ -41,7 +41,7 @@ describe('Daidoji Hiroteru', function () {
         it('should let you play properly traited characters as if they were in your hand with discount', function () {
             this.nextPhase();
             this.nextPhase();
-            let fate = this.player1.player.fate;
+            let fate = this.player1.fate;
             expect(this.game.currentPhase).toBe('conflict');
             this.player1.clickCard(this.scout);
             this.player1.clickPrompt('0');
@@ -63,7 +63,7 @@ describe('Daidoji Hiroteru', function () {
         it('should not discount characters played directly from hand', function () {
             this.nextPhase();
             this.nextPhase();
-            let fate = this.player1.player.fate;
+            let fate = this.player1.fate;
             this.player1.clickCard(this.shadows);
             this.player1.clickPrompt('0');
             expect(this.shadows.location).toBe('play area');
@@ -124,7 +124,6 @@ describe('Daidoji Hiroteru', function () {
 
             this.nextPhase();
             this.nextPhase();
-            let fate = this.player1.player.fate;
             expect(this.game.currentPhase).toBe('conflict');
             expect(this.player1).toHavePrompt('Action Window');
             this.player1.clickCard(this.scout);

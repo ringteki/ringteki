@@ -33,7 +33,7 @@ describe('Empress Favorite', function () {
 
             this.player2.clickCard(this.favorite);
             expect(this.player1.honor).toBe(honor - 1);
-            expect(this.player2.honor).toBe(honor + 1);
+            expect(this.player2.honor).toBe(honor2 + 1);
             expect(this.getChatLogs(5)).toContain('player2 uses Empress\' Favorite to take 1 honor from player1');
 
             expect(this.player1).toHavePrompt('Conflict Action Window');
