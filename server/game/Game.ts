@@ -724,7 +724,7 @@ class Game {
     /*
      * Creates a step which calls a handler function
      */
-    queueSimpleStep(handler: () => any): void {
+    queueSimpleStep(handler: () => unknown): void {
         this.pipeline.queueStep(new SimpleStep(this, handler));
     }
 

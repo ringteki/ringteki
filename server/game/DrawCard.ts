@@ -25,6 +25,7 @@ import type { ProvinceCard } from './ProvinceCard.js';
 import type Ring from './Ring.js';
 import type { AbilityContext } from './AbilityContext.js';
 import type { GameEvent } from './Events/EventPayloads.js';
+import type { Event } from './Events/Event.js';
 import type { ActionProps, ConflictActionProps, PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces.js';
 import type { Duel } from './Duel.js';
 import type { CardData } from './types/CardData.js';
@@ -89,7 +90,7 @@ class DrawCard extends BaseCard {
 
         if(this.getType() === CardType.Attachment) {
             // cannot have fate or status tokens
-            const events: any = [];
+            const events: Event[] = [];
             if(this.fate > 0) {
                 this.game.addMessage('{0} fate is removed from {1} as it can no longer legally have fate', this.fate, this);
                 this.game.actions.removeFate({ target: this, amount: this.fate }).addEventsToArray(events, context);

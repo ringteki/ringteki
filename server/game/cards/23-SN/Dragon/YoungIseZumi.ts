@@ -1,6 +1,7 @@
 import { Duration } from '../../../Constants.js';
 import AbilityDsl from '../../../abilitydsl.js';
 import DrawCard from '../../../DrawCard.js';
+import type Ring from '../../../Ring.js';
 
 export default class YoungIseZumi extends DrawCard {
     static id = 'young-ise-zumi';
@@ -20,7 +21,7 @@ export default class YoungIseZumi extends DrawCard {
                 effect: AbilityDsl.effects.cannotDeclareRing(() => true)
             })),
             effect: 'prevent conflicts from being declared with the {1}',
-            effectArgs: context => [context.costs.placeFate] as any
+            effectArgs: context => [context.costs.placeFate as Ring]
         });
     }
 }

@@ -6,7 +6,7 @@ export default class AncestorAttendant extends DrawCard {
     static id = 'ancestor-attendant';
 
     setupCardAbilities() {
-        this.conflictAction({
+        this.conflictAction<DrawCard>({
             title: 'Dishonor a character',
             target: {
                 cardCondition: (card, context) => !!context.player.opponent && card.isParticipatingFor(context.player.opponent) && context.player.dynastyDeck.length >= (card.printedCost ?? 0),
@@ -25,9 +25,9 @@ export default class AncestorAttendant extends DrawCard {
                 })
             },
             effect: 'dishonor {0}{1}{2}{3}',
-            effectArgs: (context: any) => {
-                return ((context.target.printedCost ?? 0) === 0) ? ['', '', ''] :
-                    [' and discard the top ', context.target.printedCost, ' cards of their dynasty deck'];
+            effectArgs: (context) => {
+                return ((context.target?.printedCost ?? 0) === 0) ? ['', '', ''] :
+                    [' and discard the top ', context.target?.printedCost, ' cards of their dynasty deck'];
             }
         });
     }
