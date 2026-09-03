@@ -4,7 +4,7 @@ describe('Hida Marauder', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['hida-marauder', 'adept-of-the-waves', 'solemn-scholar'],
+                    inPlay: ['hida-marauder', 'adept-of-the-waves', 'solemn-scholar']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan'],

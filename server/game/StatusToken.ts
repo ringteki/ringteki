@@ -31,7 +31,7 @@ export class StatusToken extends EffectSource {
     }
 
     static create(game: Game, card: BaseCard, tokenType: CharacterStatus): StatusToken {
-        switch (tokenType) {
+        switch(tokenType) {
             case CharacterStatus.Tainted:
                 return new StatusToken(game, card, CharacterStatus.Tainted, 'Tainted Token');
             case CharacterStatus.Honored:
@@ -50,7 +50,7 @@ export class StatusToken extends EffectSource {
     }
 
     get grantedStatusName(): string {
-        switch (this.grantedStatus) {
+        switch(this.grantedStatus) {
             case CharacterStatus.Honored:
                 return 'Honorable';
             case CharacterStatus.Dishonored:
@@ -63,7 +63,7 @@ export class StatusToken extends EffectSource {
     }
 
     applyEffects(): void {
-        switch (this.grantedStatus) {
+        switch(this.grantedStatus) {
             case CharacterStatus.Honored:
                 return this.applyHonoredEffect();
             case CharacterStatus.Dishonored:
@@ -74,7 +74,7 @@ export class StatusToken extends EffectSource {
     }
 
     removeEffects() {
-        for (const effect of this.persistentEffects) {
+        for(const effect of this.persistentEffects) {
             this.removeEffectFromEngine(effect.ref);
             effect.ref = [];
         }
@@ -88,7 +88,7 @@ export class StatusToken extends EffectSource {
     }
 
     applyDishonoredEffect() {
-        if (!this.card || this.card.type !== CardType.Character) {
+        if(!this.card || this.card.type !== CardType.Character) {
             return;
         }
         const effect: StatusTokenEffect = {
@@ -101,7 +101,7 @@ export class StatusToken extends EffectSource {
     }
 
     applyHonoredEffect() {
-        if (!this.card || this.card.type !== CardType.Character) {
+        if(!this.card || this.card.type !== CardType.Character) {
             return;
         }
         const effect: StatusTokenEffect = {
@@ -114,7 +114,7 @@ export class StatusToken extends EffectSource {
     }
 
     applyTaintedEffect() {
-        if (!this.card) {
+        if(!this.card) {
             return;
         }
         const effects =
@@ -132,7 +132,7 @@ export class StatusToken extends EffectSource {
 
     #taintEffectsOnCharacters(): StatusTokenEffect[] {
         const card = this.card;
-        if (!card) {
+        if(!card) {
             return [];
         }
         return [
@@ -155,7 +155,7 @@ export class StatusToken extends EffectSource {
 
     #taintEffectsOnProvinces(): StatusTokenEffect[] {
         const card = this.card;
-        if (!card) {
+        if(!card) {
             return [];
         }
         return [
@@ -180,7 +180,7 @@ export class StatusToken extends EffectSource {
                         AbilityDsl.actions.loseHonor({
                             target: player,
                             amount: 1,
-                            dueToStatusToken: true,
+                            dueToStatusToken: true
                         })
                 }),
                 ref: []

@@ -68,9 +68,9 @@ export class OptionalAction extends GameAction<OptionalActionProperties> {
 
     skipAction(
         properties: OptionalActionProperties,
-        context: AbilityContext,
+        context: AbilityContext
     ) {
-        if (properties.showMessageOnNo) {
+        if(properties.showMessageOnNo) {
             const args = properties.effectArgs ? derive(properties.effectArgs, context) : [];
             const nextArg = args.length;
             const msg = `{${nextArg}} chooses not to ${properties.effect ?? ''}`;

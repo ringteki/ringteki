@@ -6,7 +6,7 @@ describe('Kaiu Scout', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['kaiu-scout', 'adept-of-the-waves', 'solemn-scholar'],
+                    inPlay: ['kaiu-scout', 'adept-of-the-waves', 'solemn-scholar']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan'],

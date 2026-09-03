@@ -32,7 +32,7 @@ export class GainHonorAction extends PlayerAction<GainHonorProperties> {
         let properties = this.getProperties(context, additionalProperties);
         var wouldGainAnyHonor = properties.amount !== 0;
 
-        if (!wouldGainAnyHonor) {
+        if(!wouldGainAnyHonor) {
             return false;
         }
 
@@ -43,7 +43,7 @@ export class GainHonorAction extends PlayerAction<GainHonorProperties> {
             properties.amount ?? 0
         );
 
-        if (hasHonorLimit && !amountToTransfer) {
+        if(hasHonorLimit && !amountToTransfer) {
             return false;
         }
 
@@ -71,7 +71,7 @@ export class GainHonorAction extends PlayerAction<GainHonorProperties> {
             event.amount as number
         );
         player.modifyHonor(amountToTransfer);
-        if (amountToTransfer && context?.game) {
+        if(amountToTransfer && context?.game) {
             context.game.addAnimation({ type: 'honor', playerName: player.name, amount: amountToTransfer });
         }
     }

@@ -10,7 +10,7 @@ describe('Loyal Attendant', function () {
                 player2: {
                     inPlay: ['loyal-attendant'],
                     hand: ['ornate-fan', 'fine-katana', 'banzai', 'let-go']
-                },
+                }
             });
 
             this.tadaka = this.player1.findCardByName('isawa-tadaka');

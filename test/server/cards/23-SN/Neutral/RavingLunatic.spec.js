@@ -4,10 +4,10 @@ describe('Raving Lunatic', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['raving-lunatic', 'doji-challenger'],
+                    inPlay: ['raving-lunatic', 'doji-challenger']
                 },
                 player2: {
-                    inPlay: ['raving-lunatic'],
+                    inPlay: ['raving-lunatic']
                 }
             });
             this.lunatic = this.player1.findCardByName('raving-lunatic');
@@ -22,7 +22,7 @@ describe('Raving Lunatic', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.lunatic2],
+                defenders: [this.lunatic2]
             });
 
             expect(this.lunatic.getMilitarySkill()).toBe(this.lunatic2.getMilitarySkill() + 2);

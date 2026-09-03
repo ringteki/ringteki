@@ -4,10 +4,10 @@ describe('Shinjo Oyuun', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['shinjo-oyuun', 'doji-challenger', 'aranat'],
+                    inPlay: ['shinjo-oyuun', 'doji-challenger', 'aranat']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -34,7 +34,7 @@ describe('Shinjo Oyuun', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shinjo],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player2.pass();
 
@@ -58,7 +58,7 @@ describe('Shinjo Oyuun', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shinjo],
-                defenders: [this.whisperer],
+                defenders: [this.whisperer]
             });
             this.player2.pass();
 

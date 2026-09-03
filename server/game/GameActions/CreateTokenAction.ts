@@ -24,11 +24,11 @@ export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
     canAffect(card: BaseCard, context: AbilityContext): boolean {
         let { canEnterConflict } = this.getProperties(context);
 
-        if (!card.isFacedown() || !card.isInProvince() || card.location === Location.StrongholdProvince) {
+        if(!card.isFacedown() || !card.isInProvince() || card.location === Location.StrongholdProvince) {
             return false;
-        } else if (context.game.isDuringConflict('military') && !canEnterConflict('military')) {
+        } else if(context.game.isDuringConflict('military') && !canEnterConflict('military')) {
             return false;
-        } else if (context.game.isDuringConflict('political') && !canEnterConflict('political')) {
+        } else if(context.game.isDuringConflict('political') && !canEnterConflict('political')) {
             return false;
         }
         return super.canAffect(card, context);
@@ -44,8 +44,8 @@ export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
         card.moveTo(Location.RemovedFromGame);
         card.owner.moveCard(token, Location.PlayArea);
         const conflict = context.game.currentConflict;
-        if (!atHome && conflict) {
-            if (context.player.isAttackingPlayer()) {
+        if(!atHome && conflict) {
+            if(context.player.isAttackingPlayer()) {
                 conflict.addAttacker(token);
             } else {
                 conflict.addDefender(token);

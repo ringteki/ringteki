@@ -14,7 +14,7 @@ describe('Laughing Thunder', function () {
                     inPlay: ['akodo-toturi', 'political-rival', 'tattooed-wanderer'],
                     hand: ['way-of-the-lion', 'fine-katana', 'voice-of-honor']
                 },
-                gameMode: GameModes.Emerald,
+                gameMode: GameModes.Emerald
             });
 
             this.thunder = this.player1.findCardByName('laughing-thunder');
@@ -120,9 +120,9 @@ describe('Laughing Thunder', function () {
 
             this.player2.pass();
 
-            expect(this.player1).toHavePrompt('Conflict Action Window')
+            expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.breath);
-            expect(this.player1).toHavePrompt('Conflict Action Window')
+            expect(this.player1).toHavePrompt('Conflict Action Window');
 
             this.player1.clickCard(this.thunder);
             expect(this.player1).toBeAbleToSelect(this.thunder);
@@ -151,9 +151,9 @@ describe('Laughing Thunder', function () {
 
             this.player2.pass();
 
-            expect(this.player1).toHavePrompt('Conflict Action Window')
+            expect(this.player1).toHavePrompt('Conflict Action Window');
             this.player1.clickCard(this.thunder);
-            expect(this.player1).toHavePrompt('Conflict Action Window')
+            expect(this.player1).toHavePrompt('Conflict Action Window');
         });
     });
 });

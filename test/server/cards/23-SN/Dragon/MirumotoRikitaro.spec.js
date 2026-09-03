@@ -6,7 +6,7 @@ describe('Mirumoto Rikitaro', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['mirumoto-rikitaro', 'kakita-yoshi'],
-                        hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade', 'tattooed-wanderer'],
+                        hand: ['fine-katana', 'ornate-fan', 'kakita-blade', 'honored-blade', 'tattooed-wanderer']
                     },
                     player2: {
                         inPlay: ['togashi-initiate'],
@@ -150,7 +150,7 @@ describe('Mirumoto Rikitaro', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['mirumoto-rikitaro', 'kakita-yoshi'],
-                        hand: ['kakita-blade'],
+                        hand: ['kakita-blade']
                     },
                     player2: {
                         inPlay: ['togashi-initiate'],
@@ -183,7 +183,7 @@ describe('Mirumoto Rikitaro', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.rikitaro],
-                    defenders: [this.initiate],
+                    defenders: [this.initiate]
                 });
 
                 let mil = this.rikitaro.getMilitarySkill();
@@ -210,7 +210,7 @@ describe('Mirumoto Rikitaro', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.rikitaro],
-                    defenders: [this.initiate],
+                    defenders: [this.initiate]
                 });
 
                 let mil = this.rikitaro.getMilitarySkill();
@@ -236,7 +236,7 @@ describe('Mirumoto Rikitaro', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.yoshi],
-                    defenders: [this.initiate],
+                    defenders: [this.initiate]
                 });
 
                 this.player2.pass();

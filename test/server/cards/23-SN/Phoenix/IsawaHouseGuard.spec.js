@@ -43,7 +43,7 @@ describe('Isawa House Guard', function () {
             this.player2.clickPrompt('1');
 
             expect(this.getChatLogs(10)).toContain('Duel Effect: Kakita Yoshi is dishonored and injured if tainted');
-            expect(this.yoshi.isDishonored).toBe(true)
+            expect(this.yoshi.isDishonored).toBe(true);
             expect(this.yoshi.fate).toBe(1);
         });
 
@@ -91,7 +91,7 @@ describe('Isawa House Guard', function () {
             this.player2.clickPrompt('5');
 
             expect(this.getChatLogs(10)).toContain('Duel Effect: Kakita Yoshi is dishonored and injured if tainted');
-            expect(this.yoshi.isDishonored).toBe(true)
+            expect(this.yoshi.isDishonored).toBe(true);
             expect(this.yoshi.fate).toBe(0);
         });
     });

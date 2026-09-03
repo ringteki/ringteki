@@ -6,11 +6,11 @@ describe('Ancestor Attendant', function () {
                 player1: {
                     inPlay: ['ancestor-attendant', 'doji-challenger'],
                     dynastyDeck: ['doji-whisperer', 'kakita-yoshi', 'kakita-toshimoko', 'daidoji-kageyu', 'moto-chagatai', 'favorable-ground',
-                        'imperial-storehouse', 'iron-mine', 'a-season-of-war', 'dispatch-to-nowhere'],
+                        'imperial-storehouse', 'iron-mine', 'a-season-of-war', 'dispatch-to-nowhere']
 
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'doji-diplomat'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'doji-diplomat']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -39,7 +39,7 @@ describe('Ancestor Attendant', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.attendant, this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.diplomat],
+                defenders: [this.mitsu, this.whisperer, this.diplomat]
             });
 
             this.player2.pass();
@@ -64,7 +64,7 @@ describe('Ancestor Attendant', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.attendant, this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.diplomat],
+                defenders: [this.mitsu, this.whisperer, this.diplomat]
             });
 
             this.player2.pass();
@@ -90,7 +90,7 @@ describe('Ancestor Attendant', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.diplomat],
+                defenders: [this.mitsu, this.whisperer, this.diplomat]
             });
 
             this.player2.pass();

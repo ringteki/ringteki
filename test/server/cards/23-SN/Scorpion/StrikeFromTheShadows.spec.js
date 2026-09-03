@@ -8,7 +8,7 @@
                     hand: ['strike-from-the-shadows']
                 },
                 player2: {
-                    inPlay: ['doji-kuwanan', 'kakita-yoshi'],
+                    inPlay: ['doji-kuwanan', 'kakita-yoshi']
                 }
             });
 
@@ -27,7 +27,7 @@
 
             this.initiateConflict({
                 attackers: [this.adept, this.bm, this.saboteur],
-                defenders: [this.kuwanan],
+                defenders: [this.kuwanan]
             });
             expect(this.getChatLogs(5)).toContain('Military Air conflict - Attacker: 4 Defender: 5');
             expect(this.getChatLogs(5)).toContain('Defender is winning the conflict');
@@ -47,7 +47,7 @@
 
             this.initiateConflict({
                 attackers: [this.adept, this.bm, this.saboteur, this.stalker],
-                defenders: [this.kuwanan],
+                defenders: [this.kuwanan]
             });
             this.noMoreActions();
             expect(this.player1).toHavePrompt('Triggered Abilities');

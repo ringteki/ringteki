@@ -4,7 +4,7 @@ describe('Supply Officer', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['supply-officer', 'doji-challenger'],
+                    inPlay: ['supply-officer', 'doji-challenger']
                 },
                 player2: {
                     inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
@@ -24,7 +24,7 @@ describe('Supply Officer', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             this.challenger.bow();
@@ -61,7 +61,7 @@ describe('Supply Officer', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mystic],
+                defenders: [this.mystic]
             });
 
             this.challenger.bow();
@@ -85,7 +85,7 @@ describe('Supply Officer', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mystic],
+                defenders: [this.mystic]
             });
 
             this.challenger.bow();

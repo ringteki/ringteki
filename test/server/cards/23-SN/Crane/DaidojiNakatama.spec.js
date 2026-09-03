@@ -8,7 +8,7 @@ describe('Daidoji Nakatama', function () {
                     dynastyDeck: ['favorable-ground']
                 },
                 player2: {
-                    inPlay: ['student-of-the-tao', 'doji-kuwanan'],
+                    inPlay: ['student-of-the-tao', 'doji-kuwanan']
                 }
             });
             this.ground = this.player1.placeCardInProvince('favorable-ground', 'province 1');
@@ -24,7 +24,7 @@ describe('Daidoji Nakatama', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.nakatama],
-                defenders: [this.tao, this.kuwanan],
+                defenders: [this.tao, this.kuwanan]
             });
             expect(this.player2).toHavePrompt('Conflict Action Window');
             this.player2.clickCard(this.tao);

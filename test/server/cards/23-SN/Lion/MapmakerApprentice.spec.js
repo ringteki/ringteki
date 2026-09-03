@@ -23,7 +23,7 @@ describe('Mapmaker Apprentice', function () {
 
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
             this.whisperer = this.player2.findCardByName('doji-whisperer');
-            this.assassination2 = this.player2.findCardByName("assassination");
+            this.assassination2 = this.player2.findCardByName('assassination');
 
             this.sd1 = this.player2.findCardByName('shameful-display', 'province 1');
             this.sd2 = this.player2.findCardByName('shameful-display', 'province 2');
@@ -37,7 +37,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();
@@ -100,7 +100,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();
@@ -129,7 +129,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();
@@ -154,7 +154,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();
@@ -178,7 +178,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();
@@ -214,7 +214,7 @@ describe('Mapmaker Apprentice', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             let strength = this.sd1.getStrength();

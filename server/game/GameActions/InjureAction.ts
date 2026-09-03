@@ -38,15 +38,15 @@ export class InjureAction extends GameAction<InjureActionProperties> {
     }
 
     canAffect(target: GameObject, context: AbilityContext, additionalProperties = {}): boolean {
-        if (!(target instanceof DrawCard)) {
+        if(!(target instanceof DrawCard)) {
             return false;
         }
 
-        if (target.location !== Location.PlayArea) {
+        if(target.location !== Location.PlayArea) {
             return false;
         }
 
-        if (target.getFate() === 0) {
+        if(target.getFate() === 0) {
             return this.discardGameAction.canAffect(target, context, additionalProperties);
         }
         return this.removeFateGameAction.canAffect(target, context, additionalProperties);
@@ -54,13 +54,13 @@ export class InjureAction extends GameAction<InjureActionProperties> {
 
     addEventsToArray(events: Event[], context: AbilityContext, additionalProperties = {}): void {
         let properties = this.getProperties(context, additionalProperties);
-        for (let target of properties.target as DrawCard[]) {
-            if (target.getFate() === 0) {
-                if (this.discardGameAction.canAffect(target, context, additionalProperties)) {
+        for(let target of properties.target as DrawCard[]) {
+            if(target.getFate() === 0) {
+                if(this.discardGameAction.canAffect(target, context, additionalProperties)) {
                     events.push(this.discardGameAction.getEvent(target, context, additionalProperties));
                 }
             } else {
-                if (this.removeFateGameAction.canAffect(target, context, additionalProperties)) {
+                if(this.removeFateGameAction.canAffect(target, context, additionalProperties)) {
                     events.push(this.removeFateGameAction.getEvent(target, context, additionalProperties));
                 }
             }

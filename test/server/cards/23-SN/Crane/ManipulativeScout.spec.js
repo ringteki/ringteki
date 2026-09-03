@@ -4,7 +4,7 @@ describe('Manipulative Scout', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['manipulative-scout', 'adept-of-the-waves', 'solemn-scholar'],
+                    inPlay: ['manipulative-scout', 'adept-of-the-waves', 'solemn-scholar']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan'],

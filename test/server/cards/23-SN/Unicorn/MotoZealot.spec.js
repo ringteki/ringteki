@@ -4,10 +4,10 @@ describe('Moto Zealot', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['moto-zealot', 'doji-challenger', 'aranat'],
+                    inPlay: ['moto-zealot', 'doji-challenger', 'aranat']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -23,7 +23,7 @@ describe('Moto Zealot', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zealot],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 
@@ -44,7 +44,7 @@ describe('Moto Zealot', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zealot],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 
@@ -65,7 +65,7 @@ describe('Moto Zealot', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zealot, this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 
@@ -80,7 +80,7 @@ describe('Moto Zealot', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.zealot],
-                defenders: [this.mitsu, this.whisperer],
+                defenders: [this.mitsu, this.whisperer]
             });
             this.player2.pass();
 

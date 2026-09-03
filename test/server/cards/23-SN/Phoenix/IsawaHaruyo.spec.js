@@ -10,7 +10,7 @@ describe('Isawa Haruyo', function () {
                 player2: {
                     inPlay: ['isawa-haruyo'],
                     hand: ['ornate-fan', 'fine-katana', 'banzai', 'let-go']
-                },
+                }
             });
 
             this.haruyo1 = this.player1.findCardByName('isawa-haruyo');

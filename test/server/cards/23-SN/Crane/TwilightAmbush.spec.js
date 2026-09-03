@@ -5,7 +5,7 @@ describe('Twilight Ambush', function () {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['adept-of-shadows', 'solemn-scholar'],
-                    hand: ['twilight-ambush'],
+                    hand: ['twilight-ambush']
                 },
                 player2: {
                     inPlay: ['doji-kuwanan', 'doji-challenger'],

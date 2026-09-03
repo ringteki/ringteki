@@ -4,10 +4,10 @@
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['bashful-confidante', 'bashful-confidante', 'heir-of-the-serpent'],
+                    inPlay: ['bashful-confidante', 'bashful-confidante', 'heir-of-the-serpent']
                 },
                 player2: {
-                    inPlay: ['asahina-diviner', 'doji-kuwanan', 'kakita-yoshi'],
+                    inPlay: ['asahina-diviner', 'doji-kuwanan', 'kakita-yoshi']
                 }
             });
 
@@ -24,7 +24,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.bashful, this.serpent],
-                defenders: [this.diviner, this.kuwanan],
+                defenders: [this.diviner, this.kuwanan]
             });
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -54,7 +54,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.bashful, this.serpent],
-                defenders: [this.diviner, this.kuwanan],
+                defenders: [this.diviner, this.kuwanan]
             });
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -78,7 +78,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.bashful, this.bashful2],
-                defenders: [this.diviner, this.kuwanan],
+                defenders: [this.diviner, this.kuwanan]
             });
 
             this.player1.clickCard(this.bashful);

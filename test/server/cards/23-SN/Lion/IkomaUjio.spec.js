@@ -4,10 +4,10 @@ describe('Ikoma Ujio', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['ikoma-ujio', 'doji-challenger'],
+                    inPlay: ['ikoma-ujio', 'doji-challenger']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'doji-diplomat'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'doji-diplomat']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');

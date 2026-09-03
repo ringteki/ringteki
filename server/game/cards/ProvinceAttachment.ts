@@ -19,11 +19,11 @@ export class ProvinceAttachment extends DrawCard {
     }
 
     public canAttach(parent: BaseCard) {
-        if (this.unbrokenOnly() && parent instanceof ProvinceCard && parent.isBroken) {
+        if(this.unbrokenOnly() && parent instanceof ProvinceCard && parent.isBroken) {
             return false;
         }
 
-        if (this.myProvinceOnly() && parent.controller !== this.controller) {
+        if(this.myProvinceOnly() && parent.controller !== this.controller) {
             return false;
         }
 

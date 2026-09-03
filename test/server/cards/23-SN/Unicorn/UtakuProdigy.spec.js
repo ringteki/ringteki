@@ -4,7 +4,7 @@ describe('Utaku Prodigy', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['utaku-prodigy', 'doji-challenger', 'aranat', 'brash-samurai'],
+                    inPlay: ['utaku-prodigy', 'doji-challenger', 'aranat', 'brash-samurai']
                 },
                 player2: {
                     inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
@@ -30,7 +30,7 @@ describe('Utaku Prodigy', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.prodigy],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             let honor = this.player1.honor;
             this.player2.clickCard(this.assassination);
@@ -48,7 +48,7 @@ describe('Utaku Prodigy', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.prodigy],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.clickCard(this.assassination);
             this.player2.clickCard(this.mystic);
@@ -60,7 +60,7 @@ describe('Utaku Prodigy', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.prodigy],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.clickCard(this.scorp);
             expect(this.player2).not.toBeAbleToSelect(this.prodigy);

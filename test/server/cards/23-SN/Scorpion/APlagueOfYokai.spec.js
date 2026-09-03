@@ -39,7 +39,7 @@ describe('A Plague of Yokai', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shadows],
-                defenders: [this.challenger, this.kuwanan, this.yoshi],
+                defenders: [this.challenger, this.kuwanan, this.yoshi]
             });
             expect(this.challenger.getMilitarySkill()).toBe(2);
             expect(this.challenger.getPoliticalSkill()).toBe(2);
@@ -115,7 +115,7 @@ describe('A Plague of Yokai', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shadows],
-                defenders: [this.challenger, this.kuwanan, this.yoshi],
+                defenders: [this.challenger, this.kuwanan, this.yoshi]
             });
             let honor = this.player1.honor;
             this.player2.pass();

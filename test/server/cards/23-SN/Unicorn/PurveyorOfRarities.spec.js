@@ -8,7 +8,7 @@ describe('Purveyor Of Rarities', function () {
                     hand: ['voice-of-honor', 'way-of-the-unicorn', 'foreign-customs']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -27,7 +27,7 @@ describe('Purveyor Of Rarities', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.rarities],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 
@@ -49,7 +49,7 @@ describe('Purveyor Of Rarities', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.rarities],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 
@@ -71,7 +71,7 @@ describe('Purveyor Of Rarities', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.rarities],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 

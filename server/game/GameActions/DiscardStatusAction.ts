@@ -32,8 +32,8 @@ export class DiscardStatusAction extends TokenAction<DiscardStatusProperties> {
 
     eventHandler(event: GameEvent<EventName.OnStatusTokenDiscarded>): void {
         const tokens = Array.isArray(event.token) ? event.token : [event.token];
-        for (const token of tokens) {
-            if (token.card) {
+        for(const token of tokens) {
+            if(token.card) {
                 token.card.removeStatusToken(token);
             }
         }
@@ -41,14 +41,14 @@ export class DiscardStatusAction extends TokenAction<DiscardStatusProperties> {
 
     #cardsLosingStatus(context: AbilityContext) {
         let properties = this.getProperties(context);
-        if (!properties.target) {
+        if(!properties.target) {
             return [];
         }
 
         const targets = Array.isArray(properties.target) ? properties.target : [properties.target];
         return targets.map((a) => {
             let token = a as StatusToken;
-            if (token) {
+            if(token) {
                 return token.card;
             }
             return a;

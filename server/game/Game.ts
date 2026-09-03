@@ -944,7 +944,7 @@ class Game {
                         this.takeControl(card.getModifiedController(), card);
                     }
                     // any attachments which are illegally attached
-                    if (!card.checkForIllegalAttachments()) {
+                    if(!card.checkForIllegalAttachments()) {
                         // queue in a separate gamestate check
                         // any tokens which are illegal
                         card.checkForIllegalTokens();

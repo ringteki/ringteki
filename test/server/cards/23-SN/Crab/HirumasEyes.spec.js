@@ -11,8 +11,8 @@ describe('Hiruma\'s Eyes', function () {
                     inPlay: ['doji-challenger', 'border-rider', 'kakita-yoshi'],
                     hand: [],
                     dynastyDiscard: [
-                        'kakita-toshimoko',
-                    ],
+                        'kakita-toshimoko'
+                    ]
                 }
             });
 
@@ -33,7 +33,7 @@ describe('Hiruma\'s Eyes', function () {
                 type: 'military',
                 attackers: [this.brash],
                 defenders: [this.challenger, this.rider, this.yoshi],
-                province: this.p3_2,
+                province: this.p3_2
             });
 
             let brashMil = this.brash.getMilitarySkill();
@@ -45,7 +45,7 @@ describe('Hiruma\'s Eyes', function () {
             this.player1.clickCard(this.eyes);
             expect(this.player1).toBeAbleToSelect(this.toshimoko);
             this.player1.clickCard(this.toshimoko);
-            this.player1.clickPrompt('Give -2')
+            this.player1.clickPrompt('Give -2');
             expect(this.brash.getMilitarySkill()).toBe(brashMil);
             expect(this.rider.getMilitarySkill()).toBe(riderMil - 2);
             expect(this.challenger.getMilitarySkill()).toBe(challengerMil - 2);
@@ -59,7 +59,7 @@ describe('Hiruma\'s Eyes', function () {
                 type: 'military',
                 attackers: [this.brash],
                 defenders: [this.challenger, this.rider, this.yoshi],
-                province: this.p3_2,
+                province: this.p3_2
             });
 
             let brashMil = this.brash.getMilitarySkill();
@@ -71,7 +71,7 @@ describe('Hiruma\'s Eyes', function () {
             this.player1.clickCard(this.eyes);
             expect(this.player1).toBeAbleToSelect(this.toshimoko);
             this.player1.clickCard(this.toshimoko);
-            this.player1.clickPrompt('Give +2')
+            this.player1.clickPrompt('Give +2');
             expect(this.brash.getMilitarySkill()).toBe(brashMil);
             expect(this.rider.getMilitarySkill()).toBe(riderMil + 2);
             expect(this.challenger.getMilitarySkill()).toBe(challengerMil + 2);

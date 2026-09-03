@@ -87,7 +87,7 @@ describe('Prayers on the Eve of Battle', function () {
                 this.noMoreActions();
                 this.initiateConflict({
                     attackers: [this.asakoTsuki],
-                    defenders: [this.borderlands],
+                    defenders: [this.borderlands]
                 });
 
                 this.noMoreActions();

@@ -5,7 +5,7 @@ describe('Opportunistic Rustler', function () {
                 phase: 'conflict',
                 player1: {
                     fate: 5,
-                    inPlay: ['opportunistic-rustler'],
+                    inPlay: ['opportunistic-rustler']
                 },
                 player2: {
                     inPlay: ['brash-samurai', 'diplomat-of-the-steppes', 'courtly-challenger', 'tengu-sensei']

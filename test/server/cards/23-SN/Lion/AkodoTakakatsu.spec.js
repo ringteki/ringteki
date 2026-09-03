@@ -8,7 +8,7 @@ describe('Akodo Takakatsu', function () {
                     hand: ['invocation-of-ash']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -45,7 +45,7 @@ describe('Akodo Takakatsu', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.tadakatsu],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
@@ -72,7 +72,7 @@ describe('Akodo Takakatsu', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.tadakatsu],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
 
             expect(this.player1).toHavePrompt('Triggered Abilities');

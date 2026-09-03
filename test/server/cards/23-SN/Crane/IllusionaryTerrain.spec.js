@@ -152,7 +152,7 @@ describe('Illusionary Terrain', function () {
             this.player2.clickCard(this.manicuredGarden);
 
             expect(this.getChatLogs(10)).toContain('player2 plays Illusionary Terrain to transform the attacked province into a copy of Manicured Garden');
-            this.player2.clickPrompt('Done') // defenders
+            this.player2.clickPrompt('Done'); // defenders
 
             let fate = this.player2.fate;
             this.player2.clickCard(this.fury);
@@ -225,7 +225,7 @@ describe('Illusionary Terrain', function () {
             this.player2.clickCard(this.abandoning);
             expect(this.getChatLogs(10)).toContain('player2 plays Illusionary Terrain to transform the attacked province into a copy of Abandoning Honor');
 
-            this.player2.clickPrompt('Done') // defenders;
+            this.player2.clickPrompt('Done'); // defenders;
             this.player2.pass();
             this.player1.pass();
             expect(this.player2).toBeAbleToSelect(this.fury);

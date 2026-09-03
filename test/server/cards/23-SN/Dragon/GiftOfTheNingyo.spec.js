@@ -9,7 +9,7 @@ describe('Gift of the Ningyo', function () {
                 },
                 player2: {
                     inPlay: ['brash-samurai', 'ceremonial-robes', 'feral-ningyo'],
-                    hand: ['spirit-of-valor'],
+                    hand: ['spirit-of-valor']
                 }
             });
             this.challenger = this.player1.findCardByName('doji-challenger');
@@ -31,7 +31,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.brash],
+                defenders: [this.brash]
             });
             this.player2.pass();
 
@@ -49,7 +49,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.brash],
+                defenders: [this.brash]
             });
             expect(this.challenger.getPoliticalSkill()).toBe(3);
 
@@ -65,7 +65,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.brash],
+                defenders: [this.brash]
             });
             expect(this.challenger.getPoliticalSkill()).toBe(3);
 
@@ -81,7 +81,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.robe],
+                defenders: [this.robe]
             });
             expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
@@ -92,7 +92,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.ningyo],
+                defenders: [this.ningyo]
             });
             expect(this.challenger.getPoliticalSkill()).toBe(5);
         });
@@ -103,7 +103,7 @@ describe('Gift of the Ningyo', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger, this.aranat],
-                defenders: [this.brash],
+                defenders: [this.brash]
             });
             expect(this.challenger.getPoliticalSkill()).toBe(3);
         });

@@ -22,7 +22,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.demagogue, this.guardianKami],
-                defenders: [this.akodoGunso, this.wanderingRonin],
+                defenders: [this.akodoGunso, this.wanderingRonin]
             });
             this.player2.pass();
             this.player1.clickCard(this.demagogue);
@@ -41,7 +41,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.demagogue, this.guardianKami],
-                defenders: [this.akodoGunso, this.wanderingRonin],
+                defenders: [this.akodoGunso, this.wanderingRonin]
             });
             this.player2.pass();
             this.player1.clickCard(this.demagogue);

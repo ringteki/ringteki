@@ -27,7 +27,7 @@ export default class ForceOfTheRiver extends DrawCard {
                         context.player.getDynastyCardsInProvince(location).filter((card: DrawCard) => card.isFacedown())
                     ),
                 token: SpiritOfTheRiver,
-                canEnterConflict: (type) => type === 'military',
+                canEnterConflict: (type) => type === 'military'
             }))
         });
     }

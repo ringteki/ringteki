@@ -8,7 +8,7 @@ describe('Paths Not Taken', function () {
                     hand: ['paths-not-taken', 'desperate-defense']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu-2', 'doji-whisperer', 'miya-mystic'],
+                    inPlay: ['togashi-mitsu-2', 'doji-whisperer', 'miya-mystic']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu-2');
@@ -28,7 +28,7 @@ describe('Paths Not Taken', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.mitsu, this.whisperer],
-                defenders: [this.challenger],
+                defenders: [this.challenger]
             });
             this.player1.clickCard(this.defense);
             this.player2.pass();
@@ -49,7 +49,7 @@ describe('Paths Not Taken', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.mitsu, this.whisperer],
-                defenders: [this.challenger, this.scout],
+                defenders: [this.challenger, this.scout]
             });
             this.player1.clickCard(this.defense);
             this.player2.pass();

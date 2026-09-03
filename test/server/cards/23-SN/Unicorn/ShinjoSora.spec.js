@@ -4,7 +4,7 @@ describe('Shinjo Sora', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['doji-challenger', 'aranat', 'brash-samurai'],
+                    inPlay: ['doji-challenger', 'aranat', 'brash-samurai']
                 },
                 player2: {
                     inPlay: ['shinjo-sora', 'togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
@@ -43,7 +43,7 @@ describe('Shinjo Sora', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.sora],
+                defenders: [this.sora]
             });
             this.player2.clickCard(this.sora);
             expect(this.getChatLogs(10)).toContain('player2 uses Shinjo Sora to release the hounds!');
@@ -94,7 +94,7 @@ describe('Shinjo Sora', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.sora],
+                defenders: [this.sora]
             });
             this.player2.clickCard(this.sora);
             expect(this.getChatLogs(10)).toContain('player2 uses Shinjo Sora to release the hounds!');

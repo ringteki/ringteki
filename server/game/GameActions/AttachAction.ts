@@ -29,17 +29,17 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
         controlSwitchOptional: false,
         ignoreUniqueness: false,
         viaDisguised: false,
-        wasACharacter: false,
+        wasACharacter: false
     };
 
     getEffectMessage(context: AbilityContext): MessageArgs {
         let properties = this.getProperties(context);
-        if (properties.takeControl) {
+        if(properties.takeControl) {
             return [
                 'take control of and attach {2}\'s {1} to {0}',
                 [properties.target, properties.attachment, (properties.attachment as DrawCard).parent]
             ];
-        } else if (properties.giveControl) {
+        } else if(properties.giveControl) {
             return [
                 'give control of and attach {2}\'s {1} to {0}',
                 [properties.target, properties.attachment, (properties.attachment as DrawCard).parent]
@@ -54,45 +54,45 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
             ignoreType: !!properties.ignoreType,
             controller: this.getFinalController(properties, context) as Player
         };
-        if (properties.viaDisguised) {
+        if(properties.viaDisguised) {
             return true;
         }
 
-        if (
+        if(
             !context ||
             !context.player ||
             !card ||
             (card.location !== Location.PlayArea && card.type !== CardType.Province)
         ) {
             return false;
-        } else if (
+        } else if(
             !properties.attachment ||
             (!properties.ignoreUniqueness && properties.attachment.anotherUniqueInPlay(context.player)) ||
             !properties.attachment.canAttach(card, canAttachProps)
         ) {
             return false;
-        } else if (
+        } else if(
             !properties.controlSwitchOptional &&
             properties.takeControl &&
             properties.attachment.controller === context.player
         ) {
             return false;
-        } else if (
+        } else if(
             !properties.controlSwitchOptional &&
             properties.giveControl &&
             properties.attachment.controller !== context.player
         ) {
             return false;
-        } else if (!card.checkRestrictions('play', context)) {
+        } else if(!card.checkRestrictions('play', context)) {
             return false;
         }
         return card.allowAttachment(properties.attachment) && super.canAffect(card, context);
     }
 
     getFinalController(properties: AttachActionProperties, context: AbilityContext): Player {
-        if (properties.takeControl) {
+        if(properties.takeControl) {
             return context.player;
-        } else if (properties.giveControl) {
+        } else if(properties.giveControl) {
             return context.player.opponent as Player;
         }
 
@@ -123,7 +123,7 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
         const properties = this.getProperties(context, additionalProperties);
         event.originalLocation = card.location;
 
-        if (card.location === Location.PlayArea && !properties.wasACharacter) {
+        if(card.location === Location.PlayArea && !properties.wasACharacter) {
             const currentParent = card.parent as DrawCard;
             currentParent.removeAttachment(card);
         } else {
@@ -133,14 +133,14 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
         }
         parent.attachments.push(card);
         card.parent = parent;
-        if (properties.takeControl) {
+        if(properties.takeControl) {
             card.controller = context.player;
             card.updateEffectContexts();
-        } else if (properties.giveControl) {
+        } else if(properties.giveControl) {
             card.controller = context.player.opponent as Player;
             card.updateEffectContexts();
         }
-        if (parent.getType() === CardType.Province) {
+        if(parent.getType() === CardType.Province) {
             this.checkForRefillProvince(parent, event, additionalProperties);
         }
     }

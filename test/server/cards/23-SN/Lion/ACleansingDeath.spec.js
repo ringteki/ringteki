@@ -9,7 +9,7 @@ describe('A Cleansing Death', function () {
                     hand: ['a-cleansing-death']
                 },
                 player2: {
-                    dynastyDeck: ['doji-diplomat'],
+                    dynastyDeck: ['doji-diplomat']
                 }
             });
             this.mitsu = this.player1.placeCardInProvince('togashi-mitsu', 'province 1');
@@ -19,7 +19,7 @@ describe('A Cleansing Death', function () {
             const adepts = this.player1.filterCardsByName('adept-of-the-waves');
             adepts.forEach(card => {
                 card.facedown = true;
-            })
+            });
 
             this.diplomat = this.player2.placeCardInProvince('doji-diplomat', 'province 1');
 
@@ -66,7 +66,7 @@ describe('A Cleansing Death', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yokuni],
-                defenders: [],
+                defenders: []
             });
 
             this.player2.pass();

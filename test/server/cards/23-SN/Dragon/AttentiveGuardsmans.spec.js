@@ -9,7 +9,7 @@ describe('Attentive Guardsman', function () {
                 },
                 player2: {
                     inPlay: ['attentive-guardsman'],
-                    dynastyDeck: ['favorable-ground'],
+                    dynastyDeck: ['favorable-ground']
                 }
             });
             this.ground = this.player1.placeCardInProvince('favorable-ground', 'province 1');
@@ -49,7 +49,7 @@ describe('Attentive Guardsman', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.guard2],
+                defenders: [this.guard2]
             });
             expect(this.guard2.isParticipating()).toBe(true);
             this.player2.pass();
@@ -63,7 +63,7 @@ describe('Attentive Guardsman', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.yokuni],
-                defenders: [],
+                defenders: []
             });
 
             let mil = this.guard2.getMilitarySkill();

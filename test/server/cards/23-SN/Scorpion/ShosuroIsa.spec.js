@@ -11,7 +11,7 @@
                 player2: {
                     inPlay: ['doji-kuwanan', 'kakita-yoshi'],
                     hand: ['assassination'],
-                    dynastyDiscard: ['asahina-diviner'],
+                    dynastyDiscard: ['asahina-diviner']
                 }
             });
 
@@ -50,7 +50,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.isa],
-                defenders: [this.kuwanan],
+                defenders: [this.kuwanan]
             });
 
             this.player2.clickCard(this.assassination);
@@ -71,7 +71,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.isa],
-                defenders: [this.kuwanan],
+                defenders: [this.kuwanan]
             });
 
             this.player2.clickCard(this.assassination);

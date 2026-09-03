@@ -10,7 +10,7 @@ describe('Lessons From Earth', function () {
                 player2: {
                     inPlay: ['isawa-tadaka-2'],
                     hand: ['ornate-fan', 'fine-katana']
-                },
+                }
             });
 
             this.kuwanan = this.player1.findCardByName('doji-kuwanan');

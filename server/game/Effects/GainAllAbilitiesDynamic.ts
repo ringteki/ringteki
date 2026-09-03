@@ -59,7 +59,7 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
 
     getAbility(abilityType: AbilityType, ability: CardAbility, target: BaseCard): GainAbility {
         const id = this.getAbilityIdentifier(ability);
-        if (!this.createdAbilities[id]) {
+        if(!this.createdAbilities[id]) {
             const res = new GainAbility(abilityType, ability);
             this.createdAbilities[id] = res;
             this.createdAbilities[id].apply(target);
@@ -69,7 +69,7 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
 
     calculate(target: BaseCard, context: AbilityContext) {
         let cards: BaseCard | BaseCard[] = [];
-        if (typeof this.match === 'function') {
+        if(typeof this.match === 'function') {
             cards = this.match(target, context);
         } else {
             cards = this.match;
@@ -89,8 +89,8 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
     }
 
     _applyAbilities(target: BaseCard) {
-        if (this.abilitiesForTargets[target.uuid]) {
-            for (const value of this.abilitiesForTargets[target.uuid].reactions) {
+        if(this.abilitiesForTargets[target.uuid]) {
+            for(const value of this.abilitiesForTargets[target.uuid].reactions) {
                 value.registerEvents();
             }
         }
@@ -101,22 +101,22 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
     }
 
     unapply(target: BaseCard) {
-        if (this.abilitiesForTargets[target.uuid]) {
-            for (const value of this.abilitiesForTargets[target.uuid].reactions) {
+        if(this.abilitiesForTargets[target.uuid]) {
+            for(const value of this.abilitiesForTargets[target.uuid].reactions) {
                 value.unregisterEvents();
             }
         }
     }
 
     getActions(target: BaseCard): unknown[] {
-        if (this.abilitiesForTargets[target.uuid]) {
+        if(this.abilitiesForTargets[target.uuid]) {
             return this.abilitiesForTargets[target.uuid].actions;
         }
         return [];
     }
 
     getReactions(target: BaseCard): TriggeredAbility[] {
-        if (this.abilitiesForTargets[target.uuid]) {
+        if(this.abilitiesForTargets[target.uuid]) {
             return this.abilitiesForTargets[target.uuid].reactions;
         }
         return [];

@@ -32,7 +32,7 @@ describe('Cast Out the Shadow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.hida],
+                defenders: [this.mitsu, this.whisperer, this.hida]
             });
 
             this.player2.pass();
@@ -57,7 +57,7 @@ describe('Cast Out the Shadow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.hida],
+                defenders: [this.mitsu, this.whisperer, this.hida]
             });
 
             let honor = this.player1.honor;
@@ -87,7 +87,7 @@ describe('Cast Out the Shadow', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu, this.whisperer, this.hida],
+                defenders: [this.mitsu, this.whisperer, this.hida]
             });
 
             this.player2.pass();

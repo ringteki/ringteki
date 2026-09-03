@@ -4,10 +4,10 @@ describe('Iuchi Hatsue', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['iuchi-hatsue', 'doji-challenger', 'aranat'],
+                    inPlay: ['iuchi-hatsue', 'doji-challenger', 'aranat']
                 },
                 player2: {
-                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic'],
+                    inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic']
                 }
             });
             this.mitsu = this.player2.findCardByName('togashi-mitsu');
@@ -23,7 +23,7 @@ describe('Iuchi Hatsue', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             let mil = this.hatsue.getMilitarySkill();
             let pol = this.hatsue.getPoliticalSkill();
@@ -63,7 +63,7 @@ describe('Iuchi Hatsue', function () {
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.challenger],
-                defenders: [this.mitsu],
+                defenders: [this.mitsu]
             });
             this.player2.pass();
 

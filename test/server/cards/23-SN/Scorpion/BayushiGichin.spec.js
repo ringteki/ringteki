@@ -6,10 +6,10 @@
                 player1: {
                     inPlay: ['bayushi-gichin', 'heir-of-the-serpent'],
                     hand: ['fiery-madness'],
-                    conflictDiscard: ['stolen-breath'],
+                    conflictDiscard: ['stolen-breath']
                 },
                 player2: {
-                    inPlay: ['doji-challenger', 'akodo-toturi', 'kitsuki-yaruma'],
+                    inPlay: ['doji-challenger', 'akodo-toturi', 'kitsuki-yaruma']
                 }
             });
 
@@ -27,7 +27,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.gichin],
-                defenders: [this.challenger, this.toturi],
+                defenders: [this.challenger, this.toturi]
             });
 
             let honor = this.player1.honor;
@@ -70,7 +70,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.gichin],
-                defenders: [this.challenger, this.toturi],
+                defenders: [this.challenger, this.toturi]
             });
 
             let honor = this.player1.honor;
@@ -94,7 +94,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.gichin],
-                defenders: [this.challenger, this.toturi],
+                defenders: [this.challenger, this.toturi]
             });
 
             let honor = this.player1.honor;
@@ -122,7 +122,7 @@
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.gichin],
-                defenders: [this.challenger, this.yaruma],
+                defenders: [this.challenger, this.yaruma]
             });
 
             let honor = this.player1.honor;
@@ -148,7 +148,7 @@
             this.game.checkGameState(true);
 
             this.player1.clickCard(this.gichin);
-            expect(this.player1).toBeAbleToSelect(this.serpent)
+            expect(this.player1).toBeAbleToSelect(this.serpent);
             this.player1.clickCard(this.serpent);
 
             expect(this.getChatLogs(5)).toContain('player1 plays Bayushi Gichin using Disguised, choosing to replace Heir of the Serpent');

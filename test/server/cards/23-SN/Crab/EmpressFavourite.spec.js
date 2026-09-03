@@ -7,7 +7,7 @@ describe('Empress Favorite', function () {
                     inPlay: ['matsu-berserker', 'doji-diplomat', 'empress-favorite']
                 },
                 player2: {
-                    inPlay: ['borderlands-defender', 'empress-favorite'],
+                    inPlay: ['borderlands-defender', 'empress-favorite']
                 }
             });
             this.sd1 = this.player2.findCardByName('shameful-display', 'province 1');

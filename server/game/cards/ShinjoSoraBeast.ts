@@ -35,7 +35,7 @@ class ShinjoSoraBeast extends DrawCard {
     getSummary(activePlayer: Player, hideWhenFaceup?: boolean) {
         const summary = super.getSummary(activePlayer, hideWhenFaceup);
         const tokenProps: Record<string, unknown> = { isToken: true };
-        if (activePlayer === this.controller) {
+        if(activePlayer === this.controller) {
             tokenProps.facedownId = this.facedownCard.cardData.id;
             tokenProps.facedownPackId = this.facedownCard.packId;
         }
