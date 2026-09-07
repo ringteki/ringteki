@@ -27,7 +27,7 @@ export class PlayerConflictManager {
         political: 1
     };
 
-    constructor(private readonly player: Player, private readonly game: Game) {}
+    constructor(private readonly player: Player, private readonly game: Game) { }
 
     hasLegalConflictDeclaration(properties: ConflictDeclarationProperties): boolean {
         const conflictType = this.getLegalConflictTypes(properties);
@@ -53,7 +53,7 @@ export class PlayerConflictManager {
                 conflictProvince.some(
                     (province: ProvinceCard) =>
                         province.canDeclare(type, ring) &&
-                        cards.some((card: DrawCard) => card.canDeclareAsAttacker(type, ring, province))
+                        cards.some((card: DrawCard) => card.canDeclareAsAttacker(type, ring, province, this.game.currentConflict?.attackers))
                 )
             )
         );

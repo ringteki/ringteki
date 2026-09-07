@@ -25,7 +25,7 @@ import type { ProvinceCard } from './ProvinceCard.js';
 import type Ring from './Ring.js';
 import type { AbilityContext } from './AbilityContext.js';
 import type { GameEvent } from './Events/EventPayloads.js';
-import type { PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces.js';
+import type { ActionProps, ConflictActionProps, PersistentEffectProps, TriggeredAbilityProps, TriggeredAbilityWhenProps } from './Interfaces.js';
 import type { Duel } from './Duel.js';
 import type { CardData } from './types/CardData.js';
 
@@ -81,6 +81,33 @@ class DrawCard extends BaseCard {
 
     override checkForIllegalAttachments(): boolean {
         return this.attachmentHost.checkForIllegalAttachments();
+    }
+
+    override checkForIllegalTokens(): boolean {
+        const context = (this.game.getFrameworkContext as (player?: Player | null) => AbilityContext)(this.controller);
+        let result = false;
+
+        if(this.getType() === CardType.Attachment) {
+            // cannot have fate or status tokens
+            const events: any = [];
+            if(this.fate > 0) {
+                this.game.addMessage('{0} fate is removed from {1} as it can no longer legally have fate', this.fate, this);
+                this.game.actions.removeFate({ target: this, amount: this.fate }).addEventsToArray(events, context);
+                result = true;
+            }
+            if(this.statusTokens.length > 0) {
+                this.game.addMessage('Status tokens are removed from {0} as it can no longer legally have status tokens', this);
+                for(const token of this.statusTokens) {
+                    this.game.actions.discardStatusToken({ target: token }).addEventsToArray(events, context);
+                }
+                result = true;
+            }
+            if(events.length > 0) {
+                this.game.openEventWindow(events);
+                this.game.queueSimpleStep(() => context.refill());
+            }
+        }
+        return result;
     }
 
     get childCards(): DrawCard[] {
@@ -680,7 +707,10 @@ class DrawCard extends BaseCard {
 
         if(this.isDishonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
-            const honorLossAction = this.game.actions.loseHonor();
+            const honorLossAction = this.game.actions.loseHonor({
+                amount: 1,
+                dueToStatusToken: true
+            });
 
             if(honorLossAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} loses 1 honor due to {1}\'s personal honor', this.controller, this);
@@ -688,7 +718,10 @@ class DrawCard extends BaseCard {
             this.game.openThenEventWindow(honorLossAction.getEvent(this.controller, frameworkContext));
         } else if(this.isHonored && !ignoreHonorStatus) {
             const frameworkContext = this.game.getFrameworkContext();
-            const honorGainAction = this.game.actions.gainHonor();
+            const honorGainAction = this.game.actions.gainHonor({
+                amount: 1,
+                dueToStatusToken: true
+            });
             if(honorGainAction.canAffect(this.controller, frameworkContext)) {
                 this.game.addMessage('{0} gains 1 honor due to {1}\'s personal honor', this.controller, this);
             }
@@ -774,7 +807,7 @@ class DrawCard extends BaseCard {
                 (total: number, card: DrawCard) => total + card.sumEffects(EffectName.FateCostToAttack),
                 0
             ) +
-                fateCostToAttackProvince >
+            fateCostToAttackProvince >
             this.controller.fate
         ) {
             return false;
@@ -782,6 +815,22 @@ class DrawCard extends BaseCard {
         if(this.anyEffect(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
             for(const element of this.getEffects(EffectName.CanOnlyBeDeclaredAsAttackerWithElement)) {
                 if(!ring.hasElement(element) && !elementsAdded.includes(element)) {
+                    return false;
+                }
+            }
+        }
+
+        const frameworkContext = this.game.getFrameworkContext();
+
+        if(this.anyEffect(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition)) {
+            for(const condition of this.getEffects(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition)) {
+                if(!condition({
+                    context: frameworkContext,
+                    conflictType,
+                    ring,
+                    province,
+                    incomingAttackers
+                })) {
                     return false;
                 }
             }
@@ -801,7 +850,7 @@ class DrawCard extends BaseCard {
         }
 
         return (
-            this.checkRestrictions('declareAsAttacker', this.game.getFrameworkContext()) &&
+            this.checkRestrictions('declareAsAttacker', frameworkContext) &&
             this.canParticipateAsAttacker(conflictType) &&
             this.location === Location.PlayArea &&
             !this.bowed
@@ -996,6 +1045,24 @@ class DrawCard extends BaseCard {
                     (!properties.duelCondition || properties.duelCondition(duel, context))
             }
         });
+    }
+
+    conflictAction<Target extends BaseCard = BaseCard>(properties: ConflictActionProps<this, Target>): void {
+        const propConditions = properties.condition;
+        const finalCondition = (context: AbilityContext<this, Target>) => {
+            if(!context.source.game.isDuringConflict()) {
+                return false;
+            }
+            if(!properties.evenFromHome && !context.source.isParticipating(properties.conflictType)) {
+                return false;
+            }
+            return propConditions?.(context) ?? true;
+        };
+        const finalProperties = {
+            ...properties,
+            condition: finalCondition
+        };
+        this.abilities.actions.push(this.createAction(finalProperties as ActionProps));
     }
 }
 

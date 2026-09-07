@@ -85,13 +85,21 @@ export class ProvinceCard extends BaseCard {
         return isNaN(parsed) ? 0 : parsed;
     }
 
+    getCardStrength(): number {
+        let copyEffect = this.mostRecentEffect(EffectName.CopyProvince);
+        const cardStrengthString = copyEffect ? copyEffect.cardData.strength : this.cardData.strength;
+        const cardStrength = (parseInt(String(cardStrengthString ?? '')) || 0);
+
+        return cardStrength;
+    }
+
     getBaseStrength(): number {
         if(this.anyEffect(EffectName.SetBaseProvinceStrength)) {
             return this.mostRecentEffect(EffectName.SetBaseProvinceStrength);
         }
         return (
             this.sumEffects(EffectName.ModifyBaseProvinceStrength) +
-            (parseInt(String(this.cardData.strength ?? '')) || 0)
+            this.getCardStrength()
         );
     }
 
@@ -125,7 +133,7 @@ export class ProvinceCard extends BaseCard {
             const effect = setBaseEffects[setBaseEffects.length - 1];
             modifiers.push(StatModifier.fromEffect(effect.getValue(this), effect, true, StatModifier.getEffectName(effect)));
         } else {
-            modifiers.push(new StatModifier(this.printedStrength, 'Printed', false, undefined));
+            modifiers.push(new StatModifier(this.getCardStrength(), 'Printed', false, undefined));
             for(const effect of this.getRawEffects().filter((e) => e.type === EffectName.ModifyBaseProvinceStrength)) {
                 modifiers.push(StatModifier.fromEffect(effect.getValue(this), effect, false));
             }
@@ -162,6 +170,11 @@ export class ProvinceCard extends BaseCard {
     }
 
     getElement(): Element[] {
+        let copyEffect = this.mostRecentEffect(EffectName.CopyProvince);
+        if(copyEffect) {
+            return (copyEffect as ProvinceCard).getElement();
+        }
+
         const symbols = this.getCurrentElementSymbols();
         const elementArray: Element[] = [];
         symbols.forEach((symbol) => {
@@ -279,8 +292,7 @@ export class ProvinceCard extends BaseCard {
                     ? this.game.currentConflict.attackingPlayer
                     : this.controller.opponent;
             this.game.promptWithHandlerMenu(choosingPlayer, {
-                activePromptTitle: `Do you wish to discard ${
-                    dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name
+                activePromptTitle: `Do you wish to discard ${dynastyCard.isFacedown() ? 'the facedown card' : dynastyCard.name
                 }?`,
                 source: `Break ${this.name}`,
                 choices: ['Yes', 'No'],

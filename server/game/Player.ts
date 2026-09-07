@@ -20,6 +20,7 @@ import { StrongholdCard } from './StrongholdCard.js';
 
 import {
     CardType,
+    ConflictType,
     Decks,
     EffectName,
     EventName,
@@ -1367,6 +1368,13 @@ class Player extends GameObject {
                 (card) => card.hasTrait('kiho') && card.uuid !== cardBeingPlayed.uuid
             ) > 0
         );
+    }
+
+    hasDeclaredConflictOfType(context: AbilityContext, conflictType: ConflictType): boolean {
+        const conflicts = context.game.getConflicts(this);
+        const declaredConflicts = conflicts.filter(conflict => conflict.declaredType === conflictType);
+
+        return declaredConflicts.length > 0;
     }
 
     getStats() {

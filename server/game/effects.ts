@@ -8,7 +8,7 @@ import { attachmentPoliticalSkillModifier } from './Effects/Library/attachmentPo
 import { canPlayFromOwn } from './Effects/Library/canPlayFromOwn.js';
 import { cardCannot } from './Effects/Library/cardCannot.js';
 import { changePlayerGloryModifier } from './Effects/Library/changePlayerGloryModifier.js';
-import { copyCard } from './Effects/Library/copyCard.js';
+import { copyCard, copyProvince } from './Effects/Library/copyCard.js';
 import { gainAllAbilities } from './Effects/Library/gainAllAbilities.js';
 import { gainAbility } from './Effects/Library/gainAbility.js';
 import { mustBeDeclaredAsAttacker } from './Effects/Library/mustBeDeclaredAsAttacker.js';
@@ -27,6 +27,7 @@ import type { EffectTarget, DetachedValue } from './Effects/EffectBuilder.js';
 import type { DynamicMatch } from './Effects/GainAllAbilitiesDynamic.js';
 import type { CostReducer, CostReducerProps } from './CostReducer.js';
 import type { RestrictionProperties } from './Effects/Restriction.js';
+import { ICanOnlyBeDeclaredAsAttackerWithCondition } from './Effects/EffectValueMap.js';
 
 /* Types of effect
     1. Static effects - do something for a period
@@ -39,6 +40,7 @@ type Flexible<T, Target extends EffectTarget = DrawCard> = T | ((target: Target,
 const Effects = {
     // Card effects
     addElementAsAttacker: (element: Flexible<string | string[]>) => EffectBuilder.card.flexible(EffectName.AddElementAsAttacker, element),
+    addFlag: (flag: string) => EffectBuilder.card.static(EffectName.AddFlag, flag),
     addFaction: (faction: string) => EffectBuilder.card.static(EffectName.AddFaction, faction),
     loseFaction: (faction: string) => EffectBuilder.card.static(EffectName.LoseFaction, faction),
     addKeyword: (keyword: string) => EffectBuilder.card.static(EffectName.AddKeyword, keyword),
@@ -74,6 +76,8 @@ const Effects = {
     canBeTriggeredByOpponent: () => EffectBuilder.card.static(EffectName.CanBeTriggeredByOpponent, true),
     canOnlyBeDeclaredAsAttackerWithElement: (element: Flexible<string>) =>
         EffectBuilder.card.flexible(EffectName.CanOnlyBeDeclaredAsAttackerWithElement, element),
+    canOnlyBeDeclaredAsAttackerWithCondition: (condition: (props: ICanOnlyBeDeclaredAsAttackerWithCondition) => boolean) =>
+        EffectBuilder.card.static(EffectName.CanOnlyBeDeclaredAsAttackerWithCondition, condition),
     cannotApplyLastingEffects: (condition: unknown) =>
         EffectBuilder.card.static(EffectName.CannotApplyLastingEffects, condition),
     cannotBeAttacked: () => EffectBuilder.card.static(EffectName.CannotBeAttacked, true),
@@ -99,6 +103,7 @@ const Effects = {
     canContributeGloryWhileBowed: (properties?: unknown) =>
         EffectBuilder.card.static(EffectName.CanContributeGloryWhileBowed, properties),
     copyCard,
+    copyProvince,
     customDetachedCard: (properties: DetachedValue) => EffectBuilder.card.detached(EffectName.CustomEffect, properties),
     customRefillProvince: (refillFunc: unknown) => EffectBuilder.card.static(EffectName.CustomProvinceRefillEffect, refillFunc),
     delayedEffect: (properties: unknown) => EffectBuilder.card.static(EffectName.DelayedEffect, properties),
@@ -108,14 +113,14 @@ const Effects = {
     entersPlayForOpponent: () => EffectBuilder.card.static(EffectName.EntersPlayForOpponent, true),
     fateCostToAttack: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.FateCostToAttack, amount),
     cardCostToAttackMilitary: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.CardCostToAttackMilitary, amount),
-    honorCostToDeclare: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.HonorCostToDeclare, amount),
+    honorCostToDeclare: (properties: { amount: Flexible<number>, dueToStatusToken?: boolean } = { amount: 1, dueToStatusToken: false }) => EffectBuilder.card.flexible(EffectName.HonorCostToDeclare, properties),
     fateCostToRingToDeclareConflictAgainst: (amount: Flexible<number> = 1) =>
         EffectBuilder.card.flexible(EffectName.FateCostToRingToDeclareConflictAgainst, amount),
     fateCostToTarget: (properties: unknown) => EffectBuilder.card.flexible(EffectName.FateCostToTarget, properties),
     gainAbility,
     gainAllAbilities,
-    gainAllAbilitiesDynamic: (match: DynamicMatch) =>
-        EffectBuilder.card.static(EffectName.GainAllAbilitiesDynamic, new GainAllAbiliitesDynamic(match)),
+    gainAllAbilitiesDynamic: (match: DynamicMatch, printedAbilitiesOnly = false) =>
+        EffectBuilder.card.static(EffectName.GainAllAbilitiesDynamic, new GainAllAbiliitesDynamic(match, printedAbilitiesOnly)),
     gainExtraFateWhenPlayed: (amount: Flexible<number> = 1) => EffectBuilder.card.flexible(EffectName.GainExtraFateWhenPlayed, amount),
     gainPlayAction: (playActionClass: new (card: DrawCard) => BaseAction) =>
         EffectBuilder.card.detached(EffectName.GainPlayAction, {
@@ -199,6 +204,7 @@ const Effects = {
     winDuel: (duel: unknown) => EffectBuilder.card.static(EffectName.WinDuel, duel),
     winDuelTies: () => EffectBuilder.card.static(EffectName.WinDuelTies, true),
     ignoreDuelSkill: () => EffectBuilder.card.static(EffectName.IgnoreDuelSkill, true),
+    payPrintedCostToOpponent: () => EffectBuilder.card.static(EffectName.PayPrintedCostToOpponent, true),
     // Ring effects
     addElement: (element: Flexible<string | string[], Ring>) => EffectBuilder.ring.flexible(EffectName.AddElement, element),
     cannotBidInDuels: (num: number | string) => EffectBuilder.player.static(EffectName.CannotBidInDuels, num),

@@ -6,6 +6,7 @@ import type TriggeredAbility from '../../TriggeredAbility.js';
 import { EffectBuilder } from '../EffectBuilder.js';
 import { EffectValue } from '../EffectValue.js';
 import GainAbility from '../GainAbility.js';
+import { ProvinceCard } from '../../ProvinceCard.js';
 
 class CopyCard extends EffectValue<BaseCard> {
     actions: Array<GainAbility>;
@@ -43,7 +44,8 @@ class CopyCard extends EffectValue<BaseCard> {
             if(
                 effect.location === Location.Any ||
                 (target.getType() === CardType.Character && effect.location === Location.PlayArea) ||
-                (target.getType() === CardType.Holding && effect.location === Location.Provinces)
+                (target.getType() === CardType.Holding && effect.location === Location.Provinces) ||
+                (target.getType() === CardType.Province && effect.location === Location.Provinces)
             ) {
                 effect.ref = target.addEffectToEngine({ ...effect, location: effect.location });
             }
@@ -82,4 +84,8 @@ class CopyCard extends EffectValue<BaseCard> {
 
 export function copyCard(character: BaseCard) {
     return EffectBuilder.card.static(EffectName.CopyCharacter, new CopyCard(character));
+}
+
+export function copyProvince(province: ProvinceCard) {
+    return EffectBuilder.card.static(EffectName.CopyProvince, new CopyCard(province));
 }

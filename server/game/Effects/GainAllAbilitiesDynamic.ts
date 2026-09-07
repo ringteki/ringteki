@@ -22,8 +22,9 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
     actions: GainAbility[];
     reactions: GainAbility[];
     persistentEffects: unknown[];
+    printedAbilitiesOnly: boolean;
 
-    constructor(match: DynamicMatch) {
+    constructor(match: DynamicMatch, printedAbilitiesOnly = false) {
         super(match);
         this.match = match;
         this.createdAbilities = {};
@@ -31,6 +32,7 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
         this.actions = [];
         this.reactions = [];
         this.persistentEffects = [];
+        this.printedAbilitiesOnly = printedAbilitiesOnly;
     }
 
     _setAbilities(cards: BaseCard | BaseCard[], target: BaseCard) {
@@ -41,10 +43,10 @@ export default class GainAllAbilitiesDynamic extends EffectValue<DynamicMatch> {
         this.persistentEffects = [];
         cardList.forEach((card: BaseCard) => {
             card._getActions(true)
-                .filter((a: CardAction) => a.isTriggeredAbility() && (!card.isBlank() || !a.printedAbility))
+                .filter((a: CardAction) => a.isTriggeredAbility() && (!card.isBlank() || (!this.printedAbilitiesOnly && !a.printedAbility)))
                 .forEach((action: CardAction) => this.actions.push(this.getAbility(AbilityType.Action, action, target)));
             card._getReactions(true)
-                .filter((a: TriggeredAbility) => a.isTriggeredAbility() && (!card.isBlank() || !a.printedAbility))
+                .filter((a: TriggeredAbility) => a.isTriggeredAbility() && (!card.isBlank() || (!this.printedAbilitiesOnly && !a.printedAbility)))
                 .forEach((ability: TriggeredAbility) => {
                     this.reactions.push(this.getAbility(ability.abilityType, ability, target));
                 });

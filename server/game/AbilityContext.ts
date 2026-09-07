@@ -66,6 +66,7 @@ export class AbilityContext<S = BaseCard, T extends BaseCard = BaseCard> {
     playType: PlayType | undefined;
     cardStateWhenInitiated: BaseCard | null = null;
     ignoreFateCost?: boolean;
+    payFateCostToOpponent?: boolean;
     onPlayCardSource?: BaseCard;
 
     constructor(properties: AbilityContextProperties) {

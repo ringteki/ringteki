@@ -15,6 +15,7 @@ export interface AttachActionProperties extends CardActionProperties {
     ignoreUniqueness?: boolean;
     viaDisguised?: boolean;
     controlSwitchOptional?: boolean;
+    wasACharacter?: boolean;
 }
 
 export class AttachAction extends CardGameAction<AttachActionProperties> {
@@ -27,7 +28,8 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
         giveControl: false,
         controlSwitchOptional: false,
         ignoreUniqueness: false,
-        viaDisguised: false
+        viaDisguised: false,
+        wasACharacter: false
     };
 
     getEffectMessage(context: AbilityContext): MessageArgs {
@@ -120,7 +122,8 @@ export class AttachAction extends CardGameAction<AttachActionProperties> {
         const context = event.context as AbilityContext;
         const properties = this.getProperties(context, additionalProperties);
         event.originalLocation = card.location;
-        if(card.location === Location.PlayArea) {
+
+        if(card.location === Location.PlayArea && !properties.wasACharacter) {
             const currentParent = card.parent as DrawCard;
             currentParent.removeAttachment(card);
         } else {

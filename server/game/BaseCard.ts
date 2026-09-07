@@ -134,9 +134,21 @@ class BaseCard extends EffectSource {
         this.parseKeywords(cardData.text ? cardData.text.replace(/<[^>]*>/g, '').toLowerCase() : '');
     }
 
+    get copiedCard(): BaseCard | undefined {
+        let copyCharacterEffect = this.mostRecentEffect(EffectName.CopyCharacter);
+        if(copyCharacterEffect) {
+            return copyCharacterEffect;
+        }
+        let copyProvinceEffect = this.mostRecentEffect(EffectName.CopyProvince);
+        if(copyProvinceEffect) {
+            return copyProvinceEffect;
+        }
+        return undefined;
+    }
+
     get name(): string {
-        let copyEffect = this.mostRecentEffect(EffectName.CopyCharacter);
-        return copyEffect ? copyEffect.printedName : this.printedName;
+        let copiedCard = this.copiedCard;
+        return copiedCard ? copiedCard.printedName : this.printedName;
     }
 
     set name(name: string) {
@@ -147,14 +159,23 @@ class BaseCard extends EffectSource {
         return this.getType() as CardType;
     }
 
-    #mostRecentEffect(predicate: (effect: CardEffect) => boolean): CardEffect | undefined {
-        const effects = this.getRawEffects().filter(predicate);
-        return effects[effects.length - 1];
+    #mostRecentCopyEffect(): CardEffect | undefined {
+        const copyCharacterEffects = this.getRawEffects().filter((effect) => effect.type === EffectName.CopyCharacter);
+        if(copyCharacterEffects.length > 0) {
+            return copyCharacterEffects[copyCharacterEffects.length - 1];
+        }
+
+        const copyProvinceEffects = this.getRawEffects().filter((effect) => effect.type === EffectName.CopyProvince);
+        if(copyProvinceEffects.length > 0) {
+            return copyProvinceEffects[copyProvinceEffects.length - 1];
+        }
+
+        return undefined;
     }
 
     _getActions(ignoreDynamicGains = false): CardAction[] {
         let actions = this.abilities.actions;
-        const mostRecentEffect = this.#mostRecentEffect((effect) => effect.type === EffectName.CopyCharacter);
+        const mostRecentEffect = this.#mostRecentCopyEffect();
         if(mostRecentEffect) {
             actions = (mostRecentEffect.value as AbilityProvidingEffectValue).getActions(this);
         }
@@ -202,7 +223,7 @@ class BaseCard extends EffectSource {
             AbilityType.WouldInterrupt
         ];
         let reactions = this.abilities.reactions;
-        const mostRecentEffect = this.#mostRecentEffect((effect) => effect.type === EffectName.CopyCharacter);
+        const mostRecentEffect = this.#mostRecentCopyEffect();
         if(mostRecentEffect) {
             reactions = (mostRecentEffect.value as AbilityProvidingEffectValue).getReactions(this);
         }
@@ -245,7 +266,7 @@ class BaseCard extends EffectSource {
             (ability) => ability.abilityType === AbilityType.Persistent
         );
 
-        const mostRecentEffect = this.#mostRecentEffect((effect) => effect.type === EffectName.CopyCharacter);
+        const mostRecentEffect = this.#mostRecentCopyEffect();
         if(mostRecentEffect) {
             return gainedPersistentEffects.concat((mostRecentEffect.value as AbilityProvidingEffectValue).getPersistentEffects());
         }
@@ -510,10 +531,10 @@ class BaseCard extends EffectSource {
     }
 
     getTraitSet(): Set<string> {
-        const copyEffect = this.mostRecentEffect(EffectName.CopyCharacter);
+        const copiedCard = this.copiedCard;
         const set = new Set(
-            copyEffect
-                ? (copyEffect.traits as string[])
+            copiedCard
+                ? (copiedCard.traits as string[])
                 : this.getEffects(EffectName.Blank).some((blankTraits: boolean) => blankTraits)
                     ? []
                     : this.traits
@@ -538,8 +559,8 @@ class BaseCard extends EffectSource {
     }
 
     getFactions(): Set<Faction> {
-        const copyEffect = this.mostRecentEffect(EffectName.CopyCharacter);
-        const cardFaction = (copyEffect ? copyEffect.printedFaction : this.printedFaction) as Faction;
+        const copiedCard = this.copiedCard;
+        const cardFaction = (copiedCard ? copiedCard.printedFaction : this.printedFaction) as Faction;
         const addedFactions = this.getEffects(EffectName.AddFaction) as Faction[];
         const lostFactions = this.getEffects(EffectName.LoseFaction) as Faction[];
         const factionArray = [...addedFactions, cardFaction].filter(faction => !lostFactions.includes(faction));
@@ -769,7 +790,7 @@ class BaseCard extends EffectSource {
     }
 
     isBlank(): boolean {
-        return this.anyEffect(EffectName.Blank) || this.anyEffect(EffectName.CopyCharacter);
+        return this.anyEffect(EffectName.Blank) || this.anyEffect(EffectName.CopyCharacter) || this.anyEffect(EffectName.CopyProvince);
     }
 
     getPrintedFaction(): string {
@@ -855,6 +876,10 @@ class BaseCard extends EffectSource {
     }
 
     checkForIllegalAttachments(): boolean {
+        return false;
+    }
+
+    checkForIllegalTokens(): boolean {
         return false;
     }
 

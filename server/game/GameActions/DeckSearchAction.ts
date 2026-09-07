@@ -240,14 +240,17 @@ export class DeckSearchAction extends PlayerAction<DeckSearchProperties, EventNa
         if(properties.placeOnBottomInRandomOrder) {
             const cardsToMove = allCards.filter((card) => !selectedCards.has(card));
             if(cardsToMove.length > 0) {
+                const isDynasty = properties.deck === Decks.DynastyDeck;
+                const deckLocation = isDynasty ? Location.DynastyDeck : Location.ConflictDeck;
                 for(const card of shuffle(cardsToMove)) {
-                    player.moveCard(card, Location.ConflictDeck, { bottom: true });
+                    player.moveCard(card, deckLocation, { bottom: true });
                 }
                 context.game.addMessage(
-                    '{0} puts {1} card{2} on the bottom of their conflict deck',
+                    '{0} puts {1} card{2} on the bottom of their {3} deck',
                     player,
                     cardsToMove.length,
-                    cardsToMove.length > 1 ? 's' : ''
+                    cardsToMove.length > 1 ? 's' : '',
+                    isDynasty ? 'dynasty' : 'conflict'
                 );
             }
         }

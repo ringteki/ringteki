@@ -301,6 +301,11 @@ class InitiateConflictPrompt extends UiPrompt {
                 } else {
                     this.removeFromConflict(character);
                 }
+                this.conflict.attackers.forEach((card: DrawCard) => {
+                    if(!card.canDeclareAsAttacker(this.conflict.conflictType || 'military', this.conflict.ring || this.game.rings['air'], this.conflict.conflictProvince, this.conflict.attackers)) {
+                        this.removeFromConflict(card);
+                    }
+                });
             } else {
                 if(!this.selectedDefenders.includes(card as DrawCard)) {
                     this.selectedDefenders.push(card as DrawCard);
@@ -331,7 +336,7 @@ class InitiateConflictPrompt extends UiPrompt {
     menuCommand(_player: Player, arg: string): boolean {
         if(arg === 'done') {
             if(!this.conflict.ring || this.game.rings[this.conflict.element as Element] !== this.conflict.ring ||
-                                (!this.conflict.isSinglePlayer && !this.conflict.conflictProvince) || this.conflict.attackers.length === 0) {
+                (!this.conflict.isSinglePlayer && !this.conflict.conflictProvince) || this.conflict.attackers.length === 0) {
                 return false;
             }
             this.conflict.setDeclarationComplete(true);

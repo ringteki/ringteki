@@ -200,7 +200,11 @@ class ConflictFlow extends BaseStepWithPipeline {
                 0
             );
             const totalHonorCost = this.conflict.attackers.reduce(
-                (total: number, card: DrawCard) => total + card.sumEffects(EffectName.HonorCostToDeclare),
+                (total: number, card: DrawCard) => {
+                    const effects = card.getEffects(EffectName.HonorCostToDeclare);
+                    const sum = effects.reduce((total, effect) => total + effect.amount, 0);
+                    return total + sum;
+                },
                 0
             );
             const totalCardCost =
@@ -228,10 +232,19 @@ class ConflictFlow extends BaseStepWithPipeline {
                     this.conflict.attackingPlayer,
                     totalHonorCost
                 );
-                payHonor(totalHonorCost).addEventsToArray?.(
-                    costEvents,
-                    this.game.getFrameworkContext(this.conflict.attackingPlayer)
-                );
+                this.conflict.attackers.forEach(card => {
+                    const effects = card.getEffects(EffectName.HonorCostToDeclare);
+                    effects.forEach(effect => {
+                        payHonor(effect.amount, effect.dueToStatusToken).addEventsToArray?.(
+                            costEvents,
+                            this.game.getFrameworkContext(this.conflict.attackingPlayer)
+                        );
+                    });
+                });
+                // payHonor(totalHonorCost).addEventsToArray?.(
+                //     costEvents,
+                //     this.game.getFrameworkContext(this.conflict.attackingPlayer)
+                // );
             }
             if(!this.conflict.conflictPassed && totalCardCost > 0) {
                 this.game.addMessage(
@@ -675,7 +688,11 @@ class ConflictFlow extends BaseStepWithPipeline {
             }
 
             const totalHonorCost = this.conflict.defenders.reduce(
-                (total: number, card: DrawCard) => total + card.sumEffects(EffectName.HonorCostToDeclare),
+                (total: number, card: DrawCard) => {
+                    const effects = card.getEffects(EffectName.HonorCostToDeclare);
+                    const sum = effects.reduce((total, effect) => total + effect.amount, 0);
+                    return total + sum;
+                },
                 0
             );
             if(!this.conflict.conflictPassed && totalHonorCost > 0) {
@@ -685,10 +702,19 @@ class ConflictFlow extends BaseStepWithPipeline {
                     this.conflict.defendingPlayer,
                     totalHonorCost
                 );
-                payHonor(totalHonorCost).addEventsToArray?.(
-                    costEvents,
-                    this.game.getFrameworkContext(this.conflict.defendingPlayer)
-                );
+                this.conflict.defenders.forEach(card => {
+                    const effects = card.getEffects(EffectName.HonorCostToDeclare);
+                    effects.forEach(effect => {
+                        payHonor(effect.amount, effect.dueToStatusToken).addEventsToArray?.(
+                            costEvents,
+                            this.game.getFrameworkContext(this.conflict.defendingPlayer)
+                        );
+                    });
+                });
+                // payHonor(totalHonorCost).addEventsToArray?.(
+                //     costEvents,
+                //     this.game.getFrameworkContext(this.conflict.defendingPlayer)
+                // );
                 this.game.openEventWindow(costEvents);
             }
         }

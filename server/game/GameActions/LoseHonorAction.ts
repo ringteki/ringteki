@@ -8,10 +8,11 @@ import { PlayerAction, type PlayerActionProperties } from './PlayerAction.js';
 export interface LoseHonorProperties extends PlayerActionProperties {
     amount?: number;
     dueToUnopposed?: boolean;
+    dueToStatusToken?: boolean;
 }
 
 export class LoseHonorAction extends PlayerAction<LoseHonorProperties> {
-    defaultProperties: LoseHonorProperties = { amount: 1, dueToUnopposed: false };
+    defaultProperties: LoseHonorProperties = { amount: 1, dueToUnopposed: false, dueToStatusToken: false };
 
     name = 'loseHonor';
     eventName = EventName.OnModifyHonor;
@@ -32,10 +33,11 @@ export class LoseHonorAction extends PlayerAction<LoseHonorProperties> {
     }
 
     addPropertiesToEvent(event: GameEvent<EventName.OnModifyHonor>, player: Player, context: AbilityContext, additionalProperties: Record<string, unknown> = {}): void {
-        let { amount, dueToUnopposed } = this.getProperties(context, additionalProperties);
+        let { amount, dueToUnopposed, dueToStatusToken } = this.getProperties(context, additionalProperties);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = -(amount ?? 0);
         event.dueToUnopposed = dueToUnopposed;
+        event.dueToStatusToken = dueToStatusToken;
     }
 
     eventHandler(event: GameEvent<EventName.OnModifyHonor>): void {

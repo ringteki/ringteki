@@ -8,10 +8,11 @@ import { CalculateHonorLimit } from './Shared/HonorLogic.js';
 
 export interface GainHonorProperties extends PlayerActionProperties {
     amount?: number;
+    dueToStatusToken?: boolean;
 }
 
 export class GainHonorAction extends PlayerAction<GainHonorProperties> {
-    defaultProperties: GainHonorProperties = { amount: 1 };
+    defaultProperties: GainHonorProperties = { amount: 1, dueToStatusToken: false };
 
     name: string = 'gainHonor';
     eventName = EventName.OnModifyHonor;
@@ -54,9 +55,10 @@ export class GainHonorAction extends PlayerAction<GainHonorProperties> {
     }
 
     addPropertiesToEvent(event: GameEvent<EventName.OnModifyHonor>, player: Player, context: AbilityContext, additionalProperties: Record<string, unknown> = {}): void {
-        let { amount } = this.getProperties(context, additionalProperties);
+        let { amount, dueToStatusToken } = this.getProperties(context, additionalProperties);
         super.addPropertiesToEvent(event, player, context, additionalProperties);
         event.amount = amount;
+        event.dueToStatusToken = dueToStatusToken;
     }
 
     eventHandler(event: GameEvent<EventName.OnModifyHonor>): void {

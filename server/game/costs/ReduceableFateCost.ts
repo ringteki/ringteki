@@ -24,7 +24,8 @@ type Props = {
 export class ReduceableFateCost implements Cost {
     public isPlayCost = true;
     public isPrintedFateCost = true;
-    constructor(public ignoreType: boolean) {}
+    public payFateCostToOpponent = false;
+    constructor(public ignoreType: boolean) { }
 
     public canPay(context: AbilityContext<DrawCard>): boolean {
         if(context.source.printedCost === null) {
@@ -253,7 +254,7 @@ export class ReduceableFateCost implements Cost {
     /**
      * USED FOR EXTENDING THIS CLASS
      */
-    protected afterPayHook(_event: Event): void {}
+    protected afterPayHook(_event: Event): void { }
 
     public payEvent(context: TriggeredAbilityContext<DrawCard>): Event {
         const amount = this.getReducedCost(context);

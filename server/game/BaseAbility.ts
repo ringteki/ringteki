@@ -166,6 +166,10 @@ class BaseAbility {
         if(!playCosts) {
             costs = costs.filter((cost) => !cost.isPlayCost);
         }
+
+        if(context.payFateCostToOpponent) {
+            costs.forEach(cost => cost.payFateCostToOpponent = true);
+        }
         return costs;
     }
 

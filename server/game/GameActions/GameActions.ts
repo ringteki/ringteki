@@ -39,6 +39,7 @@ import { HonorAction, HonorProperties } from './HonorAction.js';
 import { HonorBidAction, HonorBidProperties } from './HonorBidAction.js';
 import { IfAbleAction, IfAbleActionProperties } from './IfAbleAction.js';
 import { InitiateConflictAction, InitiateConflictProperties } from './InitiateConflictAction.js';
+import { InjureAction, InjureActionProperties } from './InjureAction.js';
 import { JointGameAction } from './JointGameAction.js';
 import { JointGameContextProperties, JointGameContextAction } from './JointGameContextAction.js';
 import { LastingEffectAction, LastingEffectProperties } from './LastingEffectAction.js';
@@ -47,6 +48,7 @@ import { LastingEffectRingAction, LastingEffectRingProperties } from './LastingE
 import { LookAtAction, LookAtProperties } from './LookAtAction.js';
 import { LoseFateAction, LoseFateProperties } from './LoseFateAction.js';
 import { LoseHonorAction, LoseHonorProperties } from './LoseHonorAction.js';
+import { OptionalAction, OptionalActionProperties } from './OptionalAction.js';
 import { MatchingDiscardAction, MatchingDiscardProperties } from './MatchingDiscardAction.js';
 import { MenuPromptAction, MenuPromptProperties } from './MenuPromptAction.js';
 import { ModifyBidAction, ModifyBidProperties } from './ModifyBidAction.js';
@@ -126,7 +128,7 @@ export function cardLastingEffect<Target = unknown>(propertyFactory: PropsFactor
 export function claimImperialFavor<Target = unknown>(propertyFactory: PropsFactory<ClaimFavorProperties, NoInfer<Target>>): GameAction {
     return new ClaimFavorAction(propertyFactory as ConstructorParameters<typeof ClaimFavorAction>[0]);
 }
-export function createToken<Target = unknown>(propertyFactory: PropsFactory<CreateTokenProperties, NoInfer<Target>> = {}): GameAction {
+export function createToken<Target = unknown>(propertyFactory: PropsFactory<CreateTokenProperties, NoInfer<Target>>): GameAction {
     return new CreateTokenAction(propertyFactory as ConstructorParameters<typeof CreateTokenAction>[0]);
 }
 export function detach<Target = unknown>(propertyFactory: PropsFactory<DetachActionProperties, NoInfer<Target>> = {}): GameAction {
@@ -159,6 +161,10 @@ export function flipImperialFavor<Target = unknown>(propertyFactory: PropsFactor
 export function honor<Target = unknown>(propertyFactory: PropsFactory<HonorProperties, NoInfer<Target>> = {}): GameAction {
     return new HonorAction(propertyFactory as ConstructorParameters<typeof HonorAction>[0]);
 }
+export function injure<Target = unknown>(propertyFactory: PropsFactory<InjureActionProperties, NoInfer<Target>> = {}): GameAction {
+    return new InjureAction(propertyFactory as ConstructorParameters<typeof InjureAction>[0]);
+}
+
 export function lookAt<Target = unknown>(propertyFactory: PropsFactory<LookAtProperties, NoInfer<Target>> = {}): GameAction {
     return new LookAtAction(propertyFactory as ConstructorParameters<typeof LookAtAction>[0]);
 }
@@ -480,6 +486,9 @@ export function conditional<Target = unknown>(propertyFactory: PropsFactory<Cond
 }
 export function onAffinity<Target = unknown>(propertyFactory: PropsFactory<AffinityActionProperties, NoInfer<Target>>): GameAction {
     return new AffinityAction(propertyFactory as ConstructorParameters<typeof AffinityAction>[0]);
+}
+export function optional<Target = unknown>(propertyFactory: PropsFactory<OptionalActionProperties, NoInfer<Target>>): GameAction {
+    return new OptionalAction(propertyFactory as ConstructorParameters<typeof OptionalAction>[0]);
 }
 export function ifAble<Target = unknown>(propertyFactory: PropsFactory<IfAbleActionProperties, NoInfer<Target>>): GameAction {
     return new IfAbleAction(propertyFactory as ConstructorParameters<typeof IfAbleAction>[0]);

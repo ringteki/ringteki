@@ -178,6 +178,11 @@ export interface ActionProps<Source = BaseCard, Target extends BaseCard = BaseCa
     canTriggerOutsideConflict?: boolean;
 }
 
+export interface ConflictActionProps<Source = BaseCard, Target extends BaseCard = BaseCard> extends ActionProps<Source, Target> {
+    conflictType?: 'military' | 'political';
+    evenFromHome?: boolean;
+}
+
 interface TriggeredAbilityCardTarget {
     cardCondition?: (card: DrawCard, context: AbilityContext<DrawCard>) => boolean;
 }

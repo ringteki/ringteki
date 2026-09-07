@@ -33,7 +33,9 @@ export class DiscardStatusAction extends TokenAction<DiscardStatusProperties> {
     eventHandler(event: GameEvent<EventName.OnStatusTokenDiscarded>): void {
         const tokens = Array.isArray(event.token) ? event.token : [event.token];
         for(const token of tokens) {
-            token.card.removeStatusToken(token);
+            if(token.card) {
+                token.card.removeStatusToken(token);
+            }
         }
     }
 

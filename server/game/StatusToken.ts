@@ -144,7 +144,10 @@ export class StatusToken extends EffectSource {
             {
                 match: card,
                 condition: () => !card.anyEffect(EffectName.TaintedStatusDoesNotCostHonor),
-                effect: AbilityDsl.effects.honorCostToDeclare(1),
+                effect: AbilityDsl.effects.honorCostToDeclare({
+                    amount: 1,
+                    dueToStatusToken: true
+                }),
                 ref: []
             }
         ];
@@ -176,7 +179,8 @@ export class StatusToken extends EffectSource {
                     cost: (player: Player) =>
                         AbilityDsl.actions.loseHonor({
                             target: player,
-                            amount: 1
+                            amount: 1,
+                            dueToStatusToken: true
                         })
                 }),
                 ref: []

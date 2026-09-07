@@ -68,8 +68,8 @@ export function payFate(amount: number | ((context: AbilityContext) => number) =
 /**
  * Cost in which the player must pay a fixed, non-reduceable amount of honor.
  */
-export function payHonor(amount = 1): Cost {
-    return new GameActionCost(GameActions.loseHonor((context) => ({ target: context.player, amount })));
+export function payHonor(amount = 1, dueToStatusToken = false): Cost {
+    return new GameActionCost(GameActions.loseHonor((context) => ({ target: context.player, amount, dueToStatusToken })));
 }
 
 export function giveHonorToOpponent(amount = 1): Cost {

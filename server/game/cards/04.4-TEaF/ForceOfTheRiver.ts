@@ -1,6 +1,7 @@
 import { CardType, Location } from '../../Constants.js';
 import DrawCard from '../../DrawCard.js';
 import AbilityDsl from '../../abilitydsl.js';
+import SpiritOfTheRiver from '../SpiritOfTheRiver.js';
 
 export default class ForceOfTheRiver extends DrawCard {
     static id = 'force-of-the-river';
@@ -24,7 +25,9 @@ export default class ForceOfTheRiver extends DrawCard {
                     .getProvinceArray()
                     .flatMap((location: Location) =>
                         context.player.getDynastyCardsInProvince(location).filter((card: DrawCard) => card.isFacedown())
-                    )
+                    ),
+                token: SpiritOfTheRiver,
+                canEnterConflict: (type) => type === 'military'
             }))
         });
     }

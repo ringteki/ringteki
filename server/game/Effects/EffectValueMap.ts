@@ -62,7 +62,6 @@ export interface EffectValueMap {
     [EffectName.AttachmentLimit]: number;
     [EffectName.FateCostToAttack]: number;
     [EffectName.CardCostToAttackMilitary]: number;
-    [EffectName.HonorCostToDeclare]: number;
     [EffectName.FateCostToRingToDeclareConflictAgainst]: number;
     [EffectName.GainExtraFateWhenPlayed]: number;
     [EffectName.LegendaryFate]: number;
@@ -126,6 +125,7 @@ export interface EffectValueMap {
     [EffectName.SwitchBaseSkills]: boolean;
     [EffectName.WinDuelTies]: boolean;
     [EffectName.IgnoreDuelSkill]: boolean;
+    [EffectName.PayPrintedCostToOpponent]: boolean;
     [EffectName.CannotResolveRings]: boolean;
     [EffectName.ShowTopDynastyCard]: boolean;
     [EffectName.EventsCannotBeCancelled]: boolean;
@@ -139,6 +139,7 @@ export interface EffectValueMap {
 
     // --- string (faction/keyword/trait/conflict-type names) ---
     [EffectName.AddElementAsAttacker]: Element | Element[];
+    [EffectName.AddFlag]: string;
     [EffectName.AddFaction]: string;
     [EffectName.LoseFaction]: string;
     [EffectName.AddKeyword]: string;
@@ -174,8 +175,12 @@ export interface EffectValueMap {
 
     // --- instance/Player-valued ---
     [EffectName.CopyCharacter]: DrawCard; // the copied card; consumers read printed* / traits
+    [EffectName.CopyProvince]: ProvinceCard; // the copied card; consumers read printed* / traits
     [EffectName.TakeControl]: Player;
     [EffectName.ChangePlayerGloryModifier]: number;
+
+    // --- composite-valued (multiple values) ---
+    [EffectName.HonorCostToDeclare]: { amount: number, dueToStatusToken?: boolean };
 
     // --- function-valued (predicate / match / cost functions; typed against consumer call sites) ---
     [EffectName.CannotDeclareRing]: (player: Player) => boolean;
@@ -196,4 +201,13 @@ export interface EffectValueMap {
     [EffectName.AdditionalAttackedProvince]: ProvinceCard;
     [EffectName.AdditionalTriggerCost]: (context: AbilityContext) => Cost | Cost[];
     [EffectName.AdditionalPlayCost]: (context: AbilityContext) => Cost | Cost[];
+    [EffectName.CanOnlyBeDeclaredAsAttackerWithCondition]: ((props: ICanOnlyBeDeclaredAsAttackerWithCondition) => boolean);
+}
+
+export interface ICanOnlyBeDeclaredAsAttackerWithCondition {
+    context: AbilityContext,
+    conflictType: string,
+    ring: Ring,
+    province?: ProvinceCard | null,
+    incomingAttackers?: DrawCard[]
 }

@@ -10,7 +10,9 @@ class UnleashedExperiment extends DrawCard {
         });
 
         this.persistentEffect({
-            effect: AbilityDsl.effects.honorCostToDeclare(2)
+            effect: AbilityDsl.effects.honorCostToDeclare({
+                amount: 2
+            })
         });
     }
 }
