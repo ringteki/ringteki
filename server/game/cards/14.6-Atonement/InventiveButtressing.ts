@@ -15,7 +15,7 @@ class InventiveButtressing extends ProvinceAttachment {
         });
     }
 
-    protected myProvinceOnly(): boolean {
+    protected controllerProvinceOnly(): boolean {
         return true;
     }
 }
