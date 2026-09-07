@@ -2,7 +2,7 @@
 
 import { GameModes } from '../../server/GameModes.js';
 import './objectformatters.js';
-import DeckBuilder from './deckbuilder.js';
+import DeckBuilder, { fillers } from './deckbuilder.js';
 import GameFlowWrapper from './gameflowwrapper.js';
 import type PlayerInteractionWrapper from './playerinteractionwrapper.js';
 
@@ -139,6 +139,8 @@ interface IntegrationSetupOptions {
     skipAutoSetup?: boolean;
     skipAutoFirstPlayer?: boolean;
 }
+
+(globalThis as { fillers?: typeof fillers }).fillers = fillers;
 
 (globalThis as { integration?: (definitions: () => void) => void }).integration = function (definitions: () => void): void {
     describe('integration', function (this: unknown) {

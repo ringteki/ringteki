@@ -274,14 +274,14 @@ describe('(4) Fate Phase', function() {
 
                 this.shameful1 = this.player1.findCardByName('shameful-display', 'province 2');
                 this.shameful2 = this.player2.findCardByName('shameful-display', 'province 2');
-                this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
-                this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
+                this.adept1 = this.player1.findCardByName(fillers.dynasty, 'province 1');
+                this.adept2 = this.player2.findCardByName(fillers.dynasty, 'province 1');
 
-                this.adept3 = this.player1.findCardByName('adept-of-the-waves', 'province 2');
-                this.adept4 = this.player2.findCardByName('adept-of-the-waves', 'province 2');
+                this.adept3 = this.player1.findCardByName(fillers.dynasty, 'province 2');
+                this.adept4 = this.player2.findCardByName(fillers.dynasty, 'province 2');
 
-                this.adept5 = this.player1.findCardByName('adept-of-the-waves', 'province 3');
-                this.adept6 = this.player2.findCardByName('adept-of-the-waves', 'province 3');
+                this.adept5 = this.player1.findCardByName(fillers.dynasty, 'province 3');
+                this.adept6 = this.player2.findCardByName(fillers.dynasty, 'province 3');
 
                 //4.2
                 this.player1.clickPrompt('Done');
@@ -331,8 +331,8 @@ describe('(4) Fate Phase', function() {
                 this.player1.player.promptedActionWindows.fate = true;
                 this.player2.player.promptedActionWindows.fate = true;
 
-                this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
-                this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
+                this.adept1 = this.player1.findCardByName(fillers.dynasty, 'province 1');
+                this.adept2 = this.player2.findCardByName(fillers.dynasty, 'province 1');
                 this.adept1.facedown = false;
                 this.adept2.facedown = false;
 
@@ -369,8 +369,8 @@ describe('(4) Fate Phase', function() {
                 this.player1.player.promptedActionWindows.fate = true;
                 this.player2.player.promptedActionWindows.fate = true;
 
-                this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
-                this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
+                this.adept1 = this.player1.findCardByName(fillers.dynasty, 'province 1');
+                this.adept2 = this.player2.findCardByName(fillers.dynasty, 'province 1');
                 this.adept1.facedown = false;
                 this.adept2.facedown = false;
 
@@ -397,8 +397,8 @@ describe('(4) Fate Phase', function() {
                 this.player1.player.promptedActionWindows.fate = true;
                 this.player2.player.promptedActionWindows.fate = true;
 
-                this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
-                this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
+                this.adept1 = this.player1.findCardByName(fillers.dynasty, 'province 1');
+                this.adept2 = this.player2.findCardByName(fillers.dynasty, 'province 1');
                 this.adept1.facedown = false;
                 this.adept2.facedown = false;
 

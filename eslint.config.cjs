@@ -171,7 +171,8 @@ module.exports = [
                 ...globals.node,
                 ...globals.es2020,
                 ...globals.jasmine,
-                integration: 'readonly'
+                integration: 'readonly',
+                fillers: 'readonly'
             }
         },
         rules: {
@@ -192,7 +193,8 @@ module.exports = [
             globals: {
                 ...globals.node,
                 ...globals.jasmine,
-                integration: 'readonly'
+                integration: 'readonly',
+                fillers: 'readonly'
             }
         },
         rules: {

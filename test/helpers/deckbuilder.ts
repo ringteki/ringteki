@@ -59,6 +59,20 @@ const minProvince = 5;
 const provinceFiller = 'shameful-display';
 const dynastyFiller = 'adept-of-the-waves';
 const conflictFiller = 'supernatural-storm';
+
+/**
+ * The cards setupTest pads decks with. Specs that read a filler card out of a
+ * province (rather than placing their own) must reference these instead of
+ * hardcoding the id, so the filler can be changed in one place.
+ */
+export const fillers = Object.freeze({
+    faction: defaultFaction,
+    role: defaultRole,
+    stronghold: defaultStronghold,
+    province: provinceFiller,
+    dynasty: dynastyFiller,
+    conflict: conflictFiller
+});
 const dynastyBuffer = 8;
 const conflictBuffer = 8;
 
@@ -75,14 +89,7 @@ class DeckBuilder {
 
     constructor() {
         this.cards = this.loadCards(PathToSubModulePacks);
-        this.fillers = {
-            faction: defaultFaction,
-            role: defaultRole,
-            stronghold: defaultStronghold,
-            province: provinceFiller,
-            dynasty: dynastyFiller,
-            conflict: conflictFiller
-        };
+        this.fillers = { ...fillers };
     }
 
     loadCards(directory: string): Record<string, JsonCardData> {

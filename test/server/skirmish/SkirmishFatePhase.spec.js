@@ -44,14 +44,14 @@ describe('Skirmish Fate Phase', function() {
 
                 this.province1 = this.player1.findCardByName('skirmish-province-1', 'province 2');
                 this.province2 = this.player2.findCardByName('skirmish-province-1', 'province 2');
-                this.adept1 = this.player1.findCardByName('adept-of-the-waves', 'province 1');
-                this.adept2 = this.player2.findCardByName('adept-of-the-waves', 'province 1');
+                this.adept1 = this.player1.findCardByName(fillers.dynasty, 'province 1');
+                this.adept2 = this.player2.findCardByName(fillers.dynasty, 'province 1');
 
-                this.adept3 = this.player1.findCardByName('adept-of-the-waves', 'province 2');
-                this.adept4 = this.player2.findCardByName('adept-of-the-waves', 'province 2');
+                this.adept3 = this.player1.findCardByName(fillers.dynasty, 'province 2');
+                this.adept4 = this.player2.findCardByName(fillers.dynasty, 'province 2');
 
-                this.adept5 = this.player1.findCardByName('adept-of-the-waves', 'province 3');
-                this.adept6 = this.player2.findCardByName('adept-of-the-waves', 'province 3');
+                this.adept5 = this.player1.findCardByName(fillers.dynasty, 'province 3');
+                this.adept6 = this.player2.findCardByName(fillers.dynasty, 'province 3');
 
                 //4.2
                 this.player1.clickPrompt('Done');
