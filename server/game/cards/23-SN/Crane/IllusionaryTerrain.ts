@@ -1,8 +1,7 @@
 import DrawCard from '../../../DrawCard.js';
 import { ProvinceCard } from '../../../ProvinceCard.js';
-import { CardType, /*EventName,*/ Players, Location } from '../../../Constants.js';
+import { CardType, Players, Location } from '../../../Constants.js';
 import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
-// import type { EventPayload } from '../../../Events/EventPayloads.js';
 import AbilityDsl from '../../../abilitydsl.js';
 import BaseCard from '../../../BaseCard.js';
 

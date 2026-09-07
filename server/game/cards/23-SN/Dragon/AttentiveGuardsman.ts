@@ -10,7 +10,6 @@ export default class AttentiveGuardsman extends DrawCard {
         this.persistentEffect({
             effect: AbilityDsl.effects.canOnlyBeDeclaredAsAttackerWithCondition((props: ICanOnlyBeDeclaredAsAttackerWithCondition) => {
                 const { incomingAttackers } = props;
-                // console.log("incomingAttackers", incomingAttackers?.map(a => a.name), incomingAttackers?.some((card: DrawCard) => (card.getType() === CardType.Character && card.isUnique())));
                 return !!incomingAttackers?.some((card: DrawCard) => (card.getType() === CardType.Character && card.isUnique()));
             })
         });
