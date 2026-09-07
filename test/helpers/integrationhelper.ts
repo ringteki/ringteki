@@ -2,7 +2,7 @@
 
 import { GameModes } from '../../server/GameModes.js';
 import './objectformatters.js';
-import DeckBuilder from './deckbuilder.js';
+import DeckBuilder, { fillers } from './deckbuilder.js';
 import GameFlowWrapper from './gameflowwrapper.js';
 import type PlayerInteractionWrapper from './playerinteractionwrapper.js';
 
@@ -140,6 +140,8 @@ interface IntegrationSetupOptions {
     skipAutoFirstPlayer?: boolean;
 }
 
+(globalThis as { fillers?: typeof fillers }).fillers = fillers;
+
 (globalThis as { integration?: (definitions: () => void) => void }).integration = function (definitions: () => void): void {
     describe('integration', function (this: unknown) {
         beforeEach(function (this: Record<string, unknown>) {
@@ -232,8 +234,23 @@ interface IntegrationSetupOptions {
                 }
                 if(options.phase !== 'setup') {
                     for(const location of ['province 1', 'province 2', 'province 3', 'province 4']) {
-                        flow.player1.player.replaceDynastyCard(location);
-                        flow.player2.player.replaceDynastyCard(location);
+                        for(const wrapper of [flow.player1, flow.player2]) {
+                            // A province emptied by the setup above (an `inPlay` card can be the
+                            // only copy and get sourced out of a province) is backfilled facedown.
+                            // In the dynasty phase the reveal has already happened and no refill
+                            // has occurred yet, so a facedown card there is an impossible state --
+                            // reveal whatever the backfill just added, and only that. Later phases
+                            // legitimately hold facedown cards from post-reveal refills.
+                            const before = options.phase === 'dynasty'
+                                ? wrapper.player.getDynastyCardsInProvince(location)
+                                : [];
+                            wrapper.player.replaceDynastyCard(location);
+                            if(options.phase === 'dynasty') {
+                                wrapper.player.getDynastyCardsInProvince(location)
+                                    .filter((card) => !before.includes(card))
+                                    .forEach((card) => (card.facedown = false));
+                            }
+                        }
                     }
                 }
                 if(options.phase !== 'setup') {

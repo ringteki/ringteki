@@ -16,7 +16,7 @@ describe('A Cleansing Death', function () {
             this.tanuki = this.player1.placeCardInProvince('mischievous-tanuki', 'province 2');
             this.whisperer = this.player1.placeCardInProvince('doji-whisperer', 'province 3');
 
-            const adepts = this.player1.filterCardsByName('adept-of-the-waves');
+            const adepts = this.player1.filterCardsByName(fillers.dynasty);
             adepts.forEach(card => {
                 card.facedown = true;
             });
