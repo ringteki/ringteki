@@ -1,34 +1,27 @@
 import AbilityDsl from '../../abilitydsl.js';
 import type BaseCard from '../../BaseCard.js';
-import { AbilityType, CardType, EventName, Location, Players } from '../../Constants.js';
+import { CardType, Location, Players } from '../../Constants.js';
 import DrawCard from '../../DrawCard.js';
-import { EventRegistrar } from '../../EventRegistrar.js';
 import type { TriggeredAbilityContext } from '../../TriggeredAbilityContext.js';
-import type { GameEvent } from '../../Events/EventPayloads.js';
 
 export default class WithstandTheDarkness extends DrawCard {
     static id = 'withstand-the-darkness';
 
     private currentTargets = new Set<BaseCard>();
-    private extraBanzaiTarget?: BaseCard;
-    private abilityRegistrar?: EventRegistrar;
 
     setupCardAbilities() {
-        this.abilityRegistrar = new EventRegistrar(this.game, this);
-        this.abilityRegistrar.register([
-            {
-                [`${EventName.OnInitiateAbilityEffects}:${AbilityType.WouldInterrupt}`]: 'onInitiateAbility'
-            }
-        ]);
-
         this.reaction({
             when: {
                 onCardPlayed: (event, context) => {
-                    if(event.card.type === CardType.Event && event.card.controller === context.player.opponent) {
-                        this.currentTargets = this.getLegalWithstandTargets(event);
-                        return this.currentTargets.size > 0;
+                    if(event.card.type !== CardType.Event || event.card.controller !== context.player.opponent) {
+                        return false;
                     }
-                    return false;
+                    // chosenCardTargets covers the whole triggering, sub-resolutions included
+                    const chosenTargets = event.context?.triggeringContext.chosenCardTargets ?? [];
+                    this.currentTargets = new Set(
+                        chosenTargets.filter((card) => this.isValidTargetForWithstand(card, context))
+                    );
+                    return this.currentTargets.size > 0;
                 }
             },
             title: 'Place a fate on a character',
@@ -42,50 +35,6 @@ export default class WithstandTheDarkness extends DrawCard {
             },
             max: AbilityDsl.limit.perPhase(1)
         });
-    }
-
-    public onInitiateAbility(event: GameEvent<EventName.OnInitiateAbilityEffects>) {
-        if(event.card.id === 'banzai') {
-            if(event.context) {
-                this.extraBanzaiTarget = event.context.targets.target as BaseCard;
-            }
-        }
-    }
-
-    private getLegalWithstandTargets(event: any) {
-        const allTargets = new Set<BaseCard>();
-        if(!event.context) {
-            return allTargets;
-        }
-
-        for(const directTargets of Object.values<BaseCard | BaseCard[]>(event.context.targets)) {
-            if(!Array.isArray(directTargets)) {
-                allTargets.add(directTargets);
-                continue;
-            }
-            for(const directTarget of directTargets) {
-                allTargets.add(directTarget);
-            }
-        }
-
-        for(const selectedTargets of Object.values<BaseCard | BaseCard[]>(event.context.selects)) {
-            if(!Array.isArray(selectedTargets)) {
-                allTargets.add(selectedTargets);
-                continue;
-            }
-            for(const selectedTarget of selectedTargets) {
-                allTargets.add(selectedTarget);
-            }
-        }
-
-        if(event.card.id === 'banzai') {
-            if(this.extraBanzaiTarget) {
-                allTargets.add(this.extraBanzaiTarget);
-            }
-            this.extraBanzaiTarget = undefined;
-        }
-
-        return allTargets;
     }
 
     private isValidTargetForWithstand(card: BaseCard, context: TriggeredAbilityContext) {

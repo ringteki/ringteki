@@ -90,7 +90,10 @@ class ThenAbility extends BaseCardAbility {
                 }
             } else if(then && (then as ThenAbilityProperties).thenCondition && (then as ThenAbilityProperties).thenCondition?.(context)) {
                 const thenAbility = new ThenAbility(this.card, then as ThenAbilityProperties);
-                this.game.resolveAbility(thenAbility.createContext(context.player));
+                const thenContext = thenAbility.createContext(context.player);
+                // a `then` continues the same triggering, so keep the link for chosenCardTargets
+                thenContext.originatingContext = context.triggeringContext;
+                this.game.resolveAbility(thenContext);
             }
         });
     }

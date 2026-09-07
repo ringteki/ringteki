@@ -35,7 +35,8 @@ export default class ACleansingDeath extends DrawCard {
             cannotTargetFirst: true,
             target: {
                 cardType: CardType.Character,
-                cardCondition: (card: any, context: any) => card.printedCost <= (context.costs.sacrificeStateWhenChosen?.printedCost || 10),
+                cardCondition: (card, context) => (card.printedCost ?? 0) <=
+                    ((context.costs.sacrificeStateWhenChosen as DrawCard | undefined)?.printedCost || 10),
                 location: Location.Provinces,
                 controller: Players.Self,
                 gameAction: AbilityDsl.actions.joint([

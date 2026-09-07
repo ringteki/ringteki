@@ -1,8 +1,7 @@
 import DrawCard from '../../../DrawCard.js';
 import { ProvinceCard } from '../../../ProvinceCard.js';
-import { CardType, /*EventName,*/ Players, Location } from '../../../Constants.js';
-// import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
-// import type { EventPayload } from '../../../Events/EventPayloads.js';
+import { CardType, Players, Location } from '../../../Constants.js';
+import type { TriggeredAbilityContext } from '../../../TriggeredAbilityContext.js';
 import AbilityDsl from '../../../abilitydsl.js';
 import BaseCard from '../../../BaseCard.js';
 
@@ -33,7 +32,8 @@ export default class IllusionaryTerrain extends DrawCard {
                 cardType: CardType.Province,
                 location: Location.Provinces,
                 controller: context => context.player.hasAffinity('air', context) ? Players.Any : Players.Self,
-                cardCondition: (card: BaseCard, context: any) => (card as ProvinceCard).isFaceup() && card !== context.event.conflict.conflictProvince,
+                cardCondition: (card: BaseCard, context) => (card as ProvinceCard).isFaceup() &&
+                    card !== (context as TriggeredAbilityContext<DrawCard>).event.conflict?.conflictProvince,
                 gameAction: AbilityDsl.actions.cardLastingEffect<DrawCard>((context) => ({
                     target: context.event.conflict.conflictProvince,
                     targetLocation: Location.Any,

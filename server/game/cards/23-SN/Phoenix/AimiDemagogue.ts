@@ -31,7 +31,7 @@ export default class AimiDemagogue extends DrawCard {
                 })
             },
             effect: 'give {1}{0} pride the end of the conflict',
-            effectArgs: (context: any) => [context.target.controller !== context.player ? 'itself and ' : '']
+            effectArgs: (context) => [context.target?.controller !== context.player ? 'itself and ' : '']
         });
     }
 }

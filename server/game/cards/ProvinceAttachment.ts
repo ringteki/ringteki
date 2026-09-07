@@ -13,7 +13,7 @@ export class ProvinceAttachment extends DrawCard {
             source &&
             source.getType() === 'province' &&
             (!this.unbrokenOnly() || !(source instanceof ProvinceCard && source.isBroken)) &&
-            (!this.myProvinceOnly() || (source as BaseCard).controller === this.controller) &&
+            (!this.controllerProvinceOnly() || (source as BaseCard).controller === this.controller) &&
             this.getType() === CardType.Attachment
         );
     }
@@ -23,14 +23,14 @@ export class ProvinceAttachment extends DrawCard {
             return false;
         }
 
-        if(this.myProvinceOnly() && parent.controller !== this.controller) {
+        if(this.controllerProvinceOnly() && parent.controller !== this.controller) {
             return false;
         }
 
         return parent && parent.getType() === CardType.Province && this.getType() === CardType.Attachment;
     }
 
-    protected myProvinceOnly(): boolean {
+    protected controllerProvinceOnly(): boolean {
         return false;
     }
 

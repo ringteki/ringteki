@@ -53,6 +53,9 @@ export class TriggerAbilityAction extends CardGameAction<TriggerAbilityPropertie
         let newContextEvent = properties.event;
         let newContext = (properties.ability as TriggeredAbility).createContext(player, newContextEvent);
         newContext.subResolution = !!properties.subResolution;
+        if(properties.subResolution) {
+            newContext.originatingContext = (event.context as AbilityContext).triggeringContext;
+        }
         (event.context as AbilityContext).game.queueStep(new AbilityResolver((event.context as AbilityContext).game, newContext));
     }
 

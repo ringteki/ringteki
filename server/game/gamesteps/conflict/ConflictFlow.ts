@@ -241,10 +241,6 @@ class ConflictFlow extends BaseStepWithPipeline {
                         );
                     });
                 });
-                // payHonor(totalHonorCost).addEventsToArray?.(
-                //     costEvents,
-                //     this.game.getFrameworkContext(this.conflict.attackingPlayer)
-                // );
             }
             if(!this.conflict.conflictPassed && totalCardCost > 0) {
                 this.game.addMessage(
@@ -711,10 +707,6 @@ class ConflictFlow extends BaseStepWithPipeline {
                         );
                     });
                 });
-                // payHonor(totalHonorCost).addEventsToArray?.(
-                //     costEvents,
-                //     this.game.getFrameworkContext(this.conflict.defendingPlayer)
-                // );
                 this.game.openEventWindow(costEvents);
             }
         }

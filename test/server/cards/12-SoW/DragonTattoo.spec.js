@@ -653,3 +653,60 @@ describe('Dragon Tattoo', function() {
         });
     });
 });
+
+describe('Dragon Tattoo - sub-resolutions', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    inPlay: ['togashi-kazue', 'doji-challenger'],
+                    hand: ['dragon-tattoo', 'the-void-of-war']
+                },
+                player2: {
+                    inPlay: ['doji-kuwanan', 'keeper-initiate']
+                }
+            });
+
+            this.kazue = this.player1.findCardByName('togashi-kazue');
+            this.challenger = this.player1.findCardByName('doji-challenger');
+            this.dragonTattoo = this.player1.findCardByName('dragon-tattoo');
+            this.voidOfWar = this.player1.findCardByName('the-void-of-war');
+
+            this.kuwanan = this.player2.findCardByName('doji-kuwanan');
+            this.keeper = this.player2.findCardByName('keeper-initiate');
+
+            this.player1.playAttachment(this.dragonTattoo, this.kazue);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.kazue, this.challenger],
+                defenders: [this.kuwanan, this.keeper],
+                type: 'military'
+            });
+        });
+
+        it('should react when only the sub-resolution targets the attached character', function() {
+            this.player2.pass();
+            this.player1.clickCard(this.voidOfWar);
+
+            this.player2.clickCard(this.kuwanan);
+            expect(this.kuwanan.bowed).toBe(true);
+            expect(this.player1).not.toHavePrompt('Triggered Abilities');
+
+            this.player2.clickPrompt('Yes');
+            this.player1.clickCard(this.kazue);
+            expect(this.kazue.bowed).toBe(true);
+            this.player1.clickPrompt('No');
+
+            expect(this.player1).toHavePrompt('Triggered Abilities');
+            expect(this.player1).toBeAbleToSelect(this.dragonTattoo);
+            this.player1.clickCard(this.dragonTattoo);
+
+            this.player2.clickCard(this.keeper);
+            expect(this.keeper.bowed).toBe(true);
+            this.player2.clickPrompt('No');
+            expect(this.getChatLogs(10)).toContain('player1 uses Dragon Tattoo to play The Void of War');
+        });
+    });
+});
