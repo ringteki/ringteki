@@ -95,6 +95,42 @@ interface GameOptions {
     router?: GameRouter;
 }
 
+type ApplyGameActionCardTarget = BaseCard | BaseCard[];
+type ApplyGameActionPlayerTarget = Player | Player[];
+
+/*
+ * The game actions reachable through `applyGameAction`, keyed by the name callers pass.
+ * Each entry adapts the caller's bare target to that action's own properties type, so
+ * the lookup stays typed instead of indexing the `GameActions` namespace dynamically.
+ */
+const APPLY_CARD_ACTIONS = {
+    bow: (target: ApplyGameActionCardTarget) => GameActions.bow({ target }),
+    break: (target: ApplyGameActionCardTarget) => GameActions.breakProvince({ target }),
+    discardCard: (target: ApplyGameActionCardTarget) => GameActions.discardCard({ target }),
+    discardFromPlay: (target: ApplyGameActionCardTarget) => GameActions.discardFromPlay({ target }),
+    dishonor: (target: ApplyGameActionCardTarget) => GameActions.dishonor({ target }),
+    flipDynasty: (target: ApplyGameActionCardTarget) => GameActions.flipDynasty({ target }),
+    honor: (target: ApplyGameActionCardTarget) => GameActions.honor({ target }),
+    placeFate: (target: ApplyGameActionCardTarget) => GameActions.placeFate({ target }),
+    ready: (target: ApplyGameActionCardTarget) => GameActions.ready({ target }),
+    removeFate: (target: ApplyGameActionCardTarget) => GameActions.removeFate({ target }),
+    sendHome: (target: ApplyGameActionCardTarget) => GameActions.sendHome({ target }),
+    turnFacedown: (target: ApplyGameActionCardTarget) => GameActions.turnFacedown({ target })
+};
+
+const APPLY_PLAYER_ACTIONS = {
+    discardAtRandom: (target: ApplyGameActionPlayerTarget) => GameActions.discardAtRandom({ target }),
+    draw: (target: ApplyGameActionPlayerTarget) => GameActions.draw({ target }),
+    gainFate: (target: ApplyGameActionPlayerTarget) => GameActions.gainFate({ target }),
+    gainHonor: (target: ApplyGameActionPlayerTarget) => GameActions.gainHonor({ target }),
+    loseHonor: (target: ApplyGameActionPlayerTarget) => GameActions.loseHonor({ target })
+};
+
+export type GameActionRequest = Partial<
+    { [K in keyof typeof APPLY_CARD_ACTIONS]: ApplyGameActionCardTarget } &
+    { [K in keyof typeof APPLY_PLAYER_ACTIONS]: ApplyGameActionPlayerTarget }
+>;
+
 class Game {
     private readonly events = new GameEventManager(this);
 
@@ -810,18 +846,19 @@ class Game {
      * Checks whether a game action can be performed on a card or an array of
      * cards, and performs it on all legal targets.
      */
-    applyGameAction(context: AbilityContext | null, actions: Record<string, unknown>): Event[] {
+    applyGameAction(context: AbilityContext | null, actions: GameActionRequest): Event[] {
         if(!context) {
             context = this.getFrameworkContext();
         }
         const resolvedContext = context;
         const actionPairs = Object.entries(actions);
         const events = actionPairs.reduce((array: Event[], [action, cards]) => {
-            action = action === 'break' ? 'breakProvince' : action;
-            const gameActionFactory = (GameActions as any)[action];
-            if(typeof gameActionFactory === 'function') {
-                const gameAction = gameActionFactory({ target: cards });
-                gameAction.addEventsToArray(array, resolvedContext);
+            if(action in APPLY_CARD_ACTIONS) {
+                const factory = APPLY_CARD_ACTIONS[action as keyof typeof APPLY_CARD_ACTIONS];
+                factory(cards as ApplyGameActionCardTarget).addEventsToArray(array, resolvedContext);
+            } else if(action in APPLY_PLAYER_ACTIONS) {
+                const factory = APPLY_PLAYER_ACTIONS[action as keyof typeof APPLY_PLAYER_ACTIONS];
+                factory(cards as ApplyGameActionPlayerTarget).addEventsToArray(array, resolvedContext);
             }
             return array;
         }, []);
