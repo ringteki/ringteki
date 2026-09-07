@@ -4,7 +4,6 @@ import { ProvinceCard } from '../../../ProvinceCard.js';
 import type BaseCard from '../../../BaseCard.js';
 import type DrawCard from '../../../DrawCard.js';
 import type Player from '../../../Player.js';
-import type { AbilityContext } from '../../../AbilityContext.js';
 import AbilityDsl from '../../../abilitydsl.js';
 
 import type { EventPayload } from '../../../Events/EventPayloads.js';
@@ -95,6 +94,10 @@ export default class Maelstrom extends ProvinceCard {
                     context.costs.maelstromCostPaid ? true : card.controller === context.player,
                 gameAction: AbilityDsl.actions.multipleContext((context) => {
                     const target = context.target;
+                    // "you" is whoever triggered this, which is not always the province's
+                    // controller (Contested Countryside). A delayed effect's own context is
+                    // owned by the source's controller, so capture the player here.
+                    const triggeringPlayer = context.player;
                     return {
                         gameActions: [
                             AbilityDsl.actions.moveToConflict(),
@@ -103,10 +106,10 @@ export default class Maelstrom extends ProvinceCard {
                                 duration: Duration.UntilEndOfPhase,
                                 effect: AbilityDsl.effects.delayedEffect({
                                     when: {
-                                        afterConflict: (event: EventPayload<EventName.AfterConflict>, context: AbilityContext) =>
+                                        afterConflict: (event: EventPayload<EventName.AfterConflict>) =>
                                             event.conflict.winner === target.controller &&
                                             target.isParticipating() &&
-                                            target.controller === context.player
+                                            target.controller === triggeringPlayer
                                     },
                                     message: '{0} is honored due to {1}\'s effect',
                                     messageArgs: [target, context.source],
