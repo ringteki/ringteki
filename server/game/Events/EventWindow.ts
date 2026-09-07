@@ -118,7 +118,10 @@ export default class EventWindow extends BaseStepWithPipeline {
         this.eventsToExecute.forEach(event => {
             // need to checkCondition here to ensure the event won't fizzle due to another event's resolution (e.g. double honoring an ordinary character with YR etc.)
             event.checkCondition();
-            if(!event.cancelled) {
+            // An event can reach a second window after it has already run -- a sequential
+            // action resolves its earlier actions itself, then hands those events back so
+            // later actions can inspect context.events. Executing again applies it twice.
+            if(!event.cancelled && !event.resolved) {
                 event.executeHandler();
                 this.game.emit(event.name, event);
             }
