@@ -145,7 +145,11 @@ class GameFlowWrapper {
                 (a.hasPrompt('Waiting for opponent to discard dynasty cards') ? 1 : 0) -
                 (b.hasPrompt('Waiting for opponent to discard dynasty cards') ? 1 : 0)
         );
-        playersInPromptedOrder.forEach((player) => player.clickPrompt('Done'));
+        playersInPromptedOrder.forEach((player) => {
+            if(player.hasPromptButton('Done')) {
+                player.clickPrompt('Done');
+            }
+        });
         const promptedToEnd = this.allPlayers.slice().sort(
             (a, b) =>
                 (a.hasPrompt('Waiting for opponent to end the round') ? 1 : 0) -
@@ -162,7 +166,11 @@ class GameFlowWrapper {
                 (a.hasPrompt('Waiting for opponent to discard dynasty cards') ? 1 : 0) -
                 (b.hasPrompt('Waiting for opponent to discard dynasty cards') ? 1 : 0)
         );
-        playersInPromptedOrder.forEach((player) => player.clickPrompt('Done'));
+        playersInPromptedOrder.forEach((player) => {
+            if(player.hasPromptButton('Done')) {
+                player.clickPrompt('Done');
+            }
+        });
         const promptedToEnd = this.allPlayers.slice().sort(
             (a, b) =>
                 (a.hasPrompt('Waiting for opponent to end the round') ? 1 : 0) -

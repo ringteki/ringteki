@@ -390,6 +390,13 @@ class PlayerInteractionWrapper {
         );
     }
 
+    hasPromptButton(text: string | number): boolean {
+        const textStr = text.toString().toLowerCase();
+        return this.player.currentPrompt().buttons.some(
+            (button) => button.text?.toString().toLowerCase() === textStr && !button.disabled
+        );
+    }
+
     selectDeck(deck: unknown): void {
         this.game.selectDeck(this.player.name, deck);
     }
