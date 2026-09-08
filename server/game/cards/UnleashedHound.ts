@@ -2,15 +2,15 @@ import DrawCard from '../DrawCard.js';
 import type Player from '../Player.js';
 import { Location, CardType } from '../Constants.js';
 
-class ShinjoSoraBeast extends DrawCard {
+class UnleashedHound extends DrawCard {
     facedownCard: DrawCard;
 
     constructor(facedownCard: DrawCard) {
         super(facedownCard.owner, {
-            clan: 'neutral',
+            clan: 'unicorn',
             cost: null,
             glory: '0',
-            id: 'shinjo-sora-beast',
+            id: 'unleashed-hound',
             military: '1',
             name: 'Unleashed Hound',
             political: '0',
@@ -43,4 +43,4 @@ class ShinjoSoraBeast extends DrawCard {
     }
 }
 
-export default ShinjoSoraBeast;
+export default UnleashedHound;

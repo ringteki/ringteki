@@ -7,6 +7,8 @@
   "helpers": [
     "build/test/helpers/**/*.js"
   ],
-  "stopSpecOnExpectationFailure": false,
-  "random": false
+  "env": {
+    "stopSpecOnExpectationFailure": false,
+    "random": false
+  }
 }

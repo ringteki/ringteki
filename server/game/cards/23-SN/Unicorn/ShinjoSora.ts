@@ -1,7 +1,7 @@
 import { Location } from '../../../Constants.js';
 import DrawCard from '../../../DrawCard.js';
 import AbilityDsl from '../../../abilitydsl.js';
-import ShinjoSoraBeast from '../../ShinjoSoraBeast.js';
+import UnleashedHound from '../../UnleashedHound.js';
 
 export default class ShinjoSora extends DrawCard {
     static id = 'shinjo-sora';
@@ -16,7 +16,7 @@ export default class ShinjoSora extends DrawCard {
                     .flatMap((location: Location) =>
                         context.player.getDynastyCardsInProvince(location).filter((card: DrawCard) => card.isFacedown())
                     ),
-                token: ShinjoSoraBeast,
+                token: UnleashedHound,
                 canEnterConflict: () => true,
                 leavingPlayMessage: '{0} grows tired and decides to have a nap'
             }))

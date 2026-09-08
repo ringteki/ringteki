@@ -171,3 +171,52 @@ describe('Maelstrom', function() {
         });
     });
 });
+
+describe('Maelstrom with Contested Countryside', function() {
+    integration(function() {
+        beforeEach(function() {
+            this.setupTest({
+                phase: 'conflict',
+                player1: {
+                    honor: 10,
+                    inPlay: ['moto-chagatai', 'border-rider'],
+                    hand: ['fine-katana'],
+                    dynastyDiscard: ['contested-countryside'],
+                    role: 'keeper-of-water'
+                },
+                player2: {
+                    honor: 10,
+                    inPlay: ['kakita-yoshi'],
+                    provinces: ['maelstrom', 'the-pursuit-of-justice'],
+                    role: 'keeper-of-water'
+                }
+            });
+            this.chagatai = this.player1.findCardByName('moto-chagatai');
+            this.rider = this.player1.findCardByName('border-rider');
+            this.countryside = this.player1.findCardByName('contested-countryside');
+            this.yoshi = this.player2.findCardByName('kakita-yoshi');
+            this.province = this.player2.findCardByName('maelstrom');
+        });
+
+        it('honors the moved character when the triggering player wins, not the province controller', function() {
+            this.player1.moveCard(this.countryside, 'province 1');
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.chagatai],
+                defenders: [this.yoshi],
+                province: this.province
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.province);
+            this.player1.clickPrompt('No');
+            this.player1.clickCard(this.rider);
+            expect(this.rider.isParticipating()).toBe(true);
+            expect(this.rider.isHonored).toBe(false);
+
+            this.noMoreActions();
+            expect(this.rider.isHonored).toBe(true);
+            expect(this.getChatLogs(6)).toContain('Border Rider is honored due to Maelstrom\'s effect');
+        });
+    });
+});
