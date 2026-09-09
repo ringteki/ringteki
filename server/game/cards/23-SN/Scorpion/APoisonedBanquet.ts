@@ -15,7 +15,7 @@ export default class APoisonedBanquet extends DrawCard {
             gameAction: AbilityDsl.actions.injure((context: AbilityContext) => ({
                 target: context.game.findAnyCardsInPlay(card => card.attachments.some(attachment => attachment.hasTrait('poison')))
             })),
-            limit: AbilityDsl.limit.perRound(1)
+            max: AbilityDsl.limit.perRound(1)
         });
     }
 }

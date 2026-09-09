@@ -62,7 +62,7 @@ describe('Prayers on the Eve of Battle', function () {
                 this.setupTest({
                     phase: 'conflict',
                     player1: {
-                        inPlay: ['asako-tsuki'],
+                        inPlay: ['asako-tsuki', 'doji-challenger'],
                         hand: ['prayers-on-the-eve-of-battle']
                     },
                     player2: {
@@ -72,12 +72,29 @@ describe('Prayers on the Eve of Battle', function () {
                 });
                 this.asakoTsuki = this.player1.findCardByName('asako-tsuki');
                 this.borderlands = this.player2.findCardByName('borderlands-defender');
+                this.challenger = this.player1.findCardByName('doji-challenger');
 
                 this.prayers1 = this.player1.findCardByName('prayers-on-the-eve-of-battle');
                 this.prayers2 = this.player2.findCardByName('prayers-on-the-eve-of-battle');
 
                 this.player1.playAttachment(this.prayers1, this.asakoTsuki);
                 this.player2.playAttachment(this.prayers2, this.borderlands);
+            });
+
+            it('is removed from the game when the attached character sits the conflict out', function () {
+                const fate = this.player1.fate;
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    attackers: [this.challenger],
+                    defenders: [this.borderlands]
+                });
+
+                this.noMoreActions();
+
+                expect(this.asakoTsuki.isParticipating()).toBe(false);
+                expect(this.prayers1.location).toBe('removed from game');
+                expect(this.player1.fate).toBe(fate);
             });
 
             it('happy path', function () {

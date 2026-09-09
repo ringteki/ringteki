@@ -4,7 +4,7 @@ describe('Shinjo Oyuun', function () {
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['shinjo-oyuun', 'doji-challenger', 'aranat']
+                    inPlay: ['shinjo-oyuun', 'doji-challenger', 'aranat', 'eager-scout']
                 },
                 player2: {
                     inPlay: ['togashi-mitsu', 'doji-whisperer', 'miya-mystic']
@@ -17,6 +17,7 @@ describe('Shinjo Oyuun', function () {
             this.shinjo = this.player1.findCardByName('shinjo-oyuun');
             this.challenger = this.player1.findCardByName('doji-challenger');
             this.aranat = this.player1.findCardByName('aranat');
+            this.scout = this.player1.findCardByName('eager-scout');
 
             this.p1 = this.player2.findCardByName('shameful-display', 'province 1');
             this.p2 = this.player2.findCardByName('shameful-display', 'province 2');
@@ -49,6 +50,20 @@ describe('Shinjo Oyuun', function () {
             expect(this.mystic.isParticipating()).toBe(true);
 
             expect(this.getChatLogs(5)).toContain('player1 uses Shinjo Oyuun to move Miya Mystic into the conflict');
+        });
+
+        it('can move a character with printed cost 0', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.shinjo],
+                defenders: [this.whisperer]
+            });
+            this.player2.pass();
+
+            this.player1.clickCard(this.shinjo);
+            expect(this.player1).toBeAbleToSelect(this.scout);
+            this.player1.clickCard(this.scout);
+            expect(this.scout.isParticipating()).toBe(true);
         });
 
         it('5 provinces', function () {
