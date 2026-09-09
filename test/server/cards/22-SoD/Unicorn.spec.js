@@ -301,6 +301,51 @@ describe('SoD - Unicorn', function () {
             });
         });
 
+        describe('Utaku Tomoe and Palm Strike', function () {
+            beforeEach(function () {
+                this.setupTest({
+                    phase: 'conflict',
+                    player1: {
+                        inPlay: ['togashi-ichi'],
+                        hand: ['palm-strike']
+                    },
+                    player2: {
+                        inPlay: ['utaku-tomoe', 'moto-youth']
+                    }
+                });
+
+                this.ichi = this.player1.findCardByName('togashi-ichi');
+                this.palmStrike = this.player1.findCardByName('palm-strike');
+                this.tomoe = this.player2.findCardByName('utaku-tomoe');
+                this.youth = this.player2.findCardByName('moto-youth');
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.ichi],
+                    defenders: [this.tomoe, this.youth]
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.palmStrike);
+                this.player1.clickCard(this.ichi);
+                this.player1.clickCard(this.tomoe);
+                expect(this.tomoe.bowed).toBe(true);
+            });
+
+            it('lets Tomoe ready once the conflict is over and cannot-ready has expired', function () {
+                this.player2.pass();
+                this.player1.pass();
+                this.player1.clickPrompt('Gain 2 honor');
+
+                expect(this.player2).toHavePrompt('Triggered Abilities');
+                expect(this.player2).toBeAbleToSelect(this.tomoe);
+
+                this.player2.clickCard(this.tomoe);
+                expect(this.tomoe.bowed).toBe(false);
+            });
+        });
+
         describe('Strange Mirror', function () {
             beforeEach(function () {
                 this.setupTest({

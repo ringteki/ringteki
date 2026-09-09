@@ -4,7 +4,7 @@
             this.setupTest({
                 phase: 'conflict',
                 player1: {
-                    inPlay: ['bayushi-gichin', 'heir-of-the-serpent'],
+                    inPlay: ['bayushi-gichin', 'heir-of-the-serpent', 'ikoma-ujio'],
                     hand: ['fiery-madness'],
                     conflictDiscard: ['stolen-breath']
                 },
@@ -14,6 +14,7 @@
             });
 
             this.serpent = this.player1.findCardByName('heir-of-the-serpent');
+            this.ujio = this.player1.findCardByName('ikoma-ujio');
             this.gichin = this.player1.findCardByName('bayushi-gichin');
             this.madness = this.player1.findCardByName('fiery-madness');
             this.breath = this.player1.findCardByName('stolen-breath');
@@ -21,6 +22,25 @@
             this.challenger = this.player2.findCardByName('doji-challenger');
             this.toturi = this.player2.findCardByName('akodo-toturi');
             this.yaruma = this.player2.findCardByName('kitsuki-yaruma');
+        });
+
+        it('cannot duel strike in a duel it is not involved in', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'political',
+                attackers: [this.ujio, this.gichin],
+                defenders: [this.challenger]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.ujio);
+            this.player1.clickCard(this.challenger);
+
+            this.player1.clickPrompt('1');
+            this.player2.clickPrompt('1');
+
+            expect(this.player1).not.toBeAbleToSelect(this.gichin);
+            expect(this.madness.parent).toBeFalsy();
         });
 
         it('duel win', function () {

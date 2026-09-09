@@ -12,6 +12,7 @@ export default class BayushiGichin extends DrawCard {
     setupCardAbilities() {
         this.duelStrike({
             title: 'Poison a character',
+            duelCondition: (duel, context) => duel.participants.includes(context.source),
             gameAction: AbilityDsl.actions.sequentialContext(context => ({
                 gameActions: [
                     AbilityDsl.actions.selectCard({
