@@ -10,7 +10,7 @@ export default class JadePrison extends DrawCard {
         this.persistentEffect({
             location: Location.Any,
             targetController: Players.Any,
-            condition: (context) => context.player.hasAffinity('earth'),
+            condition: (context) => context.player.hasAffinity('earth', context),
             effect: AbilityDsl.effects.reduceCost({ amount: 1, match: (card, source) => card === source })
         });
 

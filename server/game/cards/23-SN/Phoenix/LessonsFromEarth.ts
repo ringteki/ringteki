@@ -28,7 +28,7 @@ export default class LessonsFromEarth extends ProvinceAttachment {
                     target: winner
                 }));
 
-                const hasAffinity = loser.hasAffinity('earth');
+                const hasAffinity = loser.hasAffinity('earth', context);
                 if(!hasAffinity) {
                     gameActions.push(AbilityDsl.actions.chosenDiscard({
                         target: loser
