@@ -85,7 +85,6 @@ class SelectCardPrompt extends UiPrompt {
     hideIfNoLegalTargets: boolean;
     selector: BaseCardSelector;
     selectedCards: BaseCard[];
-    previouslySelectedCards: BaseCard[];
     onlyMustSelectMayBeChosen: boolean;
     cannotUnselectMustSelect: boolean;
     targets: BaseCard[];
@@ -129,7 +128,6 @@ class SelectCardPrompt extends UiPrompt {
         this.onlyMustSelectMayBeChosen = false;
         this.cannotUnselectMustSelect = false;
         this.targets = [];
-        this.previouslySelectedCards = [];
         if(properties.mustSelect) {
             const numCards = (this.selector as { numCards?: number }).numCards ?? 0;
             if(this.selector.hasEnoughSelected(properties.mustSelect, properties.context) && numCards > 0 && properties.mustSelect.length >= numCards) {
@@ -139,7 +137,8 @@ class SelectCardPrompt extends UiPrompt {
                 this.cannotUnselectMustSelect = true;
             }
         }
-        this.savePreviouslySelectedCards();
+        this.choosingPlayer.clearSelectedCards();
+        this.choosingPlayer.setSelectedCards(this.selectedCards);
     }
 
     defaultProperties(): Record<string, unknown> {
@@ -169,12 +168,6 @@ class SelectCardPrompt extends UiPrompt {
         }];
     }
 
-    savePreviouslySelectedCards(): void {
-        this.previouslySelectedCards = [...this.choosingPlayer.selectedCards];
-        this.choosingPlayer.clearSelectedCards();
-        this.choosingPlayer.setSelectedCards(this.selectedCards);
-    }
-
     continue(): boolean {
         if(this.hideIfNoLegalTargets && this.selector.optional && !this.selector.hasEnoughTargets(this.context, this.choosingPlayer)) {
             this.complete();
@@ -182,6 +175,7 @@ class SelectCardPrompt extends UiPrompt {
 
         if(!this.isComplete()) {
             this.highlightSelectableCards();
+            this.choosingPlayer.setSelectedCards(this.selectedCards);
         }
 
         return super.continue();
@@ -308,9 +302,6 @@ class SelectCardPrompt extends UiPrompt {
         this.choosingPlayer.clearSelectedCards();
         this.choosingPlayer.clearSelectableCards();
         this.choosingPlayer.clearSelectableRings();
-
-        // Restore previous selections.
-        this.choosingPlayer.setSelectedCards(this.previouslySelectedCards);
     }
 }
 
