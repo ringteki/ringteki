@@ -71,6 +71,28 @@ describe('Illusionary Terrain', function () {
             expect(this.player2).toBeAbleToSelect(this.justice);
         });
 
+        it('targeting - no affinity, attacking', function () {
+            this.noMoreActions();
+            this.player1.passConflict();
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.brash],
+                province: this.position
+            });
+            expect(this.player2).toHavePrompt('Triggered Abilities');
+            this.player2.clickCard(this.terrain);
+
+            // Attacking, so "the same player" is the defender, not you.
+            expect(this.player2).not.toBeAbleToSelect(this.stone);
+            expect(this.player2).not.toBeAbleToSelect(this.justice);
+            expect(this.player2).not.toBeAbleToSelect(this.fields);
+
+            expect(this.player2).not.toBeAbleToSelect(this.position);
+            expect(this.player2).toBeAbleToSelect(this.manicuredGarden);
+            expect(this.player2).toBeAbleToSelect(this.revels);
+            expect(this.player2).toBeAbleToSelect(this.abandoning);
+        });
+
         it('targeting - affinity', function () {
             this.player2.moveCard(this.augur, 'play area');
             this.noMoreActions();
