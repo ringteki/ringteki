@@ -52,12 +52,34 @@ describe('Ancestor Attendant', function () {
             expect(this.player1).not.toBeAbleToSelect(this.attendant);
             expect(this.player1).toBeAbleToSelect(this.mitsu);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
-            expect(this.player1).toBeAbleToSelect(this.diplomat);
+            expect(this.player1).not.toBeAbleToSelect(this.diplomat);
 
             this.player1.clickCard(this.mitsu);
             expect(this.mitsu.isDishonored).toBe(true);
             expect(this.player1.dynastyDeck.length).toBe(5);
             expect(this.getChatLogs(5)).toContain('player1 uses Ancestor Attendant to dishonor Togashi Mitsu and discard the top 5 cards of their dynasty deck');
+        });
+
+        it('can still choose a character that is already dishonored', function () {
+            this.whisperer.dishonor();
+            expect(this.whisperer.isDishonored).toBe(true);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.attendant, this.challenger],
+                defenders: [this.mitsu, this.whisperer, this.diplomat]
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.attendant);
+            // The discard is what "if you do" refers to, so a character that cannot be
+            // dishonored again is still a legal choice.
+            expect(this.player1).toBeAbleToSelect(this.whisperer);
+
+            this.player1.clickCard(this.whisperer);
+            // Doji Whisperer costs 1, so one card leaves the deck of 10.
+            expect(this.player1.dynastyDeck.length).toBe(9);
+            expect(this.whisperer.isDishonored).toBe(true);
         });
 
         it('restrict targeting based on deck size', function () {
@@ -78,12 +100,14 @@ describe('Ancestor Attendant', function () {
             expect(this.player1).not.toBeAbleToSelect(this.attendant);
             expect(this.player1).not.toBeAbleToSelect(this.mitsu);
             expect(this.player1).toBeAbleToSelect(this.whisperer);
-            expect(this.player1).toBeAbleToSelect(this.diplomat);
+            // Doji Diplomat has printed cost 0: nothing would be discarded, so the
+            // "if you do" dishonor never happens and there is nothing to choose it for.
+            expect(this.player1).not.toBeAbleToSelect(this.diplomat);
 
-            this.player1.clickCard(this.diplomat);
-            expect(this.diplomat.isDishonored).toBe(true);
-            expect(this.player1.dynastyDeck.length).toBe(3);
-            expect(this.getChatLogs(5)).toContain('player1 uses Ancestor Attendant to dishonor Doji Diplomat');
+            this.player1.clickCard(this.whisperer);
+            expect(this.whisperer.isDishonored).toBe(true);
+            expect(this.player1.dynastyDeck.length).toBe(2);
+            expect(this.getChatLogs(5)).toContain('player1 uses Ancestor Attendant to dishonor Doji Whisperer and discard the top 1 cards of their dynasty deck');
         });
 
         it('needs participation', function () {
