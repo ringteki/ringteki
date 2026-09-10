@@ -39,7 +39,7 @@ describe('Darbuka of Banishment', function () {
                 expect(this.player1).not.toHavePrompt('Discard all cards from a province?');
             });
 
-            it('leaves a Meishodo spell its affinity', function () {
+            it('does not remove affinity from Meishodo spells', function () {
                 this.player1.clickCard(this.rushingWave);
                 this.player1.clickCard(this.shamefulDisplay);
 
