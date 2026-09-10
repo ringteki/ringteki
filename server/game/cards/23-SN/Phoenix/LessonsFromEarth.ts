@@ -9,7 +9,7 @@ export default class LessonsFromEarth extends ProvinceAttachment {
         super.setupCardAbilities();
 
         this.forcedReaction({
-            title: 'Loser sacrifices a character',
+            title: 'Winner draws, loser discards',
             when: {
                 afterConflict: (event, context) => {
                     return context.source.parent && event.conflict.winner && event.conflict.loser && context.source.parent.isConflictProvince();

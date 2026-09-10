@@ -8,7 +8,7 @@ export default class AkodoTadakatsu extends DrawCard {
 
     setupCardAbilities() {
         this.reaction({
-            title: 'Take fate',
+            title: 'Injure a character',
             when: {
                 onMoveFate: (event, context) => context.game.currentPhase !== Phases.Fate &&
                     event.origin === context.source && event.fate > 0
