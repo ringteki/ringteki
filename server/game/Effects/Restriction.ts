@@ -144,10 +144,9 @@ const checkRestrictions: Record<string, RestrictionCheck> = {
     },
     loseHonorAsCost: (context) => context.stage === Stage.Cost,
     unopposedHonorLoss: (context) => context.source.name === 'Framework effect',
-    unlessMeishodo: (context) => {
-        const spell = context.source || context;
-        return !spell.hasTrait('meishodo');
-    }
+    // Darbuka of Banishment restricts Spells only, so anything else keeps its affinity.
+    unlessMeishodo: (context) =>
+        !!context.source && context.source.hasTrait('spell') && !context.source.hasTrait('meishodo')
 };
 
 const getApplyingPlayer = (effect: Restriction): Player => {
