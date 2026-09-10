@@ -24,6 +24,8 @@ type GameSpy = jasmine.SpyObj<{
     password?: string;
     playersAndSpectators: Record<string, unknown>;
     gameChat: { messages: unknown[] };
+    pipeline: { getDebugInfo: () => unknown };
+    effectEngine: { getDebugInfo: () => unknown };
 };
 
 type ServerCtx = {
@@ -267,6 +269,59 @@ describe('GameServer.notifyAndCloseGame', () => {
         call('notifyAndCloseGame', ctx, game);
         expect(playerSocketSpy.send).not.toHaveBeenCalled();
         expect(ctx.wsSocket.send).toHaveBeenCalledWith('GAMECLOSED', { game: 'g1' });
+    });
+});
+
+describe('GameServer.handleError', () => {
+    function makeErroringGame(pipelineInfo: unknown) {
+        const game = makeGame();
+        game.getPlayers.and.returnValue([{ name: 'p1' }, { name: 'p2' }]);
+        game.pipeline = { getDebugInfo: () => pipelineInfo };
+        game.effectEngine = { getDebugInfo: () => ({ effects: [] }) };
+        return game;
+    }
+
+    function sentPayload(ctx: ServerCtx) {
+        const args = ctx.wsSocket.send.calls.mostRecent().args;
+        return { command: args[0], arg: args[1] as Record<string, unknown> };
+    }
+
+    it('sends the debug data when it is small enough', () => {
+        const ctx = makeCtx();
+        const game = makeErroringGame({ step: 'ConflictFlow' });
+
+        call('handleError', ctx, game, new Error('boom'));
+
+        const { command, arg } = sentPayload(ctx);
+        expect(command).toBe('GAMEERROR');
+        expect(arg.errorMessage).toBe('boom');
+        expect(arg.debugData).toEqual({ pipeline: { step: 'ConflictFlow' }, effectEngine: { effects: [] } });
+    });
+
+    it('drops oversized debug data but still reports the error', () => {
+        const ctx = makeCtx();
+        const game = makeErroringGame({ blob: 'x'.repeat(5 * 1024 * 1024) });
+
+        call('handleError', ctx, game, new Error('boom'));
+
+        const { command, arg } = sentPayload(ctx);
+        expect(command).toBe('GAMEERROR');
+        expect(arg.errorMessage).toBe('boom');
+        expect(arg.errorStack).toBeDefined();
+        expect((arg.debugData as { omitted?: string }).omitted).toContain('over the');
+    });
+
+    it('drops debug data that cannot be serialized at all', () => {
+        const ctx = makeCtx();
+        const game = makeErroringGame({ get boom() {
+            throw new Error('nope');
+        } });
+
+        call('handleError', ctx, game, new Error('boom'));
+
+        const { arg } = sentPayload(ctx);
+        expect(arg.errorMessage).toBe('boom');
+        expect((arg.debugData as { omitted?: string }).omitted).toContain('could not be serialized');
     });
 });
 
