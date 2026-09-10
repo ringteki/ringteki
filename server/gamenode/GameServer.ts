@@ -12,7 +12,6 @@ import type Player from '../game/Player.js';
 import { logger } from '../logger.js';
 import Socket from '../Socket.js';
 import { detectBinary } from '../util.js';
-import { SendGameStateProfiler } from './SendGameStateProfiler.js';
 import { WsSocket } from './WsSocket.js';
 import type { GameSummary, PendingGameDTO, ShortCardData, UserIdentity } from './LobbyProtocol.js';
 import type { GameDetails } from '../game/Game.js';
@@ -29,7 +28,6 @@ export class GameServer implements GameRouter {
     private io: socketio.Server;
     private shortCardData: ShortCardData[] = [];
     private lastSentMessageCount = new Map<string, number>();
-    private profiler = new SendGameStateProfiler();
 
     constructor() {
         let privateKey: undefined | string;
@@ -191,12 +189,7 @@ export class GameServer implements GameRouter {
     }
 
     sendGameState(game: Game): void {
-        const profile = this.profiler.enabled;
-        const t0 = profile ? this.profiler.now() : 0n;
-
         const sharedState = game.getSharedState();
-        const t1 = profile ? this.profiler.now() : 0n;
-
         const allMessages = game.gameChat.messages;
         const totalMessages = allMessages.length;
         let spectatorState: ReturnType<Game['getState']> | null = null;
@@ -205,35 +198,18 @@ export class GameServer implements GameRouter {
         if(game.started) {
             game.recordHiddenInfoIfChanged();
         }
-        const t2 = profile ? this.profiler.now() : 0n;
-
-        let perViewerNs = 0n;
-        let spectatorNs = 0n;
-        let sendNs = 0n;
-        let playerCount = 0;
-        let spectatorCount = 0;
 
         for(const player of Object.values(game.getPlayersAndSpectators())) {
             if(player.socket && !player.left && !player.disconnected) {
                 let state: ReturnType<Game['getState']> | null;
                 if(game.isSpectator(player)) {
-                    spectatorCount++;
                     // All spectators see the same game view — compute once
                     if(!spectatorState) {
-                        const s0 = profile ? this.profiler.now() : 0n;
                         spectatorState = game.getState(player.name, sharedState);
-                        if(profile) {
-                            spectatorNs += this.profiler.now() - s0;
-                        }
                     }
                     state = spectatorState;
                 } else {
-                    playerCount++;
-                    const p0 = profile ? this.profiler.now() : 0n;
                     state = game.getState(player.name, sharedState);
-                    if(profile) {
-                        perViewerNs += this.profiler.now() - p0;
-                    }
                 }
 
                 // Send only new messages since last send
@@ -248,29 +224,11 @@ export class GameServer implements GameRouter {
                     newMessages: lastSent > 0
                 });
 
-                const w0 = profile ? this.profiler.now() : 0n;
                 player.socket.send('gamestate', stateWithMessages);
-                if(profile) {
-                    sendNs += this.profiler.now() - w0;
-                }
             }
         }
 
         game.clearAnimations();
-
-        if(profile) {
-            const total = this.profiler.now() - t0;
-            this.profiler.record({
-                sharedState: t1 - t0,
-                hiddenInfo: t2 - t1,
-                perViewer: perViewerNs,
-                spectator: spectatorNs,
-                send: sendNs,
-                total,
-                players: playerCount,
-                spectators: spectatorCount
-            });
-        }
     }
 
     private clearMessageCountsForGame(game: Game): void {

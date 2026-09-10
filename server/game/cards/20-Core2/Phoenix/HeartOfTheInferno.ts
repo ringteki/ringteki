@@ -16,7 +16,13 @@ export default class HeartOfTheInferno extends DrawCard {
             target: {
                 mode: TargetMode.Single,
                 controller: Players.Opponent,
-                cardCondition: (card: DrawCard) => card.isParticipating() || !!card.parent?.isParticipating(),
+                // On the enemy side: a participating character, or an attachment on one.
+                // An opponent's attachment on your own character is on your side, and a
+                // ring or province parent is not a DrawCard and is on no side at all.
+                cardCondition: (card: DrawCard, context) => !!context.player.opponent &&
+                    (card.isParticipatingFor(context.player.opponent) ||
+                        (card.parent instanceof DrawCard &&
+                            card.parent.isParticipatingFor(context.player.opponent))),
                 gameAction: AbilityDsl.actions.multipleContext((context) => {
                     if(!(context.target instanceof DrawCard)) {
                         return { gameActions: [] };

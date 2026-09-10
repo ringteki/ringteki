@@ -32,7 +32,6 @@ type ServerCtx = {
     abandonTimers: Map<string, ReturnType<typeof setTimeout>>;
     lastSentMessageCount: Map<string, number>;
     wsSocket: jasmine.SpyObj<{ send: (cmd: string, arg?: unknown) => void }>;
-    profiler: { enabled: boolean };
     sendGameState?: (game: unknown) => void;
     notifyAndCloseGame?: (game: unknown) => void;
     handleError?: (game: unknown, e: Error) => void;
@@ -75,7 +74,6 @@ function makeCtx(overrides: Partial<ServerCtx> = {}): ServerCtx {
         abandonTimers: new Map(),
         lastSentMessageCount: new Map(),
         wsSocket: jasmine.createSpyObj('wsSocket', ['send']),
-        profiler: { enabled: false },
         ...overrides
     });
     return ctx;

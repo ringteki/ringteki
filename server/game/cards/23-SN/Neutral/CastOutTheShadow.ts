@@ -8,7 +8,7 @@ export default class CastOutTheShadow extends DrawCard {
 
     setupCardAbilities() {
         this.action({
-            title: 'Dishonor or bow a character',
+            title: 'Sacrifice a character or take 2 honor',
             condition: context => context.game.isDuringConflict(),
             targets: {
                 character: {

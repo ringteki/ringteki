@@ -203,6 +203,33 @@ describe('Mapmaker Apprentice', function () {
             expect(this.sd1.getStrength()).toBe(strength + 4);
         });
 
+        it('lowers twice, even once the province is down to 1', function () {
+            this.player1.clickCard(this.map1);
+            this.player1.clickCard(this.sd1);
+            this.player2.pass();
+            this.player1.clickCard(this.map2);
+            this.player1.clickCard(this.sd1);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.challenger],
+                defenders: [this.mitsu]
+            });
+
+            const strength = this.sd1.getStrength();
+
+            this.player2.pass();
+            this.player1.clickCard(this.assassination1);
+            this.player1.clickCard(this.whisperer);
+            this.player1.clickPrompt('Lower attacked province\'s strength by 2');
+            expect(this.sd1.getStrength()).toBe(strength - 2);
+
+            // The second -2 still has to be applied, even though the province is at 1 and
+            // the total floors at 0 -- it is a modifier, not a one-off subtraction.
+            this.player1.clickPrompt('Lower attacked province\'s strength by 2');
+            expect(this.sd1.getStrength()).toBe(0);
+        });
+
         it('second conflict', function () {
             this.player1.playAttachment(this.invocation, this.challenger);
             this.mitsu.honor();

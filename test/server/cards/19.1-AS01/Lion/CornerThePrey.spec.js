@@ -7,7 +7,7 @@ describe('Corner the Prey', function () {
                     player1: {
                         fate: 500,
                         inPlay: ['doji-challenger', 'doji-whisperer', 'ikoma-message-runner'],
-                        hand: ['corner-the-prey', 'fine-katana', 'ayubune-pilot', 'dutiful-assistant']
+                        hand: ['corner-the-prey', 'fine-katana', 'ayubune-pilot', 'dutiful-assistant', 'educated-heimin']
                     },
                     player2: {
                         inPlay: ['solemn-scholar', 'agasha-prodigy', 'akodo-makoto', 'akodo-kage', 'akodo-cho']
@@ -22,6 +22,7 @@ describe('Corner the Prey', function () {
                 this.ayubunePilot = this.player1.findCardByName('ayubune-pilot');
                 this.fineKatana = this.player1.findCardByName('fine-katana');
                 this.assistant = this.player1.findCardByName('dutiful-assistant');
+                this.heimin = this.player1.findCardByName('educated-heimin');
 
                 this.solemnScholar = this.player2.findCardByName('solemn-scholar');
                 this.agashaProdigy = this.player2.findCardByName('agasha-prodigy');
@@ -48,6 +49,28 @@ describe('Corner the Prey', function () {
                 this.player1.clickCard(this.cornerThePrey);
 
                 expect(this.player1).toHavePrompt('Conflict Action Window');
+            });
+
+            it('ignores a follower attached to a province rather than falling over', function () {
+                const province = this.player1.findCardByName('shameful-display', 'province 1');
+                province.facedown = false;
+                this.player2.pass();
+                this.player1.playAttachment(this.heimin, province);
+                expect(this.heimin.parent).toBe(province);
+
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    attackers: [this.challenger, this.messageRunner],
+                    defenders: [this.solemnScholar]
+                });
+
+                this.player2.pass();
+                this.player1.clickCard(this.cornerThePrey);
+                // A province is not a character, so it has no isParticipating()
+                expect(this.player1).toHavePrompt('Select card to sacrifice');
+                expect(this.player1).not.toBeAbleToSelect(this.heimin);
+                expect(this.player1).toBeAbleToSelect(this.ayubunePilot);
             });
 
             it('should prompt you to sacrifice followers', function () {

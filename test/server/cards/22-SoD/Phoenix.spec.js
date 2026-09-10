@@ -314,12 +314,34 @@ describe('SoD - Phoenix', function () {
                 expect(this.player1).toHavePromptButton('Void');
                 expect(this.player1).toHavePromptButton('Water');
 
+                // Shameful Display is a void province; the ring is air, and the ring
+                // is not what the card looks at.
                 this.player1.clickPrompt('Air');
+
+                expect(this.kami.getMilitarySkill()).toBe(1);
+                expect(this.kami.getPoliticalSkill()).toBe(1);
+
+                expect(this.getChatLogs(5)).toContain('player1 uses Benevolent Lesser Kami to gain the Air trait');
+            });
+
+            it('gets the bonus for the attacked province\'s element', function () {
+                this.noMoreActions();
+                this.initiateConflict({
+                    type: 'military',
+                    ring: 'air',
+                    attackers: [this.kami],
+                    defenders: [this.diplomat]
+                });
+
+                expect(this.kami.getMilitarySkill()).toBe(1);
+
+                this.player2.pass();
+                this.player1.clickCard(this.kami);
+                this.player1.clickPrompt('Gain an elemental trait');
+                this.player1.clickPrompt('Void');
 
                 expect(this.kami.getMilitarySkill()).toBe(2);
                 expect(this.kami.getPoliticalSkill()).toBe(2);
-
-                expect(this.getChatLogs(5)).toContain('player1 uses Benevolent Lesser Kami to gain the Air trait');
             });
 
             it('shuffle', function () {

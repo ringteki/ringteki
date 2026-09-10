@@ -56,12 +56,9 @@ export default class MapmakerApprentice extends DrawCard {
                                         message: '{0} chooses to increase {1}\'s strength by 2'
                                     },
                                     'Lower attacked province\'s strength by 2': {
-                                        action: AbilityDsl.actions.cardLastingEffect((context) => ({
+                                        action: AbilityDsl.actions.cardLastingEffect(() => ({
                                             targetLocation: Location.Provinces,
-                                            effect:
-                                                context.target.getStrength() > 1
-                                                    ? AbilityDsl.effects.modifyProvinceStrength(-2)
-                                                    : []
+                                            effect: AbilityDsl.effects.modifyProvinceStrength(-2)
                                         })),
                                         message: '{0} chooses to reduce {1}\'s strength by 2'
                                     }

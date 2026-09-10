@@ -119,11 +119,13 @@ describe('the SelectCardPrompt', function() {
                         expect(this.prompt.isComplete()).toBe(true);
                     });
 
-                    it('should reselect the card when the prompt is completed', function() {
+                    it('should not restore an earlier selection when the prompt is completed', function() {
                         this.prompt.onCardClicked(this.player, this.card);
                         this.prompt.continue();
 
-                        expect(this.player.setSelectedCards).toHaveBeenCalledWith([this.previousCard]);
+                        // Restoring here resurrects a selection whose own prompt has since
+                        // finished, which leaves the card highlighted for the rest of the game.
+                        expect(this.player.setSelectedCards).not.toHaveBeenCalledWith([this.previousCard]);
                     });
                 });
 
@@ -261,6 +263,17 @@ describe('the SelectCardPrompt', function() {
                     it('should not call onSelect', function() {
                         this.prompt.onCardClicked(this.player, this.card);
                         expect(this.properties.onSelect).not.toHaveBeenCalled();
+                    });
+
+                    it('should re-assert its own selection while it is still active', function() {
+                        this.prompt.onCardClicked(this.player, this.card);
+                        // The mocked game cannot enumerate selectable cards.
+                        spyOn(this.prompt, 'highlightSelectableCards');
+                        this.player.setSelectedCards.calls.reset();
+                        this.prompt.continue();
+
+                        // How a nested prompt's picks survive without being restored later.
+                        expect(this.player.setSelectedCards).toHaveBeenCalledWith([this.card]);
                     });
                 });
 

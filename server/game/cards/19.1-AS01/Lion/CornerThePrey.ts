@@ -14,9 +14,10 @@ export default class CornerThePrey extends DrawCard {
             cost: AbilityDsl.costs.sacrifice({
                 cardType: [CardType.Character, CardType.Attachment],
                 mode: TargetMode.Unlimited,
+                // A follower can be attached to a province, which does not participate.
                 cardCondition: (card) =>
                     card.hasTrait('follower') &&
-                    (card.isParticipating() || (!!card.parent && card.parent.isParticipating()))
+                    (card.isParticipating() || (card.parent instanceof DrawCard && card.parent.isParticipating()))
             }),
             target: {
                 cardType: CardType.Character,
@@ -36,7 +37,8 @@ export default class CornerThePrey extends DrawCard {
             (card) => card.controller === context.player && card.hasTrait('follower')
         );
         const myParticipatingFollowers = myFollowers.filter(
-            (card) => card instanceof DrawCard && (card.isParticipating() || (!!card.parent && card.parent.isParticipating()))
+            (card) => card instanceof DrawCard &&
+                (card.isParticipating() || (card.parent instanceof DrawCard && card.parent.isParticipating()))
         );
         const amount = myParticipatingFollowers.length;
         return amount;

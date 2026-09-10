@@ -5,7 +5,7 @@ describe('Spearhead', function() {
                 phase: 'conflict',
                 player1: {
                     inPlay: ['kakita-yoshi'],
-                    hand: ['spearhead', 'fine-katana', 'a-new-name']
+                    hand: ['spearhead', 'fine-katana', 'a-new-name', 'inventive-buttressing']
                 },
                 player2: {
                     inPlay: ['doji-whisperer', 'doji-challenger'],
@@ -20,6 +20,7 @@ describe('Spearhead', function() {
             this.katana = this.player1.findCardByName('fine-katana');
             this.fan = this.player2.findCardByName('ornate-fan');
             this.ann = this.player1.findCardByName('a-new-name');
+            this.buttressing = this.player1.findCardByName('inventive-buttressing');
             this.blade = this.player2.findCardByName('kakita-blade');
             this.player1.playAttachment(this.katana, this.yoshi);
             this.player2.playAttachment(this.fan, this.yoshi);
@@ -60,6 +61,27 @@ describe('Spearhead', function() {
             expect(this.dojiWhisperer.bowed).toBe(true);
             expect(this.katana.location).toBe('conflict discard pile');
             expect(this.getChatLogs(3)).toContain('player1 plays Spearhead, sacrificing Fine Katana to bow Doji Whisperer');
+        });
+
+        it('ignores an attachment on a province rather than falling over', function() {
+            const province = this.player1.findCardByName('shameful-display', 'province 1');
+            province.facedown = false;
+            this.player1.playAttachment(this.buttressing, province);
+            expect(this.buttressing.parent).toBe(province);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.yoshi],
+                defenders: [this.dojiWhisperer],
+                type: 'military'
+            });
+
+            this.player2.pass();
+            this.player1.clickCard(this.spearhead);
+            // A province is not a character, so it has no isParticipating()
+            expect(this.player1).toHavePrompt('Select card to sacrifice');
+            expect(this.player1).not.toBeAbleToSelect(this.buttressing);
+            expect(this.player1).toBeAbleToSelect(this.katana);
         });
 
         it('should not work in pol conflicts', function() {
