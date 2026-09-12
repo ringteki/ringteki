@@ -238,19 +238,21 @@ class DrawCard extends BaseCard {
 
     getPrintedSkill(type: string): number {
         if(type === 'military') {
-            return this.cardData.military === null || this.cardData.military === undefined
-                ? NaN
-                : isNaN(parseInt(this.cardData.military))
-                    ? 0
-                    : parseInt(this.cardData.military);
+            return this.parsePrintedSkill(this.cardData.military);
         } else if(type === 'political') {
-            return this.cardData.political === null || this.cardData.political === undefined
-                ? NaN
-                : isNaN(parseInt(this.cardData.political))
-                    ? 0
-                    : parseInt(this.cardData.political);
+            return this.parsePrintedSkill(this.cardData.political);
         }
         return NaN;
+    }
+
+    // EmeraldDB writes a dash as either null or an empty string; anything else that will
+    // not parse is an X printed on the card (Iron Crane Legion), which is 0.
+    private parsePrintedSkill(value: string | null | undefined): number {
+        if(value === null || value === undefined || value === '') {
+            return NaN;
+        }
+        const skill = parseInt(value);
+        return isNaN(skill) ? 0 : skill;
     }
 
     isLimited(): boolean {

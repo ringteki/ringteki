@@ -66,6 +66,6 @@ export class CreateTokenAction extends CardGameAction<CreateTokenProperties> {
             })
             .resolve(token, context);
 
-        context.game.raiseEvent(EventName.OnCreateTokenCharacter, { tokenCharacter: token });
+        event.tokenCharacter = token;
     }
 }

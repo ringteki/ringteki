@@ -8,7 +8,7 @@ describe('Matsu Koso', function() {
                 },
                 player2: {
                     inPlay: ['solemn-scholar', 'shiba-tsukune', 'isawa-uona'],
-                    hand: ['my-ancestor-s-strength'],
+                    hand: ['my-ancestor-s-strength', 'kiss-of-the-sea', 'kiss-of-the-sea'],
                     dynastyDiscard: ['fushicho']
                 }
             });
@@ -22,6 +22,8 @@ describe('Matsu Koso', function() {
             this.isawaUona = this.player2.findCardByName('isawa-uona');
             this.fushicho = this.player2.findCardByName('fushicho');
             this.myAncestorsStrength = this.player2.findCardByName('my-ancestor-s-strength');
+            this.kiss = this.player2.filterCardsByName('kiss-of-the-sea')[0];
+            this.kiss2 = this.player2.filterCardsByName('kiss-of-the-sea')[1];
         });
 
         it('should decrease each participating characters military skill by their printed base political skill on both sides (Koso attacking)', function() {
@@ -41,7 +43,7 @@ describe('Matsu Koso', function() {
             expect(this.solemnScholar.getMilitarySkill()).toBe(this.solemnScholar.printedMilitarySkill - this.solemnScholar.printedPoliticalSkill);
             expect(this.shibaTsukune.getMilitarySkill()).toBe(this.shibaTsukune.printedMilitarySkill - this.shibaTsukune.printedPoliticalSkill);
             expect(this.isawaUona.getMilitarySkill()).toBe(this.isawaUona.printedMilitarySkill); // Printed pol is NaN
-            expect(this.getChatLogs(5)).toContain('player1 uses Matsu Koso to lower the military skill of Kitsu Motso, Matsu Koso, Matsu Berserker, Solemn Scholar, Shiba Tsukune and Isawa Uona by their respective printed political skill');
+            expect(this.getChatLogs(5)).toContain('player1 uses Matsu Koso to lower the military skill of Kitsu Motso, Solemn Scholar and Shiba Tsukune by their respective printed political skill');
         });
 
         it('should decrease each participating characters military skill by their printed base political skill on both sides (Koso defending)', function() {
@@ -64,7 +66,30 @@ describe('Matsu Koso', function() {
             expect(this.solemnScholar.getMilitarySkill()).toBe(this.solemnScholar.printedMilitarySkill - this.solemnScholar.printedPoliticalSkill);
             expect(this.shibaTsukune.getMilitarySkill()).toBe(this.shibaTsukune.printedMilitarySkill - this.shibaTsukune.printedPoliticalSkill);
             expect(this.isawaUona.getMilitarySkill()).toBe(this.isawaUona.printedMilitarySkill); // Printed pol is NaN
-            expect(this.getChatLogs(5)).toContain('player1 uses Matsu Koso to lower the military skill of Solemn Scholar, Shiba Tsukune, Isawa Uona, Kitsu Motso, Matsu Koso and Matsu Berserker by their respective printed political skill');
+            expect(this.getChatLogs(5)).toContain('player1 uses Matsu Koso to lower the military skill of Solemn Scholar, Shiba Tsukune and Kitsu Motso by their respective printed political skill');
+        });
+
+        it('does not touch a character with no printed political skill', function() {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.matsuKoso, this.kitsuMotso],
+                defenders: [this.solemnScholar],
+                type: 'military'
+            });
+
+            this.player2.playAttachment(this.kiss, this.matsuKoso);
+            this.player1.pass();
+            this.player2.playAttachment(this.kiss2, this.kitsuMotso);
+
+            this.player1.clickCard(this.matsuKoso);
+
+            // Koso's political skill is a dash, so her military skill never changes and
+            // Kiss of the Sea has nothing to react to.
+            expect(this.player2).not.toBeAbleToSelect(this.kiss);
+            expect(this.player2).toBeAbleToSelect(this.kiss2);
+            this.player2.clickCard(this.kiss2);
+            expect(this.kitsuMotso.bowed).toBe(true);
+            expect(this.matsuKoso.bowed).toBe(false);
         });
 
         it('should take into account printed, not base political', function() {

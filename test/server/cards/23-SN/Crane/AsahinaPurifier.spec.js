@@ -29,6 +29,25 @@ describe('Asahina Purifier', function () {
             this.unleashed.fate = 5;
         });
 
+        it('has a dash military skill', function () {
+            expect(this.purifier.hasDash('military')).toBe(true);
+
+            this.noMoreActions();
+            this.initiateConflict({
+                type: 'military',
+                attackers: [this.brash]
+            });
+
+            expect(this.player2).toHavePrompt('Choose defenders');
+            // A dash cannot be declared: clicking it does not make it a defender.
+            this.player2.clickCard(this.purifier);
+            this.player2.clickCard(this.shugenja);
+            this.player2.clickPrompt('Done');
+
+            expect(this.purifier.isParticipating()).toBe(false);
+            expect(this.shugenja.isParticipating()).toBe(true);
+        });
+
         it('should work when you defend tainted province', function () {
             this.shameful.taint();
             let honor = this.player2.honor;
