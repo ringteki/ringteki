@@ -17,96 +17,38 @@ export default class APlagueOfYokai extends DrawCard {
 
         this.action({
             title: 'Spread the plague',
-            condition: context => {
-                if(!context.game.isDuringConflict()) {
-                    return false;
-                }
-                if(!context.player.anyCardsInPlay(card => card.isParticipating() && card.hasTrait('shinobi'))) {
-                    return false;
-                }
-                const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
-                if(copiesInDiscard.length === 0 && copiesInDeck.length === 0) {
-                    return false;
-                }
-
-                return true;
-            },
+            condition: context => !!context.game.isDuringConflict() && this.getCopiesInDeck(context).length > 0,
+            cost: AbilityDsl.costs.dishonor({
+                controller: Players.Self,
+                cardType: CardType.Character,
+                cardCondition: card => card.isParticipating() && card.hasTrait('shinobi')
+            }),
             target: {
                 controller: Players.Any,
                 cardType: CardType.Character,
-                cardCondition: (card, context) => {
-                    const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
-                    let attachment;
-                    if(copiesInDeck.length > 0) {
-                        attachment = copiesInDeck[0];
-                    } else if(copiesInDiscard.length > 0) {
-                        attachment = copiesInDiscard[0];
-                    }
-                    return card.isParticipating() && AbilityDsl.actions.attach().canAffect(card, context, { attachment });
-                },
-                gameAction: AbilityDsl.actions.multiple([
-                    AbilityDsl.actions.chooseAction((context) => {
-                        const { copiesInDeck, copiesInDiscard } = this.getCopies(context);
-
-                        let options = {};
-                        if(copiesInDiscard.length > 0) {
-                            const optionTitle = `Discard pile (${copiesInDiscard.length})`;
-                            options = {
-                                ...options,
-                                [optionTitle]: {
-                                    action: AbilityDsl.actions.attach({
-                                        target: context.target,
-                                        attachment: copiesInDiscard[0]
-                                    }),
-                                    message: '{0} takes from their discard pile'
-                                }
-                            };
-                        }
-                        if(copiesInDeck.length > 0) {
-                            const optionTitle = `Deck (${copiesInDeck.length})`;
-                            options = {
-                                ...options,
-                                [optionTitle]: {
-                                    action: AbilityDsl.actions.multiple([
-                                        AbilityDsl.actions.attach({
-                                            target: context.target,
-                                            attachment: copiesInDeck[0]
-                                        }),
-                                        AbilityDsl.actions.shuffleDeck({
-                                            deck: Location.ConflictDeck,
-                                            target: context.player
-                                        })
-                                    ]),
-                                    message: '{0} takes from their deck'
-                                }
-                            };
-                        }
-
-                        return {
-                            activePromptTitle: 'Select where to pull card from',
-                            options
-                        };
-                    }),
-                    AbilityDsl.actions.onAffinity(context => ({
-                        trait: 'shadow',
-                        gameAction: AbilityDsl.actions.noAction(),
-                        noAffinityGameAction: AbilityDsl.actions.loseHonor({
-                            target: context.player
+                cardCondition: (card, context) => !!context.player.opponent &&
+                    card.isParticipatingFor(context.player.opponent) &&
+                    AbilityDsl.actions.attach().canAffect(card, context, { attachment: this.getCopiesInDeck(context)[0] }),
+                gameAction: AbilityDsl.actions.multipleContext(context => ({
+                    gameActions: [
+                        AbilityDsl.actions.attach({
+                            target: context.target,
+                            attachment: this.getCopiesInDeck(context)[0]
                         }),
-                        effect: 'prevent the honor loss'
-                    }))
-                ])
+                        AbilityDsl.actions.shuffleDeck({
+                            deck: Location.ConflictDeck,
+                            target: context.player
+                        })
+                    ]
+                }))
             },
-            effect: 'infect {0} and lose 1 honor'
+            effect: 'infect {0}'
         });
     }
 
-    getCopies(context: AbilityContext) {
+    getCopiesInDeck(context: AbilityContext) {
         const player = context.player as Player;
-        const copiesInDiscard = player.conflictDiscardPile.filter(card => card.name === context.source.name);
-        const copiesInDeck = player.conflictDeck.filter(card => card.name === context.source.name);
-
-        return { copiesInDiscard, copiesInDeck };
+        return player.conflictDeck.filter(card => card.name === context.source.name);
     }
 
     getSkillModifier(context: AbilityContext) {
