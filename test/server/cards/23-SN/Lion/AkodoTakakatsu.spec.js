@@ -54,6 +54,7 @@ describe('Akodo Takakatsu', function () {
             });
             this.noMoreActions();
 
+            this.player2.clickPrompt('No');
             this.player2.clickCard(this.tadakatsu);
             expect(this.tadakatsu.fate).toBe(1);
 
