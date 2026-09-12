@@ -1,4 +1,4 @@
-describe('Akodo Takakatsu', function () {
+describe('Akodo Tadakatsu', function () {
     integration(function () {
         beforeEach(function () {
             this.setupTest({
