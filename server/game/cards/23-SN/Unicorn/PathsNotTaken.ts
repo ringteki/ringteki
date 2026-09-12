@@ -7,14 +7,18 @@ export default class PathsNotTaken extends DrawCard {
     static id = 'paths-not-taken';
 
     setupCardAbilities() {
-        this.action({
+        this.reaction({
             title: 'Send home a character',
             max: AbilityDsl.limit.perConflict(1),
-            condition: context => !!context.game.isDuringConflict() && context.player.isDefendingPlayer(),
+            when: {
+                onConflictStarted: (event, context) => event.conflict.defendingPlayer === context.player
+            },
             target: {
                 cardType: CardType.Character,
                 controller: Players.Opponent,
-                cardCondition: (card, context) => card.isParticipating() && card.printedCost !== null && card.printedCost < this.getSkillThreshold(context),
+                cardCondition: (card, context) => !!context.player.opponent &&
+                    card.isParticipatingFor(context.player.opponent) &&
+                    card.printedCost !== null && card.printedCost < this.getSkillThreshold(context),
                 gameAction: AbilityDsl.actions.sendHome()
             }
         });
