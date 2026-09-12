@@ -175,20 +175,25 @@ describe('Composite Yumi', function () {
             this.player1.clickCard(this.masterOfTheSwiftWaves);
             this.player2.pass();
 
+            this.game
+                .getProvinceArray()
+                .flatMap((location) => this.player1.player.getDynastyCardsInProvince(location))
+                .filter((card) => card.isFacedown() && card !== this.kisada && card !== this.storehouse)
+                .forEach((card) => this.player1.moveCard(card, 'dynasty deck'));
+
             this.player1.clickCard(this.forceOfTheRiver);
 
             expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.compositeYumi);
             this.player1.clickCard(this.compositeYumi);
+            this.player1.clickCard(this.kisada);
             expect(this.getChatLogs(3)).toContain('player1 uses Composite Yumi to give +1military to Wandering Ronin');
 
-            expect(this.player1).toHavePrompt('Triggered Abilities');
             expect(this.player1).toBeAbleToSelect(this.compositeYumi);
             this.player1.clickCard(this.compositeYumi);
-            expect(this.getChatLogs(3)).toContain('player1 uses Composite Yumi to give +1military to Wandering Ronin');
+            this.player1.clickCard(this.storehouse);
 
-            expect(this.player1).toHavePrompt('Triggered Abilities');
-            expect(this.player1).toBeAbleToSelect(this.compositeYumi);
+            expect(this.wanderingRonin.getMilitarySkill()).toBe(3 + 2);
+            expect(this.player1).not.toBeAbleToSelect(this.compositeYumi);
         });
     });
 });
