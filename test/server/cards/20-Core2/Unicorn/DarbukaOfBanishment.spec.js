@@ -6,7 +6,8 @@ describe('Darbuka of Banishment', function () {
                     phase: 'conflict',
                     player1: {
                         inPlay: ['miya-mystic', 'adept-of-the-waves'],
-                        hand: ['rejuvenating-vapors', 'grasp-of-earth-2']
+                        hand: ['rejuvenating-vapors', 'grasp-of-earth-2', 'the-rushing-wave'],
+                        role: 'keeper-of-water'
                     },
                     player2: {
                         inPlay: ['moto-youth'],
@@ -17,6 +18,7 @@ describe('Darbuka of Banishment', function () {
 
                 this.suitengu = this.player1.findCardByName('rejuvenating-vapors');
                 this.graspOfEarth = this.player1.findCardByName('grasp-of-earth-2');
+                this.rushingWave = this.player1.findCardByName('the-rushing-wave');
                 this.mystic = this.player1.findCardByName('miya-mystic');
                 this.mystic.bow();
 
@@ -35,6 +37,15 @@ describe('Darbuka of Banishment', function () {
                 this.player1.clickCard(this.mystic);
                 expect(this.getChatLogs(5)).toContain('player1 plays Rejuvenating Vapors to ready Miya Mystic');
                 expect(this.player1).not.toHavePrompt('Discard all cards from a province?');
+            });
+
+            it('does not remove affinity from Meishodo spells', function () {
+                this.player1.clickCard(this.rushingWave);
+                this.player1.clickCard(this.shamefulDisplay);
+
+                // Meishodo is exempt, so the neighbouring provinces drop as well.
+                expect(this.shamefulDisplay.getStrength()).toBe(0);
+                expect(this.player2.findCardByName('shameful-display', 'province 2').getStrength()).toBe(0);
             });
 
             it('removes affinity from spell attachments', function () {

@@ -12,11 +12,13 @@ import type Player from '../game/Player.js';
 import { logger } from '../logger.js';
 import Socket from '../Socket.js';
 import { detectBinary } from '../util.js';
-import { WsSocket } from './WsSocket.js';
+import { stringifyWithoutCycles, WsSocket } from './WsSocket.js';
 import type { GameSummary, PendingGameDTO, ShortCardData, UserIdentity } from './LobbyProtocol.js';
 import type { GameDetails } from '../game/Game.js';
 import type { MenuItem } from '../game/MenuCommands.js';
 import * as env from '../env.js';
+
+const MAX_DEBUG_DATA_LENGTH = 4 * 1024 * 1024;
 
 export class GameServer implements GameRouter {
     private games = new Map<string, Game>();
@@ -120,24 +122,13 @@ export class GameServer implements GameRouter {
     handleError(game: Game, e: Error) {
         logger.error(`Game error: ${e.message}\n${e.stack}`);
 
-        let gameState = game.getState();
-        let debugData: Record<string, unknown> = {};
+        const debugData: Record<string, unknown> = {};
 
         if(e.message.includes('Maximum call stack')) {
-            debugData.badSerializaton = detectBinary(gameState);
+            debugData.badSerializaton = detectBinary(game.getState());
         } else {
-            debugData.game = gameState;
-            (debugData.game as Record<string, unknown>).players = undefined;
-
-            debugData.messages = game.messages;
-            (debugData.game as Record<string, unknown>).messages = undefined;
-
             debugData.pipeline = game.pipeline.getDebugInfo();
             debugData.effectEngine = game.effectEngine.getDebugInfo();
-
-            for(const player of game.getPlayers()) {
-                debugData[player.name] = player.getState(player);
-            }
         }
 
         const playerNames = game.getPlayers().map((p) => p.name);
@@ -149,7 +140,7 @@ export class GameServer implements GameRouter {
                 errorMessage: e.message,
                 errorStack: e.stack,
                 timestamp: new Date().toISOString(),
-                debugData: debugData
+                debugData: this.limitDebugData(debugData)
             });
         }
 
@@ -157,6 +148,20 @@ export class GameServer implements GameRouter {
             game.addMessage(
                 'A Server error has occured processing your game state, apologies.  Your game may now be in an inconsistent state, or you may be able to continue.  The error has been logged.'
             );
+        }
+    }
+
+    // The report has to survive a WebSocket frame and then a Mongo document, so keep
+    // the message and stack at any cost and drop the debug data if it will not fit.
+    private limitDebugData(debugData: Record<string, unknown>): unknown {
+        try {
+            const length = stringifyWithoutCycles(debugData).length;
+            if(length <= MAX_DEBUG_DATA_LENGTH) {
+                return debugData;
+            }
+            return { omitted: `${length} characters, over the ${MAX_DEBUG_DATA_LENGTH} limit` };
+        } catch(err) {
+            return { omitted: `could not be serialized: ${err}` };
         }
     }
 

@@ -144,10 +144,8 @@ const checkRestrictions: Record<string, RestrictionCheck> = {
     },
     loseHonorAsCost: (context) => context.stage === Stage.Cost,
     unopposedHonorLoss: (context) => context.source.name === 'Framework effect',
-    unlessMeishodo: (context) => {
-        const spell = context.source || context;
-        return !spell.hasTrait('meishodo');
-    }
+    unlessMeishodo: (context) =>
+        !!context.source && context.source.hasTrait('spell') && !context.source.hasTrait('meishodo')
 };
 
 const getApplyingPlayer = (effect: Restriction): Player => {

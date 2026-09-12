@@ -31,7 +31,7 @@ export default class DrawingTheVoid extends DrawCard {
                             gameAction: AbilityDsl.actions.moveCard({ destination: Location.RemovedFromGame })
                         })),
                         AbilityDsl.actions.conditional((context) => ({
-                            condition: context.player.hasAffinity('void'),
+                            condition: context.player.hasAffinity('void', context),
                             trueGameAction: AbilityDsl.actions.draw(),
                             falseGameAction: AbilityDsl.actions.noAction()
                         }))

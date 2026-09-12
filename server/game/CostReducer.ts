@@ -1,4 +1,4 @@
-import type { AbilityContext } from './AbilityContext.js';
+import { AbilityContext } from './AbilityContext.js';
 import type { AbilityLimit } from './AbilityLimit.js';
 import type BaseCard from './BaseCard.js';
 import type DrawCard from './DrawCard.js';
@@ -53,7 +53,7 @@ export class CostReducer {
         } else if(this.playingTypes && !this.playingTypes.includes(playingType)) {
             return false;
         }
-        const context = this.game.getFrameworkContext(card.controller);
+        const context = new AbilityContext({ game: this.game, player: card.controller, source: card });
         return this.checkMatch(card) && this.checkTargetCondition(context, target);
     }
 

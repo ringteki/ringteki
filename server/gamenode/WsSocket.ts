@@ -19,7 +19,7 @@ const MAX_RECONNECT_DELAY = 5_000;
 
 // Error payloads carry game debug data, which can contain references back to the
 // Game object. Replace cycles instead of throwing so the report still gets sent.
-function stringifyWithoutCycles(value: unknown): string {
+export function stringifyWithoutCycles(value: unknown): string {
     const ancestors: unknown[] = [];
 
     return JSON.stringify(value, function(this: unknown, _key: string, val: unknown) {

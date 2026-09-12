@@ -13,7 +13,7 @@ describe('Illusionary Terrain', function () {
                     inPlay: ['brash-samurai'],
                     provinces: ['the-pursuit-of-justice', 'fertile-fields', 'avalanche-of-stone', 'elemental-fury'],
                     hand: ['illusionary-terrain'],
-                    dynastyDiscard: ['doomed-shugenja', 'asahina-augur'],
+                    dynastyDiscard: ['doomed-shugenja', 'asahina-purifier'],
                     role: 'keeper-of-void'
                 }
             });
@@ -32,7 +32,7 @@ describe('Illusionary Terrain', function () {
             this.scout = this.player1.findCardByName('eager-scout');
             this.brash = this.player2.findCardByName('brash-samurai');
             this.doomed = this.player2.findCardByName('doomed-shugenja');
-            this.augur = this.player2.findCardByName('asahina-augur');
+            this.purifier = this.player2.findCardByName('asahina-purifier');
 
             this.terrain = this.player2.findCardByName('illusionary-terrain');
 
@@ -94,7 +94,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('targeting - affinity', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -116,7 +116,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('copy - passive effect', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -138,7 +138,7 @@ describe('Illusionary Terrain', function () {
 
         it('copy onto a facedown province', function () {
             this.fury.facedown = true;
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -159,7 +159,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('copy - action ability', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -184,7 +184,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('copy - reaction ability', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -208,7 +208,7 @@ describe('Illusionary Terrain', function () {
 
         it('copy - on reveal', function () {
             this.fury.facedown = true;
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.toshimoko],
@@ -225,13 +225,13 @@ describe('Illusionary Terrain', function () {
             expect(this.getChatLogs(10)).toContain('player2 plays Illusionary Terrain to transform the attacked province into a copy of Avalanche of Stone');
             expect(this.player2).toBeAbleToSelect(this.fury);
             this.player2.clickCard(this.fury);
-            expect(this.augur.bowed).toBe(true);
-            expect(this.getChatLogs(10)).toContain('player2 uses Avalanche of Stone\'s gained ability from Avalanche of Stone to bow Eager Scout, Brash Samurai and Asahina Augur');
+            expect(this.purifier.bowed).toBe(true);
+            expect(this.getChatLogs(10)).toContain('player2 uses Avalanche of Stone\'s gained ability from Avalanche of Stone to bow Eager Scout, Brash Samurai and Asahina Purifier');
         });
 
         it('copy - interrupt', function () {
             this.fury.facedown = true;
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.scout.dishonor();
             this.noMoreActions();
             this.initiateConflict({
@@ -276,7 +276,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('discount 1', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             let fate = this.player2.fate;
             this.noMoreActions();
             this.initiateConflict({
@@ -295,7 +295,7 @@ describe('Illusionary Terrain', function () {
         });
 
         it('discount 2', function () {
-            this.player2.moveCard(this.augur, 'play area');
+            this.player2.moveCard(this.purifier, 'play area');
             this.player2.moveCard(this.doomed, 'play area');
             let fate = this.player2.fate;
             this.noMoreActions();

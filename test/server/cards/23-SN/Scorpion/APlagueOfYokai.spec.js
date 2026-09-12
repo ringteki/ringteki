@@ -1,4 +1,4 @@
-﻿import { GameModes } from '../../../../../build/server/GameModes.js';
+import { GameModes } from '../../../../../build/server/GameModes.js';
 
 describe('A Plague of Yokai', function () {
     integration(function () {
@@ -50,20 +50,24 @@ describe('A Plague of Yokai', function () {
             expect(this.challenger.getMilitarySkill()).toBe(2);
             expect(this.challenger.getPoliticalSkill()).toBe(2);
 
+            let length = this.player1.conflictDeck.length;
+
             this.player1.clickCard(this.plague1);
-            expect(this.player1).toBeAbleToSelect(this.shadows);
+
+            // Only characters on the enemy side can be infected.
+            expect(this.player1).not.toBeAbleToSelect(this.shadows);
             expect(this.player1).not.toBeAbleToSelect(this.challenger);
             expect(this.player1).toBeAbleToSelect(this.kuwanan);
             expect(this.player1).toBeAbleToSelect(this.yoshi);
-
             this.player1.clickCard(this.yoshi);
-            expect(this.player1).toHavePrompt('Select where to pull card from');
-            expect(this.player1).toHavePromptButton('Discard pile (1)');
-            expect(this.player1).toHavePromptButton('Deck (1)');
 
-            let length = this.player1.conflictDeck.length;
-
-            this.player1.clickPrompt('Deck (1)');
+            // The dishonor is a cost, and only a friendly participating Shinobi pays it.
+            expect(this.player1).toHavePrompt('Select character to dishonor');
+            expect(this.player1).toBeAbleToSelect(this.shadows);
+            expect(this.player1).not.toBeAbleToSelect(this.serpent);
+            expect(this.player1).not.toBeAbleToSelect(this.kuwanan);
+            this.player1.clickCard(this.shadows);
+            expect(this.shadows.isDishonored).toBe(true);
 
             expect(this.plague2.parent).toBe(this.yoshi);
             expect(this.challenger.getMilitarySkill()).toBe(1);
@@ -73,63 +77,49 @@ describe('A Plague of Yokai', function () {
 
             expect(this.player1.conflictDeck.length).toBe(length - 1);
 
-            expect(this.getChatLogs(10)).toContain('player1 uses A Plague of Yokai to infect Kakita Yoshi and lose 1 honor');
-            expect(this.getChatLogs(10)).toContain('player1 takes from their deck');
-            expect(this.getChatLogs(10)).toContain('player1 channels their shadow affinity to prevent the honor loss');
+            expect(this.getChatLogs(10)).toContain('player1 uses A Plague of Yokai, dishonoring Adept of Shadows to infect Kakita Yoshi');
             expect(this.getChatLogs(10)).toContain('player1 is shuffling their conflict deck');
-
-            this.player2.pass();
-
-            this.player1.clickCard(this.plague2);
-            expect(this.player1).toBeAbleToSelect(this.shadows);
-            expect(this.player1).not.toBeAbleToSelect(this.challenger);
-            expect(this.player1).toBeAbleToSelect(this.kuwanan);
-            expect(this.player1).not.toBeAbleToSelect(this.yoshi);
-
-            this.player1.clickCard(this.kuwanan);
-            expect(this.player1).toHavePrompt('Select where to pull card from');
-            expect(this.player1).toHavePromptButton('Discard pile (1)');
-            expect(this.player1).not.toHavePromptButton('Deck (1)');
-
-            let length2 = this.player1.conflictDiscard.length;
-
-            this.player1.clickPrompt('Discard pile (1)');
-
-            expect(this.plague3.parent).toBe(this.kuwanan);
-            expect(this.challenger.getMilitarySkill()).toBe(0);
-            expect(this.challenger.getPoliticalSkill()).toBe(0);
-            expect(this.yoshi.getMilitarySkill()).toBe(0);
-            expect(this.yoshi.getPoliticalSkill()).toBe(3);
-            expect(this.kuwanan.getMilitarySkill()).toBe(2);
-            expect(this.kuwanan.getPoliticalSkill()).toBe(1);
-
-            expect(this.player1.conflictDiscard.length).toBe(length2 - 1);
-
-            expect(this.getChatLogs(10)).toContain('player1 uses A Plague of Yokai to infect Doji Kuwanan and lose 1 honor');
-            expect(this.getChatLogs(10)).toContain('player1 takes from their discard pile');
-            expect(this.getChatLogs(10)).toContain('player1 channels their shadow affinity to prevent the honor loss');
         });
 
-        it('no affinity', function () {
-            this.player1.moveCard(this.serpent, 'dynasty discard pile');
+        it('does not search the discard pile', function () {
+            this.player1.moveCard(this.plague2, 'conflict discard pile');
+
             this.noMoreActions();
             this.initiateConflict({
                 attackers: [this.shadows],
-                defenders: [this.challenger, this.kuwanan, this.yoshi]
+                defenders: [this.challenger]
             });
-            let honor = this.player1.honor;
             this.player2.pass();
+
             this.player1.clickCard(this.plague1);
             this.player1.clickCard(this.challenger);
+            expect(this.plague1.parent).toBe(this.challenger);
+
+            this.player2.pass();
+
+            // Only copies in the conflict deck can be found.
+            this.player1.clickCard(this.plague1);
+            expect(this.player1).not.toBeAbleToSelect(this.challenger);
+            expect(this.plague2.location).toBe('conflict discard pile');
+        });
+
+        it('cannot be used without a friendly participating Shinobi', function () {
+            this.noMoreActions();
+            this.initiateConflict({
+                attackers: [this.serpent],
+                defenders: [this.challenger]
+            });
+            this.player2.pass();
+
+            this.player1.clickCard(this.plague1);
+            this.player1.clickCard(this.challenger);
+            expect(this.plague1.parent).toBe(this.challenger);
 
             this.player2.pass();
 
             this.player1.clickCard(this.plague1);
-            this.player1.clickCard(this.yoshi);
-            this.player1.clickPrompt('Deck (1)');
-            expect(this.plague2.parent).toBe(this.yoshi);
-            expect(this.player1.honor).toBe(honor - 1);
-            expect(this.getChatLogs(10)).not.toContain('player1 channels their shadow affinity to prevent the honor loss');
+            expect(this.player1).not.toBeAbleToSelect(this.challenger);
+            expect(this.plague2.location).toBe('conflict deck');
         });
     });
 });

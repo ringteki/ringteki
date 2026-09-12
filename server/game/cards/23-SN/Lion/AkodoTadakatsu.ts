@@ -10,8 +10,14 @@ export default class AkodoTadakatsu extends DrawCard {
         this.reaction({
             title: 'Injure a character',
             when: {
-                onMoveFate: (event, context) => context.game.currentPhase !== Phases.Fate &&
-                    event.origin === context.source && event.fate > 0
+                onMoveFate: (event, context) => {
+                    if(context.game.currentPhase === Phases.Fate || event.origin !== context.source || event.fate <= 0) {
+                        return false;
+                    }
+                    const cause = event.context;
+                    return !!cause && !!context.player.opponent && cause.player === context.player.opponent &&
+                        ((cause.source.type as string) === 'ring' || cause.ability.isCardAbility());
+                }
             },
             target: {
                 controller: Players.Opponent,

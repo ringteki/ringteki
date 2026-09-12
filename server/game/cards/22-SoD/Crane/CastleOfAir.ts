@@ -28,7 +28,7 @@ export default class CastleOfAir extends DrawCard {
                 cardCondition: (card: BaseCard) => card.hasTrait('shugenja')
             }),
             effect: 'increase the strength of an attacked province by 4{1}',
-            effectArgs: context => context.player.hasAffinity('air') ? [' and prevent unopposed honor loss'] : [''],
+            effectArgs: context => context.player.hasAffinity('air', context) ? [' and prevent unopposed honor loss'] : [''],
             condition: (context) => context.game.isDuringConflict(),
             gameAction: AbilityDsl.actions.multiple([
                 AbilityDsl.actions.selectCard((context) => ({
@@ -45,7 +45,7 @@ export default class CastleOfAir extends DrawCard {
                     })
                 })),
                 AbilityDsl.actions.conditional((context) => ({
-                    condition: context.player.hasAffinity('air'),
+                    condition: context.player.hasAffinity('air', context),
                     trueGameAction: AbilityDsl.actions.handler({
                         handler: context => {
                             this.playersTriggered.set(context.player.uuid, true);
